@@ -56,7 +56,8 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
-| S-033 | E-23 | Architecture document v2 reflecting ADR-001/D-007: Cairo default 2D renderer, pygame platform + presentation, IR, three-checkpoint Phase 1, text-as-outlines with `TextRun` reserved | `docs/design/Playground_Technology_Architecture_v2.md` (Markdown; the .docx stays as the v1 record) | ready |
+| S-033 | E-23 | Architecture document v2 reflecting ADR-001/D-007 (and ADR-002 if D-010 = B): IR, pygame platform + presentation, interactive renderer marked OPEN with Cairo as reference implementation, export via Cairo, three-checkpoint Phase 1, text-as-outlines with `TextRun` reserved | `docs/design/Playground_Technology_Architecture_v2.md` (Markdown; the .docx stays as the v1 record) | ready |
+| S-035 | E-08 | **Spike 07 — renderer bake-off** (if D-010 = B). Same IR stream to Cairo, Skia and Blend2D (the last only if its binding passes a coverage gate: clip, scale, fill rule, stroke join/cap). Scenes: primitive-heavy animation (500 circles + 500 rects, alpha, rotation); complex paths (100 Béziers, joins/caps, clip, nested transforms); translucency/compositing; gradients incl. conic; text via outlines route + Blend2D native font load; export replay through Cairo PDF/SVG; install size, cold import, first frame; binding-risk score | Numbers + PNGs in `spikes/RESULTS.md` §7; D-011 presented per PROCESS before Sprint 3 | ready — Sprint 2, parallel to IR work |
 
 ## Sprint 4 — Phase 2: public API on the vector model (planned)
 

@@ -17,8 +17,30 @@ are raised and closed.
 | D-008 | 2026-09-24 | Fate of pygame drawing code after Cairo | keep as permanent fallback renderer · name `LegacyPygameRenderer`, delete in Sprint 3 | delete | **accepted** | 2026-09-24 | story S-019 / S-026 |
 
 | D-009 | 2026-09-24 | Which font file to bundle as Playground's default (closes D-006) | see below | DejaVu Sans | **pending** | | Spike 06, `spikes/RESULTS.md` §6 |
+| D-010 | 2026-09-24 | Reopen the interactive-renderer engine choice (Cairo) pending a broader bake-off? | A keep ADR-001 · B reopen, Cairo = reference implementation, Spike 07 in Sprint 2, decide D-011 before Sprint 3 · C as B without Blend2D | B | **pending** | | `ADR-002` |
 
 ## Open
+
+### D-010 — reopen the renderer engine choice
+
+**Context.** The maintainer asked whether Cairo is the right long-term bet given that browser engines
+have moved to Skia/GPU renderers. ADR-001 was decided on one spike (Cairo vs Skia, one scene). The
+IR is what protects us from a wrong engine choice, and Sprint 2 builds the IR without depending on
+the engine — so this is the cheapest moment to widen the evidence. Not deciding means Sprint 3 starts
+implementing Cairo on ADR-001 as written.
+
+**Options and trade-offs.** In `ADR-002` (A keep / B reopen with bake-off incl. Blend2D behind a
+binding-coverage gate / C reopen, Cairo vs Skia only). Schedule cost of B and C: none for Sprint 2;
+one bounded spike (~1–2 days) in parallel. Risk of A: an engine decision taken on thin evidence and
+revisited after Cairo-specific code exists.
+
+**Recommendation: B.** **Why:** it answers the concern with data instead of argument; a third IR
+consumer is the strongest test of backend-neutrality we can buy; and the binding-coverage gate keeps
+Blend2D honest — today's `blend2d-py` exposes no clipping or scale, so it cannot run the IR without
+either an upstream release or a binding we would own.
+
+**What would change it:** if Sprint 3 had already started (it hasn't), or if the maintainer wants the
+smallest possible dependency set decided now rather than measured.
 
 ### D-009 — the bundled default font
 
