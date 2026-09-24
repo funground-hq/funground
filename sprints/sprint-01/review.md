@@ -24,7 +24,7 @@ One decision raised and left open for the maintainer (D-009, font file).
 ```
 115 passed in 19.7 s
   test_api_contract 7 · test_semantics 42 · test_examples_golden 24 (11 goldens, exact)
-  test_color 27 · test_state 4 · test_sketch 5 · test_boundaries 2
+  test_color 31 · test_state 4 · test_sketch 5 · test_boundaries 2
 ```
 
 Windows 11, Python 3.14.7, pygame-ce 2.5.8. Goldens unchanged since Sprint 0.

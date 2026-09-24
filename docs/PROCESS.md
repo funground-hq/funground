@@ -51,7 +51,12 @@ Sprint length is set by the maintainer; default one week. Sprint numbering is gl
    status column is updated when a whole story completes.
 3. **Review** — `sprints/sprint-NN/review.md` records: stories done / not done and why, test
    results (counts, CI), measurements, decisions taken (with links to ADRs or contract rows),
-   findings that change later sprints, and a short retrospective.
+   findings that change later sprints, and a short retrospective. Alongside it,
+   `sprints/sprint-NN/reviewers_guide.md` tells the maintainer how to review the sprint's code in
+   about an hour: how to verify the sprint's central claim first, which commits to read in what
+   order, a map of what changed, what to scrutinise file by file, what the author would flag, the
+   open decisions, and a sign-off checklist. **A sprint is closed only after the maintainer has
+   reviewed the retrospective and signed off the guide's checklist.**
 4. **Carry-over** — unfinished stories return to the backlog with a note, never silently slide.
 
 ## Definitions
