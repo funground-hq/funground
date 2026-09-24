@@ -1,0 +1,23 @@
+{
+  "import_ms": 61.95,
+  "python": "3.14.7",
+  "playground_version": "0.6.0.dev0",
+  "frames": 60,
+  "ops_per_frame": 53,
+  "canvas_calls_per_frame": 358,
+  "frame_ms": 0.334,
+  "render_walk_ms": 0.009,
+  "api_and_ir_ms": 0.325,
+  "to_jsonable_ms": 0.203,
+  "json_dumps_ms": 0.084,
+  "json_bytes": 8169,
+  "from_jsonable_ms": 0.245,
+  "font_load_ms": 37.19,
+  "outline_ms_uncached": 1.479,
+  "outline_ms_cached": 0.0022,
+  "text_fillpath_ops_ms": 0.413,
+  "text_fillpath_segments": 284,
+  "text_glyphs": 18,
+  "upem": 2048,
+  "hhea_ascent": 1901
+}

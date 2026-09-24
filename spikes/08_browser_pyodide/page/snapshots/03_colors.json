@@ -1,0 +1,167 @@
+[
+ {
+  "color": [
+   245,
+   245,
+   240,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "diameter": 80,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 100,
+  "y": 100
+ },
+ {
+  "height": 80,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    180,
+    100,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 120,
+  "x": 200,
+  "y": 60
+ },
+ {
+  "height": 80,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    240,
+    90,
+    69,
+    255
+   ],
+   "stroke": [
+    32,
+    48,
+    64,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 140,
+  "x": 450,
+  "y": 100
+ },
+ {
+  "diameter": 60,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    64,
+    64,
+    64,
+    255
+   ],
+   "stroke": [
+    32,
+    48,
+    64,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 100,
+  "y": 280
+ },
+ {
+  "diameter": 60,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    205,
+    79,
+    57,
+    255
+   ],
+   "stroke": [
+    32,
+    48,
+    64,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 250,
+  "y": 280
+ },
+ {
+  "diameter": 60,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    47,
+    79,
+    79,
+    255
+   ],
+   "stroke": [
+    32,
+    48,
+    64,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 400,
+  "y": 280
+ },
+ {
+  "diameter": 60,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    0,
+    255,
+    255,
+    255
+   ],
+   "stroke": [
+    32,
+    48,
+    64,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 550,
+  "y": 280
+ }
+]

@@ -1,0 +1,118 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 28
+  },
+  "text": "Hello",
+  "x": 30,
+  "y": 40
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 28
+  },
+  "text": "29",
+  "x": 30,
+  "y": 80
+ },
+ {
+  "color": [
+   255,
+   99,
+   71,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": null,
+   "stroke": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "text": "stroke colour when there is no fill",
+  "x": 30,
+  "y": 140
+ },
+ {
+  "color": [
+   255,
+   215,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 48
+  },
+  "text": "3.5",
+  "x": 30,
+  "y": 200
+ }
+]

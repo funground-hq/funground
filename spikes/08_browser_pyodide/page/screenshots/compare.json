@@ -1,0 +1,112 @@
+[
+  {
+    "name": "01_first_sketch",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 0.674,
+    "mean_abs_diff": 0.537
+  },
+  {
+    "name": "02_shapes",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 2.308,
+    "mean_abs_diff": 2.358
+  },
+  {
+    "name": "03_colors",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 2.266,
+    "mean_abs_diff": 1.636
+  },
+  {
+    "name": "04_fill_stroke",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 2.216,
+    "mean_abs_diff": 1.555
+  },
+  {
+    "name": "05_text",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 2.197,
+    "mean_abs_diff": 1.669
+  },
+  {
+    "name": "06_animation",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 0.541,
+    "mean_abs_diff": 0.407
+  },
+  {
+    "name": "07_bounce",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 0.539,
+    "mean_abs_diff": 0.43
+  },
+  {
+    "name": "08_mouse",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 0.628,
+    "mean_abs_diff": 0.472
+  },
+  {
+    "name": "09_keyboard",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 0.609,
+    "mean_abs_diff": 0.472
+  },
+  {
+    "name": "10_helpers",
+    "size_ok": true,
+    "size": [
+      640,
+      400
+    ],
+    "pixels_differing_pct": 1.736,
+    "mean_abs_diff": 1.651
+  },
+  {
+    "name": "12_default_window",
+    "size_ok": true,
+    "size": [
+      640,
+      480
+    ],
+    "pixels_differing_pct": 0.588,
+    "mean_abs_diff": 0.465
+  }
+]

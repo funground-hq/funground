@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spike 08 — Playground IR on a &lt;canvas&gt;</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; padding: 16px; font: 14px system-ui, sans-serif; background: #f6f6f4; color: #222; }
+  body.shot { padding: 0; background: #fff; }
+  body.shot > :not(canvas) { display: none; }
+  h1 { font-size: 18px; margin: 0 0 8px; }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+  canvas, img { border: 1px solid #bbb; background: #fff; display: block; }
+  .col { display: flex; flex-direction: column; gap: 6px; }
+  .note { max-width: 70ch; background: #fff7d6; border: 1px solid #e6cf6a; padding: 8px 10px; border-radius: 4px; }
+  code { background: #eee; padding: 0 3px; }
+  #stats { font-family: ui-monospace, monospace; white-space: pre; }
+</style>
+</head>
+<body>
+<h1>Spike 08 — Playground IR replayed with the Canvas 2D API</h1>
+<p>
+  Snapshot: <select id="pick"></select>
+  <label><input type="checkbox" id="wait"> wait for font before drawing</label>
+</p>
+<div class="row">
+  <div class="col"><b>Canvas 2D from the IR JSON (<code>ir_canvas.js</code>)</b><canvas id="c"></canvas></div>
+  <div class="col"><b>Desktop golden (Cairo, <code>tests/golden/*.png</code>)</b><img id="golden" alt="golden"></div>
+</div>
+<p id="stats"></p>
+<p class="note">
+  <b>Text caveat.</b> <code>Text</code> ops are drawn with <code>ctx.fillText</code> and the bundled DejaVu Sans
+  loaded as a <code>FontFace</code>, i.e. the browser shapes and rasterises the text. This is <em>not</em> the
+  deterministic outline route the desktop renderer uses (fontTools outlines positioned by HarfBuzz, emitted as
+  <code>FillPath</code> ops), so glyph advances, kerning and hinting may differ per browser. It is option 4 of the
+  Browser Mode Note; the spike's purpose is to check the shape ops and the plumbing, not to pin browser text.
+</p>
+<p>Serve from the repo root (e.g. <code>python -m http.server 8765</code>) and open
+  <code>/spikes/08_browser_pyodide/page/index.html?snapshot=05_text</code>; the font and goldens are fetched with
+  <code>../../../</code> relative URLs. <code>&amp;shot=1</code> shows only the canvas at (0, 0) for headless screenshots.</p>
+
+<script type="module">
+  import { SNAPSHOTS, loadFont, drawFrame, prepareCanvas } from "./ir_canvas.js";
+
+  const q = new URLSearchParams(location.search);
+  const pick = document.getElementById("pick");
+  for (const name of Object.keys(SNAPSHOTS)) pick.add(new Option(name, name));
+  pick.value = q.get("snapshot") && SNAPSHOTS[q.get("snapshot")] ? q.get("snapshot") : "01_first_sketch";
+  if (q.get("shot")) {                        // canvas alone at (0, 0) for headless screenshots
+    document.body.classList.add("shot");
+    document.body.prepend(document.getElementById("c"));
+  }
+  const waitBox = document.getElementById("wait");
+  waitBox.checked = true;
+
+  const fontReady = loadFont("../../../playground/fonts/DejaVuSans.ttf").catch((e) => {
+    console.warn("font failed to load; falling back to sans-serif", e);
+  });
+
+  async function show(name) {
+    const [w, h] = SNAPSHOTS[name];
+    const ops = await (await fetch(`snapshots/${name}.json`)).json();
+    if (waitBox.checked) await fontReady;
+    const canvas = document.getElementById("c");
+    const ctx = prepareCanvas(canvas, w, h);
+    const t0 = performance.now();
+    const calls = drawFrame(ctx, ops, w, h);
+    const ms = performance.now() - t0;
+    document.getElementById("golden").src = `../../../tests/golden/${name}.png`;
+    document.getElementById("stats").textContent =
+      `${name}: ${ops.length} ops -> ~${calls} Canvas 2D calls in ${ms.toFixed(2)} ms  (dpr ${window.devicePixelRatio})`;
+    document.title = `Spike 08 — ${name}`;
+    document.body.dataset.drawn = name;        // headless runner polls this
+  }
+  pick.addEventListener("change", () => { history.replaceState(null, "", `?snapshot=${pick.value}`); show(pick.value); });
+  show(pick.value);
+</script>
+</body>
+</html>
