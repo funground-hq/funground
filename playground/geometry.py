@@ -1,7 +1,8 @@
 """Backend-neutral geometry: affine Transform and Path (story S-018.3).
 
 Internal in Phase 1 (PROCESS: internal capability first); the public
-`p.translate()` / `p.path()` vocabulary arrives in Phase 2.
+`p.translate()` (S-027) and `p.path()` (S-028, `playground.paths.PathBuilder`)
+vocabulary arrived in Sprint 4.
 
 Conventions (contract C1, F1): y grows downward; angles in degrees; a
 Transform maps a point (x, y) to (a*x + c*y + e, b*x + d*y + f).
@@ -138,6 +139,25 @@ class Path:
     @property
     def is_empty(self) -> bool:
         return not self.segments
+
+    @property
+    def is_closed(self) -> bool:
+        """True when every sub-path that draws something ends with close().
+
+        Contract F3: only closed shapes are filled; a trailing move_to on its
+        own draws nothing and does not count.
+        """
+        pending = False  # a sub-path with segments that has not been closed yet
+        for seg in self.segments:
+            k = seg[0]
+            if k == "move":
+                if pending:
+                    return False
+            elif k == "close":
+                pending = False
+            else:
+                pending = True
+        return bool(self.segments) and not pending
 
     def current_point(self) -> Point:
         start: Point | None = None

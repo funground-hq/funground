@@ -31,11 +31,12 @@ postponed, per the other agent's note).
 5. **Why.** Beginners meet `with open(...)` first; `with p.state():` follows the same "with *a thing*" pattern. Would change if the maintainer wants strict p5 vocabulary (then B). Either way the change is a one-line alias in `api.py` plus the contract row.
 
 ### S-028 Paths and clipping — E-11
-- [ ] S-028.1 `p.begin_shape()` / `p.vertex(x, y)` / `p.curve_vertex(...)` / `p.end_shape(close=False)` — the p5-shaped, beginner-first API; emits `FillPath`/`StrokePath` with the current style
-- [ ] S-028.2 `path = p.path()` builder object (`move_to`, `line_to`, `curve_to`, `close`) for reuse; `p.draw_path(path)`; `p.clip(path)` emits `ClipPath` (inside a `push`/`pop`)
-- [ ] S-028.3 Contract F3 pinned: fill rule non-zero; open shapes are stroked not filled unless closed
-- [ ] S-028.4 Tests + sample sketch `14_paths.py` with golden + snapshot
+- [x] S-028.1 `p.begin_shape()` / `p.vertex(x, y)` / `p.curve_vertex(...)` / `p.end_shape(close=False)` — the p5-shaped, beginner-first API; emits `FillPath`/`StrokePath` with the current style
+- [x] S-028.2 `path = p.path()` builder object (`move_to`, `line_to`, `curve_to`, `close`) for reuse; `p.draw_path(path)`; `p.clip(path)` emits `ClipPath` (inside a `push`/`pop`)
+- [x] S-028.3 Contract F3 pinned: fill rule non-zero; open shapes are stroked not filled unless closed
+- [x] S-028.4 Tests + sample sketch `14_paths.py` with golden + snapshot
 *Acceptance:* a star, a Bézier curve and a clipped pattern render through Cairo and export to PDF.
+*Status:* done — `playground/paths.py` (`PathBuilder`, also `quad_to`), `tests/test_paths.py` (23 tests incl. a headless PDF export of the sample), sample `14_paths.py` with golden + snapshot; contract F3 pinned (the former mode-switch row is now F4, still proposed). No new decision raised: every public name came from this plan.
 
 ### S-037 Text rendering polish — E-15 *(small, from Sprint 3 findings)*
 - [ ] S-037.1 Cap the per-window `TextRun` cache (LRU, 256 entries) — `p.text(p.frame_count, …)` must not grow without bound

@@ -9,6 +9,7 @@ import inspect
 from contextlib import AbstractContextManager
 
 from .color import ColorLike as Color
+from .paths import PathBuilder
 from .sketch import Sketch
 
 _active: Sketch | None = None
@@ -151,6 +152,42 @@ def pop() -> None:
 def state() -> AbstractContextManager[None]:
     """``with p.state():`` - push() on entry, pop() on exit, even after an error."""
     return active_sketch().state()
+
+
+# ---- shapes, paths and clipping (S-028)
+def begin_shape() -> None:
+    """Start a shape: list its corners with vertex(), then call end_shape()."""
+    active_sketch().begin_shape()
+
+
+def vertex(x: float, y: float) -> None:
+    """Add a corner to the shape begun by begin_shape()."""
+    active_sketch().vertex(x, y)
+
+
+def curve_vertex(cx1: float, cy1: float, cx2: float, cy2: float, x: float, y: float) -> None:
+    """Add a curved segment: two control points (cx1, cy1), (cx2, cy2), then the end point (x, y)."""
+    active_sketch().curve_vertex(cx1, cy1, cx2, cy2, x, y)
+
+
+def end_shape(close: bool = False) -> None:
+    """Draw the shape. close=True joins the last corner to the first and fills it; open shapes are only stroked."""
+    active_sketch().end_shape(close)
+
+
+def path() -> PathBuilder:
+    """A reusable path: p.path().move_to(0, 0).line_to(40, 0).curve_to(...).close(); draw it with draw_path()."""
+    return active_sketch().path()
+
+
+def draw_path(path: PathBuilder) -> None:
+    """Fill (if closed) and stroke a path made with p.path(), using the current style."""
+    active_sketch().draw_path(path)
+
+
+def clip(path: PathBuilder) -> None:
+    """Limit later drawing to the inside of *path* until the enclosing pop() / end of the state() block."""
+    active_sketch().clip(path)
 
 
 # ---- input
