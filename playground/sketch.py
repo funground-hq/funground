@@ -279,6 +279,12 @@ class Sketch:
             chosen = style.fill or style.stroke or WHITE  # contract T4
         self._emit(ir.Text(str(message), x, y, chosen, style))
 
+    def text_width(self, message: object) -> float:
+        """Advance width of *message* in logical pixels at the current text_size (contract T6)."""
+        from .typography import text_width
+
+        return text_width(str(message), self.style.text_size)
+
     # ------------------------------------------------------------ shapes, paths, clipping (S-028)
     def begin_shape(self) -> None:
         if self._shape is not None:

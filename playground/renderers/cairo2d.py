@@ -10,6 +10,8 @@ materialised through the outline route (playground.typography).
 from __future__ import annotations
 
 import math
+from collections import OrderedDict
+from typing import TYPE_CHECKING
 
 import cairo
 
@@ -19,6 +21,13 @@ from ..color import Color
 from ..geometry import Path
 from ..platform.base import Pixels
 from ..state import GraphicsState
+
+if TYPE_CHECKING:
+    from ..typography import TextRun
+
+# S-037: shaped text runs are cached per (text, size); an LRU cap keeps
+# `p.text(p.frame_count, ...)` from growing the cache without bound.
+TEXT_RUN_CACHE_SIZE = 256
 
 
 class CairoRenderer:
@@ -33,7 +42,7 @@ class CairoRenderer:
         self._surface: cairo.ImageSurface | None = None
         self._ctx: cairo.Context | None = None
         self._scale = 1.0
-        self._text_runs: dict[tuple[str, int], object] = {}
+        self._text_runs: OrderedDict[tuple[str, int], TextRun] = OrderedDict()
 
     # ---- lifecycle
     def attach(self, width: int, height: int, scale: float = 1.0) -> None:
@@ -162,5 +171,10 @@ class CairoRenderer:
         key = (op.text, op.style.text_size)
         run = self._text_runs.get(key)
         if run is None:
-            run = self._text_runs[key] = default_font().shape(op.text, op.style.text_size)
+            run = default_font().shape(op.text, op.style.text_size)
+            self._text_runs[key] = run
+            while len(self._text_runs) > TEXT_RUN_CACHE_SIZE:
+                self._text_runs.popitem(last=False)       # evict least recently used
+        else:
+            self._text_runs.move_to_end(key)              # mark as most recently used
         return run.outline_ops(op.x, op.y, op.color)

@@ -55,6 +55,7 @@ from .api import (
     stroke_width,
     text,
     text_size,
+    text_width,
     translate,
     vertex,
 )
@@ -97,6 +98,7 @@ __all__ = [
     "stroke_width",
     "text",
     "text_size",
+    "text_width",
     "translate",
     "vertex",
     "width",
