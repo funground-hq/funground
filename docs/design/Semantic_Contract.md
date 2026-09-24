@@ -41,7 +41,7 @@ provide capabilities.* This table is what "owns" means.
 |---|---|---|---|---|
 | T1 | Anchor | (x, y) is the **top-left** of the rendered glyph box | Same | Pinned |
 | T2 | Font | pygame's bundled `freesansbold.ttf` via `Font(None, size)`; no way to choose a font | **DejaVu Sans** (Bitstream Vera licence, 757 KB) bundled with Playground. Mechanism: glyph outlines read by fontTools, positioned by uharfbuzz, emitted as path ops in the IR — deterministic on every platform and renderer. Known limitation, accepted: exported PDFs carry outlines, not searchable text, until fonts are embedded (S-032) | Pinned (D-006, D-009) — in effect since Sprint 3 |
-| T3 | Size | pygame `Font(None, size)` semantics (size 20 → ~13 px glyph height) | Define `text_size` as font size in logical pixels; may shift metrics slightly | Pinned intent |
+| T3 | Size | pygame `Font(None, size)` semantics (size 20 → ~13 px glyph height) | **`text_size(n)` is an n-pixel em** in logical pixels — the CSS/p5/DrawBot convention. Text therefore renders ~1.4× larger than v0.5 at the same number; a deliberate, one-time change | Pinned (D-012) — in effect since Sprint 3 |
 | T4 | Colour | explicit `color=` → current fill → current stroke → white | Same | Pinned |
 | T5 | Message | Any object; `str()` is applied | Same | Pinned |
 

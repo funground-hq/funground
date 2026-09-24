@@ -9,7 +9,7 @@ the legacy renderer is deleted.
 
 All six stories done. **Phase 1 checkpoint 3 (D-007) met — Phase 1 is complete:** learner code
 unchanged, IR snapshots byte-identical, goldens regenerated exactly once, no `pygame.draw` in the
-package. One decision raised and pending: D-012 (`text_size` meaning).
+package. One decision raised: D-012 (`text_size` meaning), accepted as A at sign-off.
 
 | Story | Result | Commit |
 |---|---|---|
@@ -67,7 +67,11 @@ IR snapshot diff before/after the switch: **empty** — the learner-facing reque
 ## Decisions
 
 - Applied: D-003, D-004, D-005, D-006/D-009, D-008, D-011.
-- **Pending: D-012 — what `text_size` means** (recommendation A: em-size in logical pixels).
+- **D-012 — what `text_size` means: accepted as A (em-size in logical pixels), 25 Sept 2026.**
+
+## Sign-off (25 September 2026)
+
+Maintainer accepted D-012 = A; Sprint 3 **closed**; Phase 1 complete.
 
 ## Retrospective
 
