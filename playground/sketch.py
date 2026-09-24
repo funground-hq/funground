@@ -26,7 +26,7 @@ REQUIRED_CAPABILITIES: dict[Capability, str] = {Capability.RASTER_2D: "Drawing s
 # Renderer selection (S-023.4). "legacy" exists only until S-026 deletes it.
 RENDERERS = {"cairo": "playground.renderers.cairo2d:CairoRenderer",
              "legacy": "playground.renderers.legacy_pygame:LegacyPygameRenderer"}
-DEFAULT_RENDERER = "legacy"
+DEFAULT_RENDERER = "cairo"
 
 
 def default_renderer() -> Renderer:
