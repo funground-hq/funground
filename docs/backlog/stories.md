@@ -57,7 +57,7 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
 | S-033 | E-23 | Architecture document v2 reflecting ADR-001/D-007 (and ADR-002 if D-010 = B): IR, pygame platform + presentation, interactive renderer marked OPEN with Cairo as reference implementation, export via Cairo, three-checkpoint Phase 1, text-as-outlines with `TextRun` reserved | `docs/design/Playground_Technology_Architecture_v2.md` (Markdown; the .docx stays as the v1 record) | ready |
-| S-035 | E-08 | **Spike 07 — renderer bake-off** (if D-010 = B). Same IR stream to Cairo, Skia and Blend2D (the last only if its binding passes a coverage gate: clip, scale, fill rule, stroke join/cap). Scenes: primitive-heavy animation (500 circles + 500 rects, alpha, rotation); complex paths (100 Béziers, joins/caps, clip, nested transforms); translucency/compositing; gradients incl. conic; text via outlines route + Blend2D native font load; export replay through Cairo PDF/SVG; install size, cold import, first frame; binding-risk score | Numbers + PNGs in `spikes/RESULTS.md` §7; D-011 presented per PROCESS before Sprint 3 | ready — Sprint 2, parallel to IR work |
+| S-035 | E-08 | **Spike 07 — renderer bake-off** (D-010 = B). Same IR stream to Cairo, Skia and Blend2D (the last only if its binding passes a coverage gate: clip, scale, fill rule, stroke join/cap). Scenes: primitive-heavy animation (500 circles + 500 rects, alpha, rotation); complex paths (100 Béziers, joins/caps, clip, nested transforms); translucency/compositing; gradients incl. conic; text via outlines route + Blend2D native font load; export replay through Cairo PDF/SVG; install size, cold import, first frame; binding-risk score | Numbers + PNGs in `spikes/RESULTS.md` §7; D-011 presented per PROCESS before Sprint 3 | ready — Sprint 2, parallel to IR work (D-010 accepted) |
 
 ## Sprint 4 — Phase 2: public API on the vector model (planned)
 
@@ -65,7 +65,7 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 |---|---|---|---|---|
 | S-027 | E-10 | `p.translate/rotate/scale` (degrees, D-002), `p.radians/degrees`, `p.push/pop`, `with p.state():` | Semantic tests; contract F2 pinned | ready |
 | S-028 | E-11 | `p.path()` with `move_to/line_to/curve_to/close`, fill/stroke/clip | Tests; golden sketch | ready |
-| S-029 | E-15 | Text subsystem v1 from Spike 06: `FontResource` (HarfBuzz face + fontTools glyph set + glyph-outline cache), `TextRun` (semantic text + shaped glyphs, outlines materialised for the IR) — `p.text()` unchanged for learners | Deterministic text goldens on two platforms | ready (after S-031) |
+| S-029 | E-15 | Text subsystem v1 from Spike 06 (font: DejaVu Sans, D-009): `FontResource` (HarfBuzz face + fontTools glyph set + glyph-outline cache), `TextRun` (semantic text + shaped glyphs, outlines materialised for the IR) — `p.text()` unchanged for learners | Deterministic text goldens on two platforms | ready (after S-031) |
 | S-030 | E-22 | Quick Reference v0.6 documents every additive API | PDF/MD regenerated | ready |
 
 ## Later (Phases 3–4, directional)

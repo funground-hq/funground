@@ -1,9 +1,9 @@
 # ADR-002: Renderer selection reopened — Cairo as reference implementation pending a bake-off
 
-**Status:** Proposed — supersedes the *engine* clause of ADR-001 if accepted (Decision Log D-010). The
-*topology* clause of ADR-001 (Playground owns semantics + IR; pygame-ce is platform + presentation;
-renderers are IR consumers) is unchanged and not reopened.
-**Date:** 24 September 2026
+**Status:** Accepted — option B, by the maintainer on 24 September 2026 (Decision Log D-010).
+Supersedes the *engine* clause of ADR-001. The *topology* clause of ADR-001 (Playground owns
+semantics + IR; pygame-ce is platform + presentation; renderers are IR consumers) is unchanged.
+**Date:** proposed and accepted 24 September 2026
 
 ## Context
 
@@ -47,12 +47,13 @@ today's binding, but it forfeits the strongest CPU contender without measuring i
 
 ## Decision
 
-*Pending D-010.* Recommendation: **B**, with the sharpened principle from the advising agent adopted
-in `Semantic_Contract.md`/`PROCESS.md`: **providers are selected per capability and workload, not
-per framework** — interactive raster, vector export, shaping and font model may be different
-providers behind one IR, as long as learners never see the seam.
+**Option B.** The interactive 2D engine is **open**; Cairo is the *reference implementation* of the
+IR until Spike 07 (S-035) reports and D-011 is decided before Sprint 3. Principle adopted in
+`PROCESS.md`: **providers are selected per capability and workload, not per framework** —
+interactive raster, vector export, shaping and font model may be different providers behind one
+IR, as long as learners never see the seam.
 
-## Consequences (if B)
+## Consequences
 
 - Architecture document v2 (S-033) says "interactive 2D renderer: OPEN — reference implementation
   Cairo"; export through Cairo PDF/SVG surfaces is retained regardless of the interactive winner.

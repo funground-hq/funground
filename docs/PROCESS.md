@@ -117,5 +117,10 @@ decisions and are not logged.
 - Learner code in `examples/session1/` never changes to make a test pass.
 - A change to a pinned semantic is a contract change: ADR or contract row first, then code.
 - Backend types (`pygame.Surface`, `cairo.Context`, …) never appear in `playground/api.py` or in tests of public behaviour.
+- **Providers are selected per capability and workload, not per framework** (D-010). Interactive
+  raster, vector export, shaping and font model may be different libraries behind the one IR;
+  learners must never see the seam. An engine is chosen by measurement (a bake-off spike) and
+  recorded in an ADR; "reference implementation" means the current best-measured consumer of the
+  IR, not a commitment.
 - **Internal capability first, public API later.** A concept (transform, path, clip, text run, state stack) enters the IR and the internal model in the sprint that needs it; its learner-facing vocabulary is a separate, later story. The architecture settles before the API grows.
 - The test hierarchy, top to bottom: public API semantics → draw-op IR snapshots (the cross-backend contract) → per-backend semantic tests → per-backend golden images. Two correct renderers may differ in pixels; they may not differ in ops.

@@ -1,6 +1,8 @@
 # ADR-001: Renderer topology and first rasteriser
 
-**Status:** Accepted — option C, by the maintainer on 24 September 2026 (Decision Log D-001)
+**Status:** Accepted — option C, by the maintainer on 24 September 2026 (Decision Log D-001).
+**Engine clause superseded by ADR-002 (D-010, same day):** the topology stands; "Cairo is the
+default 2D renderer" becomes "Cairo is the reference implementation pending the Spike 07 bake-off".
 **Date:** proposed and accepted 24 September 2026
 **Inputs:** architecture document §5–8, architecture review Issue 1, spikes 01/02/03/05 (`spikes/RESULTS.md`)
 

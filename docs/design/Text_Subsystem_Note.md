@@ -1,6 +1,8 @@
 # Design note: text as outlines, `TextRun` reserved
 
-**Status:** agreed direction (D-006), 24 September 2026. Validated by Spike 06 (S-031) before implementation (S-029).
+**Status:** decided (D-006, D-009), 24 September 2026. Validated by Spike 06 (S-031): 0.44–0.48 ms per
+line cached, byte-identical, kerning/ligatures/Devanagari correct. **Bundled font: DejaVu Sans**
+(757 KB, Bitstream Vera licence — ship `DejaVu-LICENSE.txt` beside it). Implementation: S-029.
 
 ## Why not Cairo's text API
 

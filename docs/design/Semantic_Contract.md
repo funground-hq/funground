@@ -40,7 +40,7 @@ provide capabilities.* This table is what "owns" means.
 | # | Semantic | v0.5 verified behaviour | v0.6 rule | Status |
 |---|---|---|---|---|
 | T1 | Anchor | (x, y) is the **top-left** of the rendered glyph box | Same | Pinned |
-| T2 | Font | pygame's bundled `freesansbold.ttf` via `Font(None, size)`; no way to choose a font | One bundled OFL-licensed font shipped with Playground. Mechanism: glyph outlines read by fontTools, positioned by uharfbuzz, emitted as path ops in the IR — deterministic on every platform and renderer (pycairo cannot load a font file directly). Known limitation, accepted: exported PDFs carry outlines, not searchable text, until fonts are embedded (S-032) | Pinned in principle (D-006); font file chosen after Spike 06 (S-031) |
+| T2 | Font | pygame's bundled `freesansbold.ttf` via `Font(None, size)`; no way to choose a font | **DejaVu Sans** (Bitstream Vera licence, 757 KB) bundled with Playground. Mechanism: glyph outlines read by fontTools, positioned by uharfbuzz, emitted as path ops in the IR — deterministic on every platform and renderer. Known limitation, accepted: exported PDFs carry outlines, not searchable text, until fonts are embedded (S-032) | Pinned (D-006, D-009) |
 | T3 | Size | pygame `Font(None, size)` semantics (size 20 → ~13 px glyph height) | Define `text_size` as font size in logical pixels; may shift metrics slightly | Pinned intent |
 | T4 | Colour | explicit `color=` → current fill → current stroke → white | Same | Pinned |
 | T5 | Message | Any object; `str()` is applied | Same | Pinned |
