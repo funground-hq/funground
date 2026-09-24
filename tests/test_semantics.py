@@ -10,7 +10,8 @@ import pygame
 import pytest
 
 import playground as p
-from playground import _core
+from playground import api
+from playground.platform.pygame_platform import key_code
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -22,13 +23,13 @@ def px(surface, x, y):
 
 
 # ---------------------------------------------------------------- defaults
-def test_default_style_and_state():
-    assert (_core._style.fill, _core._style.stroke) == ("white", "black")
-    assert _core._style.stroke_width == 1
-    assert _core._style.text_size == 20
-    assert (_core._state.width, _core._state.height) == (640, 480)
-    assert _core._state.fps == 60
-    assert _core._state.title == "playground"
+def test_default_style_and_state(sketch):
+    assert (sketch.style.fill.rgb, sketch.style.stroke.rgb) == ((255, 255, 255), (0, 0, 0))
+    assert sketch.style.stroke_width == 1
+    assert sketch.style.text_size == 20
+    assert (sketch.width, sketch.height) == (640, 480)
+    assert sketch.fps == 60
+    assert sketch.title == "playground"
 
 
 def test_size_sets_live_values(canvas):
@@ -151,7 +152,7 @@ def test_stroke_width_minimum_is_one():
     with pytest.raises(ValueError):
         p.stroke_width(0)
     p.stroke_width(1)
-    assert _core._style.stroke_width == 1
+    assert api.active_sketch().style.stroke_width == 1
 
 
 def test_point_size_follows_stroke_width(canvas):
@@ -269,18 +270,18 @@ def test_text_converts_any_object(canvas):
 # ---------------------------------------------------------------- input
 def test_key_names():
     pygame.init()
-    assert _core._key_code("left") == pygame.K_LEFT
-    assert _core._key_code("SPACE") == pygame.K_SPACE
-    assert _core._key_code("enter") == pygame.K_RETURN
-    assert _core._key_code("escape") == pygame.K_ESCAPE
-    assert _core._key_code("a") == pygame.K_a
-    assert _core._key_code("7") == pygame.K_7
-    assert _core._key_code(pygame.K_x) == pygame.K_x
+    assert key_code("left") == pygame.K_LEFT
+    assert key_code("SPACE") == pygame.K_SPACE
+    assert key_code("enter") == pygame.K_RETURN
+    assert key_code("escape") == pygame.K_ESCAPE
+    assert key_code("a") == pygame.K_a
+    assert key_code("7") == pygame.K_7
+    assert key_code(pygame.K_x) == pygame.K_x
 
 
 def test_unknown_key_name_is_an_error():
     with pytest.raises(ValueError):
-        _core._key_code("banana")
+        key_code("banana")
 
 
 def test_key_down_is_false_when_nothing_is_pressed(canvas):
@@ -321,11 +322,11 @@ def test_constrain_and_distance():
 # ---------------------------------------------------------------- runtime
 def test_run_requires_draw_and_optional_setup():
     with pytest.raises(RuntimeError, match="draw"):
-        _core._run_namespace({}, max_frames=1)
+        api.active_sketch().run_namespace({}, max_frames=1)
     with pytest.raises(TypeError):
-        _core._run_namespace({"draw": lambda: None, "setup": 3}, max_frames=1)
+        api.active_sketch().run_namespace({"draw": lambda: None, "setup": 3}, max_frames=1)
     with pytest.raises(TypeError):
-        _core._run_namespace({"draw": "nope"}, max_frames=1)
+        api.active_sketch().run_namespace({"draw": "nope"}, max_frames=1)
 
 
 def test_run_without_size_creates_the_default_window():
@@ -334,7 +335,7 @@ def test_run_without_size_creates_the_default_window():
     def draw():
         seen["size"] = (p.width, p.height)
 
-    _core._run_namespace({"draw": draw}, max_frames=1)
+    api.active_sketch().run_namespace({"draw": draw}, max_frames=1)
     assert seen["size"] == (640, 480)
 
 
@@ -344,7 +345,7 @@ def test_frame_count_starts_at_zero_and_counts_completed_frames():
     def draw():
         seen.append(p.frame_count)
 
-    _core._run_namespace({"draw": draw}, max_frames=3)
+    api.active_sketch().run_namespace({"draw": draw}, max_frames=3)
     assert seen == [0, 1, 2]
     assert p.frame_count == 3
 
@@ -352,7 +353,7 @@ def test_frame_count_starts_at_zero_and_counts_completed_frames():
 def test_setup_runs_once_before_draw():
     calls = []
     ns = {"setup": lambda: calls.append("setup"), "draw": lambda: calls.append("draw")}
-    _core._run_namespace(ns, max_frames=2)
+    api.active_sketch().run_namespace(ns, max_frames=2)
     assert calls == ["setup", "draw", "draw"]
 
 
@@ -364,15 +365,15 @@ def test_stop_ends_the_loop():
         if len(n) == 4:
             p.stop()
 
-    _core._run_namespace({"draw": draw}, max_frames=100)
+    api.active_sketch().run_namespace({"draw": draw}, max_frames=100)
     assert len(n) == 4
 
 
 def test_run_fps_argument_validation():
     with pytest.raises(ValueError):
-        _core._run_namespace({"draw": lambda: None}, fps=0, max_frames=1)
+        api.active_sketch().run_namespace({"draw": lambda: None}, fps=0, max_frames=1)
     with pytest.raises(ValueError):
-        _core._run_namespace({"draw": lambda: None}, max_frames=0)
+        api.active_sketch().run_namespace({"draw": lambda: None}, max_frames=0)
 
 
 def test_delta_time_is_seconds_and_updates():
@@ -381,14 +382,14 @@ def test_delta_time_is_seconds_and_updates():
     def draw():
         seen.append(p.delta_time)
 
-    _core._run_namespace({"draw": draw}, fps=1000, max_frames=3)
+    api.active_sketch().run_namespace({"draw": draw}, fps=1000, max_frames=3)
     assert seen[0] == 0.0
     assert all(0.0 <= d < 1.0 for d in seen[1:])
 
 
 def test_a_second_run_in_the_same_process_works():
-    _core._run_namespace({"draw": lambda: None}, max_frames=1)
-    _core._run_namespace({"draw": lambda: None}, max_frames=2)
+    api.active_sketch().run_namespace({"draw": lambda: None}, max_frames=1)
+    api.active_sketch().run_namespace({"draw": lambda: None}, max_frames=2)
     assert p.frame_count == 2
 
 
@@ -396,7 +397,7 @@ def test_max_frames_captures_the_final_frame():
     def draw():
         p.background("navy")
 
-    _core._run_namespace({"draw": draw}, max_frames=1)
-    (w, h), data = _core._last_frame
+    api.active_sketch().run_namespace({"draw": draw}, max_frames=1)
+    (w, h), data = api.active_sketch().last_frame
     assert (w, h) == (640, 480)
     assert data[:3] == bytes((0, 0, 128))
