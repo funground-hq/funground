@@ -48,12 +48,30 @@ def sketch() -> Sketch:
     return api.active_sketch()
 
 
+class LiveCanvas:
+    """Pixel access that first renders whatever the sketch has recorded.
+
+    Drawing calls append IR ops; pixels exist only after Sketch._render(), so
+    semantic tests read through this wrapper instead of the raw surface.
+    """
+
+    def __init__(self, sketch: Sketch) -> None:
+        self._sketch = sketch
+
+    def get_at(self, pos):
+        self._sketch._render()
+        return self._sketch._platform.target.get_at(pos)
+
+    def get_size(self):
+        return self._sketch._platform.target.get_size()
+
+
 @pytest.fixture
 def canvas():
     """A live 200x100 drawing surface for pixel-level semantic tests."""
     pygame.init()
     playground.size(200, 100)
-    return api.active_sketch()._platform.target
+    return LiveCanvas(api.active_sketch())
 
 
 def run_sketch(path: Path, frames: int = 30, fps: int = 1000):

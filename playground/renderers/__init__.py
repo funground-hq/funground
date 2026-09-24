@@ -1,25 +1,22 @@
-"""The Renderer protocol for the v0.5 primitive set.
+"""The Renderer protocol: consume a Frame of IR ops (story S-019).
 
-Sprint 1 boundary: the sketch validates arguments, resolves colours and owns
-the GraphicsState; a renderer only paints. Sprint 2 replaces these per-primitive
-methods with a single ``render(ops)`` over the draw-op IR (story S-018/S-019).
+A renderer never sees a public API call; it sees data. Each renderer declares
+the capabilities it can honour so the sketch can refuse unsupported features
+up front (story S-021).
 """
 from __future__ import annotations
 
 from typing import Any, Protocol
 
-from ..color import Color
-from ..state import GraphicsState
+from ..capabilities import Capability
+from ..ir import Frame
 
 
 class Renderer(Protocol):
-    def attach(self, target: Any) -> None:
-        """Bind to the platform's native drawing target."""
+    capabilities: frozenset[Capability]
 
-    def background(self, color: Color) -> None: ...
-    def circle(self, x: float, y: float, diameter: float, state: GraphicsState) -> None: ...
-    def ellipse(self, x: float, y: float, width: float, height: float, state: GraphicsState) -> None: ...
-    def rect(self, x: float, y: float, width: float, height: float, state: GraphicsState) -> None: ...
-    def line(self, x1: float, y1: float, x2: float, y2: float, state: GraphicsState) -> None: ...
-    def point(self, x: float, y: float, state: GraphicsState) -> None: ...
-    def text(self, message: str, x: float, y: float, color: Color, state: GraphicsState) -> None: ...
+    def attach(self, target: Any) -> None:
+        """Bind to the platform's native drawing target (None to detach)."""
+
+    def render(self, frame: Frame) -> None:
+        """Draw every op in *frame*, in order, onto the attached target."""
