@@ -23,9 +23,8 @@ from .state import GraphicsState, StateStack
 # What the v0.5 public API needs from any renderer.
 REQUIRED_CAPABILITIES: dict[Capability, str] = {Capability.RASTER_2D: "Drawing shapes"}
 
-# Renderer selection (S-023.4). "legacy" exists only until S-026 deletes it.
-RENDERERS = {"cairo": "playground.renderers.cairo2d:CairoRenderer",
-             "legacy": "playground.renderers.legacy_pygame:LegacyPygameRenderer"}
+# Renderer selection (S-023.4). Future optional renderers (e.g. Blend2D, S-036) register here.
+RENDERERS = {"cairo": "playground.renderers.cairo2d:CairoRenderer"}
 DEFAULT_RENDERER = "cairo"
 
 

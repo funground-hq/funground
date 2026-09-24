@@ -9,8 +9,9 @@ import ast
 from pathlib import Path
 
 PACKAGE = Path(__file__).resolve().parent.parent / "playground"
-BACKENDS = {"pygame", "cairo", "skia", "moderngl", "OpenGL"}
-ALLOWED = ("platform/", "renderers/")
+BACKENDS = {"pygame", "cairo", "skia", "blend2d", "moderngl", "OpenGL"}
+# Which backend each provider directory may import (S-026: pygame is platform-only now).
+ALLOWED = {"platform/": {"pygame"}, "renderers/": {"cairo", "skia", "blend2d", "pygame"}, "export/": {"cairo"}}
 
 
 def _imports(path: Path) -> set[str]:
@@ -28,12 +29,18 @@ def test_backend_libraries_are_imported_only_by_providers():
     offenders = []
     for path in PACKAGE.rglob("*.py"):
         rel = path.relative_to(PACKAGE).as_posix()
-        if rel.startswith(ALLOWED):
-            continue
-        hit = _imports(path) & BACKENDS
+        allowed = next((libs for prefix, libs in ALLOWED.items() if rel.startswith(prefix)), set())
+        hit = (_imports(path) & BACKENDS) - allowed
         if hit:
             offenders.append(f"{rel}: {sorted(hit)}")
-    assert not offenders, "backend imports outside providers:\n" + "\n".join(offenders)
+    assert not offenders, "backend imports outside their provider:\n" + "\n".join(offenders)
+
+
+def test_no_pygame_drawing_remains():
+    """D-008: pygame draws nothing after the legacy renderer is deleted."""
+    for path in PACKAGE.rglob("*.py"):
+        src = path.read_text(encoding="utf-8")
+        assert "pygame.draw" not in src and "pygame.font" not in src, path.name
 
 
 def test_public_facade_imports_no_backend():
