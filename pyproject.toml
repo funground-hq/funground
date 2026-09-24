@@ -14,7 +14,7 @@ dependencies = ["pygame-ce>=2.5", "pycairo>=1.27", "fonttools>=4.55", "uharfbuzz
 dev = ["pytest>=8"]
 
 [tool.setuptools]
-packages = ["playground", "playground.platform", "playground.renderers"]
+packages = ["playground", "playground.platform", "playground.renderers", "playground.export"]
 
 [tool.setuptools.package-data]
 playground = ["fonts/*.ttf", "fonts/*.txt"]
