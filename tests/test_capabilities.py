@@ -51,9 +51,13 @@ def test_playground_error_is_a_runtime_error():
     assert issubclass(PlaygroundError, RuntimeError)
 
 
-def test_renderer_refuses_unknown_ops_loudly(canvas):
-    """Until the vector renderer exists, an internal op reaching the legacy renderer is a bug, not silence."""
-    s = api.active_sketch()
-    s.frame.append(ir.Save())
+def test_legacy_renderer_refuses_unknown_ops_loudly():
+    """An op the legacy renderer cannot draw is a bug, not silence (deleted with it in S-026)."""
+    from playground.renderers.legacy_pygame import LegacyPygameRenderer
+
+    import pygame
+
+    r = LegacyPygameRenderer()
+    r.attach(pygame.Surface((10, 10)))
     with pytest.raises(NotImplementedError, match="Save"):
-        s._render()
+        r.render(ir.Frame([ir.Save()]))
