@@ -104,13 +104,15 @@ def test_ellipse_is_centred(canvas):
     assert px(canvas, 58, 50) == WHITE
 
 
-def test_shape_coordinates_are_rounded_to_whole_pixels(canvas):
+def test_fractional_coordinates_are_honoured_with_antialiasing(canvas):
+    """Contract C6 (D-005): v0.5 rounded to whole pixels; v0.6 keeps fractions and anti-aliases."""
     p.background("white")
     p.no_stroke()
     p.fill("red")
-    p.rect(10.4, 10.6, 5, 5)  # -> (10, 11)
-    assert px(canvas, 10, 11) == RED
-    assert px(canvas, 10, 10) == WHITE
+    p.rect(10.5, 10, 5, 5)
+    assert px(canvas, 12, 12) == RED
+    edge = px(canvas, 10, 12)               # half-covered column: a blend, not a hard edge
+    assert edge != RED and edge != WHITE and edge[0] == 255
 
 
 # ---------------------------------------------------------------- fill / stroke
@@ -125,17 +127,17 @@ def test_no_fill_and_no_stroke_draw_nothing(canvas):
     assert all(px(canvas, x, y) == WHITE for x, y in ((10, 10), (30, 30), (100, 50), (100, 50), (150, 80)))
 
 
-def test_stroke_is_drawn_inside_the_shape_bounds(canvas):
-    """v0.5 (pygame) strokes grow inward from the geometric edge."""
+def test_stroke_is_centred_on_the_edge(canvas):
+    """Contract S4 (D-004): v0.5 grew strokes inward; v0.6 centres them on the geometric edge."""
     p.background("white")
     p.no_fill()
     p.stroke("black")
     p.stroke_width(6)
     p.rect(20, 20, 40, 40)
-    assert px(canvas, 19, 40) == WHITE   # nothing outside the edge
-    assert px(canvas, 20, 40) == BLACK   # edge pixel
-    assert px(canvas, 25, 40) == BLACK   # 6th pixel inward
-    assert px(canvas, 26, 40) == WHITE   # inside the stroke
+    assert px(canvas, 17, 40) == BLACK   # 3 px outside the edge
+    assert px(canvas, 22, 40) == BLACK   # 3 px inside
+    assert px(canvas, 16, 40) == WHITE
+    assert px(canvas, 23, 40) == WHITE
 
 
 def test_stroke_draws_over_fill(canvas):
@@ -156,15 +158,17 @@ def test_stroke_width_minimum_is_one():
 
 
 def test_point_size_follows_stroke_width(canvas):
+    """Contract S7: a dot of diameter ~stroke_width in the stroke colour (anti-aliased since v0.6)."""
     p.background("white")
     p.stroke("black")
     p.stroke_width(1)
     p.point(50, 50)
-    assert px(canvas, 50, 50) == BLACK
+    assert px(canvas, 50, 50) != WHITE      # a 1-px dot lands on its pixel
     assert px(canvas, 53, 50) == WHITE
-    p.stroke_width(8)  # radius max(1, 8 // 2) = 4
+    p.stroke_width(8)  # radius 4
     p.point(120, 50)
-    assert px(canvas, 123, 50) == BLACK
+    assert px(canvas, 120, 50) == BLACK
+    assert px(canvas, 122, 50) == BLACK
     assert px(canvas, 126, 50) == WHITE
 
 
@@ -172,8 +176,10 @@ def test_line_uses_stroke_only(canvas):
     p.background("white")
     p.fill("red")
     p.stroke("black")
+    p.stroke_width(2)                       # a 2-px line centred on y=50 covers rows 49 and 50 fully
     p.line(0, 50, 199, 50)
-    assert px(canvas, 100, 50) == BLACK
+    assert px(canvas, 100, 50) == BLACK and px(canvas, 100, 49) == BLACK
+    assert px(canvas, 100, 52) == WHITE
     p.no_stroke()
     p.line(0, 20, 199, 20)
     assert px(canvas, 100, 20) == WHITE
@@ -189,13 +195,14 @@ def test_colour_forms_are_passed_through(canvas):
         assert px(canvas, 5, 5) == expected
 
 
-def test_alpha_is_silently_dropped_on_the_window(canvas):
-    """v0.5 draws straight onto an opaque display surface: RGBA alpha is ignored."""
+def test_alpha_is_honoured(canvas):
+    """Contract S2 (D-003): v0.5 dropped alpha on the window; v0.6 composites it."""
     p.background("white")
     p.no_stroke()
-    p.fill((0, 0, 255, 64))
+    p.fill((0, 0, 255, 128))
     p.rect(0, 0, 10, 10)
-    assert px(canvas, 5, 5) == (0, 0, 255)
+    r, g, b = px(canvas, 5, 5)
+    assert b == 255 and 120 <= r <= 135 and 120 <= g <= 135   # half blue over white
 
 
 def test_background_fills_everything(canvas):
