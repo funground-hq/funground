@@ -63,6 +63,16 @@ playground/
 - **Pending: D-009 — which font to bundle.** Presented in the decision log with context, options,
   trade-offs and recommendation (DejaVu Sans). Blocks only S-029 (Sprint 4).
 
+## Sign-off (25 September 2026)
+
+Maintainer reviewed the reviewer's guide and retrospective; sprint **closed** with two outcomes:
+
+- **Colour forms:** the undocumented v0.5 forms (`pygame.Color` objects, packed `0xRRGGBBAA` ints) are
+  *kept* — the API is frozen and dropping them would have been an unforced break. Restored by
+  duck-typing `r/g/b/a` and decoding packed ints, with parity tests against pygame; contract S1 updated.
+- **Commit practice:** commit as soon as a logical change exists, so a staging slip cannot swallow
+  another story's change. Recorded in `PROCESS.md` § Rules.
+
 ## Retrospective
 
 - *Went well:* stories were planned before the work; each landed as one commit with a byte-identical

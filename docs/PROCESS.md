@@ -114,6 +114,8 @@ decisions and are not logged.
 ## Rules that outrank the documents
 
 - The v0.5 source and the test suite are authoritative when a document disagrees with them.
+- **Commit as soon as a logical change exists** — one story or concern per commit, message states
+  the context. Never let two stories' changes sit staged together (Sprint 1 retro).
 - Learner code in `examples/session1/` never changes to make a test pass.
 - A change to a pinned semantic is a contract change: ADR or contract row first, then code.
 - Backend types (`pygame.Surface`, `cairo.Context`, …) never appear in `playground/api.py` or in tests of public behaviour.
