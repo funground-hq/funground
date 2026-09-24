@@ -1,0 +1,87 @@
+{
+ "engine": "skia",
+ "features": {
+  "clip_path": true,
+  "scale": true,
+  "fill_rule": true,
+  "stroke_join_cap": true,
+  "gradients": "linear, radial, sweep(conic), two-point conical",
+  "native_font_file": true,
+  "pdf": true,
+  "svg": true,
+  "comp_ops": "SkBlendMode (multiply, screen, plus ...)"
+ },
+ "scenes": {
+  "A_primitives@640x400": {
+   "ops": 2501,
+   "draw_ms": 206.26,
+   "present_ms": 0.28,
+   "first_frame_ms": 196.23,
+   "fps": 4.8,
+   "unsupported_ops": 0
+  },
+  "B_paths@640x400": {
+   "ops": 405,
+   "draw_ms": 61.46,
+   "present_ms": 0.29,
+   "first_frame_ms": 57.1,
+   "fps": 16.2,
+   "unsupported_ops": 0
+  },
+  "C_translucency@640x400": {
+   "ops": 301,
+   "draw_ms": 505.61,
+   "present_ms": 0.31,
+   "first_frame_ms": 516.01,
+   "fps": 2.0,
+   "unsupported_ops": 0
+  },
+  "E_text@640x400": {
+   "ops": 1591,
+   "draw_ms": 56.49,
+   "present_ms": 0.28,
+   "first_frame_ms": 64.01,
+   "fps": 17.6,
+   "unsupported_ops": 0
+  },
+  "A_primitives@1280x720": {
+   "ops": 2501,
+   "draw_ms": 195.83,
+   "present_ms": 0.87,
+   "first_frame_ms": 209.11,
+   "fps": 5.1,
+   "unsupported_ops": 0
+  },
+  "B_paths@1280x720": {
+   "ops": 405,
+   "draw_ms": 109.82,
+   "present_ms": 0.94,
+   "first_frame_ms": 109.24,
+   "fps": 9.0,
+   "unsupported_ops": 0
+  },
+  "C_translucency@1280x720": {
+   "ops": 301,
+   "draw_ms": 1708.77,
+   "present_ms": 0.89,
+   "first_frame_ms": 1787.87,
+   "fps": 0.6,
+   "unsupported_ops": 0
+  },
+  "E_text@1280x720": {
+   "ops": 1591,
+   "draw_ms": 61.51,
+   "present_ms": 0.85,
+   "first_frame_ms": 59.83,
+   "fps": 16.0,
+   "unsupported_ops": 0
+  }
+ },
+ "python": "3.14.7",
+ "gradients_ms_50_rects": 196.52,
+ "sanity_C_scene_variants_ms": {
+  "drawPath_aa": 499.1,
+  "drawOval_aa": 650.6,
+  "drawOval_noaa": 619.5
+ }
+}

@@ -200,6 +200,88 @@ bearing), which is what `pygame.font` does today, so contract T1 holds without a
 
 **Decision requested (D-009): which font to bundle.** See `docs/design/Decision_Log.md`.
 
+## 7. Renderer bake-off — `07_renderer_bakeoff/` (Sprint 2, story S-035, ADR-002)
+
+**Question (D-010 → D-011):** with the real Sprint-2 IR as the input, which engine should render
+Playground's interactive frames? Candidates per ADR-002: Cairo, Skia, Blend2D. One venv each
+(pycairo 1.29.1 · skia-python 144.0.post2 · blend2d-py 2025.5.0), same `scenes.py` emitting
+`playground.ir` frames, ~100-line adapter per engine, presented through pygame on a hidden window,
+30 frames averaged, Windows 11 / Python 3.14.7. Draw time includes the Python cost of walking the
+IR (equal for all three).
+
+**The IR passed its own test:** all three engines rendered scene A pixel-for-pixel alike
+(`*_A_primitives_640x400.png`); no engine ever saw a public API call.
+
+### Binding-coverage gate (S-035.2)
+
+| Needed by the IR | Cairo | Skia | Blend2D (binding) |
+|---|---|---|---|
+| Clip to path | ✅ | ✅ | **✗ not exposed** — scene B ran without its clip (31 ops dropped) |
+| Scale / general matrix | ✅ | ✅ | **✗** — only translate/rotate; emulated by transforming paths in Python |
+| Fill rule | ✅ | ✅ | ✗ not exposed (default only) |
+| Stroke width / join / cap | ✅ | ✅ | ✅ |
+| Gradients | linear, radial, mesh | linear, radial, sweep, conical | linear, radial, **conic** |
+| Blend modes | cairo operators | SkBlendMode | CompOp |
+| Font from file | ✗ (toy API only) | ✅ | ✅ `FontFace().create_from_file()` |
+| PDF / SVG | ✅ | ✅ | ✗ |
+| Wheels (cp314) | win, linux, macOS x86_64 + arm64 | win, linux, macOS both | win, linux, **macOS arm64 only** |
+
+### Draw time per frame, ms (lower is better)
+
+| Scene (ops/frame) | Cairo 640×400 | Skia 640×400 | Blend2D 640×400 | Cairo 720p | Skia 720p | Blend2D 720p |
+|---|---|---|---|---|---|---|
+| A 500 circles + 500 rotated rects, alpha (2501) | 70.4 | 206.3 | **23.7** | 70.8 | 195.8 | **25.9** |
+| B 100 stroked Béziers, clip, nested transforms (405) | 14.8 | 61.5 | 3.5 † | 42.2 | 109.8 | 5.7 † |
+| C 300 large translucent ellipses (301) | 20.7 | 505.6 | **5.5** | 48.9 | 1708.8 | **10.0** |
+| E 40 lines of outline text, DejaVu Sans (1591) | 15.2 | 56.5 | **9.9** | 17.8 | 61.5 | **11.4** |
+| Gradients, 50 rects (native API) | 27.8 | 196.5 | **3.6** | | | |
+
+† Blend2D drew scene B *without* the clip; not comparable.
+Presentation (buffer → pygame → flip) was 0.1–1.5 ms for every engine.
+
+Skia sanity check (`results_skia.json`): scene C via `drawOval` instead of paths is *slower*
+(651 ms), and disabling AA does not help (620 ms) — the cost is skia-python's CPU rasteriser,
+not the adapter. Native Skia in browsers runs on the GPU; this binding does not.
+
+### Classroom cost (fresh venv, `--no-cache-dir`)
+
+| | Cairo | Skia | Blend2D |
+|---|---|---|---|
+| `pip install` | 1.6 s | 17.9 s | 1.3 s |
+| Download | 0.9 MB | 24.3 MB (numpy) | 0.9 MB |
+| Installed | 2.0 MB | 81.1 MB | 2.2 MB |
+| Cold import cost | 1 ms | 90 ms | 6 ms |
+
+### Export replay (S-035.4)
+
+Scenes A, B, E replayed from the same IR through Cairo PDF/SVG surfaces: A 87 KB PDF / 481 KB SVG
+in 50 / 19 ms; B 9 / 83 KB; E (outline text) 185 KB / 839 KB. Export is independent of the
+interactive engine — Cairo can be the exporter whoever draws the window.
+
+### Native text (Blend2D only)
+
+`fill_utf8_text` with DejaVu Sans loaded from file: **0.032 ms per line** vs 0.44 ms through the
+outlines route (Spike 06). Fast, but renderer-specific: it bypasses the IR and the determinism
+guarantee, so it could only ever be an optimisation behind `TextRun`, not the contract.
+
+### Binding-risk score (S-035.6)
+
+| | Cairo (pycairo) | Skia (skia-python) | Blend2D (blend2d-py) |
+|---|---|---|---|
+| Core project | cairo 1.18.x, maintained, 20+ years | Google, huge | Blend2D 0.x, one principal author, active |
+| Binding owner | pygobject project (GNOME ecosystem) | one maintainer, 5+ years, many releases | Shiguredo (WebRTC company), first release 2025 |
+| API coverage of the IR | complete | complete | **incomplete** (no clip / matrix / fill rule) |
+| Wheel coverage | all platforms incl. py3.15 | all platforms | no macOS x86_64 |
+| Release cadence | steady | steady | ~monthly through 2025, 2026.1.0.dev0 |
+| Licence | LGPL/MPL (cairo), LGPL/MPL (pycairo) | BSD | zlib |
+| Risk | low | low (but heavy) | **medium–high** for the binding; low for the engine |
+
+### Scene note
+Scene E's Devanagari shows as boxes because DejaVu Sans has no Devanagari glyphs (Spike 06 used
+Noto Sans Devanagari for that); the row overlap is a scene-layout bug. Neither affects timings.
+
+**Decision requested (D-011): the interactive 2D engine.** See `docs/design/Decision_Log.md`.
+
 ## Reference clone
 
 `spikes/reference/drawbot-skia/` — shallow clone of justvanrossum/drawbot-skia (precedent for the

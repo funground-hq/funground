@@ -1,0 +1,88 @@
+{
+ "engine": "blend2d",
+ "features": {
+  "clip_path": false,
+  "scale": "emulated in Python (binding lacks it)",
+  "fill_rule": "not exposed",
+  "stroke_join_cap": true,
+  "gradients": "linear, radial, conic",
+  "native_font_file": true,
+  "pdf": false,
+  "svg": false,
+  "comp_ops": "CompOp enum (multiply, screen, plus ...)"
+ },
+ "scenes": {
+  "A_primitives@640x400": {
+   "ops": 2501,
+   "draw_ms": 23.71,
+   "present_ms": 0.2,
+   "first_frame_ms": 34.52,
+   "fps": 41.8,
+   "unsupported_ops": 0
+  },
+  "B_paths@640x400": {
+   "ops": 405,
+   "draw_ms": 3.47,
+   "present_ms": 0.14,
+   "first_frame_ms": 4.14,
+   "fps": 276.7,
+   "unsupported_ops": 31
+  },
+  "C_translucency@640x400": {
+   "ops": 301,
+   "draw_ms": 5.45,
+   "present_ms": 0.13,
+   "first_frame_ms": 5.75,
+   "fps": 179.4,
+   "unsupported_ops": 0
+  },
+  "E_text@640x400": {
+   "ops": 1591,
+   "draw_ms": 9.88,
+   "present_ms": 0.22,
+   "first_frame_ms": 9.9,
+   "fps": 99.0,
+   "unsupported_ops": 0
+  },
+  "A_primitives@1280x720": {
+   "ops": 2501,
+   "draw_ms": 25.87,
+   "present_ms": 0.76,
+   "first_frame_ms": 30.79,
+   "fps": 37.6,
+   "unsupported_ops": 0
+  },
+  "B_paths@1280x720": {
+   "ops": 405,
+   "draw_ms": 5.7,
+   "present_ms": 0.63,
+   "first_frame_ms": 6.43,
+   "fps": 158.0,
+   "unsupported_ops": 31
+  },
+  "C_translucency@1280x720": {
+   "ops": 301,
+   "draw_ms": 9.97,
+   "present_ms": 0.66,
+   "first_frame_ms": 11.31,
+   "fps": 94.1,
+   "unsupported_ops": 0
+  },
+  "E_text@1280x720": {
+   "ops": 1591,
+   "draw_ms": 11.44,
+   "present_ms": 0.93,
+   "first_frame_ms": 11.18,
+   "fps": 80.8,
+   "unsupported_ops": 0
+  }
+ },
+ "python": "3.14.7",
+ "gradients_ms_50_rects": 3.61,
+ "native_font": {
+  "ok": true,
+  "family": "DejaVu Sans",
+  "weight": 400,
+  "ms_per_line_native": 0.032
+ }
+}

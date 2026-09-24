@@ -10,3 +10,6 @@ spikes/03_skia_install_cost/wheels/
 spikes/reference/
 tests/golden/_actual/
 spikes/06_text_outlines/fonts/*.ttf
+spikes/07_renderer_bakeoff/venv_*/
+spikes/07_renderer_bakeoff/wheels_*/
+spikes/07_renderer_bakeoff/export_*.svg

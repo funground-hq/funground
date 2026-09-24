@@ -1,0 +1,108 @@
+{
+ "engine": "cairo",
+ "features": {
+  "clip_path": true,
+  "scale": true,
+  "fill_rule": true,
+  "stroke_join_cap": true,
+  "gradients": "linear, radial, mesh (no conic)",
+  "native_font_file": false,
+  "pdf": true,
+  "svg": true,
+  "comp_ops": "cairo operators (multiply, add, screen ...)"
+ },
+ "scenes": {
+  "A_primitives@640x400": {
+   "ops": 2501,
+   "draw_ms": 70.38,
+   "present_ms": 0.34,
+   "first_frame_ms": 58.25,
+   "fps": 14.1,
+   "unsupported_ops": 0
+  },
+  "B_paths@640x400": {
+   "ops": 405,
+   "draw_ms": 14.82,
+   "present_ms": 0.2,
+   "first_frame_ms": 14.88,
+   "fps": 66.6,
+   "unsupported_ops": 0
+  },
+  "C_translucency@640x400": {
+   "ops": 301,
+   "draw_ms": 20.66,
+   "present_ms": 0.21,
+   "first_frame_ms": 20.7,
+   "fps": 47.9,
+   "unsupported_ops": 0
+  },
+  "E_text@640x400": {
+   "ops": 1591,
+   "draw_ms": 15.22,
+   "present_ms": 0.26,
+   "first_frame_ms": 16.44,
+   "fps": 64.6,
+   "unsupported_ops": 0
+  },
+  "A_primitives@1280x720": {
+   "ops": 2501,
+   "draw_ms": 70.82,
+   "present_ms": 1.14,
+   "first_frame_ms": 67.1,
+   "fps": 13.9,
+   "unsupported_ops": 0
+  },
+  "B_paths@1280x720": {
+   "ops": 405,
+   "draw_ms": 42.21,
+   "present_ms": 1.51,
+   "first_frame_ms": 30.92,
+   "fps": 22.9,
+   "unsupported_ops": 0
+  },
+  "C_translucency@1280x720": {
+   "ops": 301,
+   "draw_ms": 48.89,
+   "present_ms": 0.86,
+   "first_frame_ms": 59.05,
+   "fps": 20.1,
+   "unsupported_ops": 0
+  },
+  "E_text@1280x720": {
+   "ops": 1591,
+   "draw_ms": 17.84,
+   "present_ms": 1.18,
+   "first_frame_ms": 20.07,
+   "fps": 52.6,
+   "unsupported_ops": 0
+  }
+ },
+ "python": "3.14.7",
+ "gradients_ms_50_rects": 27.81,
+ "export_replay": {
+  "A_primitives.pdf": {
+   "bytes": 87463,
+   "ms": 50.2
+  },
+  "A_primitives.svg": {
+   "bytes": 480706,
+   "ms": 18.7
+  },
+  "B_paths.pdf": {
+   "bytes": 9047,
+   "ms": 5.7
+  },
+  "B_paths.svg": {
+   "bytes": 83127,
+   "ms": 3.4
+  },
+  "E_text.pdf": {
+   "bytes": 184924,
+   "ms": 66.0
+  },
+  "E_text.svg": {
+   "bytes": 838896,
+   "ms": 27.0
+  }
+ }
+}

@@ -36,14 +36,14 @@ parallel, the renderer bake-off (Spike 07) produces the numbers for D-011.
 - [x] S-021.3 Tests for message text
 *Acceptance:* no capability check happens inside the frame loop.
 
-### S-035 Spike 07 — renderer bake-off — E-08 *(parallel; feeds D-011)*
-- [ ] S-035.1 `spikes/07_renderer_bakeoff/` with one venv per engine (pycairo; skia-python; blend2d-py) and a shared scene generator that emits the **Sprint 2 IR** (so the spike also tests the IR)
-- [ ] S-035.2 Binding-coverage gate for Blend2D: clip path, scale, fill rule, stroke join/cap, gradient types — pass/fail table; if fail, Blend2D is measured only on what it can do and scored on binding risk
-- [ ] S-035.3 Scenes: A primitive-heavy animation (500 circles + 500 rects, alpha, rotation) · B complex paths (100 Béziers, joins/caps, clip, nested transforms) · C translucency/compositing (multiply/add/screen where supported) · D gradients (linear, radial, conic where available) · E text via the outlines route with DejaVu Sans (+ Blend2D native font load for comparison)
-- [ ] S-035.4 Export replay: the same IR through Cairo PDF/SVG surfaces regardless of interactive engine
-- [ ] S-035.5 Classroom cost: `pip install` time, download size, installed footprint, cold import, first frame — each in a fresh venv
-- [ ] S-035.6 Binding-risk score per engine: core project stability, binding ownership, wheel coverage (incl. macOS x86_64), release cadence, API coverage, licence
-- [ ] S-035.7 Results in `spikes/RESULTS.md` §7; **D-011** presented per PROCESS (context / options / trade-offs / recommendation / why)
+### S-035 Spike 07 — renderer bake-off — E-08 ✅ (D-011 pending)
+- [x] S-035.1 `spikes/07_renderer_bakeoff/` with one venv per engine (pycairo; skia-python; blend2d-py) and a shared scene generator that emits the **Sprint 2 IR** (so the spike also tests the IR)
+- [x] S-035.2 Binding-coverage gate for Blend2D: clip path, scale, fill rule, stroke join/cap, gradient types — pass/fail table; if fail, Blend2D is measured only on what it can do and scored on binding risk
+- [x] S-035.3 Scenes: A primitive-heavy animation (500 circles + 500 rects, alpha, rotation) · B complex paths (100 Béziers, joins/caps, clip, nested transforms) · C translucency/compositing (multiply/add/screen where supported) · D gradients (linear, radial, conic where available) · E text via the outlines route with DejaVu Sans (+ Blend2D native font load for comparison)
+- [x] S-035.4 Export replay: the same IR through Cairo PDF/SVG surfaces regardless of interactive engine
+- [x] S-035.5 Classroom cost: `pip install` time, download size, installed footprint, cold import, first frame — each in a fresh venv
+- [x] S-035.6 Binding-risk score per engine: core project stability, binding ownership, wheel coverage (incl. macOS x86_64), release cadence, API coverage, licence
+- [x] S-035.7 Results in `spikes/RESULTS.md` §7; **D-011** presented per PROCESS (context / options / trade-offs / recommendation / why)
 *Acceptance:* the maintainer can decide the engine from the document alone.
 
 ### S-033 Architecture document v2 — E-23

@@ -1,0 +1,14 @@
+{
+ "package": "pycairo",
+ "install_s": 1.6,
+ "rc": 0,
+ "download_MB": {
+  "pycairo-1.29.1-cp314-cp314-win_amd64.whl": 0.87
+ },
+ "site_packages_MB": {
+  "cairo": 1.98
+ },
+ "cold_import_s_min": 0.052,
+ "interpreter_start_s_min": 0.051,
+ "import_cost_s": 0.001
+}

@@ -1,0 +1,21 @@
+{
+ "package": "skia-python",
+ "install_s": 17.9,
+ "rc": 0,
+ "download_MB": {
+  "numpy-2.5.3-cp314-cp314-win_amd64.whl": 12.7,
+  "pybind11-3.1.0-py3-none-any.whl": 0.32,
+  "skia_python-144.0.post2-cp314-cp314-win_amd64.whl": 11.26
+ },
+ "site_packages_MB": {
+  "icudtl.dat": 10.47,
+  "numpy": 32.87,
+  "numpy-2.5.3.dist-info": 0.21,
+  "numpy.libs": 21.16,
+  "pybind11": 1.2,
+  "skia.cp314-win_amd64.pyd": 15.21
+ },
+ "cold_import_s_min": 0.142,
+ "interpreter_start_s_min": 0.052,
+ "import_cost_s": 0.09
+}

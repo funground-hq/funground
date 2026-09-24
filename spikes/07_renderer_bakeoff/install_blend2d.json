@@ -1,0 +1,14 @@
+{
+ "package": "blend2d-py",
+ "install_s": 1.3,
+ "rc": 0,
+ "download_MB": {
+  "blend2d_py-2025.5.0-cp314-cp314-win_amd64.whl": 0.94
+ },
+ "site_packages_MB": {
+  "blend2d": 2.16
+ },
+ "cold_import_s_min": 0.06,
+ "interpreter_start_s_min": 0.054,
+ "import_cost_s": 0.006
+}
