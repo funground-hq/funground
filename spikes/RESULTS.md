@@ -282,6 +282,102 @@ Noto Sans Devanagari for that); the row overlap is a scene-layout bug. Neither a
 
 **Decision requested (D-011): the interactive 2D engine.** See `docs/design/Decision_Log.md`.
 
+## 8. Browser feasibility — `08_browser_pyodide/` (Sprint 4, story S-059, epic E-31)
+
+**Question:** does Playground's pure-Python core run under Pyodide unchanged, and are the pieces a
+browser mode needs (IR build per frame, IR → JSON, fontTools outlines in wasm) fast enough?
+Route A of `docs/design/Browser_Mode_Note.md`: Pyodide + our own platform/renderer pair, no
+pygame, no Cairo. Pyodide 0.28.3 (CPython 3.13.2 in wasm) under Node 22.14 on the Windows 11
+teaching machine; native comparison CPython 3.14.7 from the repo venv. Raw numbers:
+`results.json` (wasm), `results_native.json`, `page/screenshots/compare.json`.
+
+### Part 1 — the core in wasm (Node, `feasibility.mjs` + `feasibility.py`)
+
+The package mounted into the Pyodide FS with `platform/pygame_platform.py`, `renderers/cairo2d.py`
+and `export/` left out (16 files, 841 KB of which 757 KB is DejaVu Sans). `import playground` and
+`from playground import ir, api, sketch, geometry, color, state` succeed **with no source change**:
+nothing on the import path of the core touches pygame, Cairo or uharfbuzz (only
+`renderers/cairo2d.py` imports `typography`). A rAF-style `BrowserPlatform` stub (every protocol
+method, `tick()` never waits) and a `Canvas2DStubRenderer` (walks the IR, counts the Canvas 2D calls
+a real renderer would make) drove `Sketch.run_namespace(max_frames=60)` on a Session-1-scale
+`draw()`: background + 50 circles (alternating translucent tomato / steelblue) + two `text()` calls.
+
+| Measurement | Pyodide (wasm) | native CPython | wasm ÷ native |
+|---|---|---|---|
+| `loadPyodide()` (local files, Node) | **1.7 s** (1.6 s first run) | — | — |
+| `loadPackage("fonttools")` from the Pyodide CDN | **0.27 s** (0.76 s first run, cold cache) | — | — |
+| mount 16 files into the FS | 7 ms | — | — |
+| import the core (`playground` + six modules) | **120 ms** (87 ms first run) | 62 ms | 1.9× |
+| one frame: api → IR → stub render, 53 ops (≈358 Canvas 2D calls) | **0.79 ms** | 0.33 ms | 2.4× |
+| of which the IR walk in the stub renderer | 0.02 ms | 0.01 ms | — |
+| `Frame.to_jsonable()` for that frame | **0.44 ms** | 0.20 ms | 2.2× |
+| `json.dumps` of it (8.2 KB) / `Frame.from_jsonable` | 0.42 / 0.52 ms | 0.08 / 0.25 ms | 5× / 2× |
+| `TTFont("DejaVuSans.ttf")` + glyph set | 182 ms | 37 ms | 4.9× |
+| outlines for `"Hello, Playground!"`, 18 glyphs, cache cold (BasePen subclass) | **3.4 ms** (0.19 ms/glyph) | 1.5 ms | 2.3× |
+| same, cache warm (18 dict lookups) | 0.003 ms | 0.002 ms | — |
+| per-frame text cost as `typography.py` pays it: cached outline → `transformed()` → `FillPath`, 284 segments | **0.91 ms** | 0.41 ms | 2.2× |
+
+**Findings**
+- Python-in-wasm is **2–2.5× slower than native** for everything that matters per frame — better
+  than the 3–5× the note assumed. A Session-1 frame costs under 1 ms of Python; the 16 ms budget
+  is not the constraint, the browser's own rasterisation is.
+- The IR → JSON round trip (`to_jsonable` + `json.dumps`, ~0.9 ms for 53 ops) is cheap enough that
+  a **JavaScript** renderer consuming the serialised frame is a viable first Canvas2DRenderer; the
+  alternative, calling `ctx.*` from Python through Pyodide's FFI (~360 calls per frame here), was
+  not measured and is the open performance question for S-062.
+- fontTools works unmodified in wasm; the outline route is affordable there (0.19 ms per new
+  glyph, 0.9 ms per frame for an 18-glyph line). What is missing is only the **shaper** (uharfbuzz
+  has no wasm wheel) — exactly the S-063 question.
+- Cold start on this machine, everything local: 1.7 s runtime + 0.3–0.8 s fontTools + 0.2 s font +
+  0.1 s import ≈ **2.5–3 s** before the first frame, plus the ~10 MB Pyodide download from a CDN on
+  a real page. Within the note's 3–8 s estimate.
+- `run_namespace` ran to completion only because `max_frames` stopped it; its `while self.running`
+  loop would block a browser's main thread. **S-060 (loop inversion into `start/step/finish`) is
+  confirmed as the prerequisite**; the `Platform` protocol itself needed nothing new.
+
+### Part 2 — a `<canvas>` consumer of the IR (`page/ir_canvas.js`, `page/index.html`)
+
+~110 lines of JavaScript replay a `Frame.to_jsonable()` list with the Canvas 2D API, op for op as
+`cairo2d.py` does: `Clear` → `fillRect` with `globalCompositeOperation = "copy"`; shapes → `arc` /
+`ellipse` / `rect`, fill then stroke, centred strokes, round joins and caps; `Line`/`Point` stroke
+only; `Save/Restore/Concat` → `save/restore/transform`; `ClipPath/FillPath/StrokePath` → path
+commands + `clip/fill/stroke`. `Text` → `fillText` with the bundled font as a `FontFace`, baseline at
+`y + hhea.ascent × size / upem` like `typography.py` — **browser shaping, not the outline route**,
+and the page says so. HiDPI handled as on the desktop (`canvas.width = w × dpr`, `ctx.scale`).
+
+**Verified — but not with the browser-automation tool** (the Claude-in-Chrome extension is not
+connected in this session). Instead: `python -m http.server` at the repo root + **headless Edge
+153.0.4234.48 (Chromium) `--screenshot`** at DPR 1 for all 11 snapshots →
+`page/screenshots/*.png`, compared with `tests/golden/*.png` by `compare.py`:
+
+| Snapshot | pixels differing (> 8/255 in any channel) | mean abs diff /255 |
+|---|---|---|
+| 01, 06, 07, 08, 09, 12 (one or two shapes) | 0.5–0.7 % | 0.4–0.5 |
+| 10_helpers (20 circles) | 1.7 % | 1.7 |
+| 02_shapes, 03_colors, 04_fill_stroke | 2.2–2.3 % | 1.6–2.4 |
+| 05_text (four `fillText` lines) | 2.2 % | 1.7 |
+
+Every difference is an anti-aliased edge; nothing is misplaced, missing or mis-coloured, and the
+text lines land on the same baselines as the desktop outlines (same font file, same ascent
+formula). Visual inspection of 02, 03 and 05 beside their goldens agrees. Two correct renderers may
+differ in pixels; these do not differ in ops.
+
+Caveats: `Clear` inside a `ClipPath` cannot drop the clip in Canvas 2D (Cairo `reset_clip`s); no
+snapshot exercises it. `Concat/ClipPath/FillPath/StrokePath` are implemented but no public API
+emits them yet, so they are untested by a snapshot.
+
+### Implications for E-31
+
+| Story | What the spike says |
+|---|---|
+| S-060 loop inversion | Required; the only core change the browser needs. `start()` = platform start + setup + default size; `step()` = poll, input, draw, render, tick; `finish()` = the `finally` block. |
+| S-061 `BrowserPlatform` | The stub is the shape of it: `tick` returns elapsed time, `present` is a no-op, `capture` reads the canvas back. ~60 lines plus DOM event wiring. |
+| S-062 `Canvas2DRenderer` | `ir_canvas.js` is the op mapping. Decide JS-side (consume JSON, +0.9 ms/frame at Session-1 scale) vs Python-side through the FFI (unmeasured). Text needs S-063 first; until then `fillText` is a labelled "browser-native text" mode. |
+| S-063 browser text | Outlines in wasm cost 0.19 ms/glyph cold, 0.9 ms/frame warm for 18 glyphs — the outline route fits. Only shaping is missing; `fillText` is visually close for Latin but non-deterministic. These are the numbers for D-013. |
+| S-064 loader | Budget ≈ 2.5–3 s cold local + the Pyodide download; prefetch fontTools and the font in parallel with the runtime as Pyxel does. `loadPackage("fonttools")` needs the CDN (or a self-hosted wheel). |
+| S-065 export | `to_jsonable` ≈ 0.4 ms; an SVG writer over the IR is a small JS or Python function; PNG = `canvas.toBlob`. |
+| S-066 classroom page | Nothing new; depends on S-060–S-064. |
+
 ## Reference clone
 
 `spikes/reference/drawbot-skia/` — shallow clone of justvanrossum/drawbot-skia (precedent for the

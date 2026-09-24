@@ -126,3 +126,14 @@ visually equivalent output; a lesson can be shared as a URL.
 Pyxel `wasm/pyxel.js`, `Makefile`, `docs/web-usage.md` (kitao/pyxel, main, 25 Sept 2026);
 kitao/pyxel issue #418; Pyodide PR #3508 and "Using SDL-based packages in Pyodide" (v314);
 Pyodide packages list (v314); pygbag 0.9.3 on PyPI (Feb 2026); PyScript 2026.3.1 `py-game` docs.
+
+## Spike 08 results (S-059, 25 September 2026) — `spikes/RESULTS.md` §8
+
+- The pure-Python core imports and runs under **Pyodide 0.28.3 unchanged**: pygame, Cairo and uharfbuzz are all behind `platform/`, `renderers/cairo2d.py` and `typography.py`, none on the core's import path.
+- Wasm is **2–2.5× slower than native**, not 3–5×: a Session-1 frame (50 circles + text, 53 ops) costs 0.79 ms of Python in wasm vs 0.33 ms native; `Frame.to_jsonable()` 0.44 ms; `json.dumps` 0.42 ms for 8 KB.
+- fontTools runs in wasm: outlines 0.19 ms per new glyph, ~0.9 ms per frame for an 18-glyph line through the cached-outline → `FillPath` path. Only the shaper is missing (S-063 / D-013).
+- Cold start on the teaching machine with everything local: `loadPyodide` 1.7 s + fontTools 0.3–0.8 s + font 0.2 s + import 0.1 s ≈ **2.5–3 s**, plus the ~10 MB runtime download on a real page.
+- `Sketch.run_namespace`'s `while` loop is the one thing that cannot run in a browser: **S-060 loop inversion is the prerequisite**; the `Platform` protocol needed no change.
+- A ~110-line JavaScript Canvas 2D consumer of the IR JSON (`page/ir_canvas.js`) rendered all 11 snapshot frames; headless Edge 153 screenshots differ from the Cairo goldens on ≤ 2.3 % of pixels (anti-aliased edges only). Text used `fillText` + `FontFace` (option 4 above), which is visually close for Latin but not the deterministic route.
+- Verification was by headless Chromium screenshots, not by the browser-automation tool (not connected in this session); `Clear` inside a clip and the internal path ops are implemented but exercised by no snapshot.
+- Recommendation unchanged: **route A**. Open for S-062: consume the JSON from JS (measured, ~0.9 ms/frame extra) or call `ctx.*` from Python through the FFI (unmeasured).
