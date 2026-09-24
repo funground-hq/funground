@@ -8,7 +8,7 @@ renderer bake-off produces the numbers for D-011.
 ## Outcome
 
 All six stories done. **Phase 1 checkpoint 2 (D-007) met: all 11 goldens byte-identical; 11 IR
-snapshots committed.** One decision raised and pending: D-011 (interactive engine).
+snapshots committed.** One decision raised: D-011 (interactive engine), accepted as D at sign-off.
 
 | Story | Result | Commit |
 |---|---|---|
@@ -54,9 +54,13 @@ Code diff for the sprint: 23 files, +2298 / −100.
 
 ## Decisions
 
-- **Pending: D-011 — the interactive 2D engine.** Presented per PROCESS in `Decision_Log.md`.
+- **D-011 — the interactive 2D engine: accepted as D on 25 Sept 2026.** Presented per PROCESS in `Decision_Log.md`.
   Recommendation D: Cairo for Sprint 3 and export; Blend2D as a gated optional renderer later.
 - Taken during the sprint: none beyond D-010's application.
+
+## Sign-off (25 September 2026)
+
+Maintainer accepted D-011 = D and opened Sprint 3. Sprint **closed**.
 
 ## Retrospective
 

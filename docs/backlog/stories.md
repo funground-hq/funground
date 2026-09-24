@@ -42,7 +42,7 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 | S-021 | E-07 | Asking for an unsupported capability fails at `p.size()`/`p.run()` with a message naming the extra to install | Tests for message text | ready |
 | S-022 | E-08 | ADR-001 is accepted or amended | ADR status ≠ Proposed | done 24 Sept 2026 (D-001, accepted early) |
 
-## Sprint 3 — Phase 1c: vector renderer via the IR (engine per D-011; reference: Cairo), semantic migration (planned)
+## Sprint 3 — Phase 1c: Cairo via the IR (D-011 = D), semantic migration (in progress)
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
@@ -75,3 +75,9 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 | S-032 | E-12 | PDF exporter consumes `TextRun` and embeds/subsets the font so exported text is searchable and selectable | Accepted limitation from D-006 until then |
 
 Other stories are cut from epics E-14 … E-21 when their phase is scheduled. Nothing here is committed.
+
+## Tracking (engine watch)
+
+| ID | Epic | Story | Trigger | Status |
+|---|---|---|---|---|
+| S-036 | E-08 | Blend2D as a gated optional renderer (`playground[fast]`): re-run Spike 07, then productionise the adapter as a second IR consumer | `blend2d-py` exposes clip + matrix + fill rule and ships macOS x86_64 wheels | tracking (D-011) |

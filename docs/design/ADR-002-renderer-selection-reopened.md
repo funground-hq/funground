@@ -1,6 +1,6 @@
 # ADR-002: Renderer selection reopened — Cairo as reference implementation pending a bake-off
 
-**Status:** Accepted — option B, by the maintainer on 24 September 2026 (Decision Log D-010).
+**Status:** Accepted — option B on 24 September 2026 (D-010); **open clause closed by D-011 on 25 September 2026: Cairo is the Sprint 3 interactive renderer and the exporter; Blend2D is a gated optional renderer (S-036).** Bake-off evidence: `spikes/RESULTS.md` §7.
 Supersedes the *engine* clause of ADR-001. The *topology* clause of ADR-001 (Playground owns
 semantics + IR; pygame-ce is platform + presentation; renderers are IR consumers) is unchanged.
 **Date:** proposed and accepted 24 September 2026
