@@ -46,6 +46,14 @@ ADDED_FUNCTIONS = {
     "state": "() -> 'AbstractContextManager[None]'",
     "radians": "(degrees: 'float') -> 'float'",
     "degrees": "(radians: 'float') -> 'float'",
+    # Sprint 4, S-028: shapes, paths and clipping (contract F3).
+    "begin_shape": "() -> 'None'",
+    "vertex": "(x: 'float', y: 'float') -> 'None'",
+    "curve_vertex": "(cx1: 'float', cy1: 'float', cx2: 'float', cy2: 'float', x: 'float', y: 'float') -> 'None'",
+    "end_shape": "(close: 'bool' = False) -> 'None'",
+    "path": "() -> 'PathBuilder'",
+    "draw_path": "(path: 'PathBuilder') -> 'None'",
+    "clip": "(path: 'PathBuilder') -> 'None'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

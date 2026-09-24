@@ -18,7 +18,8 @@ from typing import Any
 from . import ir
 from .capabilities import Capability, PlaygroundWarning, missing_capability
 from .color import WHITE, Color, ColorLike
-from .geometry import Transform
+from .geometry import Path, Transform
+from .paths import PathBuilder
 from .platform.base import KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
@@ -68,6 +69,8 @@ class Sketch:
         # Ops recorded since the last render; consumed once per loop iteration.
         self.frame = ir.Frame()
         self._pending_saves: list[str] = []
+        # The shape between begin_shape() and end_shape(), if one is open (S-028).
+        self._shape: PathBuilder | None = None
         # Playground keeps its own generator so random_seed() never disturbs a
         # learner's own `import random`.
         self._rng = _random.Random()
@@ -129,6 +132,13 @@ class Sketch:
 
     def _end_draw(self) -> None:
         """End-of-frame safety (S-027.4): unwind pushes draw() left open, with a warning."""
+        if self._shape is not None:
+            self._shape = None
+            warnings.warn(
+                "draw() finished inside a shape: p.begin_shape() had no p.end_shape(), "
+                "so nothing was drawn for it.",
+                PlaygroundWarning, stacklevel=2,
+            )
         open_pushes = self._states.unwind()
         if open_pushes:
             for _ in range(open_pushes):
@@ -269,6 +279,59 @@ class Sketch:
             chosen = style.fill or style.stroke or WHITE  # contract T4
         self._emit(ir.Text(str(message), x, y, chosen, style))
 
+    # ------------------------------------------------------------ shapes, paths, clipping (S-028)
+    def begin_shape(self) -> None:
+        if self._shape is not None:
+            raise RuntimeError("p.begin_shape() called again before p.end_shape(); finish the first shape.")
+        self._shape = PathBuilder()
+
+    def vertex(self, x: float, y: float) -> None:
+        shape = self._open_shape("vertex")
+        if shape.is_empty:
+            shape.move_to(x, y)       # the first corner starts the shape
+        else:
+            shape.line_to(x, y)
+
+    def curve_vertex(self, cx1: float, cy1: float, cx2: float, cy2: float, x: float, y: float) -> None:
+        shape = self._open_shape("curve_vertex")
+        if shape.is_empty:
+            raise RuntimeError("p.curve_vertex() needs a starting corner: call p.vertex(x, y) first.")
+        shape.curve_to(cx1, cy1, cx2, cy2, x, y)
+
+    def end_shape(self, close: bool = False) -> None:
+        """Contract F3: closed shapes are filled then stroked; open ones are stroked only."""
+        shape = self._open_shape("end_shape")
+        self._shape = None
+        if close and not shape.is_empty:
+            shape.close()
+        self._emit_path(shape.geometry)
+
+    def _open_shape(self, name: str) -> PathBuilder:
+        if self._shape is None:
+            raise RuntimeError(f"p.{name}() called outside a shape: call p.begin_shape() first.")
+        return self._shape
+
+    @staticmethod
+    def path() -> PathBuilder:
+        return PathBuilder()
+
+    def draw_path(self, path: PathBuilder | Path) -> None:
+        self._emit_path(_geometry_of(path, "draw_path"))
+
+    def clip(self, path: PathBuilder | Path) -> None:
+        """Limit later drawing to *path* (implicitly closed); pop() lifts it, so use it inside push()/pop()."""
+        self._emit(ir.ClipPath(_geometry_of(path, "clip")))
+
+    def _emit_path(self, geometry: Path) -> None:
+        self._require_window()
+        if geometry.is_empty:
+            return
+        style = self.style
+        if style.fill is not None and geometry.is_closed:      # F3: open shapes are never filled
+            self._emit(ir.FillPath(geometry, style.fill))
+        if style.stroke is not None:                           # S5: stroke on top of the fill
+            self._emit(ir.StrokePath(geometry, style.stroke, float(style.stroke_width)))
+
     # ------------------------------------------------------------ helpers
     def random(self, low: float = 1.0, high: float | None = None) -> float:
         if high is None:
@@ -314,6 +377,7 @@ class Sketch:
         self.last_ops: tuple[ir.Op, ...] | None = None
         self.frame.clear()
         self._states.unwind()
+        self._shape = None
 
         self._platform.start()
         self.running = True
@@ -354,6 +418,14 @@ class Sketch:
             self._renderer.attach(0, 0)
             self._platform.close()
             self._has_window = False
+
+
+def _geometry_of(path: PathBuilder | Path, name: str) -> Path:
+    if isinstance(path, PathBuilder):
+        return path.geometry
+    if isinstance(path, Path):
+        return path
+    raise TypeError(f"p.{name}() needs a path made with p.path(), not {type(path).__name__}")
 
 
 def _sketch_functions(namespace: Namespace) -> tuple[Callable[[], None] | None, Callable[[], None]]:

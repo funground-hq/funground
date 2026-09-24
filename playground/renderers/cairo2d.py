@@ -51,6 +51,7 @@ class CairoRenderer:
         ctx.set_line_join(cairo.LINE_JOIN_ROUND)
         ctx.set_line_cap(cairo.LINE_CAP_ROUND)
         ctx.set_antialias(cairo.ANTIALIAS_DEFAULT)
+        ctx.set_fill_rule(cairo.FILL_RULE_WINDING)   # contract F3: non-zero (Cairo's default, pinned here)
         if scale != 1.0:
             ctx.scale(scale, scale)
         return ctx

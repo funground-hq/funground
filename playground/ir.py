@@ -6,9 +6,10 @@ hashable and JSON-serialisable (see `to_jsonable`), so tests can snapshot them
 and any backend can replay them.
 
 Ops carrying `style` hold the GraphicsState *snapshot* they were issued under
-(it is immutable, so this is free). Internal-only ops (Save, Restore, Concat,
-ClipPath, FillPath, StrokePath) exist for the vector renderer and Phase 2; no
-public API emits them yet (PROCESS: internal capability first).
+(it is immutable, so this is free). The vector ops entered the IR before any
+public API used them (PROCESS: internal capability first): Save / Restore /
+Concat are emitted by `push` / `pop` / transforms since S-027, and ClipPath /
+FillPath / StrokePath by `end_shape`, `draw_path` and `clip` since S-028.
 """
 from __future__ import annotations
 
@@ -82,7 +83,7 @@ class Text(Op):
     style: GraphicsState
 
 
-# ---- internal ops (no public API yet)
+# ---- vector ops (public since Sprint 4: S-027 transforms, S-028 paths)
 @dataclass(frozen=True, slots=True)
 class Save(Op):
     pass
