@@ -1,0 +1,59 @@
+{
+  "pygame_ce": "2.5.8",
+  "python": "3.14.7",
+  "cases": {
+    "rotated_filled_rect": {
+      "possible": true,
+      "how": "Playground computes the affine and transforms corners; pygame.draw.polygon fills.",
+      "cost": "Transform math lives entirely in Playground - pygame contributes nothing here.",
+      "png": "01_rotated_filled_rect.png"
+    },
+    "rotated_stroked_rect": {
+      "possible": "partially",
+      "how": "pygame.draw.polygon(width=12) on transformed corners.",
+      "defect": "Edges are drawn as separate thick segments: joins are notched/gapped, no miter/round/bevel control, stroke alignment differs from every vector model.",
+      "png": "02_rotated_stroked_rect.png",
+      "png_join_zoom": "02b_join_zoom.png"
+    },
+    "rotated_ellipse": {
+      "possible": "only by flattening to a polygon in Playground",
+      "how": "64-segment polygonisation done in Python; pygame.draw.ellipse cannot rotate.",
+      "png": "03_rotated_ellipse.png"
+    },
+    "antialiasing": {
+      "possible": "partially",
+      "fill": "no aapolygon in this pygame-ce",
+      "stroke": "aalines is 1px only - no anti-aliased thick stroke exists",
+      "png": "04_antialiasing.png"
+    },
+    "clip_to_rotated_shape": {
+      "possible": false,
+      "how": "set_clip accepts only a Rect; arbitrary-path clipping needs a mask + per-pixel blend (pygame.mask / surfarray) - i.e. a rasteriser written in Playground.",
+      "png": "05_clip_rect_only.png"
+    },
+    "rotated_text": {
+      "possible": "raster approximation only",
+      "how": "render bitmap then pygame.transform.rotate -> resampled, blurry at small sizes, no outline access, no hinting under transform.",
+      "png": "06_rotated_text.png"
+    },
+    "translucent_fill": {
+      "possible": "only via a temporary SRCALPHA surface per shape",
+      "how": "Direct draw ignores alpha (left/red shape opaque); right/blue shape used a temp surface.",
+      "png": "07_alpha_fill.png"
+    },
+    "bezier_path": {
+      "possible": false,
+      "how": "No curve primitive; Playground would flatten cubic/quadratic curves itself."
+    }
+  },
+  "pygame_draw_api": {
+    "polygon": true,
+    "aapolygon": false,
+    "aaline": true,
+    "aacircle": true,
+    "aaellipse": false,
+    "lines": true,
+    "aalines": true
+  },
+  "timing_ms_per_frame_50_rotated_stroked_rects_640x400": 0.469
+}

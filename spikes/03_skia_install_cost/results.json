@@ -1,0 +1,18 @@
+{
+  "install_seconds": 17.4,
+  "rc": 0,
+  "wheel_sizes_MB": {
+    "numpy-2.5.3-cp314-cp314-win_amd64.whl": 12.7,
+    "pybind11-3.1.0-py3-none-any.whl": 0.3,
+    "pygame_ce-2.5.8-cp314-cp314-win_amd64.whl": 9.8,
+    "skia_python-144.0.post2-cp314-cp314-win_amd64.whl": 11.3
+  },
+  "site_packages_MB": {
+    "numpy": 54.2,
+    "skia": 15.2,
+    "pip": 11.5,
+    "icudtl": 10.5,
+    "pybind11": 1.2
+  },
+  "note": "numpy is a hard dependency of skia-python (pulled in automatically)."
+}

@@ -1,0 +1,79 @@
+{
+  "python": "3.14.7",
+  "backends": {
+    "cairo": {
+      "export": {
+        "pdf": {
+          "ok": true,
+          "bytes": 14160
+        },
+        "svg": {
+          "ok": true,
+          "bytes": 28734
+        }
+      }
+    },
+    "skia": {
+      "export": {
+        "pdf": {
+          "ok": true,
+          "bytes": 16384
+        },
+        "svg": {
+          "ok": true,
+          "bytes": 21970
+        }
+      }
+    }
+  },
+  "timing": [
+    {
+      "backend": "cairo",
+      "size": "640x400",
+      "draw_ms": 3.539,
+      "present_ms": 0.142,
+      "fps_equivalent": 271.7
+    },
+    {
+      "backend": "skia",
+      "size": "640x400",
+      "draw_ms": 6.946,
+      "present_ms": 0.139,
+      "fps_equivalent": 141.1
+    },
+    {
+      "backend": "cairo",
+      "size": "1280x720",
+      "draw_ms": 6.415,
+      "present_ms": 0.732,
+      "fps_equivalent": 139.9
+    },
+    {
+      "backend": "skia",
+      "size": "1280x720",
+      "draw_ms": 17.593,
+      "present_ms": 0.771,
+      "fps_equivalent": 54.5
+    },
+    {
+      "backend": "cairo",
+      "size": "1920x1080",
+      "draw_ms": 11.158,
+      "present_ms": 1.933,
+      "fps_equivalent": 76.4
+    },
+    {
+      "backend": "skia",
+      "size": "1920x1080",
+      "draw_ms": 34.628,
+      "present_ms": 1.879,
+      "fps_equivalent": 27.4
+    }
+  ],
+  "versions": {
+    "pycairo": "1.29.1",
+    "cairo": "1.18.4",
+    "skia_python": "144.0.post2",
+    "pygame_ce": "2.5.8"
+  }
+}

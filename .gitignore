@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+spikes/*/.venv/
+spikes/03_skia_install_cost/wheels/
+spikes/reference/
+tests/golden/_actual/

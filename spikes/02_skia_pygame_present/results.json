@@ -1,0 +1,122 @@
+{
+  "python": "3.14.7",
+  "runs": [
+    {
+      "size": "640x400",
+      "driver": "dummy",
+      "frames": 120,
+      "A_snapshot_tobytes": {
+        "skia_draw_ms": 7.023,
+        "to_pygame_ms": 0.38,
+        "blit_flip_ms": 0.163,
+        "total_ms": 7.566
+      },
+      "B_raster_direct": {
+        "skia_draw_ms": 6.751,
+        "to_pygame_ms": 0.006,
+        "blit_flip_ms": 0.128,
+        "total_ms": 6.885
+      },
+      "B_fps_equivalent": 145.2,
+      "pygame_only_baseline_ms": 0.469
+    },
+    {
+      "size": "1280x720",
+      "driver": "dummy",
+      "frames": 120,
+      "A_snapshot_tobytes": {
+        "skia_draw_ms": 19.6,
+        "to_pygame_ms": 1.648,
+        "blit_flip_ms": 0.808,
+        "total_ms": 22.056
+      },
+      "B_raster_direct": {
+        "skia_draw_ms": 18.995,
+        "to_pygame_ms": 0.013,
+        "blit_flip_ms": 0.731,
+        "total_ms": 19.739
+      },
+      "B_fps_equivalent": 50.7,
+      "pygame_only_baseline_ms": 0.888
+    },
+    {
+      "size": "1920x1080",
+      "driver": "dummy",
+      "frames": 120,
+      "A_snapshot_tobytes": {
+        "skia_draw_ms": 41.238,
+        "to_pygame_ms": 3.699,
+        "blit_flip_ms": 2.148,
+        "total_ms": 47.085
+      },
+      "B_raster_direct": {
+        "skia_draw_ms": 38.287,
+        "to_pygame_ms": 0.014,
+        "blit_flip_ms": 1.873,
+        "total_ms": 40.174
+      },
+      "B_fps_equivalent": 24.9,
+      "pygame_only_baseline_ms": 1.446
+    },
+    {
+      "size": "640x400",
+      "driver": "windows",
+      "frames": 120,
+      "A_snapshot_tobytes": {
+        "skia_draw_ms": 6.919,
+        "to_pygame_ms": 0.358,
+        "blit_flip_ms": 0.175,
+        "total_ms": 7.452
+      },
+      "B_raster_direct": {
+        "skia_draw_ms": 6.773,
+        "to_pygame_ms": 0.007,
+        "blit_flip_ms": 0.137,
+        "total_ms": 6.916
+      },
+      "B_fps_equivalent": 144.6,
+      "pygame_only_baseline_ms": 0.46
+    },
+    {
+      "size": "1280x720",
+      "driver": "windows",
+      "frames": 120,
+      "A_snapshot_tobytes": {
+        "skia_draw_ms": 19.484,
+        "to_pygame_ms": 1.614,
+        "blit_flip_ms": 0.804,
+        "total_ms": 21.902
+      },
+      "B_raster_direct": {
+        "skia_draw_ms": 18.858,
+        "to_pygame_ms": 0.012,
+        "blit_flip_ms": 0.781,
+        "total_ms": 19.651
+      },
+      "B_fps_equivalent": 50.9,
+      "pygame_only_baseline_ms": 0.861
+    },
+    {
+      "size": "1920x1080",
+      "driver": "windows",
+      "frames": 120,
+      "A_snapshot_tobytes": {
+        "skia_draw_ms": 39.648,
+        "to_pygame_ms": 3.649,
+        "blit_flip_ms": 1.903,
+        "total_ms": 45.2
+      },
+      "B_raster_direct": {
+        "skia_draw_ms": 38.769,
+        "to_pygame_ms": 0.014,
+        "blit_flip_ms": 1.929,
+        "total_ms": 40.712
+      },
+      "B_fps_equivalent": 24.6,
+      "pygame_only_baseline_ms": 1.404
+    }
+  ],
+  "skia_python": "144.0.post2",
+  "pygame_ce": "2.5.8",
+  "numpy": "2.5.3"
+}

@@ -1,0 +1,477 @@
+{
+  "skia-python": {
+    "latest": "144.0.post2",
+    "released": "2026-03-19",
+    "python_tags": [
+      "cp310",
+      "cp311",
+      "cp312",
+      "cp313",
+      "cp314",
+      "cp38",
+      "cp39"
+    ],
+    "win_amd64_wheels": [
+      [
+        "skia_python-144.0.post2-cp310-cp310-win_amd64.whl",
+        10.9
+      ],
+      [
+        "skia_python-144.0.post2-cp311-cp311-win_amd64.whl",
+        10.9
+      ],
+      [
+        "skia_python-144.0.post2-cp312-cp312-win_amd64.whl",
+        10.9
+      ],
+      [
+        "skia_python-144.0.post2-cp313-cp313-win_amd64.whl",
+        10.9
+      ],
+      [
+        "skia_python-144.0.post2-cp314-cp314t-win_amd64.whl",
+        11.5
+      ],
+      [
+        "skia_python-144.0.post2-cp314-cp314-win_amd64.whl",
+        11.3
+      ],
+      [
+        "skia_python-144.0.post2-cp38-cp38-win_amd64.whl",
+        10.9
+      ],
+      [
+        "skia_python-144.0.post2-cp39-cp39-win_amd64.whl",
+        11.1
+      ]
+    ],
+    "cp314_win_amd64_ok": true,
+    "requires_python": null,
+    "summary": "Skia python binding"
+  },
+  "moderngl": {
+    "latest": "5.12.0",
+    "released": "2024-10-17",
+    "python_tags": [
+      "cp310",
+      "cp311",
+      "cp312",
+      "cp313",
+      "cp38",
+      "cp39"
+    ],
+    "win_amd64_wheels": [
+      [
+        "moderngl-5.12.0-cp310-cp310-win_amd64.whl",
+        0.1
+      ],
+      [
+        "moderngl-5.12.0-cp311-cp311-win_amd64.whl",
+        0.1
+      ],
+      [
+        "moderngl-5.12.0-cp312-cp312-win_amd64.whl",
+        0.1
+      ],
+      [
+        "moderngl-5.12.0-cp313-cp313-win_amd64.whl",
+        0.1
+      ],
+      [
+        "moderngl-5.12.0-cp38-cp38-win_amd64.whl",
+        0.1
+      ],
+      [
+        "moderngl-5.12.0-cp39-cp39-win_amd64.whl",
+        0.1
+      ]
+    ],
+    "cp314_win_amd64_ok": false,
+    "requires_python": ">=3.7",
+    "summary": "ModernGL: High performance rendering for Python 3"
+  },
+  "PyOpenGL": {
+    "latest": "3.1.10",
+    "released": "2025-08-18",
+    "python_tags": [
+      "py3"
+    ],
+    "win_amd64_wheels": [],
+    "cp314_win_amd64_ok": false,
+    "requires_python": null,
+    "summary": "Standard OpenGL bindings for Python"
+  },
+  "pygame-ce": {
+    "latest": "2.5.8",
+    "released": "2026-08-09",
+    "python_tags": [
+      "cp310",
+      "cp311",
+      "cp312",
+      "cp313",
+      "cp314",
+      "cp315",
+      "pp311"
+    ],
+    "win_amd64_wheels": [
+      [
+        "pygame_ce-2.5.8-cp310-cp310-win_amd64.whl",
+        9.7
+      ],
+      [
+        "pygame_ce-2.5.8-cp311-cp311-win_amd64.whl",
+        9.7
+      ],
+      [
+        "pygame_ce-2.5.8-cp312-cp312-win_amd64.whl",
+        9.7
+      ],
+      [
+        "pygame_ce-2.5.8-cp313-cp313-win_amd64.whl",
+        9.7
+      ],
+      [
+        "pygame_ce-2.5.8-cp314-cp314-win_amd64.whl",
+        9.8
+      ],
+      [
+        "pygame_ce-2.5.8-cp315-cp315-win_amd64.whl",
+        9.8
+      ],
+      [
+        "pygame_ce-2.5.8-pp311-pypy311_pp73-win_amd64.whl",
+        9.6
+      ]
+    ],
+    "cp314_win_amd64_ok": true,
+    "requires_python": ">=3.10",
+    "summary": "Python Game Development"
+  },
+  "resvg-py": {
+    "latest": "0.5.0",
+    "released": "2026-08-24",
+    "python_tags": [
+      "cp310",
+      "cp314",
+      "cp315",
+      "pp311"
+    ],
+    "win_amd64_wheels": [
+      [
+        "resvg_py-0.5.0-cp310-abi3-win_amd64.whl",
+        1.2
+      ],
+      [
+        "resvg_py-0.5.0-cp314-cp314t-win_amd64.whl",
+        1.2
+      ],
+      [
+        "resvg_py-0.5.0-cp315-abi3.abi3t-win_amd64.whl",
+        1.2
+      ]
+    ],
+    "cp314_win_amd64_ok": true,
+    "requires_python": ">=3.10",
+    "summary": null
+  },
+  "resvg-python": {
+    "latest": "0.1.0",
+    "released": "2024-06-09",
+    "python_tags": [
+      "cp310",
+      "cp311",
+      "cp312",
+      "cp37",
+      "cp38",
+      "cp39",
+      "pp310",
+      "pp37",
+      "pp38",
+      "pp39"
+    ],
+    "win_amd64_wheels": [
+      [
+        "resvg_python-0.1.0-cp310-none-win_amd64.whl",
+        1.1
+      ],
+      [
+        "resvg_python-0.1.0-cp311-none-win_amd64.whl",
+        1.1
+      ],
+      [
+        "resvg_python-0.1.0-cp312-none-win_amd64.whl",
+        1.1
+      ],
+      [
+        "resvg_python-0.1.0-cp37-none-win_amd64.whl",
+        1.1
+      ],
+      [
+        "resvg_python-0.1.0-cp38-none-win_amd64.whl",
+        1.1
+      ],
+      [
+        "resvg_python-0.1.0-cp39-none-win_amd64.whl",
+        1.1
+      ]
+    ],
+    "cp314_win_amd64_ok": false,
+    "requires_python": null,
+    "summary": null
+  },
+  "python-resvg": {
+    "error": "HTTP Error 404: Not Found"
+  },
+  "uharfbuzz": {
+    "latest": "0.56.2",
+    "released": "2026-09-21",
+    "python_tags": [
+      "cp310",
+      "pp311"
+    ],
+    "win_amd64_wheels": [
+      [
+        "uharfbuzz-0.56.2-cp310-abi3-win_amd64.whl",
+        1.5
+      ],
+      [
+        "uharfbuzz-0.56.2-pp311-pypy311_pp73-win_amd64.whl",
+        1.5
+      ]
+    ],
+    "cp314_win_amd64_ok": true,
+    "requires_python": ">=3.10",
+    "summary": "Streamlined Cython bindings for the harfbuzz shaping engine"
+  },
+  "fonttools": {
+    "latest": "4.66.0",
+    "released": "2026-09-23",
+    "python_tags": [
+      "cp311",
+      "cp312",
+      "cp313",
+      "cp314",
+      "cp315",
+      "py3"
+    ],
+    "win_amd64_wheels": [
+      [
+        "fonttools-4.66.0-cp311-cp311-win_amd64.whl",
+        1.6
+      ],
+      [
+        "fonttools-4.66.0-cp312-cp312-win_amd64.whl",
+        2.5
+      ],
+      [
+        "fonttools-4.66.0-cp313-cp313-win_amd64.whl",
+        2.5
+      ],
+      [
+        "fonttools-4.66.0-cp314-cp314t-win_amd64.whl",
+        2.5
+      ],
+      [
+        "fonttools-4.66.0-cp314-cp314-win_amd64.whl",
+        2.5
+      ],
+      [
+        "fonttools-4.66.0-cp315-cp315t-win_amd64.whl",
+        2.5
+      ],
+      [
+        "fonttools-4.66.0-cp315-cp315-win_amd64.whl",
+        2.5
+      ]
+    ],
+    "cp314_win_amd64_ok": true,
+    "requires_python": ">=3.11",
+    "summary": "Tools to manipulate font files"
+  },
+  "pillow": {
+    "latest": "12.3.0",
+    "released": "2026-07-01",
+    "python_tags": [
+      "cp310",
+      "cp311",
+      "cp312",
+      "cp313",
+      "cp314",
+      "cp315",
+      "pp311"
+    ],
+    "win_amd64_wheels": [
+      [
+        "pillow-12.3.0-cp310-cp310-win_amd64.whl",
+        7.2
+      ],
+      [
+        "pillow-12.3.0-cp311-cp311-win_amd64.whl",
+        7.2
+      ],
+      [
+        "pillow-12.3.0-cp312-cp312-win_amd64.whl",
+        7.2
+      ],
+      [
+        "pillow-12.3.0-cp313-cp313-win_amd64.whl",
+        7.2
+      ],
+      [
+        "pillow-12.3.0-cp314-cp314t-win_amd64.whl",
+        7.2
+      ],
+      [
+        "pillow-12.3.0-cp314-cp314-win_amd64.whl",
+        7.2
+      ],
+      [
+        "pillow-12.3.0-cp315-cp315t-win_amd64.whl",
+        7.2
+      ],
+      [
+        "pillow-12.3.0-cp315-cp315-win_amd64.whl",
+        7.2
+      ],
+      [
+        "pillow-12.3.0-pp311-pypy311_pp73-win_amd64.whl",
+        7.2
+      ]
+    ],
+    "cp314_win_amd64_ok": true,
+    "requires_python": ">=3.10",
+    "summary": "Python Imaging Library (fork)"
+  },
+  "numpy": {
+    "latest": "2.5.3",
+    "released": "2026-09-06",
+    "python_tags": [
+      "cp312",
+      "cp313",
+      "cp314",
+      "cp315"
+    ],
+    "win_amd64_wheels": [
+      [
+        "numpy-2.5.3-cp312-cp312-win_amd64.whl",
+        12.6
+      ],
+      [
+        "numpy-2.5.3-cp313-cp313-win_amd64.whl",
+        12.6
+      ],
+      [
+        "numpy-2.5.3-cp314-cp314t-win_amd64.whl",
+        12.9
+      ],
+      [
+        "numpy-2.5.3-cp314-cp314-win_amd64.whl",
+        12.7
+      ],
+      [
+        "numpy-2.5.3-cp315-cp315t-win_amd64.whl",
+        12.9
+      ],
+      [
+        "numpy-2.5.3-cp315-cp315-win_amd64.whl",
+        12.7
+      ]
+    ],
+    "cp314_win_amd64_ok": true,
+    "requires_python": ">=3.12",
+    "summary": "Fundamental package for array computing in Python"
+  },
+  "pycairo": {
+    "latest": "1.29.1",
+    "released": "2026-08-07",
+    "python_tags": [
+      "cp310",
+      "cp311",
+      "cp312",
+      "cp313",
+      "cp314",
+      "cp315"
+    ],
+    "win_amd64_wheels": [
+      [
+        "pycairo-1.29.1-cp310-cp310-win_amd64.whl",
+        0.8
+      ],
+      [
+        "pycairo-1.29.1-cp311-cp311-win_amd64.whl",
+        0.8
+      ],
+      [
+        "pycairo-1.29.1-cp312-cp312-win_amd64.whl",
+        0.8
+      ],
+      [
+        "pycairo-1.29.1-cp313-cp313-win_amd64.whl",
+        0.8
+      ],
+      [
+        "pycairo-1.29.1-cp314-cp314t-win_amd64.whl",
+        0.9
+      ],
+      [
+        "pycairo-1.29.1-cp314-cp314-win_amd64.whl",
+        0.9
+      ],
+      [
+        "pycairo-1.29.1-cp315-cp315t-win_amd64.whl",
+        0.9
+      ],
+      [
+        "pycairo-1.29.1-cp315-cp315-win_amd64.whl",
+        0.9
+      ]
+    ],
+    "cp314_win_amd64_ok": true,
+    "requires_python": ">=3.10",
+    "summary": "Python interface for cairo"
+  },
+  "pyglet": {
+    "latest": "2.1.16",
+    "released": "2026-08-01",
+    "python_tags": [
+      "py3"
+    ],
+    "win_amd64_wheels": [],
+    "cp314_win_amd64_ok": false,
+    "requires_python": ">=3.8",
+    "summary": "pyglet is a cross-platform games and multimedia package."
+  },
+  "arcade": {
+    "latest": "3.3.3",
+    "released": "2025-10-09",
+    "python_tags": [
+      "py3"
+    ],
+    "win_amd64_wheels": [],
+    "cp314_win_amd64_ok": false,
+    "requires_python": ">=3.10",
+    "summary": "Arcade Game Development Library"
+  },
+  "moderngl-window": {
+    "latest": "3.1.1",
+    "released": "2025-01-19",
+    "python_tags": [
+      "py3"
+    ],
+    "win_amd64_wheels": [],
+    "cp314_win_amd64_ok": false,
+    "requires_python": ">=3.9",
+    "summary": "A cross platform helper library for ModernGL making window creation and resource loading simple"
+  },
+  "drawbot-skia": {
+    "latest": "0.5.1",
+    "released": "2024-07-21",
+    "python_tags": [
+      "py3"
+    ],
+    "win_amd64_wheels": [],
+    "cp314_win_amd64_ok": false,
+    "requires_python": ">=3.6",
+    "summary": "Drawbot implements a simple drawing API to generate 2D vector graphics"
+  }
+}

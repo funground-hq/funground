@@ -1,0 +1,14 @@
+Collecting skia-python
+  Downloading skia_python-144.0.post2-cp314-cp314-win_amd64.whl.metadata (5.6 kB)
+Collecting numpy (from skia-python)
+  Downloading numpy-2.5.3-cp314-cp314-win_amd64.whl.metadata (6.6 kB)
+Collecting pybind11>=2.6 (from skia-python)
+  Downloading pybind11-3.1.0-py3-none-any.whl.metadata (10 kB)
+Downloading skia_python-144.0.post2-cp314-cp314-win_amd64.whl (11.3 MB)
+   ---------------------------------------- 11.3/11.3 MB 3.6 MB/s  0:00:03
+Downloading pybind11-3.1.0-py3-none-any.whl (319 kB)
+Downloading numpy-2.5.3-cp314-cp314-win_amd64.whl (12.7 MB)
+   ---------------------------------------- 12.7/12.7 MB 2.5 MB/s  0:00:05
+Installing collected packages: pybind11, numpy, skia-python
+
+Successfully installed numpy-2.5.3 pybind11-3.1.0 skia-python-144.0.post2
