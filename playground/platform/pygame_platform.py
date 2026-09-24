@@ -37,13 +37,49 @@ def key_code(key: str | int) -> int:
     raise ValueError(f"unknown key name: {key!r}")
 
 
-def detect_backing_scale() -> float:
-    """Physical pixels per logical pixel (contract C3, story S-024).
+def _uses_sdl_highdpi_window() -> bool:
+    """True when the window should be opened through SDL's high-DPI route.
+
+    macOS and Linux (Wayland) report *screen coordinates* for a window and only
+    hand out a physical-resolution drawable when the window was created with
+    SDL_WINDOW_ALLOW_HIGHDPI. pygame-ce's display.set_mode() never sets that
+    flag; pygame.Window(allow_high_dpi=True) does (S-038). The override and the
+    dummy driver keep the plain set_mode path so tests behave the same everywhere.
+    """
+    if os.environ.get("PLAYGROUND_BACKING_SCALE"):
+        return False
+    if os.environ.get("SDL_VIDEODRIVER", "").lower() == "dummy":
+        return False
+    return sys.platform == "darwin" or sys.platform.startswith("linux")
+
+
+def _drawable_ratio(window) -> float:
+    """Drawable pixels per screen-coordinate unit of a pygame.Window.
+
+    SDL sizes the window surface with SDL_GetWindowSizeInPixels (SDL >= 2.26)
+    and ``Window.size`` with SDL_GetWindowSize, so their ratio is the backing
+    scale. Anything odd (zero width, no surface) degrades to 1.0.
+    """
+    try:
+        ww, _wh = window.size
+        sw, _sh = window.get_surface().get_size()
+    except Exception:
+        return 1.0
+    if not ww or not sw:
+        return 1.0
+    return max(0.5, sw / ww)
+
+
+def detect_backing_scale(window=None) -> float:
+    """Physical pixels per logical pixel (contract C3, stories S-024 / S-038).
 
     PLAYGROUND_BACKING_SCALE overrides (tests, unusual setups). The dummy video
     driver has no display, so it is always 1.0. On Windows the process declares
     per-monitor DPI awareness so the OS stops bitmap-stretching the window and
-    we can render at physical resolution instead.
+    we can render at physical resolution instead. On macOS / Linux the scale is
+    measured from an SDL high-DPI window: *window* if given (the sketch's own),
+    else a hidden probe window that is destroyed again. UNVERIFIED on real
+    macOS / Wayland hardware: the teaching machine is Windows (S-038.2).
     """
     forced = os.environ.get("PLAYGROUND_BACKING_SCALE")
     if forced:
@@ -61,14 +97,28 @@ def detect_backing_scale() -> float:
             return ctypes.windll.user32.GetDpiForSystem() / 96.0
         except Exception:
             return 1.0
-    return 1.0  # macOS/Linux HiDPI: follow-up story; SDL reports logical sizes there
+    if _uses_sdl_highdpi_window():
+        if window is not None:
+            return _drawable_ratio(window)
+        try:
+            pygame.display.init()
+            probe = pygame.Window("playground", (64, 64), hidden=True, allow_high_dpi=True)
+        except Exception:
+            return 1.0
+        try:
+            return _drawable_ratio(probe)
+        finally:
+            probe.destroy()
+    return 1.0
 
 
 class PygamePlatform:
     def __init__(self) -> None:
         self._screen: pygame.Surface | None = None
+        self._window: pygame.Window | None = None   # SDL high-DPI route only (S-038)
         self._clock: pygame.time.Clock | None = None
         self._scale = 1.0
+        self._input_scale = 1.0   # divisor for mouse coordinates (see input_state)
 
     @property
     def backing_scale(self) -> float:
@@ -76,8 +126,20 @@ class PygamePlatform:
 
     # ---- window
     def open_window(self, width: int, height: int, title: str) -> tuple[int, int]:
-        self._scale = detect_backing_scale()
         pygame.display.init()
+        if _uses_sdl_highdpi_window():
+            # macOS / Linux: ask SDL for a high-DPI window at the *logical* size;
+            # the window surface comes back at drawable (physical) size and the
+            # scale is whatever ratio SDL actually gave us. Mouse coordinates on
+            # this route are already in screen units, so they are not divided.
+            self._window = pygame.Window(title, (width, height), allow_high_dpi=True)
+            self._screen = self._window.get_surface()
+            self._scale = detect_backing_scale(self._window)
+            self._input_scale = 1.0
+            return self._screen.get_size()
+        self._window = None
+        self._scale = detect_backing_scale()
+        self._input_scale = self._scale
         physical = (round(width * self._scale), round(height * self._scale))
         self._screen = pygame.display.set_mode(physical)
         pygame.display.set_caption(title)
@@ -103,7 +165,7 @@ class PygamePlatform:
 
     def input_state(self) -> InputState:
         x, y = pygame.mouse.get_pos()
-        s = self._scale
+        s = self._input_scale
         return InputState(round(x / s), round(y / s), any(pygame.mouse.get_pressed(3)))
 
     def key_down(self, key: str | int) -> bool:
@@ -114,7 +176,10 @@ class PygamePlatform:
             raise RuntimeError("no window to present to")
         image = pygame.image.frombuffer(pixels.data, (pixels.width, pixels.height), pixels.format)
         self._screen.blit(image, (0, 0))
-        pygame.display.flip()
+        if self._window is not None:
+            self._window.flip()
+        else:
+            pygame.display.flip()
 
     def tick(self, fps: int) -> float:
         if self._clock is None:
@@ -129,6 +194,12 @@ class PygamePlatform:
     def close(self) -> None:
         # The display surface dies with pygame.quit(); forget it so a later
         # run creates a fresh window (v0.5 defect, fixed in Sprint 0).
+        if self._window is not None:
+            try:
+                self._window.destroy()
+            except Exception:
+                pass  # already gone with the display
         pygame.quit()
+        self._window = None
         self._screen = None
         self._clock = None
