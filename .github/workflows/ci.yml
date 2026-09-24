@@ -1,0 +1,29 @@
+name: ci
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        python: ["3.11", "3.12", "3.13", "3.14"]
+    env:
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m venv .venv
+      - run: .venv/bin/python -m pip install -e ".[dev]"
+        if: runner.os != 'Windows'
+      - run: .venv/Scripts/python -m pip install -e ".[dev]"
+        if: runner.os == 'Windows'
+      - run: .venv/bin/python -m pytest
+        if: runner.os != 'Windows'
+      - run: .venv/Scripts/python -m pytest
+        if: runner.os == 'Windows'
