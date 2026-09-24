@@ -11,8 +11,9 @@ Implements §10 of the architecture document as it stands after Sprint 0. Run wi
 | Semantic tests | One pixel-level test per pinned row of `docs/design/Semantic_Contract.md` | `tests/test_semantics.py` | live |
 | Sample-suite smoke | Every `examples/session1/*.py` runs unchanged for 30 frames headless | `tests/test_examples_golden.py::test_sketch_runs_unchanged_headless` | live |
 | Golden images | The sample suite renders exactly what it did before | `tests/test_examples_golden.py::test_sketch_matches_golden`, `tests/golden/*.png` | live |
-| Op-list snapshots | Learner code → expected draw-op list, independent of any rasteriser | planned, Sprint 2 (S-020) |
-| Provider contract | Every renderer/platform obeys its protocol | planned, Sprint 2–3 |
+| **IR snapshots** (primary cross-backend contract) | Learner code → expected draw-op list of the final frame, JSON, platform-independent | `tests/test_ops_snapshot.py`, `tests/snapshots/*.json` | live (Sprint 2) |
+| Capability / error contract | Unsupported features fail at `p.size()`/`run()` with a learner-readable message | `tests/test_capabilities.py` | live (Sprint 2) |
+| Provider contract | Every renderer/platform obeys its protocol | planned, Sprint 3 |
 | Cross-renderer conformance | Same ops → same semantics on pygame and Cairo (pixel tolerance) | planned, Sprint 3 |
 | Export checks | PDF/SVG structure + rendered comparison | planned, Sprint 4 |
 | Packaging CI | Windows/macOS/Linux × Python 3.11–3.14 | `.github/workflows/ci.yml` | written, not yet executed (no remote) |
@@ -27,6 +28,15 @@ input-driven sketches deterministic.
 wrapper that forwards the sketch's own globals to `_core._run_namespace(..., max_frames=frames)`,
 then returns the final frame's RGB bytes captured by the `max_frames` hook. Learner files never
 contain test hooks.
+
+## Test hierarchy (PROCESS)
+
+1. Public API semantics (`test_api_contract`, `test_semantics`)
+2. **IR snapshots** — what the learner's code asked for. Two correct renderers may differ in pixels;
+   they may not differ in ops. Regenerate with `PLAYGROUND_UPDATE_SNAPSHOTS=1`; a change here is
+   a change in *behaviour requested*, never in rendering.
+3. Per-backend semantic tests (pixel rows in `test_semantics`)
+4. Per-backend golden images (below)
 
 ## Golden-image policy
 
