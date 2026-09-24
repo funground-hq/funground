@@ -2,9 +2,10 @@
 
 Implements the v0.6 semantics: alpha honoured (D-003), strokes centred on the
 edge with round joins/caps (D-004), fractional coordinates anti-aliased
-(D-005). Renders into a Cairo ImageSurface that pygame presents zero-copy
-(BGRA premultiplied on little-endian == pygame "BGRA" frombuffer for opaque
-frames). Text is materialised through the outline route (playground.typography).
+(D-005). Draws into a Cairo ImageSurface at physical resolution behind a
+HiDPI base scale (S-024); the platform presents the pixels (BGRA
+premultiplied on little-endian == pygame "BGRA" for opaque frames). Text is
+materialised through the outline route (playground.typography).
 """
 from __future__ import annotations
 
@@ -16,6 +17,7 @@ from .. import ir
 from ..capabilities import Capability
 from ..color import Color
 from ..geometry import Path
+from ..platform.base import Pixels
 from ..state import GraphicsState
 
 
@@ -27,43 +29,47 @@ class CairoRenderer:
         Capability.PNG_EXPORT, Capability.PDF_EXPORT, Capability.SVG_EXPORT,
     })
 
-    def __init__(self, scale: float = 1.0) -> None:
-        self._target = None            # pygame Surface (or None)
+    def __init__(self) -> None:
         self._surface: cairo.ImageSurface | None = None
         self._ctx: cairo.Context | None = None
-        self._scale = scale            # backing scale (HiDPI, S-024)
-        self._text_runs: dict[tuple[str, int], list] = {}
+        self._scale = 1.0
+        self._text_runs: dict[tuple[str, int], object] = {}
 
     # ---- lifecycle
-    def attach(self, target) -> None:
-        self._target = target
+    def attach(self, width: int, height: int, scale: float = 1.0) -> None:
         self._text_runs.clear()
-        if target is None:
+        if width <= 0 or height <= 0:
             self._surface = self._ctx = None
             return
-        w, h = target.get_size()
-        self._surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, w, h)
-        self._ctx = self._base_context(self._surface)
+        self._scale = scale
+        self._surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+        self._ctx = self.context_for(self._surface, scale)
 
-    def _base_context(self, surface) -> cairo.Context:
+    def context_for(self, surface, scale: float = 1.0) -> cairo.Context:
+        """A context with Playground's stroke defaults and the HiDPI base transform."""
         ctx = cairo.Context(surface)
         ctx.set_line_join(cairo.LINE_JOIN_ROUND)
         ctx.set_line_cap(cairo.LINE_CAP_ROUND)
         ctx.set_antialias(cairo.ANTIALIAS_DEFAULT)
-        if self._scale != 1.0:
-            ctx.scale(self._scale, self._scale)
+        if scale != 1.0:
+            ctx.scale(scale, scale)
         return ctx
 
     @property
     def surface(self) -> cairo.ImageSurface | None:
         return self._surface
 
+    def pixels(self) -> Pixels:
+        if self._surface is None:
+            raise RuntimeError("renderer has no surface")
+        self._surface.flush()
+        return Pixels(self._surface.get_data(), self._surface.get_width(), self._surface.get_height(), "BGRA")
+
     # ---- entry point
     def render(self, frame: ir.Frame) -> None:
         if self._ctx is None:
-            raise RuntimeError("renderer has no target")
+            raise RuntimeError("renderer has no surface")
         self.draw(self._ctx, frame)
-        self._present()
 
     def draw(self, ctx: cairo.Context, frame: ir.Frame) -> None:
         """Replay *frame* onto any Cairo context (window, PNG, PDF or SVG surface)."""
@@ -148,12 +154,3 @@ class CairoRenderer:
         if run is None:
             run = self._text_runs[key] = default_font().shape(op.text, op.style.text_size)
         return run.outline_ops(op.x, op.y, op.color)
-
-    def _present(self) -> None:
-        if self._target is None:
-            return
-        import pygame  # presentation only; the platform owns the window
-
-        self._surface.flush()
-        w, h = self._surface.get_width(), self._surface.get_height()
-        self._target.blit(pygame.image.frombuffer(self._surface.get_data(), (w, h), "BGRA"), (0, 0))
