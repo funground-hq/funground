@@ -9,31 +9,31 @@ parallel, the renderer bake-off (Spike 07) produces the numbers for D-011.
 
 ## Story set
 
-### S-018 Draw-op IR — E-06
-- [ ] S-018.1 `playground/ir.py`: frozen op dataclasses for the current primitives — `Clear`, `Circle`, `Ellipse`, `Rect`, `Line`, `Point`, `Text` — each carrying the `GraphicsState` snapshot it was issued under
-- [ ] S-018.2 Internal-only ops the vector renderer will need: `Save`, `Restore`, `Transform` (affine 2×3), `ClipPath`, `Path` (`move/line/cubic/close`) — no public API (PROCESS "internal first")
-- [ ] S-018.3 `playground/geometry.py`: `Transform` (compose, apply, invert, from translate/rotate(deg)/scale) and `Path` builder; unit tests
-- [ ] S-018.4 `Frame`: an ordered op list with `append()`, `__iter__`, `clear()`; `Sketch` owns one per frame
-- [ ] S-018.5 `Sketch` drawing methods append ops instead of calling the renderer; renderer is invoked once per frame with the whole list
+### S-018 Draw-op IR — E-06 ✅ (73e26fa, f3be412, a3ab4a5)
+- [x] S-018.1 `playground/ir.py`: frozen op dataclasses for the current primitives — `Clear`, `Circle`, `Ellipse`, `Rect`, `Line`, `Point`, `Text` — each carrying the `GraphicsState` snapshot it was issued under
+- [x] S-018.2 Internal-only ops the vector renderer will need: `Save`, `Restore`, `Transform` (affine 2×3), `ClipPath`, `Path` (`move/line/cubic/close`) — no public API (PROCESS "internal first")
+- [x] S-018.3 `playground/geometry.py`: `Transform` (compose, apply, invert, from translate/rotate(deg)/scale) and `Path` builder; unit tests
+- [x] S-018.4 `Frame`: an ordered op list with `append()`, `__iter__`, `clear()`; `Sketch` owns one per frame
+- [x] S-018.5 `Sketch` drawing methods append ops instead of calling the renderer; renderer is invoked once per frame with the whole list
 *Acceptance:* `Sketch` has no per-primitive renderer calls; ops are plain data (hashable, reprable).
 
-### S-019 `LegacyPygameRenderer` consumes the IR — E-06
-- [ ] S-019.1 Rename `renderers/pygame2d.py` → `renderers/legacy_pygame.py`, class `LegacyPygameRenderer`; single entry `render(frame, target)`
-- [ ] S-019.2 Per-op dispatch reproducing today's `pygame.draw` calls exactly (rounding, inside strokes, alpha dropped, font cache)
-- [ ] S-019.3 Renderer protocol in `renderers/__init__.py` becomes `render(ops)` + `capabilities`
-- [ ] S-019.4 Delete the per-primitive protocol methods
+### S-019 `LegacyPygameRenderer` consumes the IR — E-06 ✅ (a3ab4a5)
+- [x] S-019.1 Rename `renderers/pygame2d.py` → `renderers/legacy_pygame.py`, class `LegacyPygameRenderer`; single entry `render(frame, target)`
+- [x] S-019.2 Per-op dispatch reproducing today's `pygame.draw` calls exactly (rounding, inside strokes, alpha dropped, font cache)
+- [x] S-019.3 Renderer protocol in `renderers/__init__.py` becomes `render(ops)` + `capabilities`
+- [x] S-019.4 Delete the per-primitive protocol methods
 *Acceptance:* goldens byte-identical; `test_semantics.py` unchanged.
 
-### S-020 IR snapshot tests — E-06
-- [ ] S-020.1 `tests/test_ops_snapshot.py`: run each Session-1 sketch for 30 frames, serialise the last frame's op list to `tests/snapshots/<sketch>.json`
-- [ ] S-020.2 Exact comparison; `PLAYGROUND_UPDATE_SNAPSHOTS=1` to regenerate; failure writes `_actual/`
-- [ ] S-020.3 `docs/qa/Test_Strategy.md`: IR snapshots become the primary cross-backend layer; goldens per backend
+### S-020 IR snapshot tests — E-06 ✅
+- [x] S-020.1 `tests/test_ops_snapshot.py`: run each Session-1 sketch for 30 frames, serialise the last frame's op list to `tests/snapshots/<sketch>.json`
+- [x] S-020.2 Exact comparison; `PLAYGROUND_UPDATE_SNAPSHOTS=1` to regenerate; failure writes `_actual/`
+- [x] S-020.3 `docs/qa/Test_Strategy.md`: IR snapshots become the primary cross-backend layer; goldens per backend
 *Acceptance:* 11 snapshot files committed; suite green on Windows and (when CI exists) Linux — snapshots are platform-independent by construction.
 
-### S-021 Capability registry and learner-facing errors — E-07
-- [ ] S-021.1 `playground/capabilities.py`: `Capability` enum (`RASTER_2D`, `VECTOR_PATHS`, `CLIP_PATH`, `TRANSFORMS`, `ALPHA`, `PDF_EXPORT`, `SVG_EXPORT`, …); each renderer declares a frozenset
-- [ ] S-021.2 Renderer selection at `p.size()`/`run()`; a missing capability raises `PlaygroundError` naming the feature and the extra to install
-- [ ] S-021.3 Tests for message text
+### S-021 Capability registry and learner-facing errors — E-07 ✅
+- [x] S-021.1 `playground/capabilities.py`: `Capability` enum (`RASTER_2D`, `VECTOR_PATHS`, `CLIP_PATH`, `TRANSFORMS`, `ALPHA`, `PDF_EXPORT`, `SVG_EXPORT`, …); each renderer declares a frozenset
+- [x] S-021.2 Renderer selection at `p.size()`/`run()`; a missing capability raises `PlaygroundError` naming the feature and the extra to install
+- [x] S-021.3 Tests for message text
 *Acceptance:* no capability check happens inside the frame loop.
 
 ### S-035 Spike 07 — renderer bake-off — E-08 *(parallel; feeds D-011)*
