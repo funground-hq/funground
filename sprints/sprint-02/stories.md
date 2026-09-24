@@ -46,9 +46,9 @@ parallel, the renderer bake-off (Spike 07) produces the numbers for D-011.
 - [x] S-035.7 Results in `spikes/RESULTS.md` §7; **D-011** presented per PROCESS (context / options / trade-offs / recommendation / why)
 *Acceptance:* the maintainer can decide the engine from the document alone.
 
-### S-033 Architecture document v2 — E-23
-- [ ] S-033.1 `docs/design/Playground_Technology_Architecture_v2.md`: headline "Playground owns the programming model and drawing semantics; the IR is the contract; pygame-ce runs the interactive environment; providers are selected per capability and workload"; interactive renderer **OPEN (reference implementation: Cairo)**; export via Cairo; text as outlines with `TextRun` reserved; three-checkpoint Phase 1; Phases 3–4 directional; alternatives-considered appendix (Skia, Blend2D, Vello, WebRender, GSK, Moz2D — from the D-010 discussion)
-- [ ] S-033.2 The .docx stays as the v1 record; v2 links the ADRs and decision log
+### S-033 Architecture document v2 — E-23 ✅
+- [x] S-033.1 `docs/design/Playground_Technology_Architecture_v2.md`: headline "Playground owns the programming model and drawing semantics; the IR is the contract; pygame-ce runs the interactive environment; providers are selected per capability and workload"; interactive renderer **OPEN (reference implementation: Cairo)**; export via Cairo; text as outlines with `TextRun` reserved; three-checkpoint Phase 1; Phases 3–4 directional; alternatives-considered appendix (Skia, Blend2D, Vello, WebRender, GSK, Moz2D — from the D-010 discussion)
+- [x] S-033.2 The .docx stays as the v1 record; v2 links the ADRs and decision log
 *Acceptance:* a new contributor can read v2 alone and know what is decided, what is open, and why.
 
 ## Out of scope this sprint
