@@ -13,3 +13,5 @@ spikes/06_text_outlines/fonts/*.ttf
 spikes/07_renderer_bakeoff/venv_*/
 spikes/07_renderer_bakeoff/wheels_*/
 spikes/07_renderer_bakeoff/export_*.svg
+
+spikes/08_browser_pyodide/node_modules/
