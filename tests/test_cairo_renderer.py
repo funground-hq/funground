@@ -17,7 +17,7 @@ WHITE, BLACK, RED = Color(255, 255, 255), Color(0, 0, 0), Color(255, 0, 0)
 def draw(ops, w=100, h=100):
     surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, w, h)
     r = CairoRenderer()
-    r.draw(r._base_context(surf), ir.Frame(ops))
+    r.draw(r.context_for(surf), ir.Frame(ops))
     surf.flush()
     data, stride = surf.get_data(), surf.get_stride()
 

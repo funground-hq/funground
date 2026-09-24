@@ -28,6 +28,18 @@ RENDERERS = {"cairo": "playground.renderers.cairo2d:CairoRenderer"}
 DEFAULT_RENDERER = "cairo"
 
 
+def default_platform() -> Platform:
+    import os
+
+    if os.environ.get("PLAYGROUND_HEADLESS", "").lower() in ("1", "true", "yes"):
+        from .platform.headless import HeadlessPlatform
+
+        return HeadlessPlatform()
+    from .platform.pygame_platform import PygamePlatform
+
+    return PygamePlatform()
+
+
 def default_renderer() -> Renderer:
     import importlib
     import os
@@ -44,9 +56,7 @@ Namespace = dict[str, Any]
 class Sketch:
     def __init__(self, platform: Platform | None = None, renderer: Renderer | None = None) -> None:
         if platform is None:
-            from .platform.pygame_platform import PygamePlatform
-
-            platform = PygamePlatform()
+            platform = default_platform()
         if renderer is None:
             renderer = default_renderer()
         self._platform = platform
@@ -54,6 +64,7 @@ class Sketch:
         self._states = StateStack()
         # Ops recorded since the last render; consumed once per loop iteration.
         self.frame = ir.Frame()
+        self._pending_saves: list[str] = []
         # Playground keeps its own generator so random_seed() never disturbs a
         # learner's own `import random`.
         self._rng = _random.Random()
@@ -96,8 +107,8 @@ class Sketch:
         self.fps = int(fps)
         self.title = title
         self._check_capabilities()
-        target = self._platform.open_window(self.width, self.height, self.title)
-        self._renderer.attach(target)
+        pw, ph = self._platform.open_window(self.width, self.height, self.title)
+        self._renderer.attach(pw, ph, self._platform.backing_scale)
         self._has_window = True
 
     def _check_capabilities(self) -> None:
@@ -115,10 +126,30 @@ class Sketch:
         self.frame.append(op)
 
     def _render(self) -> None:
-        """Draw everything recorded so far onto the window; the frame then starts empty."""
-        if self.frame:
+        """Draw everything recorded so far and present it; the frame then starts empty."""
+        if self.frame or self._pending_saves:
             self._renderer.render(self.frame)
+            self._platform.present(self._renderer.pixels())
+            self._flush_saves()
             self.frame.clear()
+
+    # ------------------------------------------------------------ export
+    def save(self, path: str) -> None:
+        """Write this frame to a .png, .pdf or .svg file when the frame is complete."""
+        from .export import format_of
+
+        format_of(path)  # validate early so the learner sees the error at the call site
+        self._require_window()
+        self._pending_saves.append(path)
+
+    def _flush_saves(self) -> None:
+        if not self._pending_saves:
+            return
+        from .export import save_frame
+
+        paths, self._pending_saves = self._pending_saves, []
+        for path in paths:
+            save_frame(self.frame, path, self.width, self.height, self._platform.backing_scale)
 
     # ------------------------------------------------------------ style
     def fill(self, color: ColorLike) -> None:
@@ -239,8 +270,7 @@ class Sketch:
                 draw()
                 if max_frames is not None and self.frame_count + 1 >= max_frames:
                     self.last_ops = self.frame.ops  # what the final frame asked for (IR snapshot)
-                self._render()
-                self._platform.present()
+                self._render()   # draws, presents, flushes p.save()
 
                 self.frame_count += 1
                 if max_frames is not None and self.frame_count >= max_frames:
@@ -250,7 +280,8 @@ class Sketch:
         finally:
             self.running = False
             self.frame.clear()
-            self._renderer.attach(None)
+            self._pending_saves.clear()
+            self._renderer.attach(0, 0)
             self._platform.close()
             self._has_window = False
 
