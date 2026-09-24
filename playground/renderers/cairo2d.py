@@ -4,7 +4,7 @@ Implements the v0.6 semantics: alpha honoured (D-003), strokes centred on the
 edge with round joins/caps (D-004), fractional coordinates anti-aliased
 (D-005). Renders into a Cairo ImageSurface that pygame presents zero-copy
 (BGRA premultiplied on little-endian == pygame "BGRA" frombuffer for opaque
-frames). Text is materialised through the outline route (playground.text).
+frames). Text is materialised through the outline route (playground.typography).
 """
 from __future__ import annotations
 
@@ -141,7 +141,7 @@ class CairoRenderer:
         ctx.new_path()
 
     def _text_ops(self, op: ir.Text):
-        from ..text import default_font
+        from ..typography import default_font
 
         key = (op.text, op.style.text_size)
         run = self._text_runs.get(key)

@@ -1,4 +1,4 @@
-"""Text subsystem v1: outline route (S-029)."""
+"""Text subsystem v1: outline route (S-029). Module is `typography`, not `text`, so it cannot shadow the public p.text()."""
 from __future__ import annotations
 
 import hashlib
@@ -8,7 +8,7 @@ import pytest
 
 from playground import ir
 from playground.color import BLACK
-from playground.text import DEFAULT_FONT, FontResource, TextRun, default_font
+from playground.typography import DEFAULT_FONT, FontResource, TextRun, default_font
 
 
 def test_bundled_font_and_licence_ship_with_the_package():

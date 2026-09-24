@@ -124,7 +124,7 @@ _default: FontResource | None = None
 
 
 def default_font() -> FontResource:
-    global _default
+    global _default  # module is named typography so it never shadows api.text
     if _default is None:
         _default = FontResource(DEFAULT_FONT)
     return _default

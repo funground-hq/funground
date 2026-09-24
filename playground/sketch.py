@@ -23,6 +23,22 @@ from .state import GraphicsState, StateStack
 # What the v0.5 public API needs from any renderer.
 REQUIRED_CAPABILITIES: dict[Capability, str] = {Capability.RASTER_2D: "Drawing shapes"}
 
+# Renderer selection (S-023.4). "legacy" exists only until S-026 deletes it.
+RENDERERS = {"cairo": "playground.renderers.cairo2d:CairoRenderer",
+             "legacy": "playground.renderers.legacy_pygame:LegacyPygameRenderer"}
+DEFAULT_RENDERER = "legacy"
+
+
+def default_renderer() -> Renderer:
+    import importlib
+    import os
+
+    name = os.environ.get("PLAYGROUND_RENDERER", DEFAULT_RENDERER).lower()
+    if name not in RENDERERS:
+        raise ValueError(f"PLAYGROUND_RENDERER must be one of {sorted(RENDERERS)}, not {name!r}")
+    module, cls = RENDERERS[name].split(":")
+    return getattr(importlib.import_module(module), cls)()
+
 Namespace = dict[str, Any]
 
 
@@ -33,9 +49,7 @@ class Sketch:
 
             platform = PygamePlatform()
         if renderer is None:
-            from .renderers.legacy_pygame import LegacyPygameRenderer
-
-            renderer = LegacyPygameRenderer()
+            renderer = default_renderer()
         self._platform = platform
         self._renderer = renderer
         self._states = StateStack()
