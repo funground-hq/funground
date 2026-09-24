@@ -13,10 +13,15 @@ import random as _random
 from collections.abc import Callable
 from typing import Any
 
+from . import ir
+from .capabilities import Capability, missing_capability
 from .color import WHITE, Color, ColorLike
 from .platform.base import KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
+
+# What the v0.5 public API needs from any renderer.
+REQUIRED_CAPABILITIES: dict[Capability, str] = {Capability.RASTER_2D: "Drawing shapes"}
 
 Namespace = dict[str, Any]
 
@@ -28,12 +33,14 @@ class Sketch:
 
             platform = PygamePlatform()
         if renderer is None:
-            from .renderers.pygame2d import PygameRenderer
+            from .renderers.legacy_pygame import LegacyPygameRenderer
 
-            renderer = PygameRenderer()
+            renderer = LegacyPygameRenderer()
         self._platform = platform
         self._renderer = renderer
         self._states = StateStack()
+        # Ops recorded since the last render; consumed once per loop iteration.
+        self.frame = ir.Frame()
         # Playground keeps its own generator so random_seed() never disturbs a
         # learner's own `import random`.
         self._rng = _random.Random()
@@ -75,13 +82,30 @@ class Sketch:
         self.height = int(height)
         self.fps = int(fps)
         self.title = title
+        self._check_capabilities()
         target = self._platform.open_window(self.width, self.height, self.title)
         self._renderer.attach(target)
         self._has_window = True
 
+    def _check_capabilities(self) -> None:
+        """Refuse up front (contract R9) rather than failing on frame 200."""
+        for cap, feature in REQUIRED_CAPABILITIES.items():
+            if cap not in self._renderer.capabilities:
+                raise missing_capability(cap, feature, getattr(self._renderer, "name", "selected"))
+
     def _require_window(self) -> None:
         if not self._has_window:
             raise RuntimeError("No drawing window yet. Call p.size(...) first.")
+
+    def _emit(self, op: ir.Op) -> None:
+        self._require_window()
+        self.frame.append(op)
+
+    def _render(self) -> None:
+        """Draw everything recorded so far onto the window; the frame then starts empty."""
+        if self.frame:
+            self._renderer.render(self.frame)
+            self.frame.clear()
 
     # ------------------------------------------------------------ style
     def fill(self, color: ColorLike) -> None:
@@ -108,37 +132,30 @@ class Sketch:
 
     # ------------------------------------------------------------ drawing
     def background(self, color: ColorLike) -> None:
-        self._require_window()
-        self._renderer.background(Color.parse(color))
+        self._emit(ir.Clear(Color.parse(color)))
 
     def circle(self, x: float, y: float, diameter: float) -> None:
-        self._require_window()
-        self._renderer.circle(x, y, diameter, self.style)
+        self._emit(ir.Circle(x, y, diameter, self.style))
 
     def ellipse(self, x: float, y: float, width: float, height: float) -> None:
-        self._require_window()
-        self._renderer.ellipse(x, y, width, height, self.style)
+        self._emit(ir.Ellipse(x, y, width, height, self.style))
 
     def rect(self, x: float, y: float, width: float, height: float) -> None:
-        self._require_window()
-        self._renderer.rect(x, y, width, height, self.style)
+        self._emit(ir.Rect(x, y, width, height, self.style))
 
     def line(self, x1: float, y1: float, x2: float, y2: float) -> None:
-        self._require_window()
-        self._renderer.line(x1, y1, x2, y2, self.style)
+        self._emit(ir.Line(x1, y1, x2, y2, self.style))
 
     def point(self, x: float, y: float) -> None:
-        self._require_window()
-        self._renderer.point(x, y, self.style)
+        self._emit(ir.Point(x, y, self.style))
 
     def text(self, message: object, x: float, y: float, color: ColorLike | None = None) -> None:
-        self._require_window()
         style = self.style
         if color is not None:
             chosen = Color.parse(color)
         else:
             chosen = style.fill or style.stroke or WHITE  # contract T4
-        self._renderer.text(str(message), x, y, chosen, style)
+        self._emit(ir.Text(str(message), x, y, chosen, style))
 
     # ------------------------------------------------------------ helpers
     def random(self, low: float = 1.0, high: float | None = None) -> float:
@@ -182,6 +199,8 @@ class Sketch:
         if fps is not None and fps <= 0:
             raise ValueError("fps must be positive")
         self.last_frame = None
+        self.last_ops: tuple[ir.Op, ...] | None = None
+        self.frame.clear()
 
         self._platform.start()
         self.running = True
@@ -205,6 +224,9 @@ class Sketch:
                 self.mouse_x, self.mouse_y, self.mouse_pressed = inp.mouse_x, inp.mouse_y, inp.mouse_pressed
 
                 draw()
+                if max_frames is not None and self.frame_count + 1 >= max_frames:
+                    self.last_ops = self.frame.ops  # what the final frame asked for (IR snapshot)
+                self._render()
                 self._platform.present()
 
                 self.frame_count += 1
@@ -214,6 +236,8 @@ class Sketch:
                 self.delta_time = self._platform.tick(self.fps)
         finally:
             self.running = False
+            self.frame.clear()
+            self._renderer.attach(None)
             self._platform.close()
             self._has_window = False
 
