@@ -53,7 +53,7 @@ Second consecutive run compared all 11 goldens exactly. Windows 11, Python 3.14.
 - Extras (`playground[design]`) before any separate distribution (other agent's amendment accepted).
 - Goldens are produced on Windows only; other platforms smoke-test.
 
-## Decisions requested (Sprint 1, S-012)
+## Decisions requested (Sprint 1, S-012) — *all accepted as recommended on 24 Sept 2026; see `docs/design/Decision_Log.md` D-001…D-008*
 
 | Row | Question | Recommendation |
 |---|---|---|

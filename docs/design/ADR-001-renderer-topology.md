@@ -1,7 +1,7 @@
 # ADR-001: Renderer topology and first rasteriser
 
-**Status:** Proposed — awaiting maintainer decision (blocks Sprint 3)
-**Date:** 24 September 2026
+**Status:** Accepted — option C, by the maintainer on 24 September 2026 (Decision Log D-001)
+**Date:** proposed and accepted 24 September 2026
 **Inputs:** architecture document §5–8, architecture review Issue 1, spikes 01/02/03/05 (`spikes/RESULTS.md`)
 
 ## Context
@@ -43,10 +43,15 @@ an "advanced" extra. Only justified if C's 2 MB is unacceptable.
 
 ## Decision
 
-*Pending.* Recommendation: **C**, sequenced as: Sprint 1–2 build the `Sketch`/platform/IR split with
-the existing pygame drawing behind the IR (no visual change, goldens unchanged); Sprint 3 adds
-`CairoRenderer` as a second IR consumer and, once its output passes the sample suite under the
-agreed contract changes (S2 alpha, S4 stroke alignment, C6 sub-pixel), makes it the default.
+**Option C.** Playground owns the drawing semantics and the draw-op IR; **Cairo is the default 2D
+renderer** (raster to the window, and PDF/SVG surfaces for export); **pygame-ce is the platform and
+presentation provider** (window, events, input, timing, audio, blit of the finished frame). Skia,
+OpenGL and any other renderer are optional future consumers of the same IR.
+
+Sequenced as (D-007): Sprint 1 builds the `Sketch`/platform/state split under unchanged pygame
+drawing; Sprint 2 adds the IR with a `LegacyPygameRenderer` consuming it (goldens byte-identical);
+Sprint 3 adds `CairoRenderer`, applies the contract changes D-003/D-004/D-005 with one deliberate
+golden regeneration, makes Cairo the default and deletes the legacy renderer (D-008).
 
 ## Consequences
 

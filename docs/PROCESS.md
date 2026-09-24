@@ -20,7 +20,7 @@ IDs never change or get reused. A story belongs to exactly one epic; an epic to 
 | `docs/PROCESS.md` | This document |
 | `docs/backlog/themes_and_epics.md` | Themes, epics, the phase each epic belongs to, status |
 | `docs/backlog/stories.md` | Every story with its tasks, epic, sprint assignment and status — the single backlog |
-| `docs/design/` | Architecture document, architecture review, semantic contract, ADRs (`ADR-nnn-*.md`), design notes |
+| `docs/design/` | Architecture document, architecture review, semantic contract, ADRs (`ADR-nnn-*.md`), `Decision_Log.md`, design notes |
 | `docs/qa/` | Test strategy, golden-image policy, CI matrix, QA checklists |
 | `docs/reference/` | Learner-facing and historical material: Quick Reference, v0.5 README |
 | `sprints/sprint-NN/` | One folder per sprint: `stories.md` (the sprint's story set with task status), `review.md` (what shipped, what didn't, findings, decisions, retro). A sprint may add its own docs here |
@@ -36,8 +36,8 @@ time-boxes that deliver them. A phase spans one or more sprints and ends when it
 | Phase | Goal | Sprints |
 |---|---|---|
 | 0 — Stabilise v0.5 | Freeze the API and semantics as executable tests | Sprint 0 |
-| 1 — Refactor core | `Sketch`, platform split, `GraphicsState`, draw-op IR — no learner-visible change | Sprints 1–2 |
-| 2 — First vector rasteriser | ADR-001 executed: Cairo via the IR, transforms/paths/export | Sprints 3–4 |
+| 1 — Refactor core and replace the renderer | Three golden-verified checkpoints (D-007): **Sprint 1** `Sketch`, platform split, `GraphicsState`, `Color` under unchanged pygame drawing → **Sprint 2** draw-op IR with `LegacyPygameRenderer`, goldens byte-identical → **Sprint 3** `CairoRenderer` + contract changes D-003/4/5 + one golden regeneration, HiDPI, headless, export; legacy renderer deleted | Sprints 1–3 |
+| 2 — Feature growth on the vector model | Public transforms, `save`/`restore`, paths, off-screen canvas, Quick Reference v0.6 | Sprint 4+ |
 | 3 — Creative media | Images, typography, SVG, sound, document model | Unscheduled (directional) |
 | 4 — GPU / 3D | OpenGL renderer, shaders, 3D | Unscheduled (directional) |
 
@@ -63,9 +63,54 @@ line. Any DECISION it depends on is named.
 `docs/design/Semantic_Contract.md` updated in the same change if a semantic moved; goldens
 regenerated only as a deliberate, reviewed act.
 
+## Decisions
+
+Two records are kept, and both are part of the definition of done for any story that needs a call
+from the maintainer.
+
+### Architecture Decision Records — `docs/design/ADR-nnn-<slug>.md`
+
+For decisions that shape the code for a long time (a library, a boundary, a data model, a
+non-obvious semantic). One file per decision, numbered in the order raised, never renumbered.
+Sections, in this order: **Status** (Proposed → Accepted / Rejected / Superseded by ADR-mmm, with
+dates) · **Context** · **Options** · **Decision** · **Consequences**. An ADR is never edited
+after acceptance except to change its status; a change of mind is a new ADR that supersedes it.
+
+### Decision log — `docs/design/Decision_Log.md`
+
+One row for *every* decision put to the maintainer, large or small, including those whose reasoning
+lives in an ADR, a contract row or a sprint document. Columns: ID (`D-nnn`), date asked, the
+question, the options offered, the recommendation, the outcome, date decided, and where the
+reasoning lives. A trailing **Open** list shows what is still pending. The log is the index; the
+linked document is the argument.
+
+### How a pending decision is presented
+
+Whenever work needs a call the maintainer has not made, it is raised — in the sprint's `stories.md`,
+in `review.md`, or in conversation — using this shape, every time, in this order:
+
+1. **Context** — what the decision is about, why it has come up *now*, and what happens if it is not made.
+2. **Options** — each one named, with a one-line description; the option that preserves current behaviour is always listed even if it is not recommended.
+3. **Trade-offs** — a table or list comparing the options on the axes that matter for *this* decision (learner impact, install size, speed, compatibility, effort, reversibility …), with measurements where they exist.
+4. **Recommendation** — one option, stated plainly.
+5. **Why** — the reasons, and what would change the recommendation.
+
+Then: add a `pending` row to the decision log before asking; when the maintainer answers, set the
+outcome and date in the same change that applies it (contract row, ADR status, story status).
+A recommendation the maintainer has not yet accepted is never applied to code.
+
+### When something *is* a decision
+
+Anything that changes a pinned row of `Semantic_Contract.md`; adds or removes a runtime
+dependency; changes what the base install contains; changes a public name or signature; picks
+between providers; or regenerates golden images. Routine engineering choices inside a story are not
+decisions and are not logged.
+
 ## Rules that outrank the documents
 
 - The v0.5 source and the test suite are authoritative when a document disagrees with them.
 - Learner code in `examples/session1/` never changes to make a test pass.
 - A change to a pinned semantic is a contract change: ADR or contract row first, then code.
 - Backend types (`pygame.Surface`, `cairo.Context`, …) never appear in `playground/api.py` or in tests of public behaviour.
+- **Internal capability first, public API later.** A concept (transform, path, clip, text run, state stack) enters the IR and the internal model in the sprint that needs it; its learner-facing vocabulary is a separate, later story. The architecture settles before the API grows.
+- The test hierarchy, top to bottom: public API semantics → draw-op IR snapshots (the cross-backend contract) → per-backend semantic tests → per-backend golden images. Two correct renderers may differ in pixels; they may not differ in ops.

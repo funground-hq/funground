@@ -24,7 +24,8 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
-| S-012 | E-03 | The five DECISION rows in the contract are decided (S2 alpha, S4 stroke alignment, C6 sub-pixel, T2 default font, F1 angle unit) | Contract rows changed from DECISION to Pinned; ADR or note per decision | ready — maintainer decision |
+| S-012 | E-03 | The five DECISION rows in the contract are decided (S2 alpha, S4 stroke alignment, C6 sub-pixel, T2 default font, F1 angle unit) and ADR-001 is accepted | Contract rows pinned; `Decision_Log.md` D-001…D-008 | done 24 Sept 2026 (font *file* follows S-031) |
+| S-031 | E-15 | **Spike 06 — deterministic text.** Can Playground render single-line text from a bundled OFL font through uharfbuzz shaping + fontTools outlines + IR path ops, at acceptable quality and speed? Narrow scope: no layout, no wrapping | Sizes 12/16/24/36/48; strings `ABC xyz 123`, `Hello, Playground!`, `AVATAR` (kerning), `office` (ligature), one non-Latin sample; measure visual quality vs pygame/Cairo toy text, baseline/anchor correctness, per-frame cost with and without an outline cache, byte-identical output across two runs and two platforms, PDF/SVG output. Result closes D-006 with a font choice | ready — runs during Sprint 1 |
 | S-013 | E-04 | Public functions delegate to an explicit `Sketch` instance (`_active_sketch`); live values resolve through `__getattr__` to it; two `Sketch`es can coexist in one process | New tests; all existing tests unchanged and green | ready |
 | S-014 | E-05 | Window, events, input sampling, clock and presentation live in `PygamePlatform` behind a `Platform` protocol | `_core.py` no longer calls `pygame.display`/`event`/`mouse`/`key`/`time` directly | ready |
 | S-015 | E-06 | Fill/stroke/width/text style is a Playground `GraphicsState` owned by the sketch, with `save()`/`restore()` (internal for now) | Unit tests on state stack | ready |
@@ -35,30 +36,41 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
-| S-018 | E-06 | Every current primitive (`background circle ellipse rect line point text`) records a backend-neutral op instead of drawing | `Frame` op list; op dataclasses | ready |
-| S-019 | E-06 | `PygameRenderer` consumes the op list and produces **identical** goldens | Sample suite green with unchanged goldens | ready |
+| S-018 | E-06 | Every current primitive (`background circle ellipse rect line point text`) records a backend-neutral op instead of drawing; the IR also carries `Transform`, `Path`, clip and state ops **internally** (no public API yet — see PROCESS "internal first") | `Frame` op list; op dataclasses; `Transform`, `Path` types | ready |
+| S-019 | E-06 | `LegacyPygameRenderer` consumes the op list and produces **byte-identical** goldens; it is named legacy because it is deleted in S-026 (D-008) | Sample suite green with unchanged goldens | ready |
 | S-020 | E-06 | Op-list snapshot tests exist for the sample suite | `tests/test_ops_snapshot.py` | ready |
 | S-021 | E-07 | Asking for an unsupported capability fails at `p.size()`/`p.run()` with a message naming the extra to install | Tests for message text | ready |
-| S-022 | E-08 | ADR-001 is accepted or amended | ADR status ≠ Proposed | ready — maintainer decision |
+| S-022 | E-08 | ADR-001 is accepted or amended | ADR status ≠ Proposed | done 24 Sept 2026 (D-001, accepted early) |
 
-## Sprint 3 — Phase 2a: Cairo via the IR (planned)
+## Sprint 3 — Phase 1c: Cairo via the IR, semantic migration (planned)
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
 | S-023 | E-09 | `CairoRenderer` consumes the same op list and presents through `PygamePlatform` | Spike 05 adapter productionised; sample suite renders | ready (after S-022) |
 | S-024 | E-13 | Rendering happens at physical resolution behind a scale; `p.width` stays logical | Crisp output at 125 % scaling on the teaching machine | ready |
-| S-025 | E-03 | Contract decisions S2/S4/C6 are applied and goldens regenerated once, deliberately | Contract + tests + goldens in one change | ready (after S-012) |
-| S-026 | E-09 | Cairo is the default renderer; pygame drawing remains selectable as a fallback | `PLAYGROUND_RENDERER` env / `p.size(renderer=)` | ready |
+| S-025 | E-03 | Contract decisions D-003/D-004/D-005 (alpha, centred strokes, fractional + AA) are applied and goldens regenerated once, deliberately, with each visual change listed in the sprint review | Contract + tests + goldens in one change | ready |
+| S-026 | E-09 | Cairo is the default and only renderer; `LegacyPygameRenderer` and all `pygame.draw` usage are deleted (D-008) | No `pygame.draw` in the package; boundary lint updated | ready |
+| S-034 | E-12 | Headless run and `p.save()` to PNG/PDF/SVG through Cairo surfaces (moved forward from Sprint 4 per D-007) | Export files checked structurally + rendered | ready |
 
-## Sprint 4 — Phase 2b: transforms, paths, export (planned)
+## Sprint 2 — additional (planned)
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
-| S-027 | E-10 | `p.translate/rotate/scale`, `p.push/pop`, `with p.state():` | Semantic tests; contract F1/F2 pinned | ready |
+| S-033 | E-23 | Architecture document v2 reflecting ADR-001/D-007: Cairo default 2D renderer, pygame platform + presentation, IR, three-checkpoint Phase 1, text-as-outlines with `TextRun` reserved | `docs/design/Playground_Technology_Architecture_v2.md` (Markdown; the .docx stays as the v1 record) | ready |
+
+## Sprint 4 — Phase 2: public API on the vector model (planned)
+
+| ID | Epic | Story | Acceptance | Status |
+|---|---|---|---|---|
+| S-027 | E-10 | `p.translate/rotate/scale` (degrees, D-002), `p.radians/degrees`, `p.push/pop`, `with p.state():` | Semantic tests; contract F2 pinned | ready |
 | S-028 | E-11 | `p.path()` with `move_to/line_to/curve_to/close`, fill/stroke/clip | Tests; golden sketch | ready |
-| S-029 | E-12 | `p.save("x.png|pdf|svg")` and a headless run that never opens a window | Export files checked structurally + rendered | ready |
+| S-029 | E-15 | Text subsystem v1 from Spike 06: `FontResource` (HarfBuzz face + fontTools glyph set + glyph-outline cache), `TextRun` (semantic text + shaped glyphs, outlines materialised for the IR) — `p.text()` unchanged for learners | Deterministic text goldens on two platforms | ready (after S-031) |
 | S-030 | E-22 | Quick Reference v0.6 documents every additive API | PDF/MD regenerated | ready |
 
 ## Later (Phases 3–4, directional)
 
-Stories are cut from epics E-14 … E-21 when their phase is scheduled. Nothing here is committed.
+| ID | Epic | Story | Note |
+|---|---|---|---|
+| S-032 | E-12 | PDF exporter consumes `TextRun` and embeds/subsets the font so exported text is searchable and selectable | Accepted limitation from D-006 until then |
+
+Other stories are cut from epics E-14 … E-21 when their phase is scheduled. Nothing here is committed.

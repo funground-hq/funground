@@ -24,28 +24,28 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-06 Draw-op IR and GraphicsState | Public calls record backend-neutral ops; `GraphicsState` owned by Playground; pygame drawing consumes the IR; op-list snapshot tests | 1 | ready |
 | E-07 Capability registry and errors | Unsupported features fail at renderer selection with a message naming the extra to install | 1 | ready |
 
-**Phase 1 exit criterion:** existing learner code unchanged; goldens identical; no pygame draw/display calls outside providers (enforced by lint).
+**Phase 1 exit criterion (D-007, three sprints):** Sprint 1 — refactor under pygame drawing, goldens byte-identical. Sprint 2 — IR + `LegacyPygameRenderer`, goldens byte-identical, IR snapshots established. Sprint 3 — Cairo default renderer, contract changes D-003/4/5 applied with one golden regeneration, HiDPI, headless, PNG/PDF/SVG, legacy renderer deleted. Learner code unchanged throughout; no `pygame` outside `platform/` (lint).
 
 ## TH-3 Design-Quality Rendering
 *Correct vector semantics — transforms, paths, clipping, anti-aliasing, export — in the base install.*
 
 | Epic | Outcome | Phase | Status |
 |---|---|---|---|
-| E-08 Rasteriser decision | ADR-001 accepted (recommendation: Cairo first, Skia deferred) | 1–2 | ready (ADR proposed) |
-| E-09 Cairo renderer via IR | `CairoRenderer` consumes the IR, presents through pygame; passes the sample suite under the agreed contract; becomes default | 2 | ready |
-| E-10 Transforms and state stack | `translate/rotate/scale`, `push/pop`, `with p.state()` | 2 | ready |
-| E-11 Path API | Reusable `Path` with lines, curves, close; fill/stroke; clip | 2 | ready |
-| E-12 Export and headless mode | `p.save()` PNG/PDF/SVG; run a sketch to files without a window | 2 | ready |
-| E-13 HiDPI-correct rendering | Logical coordinates, physical-resolution rendering; crisp on scaled displays | 2 | ready |
+| E-08 Rasteriser decision | ADR-001 accepted: Cairo default 2D renderer, pygame platform + presentation, Skia/GPU future IR consumers | 1 | done (D-001) |
+| E-09 Cairo renderer via IR | `CairoRenderer` consumes the IR, presents through pygame; passes the sample suite under the pinned contract; the only renderer after Sprint 3 | 1 | ready |
+| E-13 HiDPI-correct rendering | Logical coordinates, physical-resolution rendering; crisp on scaled displays | 1 | ready |
+| E-12 Export and headless mode | `p.save()` PNG/PDF/SVG through Cairo surfaces; run a sketch to files without a window; later: embedded-font PDF text (S-032) | 1 (basic) / 3 (embedded fonts) | ready |
+| E-10 Transforms and state stack | Internal `Transform` + state ops in the IR (Phase 1); public `translate/rotate/scale`, `push/pop`, `with p.state()` (Phase 2) | 1 → 2 | ready |
+| E-11 Path API | Internal `Path` in the IR (Phase 1); public `p.path()` and clip (Phase 2) | 1 → 2 | ready |
 
-**Phase 2 exit criterion:** a representative 2D sketch renders through the IR to window, PNG and PDF; exports stable; default examples ≤ 720p hold 60 fps on the teaching machine.
+**Phase 2 exit criterion:** the public transform/path/state vocabulary and text subsystem v1 are documented in Quick Reference v0.6; default examples ≤ 720p hold 60 fps on the teaching machine.
 
 ## TH-4 Creative Media *(directional)*
 
 | Epic | Outcome | Phase | Status |
 |---|---|---|---|
 | E-14 Images | `load_image`, draw with transform, Pillow adapter | 3 | directional |
-| E-15 Typography | Font choice, shaping (uharfbuzz/fontTools), multiline layout | 3 | directional |
+| E-15 Typography | v1 (Phase 2): bundled OFL font, uharfbuzz shaping + fontTools outlines as IR paths, `FontResource`/`TextRun` (S-031, S-029). Later: font choice, multiline layout, embedded-font export | 2 (v1) / 3 | ready (v1) |
 | E-16 SVG import | via `resvg-py` | 3 | directional |
 | E-17 Sound API | Simple `p.sound()` over pygame mixer | 3 | directional |
 | E-18 Document / page / frame model | Multi-page documents, frame sequences | 3 | directional |
