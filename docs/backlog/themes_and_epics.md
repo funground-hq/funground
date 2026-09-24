@@ -11,6 +11,10 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-01 Freeze and test the v0.5 contract | API inventory, semantics and Session-1 sketches are executable tests | 0 | done (Sprint 0) |
 | E-02 Packaging, install and CI | `pip install` works; CI matrix Windows/macOS/Linux × 3.11–3.14; import-lint guards provider boundaries | 0–1 | in progress |
 
+| E-26 Input events | previous mouse, buttons, wheel, drag; `mouse_pressed()`/`key_pressed()` callbacks; last key; cursor; touch/gamepad later | 2 | ready (Feature_Map §7) |
+| E-27 Creative-coding helpers | `map`, `lerp`, `norm`, `random_gaussian`, `random_choice`; `noise`; `Vector` | 2 | ready (Feature_Map §8) |
+| E-29 Runtime controls | `no_loop`/`loop`/`redraw`, `millis`, `frame_rate` query, `exit`, full screen, resize, script mode | 2 | ready (Feature_Map §1) |
+
 **Phase 0 exit criterion:** semantics pinned, now-or-never defects fixed, sample suite green, API frozen. *Met in Sprint 0 except the DECISION rows, which are Sprint 1's first task.*
 
 ## TH-2 Architecture Foundation
@@ -38,7 +42,11 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-10 Transforms and state stack | Internal `Transform` + state ops in the IR (Phase 1); public `translate/rotate/scale`, `push/pop`, `with p.state()` (Phase 2) | 1 → 2 | ready |
 | E-11 Path API | Internal `Path` in the IR (Phase 1); public `p.path()` and clip (Phase 2) | 1 → 2 | ready |
 
-**Phase 2 exit criterion:** the public transform/path/state vocabulary and text subsystem v1 are documented in Quick Reference v0.6; default examples ≤ 720p hold 60 fps on the teaching machine.
+| E-24 Drawing vocabulary completeness | `square`, `triangle`, `quad`, `arc`, `polygon`; stroke cap/join/dash/miter; anti-alias opt-out; revisit rect/ellipse modes | 2 | ready (Feature_Map §2) |
+| E-25 Colour, gradients and compositing | `color_mode` HSB/HSL, colour objects, `lerp_color`; linear/radial gradients; blend modes; opacity; shadow | 2 | ready (Feature_Map §3) |
+| E-28 Off-screen canvas | `create_canvas()` buffers drawn with the same API and used like images | 2 | ready (Feature_Map §1) |
+
+**Phase 2 exit criterion (revised 25 Sept 2026, see `Feature_Map.md`):** a learner can port a typical p5 "core" sketch (shapes, transforms, colour modes, events, noise, text) and a typical DrawBot single-page composition (paths, gradients, text box, PDF) with only naming changes; Quick Reference v0.7 documents it; default examples ≤ 720p hold 60 fps on the teaching machine.
 
 ## TH-4 Creative Media *(directional)*
 
@@ -49,7 +57,8 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-16 SVG import | via `resvg-py` | 3 | directional |
 | E-17 Sound API | Simple `p.sound()` over pygame mixer | 3 | directional |
 | E-18 Document / page / frame model | Multi-page documents, frame sequences | 3 | directional |
-| E-19 Video export | ffmpeg subprocess | 3 | directional |
+| E-19 Video export | frame sequences (Phase 2), GIF and mp4 via ffmpeg (Phase 3) | 2–3 | directional |
+| E-30 Controls | sliders/toggles bound to sketch variables (DrawBot `Variable`) | 3 | directional |
 
 ## TH-5 GPU and 3D *(directional)*
 

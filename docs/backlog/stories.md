@@ -89,3 +89,27 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-037 | E-15 | Text polish: LRU-capped `TextRun` cache; `p.text_width()` | 10k-frame headless run keeps the cache bounded | ready |
 | S-038 | E-13 | macOS / Linux HiDPI via SDL high-DPI flag (unverifiable on the teaching machine) | forced-scale unit tests; documented as unverified on real hardware | ready |
 | S-039 | E-02 | First CI run on a remote; 12-cell matrix green | green badge | blocked (no remote) |
+
+## Phase 2 story cuts from the Feature Map (25 Sept 2026) — Sprints 5–6, not yet scheduled
+
+| ID | Epic | Story | Sprint |
+|---|---|---|---|
+| S-040 | E-23 | Verify `Feature_Map.md` against the live p5.js 2.x, Processing 4 and DrawBot 3.x references; correct the inventory | 5 (first) |
+| S-041 | E-24 | `square`, `triangle`, `quad`, `arc` (open/chord/pie), `polygon(points)` | 5 |
+| S-042 | E-24 | `stroke_cap`, `stroke_join`, `stroke_dash`, miter limit; `no_smooth()` opt-out | 5 |
+| S-043 | E-10 | `shear_x/shear_y`, `apply_matrix`, `reset_matrix` | 5 |
+| S-044 | E-25 | `color_mode(RGB|HSB|HSL, max…)`, `color()` objects with component getters, `lerp_color` | 5 |
+| S-045 | E-26 | `pmouse_x/y`, `mouse_button`, wheel, drag; `mouse_pressed()/mouse_released()/mouse_moved()/key_pressed()/key_released()` callbacks; `key`, `key_code` | 5 |
+| S-046 | E-27 | `map`, `lerp`, `norm`, `mag`, `random_gaussian`, `random_choice` | 5 |
+| S-047 | E-27 | `noise(x[, y[, z]])`, `noise_seed`, `noise_detail` — deterministic, seeded | 5 |
+| S-048 | E-29 | `no_loop`, `loop`, `redraw`, `millis`, `frame_rate()` query, `exit()` | 5 |
+| S-049 | E-15 | `text_align(h, v)`, `text_ascent/descent`, cap height; `text_width` already in S-037 | 5 |
+| S-050 | E-25 | Linear and radial gradients for fill and stroke (IR op + Cairo + export) | 6 |
+| S-051 | E-25 | `blend_mode`, global `opacity`, `shadow` | 6 |
+| S-052 | E-28 | Off-screen canvas: `c = p.create_canvas(w, h)`; draw with the same verbs on `c`; `p.image(c, x, y)` | 6 |
+| S-053 | E-15 | Multi-line text, `text_leading`, word-wrap in a box with alignment and overflow | 6 |
+| S-054 | E-15 | `font(path_or_name)`, bold/italic styles, per-sketch font resources | 6 |
+| S-055 | E-27 | `Vector` (add, sub, mult, mag, normalize, heading, rotate, dist, lerp) | 6 |
+| S-056 | E-19 | `save_frames(pattern, count)` sequence export (headless-friendly) | 6 |
+| S-057 | E-29 | `cursor`/`no_cursor`, `full_screen`, `resize_canvas` | 6 |
+| S-058 | E-23 | ADR-003 "Deliberately out of scope": CMYK/print, sound synthesis, Core-Image-scale filters, data loaders | 5 |
