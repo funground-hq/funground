@@ -41,23 +41,22 @@ def test_run_without_size_also_checks_capabilities():
         api.active_sketch().run_namespace({"draw": lambda: None}, max_frames=1)
 
 
-def test_legacy_renderer_declares_raster_only():
-    from playground.renderers.legacy_pygame import LegacyPygameRenderer
+def test_default_renderer_declares_the_vector_contract():
+    from playground.renderers.cairo2d import CairoRenderer
+    from playground.sketch import RENDERERS, default_renderer
 
-    assert LegacyPygameRenderer.capabilities == frozenset({Capability.RASTER_2D})
+    assert set(RENDERERS) == {"cairo"}
+    assert isinstance(default_renderer(), CairoRenderer)
+    assert {Capability.RASTER_2D, Capability.ALPHA, Capability.CLIP_PATH} <= CairoRenderer.capabilities
+
+
+def test_unknown_renderer_name_is_an_error(monkeypatch):
+    from playground.sketch import default_renderer
+
+    monkeypatch.setenv("PLAYGROUND_RENDERER", "crayon")
+    with pytest.raises(ValueError, match="crayon"):
+        default_renderer()
 
 
 def test_playground_error_is_a_runtime_error():
     assert issubclass(PlaygroundError, RuntimeError)
-
-
-def test_legacy_renderer_refuses_unknown_ops_loudly():
-    """An op the legacy renderer cannot draw is a bug, not silence (deleted with it in S-026)."""
-    from playground.renderers.legacy_pygame import LegacyPygameRenderer
-
-    import pygame
-
-    r = LegacyPygameRenderer()
-    r.attach(pygame.Surface((10, 10)))
-    with pytest.raises(NotImplementedError, match="Save"):
-        r.render(ir.Frame([ir.Save()]))

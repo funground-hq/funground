@@ -41,7 +41,6 @@ class PygamePlatform:
     # ---- window
     def open_window(self, width: int, height: int, title: str) -> pygame.Surface:
         pygame.display.init()
-        pygame.font.init()
         self._screen = pygame.display.set_mode((width, height))
         pygame.display.set_caption(title)
         return self._screen
