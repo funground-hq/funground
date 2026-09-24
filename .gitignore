@@ -9,3 +9,4 @@ spikes/*/.venv/
 spikes/03_skia_install_cost/wheels/
 spikes/reference/
 tests/golden/_actual/
+spikes/06_text_outlines/fonts/*.ttf

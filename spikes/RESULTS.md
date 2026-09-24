@@ -156,6 +156,50 @@ the IR is what makes that swap cheap.
   Phase 0/1 (regression suite, semantic contract check, `Sketch`/`__getattr__`, `PygamePlatform`
   extraction, IR routing) cannot start without them. A repo URL or a local path is all that's needed.
 
+## 6. Deterministic text from a bundled font — `06_text_outlines/` (Sprint 1, story S-031)
+
+**Question (D-006):** can Playground render single-line text from a bundled font through
+uharfbuzz shaping → fontTools glyph outlines → path ops → Cairo, deterministically, at acceptable
+quality and speed? Narrow scope: no wrapping, no layout.
+
+**Setup:** own venv (pycairo 1.29.1, fontTools 4.66.0, uharfbuzz 0.56.2, pygame-ce 2.5.8).
+`FontResource` = HarfBuzz font + fontTools glyph set + glyph-outline cache (as in
+`docs/design/Text_Subsystem_Note.md`); outlines recorded in font units by a `BasePen` subclass
+(quadratics converted to cubics), transformed per glyph, filled by Cairo. Anchor top-left
+(baseline = y + hhea ascent). Fonts: see `fonts/SOURCES.md`.
+
+**Answer: yes, on every axis.**
+
+| Measure | DejaVu Sans | Noto Sans (variable) | Source Sans 3 | Noto Sans Devanagari |
+|---|---|---|---|---|
+| File size / glyphs | 757 KB / 6253 | 2.0 MB / 4515 | 431 KB / 2478 | 642 KB / 1117 |
+| Licence | Bitstream Vera (permissive) | OFL | OFL | OFL |
+| `Hello, Playground!` 24 px, **cached** | **0.48 ms** | **0.44 ms** | **0.44 ms** | — |
+| same, no outline cache | 1.48 ms | 1.21 ms | 1.31 ms | — |
+| shaping only | 0.008 ms | 0.007 ms | 0.008 ms | — |
+| Byte-identical across two runs | ✅ | ✅ | ✅ | ✅ |
+| Kerning (`AVATAR` narrower than advance sum) | ✅ | ✅ | ✅ | — |
+| Ligature (`office` → glyph count) | 4 (fi) | 4 (fi) | 5 (font has no default `fi`) | — |
+| Complex shaping | — | — | — | ✅ 13 codepoints → 11 glyphs, conjunct + matra placed correctly (`NotoSansDevanagari_outlines.png`) |
+| Anchor: ink of `H` at (40, 20) starts at | (43, 26) | (43, 31) | (43, 30) | — |
+| PDF / SVG (4 lines, 24 px) | 10.6 / 35.6 KB | 10.6 / 35.6 KB | 10.2 / 34.6 KB | 10.6 / 35.4 KB |
+
+Visual quality (`*_compare_12px.png`, `*_compare_24px.png`): at 12 px the unhinted outlines are
+legible and comparable to Cairo's system-font toy text; pygame's default font is bolder and coarser.
+At 24 px and above the outlines are indistinguishable from a hinted system font. The anchor lands
+at the top of the em box (ink begins below by ascent − cap height, and to the right by the side
+bearing), which is what `pygame.font` does today, so contract T1 holds without adjustment.
+
+**Findings**
+- The outline cache is what makes this cheap: 0.44 ms per line cached vs 1.2–1.5 ms rebuilding
+  outlines; a 60 fps frame budget is 16.7 ms. Shaping itself is negligible (8 µs).
+- Shaping is genuinely Unicode: kerning, ligatures and Devanagari conjuncts all come out of
+  HarfBuzz for free; nothing Latin-specific in the code.
+- fontTools 2.5 MB + uharfbuzz 1.5 MB + one font file ≈ 5 MB, all with cp314 wheels.
+- Cairo's toy API was used only for comparison; the bundled route never touches it.
+
+**Decision requested (D-009): which font to bundle.** See `docs/design/Decision_Log.md`.
+
 ## Reference clone
 
 `spikes/reference/drawbot-skia/` — shallow clone of justvanrossum/drawbot-skia (precedent for the

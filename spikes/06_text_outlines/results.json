@@ -1,0 +1,166 @@
+{
+  "python": "3.14.7",
+  "pycairo": "1.29.1",
+  "fonts": {
+    "DejaVuSans.ttf": {
+      "file_bytes": 757076,
+      "upem": 2048,
+      "glyphs": 6253,
+      "sheet": "DejaVuSans_outlines.png",
+      "compare_12": "DejaVuSans_compare_12px.png",
+      "compare_24": "DejaVuSans_compare_24px.png",
+      "timing_hello_24px": {
+        "no_cache": {
+          "ms_per_frame": 1.481,
+          "outline_builds": 3600
+        },
+        "cache": {
+          "ms_per_frame": 0.48,
+          "outline_builds": 15
+        },
+        "shape_only_ms": 0.008
+      },
+      "timing_hello_48px": {
+        "no_cache": {
+          "ms_per_frame": 1.422,
+          "outline_builds": 3600
+        },
+        "cache": {
+          "ms_per_frame": 0.589,
+          "outline_builds": 15
+        },
+        "shape_only_ms": 0.013
+      },
+      "anchor": {
+        "ink_x0": 43,
+        "ink_y0": 26,
+        "anchor": [
+          40,
+          20
+        ]
+      },
+      "determinism": {
+        "identical_across_runs": true,
+        "sha256": "7af1bce3cf04e460"
+      },
+      "exports": {
+        "pdf": 7681,
+        "svg": 25073
+      },
+      "AVATAR_glyphs": 6,
+      "AVATAR_kerned_narrower": true,
+      "office_glyph_count": 4
+    },
+    "NotoSansDevanagari[wdth,wght].ttf": {
+      "file_bytes": 641944,
+      "upem": 1000,
+      "glyphs": 1117,
+      "sheet": "NotoSansDevanagari_outlines.png",
+      "determinism": null,
+      "exports": {
+        "pdf": 10577,
+        "svg": 35445
+      },
+      "devanagari_glyph_count": 11,
+      "devanagari_codepoints": 13
+    },
+    "NotoSans[wdth,wght].ttf": {
+      "file_bytes": 2049096,
+      "upem": 1000,
+      "glyphs": 4515,
+      "sheet": "NotoSans_outlines.png",
+      "compare_12": "NotoSans_compare_12px.png",
+      "compare_24": "NotoSans_compare_24px.png",
+      "timing_hello_24px": {
+        "no_cache": {
+          "ms_per_frame": 1.209,
+          "outline_builds": 3600
+        },
+        "cache": {
+          "ms_per_frame": 0.442,
+          "outline_builds": 15
+        },
+        "shape_only_ms": 0.011
+      },
+      "timing_hello_48px": {
+        "no_cache": {
+          "ms_per_frame": 1.843,
+          "outline_builds": 3600
+        },
+        "cache": {
+          "ms_per_frame": 0.62,
+          "outline_builds": 15
+        },
+        "shape_only_ms": 0.007
+      },
+      "anchor": {
+        "ink_x0": 43,
+        "ink_y0": 31,
+        "anchor": [
+          40,
+          20
+        ]
+      },
+      "determinism": {
+        "identical_across_runs": true,
+        "sha256": "ec25a1d5c4d237d5"
+      },
+      "exports": {
+        "pdf": 10623,
+        "svg": 35585
+      },
+      "AVATAR_glyphs": 6,
+      "AVATAR_kerned_narrower": true,
+      "office_glyph_count": 4
+    },
+    "SourceSans3-Regular.ttf": {
+      "file_bytes": 431196,
+      "upem": 1000,
+      "glyphs": 2478,
+      "sheet": "SourceSans3_outlines.png",
+      "compare_12": "SourceSans3_compare_12px.png",
+      "compare_24": "SourceSans3_compare_24px.png",
+      "timing_hello_24px": {
+        "no_cache": {
+          "ms_per_frame": 1.311,
+          "outline_builds": 3600
+        },
+        "cache": {
+          "ms_per_frame": 0.44,
+          "outline_builds": 15
+        },
+        "shape_only_ms": 0.008
+      },
+      "timing_hello_48px": {
+        "no_cache": {
+          "ms_per_frame": 1.379,
+          "outline_builds": 3600
+        },
+        "cache": {
+          "ms_per_frame": 0.625,
+          "outline_builds": 15
+        },
+        "shape_only_ms": 0.008
+      },
+      "anchor": {
+        "ink_x0": 43,
+        "ink_y0": 30,
+        "anchor": [
+          40,
+          20
+        ]
+      },
+      "determinism": {
+        "identical_across_runs": true,
+        "sha256": "c3dcbe710e457942"
+      },
+      "exports": {
+        "pdf": 10195,
+        "svg": 34636
+      },
+      "AVATAR_glyphs": 6,
+      "AVATAR_kerned_narrower": true,
+      "office_glyph_count": 5
+    }
+  }
+}
