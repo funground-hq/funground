@@ -25,7 +25,7 @@ provide capabilities.* This table is what "owns" means.
 
 | # | Semantic | v0.5 verified behaviour | v0.6 rule | Status |
 |---|---|---|---|---|
-| S1 | Colour forms | Passed straight to pygame-ce: X11-style names, `(r,g,b)`, `(r,g,b,a)`, `[..]`, `"#RRGGBB"`, `"#RRGGBBAA"`, `"0xRRGGBB"`; components 0–255 | Same forms. Playground parses them into its own RGBA and **bundles the pygame-ce name table** so names render identically on every backend | Pinned |
+| S1 | Colour forms | Passed straight to pygame-ce: X11-style names, `(r,g,b)`, `(r,g,b,a)`, `[..]`, `"#RRGGBB"`, `"#RRGGBBAA"`, `"0xRRGGBB"`; components 0–255. Undocumented but working: `pygame.Color` objects and packed ints `0xRRGGBBAA` | Same forms, **including the undocumented ones** (frozen API): any object with `r/g/b[/a]` attributes is accepted by duck-typing, packed ints are decoded as pygame does — no pygame import needed. Playground parses everything into its own RGBA and **bundles the pygame-ce name table** so names render identically on every backend and cannot change under us | Pinned |
 | S2 | Alpha | **Silently dropped** — `(0,0,255,64)` draws opaque blue on the window | Alpha honoured: translucent fills and strokes, 0–255 | Pinned (D-003) — applies when Cairo lands |
 | S3 | Default style | fill `"white"`, stroke `"black"`, `stroke_width` 1, `text_size` 20 | Same | Pinned |
 | S4 | Stroke alignment | **Inside** the geometry: `rect(20,20,40,40)` with width 6 paints x = 20…25; nothing outside the edge | Stroke **centred** on the edge (half outside, half inside), as in p5, DrawBot, SVG, PDF. At the default width of 1 the difference is imperceptible | Pinned (D-004) — applies when Cairo lands |

@@ -39,13 +39,26 @@ def test_named_table_matches_pygame_ce():
     assert NAMED_COLORS == {k: tuple(v) for k, v in THECOLORS.items()}
 
 
+def test_backend_compatible_forms_still_work():
+    """v0.5 forwarded anything pygame accepted; the frozen API keeps those forms (contract S1)."""
+    pygame = pytest.importorskip("pygame")
+    # pygame.Color objects, via duck-typed r/g/b/a - no pygame import in color.py
+    assert Color.parse(pygame.Color("tomato")).rgba == (255, 99, 71, 255)
+    assert Color.parse(pygame.Color(1, 2, 3, 4)).rgba == (1, 2, 3, 4)
+    # packed 0xRRGGBBAA integers, decoded exactly as pygame does
+    for packed in (0xFF634780, 0x00000000, 0xFFFFFFFF, 0x12345678):
+        assert Color.parse(packed).rgba == tuple(pygame.Color(packed))
+    with pytest.raises(ValueError):
+        Color.parse(0x1_0000_0000)
+
+
 def test_aliases_are_identical():
     assert Color.parse("aqua") == Color.parse("cyan")
     assert Color.parse("fuchsia") == Color.parse("magenta")
     assert Color.parse("gray") == Color.parse("grey")
 
 
-@pytest.mark.parametrize("bad", ["banana", "#12345", "#GGGGGG", (1, 2), (1, 2, 3, 4, 5), (256, 0, 0), (-1, 0, 0), (1.5, 0, 0), 42, None, (True, 0, 0)])
+@pytest.mark.parametrize("bad", ["banana", "#12345", "#GGGGGG", (1, 2), (1, 2, 3, 4, 5), (256, 0, 0), (-1, 0, 0), (1.5, 0, 0), None, True, (True, 0, 0), object()])
 def test_invalid_forms_raise_learner_readable_error(bad):
     with pytest.raises(ValueError) as e:
         Color.parse(bad)

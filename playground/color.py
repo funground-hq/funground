@@ -41,6 +41,19 @@ class Color:
             return value
         if isinstance(value, str):
             return cls._parse_str(value)
+        if isinstance(value, bool):
+            raise ValueError(f"{value!r} is not a colour")
+        if isinstance(value, int):
+            # Backend-compatible packed form 0xRRGGBBAA, as pygame.Color(int) reads it.
+            if not 0 <= value <= 0xFFFFFFFF:
+                raise ValueError(f"packed colour {value:#x} must fit in 0xRRGGBBAA")
+            return cls((value >> 24) & 255, (value >> 16) & 255, (value >> 8) & 255, value & 255)
+        if all(hasattr(value, c) for c in "rgb"):
+            # Any object exposing r/g/b[/a] - covers pygame.Color without importing pygame.
+            return cls(
+                _component(value.r), _component(value.g), _component(value.b),
+                _component(getattr(value, "a", 255)),
+            )
         if isinstance(value, (tuple, list)):
             if len(value) == 3:
                 return cls(*(_component(c) for c in value))
