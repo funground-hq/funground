@@ -81,3 +81,11 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | ID | Epic | Story | Trigger | Status |
 |---|---|---|---|---|
 | S-036 | E-08 | Blend2D as a gated optional renderer (`playground[fast]`): re-run Spike 07, then productionise the adapter as a second IR consumer | `blend2d-py` exposes clip + matrix + fill rule and ships macOS x86_64 wheels | tracking (D-011) |
+
+## Sprint 4 — additional stories (planned 25 Sept 2026)
+
+| ID | Epic | Story | Acceptance | Status |
+|---|---|---|---|---|
+| S-037 | E-15 | Text polish: LRU-capped `TextRun` cache; `p.text_width()` | 10k-frame headless run keeps the cache bounded | ready |
+| S-038 | E-13 | macOS / Linux HiDPI via SDL high-DPI flag (unverifiable on the teaching machine) | forced-scale unit tests; documented as unverified on real hardware | ready |
+| S-039 | E-02 | First CI run on a remote; 12-cell matrix green | green badge | blocked (no remote) |
