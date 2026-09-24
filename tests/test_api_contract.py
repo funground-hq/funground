@@ -36,6 +36,7 @@ V05_FUNCTIONS = {
 ADDED_FUNCTIONS = {
     "random_seed": "(seed: 'int | None' = None) -> 'None'",
     "run": "(*, fps: 'int | None' = None, max_frames: 'int | None' = None) -> 'None'",
+    "save": "(path: 'str') -> 'None'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

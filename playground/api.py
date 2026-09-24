@@ -60,6 +60,11 @@ def stop() -> None:
     active_sketch().stop()
 
 
+def save(path: str) -> None:
+    """Save this frame to a .png, .pdf or .svg file (written when the frame is complete)."""
+    active_sketch().save(path)
+
+
 # ---- drawing
 def background(color: Color) -> None:
     active_sketch().background(color)
