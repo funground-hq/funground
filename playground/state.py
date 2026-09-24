@@ -1,8 +1,8 @@
 """Backend-neutral graphics state (contract rows S3–S9, T3).
 
 ``GraphicsState`` is immutable; a sketch replaces it on every style call and
-keeps a stack so ``save()``/``restore()`` (and, later, ``with p.state():``)
-are trivial and exception-safe.
+keeps a stack so ``push()``/``pop()`` and ``with p.state():`` are trivial and
+exception-safe.
 """
 from __future__ import annotations
 
@@ -40,6 +40,14 @@ class StateStack:
     @property
     def depth(self) -> int:
         return len(self._saved)
+
+    def unwind(self) -> int:
+        """Restore every saved state (end-of-frame safety); return how many were open."""
+        count = len(self._saved)
+        if count:
+            self.current = self._saved[0]
+            self._saved.clear()
+        return count
 
     def update(self, **changes) -> GraphicsState:
         self.current = self.current.with_(**changes)

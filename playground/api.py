@@ -6,6 +6,7 @@ them stable and keep this module free of any backend import.
 from __future__ import annotations
 
 import inspect
+from contextlib import AbstractContextManager
 
 from .color import ColorLike as Color
 from .sketch import Sketch
@@ -121,6 +122,37 @@ def text_size(size: int) -> None:
     active_sketch().text_size(size)
 
 
+# ---- transforms and the state stack (S-027)
+def translate(dx: float, dy: float) -> None:
+    """Move the origin: everything drawn afterwards is shifted by (dx, dy)."""
+    active_sketch().translate(dx, dy)
+
+
+def rotate(degrees: float) -> None:
+    """Turn later drawing by *degrees* about the current origin (90 = a quarter turn clockwise)."""
+    active_sketch().rotate(degrees)
+
+
+def scale(sx: float, sy: float | None = None) -> None:
+    """Grow or shrink later drawing: scale(2) doubles, scale(2, 1) stretches sideways."""
+    active_sketch().scale(sx, sy)
+
+
+def push() -> None:
+    """Save the current transform and style; pop() brings them back."""
+    active_sketch().push()
+
+
+def pop() -> None:
+    """Restore the transform and style saved by the last push()."""
+    active_sketch().pop()
+
+
+def state() -> AbstractContextManager[None]:
+    """``with p.state():`` - push() on entry, pop() on exit, even after an error."""
+    return active_sketch().state()
+
+
 # ---- input
 def key_down(key: str | int) -> bool:
     """Return whether a key is held, e.g. key_down('left') or key_down('a')."""
@@ -140,6 +172,16 @@ def random_seed(seed: int | None = None) -> None:
 
 def constrain(value: float, low: float, high: float) -> float:
     return Sketch.constrain(value, low, high)
+
+
+def radians(degrees: float) -> float:
+    """Degrees to radians, for math.sin/cos (rotate() itself takes degrees)."""
+    return Sketch.radians(degrees)
+
+
+def degrees(radians: float) -> float:
+    """Radians to degrees, e.g. degrees(math.atan2(dy, dx)) for rotate()."""
+    return Sketch.degrees(radians)
 
 
 def distance(x1: float, y1: float, x2: float, y2: float) -> float:

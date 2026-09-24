@@ -73,7 +73,7 @@ provide capabilities.* This table is what "owns" means.
 | # | Semantic | Proposed rule | Status |
 |---|---|---|---|
 | F1 | Angle unit for `rotate()` | **Degrees**: `p.rotate(90)` is a quarter turn. `p.radians(deg)` and `p.degrees(rad)` helpers for trigonometry. No angle-mode switch | Pinned (D-002) |
-| F2 | Transform state | `translate/rotate/scale` apply to all later geometry until restored; `push()`/`pop()` and `with p.state():` | Proposed |
+| F2 | Transform state | `translate(dx, dy)` / `rotate(degrees)` / `scale(s)` / `scale(sx, sy)` are **cumulative**: each multiplies the current transform (local geometry first, so `translate` then `rotate` turns about the new origin, and the reverse order rotates the translation too) and applies to **all later geometry and text** (images when they arrive) until restored. `push()` saves the transform **and** the style (fill, stroke, stroke width, text size) on one stack; `pop()` restores both — restore restores everything. `with p.state():` is push on entry, pop on exit, exception-safe. **The stack resets at the start of every `draw()`**: a transform or style set inside `draw()` never carries into the next frame, but a style set at top level *without* a push persists as before (S3). Safety: pushes left open at the end of `draw()` are popped by Playground with a `PlaygroundWarning` naming the count; a `pop()` without a `push()` warns and is ignored; `scale(0)` is a `ValueError` at the call site. `background()` ignores the transform (S9) | Pinned (S-027, Sprint 4) |
 | F3 | `rect`/`ellipse` mode switches | Not offered; anchoring is fixed as above (one rule, no `rectMode`) | Proposed |
 
 ## Test coverage

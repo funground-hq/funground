@@ -32,6 +32,10 @@ class PlaygroundError(RuntimeError):
     """A clear, learner-facing error raised by Playground itself."""
 
 
+class PlaygroundWarning(UserWarning):
+    """A learner-facing warning: something was fixed up rather than crashing mid-lesson."""
+
+
 def missing_capability(cap: Capability, feature: str, renderer_name: str) -> PlaygroundError:
     extra = EXTRA_FOR.get(cap)
     hint = f" Install it with:  pip install playground[{extra}]" if extra else ""

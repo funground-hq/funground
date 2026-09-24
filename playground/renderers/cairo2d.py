@@ -73,6 +73,15 @@ class CairoRenderer:
 
     def draw(self, ctx: cairo.Context, frame: ir.Frame) -> None:
         """Replay *frame* onto any Cairo context (window, PNG, PDF or SVG surface)."""
+        # Contract F2: the transform stack resets every frame, so a top-level
+        # Concat must not carry over to the next frame on the window context.
+        ctx.save()
+        try:
+            self._draw_ops(ctx, frame)
+        finally:
+            ctx.restore()
+
+    def _draw_ops(self, ctx: cairo.Context, frame: ir.Frame) -> None:
         depth = 0
         for op in frame:
             t = type(op)
