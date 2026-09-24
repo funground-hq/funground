@@ -44,6 +44,7 @@ provide capabilities.* This table is what "owns" means.
 | T3 | Size | pygame `Font(None, size)` semantics (size 20 → ~13 px glyph height) | **`text_size(n)` is an n-pixel em** in logical pixels — the CSS/p5/DrawBot convention. Text therefore renders ~1.4× larger than v0.5 at the same number; a deliberate, one-time change | Pinned (D-012) — in effect since Sprint 3 |
 | T4 | Colour | explicit `color=` → current fill → current stroke → white | Same | Pinned |
 | T5 | Message | Any object; `str()` is applied | Same | Pinned |
+| T6 | Measurement | — (v0.5 had no way to measure text) | `text_width(message)` returns the **advance width** of `str(message)` in logical pixels at the current `text_size`: the shaped run's kerned advance (T2), exactly the distance `text()` moves its pen, so `text(msg, (width - text_width(msg)) / 2, y)` centres it. Independent of the transform stack (`scale(2)` doubles the drawing, not the number); `""` → `0.0` | Pinned (S-037, Sprint 4) |
 
 ## Window, lifecycle and runtime
 

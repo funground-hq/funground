@@ -86,7 +86,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
-| S-037 | E-15 | Text polish: LRU-capped `TextRun` cache; `p.text_width()` | 10k-frame headless run keeps the cache bounded | ready |
+| S-037 | E-15 | Text polish: LRU-capped `TextRun` cache; `p.text_width()` | 10k-frame headless run keeps the cache bounded | done (Sprint 4) |
 | S-038 | E-13 | macOS / Linux HiDPI via SDL high-DPI flag (unverifiable on the teaching machine) | forced-scale unit tests; documented as unverified on real hardware | ready |
 | S-039 | E-02 | First CI run on a remote; 12-cell matrix green | green badge | blocked (no remote) |
 

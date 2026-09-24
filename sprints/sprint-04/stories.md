@@ -39,9 +39,10 @@ postponed, per the other agent's note).
 *Status:* done — `playground/paths.py` (`PathBuilder`, also `quad_to`), `tests/test_paths.py` (23 tests incl. a headless PDF export of the sample), sample `14_paths.py` with golden + snapshot; contract F3 pinned (the former mode-switch row is now F4, still proposed). No new decision raised: every public name came from this plan.
 
 ### S-037 Text rendering polish — E-15 *(small, from Sprint 3 findings)*
-- [ ] S-037.1 Cap the per-window `TextRun` cache (LRU, 256 entries) — `p.text(p.frame_count, …)` must not grow without bound
-- [ ] S-037.2 `p.text_width(message)` helper (advance in logical pixels) so learners can centre text
+- [x] S-037.1 Cap the per-window `TextRun` cache (LRU, 256 entries) — `p.text(p.frame_count, …)` must not grow without bound
+- [x] S-037.2 `p.text_width(message)` helper (advance in logical pixels) so learners can centre text
 *Acceptance:* a 10 000-frame headless run with changing text keeps the cache ≤ 256.
+*Status:* done — `CairoRenderer._text_runs` is an `OrderedDict` LRU capped at `TEXT_RUN_CACHE_SIZE = 256` (evicts least recently *used*, so a title drawn every frame survives a changing counter); `p.text_width(message)` via `playground.typography.text_width` (kerned advance, `str()` applied, transform-independent); contract T6 pinned; six tests in `tests/test_text.py` (1000-frame cache run, LRU order, size scaling, kerning, transforms, centred-text pixel check). No sample sketch, no new decision: name and semantic came from this plan.
 
 ### S-038 macOS / Linux HiDPI — E-13 *(follow-up from S-024)*
 - [ ] S-038.1 `detect_backing_scale()` on macOS/Linux via SDL's high-DPI window flag and drawable-size vs window-size ratio

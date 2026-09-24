@@ -54,6 +54,8 @@ ADDED_FUNCTIONS = {
     "path": "() -> 'PathBuilder'",
     "draw_path": "(path: 'PathBuilder') -> 'None'",
     "clip": "(path: 'PathBuilder') -> 'None'",
+    # Sprint 4, S-037: text measurement (contract T6).
+    "text_width": "(message: 'object') -> 'float'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

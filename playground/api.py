@@ -98,6 +98,11 @@ def text(message: object, x: float, y: float, color: Color | None = None) -> Non
     active_sketch().text(message, x, y, color)
 
 
+def text_width(message: object) -> float:
+    """How wide *message* will be at the current text_size, e.g. to centre it: p.text(msg, (p.width - p.text_width(msg)) / 2, y)."""
+    return active_sketch().text_width(message)
+
+
 # ---- style
 def fill(color: Color) -> None:
     active_sketch().fill(color)
