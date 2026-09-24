@@ -18,13 +18,13 @@ which are pure refactors under the existing contract.
 - [x] S-012.6 ADR-001 — accepted, option C (D-001)
 *Acceptance met:* no row in `Semantic_Contract.md` reads DECISION.
 
-### S-031 Spike 06 — deterministic text from a bundled font — E-15
-- [ ] S-031.1 `spikes/06_text_outlines/` with its own venv: pycairo, fontTools, uharfbuzz, pygame-ce
-- [ ] S-031.2 Candidate OFL fonts downloaded with licence files (e.g. DejaVu Sans, Noto Sans); record sizes
-- [ ] S-031.3 Shape with uharfbuzz → glyph ids/advances/offsets; outlines via fontTools glyph set + pen → path ops; render through Cairo; also render the same strings with Cairo's toy API and pygame for comparison
-- [ ] S-031.4 Matrix: sizes 12/16/24/36/48 × strings `ABC xyz 123`, `Hello, Playground!`, `AVATAR`, `office`, one non-Latin sample
-- [ ] S-031.5 Measure: per-frame cost with/without a glyph-outline cache; byte-identical output across two runs (and on Linux CI if available); baseline/anchor correctness; PDF/SVG output
-- [ ] S-031.6 Write results into `spikes/RESULTS.md`; propose the font; close D-006 in `Decision_Log.md`
+### S-031 Spike 06 — deterministic text from a bundled font — E-15 ✅ (D-009 pending)
+- [x] S-031.1 `spikes/06_text_outlines/` with its own venv: pycairo, fontTools, uharfbuzz, pygame-ce
+- [x] S-031.2 Candidate OFL fonts downloaded with licence files (e.g. DejaVu Sans, Noto Sans); record sizes
+- [x] S-031.3 Shape with uharfbuzz → glyph ids/advances/offsets; outlines via fontTools glyph set + pen → path ops; render through Cairo; also render the same strings with Cairo's toy API and pygame for comparison
+- [x] S-031.4 Matrix: sizes 12/16/24/36/48 × strings `ABC xyz 123`, `Hello, Playground!`, `AVATAR`, `office`, one non-Latin sample
+- [x] S-031.5 Measure: per-frame cost with/without a glyph-outline cache; byte-identical output across two runs (and on Linux CI if available); baseline/anchor correctness; PDF/SVG output
+- [x] S-031.6 Write results into `spikes/RESULTS.md`; propose the font; close D-006 in `Decision_Log.md` — results written; font choice raised as D-009 (pending)
 *Acceptance:* a recommendation with numbers and PNGs, narrow scope (single line, no layout).
 
 ### S-013 `Sketch` object and active-sketch facade — E-04 ✅ (503264f)
