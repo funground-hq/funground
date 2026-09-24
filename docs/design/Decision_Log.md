@@ -22,6 +22,8 @@ are raised and closed.
 
 | D-012 | 2026-09-25 | What `text_size(n)` means now that text is rendered from a real font | A em-size in logical pixels (CSS/p5/DrawBot convention) · B scale the em by ~0.72 so glyphs match v0.5's apparent size | A | **accepted — A.** `text_size(n)` is an n-pixel em (CSS/p5/DrawBot convention); goldens already reflect it | 2026-09-25 | contract T3; Sprint 3 review |
 
+| D-013 | 2026-09-25 | Name of the context-manager form of the state stack (S-027.3) | A `with p.state():` · B `with p.push():` (push() returns a context manager, so `p.push()` alone still works) · C both names | A | **pending** — implemented as A (the sprint plan's recommendation); renaming is a one-line alias if the maintainer prefers B or C | — | `sprints/sprint-04/stories.md` § D-013; contract F2 |
+
 ## Open
 
-*None.*
+- **D-013** — `with p.state():` vs `with p.push():` (S-027.3). Presented in `sprints/sprint-04/stories.md`.

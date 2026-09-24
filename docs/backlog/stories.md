@@ -63,7 +63,7 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
-| S-027 | E-10 | `p.translate/rotate/scale` (degrees, D-002), `p.radians/degrees`, `p.push/pop`, `with p.state():` | Semantic tests; contract F2 pinned | ready |
+| S-027 | E-10 | `p.translate/rotate/scale` (degrees, D-002), `p.radians/degrees`, `p.push/pop`, `with p.state():` | Semantic tests; contract F2 pinned | done (Sprint 4) |
 | S-028 | E-11 | `p.path()` with `move_to/line_to/curve_to/close`, fill/stroke/clip | Tests; golden sketch | ready |
 | S-029 | E-15 | **Done in Sprint 3** (moved forward for the S-026 ordering constraint) — text subsystem v1 (font: DejaVu Sans, D-009): `FontResource` (HarfBuzz face + fontTools glyph set + glyph-outline cache), `TextRun` (semantic text + shaped glyphs, outlines materialised for the IR) — `p.text()` unchanged for learners | Deterministic text goldens on two platforms | ready (after S-031) |
 | S-030 | E-22 | Quick Reference v0.6 documents every additive API | PDF/MD regenerated | ready |

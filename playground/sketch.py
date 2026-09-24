@@ -8,14 +8,17 @@ wrappers over the active Sketch.
 """
 from __future__ import annotations
 
+import contextlib
 import math
 import random as _random
-from collections.abc import Callable
+import warnings
+from collections.abc import Callable, Iterator
 from typing import Any
 
 from . import ir
-from .capabilities import Capability, missing_capability
+from .capabilities import Capability, PlaygroundWarning, missing_capability
 from .color import WHITE, Color, ColorLike
+from .geometry import Transform
 from .platform.base import KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
@@ -96,6 +99,70 @@ class Sketch:
     def restore_state(self) -> None:
         self._states.restore()
 
+    # One stack for the transform *and* the style (contract F2): a push saves
+    # both, a pop restores both - "restore restores everything".
+    def push(self) -> None:
+        self._emit(ir.Save())
+        self._states.save()
+
+    def pop(self) -> None:
+        if self._states.depth == 0:
+            warnings.warn(
+                "p.pop() called without a matching p.push(); ignored.",
+                PlaygroundWarning, stacklevel=3,
+            )
+            return
+        self._states.restore()
+        self._emit(ir.Restore())
+
+    @contextlib.contextmanager
+    def state(self) -> Iterator[None]:
+        """``with p.state():`` - push on entry, pop on exit, even when the body raises."""
+        self.push()
+        depth = self._states.depth
+        try:
+            yield
+        finally:
+            # Pop back to where this block started, even if the body left pushes open.
+            while self._states.depth >= depth:
+                self.pop()
+
+    def _end_draw(self) -> None:
+        """End-of-frame safety (S-027.4): unwind pushes draw() left open, with a warning."""
+        open_pushes = self._states.unwind()
+        if open_pushes:
+            for _ in range(open_pushes):
+                self.frame.append(ir.Restore())
+            warnings.warn(
+                f"draw() finished with {open_pushes} p.push() call(s) still open; "
+                "Playground popped them for you. Add a matching p.pop(), or use "
+                "`with p.state():`.",
+                PlaygroundWarning, stacklevel=2,
+            )
+
+    # ------------------------------------------------------------ transforms
+    def translate(self, dx: float, dy: float) -> None:
+        self._emit(ir.Concat(Transform.translation(dx, dy)))
+
+    def rotate(self, degrees: float) -> None:
+        """Rotate later drawing by *degrees* (contract F1): +90 turns +x into +y (clockwise on screen)."""
+        self._emit(ir.Concat(Transform.rotation(degrees)))
+
+    def scale(self, sx: float, sy: float | None = None) -> None:
+        if sy is None:
+            sy = sx
+        if sx == 0 or sy == 0:
+            raise ValueError("scale factor must not be 0 (nothing could be drawn)")
+        self._emit(ir.Concat(Transform.scaling(sx, sy)))
+
+    @staticmethod
+    def radians(degrees: float) -> float:
+        return math.radians(degrees)
+
+    @staticmethod
+    def degrees(radians: float) -> float:
+        return math.degrees(radians)
+
     # ------------------------------------------------------------ window
     def size(self, width: int, height: int, *, title: str = "playground", fps: int = 60) -> None:
         if width <= 0 or height <= 0:
@@ -127,6 +194,7 @@ class Sketch:
 
     def _render(self) -> None:
         """Draw everything recorded so far and present it; the frame then starts empty."""
+        self._end_draw()
         if self.frame or self._pending_saves:
             self._renderer.render(self.frame)
             self._platform.present(self._renderer.pixels())
@@ -245,6 +313,7 @@ class Sketch:
         self.last_frame = None
         self.last_ops: tuple[ir.Op, ...] | None = None
         self.frame.clear()
+        self._states.unwind()
 
         self._platform.start()
         self.running = True
@@ -268,6 +337,7 @@ class Sketch:
                 self.mouse_x, self.mouse_y, self.mouse_pressed = inp.mouse_x, inp.mouse_y, inp.mouse_pressed
 
                 draw()
+                self._end_draw()  # unbalanced push()es never leak into the next frame
                 if max_frames is not None and self.frame_count + 1 >= max_frames:
                     self.last_ops = self.frame.ops  # what the final frame asked for (IR snapshot)
                 self._render()   # draws, presents, flushes p.save()

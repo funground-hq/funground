@@ -13,13 +13,22 @@ postponed, per the other agent's note).
 ## Story set
 
 ### S-027 Transforms and the state stack — E-10
-- [ ] S-027.1 `p.translate(dx, dy)`, `p.rotate(degrees)`, `p.scale(s)` / `p.scale(sx, sy)` emit `ir.Concat`; `p.radians()`, `p.degrees()` helpers (D-002)
-- [ ] S-027.2 `p.push()` / `p.pop()` emit `ir.Save` / `ir.Restore` **and** save/restore the `GraphicsState` (fill, stroke, width, text size) — one stack for both, so "restore restores everything" (other agent's contract row)
-- [ ] S-027.3 `with p.state():` context manager = push on enter, pop on exit, exception-safe
-- [ ] S-027.4 End-of-frame safety: unbalanced pushes are unwound at frame end with a `PlaygroundWarning` naming the count (never a crash mid-lesson)
-- [ ] S-027.5 Contract F2 pinned: transforms are cumulative; apply to all later geometry, text and images; the stack resets at the start of every `draw()`
-- [ ] S-027.6 Semantic tests (rotation direction, order of operations, nesting) + sample sketch `13_transforms.py` with golden + snapshot
+- [x] S-027.1 `p.translate(dx, dy)`, `p.rotate(degrees)`, `p.scale(s)` / `p.scale(sx, sy)` emit `ir.Concat`; `p.radians()`, `p.degrees()` helpers (D-002)
+- [x] S-027.2 `p.push()` / `p.pop()` emit `ir.Save` / `ir.Restore` **and** save/restore the `GraphicsState` (fill, stroke, width, text size) — one stack for both, so "restore restores everything" (other agent's contract row)
+- [x] S-027.3 `with p.state():` context manager = push on enter, pop on exit, exception-safe
+- [x] S-027.4 End-of-frame safety: unbalanced pushes are unwound at frame end with a `PlaygroundWarning` naming the count (never a crash mid-lesson)
+- [x] S-027.5 Contract F2 pinned: transforms are cumulative; apply to all later geometry, text and images; the stack resets at the start of every `draw()`
+- [x] S-027.6 Semantic tests (rotation direction, order of operations, nesting) + sample sketch `13_transforms.py` with golden + snapshot
 *Acceptance:* `p.translate(100, 50); p.rotate(30); p.rect(0, 0, 80, 40)` draws exactly what Spike 05/07 drew for the same ops.
+*Status:* done — `tests/test_transforms.py` (19 tests), sample `13_transforms.py` with golden + snapshot; contract F2 pinned; D-013 raised below.
+
+#### D-013 (pending) — name of the state-stack context manager
+
+1. **Context.** S-027.3 needs a `with`-block form of push/pop so a learner's block cannot leak style or transform even when it raises. The name is a public one and so is the maintainer's call; the sprint plan recommended `state()`. Without a decision the implemented name stays.
+2. **Options.** **A** `with p.state():` (implemented) — a noun for the thing being saved. **B** `with p.push():` — `push()` returns a context manager, so `p.push()` on its own line still works as a plain call (p5's `push()`/`pop()` names, one fewer word to learn). **C** both, one as an alias.
+3. **Trade-offs.** A: clear that a block is being scoped; one more name in the reference (now 8 new names in S-027). B: fewest names, matches p5, but a returned context manager that is usually ignored is an unusual shape and `with p.push():` reads as "with push" rather than "with saved state". C: no learner has to guess, but two names for one thing is what the Quick Reference tries to avoid.
+4. **Recommendation.** A.
+5. **Why.** Beginners meet `with open(...)` first; `with p.state():` follows the same "with *a thing*" pattern. Would change if the maintainer wants strict p5 vocabulary (then B). Either way the change is a one-line alias in `api.py` plus the contract row.
 
 ### S-028 Paths and clipping — E-11
 - [ ] S-028.1 `p.begin_shape()` / `p.vertex(x, y)` / `p.curve_vertex(...)` / `p.end_shape(close=False)` — the p5-shaped, beginner-first API; emits `FillPath`/`StrokePath` with the current style
