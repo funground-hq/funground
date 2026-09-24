@@ -18,7 +18,7 @@ Phase exit criteria come from the architecture document, sharpened by the review
 
 | Epic | Outcome | Phase | Status |
 |---|---|---|---|
-| E-03 Public semantic contract | Every learner-visible rule written, decided and tested | 0–1 | in progress (DECISION rows open) |
+| E-03 Public semantic contract | Every learner-visible rule written, decided and tested | 0–1 | done (D-012 pending on text size) |
 | E-04 Sketch object and runtime split | `Sketch` + `_active_sketch`; facade in `api.py`; live values via `__getattr__` over the active sketch; two sketches per process possible | 1 | ready |
 | E-05 Platform provider | `PygamePlatform` behind a `Platform` protocol: window, events, input, clock, presentation | 1 | ready |
 | E-06 Draw-op IR and GraphicsState | Public calls record backend-neutral ops; `GraphicsState` owned by Playground; pygame drawing consumes the IR; op-list snapshot tests | 1 | ready |
@@ -32,9 +32,9 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | Epic | Outcome | Phase | Status |
 |---|---|---|---|
 | E-08 Rasteriser decision | ADR-001 accepted: Cairo default 2D renderer, pygame platform + presentation, Skia/GPU future IR consumers | 1 | done (D-001) |
-| E-09 Cairo renderer via IR | `CairoRenderer` consumes the IR, presents through pygame; passes the sample suite under the pinned contract; the only renderer after Sprint 3 | 1 | ready |
-| E-13 HiDPI-correct rendering | Logical coordinates, physical-resolution rendering; crisp on scaled displays | 1 | ready |
-| E-12 Export and headless mode | `p.save()` PNG/PDF/SVG through Cairo surfaces; run a sketch to files without a window; later: embedded-font PDF text (S-032) | 1 (basic) / 3 (embedded fonts) | ready |
+| E-09 Cairo renderer via IR | `CairoRenderer` consumes the IR, presents through pygame; passes the sample suite under the pinned contract; the only renderer after Sprint 3 | 1 | done (Sprint 3) |
+| E-13 HiDPI-correct rendering | Logical coordinates, physical-resolution rendering; crisp on scaled displays (Windows verified; macOS/Linux follow-up) | 1 | done (Sprint 3) |
+| E-12 Export and headless mode | `p.save()` PNG/PDF/SVG through Cairo surfaces; run a sketch to files without a window; later: embedded-font PDF text (S-032) | 1 (basic) / 3 (embedded fonts) | basic done (Sprint 3) |
 | E-10 Transforms and state stack | Internal `Transform` + state ops in the IR (Phase 1); public `translate/rotate/scale`, `push/pop`, `with p.state()` (Phase 2) | 1 → 2 | ready |
 | E-11 Path API | Internal `Path` in the IR (Phase 1); public `p.path()` and clip (Phase 2) | 1 → 2 | ready |
 

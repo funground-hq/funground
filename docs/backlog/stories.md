@@ -42,15 +42,15 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 | S-021 | E-07 | Asking for an unsupported capability fails at `p.size()`/`p.run()` with a message naming the extra to install | Tests for message text | ready |
 | S-022 | E-08 | ADR-001 is accepted or amended | ADR status ≠ Proposed | done 24 Sept 2026 (D-001, accepted early) |
 
-## Sprint 3 — Phase 1c: Cairo via the IR (D-011 = D), semantic migration (in progress)
+## Sprint 3 — Phase 1c: Cairo via the IR (D-011 = D), semantic migration (done, 25 Sept 2026)
 
 | ID | Epic | Story | Acceptance | Status |
 |---|---|---|---|---|
-| S-023 | E-09 | The D-011 engine's renderer consumes the same op list and presents through `PygamePlatform`; Cairo remains the export path for PDF/SVG regardless | Spike 05/07 adapter productionised; sample suite renders | ready (after D-011) |
-| S-024 | E-13 | Rendering happens at physical resolution behind a scale; `p.width` stays logical | Crisp output at 125 % scaling on the teaching machine | ready |
-| S-025 | E-03 | Contract decisions D-003/D-004/D-005 (alpha, centred strokes, fractional + AA) are applied and goldens regenerated once, deliberately, with each visual change listed in the sprint review | Contract + tests + goldens in one change | ready |
-| S-026 | E-09 | The D-011 engine is the default interactive renderer; `LegacyPygameRenderer` and all `pygame.draw` usage are deleted (D-008) | No `pygame.draw` in the package; boundary lint updated | ready |
-| S-034 | E-12 | Headless run and `p.save()` to PNG/PDF/SVG through Cairo surfaces (moved forward from Sprint 4 per D-007) | Export files checked structurally + rendered | ready |
+| S-023 | E-09 | The D-011 engine's renderer consumes the same op list and presents through `PygamePlatform`; Cairo remains the export path for PDF/SVG regardless | Spike 05/07 adapter productionised; sample suite renders | done (Sprint 3) |
+| S-024 | E-13 | Rendering happens at physical resolution behind a scale; `p.width` stays logical | Crisp output at 125 % scaling on the teaching machine | done (Sprint 3) |
+| S-025 | E-03 | Contract decisions D-003/D-004/D-005 (alpha, centred strokes, fractional + AA) are applied and goldens regenerated once, deliberately, with each visual change listed in the sprint review | Contract + tests + goldens in one change | done (Sprint 3) |
+| S-026 | E-09 | The D-011 engine is the default interactive renderer; `LegacyPygameRenderer` and all `pygame.draw` usage are deleted (D-008) | No `pygame.draw` in the package; boundary lint updated | done (Sprint 3) |
+| S-034 | E-12 | Headless run and `p.save()` to PNG/PDF/SVG through Cairo surfaces (moved forward from Sprint 4 per D-007) | Export files checked structurally + rendered | done (Sprint 3) |
 
 ## Sprint 2 — additional (planned)
 
@@ -65,7 +65,7 @@ here for completed sprints so the backlog stays a full record). Status: `done` �
 |---|---|---|---|---|
 | S-027 | E-10 | `p.translate/rotate/scale` (degrees, D-002), `p.radians/degrees`, `p.push/pop`, `with p.state():` | Semantic tests; contract F2 pinned | ready |
 | S-028 | E-11 | `p.path()` with `move_to/line_to/curve_to/close`, fill/stroke/clip | Tests; golden sketch | ready |
-| S-029 | E-15 | Text subsystem v1 from Spike 06 (font: DejaVu Sans, D-009): `FontResource` (HarfBuzz face + fontTools glyph set + glyph-outline cache), `TextRun` (semantic text + shaped glyphs, outlines materialised for the IR) — `p.text()` unchanged for learners | Deterministic text goldens on two platforms | ready (after S-031) |
+| S-029 | E-15 | **Done in Sprint 3** (moved forward for the S-026 ordering constraint) — text subsystem v1 (font: DejaVu Sans, D-009): `FontResource` (HarfBuzz face + fontTools glyph set + glyph-outline cache), `TextRun` (semantic text + shaped glyphs, outlines materialised for the IR) — `p.text()` unchanged for learners | Deterministic text goldens on two platforms | ready (after S-031) |
 | S-030 | E-22 | Quick Reference v0.6 documents every additive API | PDF/MD regenerated | ready |
 
 ## Later (Phases 3–4, directional)

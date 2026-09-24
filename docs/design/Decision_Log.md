@@ -20,6 +20,25 @@ are raised and closed.
 
 | D-011 | 2026-09-25 | Which engine renders interactive frames in Sprint 3 (closes ADR-002's open clause) | A Cairo · B Blend2D · C Skia · D Cairo now, Blend2D as an optional fast renderer once its binding passes the gate | D | **accepted — D.** Cairo renders Sprint 3 and exports; Blend2D tracked as a gated optional renderer (S-036) | 2026-09-25 | `ADR-002`; Spike 07 |
 
+| D-012 | 2026-09-25 | What `text_size(n)` means now that text is rendered from a real font | A em-size in logical pixels (CSS/p5/DrawBot convention) · B scale the em by ~0.72 so glyphs match v0.5's apparent size | A | **pending** | | contract T3; Sprint 3 review |
+
 ## Open
 
-*None.*
+### D-012 — meaning of `text_size`
+
+**Context.** v0.5 drew text with pygame's `Font(None, n)`, whose glyphs come out noticeably smaller
+than an *n*-pixel em (a size-28 "Hello" was ~14 px tall). Sprint 3 renders DejaVu Sans at an
+*n*-pixel em, so at the same `text_size` text looks about 1.4× larger than before (see
+`sprints/sprint-03/before_after_05_text.png`). Contract T3 pinned the *intent* ("font size in
+logical pixels; may shift metrics slightly") — this is more than slightly, so it needs your call.
+The goldens already reflect option A; choosing B means one more regeneration.
+
+**Options.**
+- **A. em-size in logical pixels.** `text_size(24)` is a 24 px em — what CSS, p5 and DrawBot mean. Simple to explain, exact for typography later. Session-1 sketches show larger text than the Quick Reference screenshots.
+- **B. match v0.5's apparent size.** Multiply the em by a fudge factor (~0.72) so existing sketches look as before. Preserves the look; makes `text_size` mean "roughly pygame's old size" forever, and every later font feature carries the factor.
+
+**Trade-offs.** A is a one-time visual change in teaching material (Quick Reference v0.6, S-030, is due anyway); B is a permanent oddity in the semantics to avoid updating screenshots.
+
+**Recommendation: A.** **Why:** we are pinning semantics for years; "24 means 24 pixels" is the rule a learner can reason about, and the Quick Reference is being rewritten regardless.
+
+**What would change it:** a hard requirement that existing Session-1 handouts remain pixel-faithful.
