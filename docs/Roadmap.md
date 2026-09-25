@@ -87,7 +87,7 @@ Sprint 4 sign-off ── Sprint 5 ── Sprint 6 ── v0.7 ── Sprints 7�
 | When | Decision |
 |---|---|
 | Before v0.7 | Package name on PyPI; release cadence; git remote and CI host |
-| Sprint 5 | D-016 event-callback naming (p5's `mousePressed` is both a value and a callback); D-017 colour-mode scope; `rect_mode`-style switches (postponed so far) |
+| Sprint 5 | `rect_mode`-style switches (postponed so far); D-016, D-017, D-018 decided 25 Sept 2026 |
 | Sprint 6 | Whether off-screen canvases and images share one type |
 | Phase 3 | Page/document model shape (DrawBot-like vs Processing-like); sound backend scope |
 | v1.0 | What "1.0 stable" guarantees: API freeze scope, supported Python versions |

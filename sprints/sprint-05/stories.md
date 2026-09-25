@@ -18,10 +18,8 @@ section; the guide and gallery build from the code (screenshots generated headle
 **To be presented before the story that needs it:**
 - ~~D-016 event-callback naming~~ — **decided 25 Sept 2026**: callbacks `mouse_pressed()` etc. (p5 names,
   snake_case); live booleans `is_mouse_pressed`, `is_key_pressed`. Approved contract change to v0.5.
-- **D-018 curve naming** (before S-074): our Sprint-4 `curve_vertex` is a Bézier, but Processing/p5 use
-  that name for Catmull-Rom curves through points.
-- **D-017 colour-mode scope** (before S-044): whether `color_mode()` changes how *every* colour
-  argument is read (p5/Processing behaviour) or only `p.color()`.
+- ~~D-018 curve naming~~ — **decided**: rename ours to `bezier_vertex`; `curve_vertex(x, y)` is Catmull-Rom (Processing 4).
+- ~~D-017 colour-mode scope~~ — **decided C**: no `color_mode()`; tuples always RGB; `p.hsb()`, `p.hsl()`, `p.color()` constructors.
 
 ## Ordering
 
@@ -57,7 +55,7 @@ lives; alignment is designed once for both.
 *Acceptance:* `python tools/make_gallery.py` regenerates the gallery index and images unchanged; the coverage test passes for every name that exists at sprint end.
 
 ### S-069 User Guide skeleton and first chapters — E-22
-- [ ] S-069.1 `docs/guide/` in Markdown, one file per chapter, `docs/guide/README.md` as the table of contents. Planned chapters: 1 Getting started · 2 The sketch: `setup`, `draw`, `run` · 3 Shapes · 4 Colour · 5 Fill, stroke and lines · 6 Text · 7 Animation and time · 8 Transforms and `saved_state` · 9 Paths and clipping · 10 Interaction: mouse and keyboard · 11 Randomness and noise · 12 Useful maths · 13 Saving your work · 14 Coming from p5/Processing · 15 Coming from DrawBot
+- [ ] S-069.1 `docs/guide/` in Markdown, one file per chapter, `docs/guide/README.md` as the table of contents. Planned chapters: 1 Getting started · 2 The sketch: `setup`, `draw`, `run` · 3 Shapes · 4 Colour · 5 Fill, stroke and lines · 6 Text · 7 Animation and time · 8 Transforms and `saved_state` · 9 Paths and clipping · 10 Interaction: mouse and keyboard · 11 Randomness and noise · 12 Useful maths · 13 Saving your work · 14 Coming from p5/Processing · 15 Coming from DrawBot. Chapter 14 includes **a table of every deliberate difference from p5/Processing** (maintainer request with D-017): snake_case names, `map_range`, `is_mouse_pressed` (D-016), no `color_mode()` — use `p.hsb()`/`p.hsl()` (D-017), degrees for angles (D-002), `text_size` as an em (D-012), `saved_state()` (D-013), tuples for colours
 - [ ] S-069.2 Write chapters for features that exist now (1, 2, 3 partial, 5 partial, 6, 7, 8, 9, 13), each with runnable snippets and images generated from gallery sketches
 - [ ] S-069.3 Guide ↔ reference ↔ gallery cross-links: the guide teaches, the Quick Reference is for lookup, the gallery shows
 - [ ] S-069.4 A test that every code snippet in the guide marked as runnable executes headless without error
@@ -103,9 +101,9 @@ lives; alignment is designed once for both.
 - [ ] S-048.3 Tests with the headless platform; gallery `animation/`; guide chapter 7 completed
 *Acceptance:* a `no_loop()` sketch draws exactly once and still responds to `redraw()`.
 
-### S-044 Colour modes and colour objects — E-25 *(needs D-017)*
-- [ ] S-044.1 `color(...)` returns a Playground colour object with `red/green/blue/alpha/hue/saturation/brightness/lightness` getters; accepted everywhere a colour is
-- [ ] S-044.2 `color_mode("rgb"|"hsb"|"hsl", max1=255, max2=..., max3=..., max_a=...)` with the scope decided by D-017
+### S-044 Colour constructors and colour objects — E-25 *(D-017 = C)*
+- [ ] S-044.1 `p.color(value)` turns any colour form into a colour object with `red/green/blue/alpha/hue/saturation/brightness/lightness`; accepted everywhere a colour is
+- [ ] S-044.2 `p.hsb(h, s, b, a=255)` and `p.hsl(h, s, l, a=255)` — hue 0–360, s/b/l 0–100, alpha 0–255. **No `color_mode()`**: tuples always mean RGB
 - [ ] S-044.3 `lerp_color(c1, c2, t)`
 - [ ] S-044.4 Contract S1 extended; tests; gallery `colour/`; guide chapter 4
 *Acceptance:* every v0.5 colour form still parses unchanged (frozen API).
@@ -118,9 +116,9 @@ lives; alignment is designed once for both.
 - [ ] S-045.4 Tests with scripted events; gallery `interaction/` (paint program, keyboard mover); guide chapter 10
 *Acceptance:* callbacks fire once per event in order; polling via `is_mouse_pressed` and `key_down` works; the old name fails with a helpful message.
 
-### S-074 Curve vocabulary aligned with Processing/p5 — E-11 *(needs D-018)*
-- [ ] S-074.1 Apply D-018 to the existing `curve_vertex` (Sprint 4): rename or change meaning; update contract F3, tests, `14_paths.py`, reference and guide
-- [ ] S-074.2 `bezier_vertex(cx1, cy1, cx2, cy2, x, y)`, `quadratic_vertex(cx, cy, x, y)`, Catmull-Rom `curve_vertex(x, y)` / `spline_vertex(x, y)` per D-018, `curve_tightness(t)`
+### S-074 Curve vocabulary aligned with Processing/p5 — E-11 *(D-018 = A)*
+- [ ] S-074.1 Rename Sprint 4's cubic `curve_vertex(cx1, cy1, cx2, cy2, x, y)` → `bezier_vertex`; update contract F3, tests, `14_paths.py`, reference and guide
+- [ ] S-074.2 `quadratic_vertex(cx, cy, x, y)`; Catmull-Rom `curve_vertex(x, y)` (Processing 4 meaning) with `curve_tightness(t)`
 - [ ] S-074.3 `begin_contour()` / `end_contour()` for holes (non-zero fill with reversed winding, contract F3 extended)
 - [ ] S-074.4 One-call shapes `bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2)` and `curve(...)`; `bezier_point(a, b, c, d, t)`, `bezier_tangent(...)`
 - [ ] S-074.5 Tests; gallery `curves/`; guide chapter 9
