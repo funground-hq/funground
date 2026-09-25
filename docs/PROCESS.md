@@ -18,6 +18,7 @@ IDs never change or get reused. A story belongs to exactly one epic; an epic to 
 | Path | Holds |
 |---|---|
 | `docs/PROCESS.md` | This document |
+| `docs/Roadmap.md` | The arc to 1.0: phases, releases, what is directional, decisions ahead (D-014) |
 | `docs/backlog/themes_and_epics.md` | Themes, epics, the phase each epic belongs to, status |
 | `docs/backlog/stories.md` | Every story with its tasks, epic, sprint assignment and status — the single backlog |
 | `docs/design/` | Architecture document, architecture review, semantic contract, ADRs (`ADR-nnn-*.md`), `Decision_Log.md`, design notes |

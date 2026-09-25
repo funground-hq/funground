@@ -1,6 +1,6 @@
 # Design note: Playground in the browser — how Pyxel does it, what it would take for us
 
-**Status:** research, 25 September 2026. Proposes epic E-31 and a feasibility spike (S-059); no code.
+**Status:** research, 25 September 2026; feasibility spike done (S-059). **Directional — not in 1.0 (D-014).** E-31 and its stories are kept in the backlog as post-1.0 work; nothing here is scheduled.
 
 ## 1. How Pyxel runs in the browser
 

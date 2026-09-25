@@ -21,6 +21,8 @@ are raised and closed.
 | D-012 | 2026-09-25 | What `text_size(n)` means now that text is rendered from a real font | A em-size in logical pixels (CSS/p5/DrawBot convention) · B scale the em by ~0.72 so glyphs match v0.5's apparent size | A | **accepted — A.** `text_size(n)` is an n-pixel em (CSS/p5/DrawBot convention); goldens already reflect it | 2026-09-25 | contract T3; Sprint 3 review |
 | D-013 | 2026-09-25 | Name of the context-manager form of the state stack (S-027.3) | A `with p.state():` · B `with p.push():` · C both · later shortlist: `saved_state`, `temporary_state`, `isolated`, `restore_after` | A, then `saved_state` when the maintainer asked for a more descriptive name | **accepted — `with p.saved_state():`.** Descriptive (says what happens), DrawBot's `savedState` in Playground's snake_case; renamed, not aliased, to avoid two spellings | 2026-09-25 | contract F2; `sprints/sprint-04/stories.md` § D-013 |
 
+| D-014 | 2026-09-25 | Scope of 1.0: is browser rendering (E-31) part of it? | A browser track in parallel before 1.0 (the earlier roadmap draft) · B 1.0 is desktop Cairo only, maximal DrawBot/Processing 2D parity; browser directional after 1.0 | — (raised by the maintainer) | **accepted — B.** E-31 is directional (post-1.0); Spike 08's findings are kept as research. S-060 loop inversion deferred with it: no desktop story needs it. Processing's 3D (P3D/WEBGL) is not in 1.0 either — 1.0 means the 2D surface | 2026-09-25 | `docs/Roadmap.md`; `Browser_Mode_Note.md` |
+
 ## Open
 
 *None.*

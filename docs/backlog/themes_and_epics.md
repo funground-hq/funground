@@ -60,12 +60,15 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-19 Video export | frame sequences (Phase 2), GIF and mp4 via ffmpeg (Phase 3) | 2–3 | directional |
 | E-30 Controls | sliders/toggles bound to sketch variables (DrawBot `Variable`) | 3 | directional |
 
-## TH-5 GPU and 3D *(directional)*
+## TH-5 Beyond 1.0: GPU, 3D and the web *(directional, D-014)*
+
+1.0 is desktop, Cairo, 2D. These epics are kept so the architecture does not foreclose them; none is scheduled.
 
 | Epic | Outcome | Phase | Status |
 |---|---|---|---|
 | E-20 OpenGL feasibility | Context-creation spike through `PygamePlatform`; provider interface only | 4 | directional |
 | E-21 3D primitives, shaders, camera | | 4 | directional |
+| E-31 Playground in the browser | Pyodide + `BrowserPlatform` + `Canvas2DRenderer` consuming the same IR; loader, `<playground-run>`, launcher URL, classroom page. Feasibility proven by Spike 08 (S-059, done); see `docs/design/Browser_Mode_Note.md` | post-1.0 | directional (D-014) |
 
 ## TH-6 Documentation and Process
 

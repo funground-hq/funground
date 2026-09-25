@@ -113,3 +113,18 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-056 | E-19 | `save_frames(pattern, count)` sequence export (headless-friendly) | 6 |
 | S-057 | E-29 | `cursor`/`no_cursor`, `full_screen`, `resize_canvas` | 6 |
 | S-058 | E-23 | ADR-003 "Deliberately out of scope": CMYK/print, sound synthesis, Core-Image-scale filters, data loaders | 5 |
+
+## Directional — after 1.0 (D-014)
+
+### E-31 Playground in the browser — see `docs/design/Browser_Mode_Note.md`
+
+| ID | Epic | Story | Status |
+|---|---|---|---|
+| S-059 | E-31 | Spike 08 — Pyodide feasibility (core in wasm, IR frame timings, Canvas 2D page over IR snapshots) | done (Sprint 4 lane; results in `spikes/RESULTS.md` §8) |
+| S-060 | E-31 | Loop inversion: `Sketch.start()/step()/finish()`; desktop `run()` loops over `step()` | directional |
+| S-061 | E-31 | `BrowserPlatform`: rAF-driven, DOM input, `devicePixelRatio` scale | directional |
+| S-062 | E-31 | `Canvas2DRenderer`: every IR op → Canvas 2D | directional |
+| S-063 | E-31 | Browser text: uharfbuzz-for-Pyodide vs harfbuzzjs vs fontTools-only | directional |
+| S-064 | E-31 | `playground.js` loader, `<playground-run>`, GitHub launcher URL | directional |
+| S-065 | E-31 | Browser export: PNG download; IR→SVG writer | directional |
+| S-066 | E-31 | Classroom page: editor + canvas + share-by-URL | directional |
