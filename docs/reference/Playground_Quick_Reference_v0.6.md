@@ -1,7 +1,7 @@
 # Playground Quick Reference — v0.6
 
-**Version 0.6.0.dev0** — a small visual-programming library. `import playground as p; print(p.__version__)`
-prints `0.6.0.dev0`.
+**Version 0.7.0.dev0** — a small visual-programming library. `import playground as p; print(p.__version__)`
+prints `0.7.0.dev0`.
 
 This reference follows the v0.5 pages and adds what v0.6 brings: saving pictures, transforms and
 the state stack, shapes and paths, `random_seed`, `text_width` and `max_frames`. Every function has a
@@ -832,7 +832,7 @@ The public v0.6 student-facing API. Everything is reached as `p.<name>`.
 
 | METADATA | |
 |---|---|
-| `p.__version__` | `"0.6.0.dev0"`. |
+| `p.__version__` | `"0.7.0.dev0"`. |
 
 **Remember:** use `p.` before playground functions and live values: `p.circle(...)`, `p.width`,
 `p.mouse_x`, `p.run()`. Python variables such as `x` remain ordinary Python variables.
@@ -869,7 +869,7 @@ shown there. The appendix — colours grouped by visual family with their RGB an
 **Constants and live values.** There are no uppercase constants such as `RED`, `LEFT` or `CENTER`.
 Colours and keys are strings. These module values are live state, not constants: `p.width`,
 `p.height`, `p.mouse_x`, `p.mouse_y`, `p.mouse_pressed`, `p.frame_count`, `p.delta_time`.
-`p.__version__` reports `"0.6.0.dev0"`.
+`p.__version__` reports `"0.7.0.dev0"`.
 
 **Fixed key-name strings.** `p.key_down(...)` recognises `"left"`, `"right"`, `"up"`, `"down"`,
 `"space"`, `"enter"`, `"escape"`, and any single-character key such as `"a"` or `"7"`.
@@ -886,7 +886,7 @@ repairs the frame and prints a `PlaygroundWarning` that says what it did.
 
 | Area | v0.5 | v0.6 |
 |---|---|---|
-| Version | `p.__version__ == "0.5.0"` | `"0.6.0.dev0"` |
+| Version | `p.__version__ == "0.5.0"` | `"0.7.0.dev0"` |
 | Edges | Coordinates rounded to whole pixels | Fractional coordinates honoured; edges anti-aliased |
 | Alpha | Fourth colour value silently dropped | Honoured: translucent fills and strokes |
 | Strokes | Painted inside the shape's edge | Centred on the edge |
