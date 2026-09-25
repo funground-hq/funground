@@ -187,10 +187,10 @@ def test_path_is_reusable_under_translate(sketch, canvas):
     p.no_stroke()
     square = p.path().move_to(0, 0).line_to(20, 0).line_to(20, 20).line_to(0, 20).close()
     before = square.geometry
-    with p.state():
+    with p.saved_state():
         p.translate(30, 30)
         p.draw_path(square)
-    with p.state():
+    with p.saved_state():
         p.translate(120, 60)
         p.draw_path(square)
     assert square.geometry == before                 # drawing never changes the path
@@ -255,7 +255,7 @@ def test_clip_is_undone_by_pop(sketch, canvas):
     p.background("white")
     p.no_stroke()
     p.fill("red")
-    with p.state():
+    with p.saved_state():
         p.clip(clip_window())
         p.rect(0, 0, 200, 100)
     p.fill("blue")
@@ -269,7 +269,7 @@ def test_clip_follows_the_current_transform(canvas):
     p.background("white")
     p.no_stroke()
     p.fill("red")
-    with p.state():
+    with p.saved_state():
         p.translate(100, 0)
         p.clip(clip_window())                         # window now spans x 150..200
         p.rect(-100, 0, 200, 100)
@@ -282,7 +282,7 @@ def test_background_is_not_limited_by_a_clip(canvas):
     p.no_stroke()
     p.fill("red")
     p.rect(0, 0, 200, 100)
-    with p.state():
+    with p.saved_state():
         p.clip(clip_window())
         p.background("blue")                          # S9: background paints the whole canvas
     assert px(canvas, 10, 10) == BLUE

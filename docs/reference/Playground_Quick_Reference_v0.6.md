@@ -390,7 +390,7 @@ frame. Leave it out if you intentionally want trails.
 | `p.run(max_frames=n)` | Stop automatically after `n` frames. | `p.run(max_frames=300)` |
 
 Styles you set at the top of the file or in `setup()` persist; a style or transform changed inside a
-`with p.state():` block (section 7) is undone at the end of the block.
+`with p.saved_state():` block (section 7) is undone at the end of the block.
 
 ---
 
@@ -570,7 +570,7 @@ appears. Transforms add up, and they apply to shapes, text, paths and clips alik
 | `p.scale(sx, sy)` | Scale by different amounts sideways and up-and-down. | `p.scale(2, 1)  # stretch sideways` |
 | `p.push()` | Save the current transform **and** style (fill, stroke, stroke width, text size). | `p.push()` |
 | `p.pop()` | Restore what the last `push()` saved — everything. | `p.pop()` |
-| `with p.state():` | `push()` on entry, `pop()` on exit, even if the block raises an error. | `with p.state(): p.rotate(30); p.rect(0, 0, 80, 40)` |
+| `with p.saved_state():` | `push()` on entry, `pop()` on exit, even if the block raises an error. | `with p.saved_state(): p.rotate(30); p.rect(0, 0, 80, 40)` |
 
 **Rules worth knowing**
 
@@ -611,14 +611,14 @@ def draw():
     p.pop()                          # gold fill, black stroke, no rotation again
 
     # Transforms are cumulative: each rotate() adds to the one before.
-    with p.state():                  # push on entry, pop on exit, even after an error
+    with p.saved_state():                  # push on entry, pop on exit, even after an error
         p.fill("skyblue")
         for _ in range(12):
             p.rect(60, -6, 60, 12)
             p.rotate(30)
 
     # scale() grows or shrinks later drawing; scale(2, 1) would stretch sideways.
-    with p.state():
+    with p.saved_state():
         p.translate(220, -140)       # relative to the moved origin: (380, 60) on screen
         p.fill("yellowgreen")
         for _ in range(3):
@@ -626,7 +626,7 @@ def draw():
             p.translate(60, 0)
             p.scale(1.4)
 
-    with p.state():
+    with p.saved_state():
         p.translate(260, 60)
         p.rotate(p.frame_count * 3)  # a little further every frame: it spins
         p.fill("navy")
@@ -667,7 +667,7 @@ you can draw again and again.
 | `.quad_to(cx, cy, x, y)` | Quadratic Bézier: one control point, then the end point. | |
 | `.close()` | Join back to where the sub-path started. Only closed paths are filled. | |
 | `p.draw_path(path)` | Fill (if closed) and stroke a path with the current style, under the current transform. | `p.draw_path(tri)` |
-| `p.clip(path)` | Limit **later** drawing to the inside of `path` until the enclosing `pop()` / end of the `with p.state():` block. | `with p.state(): p.clip(tri); ...` |
+| `p.clip(path)` | Limit **later** drawing to the inside of `path` until the enclosing `pop()` / end of the `with p.saved_state():` block. | `with p.saved_state(): p.clip(tri); ...` |
 
 **Rules worth knowing**
 
@@ -676,7 +676,7 @@ you can draw again and again.
 - The fill rule is **non-zero winding**: a self-crossing outline such as a five-pointed star is filled
   right through its centre.
 - `clip()` treats its path as closed, follows the current transform, and is lifted by `pop()` — so put
-  it inside `with p.state():`. `p.background()` ignores the clip.
+  it inside `with p.saved_state():`. `p.background()` ignores the clip.
 - Mistakes are caught where they happen: `vertex()` or `end_shape()` without `begin_shape()`,
   `begin_shape()` twice, or `curve_vertex()` before the first `vertex()` are `RuntimeError`s, and a
   shape still open when `draw()` ends is dropped with a `PlaygroundWarning`.
@@ -724,15 +724,15 @@ def draw():
     p.stroke("darkgreen")
     p.stroke_width(2)
     for i in range(4):
-        with p.state():
+        with p.saved_state():
             p.translate(30 + i * 100, 280)
             p.rotate(-30 + i * 20)
             p.draw_path(leaf)                  # filled (it is closed) then stroked
 
     # clip(path) limits later drawing to the inside of the path until the
-    # enclosing pop() / the end of the with p.state() block.
+    # enclosing pop() / the end of the with p.saved_state() block.
     window = p.path().move_to(540, 200).line_to(620, 280).line_to(540, 360).line_to(460, 280).close()
-    with p.state():
+    with p.saved_state():
         p.clip(window)
         p.no_stroke()
         for i in range(14):
@@ -787,7 +787,7 @@ The public v0.6 student-facing API. Everything is reached as `p.<name>`.
 | `p.rotate(degrees)` | Turn later drawing (clockwise). |
 | `p.scale(s)` / `p.scale(sx, sy)` | Grow or shrink later drawing. |
 | `p.push()` / `p.pop()` | Save / restore transform **and** style. |
-| `with p.state():` | push on entry, pop on exit. |
+| `with p.saved_state():` | push on entry, pop on exit. |
 
 | SHAPES, PATHS, CLIPPING | |
 |---|---|
@@ -894,7 +894,7 @@ repairs the frame and prints a `PlaygroundWarning` that says what it did.
 | Running | — | `p.run(max_frames=n)`; `PLAYGROUND_HEADLESS=1` runs without a window |
 | Random | — | `p.random_seed(seed)` |
 | Saving | — | `p.save()` to PNG, PDF or SVG |
-| Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with p.state():`, `radians`/`degrees` |
+| Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with p.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `begin_shape`/`vertex`/`curve_vertex`/`end_shape`, `p.path()`, `draw_path`, `clip` |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 

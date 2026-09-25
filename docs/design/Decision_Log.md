@@ -17,13 +17,10 @@ are raised and closed.
 | D-008 | 2026-09-24 | Fate of pygame drawing code after the vector renderer | keep as permanent fallback renderer · name `LegacyPygameRenderer`, delete in Sprint 3 | delete | **accepted** | 2026-09-24 | story S-019 / S-026 |
 | D-009 | 2026-09-24 | Which font file to bundle as Playground's default (closes D-006) | A DejaVu Sans (Bitstream Vera licence, 757 KB, widest coverage) · B Noto Sans (OFL, 2 MB or instanced) · C Source Sans 3 (OFL, 431 KB, no `fi`) | A | **accepted — DejaVu Sans.** Licence is Bitstream Vera + public domain (permissive, not OFL); ship `DejaVu-LICENSE.txt` with the font | 2026-09-24 | Spike 06, `spikes/RESULTS.md` §6; `Semantic_Contract.md` T2 |
 | D-010 | 2026-09-24 | Reopen the interactive-renderer engine choice pending a broader bake-off? | A keep ADR-001 · B reopen, Cairo = reference implementation, Spike 07 in Sprint 2, decide D-011 before Sprint 3 · C as B without Blend2D | B | **accepted — B.** Providers are selected per capability and workload, not per framework | 2026-09-24 | `ADR-002` |
-
 | D-011 | 2026-09-25 | Which engine renders interactive frames in Sprint 3 (closes ADR-002's open clause) | A Cairo · B Blend2D · C Skia · D Cairo now, Blend2D as an optional fast renderer once its binding passes the gate | D | **accepted — D.** Cairo renders Sprint 3 and exports; Blend2D tracked as a gated optional renderer (S-036) | 2026-09-25 | `ADR-002`; Spike 07 |
-
 | D-012 | 2026-09-25 | What `text_size(n)` means now that text is rendered from a real font | A em-size in logical pixels (CSS/p5/DrawBot convention) · B scale the em by ~0.72 so glyphs match v0.5's apparent size | A | **accepted — A.** `text_size(n)` is an n-pixel em (CSS/p5/DrawBot convention); goldens already reflect it | 2026-09-25 | contract T3; Sprint 3 review |
-
-| D-013 | 2026-09-25 | Name of the context-manager form of the state stack (S-027.3) | A `with p.state():` · B `with p.push():` (push() returns a context manager, so `p.push()` alone still works) · C both names | A | **pending** — implemented as A (the sprint plan's recommendation); renaming is a one-line alias if the maintainer prefers B or C | — | `sprints/sprint-04/stories.md` § D-013; contract F2 |
+| D-013 | 2026-09-25 | Name of the context-manager form of the state stack (S-027.3) | A `with p.state():` · B `with p.push():` · C both · later shortlist: `saved_state`, `temporary_state`, `isolated`, `restore_after` | A, then `saved_state` when the maintainer asked for a more descriptive name | **accepted — `with p.saved_state():`.** Descriptive (says what happens), DrawBot's `savedState` in Playground's snake_case; renamed, not aliased, to avoid two spellings | 2026-09-25 | contract F2; `sprints/sprint-04/stories.md` § D-013 |
 
 ## Open
 
-- **D-013** — `with p.state():` vs `with p.push():` (S-027.3). Presented in `sprints/sprint-04/stories.md`.
+*None.*

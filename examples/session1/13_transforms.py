@@ -31,14 +31,14 @@ def draw():
     p.pop()                 # back to gold fill, black stroke, no rotation
 
     # A fan of rectangles: each turn adds to the one before (transforms are cumulative).
-    with p.state():
+    with p.saved_state():
         p.translate(280, 150)
         for _ in range(6):
             p.rect(0, -6, 100, 12)
             p.rotate(15)
 
     # A spinning square: frame_count makes it turn a little more each frame.
-    with p.state():
+    with p.saved_state():
         p.translate(180, 150)
         p.rotate(p.frame_count * 3)
         p.fill("skyblue")

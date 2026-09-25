@@ -52,7 +52,7 @@ from memory on 25 Sept 2026 — story S-040 verifies it against the live docs be
 
 | Feature | p5 | DrawBot | Today | Owner | Plan |
 |---|---|---|---|---|---|
-| translate / rotate / scale, push / pop, `with state()` | ✅ | ✅ `savedState()` | **planned (Sprint 4)** | E-10 | Sprint 4 |
+| translate / rotate / scale, push / pop, `with saved_state()` | ✅ | ✅ `savedState()` | **planned (Sprint 4)** | E-10 | Sprint 4 |
 | `shear` / `skew`, `apply_matrix`, `reset_matrix` | ✅ | ✅ `skew`, `transform` | IR supports; no story | E-10 | Sprint 5 |
 
 ## 5. Text and typography

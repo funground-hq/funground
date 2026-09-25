@@ -43,7 +43,7 @@ ADDED_FUNCTIONS = {
     "scale": "(sx: 'float', sy: 'float | None' = None) -> 'None'",
     "push": "() -> 'None'",
     "pop": "() -> 'None'",
-    "state": "() -> 'AbstractContextManager[None]'",
+    "saved_state": "() -> 'AbstractContextManager[None]'",
     "radians": "(degrees: 'float') -> 'float'",
     "degrees": "(radians: 'float') -> 'float'",
     # Sprint 4, S-028: shapes, paths and clipping (contract F3).

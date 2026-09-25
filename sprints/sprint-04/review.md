@@ -114,11 +114,13 @@ uharfbuzz 0.56.2. **CI has not run** (S-039); all counts are from the teaching m
 ## Decisions
 
 - Applied (already accepted): D-002 (degrees), D-012 (em-size text, in the reference wording).
-- **D-013 — name of the state-stack context manager: PENDING.** Implemented as A
-  (`with p.state():`), the sprint plan's recommendation. Context, options, trade-offs and
+- **D-013 — name of the state-stack context manager: accepted 25 Sept 2026 as `with p.saved_state():`**
+  (more descriptive than the implemented `state()`; DrawBot's name in snake_case). Renamed across code,
+  tests, examples, contract F2 and the Quick Reference; no golden, snapshot or image changed.
+  Originally implemented as A (`with p.state():`), the sprint plan's recommendation. Context, options, trade-offs and
   recommendation in `sprints/sprint-04/stories.md` § D-013; row in `Decision_Log.md`. B
   (`with p.push():`) or C (both) is a one-line alias in `api.py` plus the F2 row and the reference
-  page. **The maintainer decides; nothing here presumes the answer.**
+  page. *(Superseded by the outcome above.)*
 - D-014 (`rect_mode`-style switches) was anticipated and **not raised**: every public name in
   S-028 came from the sprint plan, and the mode-switch row (now F4) stays Proposed as
   "not offered".

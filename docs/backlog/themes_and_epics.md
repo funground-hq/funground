@@ -39,7 +39,7 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-09 Cairo renderer via IR | `CairoRenderer` consumes the IR, presents through pygame; passes the sample suite under the pinned contract; the only renderer after Sprint 3 | 1 | done (Sprint 3) |
 | E-13 HiDPI-correct rendering | Logical coordinates, physical-resolution rendering; crisp on scaled displays (Windows verified; macOS/Linux follow-up) | 1 | done (Sprint 3) |
 | E-12 Export and headless mode | `p.save()` PNG/PDF/SVG through Cairo surfaces; run a sketch to files without a window; later: embedded-font PDF text (S-032) | 1 (basic) / 3 (embedded fonts) | basic done (Sprint 3) |
-| E-10 Transforms and state stack | Internal `Transform` + state ops in the IR (Phase 1); public `translate/rotate/scale`, `push/pop`, `with p.state()` (Phase 2) | 1 → 2 | ready |
+| E-10 Transforms and state stack | Internal `Transform` + state ops in the IR (Phase 1); public `translate/rotate/scale`, `push/pop`, `with p.saved_state()` (Phase 2) | 1 → 2 | ready |
 | E-11 Path API | Internal `Path` in the IR (Phase 1); public `p.path()` and clip (Phase 2) | 1 → 2 | ready |
 
 | E-24 Drawing vocabulary completeness | `square`, `triangle`, `quad`, `arc`, `polygon`; stroke cap/join/dash/miter; anti-alias opt-out; revisit rect/ellipse modes | 2 | ready (Feature_Map §2) |

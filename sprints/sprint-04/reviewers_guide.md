@@ -39,7 +39,7 @@ the image exists; only you can judge whether a beginner can read it.
 ## 3. What changed — the map
 
 - **Public API** (`api.py`, `__init__.py`, `ADDED_FUNCTIONS` in `tests/test_api_contract.py`):
-  16 names. Transforms 8, paths 7, text 1. `state()` returns `AbstractContextManager[None]`;
+  16 names. Transforms 8, paths 7, text 1. `saved_state()` returns `AbstractContextManager[None]`;
   `path()` returns a `PathBuilder`; `draw_path`/`clip` accept a `PathBuilder` (or a raw
   `geometry.Path` at the `Sketch` level).
 - **Sketch** (`sketch.py`): `push/pop` use the existing `StateStack`; `_end_draw()` runs after
@@ -122,7 +122,7 @@ the image exists; only you can judge whether a beginner can read it.
 
 ## 5. Things I would flag
 
-1. **D-013 — `with p.state():` vs `with p.push():`.** Implemented as A. Your call; either
+1. **D-013 — decided: `with p.saved_state():`** (renamed from `state()`). Previously: your call; either
    alternative is a one-line alias plus the F2 row and one reference page. Decide before the
    reference is handed to a class, because the name will be on the page.
 2. **Contract F2 overstates the reset rule** (verifier finding). It says "a transform or style set
@@ -161,7 +161,7 @@ the image exists; only you can judge whether a beginner can read it.
 **D-013 — name of the state-stack context manager.** Context, options (A `state()` implemented,
 B `push()` returning a context manager, C both), trade-offs, recommendation (A) and reasoning in
 `sprints/sprint-04/stories.md` § D-013; `pending` row in `docs/design/Decision_Log.md` § Open.
-**Pending — the maintainer decides.** When decided, set the outcome and date in the log in the
+**Decided 25 Sept 2026: `with p.saved_state():`.** When decided, set the outcome and date in the log in the
 same change that applies it (alias in `api.py` if B/C; F2 row; reference page).
 
 No other decision was raised. D-014 (`rect_mode`-style switches) was anticipated and not needed:

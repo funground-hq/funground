@@ -15,7 +15,7 @@ postponed, per the other agent's note).
 ### S-027 Transforms and the state stack — E-10
 - [x] S-027.1 `p.translate(dx, dy)`, `p.rotate(degrees)`, `p.scale(s)` / `p.scale(sx, sy)` emit `ir.Concat`; `p.radians()`, `p.degrees()` helpers (D-002)
 - [x] S-027.2 `p.push()` / `p.pop()` emit `ir.Save` / `ir.Restore` **and** save/restore the `GraphicsState` (fill, stroke, width, text size) — one stack for both, so "restore restores everything" (other agent's contract row)
-- [x] S-027.3 `with p.state():` context manager = push on enter, pop on exit, exception-safe
+- [x] S-027.3 `with p.saved_state():` context manager (renamed from `state()` by D-013) = push on enter, pop on exit, exception-safe
 - [x] S-027.4 End-of-frame safety: unbalanced pushes are unwound at frame end with a `PlaygroundWarning` naming the count (never a crash mid-lesson)
 - [x] S-027.5 Contract F2 pinned: transforms are cumulative; apply to all later geometry, text and images; the stack resets at the start of every `draw()`
 - [x] S-027.6 Semantic tests (rotation direction, order of operations, nesting) + sample sketch `13_transforms.py` with golden + snapshot
@@ -28,6 +28,7 @@ postponed, per the other agent's note).
 2. **Options.** **A** `with p.state():` (implemented) — a noun for the thing being saved. **B** `with p.push():` — `push()` returns a context manager, so `p.push()` on its own line still works as a plain call (p5's `push()`/`pop()` names, one fewer word to learn). **C** both, one as an alias.
 3. **Trade-offs.** A: clear that a block is being scoped; one more name in the reference (now 8 new names in S-027). B: fewest names, matches p5, but a returned context manager that is usually ignored is an unusual shape and `with p.push():` reads as "with push" rather than "with saved state". C: no learner has to guess, but two names for one thing is what the Quick Reference tries to avoid.
 4. **Recommendation.** A.
+6. **Outcome (25 Sept 2026).** The maintainer asked for a more descriptive name; shortlist `saved_state` / `temporary_state` / `isolated` / `restore_after`; **accepted `with p.saved_state():`** (DrawBot's `savedState`, snake_cased). Renamed, not aliased.
 5. **Why.** Beginners meet `with open(...)` first; `with p.state():` follows the same "with *a thing*" pattern. Would change if the maintainer wants strict p5 vocabulary (then B). Either way the change is a one-line alias in `api.py` plus the contract row.
 
 ### S-028 Paths and clipping — E-11

@@ -154,9 +154,9 @@ def pop() -> None:
     active_sketch().pop()
 
 
-def state() -> AbstractContextManager[None]:
-    """``with p.state():`` - push() on entry, pop() on exit, even after an error."""
-    return active_sketch().state()
+def saved_state() -> AbstractContextManager[None]:
+    """``with p.saved_state():`` - push() on entry, pop() on exit, even after an error."""
+    return active_sketch().saved_state()
 
 
 # ---- shapes, paths and clipping (S-028)
@@ -191,7 +191,7 @@ def draw_path(path: PathBuilder) -> None:
 
 
 def clip(path: PathBuilder) -> None:
-    """Limit later drawing to the inside of *path* until the enclosing pop() / end of the state() block."""
+    """Limit later drawing to the inside of *path* until the enclosing pop() / end of the saved_state() block."""
     active_sketch().clip(path)
 
 

@@ -95,7 +95,7 @@ once per loop iteration, after `draw()` and before `present()`: `renderer.render
   `GraphicsState` snapshot they were issued under (free, because state is immutable).
 - **Internal capability first, public API later** (`PROCESS.md`). `Save/Restore/Concat/ClipPath/
   FillPath/StrokePath` exist in the IR now so the vector renderer and the text subsystem can use
-  them; `p.translate()`, `p.path()`, `with p.state()` arrive in Phase 2 as thin emitters.
+  them; `p.translate()`, `p.path()`, `with p.saved_state()` arrive in Phase 2 as thin emitters.
 - **Snapshots are the cross-backend contract** (`tests/test_ops_snapshot.py`): the final frame's
   op list for each Session-1 sketch, as JSON. Two correct renderers may differ in pixels; they may
   not differ in ops.
@@ -142,7 +142,7 @@ PDF text is outlines, not searchable, until fonts are embedded (S-032). Detail:
 | 1a Refactor under pygame drawing | 1 | `Sketch`, platform split, state, colour — goldens byte-identical | done |
 | 1b Draw-op IR | 2 | IR + `LegacyPygameRenderer` — goldens byte-identical; IR snapshots; bake-off | done (D-011 pending) |
 | 1c Vector renderer | 3 | D-011 engine consumes the IR; D-003/4/5 applied; goldens regenerated once; HiDPI; headless; export; legacy renderer deleted | next |
-| 2 Public API on the vector model | 4+ | transforms, paths, `state()`, text subsystem v1, Quick Reference v0.6 | planned |
+| 2 Public API on the vector model | 4+ | transforms, paths, `saved_state()`, text subsystem v1, Quick Reference v0.6 | planned |
 | 3 Creative media · 4 GPU/3D | — | images, SVG import, sound, document model · OpenGL/GPU | directional |
 
 ## 9. Test hierarchy

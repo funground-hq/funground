@@ -120,7 +120,7 @@ def test_text_width_ignores_transforms(canvas):
 
     p.text_size(20)
     w = p.text_width("scaled?")
-    with p.state():
+    with p.saved_state():
         p.scale(3)
         assert p.text_width("scaled?") == w
 
