@@ -119,8 +119,8 @@ class Sketch:
         self._emit(ir.Restore())
 
     @contextlib.contextmanager
-    def state(self) -> Iterator[None]:
-        """``with p.state():`` - push on entry, pop on exit, even when the body raises."""
+    def saved_state(self) -> Iterator[None]:
+        """``with p.saved_state():`` - push on entry, pop on exit, even when the body raises."""
         self.push()
         depth = self._states.depth
         try:
@@ -146,7 +146,7 @@ class Sketch:
             warnings.warn(
                 f"draw() finished with {open_pushes} p.push() call(s) still open; "
                 "Playground popped them for you. Add a matching p.pop(), or use "
-                "`with p.state():`.",
+                "`with p.saved_state():`.",
                 PlaygroundWarning, stacklevel=2,
             )
 

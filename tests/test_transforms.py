@@ -183,10 +183,10 @@ def test_pop_without_push_warns_and_is_ignored(sketch, canvas):
     assert not any(isinstance(op, ir.Restore) for op in sketch.frame.ops)
 
 
-# ---------------------------------------------------------------- with p.state()
+# ---------------------------------------------------------------- with p.saved_state()
 def test_state_context_manager_pushes_and_pops(sketch, canvas):
     red_rects()
-    with p.state():
+    with p.saved_state():
         p.fill("blue")
         p.translate(50, 50)
         p.rect(0, 0, 10, 10)
@@ -201,7 +201,7 @@ def test_state_context_manager_pushes_and_pops(sketch, canvas):
 def test_state_context_manager_restores_when_the_body_raises(sketch, canvas):
     red_rects()
     with pytest.raises(KeyError):
-        with p.state():
+        with p.saved_state():
             p.fill("blue")
             p.translate(50, 50)
             raise KeyError("learner bug")
@@ -214,9 +214,9 @@ def test_state_context_manager_restores_when_the_body_raises(sketch, canvas):
 
 
 def test_state_blocks_nest(sketch, canvas):
-    with p.state():
+    with p.saved_state():
         p.translate(10, 0)
-        with p.state():
+        with p.saved_state():
             p.translate(0, 10)
             assert sketch._states.depth == 2
         assert sketch._states.depth == 1

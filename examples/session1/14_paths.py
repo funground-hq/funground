@@ -38,14 +38,14 @@ def draw():
     p.stroke("darkgreen")
     p.stroke_width(2)
     for i in range(4):
-        with p.state():
+        with p.saved_state():
             p.translate(40 + i * 110, 270)
             p.rotate(-20 + i * 15)
             p.draw_path(leaf)
 
-    # Clipping: inside a state() block, clip() limits everything drawn until the block ends.
+    # Clipping: inside a saved_state() block, clip() limits everything drawn until the block ends.
     window = p.path().move_to(560, 200).line_to(630, 270).line_to(560, 340).line_to(490, 270).close()
-    with p.state():
+    with p.saved_state():
         p.clip(window)
         p.no_stroke()
         for i in range(12):

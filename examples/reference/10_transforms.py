@@ -23,14 +23,14 @@ def draw():
     p.pop()                          # gold fill, black stroke, no rotation again
 
     # Transforms are cumulative: each rotate() adds to the one before.
-    with p.state():                  # push on entry, pop on exit, even after an error
+    with p.saved_state():                  # push on entry, pop on exit, even after an error
         p.fill("skyblue")
         for _ in range(12):
             p.rect(60, -6, 60, 12)
             p.rotate(30)
 
     # scale() grows or shrinks later drawing; scale(2, 1) would stretch sideways.
-    with p.state():
+    with p.saved_state():
         p.translate(220, -140)       # relative to the moved origin: (380, 60) on screen
         p.fill("yellowgreen")
         for _ in range(3):
@@ -38,7 +38,7 @@ def draw():
             p.translate(60, 0)
             p.scale(1.4)
 
-    with p.state():
+    with p.saved_state():
         p.translate(260, 60)
         p.rotate(p.frame_count * 3)  # a little further every frame: it spins
         p.fill("navy")
