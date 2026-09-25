@@ -47,6 +47,8 @@ def test_every_op_round_trips_through_json():
         ir.ResetClip(),
         ir.FillPath(path, Color(9, 9, 9)),
         ir.StrokePath(path, Color(9, 9, 9), 2.5),
+        ir.StrokePath(path, Color(1, 2, 3), 4.0, "butt", "bevel", 4.0, (6.0, 2.0), 1.5),
+        ir.SetAntialias(False),
     ]
     assert {type(o) for o in ops} == set(ir.OP_TYPES.values()), "add new ops to this test"
     text = json.dumps(ir.Frame(ops).to_jsonable(), sort_keys=True)
@@ -61,3 +63,12 @@ def test_serialised_form_is_plain_json_and_stable():
         "op": "Rect", "x": 1, "y": 2, "width": 3, "height": 4,
         "style": {"fill": [255, 255, 255, 255], "stroke": [0, 0, 0, 255], "stroke_width": 1, "text_size": 20},
     }
+
+
+def test_new_style_fields_are_omitted_when_default_so_old_snapshots_stay_valid():
+    """S-042: fields added after the format froze are serialised only when not default."""
+    plain = ir.op_to_jsonable(ir.Rect(0, 0, 1, 1, GraphicsState()))
+    assert set(plain["style"]) == {"fill", "stroke", "stroke_width", "text_size"}
+    styled = ir.op_to_jsonable(ir.Rect(0, 0, 1, 1, GraphicsState(stroke_cap="butt", dash=(4.0, 2.0))))
+    assert styled["style"]["stroke_cap"] == "butt" and styled["style"]["dash"] == [4.0, 2.0]
+    assert ir.op_from_jsonable(styled) == ir.Rect(0, 0, 1, 1, GraphicsState(stroke_cap="butt", dash=(4.0, 2.0)))

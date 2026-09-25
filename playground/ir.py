@@ -122,12 +122,24 @@ class StrokePath(Op):
     path: Path
     color: Color
     width: float
+    cap: str = "round"
+    join: str = "round"
+    miter_limit: float = 10.0
+    dash: tuple[float, ...] = ()
+    dash_offset: float = 0.0
 
 
-AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath]
+@dataclass(frozen=True, slots=True)
+class SetAntialias(Op):
+    """Smooth (anti-aliased) edges on or off for the rest of the frame (S-042, no_smooth)."""
+
+    on: bool
+
+
+AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias]
 OP_TYPES: dict[str, type] = {
     cls.__name__: cls
-    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath)
+    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias)
 }
 
 
@@ -167,6 +179,21 @@ class Frame:
 
 
 # ---- serialisation (for snapshots and, later, export replay)
+# Fields added after the snapshot format was frozen (Sprint 2) are written only when they
+# differ from their default, so every existing IR snapshot stays byte-identical (S-042).
+OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash", "dash_offset", "cap", "join"})
+
+
+def _fields_to_jsonable(obj: Any) -> dict[str, Any]:
+    out: dict[str, Any] = {}
+    for f in fields(obj):
+        value = getattr(obj, f.name)
+        if f.name in OMIT_WHEN_DEFAULT and value == f.default:
+            continue
+        out[f.name] = _value_to_jsonable(value)
+    return out
+
+
 def _value_to_jsonable(v: Any) -> Any:
     if isinstance(v, Color):
         return list(v.rgba)
@@ -175,7 +202,9 @@ def _value_to_jsonable(v: Any) -> Any:
     if isinstance(v, Path):
         return [list(seg[:1]) + [list(pt) for pt in seg[1:]] for seg in v.segments]
     if isinstance(v, GraphicsState):
-        return {f.name: _value_to_jsonable(getattr(v, f.name)) for f in fields(v)}
+        return _fields_to_jsonable(v)
+    if isinstance(v, tuple):
+        return [_value_to_jsonable(x) for x in v]
     if isinstance(v, (str, int, float, bool)) or v is None:
         return v
     raise TypeError(f"cannot serialise {type(v).__name__}")
@@ -184,17 +213,18 @@ def _value_to_jsonable(v: Any) -> Any:
 def op_to_jsonable(op: Op) -> dict[str, Any]:
     assert is_dataclass(op)
     d: dict[str, Any] = {"op": type(op).__name__}
-    for f in fields(op):
-        d[f.name] = _value_to_jsonable(getattr(op, f.name))
+    d.update(_fields_to_jsonable(op))
     return d
 
 
 def _state_from_jsonable(d: dict[str, Any]) -> GraphicsState:
+    extra = {k: (tuple(d[k]) if k == "dash" else d[k]) for k in OMIT_WHEN_DEFAULT if k in d}
     return GraphicsState(
         fill=Color(*d["fill"]) if d["fill"] is not None else None,
         stroke=Color(*d["stroke"]) if d["stroke"] is not None else None,
         stroke_width=d["stroke_width"],
         text_size=d["text_size"],
+        **extra,
     )
 
 
@@ -206,8 +236,12 @@ def op_from_jsonable(d: dict[str, Any]) -> Op:
     cls = OP_TYPES[d["op"]]
     kwargs: dict[str, Any] = {}
     for f in fields(cls):
+        if f.name not in d and f.name in OMIT_WHEN_DEFAULT:
+            continue                                   # omitted because it was the default
         v = d[f.name]
-        if f.name == "style":
+        if f.name == "dash":
+            kwargs[f.name] = tuple(v)
+        elif f.name == "style":
             kwargs[f.name] = _state_from_jsonable(v)
         elif f.name == "color":
             kwargs[f.name] = Color(*v)

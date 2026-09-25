@@ -1,0 +1,454 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_cap": "butt",
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "x1": 60,
+  "x2": 260,
+  "y1": 50,
+  "y2": 50
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "text": "butt",
+  "x": 290,
+  "y": 40
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_cap": "square",
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "x1": 60,
+  "x2": 260,
+  "y1": 95,
+  "y2": 95
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "text": "square",
+  "x": 290,
+  "y": 85
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "x1": 60,
+  "x2": 260,
+  "y1": 140,
+  "y2": 140
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "text": "round",
+  "x": 290,
+  "y": 130
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "join": "miter",
+  "miter_limit": 4.0,
+  "op": "StrokePath",
+  "path": [
+   [
+    "move",
+    [
+     380,
+     110
+    ]
+   ],
+   [
+    "line",
+    [
+     420,
+     50
+    ]
+   ],
+   [
+    "line",
+    [
+     460,
+     110
+    ]
+   ]
+  ],
+  "width": 18.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": null,
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "text": "miter",
+  "x": 395,
+  "y": 130
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "join": "bevel",
+  "miter_limit": 4.0,
+  "op": "StrokePath",
+  "path": [
+   [
+    "move",
+    [
+     470,
+     110
+    ]
+   ],
+   [
+    "line",
+    [
+     510,
+     50
+    ]
+   ],
+   [
+    "line",
+    [
+     550,
+     110
+    ]
+   ]
+  ],
+  "width": 18.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": null,
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "text": "bevel",
+  "x": 485,
+  "y": 130
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "miter_limit": 4.0,
+  "op": "StrokePath",
+  "path": [
+   [
+    "move",
+    [
+     560,
+     110
+    ]
+   ],
+   [
+    "line",
+    [
+     600,
+     50
+    ]
+   ],
+   [
+    "line",
+    [
+     640,
+     110
+    ]
+   ]
+  ],
+  "width": 18.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": null,
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 18,
+   "text_size": 20
+  },
+  "text": "round",
+  "x": 575,
+  "y": 130
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "height": 130,
+  "op": "Rect",
+  "style": {
+   "dash": [
+    16.0,
+    8.0
+   ],
+   "fill": null,
+   "miter_limit": 4.0,
+   "stroke": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke_width": 4,
+   "text_size": 20
+  },
+  "width": 240,
+  "x": 60,
+  "y": 220
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "diameter": 140,
+  "op": "Circle",
+  "style": {
+   "dash": [
+    2.0,
+    10.0
+   ],
+   "fill": null,
+   "miter_limit": 4.0,
+   "stroke": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke_width": 4,
+   "text_size": 20
+  },
+  "x": 470,
+  "y": 285
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": null,
+   "miter_limit": 4.0,
+   "stroke": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke_width": 4,
+   "text_size": 20
+  },
+  "x1": 380,
+  "x2": 560,
+  "y1": 370,
+  "y2": 370
+ }
+]

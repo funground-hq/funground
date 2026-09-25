@@ -74,11 +74,11 @@ lives; alignment is designed once for both.
 - [x] S-041.3 All emit existing IR ops (paths); contract rows added; tests; gallery example `shapes/`; guide chapter 3 completed
 *Acceptance:* each shape matches its contract row pixel-for-pixel in tests; exports to PDF.
 
-### S-042 Stroke styles and smoothing — E-24
-- [ ] S-042.1 `stroke_cap("round"|"square"|"butt")`, `stroke_join("round"|"miter"|"bevel")`, `miter_limit(n)`, `stroke_dash(pattern, offset=0)` / `no_dash()` — part of `GraphicsState`, so `push/pop` and `saved_state` restore them
-- [ ] S-042.2 `no_smooth()` / `smooth()` — anti-aliasing opt-out for pixel-art sketches (contract C6 gets an exception clause)
-- [ ] S-042.3 IR: stroke style carried in the op's style; Cairo renderer honours it; defaults stay round/round (D-004) so no existing golden moves
-- [ ] S-042.4 Tests; gallery `lines/`; guide chapter 5 completed
+### S-042 Stroke styles and smoothing — E-24 ✅
+- [x] S-042.1 `stroke_cap("round"|"square"|"butt")`, `stroke_join("round"|"miter"|"bevel")`, `miter_limit(n)`, `stroke_dash(pattern, offset=0)` / `no_dash()` — part of `GraphicsState`, so `push/pop` and `saved_state` restore them
+- [x] S-042.2 `no_smooth()` / `smooth()` — anti-aliasing opt-out for pixel-art sketches (contract C6 gets an exception clause)
+- [x] S-042.3 IR: stroke style carried in the op's style; Cairo renderer honours it; defaults stay round/round (D-004) so no existing golden moves
+- [x] S-042.4 Tests; gallery `lines/`; guide chapter 5 completed
 *Acceptance:* existing goldens byte-identical; each style visibly and testably distinct.
 
 ### S-043 Shear and matrices — E-10

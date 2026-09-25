@@ -10,7 +10,7 @@ Every complete example in this guide is tested: it runs exactly as printed.
 | 2 | [The sketch: setup, draw and run](02_the_sketch.md) | ready |
 | 3 | [Shapes](03_shapes.md) | ready |
 | 4 | [Colour](04_colour.md) | partial — HSB/HSL and colour objects in Sprint 5 (S-044) |
-| 5 | [Fill, stroke and lines](05_fill_stroke_lines.md) | partial — caps, joins and dashes in Sprint 5 (S-042) |
+| 5 | [Fill, stroke and lines](05_fill_stroke_lines.md) | ready |
 | 6 | [Text](06_text.md) | partial — alignment and multi-line text in Sprint 6 |
 | 7 | [Animation and time](07_animation_and_time.md) | partial — loop control and clock in Sprint 5 (S-048) |
 | 8 | [Transforms and saved_state](08_transforms.md) | ready — shear and matrices in Sprint 5 (S-043) |

@@ -154,6 +154,41 @@ def stroke_width(pixels: int) -> None:
     active_sketch().stroke_width(pixels)
 
 
+def stroke_cap(cap: str) -> None:
+    """How line ends look: "round" (default), "square" (extends past the end) or "butt" (stops flat)."""
+    active_sketch().stroke_cap(cap)
+
+
+def stroke_join(join: str) -> None:
+    """How corners look: "round" (default), "miter" (sharp) or "bevel" (cut off)."""
+    active_sketch().stroke_join(join)
+
+
+def miter_limit(limit: float) -> None:
+    """How far a sharp "miter" corner may stick out before it is bevelled (default 10)."""
+    active_sketch().miter_limit(limit)
+
+
+def stroke_dash(pattern: float | list[float], offset: float = 0) -> None:
+    """Dashed outlines: stroke_dash(10) or stroke_dash([12, 4, 2, 4]); offset shifts the pattern."""
+    active_sketch().stroke_dash(pattern, offset)
+
+
+def no_dash() -> None:
+    """Solid outlines again."""
+    active_sketch().no_dash()
+
+
+def no_smooth() -> None:
+    """Hard, pixel-sharp edges from now on (no anti-aliasing) - for pixel art."""
+    active_sketch().no_smooth()
+
+
+def smooth() -> None:
+    """Smooth edges again (the default)."""
+    active_sketch().smooth()
+
+
 def text_size(size: int) -> None:
     active_sketch().text_size(size)
 

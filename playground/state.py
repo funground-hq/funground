@@ -17,6 +17,12 @@ class GraphicsState:
     stroke: Color | None = BLACK
     stroke_width: int = 1
     text_size: int = 20
+    # S-042 stroke styles (contract S11). Defaults are the Sprint-3 look (D-004): round/round.
+    stroke_cap: str = "round"
+    stroke_join: str = "round"
+    miter_limit: float = 10.0
+    dash: tuple[float, ...] = ()
+    dash_offset: float = 0.0
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)

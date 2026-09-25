@@ -64,6 +64,14 @@ ADDED_FUNCTIONS = {
     "arc": "(x: 'float', y: 'float', width: 'float', height: 'float', start: 'float', stop: 'float', mode: 'str' = 'open') -> 'None'",
     "clear": "() -> 'None'",
     "no_clip": "() -> 'None'",
+    # Sprint 5, S-042: stroke styles and smoothing (contract S11, C6).
+    "stroke_cap": "(cap: 'str') -> 'None'",
+    "stroke_join": "(join: 'str') -> 'None'",
+    "miter_limit": "(limit: 'float') -> 'None'",
+    "stroke_dash": "(pattern: 'float | list[float]', offset: 'float' = 0) -> 'None'",
+    "no_dash": "() -> 'None'",
+    "no_smooth": "() -> 'None'",
+    "smooth": "() -> 'None'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

@@ -69,6 +69,8 @@ class Sketch:
         # Ops recorded since the last render; consumed once per loop iteration.
         self.frame = ir.Frame()
         self._pending_saves: list[str] = []
+        # no_smooth() is a sketch setting, re-applied at the start of every frame (S-042).
+        self._smooth = True
         # The shape between begin_shape() and end_shape(), if one is open (S-028).
         self._shape: PathBuilder | None = None
         # Playground keeps its own generator so random_seed() never disturbs a
@@ -247,6 +249,47 @@ class Sketch:
             raise ValueError("stroke width must be at least 1")
         self._states.update(stroke_width=int(pixels))
 
+    # ---- stroke styles and smoothing (S-042, contract S11/C6)
+    STROKE_CAPS = ("round", "square", "butt")
+    STROKE_JOINS = ("round", "miter", "bevel")
+
+    def stroke_cap(self, cap: str) -> None:
+        if cap not in self.STROKE_CAPS:
+            raise ValueError(f"p.stroke_cap() takes one of {', '.join(map(repr, self.STROKE_CAPS))}, not {cap!r}")
+        self._states.update(stroke_cap=cap)
+
+    def stroke_join(self, join: str) -> None:
+        if join not in self.STROKE_JOINS:
+            raise ValueError(f"p.stroke_join() takes one of {', '.join(map(repr, self.STROKE_JOINS))}, not {join!r}")
+        self._states.update(stroke_join=join)
+
+    def miter_limit(self, limit: float) -> None:
+        if limit < 1:
+            raise ValueError("p.miter_limit() must be at least 1")
+        self._states.update(miter_limit=float(limit))
+
+    def stroke_dash(self, pattern, offset: float = 0) -> None:
+        """Dashed strokes: stroke_dash(10) or stroke_dash([12, 4, 2, 4]); offset shifts the pattern."""
+        values = (pattern,) if isinstance(pattern, (int, float)) else tuple(pattern)
+        if not values or any((not isinstance(v, (int, float))) or v < 0 for v in values) or sum(values) == 0:
+            raise ValueError("p.stroke_dash() needs one or more lengths of 0 or more, not all 0, e.g. p.stroke_dash([10, 5])")
+        self._states.update(dash=tuple(float(v) for v in values), dash_offset=float(offset))
+
+    def no_dash(self) -> None:
+        self._states.update(dash=(), dash_offset=0.0)
+
+    def no_smooth(self) -> None:
+        """Hard, pixel-sharp edges (no anti-aliasing) from now on - for pixel art."""
+        self._smooth = False
+        if self._has_window:
+            self.frame.append(ir.SetAntialias(False))
+
+    def smooth(self) -> None:
+        """Smooth (anti-aliased) edges again - the default."""
+        self._smooth = True
+        if self._has_window:
+            self.frame.append(ir.SetAntialias(True))
+
     def text_size(self, size: int) -> None:
         if size <= 0:
             raise ValueError("text size must be positive")
@@ -323,7 +366,7 @@ class Sketch:
         if style.fill is not None:
             self._emit(ir.FillPath(closed, style.fill))
         if style.stroke is not None:
-            self._emit(ir.StrokePath(outline, style.stroke, float(style.stroke_width)))
+            self._emit(self._stroke_op(outline, style))
 
     def clear(self) -> None:
         """Make the whole canvas transparent (saved PNGs keep the transparency)."""
@@ -408,7 +451,13 @@ class Sketch:
         if style.fill is not None and geometry.is_closed:      # F3: open shapes are never filled
             self._emit(ir.FillPath(geometry, style.fill))
         if style.stroke is not None:                           # S5: stroke on top of the fill
-            self._emit(ir.StrokePath(geometry, style.stroke, float(style.stroke_width)))
+            self._emit(self._stroke_op(geometry, style))
+
+    @staticmethod
+    def _stroke_op(geometry: Path, style: GraphicsState) -> ir.StrokePath:
+        return ir.StrokePath(geometry, style.stroke, float(style.stroke_width),
+                             style.stroke_cap, style.stroke_join, style.miter_limit,
+                             style.dash, style.dash_offset)
 
     # ------------------------------------------------------------ helpers
     def random(self, low: float = 1.0, high: float | None = None) -> float:
@@ -478,6 +527,8 @@ class Sketch:
                 inp = self._platform.input_state()
                 self.mouse_x, self.mouse_y, self.mouse_pressed = inp.mouse_x, inp.mouse_y, inp.mouse_pressed
 
+                if not self._smooth:
+                    self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
                 draw()
                 self._end_draw()  # unbalanced push()es never leak into the next frame
                 if max_frames is not None and self.frame_count + 1 >= max_frames:

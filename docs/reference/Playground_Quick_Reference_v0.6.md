@@ -185,6 +185,11 @@ dropped the fourth value). Lists, `"0xRRGGBB"` and packed integers are still acc
 | `p.stroke(color)` | Set the outline / line colour. | `p.stroke("black")` |
 | `p.no_stroke()` | Do not draw outlines or lines. | `p.no_stroke()` |
 | `p.stroke_width(pixels)` | Set outline and line thickness. Minimum is 1. | `p.stroke_width(3)` |
+| `p.stroke_cap(cap)` | Line ends: `"round"` (default), `"square"` (extends past the end), `"butt"` (stops flat). | `p.stroke_cap("butt")` |
+| `p.stroke_join(join)` | Corners: `"round"` (default), `"miter"`, `"bevel"`. | `p.stroke_join("miter")` |
+| `p.miter_limit(n)` | How far a miter corner may stick out (default 10). | `p.miter_limit(4)` |
+| `p.stroke_dash(pattern, offset=0)` / `p.no_dash()` | Dashed outlines; one length or a list of dash/gap lengths. | `p.stroke_dash([12, 4])` |
+| `p.no_smooth()` / `p.smooth()` | Hard pixel edges (pixel art) / smooth edges again. A sketch setting, not undone by `pop()`. | `p.no_smooth()` |
 
 Defaults: fill white, stroke black, width 1. Shapes are filled first and outlined on top.
 
@@ -813,6 +818,8 @@ The public v0.6 student-facing API. Everything is reached as `p.<name>`.
 | `p.fill(color)` / `p.no_fill()` | Set / disable fill. |
 | `p.stroke(color)` / `p.no_stroke()` | Set / disable line and outline colour. |
 | `p.stroke_width(n)` | Stroke thickness (centred on the edge). |
+| `p.stroke_cap/stroke_join/stroke_dash/no_dash` | Line ends, corners, dashes. |
+| `p.no_smooth()` / `p.smooth()` | Pixel-sharp / smooth edges. |
 | `p.text_size(n)` | Text size: an n-pixel em. |
 | `p.text_width(msg)` | Width the text will take, in pixels. |
 

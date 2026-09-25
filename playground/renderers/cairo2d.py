@@ -114,7 +114,11 @@ class CairoRenderer:
             elif t is ir.FillPath:
                 self._path(ctx, op.path); self._source(ctx, op.color); ctx.fill()
             elif t is ir.StrokePath:
-                self._path(ctx, op.path); self._source(ctx, op.color); ctx.set_line_width(op.width); ctx.stroke()
+                self._path(ctx, op.path); self._source(ctx, op.color); ctx.set_line_width(op.width)
+                self._stroke_style(ctx, op.cap, op.join, op.miter_limit, op.dash, op.dash_offset)
+                ctx.stroke()
+            elif t is ir.SetAntialias:
+                ctx.set_antialias(cairo.ANTIALIAS_DEFAULT if op.on else cairo.ANTIALIAS_NONE)
             elif t is ir.Circle:
                 ctx.new_path(); ctx.arc(op.x, op.y, max(0.0, op.diameter / 2), 0, 2 * math.pi)
                 self._paint(ctx, op.style)
@@ -125,7 +129,8 @@ class CairoRenderer:
             elif t is ir.Line:
                 if op.style.stroke is not None:
                     ctx.new_path(); ctx.move_to(op.x1, op.y1); ctx.line_to(op.x2, op.y2)
-                    self._source(ctx, op.style.stroke); ctx.set_line_width(op.style.stroke_width); ctx.stroke()
+                    self._source(ctx, op.style.stroke); ctx.set_line_width(op.style.stroke_width)
+                    self._state_stroke_style(ctx, op.style); ctx.stroke()
             elif t is ir.Point:
                 if op.style.stroke is not None:
                     ctx.new_path(); ctx.arc(op.x, op.y, max(0.5, op.style.stroke_width / 2), 0, 2 * math.pi)
@@ -164,8 +169,21 @@ class CairoRenderer:
         if st.fill is not None:
             self._source(ctx, st.fill); ctx.fill_preserve()
         if st.stroke is not None:
-            self._source(ctx, st.stroke); ctx.set_line_width(st.stroke_width); ctx.stroke_preserve()
+            self._source(ctx, st.stroke); ctx.set_line_width(st.stroke_width)
+            self._state_stroke_style(ctx, st); ctx.stroke_preserve()
         ctx.new_path()
+
+    _CAPS = {"round": cairo.LINE_CAP_ROUND, "square": cairo.LINE_CAP_SQUARE, "butt": cairo.LINE_CAP_BUTT}
+    _JOINS = {"round": cairo.LINE_JOIN_ROUND, "miter": cairo.LINE_JOIN_MITER, "bevel": cairo.LINE_JOIN_BEVEL}
+
+    def _stroke_style(self, ctx, cap, join, miter_limit, dash, dash_offset) -> None:
+        ctx.set_line_cap(self._CAPS[cap])
+        ctx.set_line_join(self._JOINS[join])
+        ctx.set_miter_limit(miter_limit)
+        ctx.set_dash(list(dash), dash_offset)
+
+    def _state_stroke_style(self, ctx, st: GraphicsState) -> None:
+        self._stroke_style(ctx, st.stroke_cap, st.stroke_join, st.miter_limit, st.dash, st.dash_offset)
 
     def _text_ops(self, op: ir.Text):
         from ..typography import default_font
