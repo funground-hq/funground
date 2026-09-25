@@ -49,7 +49,6 @@ ADDED_FUNCTIONS = {
     # Sprint 4, S-028: shapes, paths and clipping (contract F3).
     "begin_shape": "() -> 'None'",
     "vertex": "(x: 'float', y: 'float') -> 'None'",
-    "curve_vertex": "(cx1: 'float', cy1: 'float', cx2: 'float', cy2: 'float', x: 'float', y: 'float') -> 'None'",
     "end_shape": "(close: 'bool' = False) -> 'None'",
     "path": "() -> 'PathBuilder'",
     "draw_path": "(path: 'PathBuilder') -> 'None'",
@@ -77,6 +76,19 @@ ADDED_FUNCTIONS = {
     "shear_y": "(degrees: 'float') -> 'None'",
     "apply_matrix": "(a: 'float', b: 'float', c: 'float', d: 'float', e: 'float', f: 'float') -> 'None'",
     "reset_matrix": "() -> 'None'",
+    # Sprint 5, S-074: curve vocabulary aligned with Processing (D-018, contract F3/F9).
+    "bezier_vertex": "(cx1: 'float', cy1: 'float', cx2: 'float', cy2: 'float', x: 'float', y: 'float') -> 'None'",
+    "quadratic_vertex": "(cx: 'float', cy: 'float', x: 'float', y: 'float') -> 'None'",
+    "curve_vertex": "(x: 'float', y: 'float') -> 'None'",
+    "curve_tightness": "(tightness: 'float') -> 'None'",
+    "begin_contour": "() -> 'None'",
+    "end_contour": "() -> 'None'",
+    "bezier": "(x1: 'float', y1: 'float', cx1: 'float', cy1: 'float', cx2: 'float', cy2: 'float', x2: 'float', y2: 'float') -> 'None'",
+    "curve": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float', x4: 'float', y4: 'float') -> 'None'",
+    "bezier_point": "(a: 'float', b: 'float', c: 'float', d: 'float', t: 'float') -> 'float'",
+    "bezier_tangent": "(a: 'float', b: 'float', c: 'float', d: 'float', t: 'float') -> 'float'",
+    "curve_point": "(a: 'float', b: 'float', c: 'float', d: 'float', t: 'float') -> 'float'",
+    "curve_tangent": "(a: 'float', b: 'float', c: 'float', d: 'float', t: 'float') -> 'float'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

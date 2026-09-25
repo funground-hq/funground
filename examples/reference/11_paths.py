@@ -21,15 +21,15 @@ def draw():
         p.vertex(110 + 80 * math.cos(a), 110 + 80 * math.sin(a))
     p.end_shape(close=True)                    # it crosses itself and is filled right through
 
-    # An open shape is stroked, never filled. curve_vertex() takes two control
+    # An open shape is stroked, never filled. bezier_vertex() takes two control
     # points, then the point the curve ends at.
     p.no_fill()
     p.stroke("steelblue")
     p.stroke_width(4)
     p.begin_shape()
     p.vertex(240, 110)
-    p.curve_vertex(300, 10, 360, 210, 420, 110)
-    p.curve_vertex(480, 10, 540, 210, 600, 110)
+    p.bezier_vertex(300, 10, 360, 210, 420, 110)
+    p.bezier_vertex(480, 10, 540, 210, 600, 110)
     p.end_shape()
 
     # p.path() builds a reusable path: move_to, line_to, curve_to, quad_to, close.

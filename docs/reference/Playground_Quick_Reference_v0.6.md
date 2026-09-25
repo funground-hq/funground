@@ -691,7 +691,14 @@ you can draw again and again.
 |---|---|---|
 | `p.begin_shape()` | Start a shape; list its corners next. | `p.begin_shape()` |
 | `p.vertex(x, y)` | Add a corner (the first one starts the shape). | `p.vertex(100, 20)` |
-| `p.curve_vertex(cx1, cy1, cx2, cy2, x, y)` | Add a curved segment: two control points, then the point the curve ends at. Needs a `vertex()` before it. | `p.curve_vertex(150, 0, 250, 40, 300, 20)` |
+| `p.bezier_vertex(cx1, cy1, cx2, cy2, x, y)` | Add a Bézier curve segment: two control points, then the end point. | `p.bezier_vertex(20, 0, 180, 0, 180, 80)` |
+| `p.quadratic_vertex(cx, cy, x, y)` | Add a quadratic curve segment: one control point, then the end point. | `p.quadratic_vertex(100, 0, 180, 80)` |
+| `p.curve_vertex(x, y)` | A point of a smooth curve *through* the points; the first and last only steer it (at least four in a row). | `p.curve_vertex(40, 60)` |
+| `p.curve_tightness(t)` | 0 smooth (default) … 1 straight lines, for `curve_vertex`/`curve`. | `p.curve_tightness(0.5)` |
+| `p.begin_contour()` / `p.end_contour()` | A hole inside the shape being built. | `p.begin_contour(); …; p.end_contour()` |
+| `p.bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2)` | One Bézier curve (stroked only). | `p.bezier(20, 80, 20, 0, 180, 0, 180, 80)` |
+| `p.curve(x1, y1, x2, y2, x3, y3, x4, y4)` | One smooth curve from point 2 to point 3 (stroked only). | `p.curve(0, 100, 40, 40, 160, 40, 200, 100)` |
+| `p.bezier_point(a, b, c, d, t)` / `p.bezier_tangent(...)` / `p.curve_point(...)` / `p.curve_tangent(...)` | A coordinate (or slope) along a curve at `t` from 0 to 1; call once for x and once for y. | `x = p.bezier_point(20, 20, 180, 180, 0.5)` |
 | `p.end_shape()` | Draw the shape open: it is **stroked, never filled**. | `p.end_shape()` |
 | `p.end_shape(close=True)` | Join the last corner to the first, then fill and stroke it. | `p.end_shape(close=True)` |
 
@@ -718,7 +725,7 @@ you can draw again and again.
 - `clip()` treats its path as closed, follows the current transform, and is lifted by `pop()` — so put
   it inside `with p.saved_state():`. `p.background()` ignores the clip.
 - Mistakes are caught where they happen: `vertex()` or `end_shape()` without `begin_shape()`,
-  `begin_shape()` twice, or `curve_vertex()` before the first `vertex()` are `RuntimeError`s, and a
+  `begin_shape()` twice, or `bezier_vertex()` before the first `vertex()` are `RuntimeError`s, and a
   shape still open when `draw()` ends is dropped with a `PlaygroundWarning`.
 
 ![Shapes and paths](images/11_paths.png)
@@ -747,15 +754,15 @@ def draw():
         p.vertex(110 + 80 * math.cos(a), 110 + 80 * math.sin(a))
     p.end_shape(close=True)                    # it crosses itself and is filled right through
 
-    # An open shape is stroked, never filled. curve_vertex() takes two control
+    # An open shape is stroked, never filled. bezier_vertex() takes two control
     # points, then the point the curve ends at.
     p.no_fill()
     p.stroke("steelblue")
     p.stroke_width(4)
     p.begin_shape()
     p.vertex(240, 110)
-    p.curve_vertex(300, 10, 360, 210, 420, 110)
-    p.curve_vertex(480, 10, 540, 210, 600, 110)
+    p.bezier_vertex(300, 10, 360, 210, 420, 110)
+    p.bezier_vertex(480, 10, 540, 210, 600, 110)
     p.end_shape()
 
     # p.path() builds a reusable path: move_to, line_to, curve_to, quad_to, close.
@@ -837,7 +844,8 @@ The public v0.6 student-facing API. Everything is reached as `p.<name>`.
 | SHAPES, PATHS, CLIPPING | |
 |---|---|
 | `p.begin_shape()` … `p.vertex(x, y)` … `p.end_shape(close=False)` | A shape from its corners; `close=True` fills it. |
-| `p.curve_vertex(cx1, cy1, cx2, cy2, x, y)` | A curved segment inside a shape. |
+| `p.bezier_vertex(...)` / `p.quadratic_vertex(...)` / `p.curve_vertex(x, y)` | Curves inside a shape; `begin_contour`/`end_contour` for holes. |
+| `p.bezier(...)` / `p.curve(...)` | One curve in a call. |
 | `p.path()` | Builder: `.move_to .line_to .curve_to .quad_to .close`. |
 | `p.draw_path(path)` | Fill (if closed) and stroke a path. |
 | `p.clip(path)` | Draw only inside `path` until the enclosing `pop()`. |
@@ -941,7 +949,7 @@ repairs the frame and prints a `PlaygroundWarning` that says what it did.
 | Random | — | `p.random_seed(seed)` |
 | Saving | — | `p.save()` to PNG, PDF or SVG |
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with p.saved_state():`, `radians`/`degrees` |
-| Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`curve_vertex`/`end_shape`, `p.path()`, `draw_path`, `clip`, `no_clip` |
+| Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `p.path()`, `draw_path`, `clip`, `no_clip` |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 
 Everything a v0.5 sketch called still exists with the same arguments; the only visible differences are

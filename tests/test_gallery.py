@@ -35,9 +35,7 @@ GOLDEN_PLATFORM = "Windows"
 
 # Public names not yet shown by any example. This list may only shrink: the test below
 # fails if a listed name is now covered, and S-072 (release v0.7) requires it empty.
-NOT_YET_IN_GALLERY = {
-    "curve_vertex",      # renamed/redefined by S-074 (D-018); its examples come with it
-}
+NOT_YET_IN_GALLERY: set[str] = set()
 
 
 @pytest.fixture(autouse=True)

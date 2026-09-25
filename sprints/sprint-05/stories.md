@@ -118,12 +118,12 @@ lives; alignment is designed once for both.
 - [ ] S-045.4 Tests with scripted events; gallery `interaction/` (paint program, keyboard mover); guide chapter 10
 *Acceptance:* callbacks fire once per event in order; polling via `is_mouse_pressed` and `key_down` works; the old name fails with a helpful message.
 
-### S-074 Curve vocabulary aligned with Processing/p5 — E-11 *(D-018 = A)*
-- [ ] S-074.1 Rename Sprint 4's cubic `curve_vertex(cx1, cy1, cx2, cy2, x, y)` → `bezier_vertex`; update contract F3, tests, `14_paths.py`, reference and guide
-- [ ] S-074.2 `quadratic_vertex(cx, cy, x, y)`; Catmull-Rom `curve_vertex(x, y)` (Processing 4 meaning) with `curve_tightness(t)`
-- [ ] S-074.3 `begin_contour()` / `end_contour()` for holes (non-zero fill with reversed winding, contract F3 extended)
-- [ ] S-074.4 One-call shapes `bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2)` and `curve(...)`; `bezier_point(a, b, c, d, t)`, `bezier_tangent(...)`
-- [ ] S-074.5 Tests; gallery `curves/`; guide chapter 9
+### S-074 Curve vocabulary aligned with Processing/p5 — E-11 *(D-018 = A)* ✅
+- [x] S-074.1 Rename Sprint 4's cubic `curve_vertex(cx1, cy1, cx2, cy2, x, y)` → `bezier_vertex`; update contract F3, tests, `14_paths.py`, reference and guide
+- [x] S-074.2 `quadratic_vertex(cx, cy, x, y)`; Catmull-Rom `curve_vertex(x, y)` (Processing 4 meaning) with `curve_tightness(t)`
+- [x] S-074.3 `begin_contour()` / `end_contour()` for holes (non-zero fill with reversed winding, contract F3 extended)
+- [x] S-074.4 One-call shapes `bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2)` and `curve(...)`; `bezier_point(a, b, c, d, t)`, `bezier_tangent(...)`
+- [x] S-074.5 Tests; gallery `curves/`; guide chapter 9
 *Acceptance:* a Processing curve sketch ports with only snake_case renames.
 
 ### S-058 ADR-003: deliberately out of scope — E-23

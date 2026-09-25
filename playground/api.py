@@ -255,9 +255,68 @@ def vertex(x: float, y: float) -> None:
     active_sketch().vertex(x, y)
 
 
-def curve_vertex(cx1: float, cy1: float, cx2: float, cy2: float, x: float, y: float) -> None:
-    """Add a curved segment: two control points (cx1, cy1), (cx2, cy2), then the end point (x, y)."""
-    active_sketch().curve_vertex(cx1, cy1, cx2, cy2, x, y)
+def bezier_vertex(cx1: float, cy1: float, cx2: float, cy2: float, x: float, y: float) -> None:
+    """Add a Bezier curve segment: two control points (cx1, cy1), (cx2, cy2), then the end point (x, y)."""
+    active_sketch().bezier_vertex(cx1, cy1, cx2, cy2, x, y)
+
+
+def quadratic_vertex(cx: float, cy: float, x: float, y: float) -> None:
+    """Add a quadratic curve segment: one control point, then the end point."""
+    active_sketch().quadratic_vertex(cx, cy, x, y)
+
+
+def curve_vertex(x: float, y: float) -> None:
+    """Add a point for a smooth curve through the points (the first and last only steer it)."""
+    active_sketch().curve_vertex(x, y)
+
+
+def curve_tightness(tightness: float) -> None:
+    """How tight curve_vertex()/curve() curves are: 0 smooth (default), 1 straight lines."""
+    active_sketch().curve_tightness(tightness)
+
+
+def begin_contour() -> None:
+    """Start a hole inside the shape being built; list its corners, then end_contour()."""
+    active_sketch().begin_contour()
+
+
+def end_contour() -> None:
+    """Finish the hole started by begin_contour()."""
+    active_sketch().end_contour()
+
+
+def bezier(x1: float, y1: float, cx1: float, cy1: float, cx2: float, cy2: float, x2: float, y2: float) -> None:
+    """A Bezier curve from (x1, y1) to (x2, y2) with two control points; stroked only."""
+    active_sketch().bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2)
+
+
+def curve(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float, x4: float, y4: float) -> None:
+    """A smooth curve from (x2, y2) to (x3, y3), steered by (x1, y1) and (x4, y4); stroked only."""
+    active_sketch().curve(x1, y1, x2, y2, x3, y3, x4, y4)
+
+
+def bezier_point(a: float, b: float, c: float, d: float, t: float) -> float:
+    """One coordinate of the Bezier curve at t (0 to 1); call it for x and for y."""
+    from .shapes import bezier_point as _bp
+
+    return _bp(a, b, c, d, t)
+
+
+def bezier_tangent(a: float, b: float, c: float, d: float, t: float) -> float:
+    """The slope of one coordinate of the Bezier curve at t, e.g. for math.atan2."""
+    from .shapes import bezier_tangent as _bt
+
+    return _bt(a, b, c, d, t)
+
+
+def curve_point(a: float, b: float, c: float, d: float, t: float) -> float:
+    """One coordinate of the curve() segment at t (0 to 1), with the current curve_tightness."""
+    return active_sketch().curve_point(a, b, c, d, t)
+
+
+def curve_tangent(a: float, b: float, c: float, d: float, t: float) -> float:
+    """The slope of one coordinate of the curve() segment at t."""
+    return active_sketch().curve_tangent(a, b, c, d, t)
 
 
 def end_shape(close: bool = False) -> None:

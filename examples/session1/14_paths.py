@@ -21,15 +21,15 @@ def draw():
         p.vertex(120 + 80 * math.cos(angle), 120 + 80 * math.sin(angle))
     p.end_shape(close=True)
 
-    # An open shape is stroked but never filled: a wave from two curve_vertex() calls.
-    # Each curve_vertex takes two control points, then the point the curve ends at.
+    # An open shape is stroked but never filled: a wave from two bezier_vertex() calls.
+    # Each bezier_vertex takes two control points, then the point the curve ends at.
     p.no_fill()
     p.stroke("steelblue")
     p.stroke_width(4)
     p.begin_shape()
     p.vertex(260, 120)
-    p.curve_vertex(320, 20, 380, 220, 440, 120)
-    p.curve_vertex(500, 20, 560, 220, 620, 120)
+    p.bezier_vertex(320, 20, 380, 220, 440, 120)
+    p.bezier_vertex(500, 20, 560, 220, 620, 120)
     p.end_shape()
 
     # A reusable path: build a leaf once, then draw it wherever the origin is.

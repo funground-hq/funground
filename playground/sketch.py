@@ -20,6 +20,7 @@ from .capabilities import Capability, PlaygroundWarning, missing_capability
 from .color import WHITE, Color, ColorLike
 from .geometry import Path, Transform
 from .paths import PathBuilder
+from .shapes import ShapeBuilder, catmull_rom_controls
 from .platform.base import KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
@@ -72,7 +73,7 @@ class Sketch:
         # no_smooth() is a sketch setting, re-applied at the start of every frame (S-042).
         self._smooth = True
         # The shape between begin_shape() and end_shape(), if one is open (S-028).
-        self._shape: PathBuilder | None = None
+        self._shape: ShapeBuilder | None = None
         # Playground keeps its own generator so random_seed() never disturbs a
         # learner's own `import random`.
         self._rng = _random.Random()
@@ -415,30 +416,56 @@ class Sketch:
     def begin_shape(self) -> None:
         if self._shape is not None:
             raise RuntimeError("p.begin_shape() called again before p.end_shape(); finish the first shape.")
-        self._shape = PathBuilder()
+        self._shape = ShapeBuilder()
 
     def vertex(self, x: float, y: float) -> None:
-        shape = self._open_shape("vertex")
-        if shape.is_empty:
-            shape.move_to(x, y)       # the first corner starts the shape
-        else:
-            shape.line_to(x, y)
+        self._open_shape("vertex").vertex(x, y)
 
-    def curve_vertex(self, cx1: float, cy1: float, cx2: float, cy2: float, x: float, y: float) -> None:
-        shape = self._open_shape("curve_vertex")
-        if shape.is_empty:
-            raise RuntimeError("p.curve_vertex() needs a starting corner: call p.vertex(x, y) first.")
-        shape.curve_to(cx1, cy1, cx2, cy2, x, y)
+    def bezier_vertex(self, cx1: float, cy1: float, cx2: float, cy2: float, x: float, y: float) -> None:
+        self._open_shape("bezier_vertex").bezier_vertex(cx1, cy1, cx2, cy2, x, y)
+
+    def quadratic_vertex(self, cx: float, cy: float, x: float, y: float) -> None:
+        self._open_shape("quadratic_vertex").quadratic_vertex(cx, cy, x, y)
+
+    def curve_vertex(self, x: float, y: float) -> None:
+        self._open_shape("curve_vertex").curve_vertex(x, y)
+
+    def begin_contour(self) -> None:
+        self._open_shape("begin_contour").begin_contour()
+
+    def end_contour(self) -> None:
+        self._open_shape("end_contour").end_contour()
+
+    def curve_tightness(self, tightness: float) -> None:
+        self._states.update(curve_tightness=float(tightness))
 
     def end_shape(self, close: bool = False) -> None:
         """Contract F3: closed shapes are filled then stroked; open ones are stroked only."""
         shape = self._open_shape("end_shape")
+        path = shape.build(close, self.style.curve_tightness)
         self._shape = None
-        if close and not shape.is_empty:
-            shape.close()
-        self._emit_path(shape.geometry)
+        self._emit_path(path)
 
-    def _open_shape(self, name: str) -> PathBuilder:
+    def bezier(self, x1, y1, cx1, cy1, cx2, cy2, x2, y2) -> None:
+        """A single cubic Bezier curve: open, so stroked only (F3)."""
+        self._emit_path(Path().move_to(x1, y1).cubic_to(cx1, cy1, cx2, cy2, x2, y2))
+
+    def curve(self, x1, y1, x2, y2, x3, y3, x4, y4) -> None:
+        """The Catmull-Rom curve from (x2, y2) to (x3, y3), steered by (x1, y1) and (x4, y4)."""
+        c1, c2 = catmull_rom_controls((x1, y1), (x2, y2), (x3, y3), (x4, y4), self.style.curve_tightness)
+        self._emit_path(Path().move_to(x2, y2).cubic_to(*c1, *c2, x3, y3))
+
+    def curve_point(self, a, b, c, d, t) -> float:
+        from .shapes import curve_point
+
+        return curve_point(a, b, c, d, t, self.style.curve_tightness)
+
+    def curve_tangent(self, a, b, c, d, t) -> float:
+        from .shapes import curve_tangent
+
+        return curve_tangent(a, b, c, d, t, self.style.curve_tightness)
+
+    def _open_shape(self, name: str) -> ShapeBuilder:
         if self._shape is None:
             raise RuntimeError(f"p.{name}() called outside a shape: call p.begin_shape() first.")
         return self._shape

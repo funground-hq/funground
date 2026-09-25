@@ -98,14 +98,14 @@ def test_vertices_become_a_move_then_lines(sketch, canvas):
     assert sketch.frame.ops[0].path.segments == (("move", (1, 2)), ("line", (3, 4)), ("line", (5, 6)))
 
 
-def test_bezier_curve_vertex_is_stroked_through_its_midpoint(sketch, canvas):
+def test_bezier_vertex_is_stroked_through_its_midpoint(sketch, canvas):
     p.background("white")
     p.no_fill()
     p.stroke("blue")
     p.stroke_width(3)
     p.begin_shape()
     p.vertex(20, 80)
-    p.curve_vertex(20, 0, 180, 0, 180, 80)   # cubic: the midpoint (t = 0.5) is at (100, 20)
+    p.bezier_vertex(20, 0, 180, 0, 180, 80)  # cubic: the midpoint (t = 0.5) is at (100, 20)
     p.end_shape()
     (op,) = sketch.frame.ops[1:]
     assert isinstance(op, ir.StrokePath)
@@ -115,10 +115,10 @@ def test_bezier_curve_vertex_is_stroked_through_its_midpoint(sketch, canvas):
     assert px(canvas, 20, 5) == WHITE     # the control point itself is not on the curve
 
 
-def test_curve_vertex_needs_a_starting_vertex(canvas):
+def test_bezier_vertex_needs_a_starting_vertex(canvas):
     p.begin_shape()
     with pytest.raises(RuntimeError, match=r"p\.vertex"):
-        p.curve_vertex(0, 0, 10, 10, 20, 20)
+        p.bezier_vertex(0, 0, 10, 10, 20, 20)
     p.end_shape()
 
 
