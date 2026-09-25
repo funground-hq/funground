@@ -14,11 +14,10 @@ section — plus the gallery and guide foundations and the Sprint 4 follow-ups.
 new public name has a contract row, tests, a gallery example with golden + snapshot, and a guide
 section; the guide and gallery build from the code (screenshots generated headless).
 
-**Decisions:** none open at start.
+**Decisions:** none open at start. Sprint opened 25 Sept 2026; D-016 decided the same day.
 **To be presented before the story that needs it:**
-- **D-016 event-callback naming** (before S-045): p5 uses `mouseIsPressed` for the live value and
-  `mousePressed()` for the callback; Playground already has the live value `p.mouse_pressed`
-  (v0.5, frozen), so the callback needs a different name.
+- ~~D-016 event-callback naming~~ — **decided 25 Sept 2026**: callbacks `mouse_pressed()` etc. (p5 names,
+  snake_case); live booleans `is_mouse_pressed`, `is_key_pressed`. Approved contract change to v0.5.
 - **D-017 colour-mode scope** (before S-044): whether `color_mode()` changes how *every* colour
   argument is read (p5/Processing behaviour) or only `p.color()`.
 
@@ -107,12 +106,13 @@ lives; alignment is designed once for both.
 - [ ] S-044.4 Contract S1 extended; tests; gallery `colour/`; guide chapter 4
 *Acceptance:* every v0.5 colour form still parses unchanged (frozen API).
 
-### S-045 Input events — E-26 *(needs D-016)*
-- [ ] S-045.1 Live values: `pmouse_x`, `pmouse_y`, `mouse_button` (`"left"|"right"|"center"|None`), `key` (last character), `key_code`, `key_pressed_now` (name per D-016)
-- [ ] S-045.2 Callbacks discovered by name like `setup`/`draw` (names per D-016): mouse pressed / released / moved / dragged / wheel; key pressed / released / typed
+### S-045 Input events — E-26 *(D-016 decided)*
+- [ ] S-045.0 Contract change (D-016): live value `mouse_pressed` → `is_mouse_pressed`; `p.mouse_pressed` raises an AttributeError naming the new name; update `08_mouse.py`, contract I1, API contract test, Quick Reference, snapshots if their serialised names change
+- [ ] S-045.1 Live values: `pmouse_x`, `pmouse_y`, `mouse_button` (`"left"|"right"|"center"|None`), `key` (last character), `key_code`, `is_key_pressed`
+- [ ] S-045.2 Callbacks discovered by name like `setup`/`draw`: `mouse_pressed`, `mouse_released`, `mouse_moved`, `mouse_dragged`, `mouse_wheel(delta)`, `key_pressed`, `key_released`, `key_typed`
 - [ ] S-045.3 Platform: events from pygame queued per frame and dispatched after input sampling, before `draw()`; headless platform supports scripted events for tests
 - [ ] S-045.4 Tests with scripted events; gallery `interaction/` (paint program, keyboard mover); guide chapter 10
-*Acceptance:* callbacks fire once per event in order; v0.5 polling (`mouse_pressed`, `key_down`) unchanged.
+*Acceptance:* callbacks fire once per event in order; polling via `is_mouse_pressed` and `key_down` works; the old name fails with a helpful message.
 
 ### S-058 ADR-003: deliberately out of scope — E-23
 - [ ] S-058.1 `docs/design/ADR-003-out-of-scope.md`: CMYK/print colour; sound synthesis; large filter libraries; Processing data/serial/network/video libraries; 3D before 1.0; browser before 1.0 (D-014) — each with the reason and what a learner uses instead
