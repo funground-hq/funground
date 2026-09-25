@@ -97,7 +97,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-040 | E-23 | Verify `Feature_Map.md` against the live p5.js 2.x, Processing 4 and DrawBot 3.x references; correct the inventory | 5 — done |
 | S-041 | E-24 | `square`, `triangle`, `quad`, `arc` (open/chord/pie), `polygon(points)` | 5 — done |
 | S-042 | E-24 | `stroke_cap`, `stroke_join`, `stroke_dash`, miter limit; `no_smooth()` opt-out | 5 — done |
-| S-043 | E-10 | `shear_x/shear_y`, `apply_matrix`, `reset_matrix` | 5 |
+| S-043 | E-10 | `shear_x/shear_y`, `apply_matrix`, `reset_matrix` | 5 — done |
 | S-044 | E-25 | `color_mode(RGB|HSB|HSL, max…)`, `color()` objects with component getters, `lerp_color` | 5 |
 | S-045 | E-26 | `pmouse_x/y`, `mouse_button`, wheel, drag; `mouse_pressed()/mouse_released()/mouse_moved()/key_pressed()/key_released()` callbacks; `key`, `key_code` | 5 |
 | S-046 | E-27 | `map_range`, `lerp`, `norm`, `mag`, `random_gaussian`, `random_choice` | 5 |

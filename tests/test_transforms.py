@@ -300,3 +300,80 @@ def test_style_set_without_push_carries_into_the_next_frame_like_p5():
     pygame.init()
     api.active_sketch().run_namespace({"draw": draw}, fps=1000, max_frames=3)
     assert seen == [WHITE, BLUE, BLUE]
+
+
+# ---------------------------------------------------------------- S-043: shear and matrices
+def test_apply_matrix_with_a_rotation_equals_rotate(canvas):
+    import math
+
+    def draw(use_matrix):
+        red_rects()
+        with p.saved_state():
+            p.translate(100, 50)
+            if use_matrix:
+                a = math.radians(30)
+                p.apply_matrix(math.cos(a), math.sin(a), -math.sin(a), math.cos(a), 0, 0)
+            else:
+                p.rotate(30)
+            p.rect(-30, -10, 60, 20)
+        return [px(canvas, x, y) for x in range(60, 140, 3) for y in range(20, 80, 3)]
+
+    assert draw(True) == draw(False)
+
+
+def test_shear_x_slants_sideways(canvas):
+    red_rects()
+    p.shear_x(45)                     # x moves by y
+    p.rect(10, 40, 20, 20)            # covers x 50..90 at y 40..60 roughly
+    assert px(canvas, 70, 50) == RED
+    assert px(canvas, 20, 50) == WHITE
+
+
+def test_shear_y_slants_up_and_down(canvas):
+    red_rects()
+    p.shear_y(45)                     # y moves by x
+    p.rect(40, 0, 20, 20)             # at x ~50 the rect sits at y ~50..70
+    assert px(canvas, 50, 60) == RED
+    assert px(canvas, 50, 10) == WHITE
+
+
+def test_ninety_degree_shear_and_flat_matrix_are_errors(canvas):
+    with pytest.raises(ValueError):
+        p.shear_x(90)
+    with pytest.raises(ValueError):
+        p.apply_matrix(1, 2, 2, 4, 0, 0)
+
+
+def test_reset_matrix_forgets_transforms_until_pop(canvas):
+    red_rects()
+    with p.saved_state():
+        p.translate(150, 0)
+        with p.saved_state():
+            p.reset_matrix()
+            p.rect(0, 0, 10, 10)          # at the real origin
+        p.rect(0, 20, 10, 10)             # translate is back: x 150..160
+    assert px(canvas, 5, 5) == RED
+    assert px(canvas, 155, 25) == RED and px(canvas, 5, 25) == WHITE
+
+
+def test_reset_matrix_keeps_the_hidpi_scale(monkeypatch):
+    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
+    from playground import api
+    from playground.sketch import Sketch
+
+    api.use_sketch(Sketch())
+    import pygame
+
+    pygame.init()
+    p.size(100, 50)
+    p.background("white")
+    p.no_stroke()
+    p.fill("red")
+    p.translate(40, 0)
+    p.reset_matrix()
+    p.rect(0, 0, 10, 10)
+    s = api.active_sketch()
+    s._render()
+    surf = s._platform.target
+    assert tuple(surf.get_at((19, 19))[:3]) == RED        # 10 logical px == 20 physical
+    assert tuple(surf.get_at((21, 5))[:3]) == WHITE

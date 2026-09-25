@@ -72,6 +72,11 @@ ADDED_FUNCTIONS = {
     "no_dash": "() -> 'None'",
     "no_smooth": "() -> 'None'",
     "smooth": "() -> 'None'",
+    # Sprint 5, S-043: shear and matrices (contract F8).
+    "shear_x": "(degrees: 'float') -> 'None'",
+    "shear_y": "(degrees: 'float') -> 'None'",
+    "apply_matrix": "(a: 'float', b: 'float', c: 'float', d: 'float', e: 'float', f: 'float') -> 'None'",
+    "reset_matrix": "() -> 'None'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

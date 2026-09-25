@@ -81,9 +81,9 @@ lives; alignment is designed once for both.
 - [x] S-042.4 Tests; gallery `lines/`; guide chapter 5 completed
 *Acceptance:* existing goldens byte-identical; each style visibly and testably distinct.
 
-### S-043 Shear and matrices — E-10
-- [ ] S-043.1 `shear_x(degrees)`, `shear_y(degrees)`, `apply_matrix(a, b, c, d, e, f)`, `reset_matrix()` — all through `ir.Concat` / a reset op
-- [ ] S-043.2 Contract F2 extended; tests; gallery `transforms/`; guide chapter 8 addendum
+### S-043 Shear and matrices — E-10 ✅
+- [x] S-043.1 `shear_x(degrees)`, `shear_y(degrees)`, `apply_matrix(a, b, c, d, e, f)`, `reset_matrix()` — all through `ir.Concat` / a reset op
+- [x] S-043.2 Contract F2 extended; tests; gallery `transforms/`; guide chapter 8 addendum
 *Acceptance:* `apply_matrix` with a rotation matrix equals `rotate` pixel-for-pixel.
 
 ### S-046 Mapping and interpolation helpers — E-27

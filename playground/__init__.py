@@ -20,6 +20,7 @@ Typical use::
 
 from . import api as _api
 from .api import (
+    apply_matrix,
     arc,
     background,
     begin_shape,
@@ -52,11 +53,14 @@ from .api import (
     random,
     random_seed,
     rect,
+    reset_matrix,
     rotate,
     run,
     save,
     saved_state,
     scale,
+    shear_x,
+    shear_y,
     size,
     smooth,
     square,
@@ -77,6 +81,7 @@ from .api import (
 __version__ = "0.7.0.dev0"
 
 __all__ = [
+    "apply_matrix",
     "arc",
     "background",
     "begin_shape",
@@ -109,11 +114,14 @@ __all__ = [
     "random",
     "random_seed",
     "rect",
+    "reset_matrix",
     "rotate",
     "run",
     "save",
     "saved_state",
     "scale",
+    "shear_x",
+    "shear_y",
     "size",
     "smooth",
     "square",

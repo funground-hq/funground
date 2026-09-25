@@ -41,6 +41,11 @@ class Transform:
         return cls(a=cos, b=sin, c=-sin, d=cos)
 
     @classmethod
+    def shearing(cls, x_degrees: float = 0.0, y_degrees: float = 0.0) -> "Transform":
+        """x' = x + tan(x_degrees) * y ; y' = y + tan(y_degrees) * x (S-043)."""
+        return cls(b=math.tan(math.radians(y_degrees)), c=math.tan(math.radians(x_degrees)))
+
+    @classmethod
     def scaling(cls, sx: float, sy: float | None = None) -> "Transform":
         return cls(a=sx, d=sx if sy is None else sy)
 

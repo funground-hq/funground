@@ -102,6 +102,11 @@ class Concat(Op):
 
 
 @dataclass(frozen=True, slots=True)
+class ResetMatrix(Op):
+    """Back to the untransformed coordinate system (S-043); undone by the enclosing Restore."""
+
+
+@dataclass(frozen=True, slots=True)
 class ClipPath(Op):
     path: Path
 
@@ -136,10 +141,10 @@ class SetAntialias(Op):
     on: bool
 
 
-AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias]
+AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix]
 OP_TYPES: dict[str, type] = {
     cls.__name__: cls
-    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias)
+    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix)
 }
 
 

@@ -34,6 +34,16 @@ p.run()
 
 ![saved_state](../gallery/images/transforms-02_saved_state.png)
 
+## Slanting and whole matrices
+
+| Function | Effect |
+|---|---|
+| `p.shear_x(degrees)` / `p.shear_y(degrees)` | Slant later drawing sideways / up and down |
+| `p.apply_matrix(a, b, c, d, e, f)` | Multiply in a whole transform: `x' = a·x + c·y + e`, `y' = b·x + d·y + f` |
+| `p.reset_matrix()` | Forget every transform so far, until the end of the `saved_state` block |
+
+![Shear and matrices](../gallery/images/transforms-03_shear_and_matrices.png)
+
 ## Order matters
 
 `p.translate(100, 0)` then `p.rotate(45)` turns the drawing around the **new** origin. The other

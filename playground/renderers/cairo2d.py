@@ -86,6 +86,7 @@ class CairoRenderer:
         # Contract F2: the transform stack resets every frame, so a top-level
         # Concat must not carry over to the next frame on the window context.
         ctx.save()
+        self._base_matrix = ctx.get_matrix()      # reset_matrix() returns here (keeps the HiDPI scale)
         try:
             self._draw_ops(ctx, frame)
         finally:
@@ -111,6 +112,8 @@ class CairoRenderer:
                 self._path(ctx, op.path); ctx.clip()
             elif t is ir.ResetClip:
                 ctx.reset_clip()
+            elif t is ir.ResetMatrix:
+                ctx.set_matrix(self._base_matrix)
             elif t is ir.FillPath:
                 self._path(ctx, op.path); self._source(ctx, op.color); ctx.fill()
             elif t is ir.StrokePath:

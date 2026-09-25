@@ -121,6 +121,14 @@ with p.saved_state(): is push() and pop() in one block: whatever the block chang
 
 Source: [`examples/gallery/transforms/02_saved_state.py`](../../examples/gallery/transforms/02_saved_state.py)
 
+### Shear and matrices
+
+![Shear and matrices](images/transforms-03_shear_and_matrices.png)
+
+shear_x and shear_y slant everything drawn afterwards; apply_matrix multiplies in any transform at once; reset_matrix forgets all transforms until the end of the saved_state block.
+
+Source: [`examples/gallery/transforms/03_shear_and_matrices.py`](../../examples/gallery/transforms/03_shear_and_matrices.py)
+
 ## Paths and clipping
 
 ### A star from vertices

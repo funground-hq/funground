@@ -603,6 +603,9 @@ appears. Transforms add up, and they apply to shapes, text, paths and clips alik
 | `p.translate(dx, dy)` | Move the origin: everything drawn afterwards is shifted by (dx, dy). | `p.translate(p.width / 2, p.height / 2)` |
 | `p.rotate(degrees)` | Turn later drawing about the current origin. **Degrees**; 90 is a quarter turn clockwise on screen. | `p.rotate(45)` |
 | `p.scale(s)` | Grow (`s > 1`) or shrink (`s < 1`) later drawing about the origin. `scale(0)` is an error. | `p.scale(2)` |
+| `p.shear_x(degrees)` / `p.shear_y(degrees)` | Slant later drawing sideways / up and down. | `p.shear_x(20)` |
+| `p.apply_matrix(a, b, c, d, e, f)` | Multiply in x' = a·x + c·y + e, y' = b·x + d·y + f. | `p.apply_matrix(1, 0, 0.5, 1, 0, 0)` |
+| `p.reset_matrix()` | Forget all transforms until the enclosing `pop()`. | `p.reset_matrix()` |
 | `p.scale(sx, sy)` | Scale by different amounts sideways and up-and-down. | `p.scale(2, 1)  # stretch sideways` |
 | `p.push()` | Save the current transform **and** style (fill, stroke, stroke width, text size). | `p.push()` |
 | `p.pop()` | Restore what the last `push()` saved — everything. | `p.pop()` |
