@@ -121,6 +121,14 @@ p.delta_time is the number of seconds the last frame took. Moving by speed * del
 
 Source: [`examples/gallery/animation/02_time_based.py`](../../examples/gallery/animation/02_time_based.py)
 
+### A clock
+
+![A clock](images/animation-03_clock.png)
+
+hour(), minute() and second() read the computer's clock; day(), month() and year() the date. millis() counts milliseconds since the sketch started and frame_rate() says how many frames per second it is really drawing. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/animation/03_clock.py`](../../examples/gallery/animation/03_clock.py)
+
 ## Transforms
 
 ### Rotating squares

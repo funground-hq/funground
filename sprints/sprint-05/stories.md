@@ -98,10 +98,11 @@ lives; alignment is designed once for both.
 - [x] S-047.3 Tests (determinism, range, continuity); gallery `noise/` (landscape line, flow field, texture); guide chapter 11
 *Acceptance:* same seed gives the same field on every platform.
 
-### S-048 Loop control and time — E-29
-- [ ] S-048.1 `no_loop()`, `loop()`, `redraw()` — the window stays open and responsive when not looping; `is_looping()`
-- [ ] S-048.2 `millis()` (since `run()` started), `frame_rate()` (measured fps, live), `exit()` (alias semantics of `stop()` documented); `second()`, `minute()`, `hour()`, `day()`, `month()`, `year()` (from S-040)
-- [ ] S-048.3 Tests with the headless platform; gallery `animation/`; guide chapter 7 completed
+### S-048 Loop control and time — E-29 ✅
+*As built:* draw() always runs on the first frame (p5); `run(max_frames=)` now counts loop iterations; a frame that draws nothing is still presented (fixes a headless capture edge case). The gallery example for `no_loop/loop/redraw/is_looping/exit` needs an input callback, so it lands with S-045 (listed in the gallery allowlist until then).
+- [x] S-048.1 `no_loop()`, `loop()`, `redraw()` — the window stays open and responsive when not looping; `is_looping()`
+- [x] S-048.2 `millis()` (since `run()` started), `frame_rate()` (measured fps, live), `exit()` (alias semantics of `stop()` documented); `second()`, `minute()`, `hour()`, `day()`, `month()`, `year()` (from S-040)
+- [x] S-048.3 Tests with the headless platform; gallery `animation/`; guide chapter 7 completed
 *Acceptance:* a `no_loop()` sketch draws exactly once and still responds to `redraw()`.
 
 ### S-044 Colour constructors and colour objects — E-25 *(D-017 = C)*

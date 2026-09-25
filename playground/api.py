@@ -62,6 +62,71 @@ def stop() -> None:
     active_sketch().stop()
 
 
+def exit() -> None:  # noqa: A001 - p5/Processing name; shadows the REPL helper only inside playground
+    """End the sketch after this frame (the same as p.stop())."""
+    active_sketch().exit()
+
+
+def no_loop() -> None:
+    """Stop calling draw() every frame; the window stays open. loop() or redraw() bring it back."""
+    active_sketch().no_loop()
+
+
+def loop() -> None:
+    """Call draw() every frame again after no_loop()."""
+    active_sketch().loop()
+
+
+def redraw() -> None:
+    """Call draw() once more, e.g. after a key press while not looping."""
+    active_sketch().redraw()
+
+
+def is_looping() -> bool:
+    """True while draw() is called every frame."""
+    return active_sketch().is_looping()
+
+
+def millis() -> int:
+    """Milliseconds since the sketch started running."""
+    return active_sketch().millis()
+
+
+def frame_rate() -> float:
+    """Frames per second actually achieved (smoothed); 0.0 until the second frame."""
+    return active_sketch().frame_rate()
+
+
+def second() -> int:
+    """The clock's seconds, 0-59."""
+    return Sketch.second()
+
+
+def minute() -> int:
+    """The clock's minutes, 0-59."""
+    return Sketch.minute()
+
+
+def hour() -> int:
+    """The clock's hour, 0-23."""
+    return Sketch.hour()
+
+
+def day() -> int:
+    """The day of the month, 1-31."""
+    return Sketch.day()
+
+
+def month() -> int:
+    """The month, 1-12."""
+    return Sketch.month()
+
+
+def year() -> int:
+    """The year, e.g. 2026."""
+    return Sketch.year()
+
+
 def save(path: str) -> None:
     """Save this frame to a .png, .pdf or .svg file (written when the frame is complete)."""
     active_sketch().save(path)

@@ -399,6 +399,10 @@ frame. Leave it out if you intentionally want trails.
 | `p.delta_time` | Seconds taken by the previous frame (0.0 in the first). For time-based motion. | `x += 120 * p.delta_time  # ~120 px per second` |
 | `p.stop()` | Ask the main loop to stop. | `if x > p.width: p.stop()` |
 | `p.run(max_frames=n)` | Stop automatically after `n` frames. | `p.run(max_frames=300)` |
+| `p.no_loop()` / `p.loop()` / `p.redraw()` / `p.is_looping()` | Stop drawing every frame (draw still runs once) / resume / draw once more / check. | `p.no_loop()` |
+| `p.exit()` | End the sketch (same as `p.stop()`). | `p.exit()` |
+| `p.millis()` / `p.frame_rate()` | Milliseconds since start / frames per second achieved. | `p.millis()` |
+| `p.second()` `p.minute()` `p.hour()` `p.day()` `p.month()` `p.year()` | The clock and date. | `p.hour()` |
 
 **Moving at the same speed on any computer.** `p.delta_time` makes motion depend on time, not on
 how many frames the computer manages:

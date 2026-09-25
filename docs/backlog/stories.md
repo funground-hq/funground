@@ -102,7 +102,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-045 | E-26 | `pmouse_x/y`, `mouse_button`, wheel, drag; `mouse_pressed()/mouse_released()/mouse_moved()/key_pressed()/key_released()` callbacks; `key`, `key_code` | 5 |
 | S-046 | E-27 | `map_range`, `lerp`, `norm`, `mag`, `random_gaussian`, `random_choice` | 5 — done |
 | S-047 | E-27 | `noise(x[, y[, z]])`, `noise_seed`, `noise_detail` — deterministic, seeded | 5 — done |
-| S-048 | E-29 | `no_loop`, `loop`, `redraw`, `millis`, `frame_rate()` query, `exit()` | 5 |
+| S-048 | E-29 | `no_loop`, `loop`, `redraw`, `millis`, `frame_rate()` query, `exit()` | 5 — done |
 | S-049 | E-15 | `text_align(h, v)`, `text_ascent/descent`, cap height; `text_width` already in S-037 | 6 (moved: designed with multi-line layout) |
 | S-050 | E-25 | Linear and radial gradients for fill and stroke (IR op + Cairo + export) | 6 |
 | S-051 | E-25 | `blend_mode`, global `opacity`, `shadow` | 6 |

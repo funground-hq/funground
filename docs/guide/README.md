@@ -12,7 +12,7 @@ Every complete example in this guide is tested: it runs exactly as printed.
 | 4 | [Colour](04_colour.md) | partial — HSB/HSL and colour objects in Sprint 5 (S-044) |
 | 5 | [Fill, stroke and lines](05_fill_stroke_lines.md) | ready |
 | 6 | [Text](06_text.md) | partial — alignment and multi-line text in Sprint 6 |
-| 7 | [Animation and time](07_animation_and_time.md) | partial — loop control and clock in Sprint 5 (S-048) |
+| 7 | [Animation and time](07_animation_and_time.md) | ready |
 | 8 | [Transforms and saved_state](08_transforms.md) | ready |
 | 9 | [Paths and clipping](09_paths_and_clipping.md) | ready |
 | 10 | [Interaction: mouse and keyboard](10_interaction.md) | planned — Sprint 5 (S-045) |
