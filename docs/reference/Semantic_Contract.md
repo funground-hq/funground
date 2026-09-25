@@ -69,6 +69,7 @@ provide capabilities.* This table is what "owns" means.
 | H1 | `random(high)` / `random(low, high)` | Uniform float; **Phase 0:** uses Playground's own generator, `random_seed(seed)` makes it repeatable and never touches the learner's `import random` | Same | Pinned |
 | H2 | `constrain`, `distance` | Clamp; Euclidean distance | Same | Pinned |
 | H3 | Helpers (S-046) | `map_range(v, a1, b1, a2, b2, clamp=False)` (named so it never shadows Python's `map`); `lerp(a, b, t)`; `norm(v, a, b)`; `mag(x, y)`. Empty ranges → `ValueError`. `random_gaussian(mean=0, sd=1)` and `random_choice(items)` use Playground's generator, so `random_seed` makes them repeatable along with `random` | Same | Pinned (Sprint 5) |
+| H4 | Noise (S-047) | `noise(x, y=0, z=0)` returns 0–1 and changes smoothly with its inputs. **p5.js's algorithm and seed generator**: after `noise_seed(n)` the values equal p5's after `noiseSeed(n)`. Unseeded, the pattern differs each run (as in p5); `random_seed` does not affect it. Negative inputs are mirrored (p5). `noise_detail(octaves, falloff=None)`: octaves ≥ 1 (default 4), 0 < falloff < 1 (default 0.5). Pure Python: ~7 µs per sample at 4 octaves on the teaching machine | Same | Pinned (Sprint 5) |
 
 ## Reserved for Phase 2 (not in v0.5)
 

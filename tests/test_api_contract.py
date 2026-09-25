@@ -96,6 +96,10 @@ ADDED_FUNCTIONS = {
     "lerp": "(start: 'float', stop: 'float', amount: 'float') -> 'float'",
     "norm": "(value: 'float', start: 'float', stop: 'float') -> 'float'",
     "mag": "(x: 'float', y: 'float') -> 'float'",
+    # Sprint 5, S-047: noise (contract H4).
+    "noise": "(x: 'float', y: 'float' = 0.0, z: 'float' = 0.0) -> 'float'",
+    "noise_seed": "(seed: 'int') -> 'None'",
+    "noise_detail": "(octaves: 'int', falloff: 'float | None' = None) -> 'None'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}
