@@ -167,6 +167,31 @@ class Sketch:
             raise ValueError("scale factor must not be 0 (nothing could be drawn)")
         self._emit(ir.Concat(Transform.scaling(sx, sy)))
 
+    def shear_x(self, degrees: float) -> None:
+        """Slant later drawing sideways: x moves by tan(degrees) * y."""
+        self._shear(degrees, 0.0)
+
+    def shear_y(self, degrees: float) -> None:
+        """Slant later drawing up/down: y moves by tan(degrees) * x."""
+        self._shear(0.0, degrees)
+
+    def _shear(self, x_degrees: float, y_degrees: float) -> None:
+        for d in (x_degrees, y_degrees):
+            if abs(math.cos(math.radians(d))) < 1e-9:
+                raise ValueError("a shear of 90 degrees (or 270) would be infinitely slanted")
+        self._emit(ir.Concat(Transform.shearing(x_degrees, y_degrees)))
+
+    def apply_matrix(self, a: float, b: float, c: float, d: float, e: float, f: float) -> None:
+        """Multiply in x' = a*x + c*y + e, y' = b*x + d*y + f (the p5 / Canvas order)."""
+        t = Transform(float(a), float(b), float(c), float(d), float(e), float(f))
+        if t.determinant() == 0:
+            raise ValueError("p.apply_matrix(): this matrix squashes everything flat (its determinant is 0)")
+        self._emit(ir.Concat(t))
+
+    def reset_matrix(self) -> None:
+        """Forget every translate/rotate/scale/shear so far (until the enclosing pop())."""
+        self._emit(ir.ResetMatrix())
+
     @staticmethod
     def radians(degrees: float) -> float:
         return math.radians(degrees)

@@ -209,6 +209,26 @@ def scale(sx: float, sy: float | None = None) -> None:
     active_sketch().scale(sx, sy)
 
 
+def shear_x(degrees: float) -> None:
+    """Slant later drawing sideways by *degrees* (x moves by tan(degrees) * y)."""
+    active_sketch().shear_x(degrees)
+
+
+def shear_y(degrees: float) -> None:
+    """Slant later drawing up or down by *degrees* (y moves by tan(degrees) * x)."""
+    active_sketch().shear_y(degrees)
+
+
+def apply_matrix(a: float, b: float, c: float, d: float, e: float, f: float) -> None:
+    """Multiply in a whole transform: x' = a*x + c*y + e, y' = b*x + d*y + f."""
+    active_sketch().apply_matrix(a, b, c, d, e, f)
+
+
+def reset_matrix() -> None:
+    """Forget every translate/rotate/scale/shear so far, until the enclosing pop()."""
+    active_sketch().reset_matrix()
+
+
 def push() -> None:
     """Save the current transform and style; pop() brings them back."""
     active_sketch().push()

@@ -49,6 +49,7 @@ def test_every_op_round_trips_through_json():
         ir.StrokePath(path, Color(9, 9, 9), 2.5),
         ir.StrokePath(path, Color(1, 2, 3), 4.0, "butt", "bevel", 4.0, (6.0, 2.0), 1.5),
         ir.SetAntialias(False),
+        ir.ResetMatrix(),
     ]
     assert {type(o) for o in ops} == set(ir.OP_TYPES.values()), "add new ops to this test"
     text = json.dumps(ir.Frame(ops).to_jsonable(), sort_keys=True)
