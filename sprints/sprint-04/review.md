@@ -127,8 +127,16 @@ uharfbuzz 0.56.2. **CI has not run** (S-039); all counts are from the teaching m
 
 ## Sign-off
 
-*Not yet signed off.* Awaiting the maintainer's review of the reviewer's guide checklist and a
-decision on D-013.
+**Closed 25 September 2026** by the maintainer.
+
+- D-013 decided: `with p.saved_state():` (renamed, commit 500f677).
+- Verifier findings not fixed in Sprint 4 (F2 wording, empty-path clip, Linux window route, minor
+  items) are carried as **S-067** in Sprint 5.
+- S-038 accepted as *code path only, unverified on macOS/Linux hardware*; an owner for hardware
+  verification is still to be named (tracked in the v1.0 hardening stage of `docs/Roadmap.md`).
+- S-039 (first CI run) carried, blocked on a git remote.
+- Scope decisions taken while the sprint was open: D-014 (1.0 is desktop Cairo 2D; browser
+  directional) and D-015 (Phase 2 releases as v0.7 with a User Guide and Examples Gallery).
 
 ## Retrospective
 
