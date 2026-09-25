@@ -1,0 +1,80 @@
+"""Regenerate the Quick Reference screenshots from the code they document (S-030).
+
+    python tools/make_reference_images.py            # every sketch
+    python tools/make_reference_images.py 05_text    # just one
+
+Each ``examples/reference/*.py`` sketch is run headless (``PLAYGROUND_HEADLESS=1``,
+no window, no SDL) for ``FRAMES`` frames; on the last frame the harness asks
+Playground to ``p.save()`` the picture to ``docs/reference/images/<stem>.png``.
+The sketches are ordinary learner sketches - they call ``p.run()`` themselves -
+so a picture in the reference can never drift from the code beside it.
+"""
+from __future__ import annotations
+
+import inspect
+import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+import playground  # noqa: E402
+from playground import api  # noqa: E402
+from playground.platform.headless import HeadlessPlatform  # noqa: E402
+from playground.sketch import Sketch  # noqa: E402
+
+SKETCHES = ROOT / "examples" / "reference"
+IMAGES = ROOT / "docs" / "reference" / "images"
+FRAMES = 30  # the same length as the Session-1 golden runs; deterministic sketches only
+
+
+def render(sketch: Path, out: Path, frames: int = FRAMES) -> Path:
+    """Run *sketch* headless for *frames* frames and p.save() the last one to *out*."""
+    out.parent.mkdir(parents=True, exist_ok=True)
+    api.use_sketch(Sketch(platform=HeadlessPlatform()))
+    source = sketch.read_text(encoding="utf-8")
+    namespace: dict[str, object] = {"__name__": "__sketch__", "__file__": str(sketch)}
+
+    def harness_run(*, fps=None, max_frames=frames):
+        sketch_globals = inspect.currentframe().f_back.f_globals
+        draw = sketch_globals.get("draw")
+        if callable(draw):
+            def draw_and_save():
+                draw()
+                if api.active_sketch().frame_count == max_frames - 1:
+                    playground.save(str(out))
+
+            sketch_globals["draw"] = draw_and_save
+        api.active_sketch().run_namespace(sketch_globals, fps=1000, max_frames=max_frames)
+
+    original = playground.run
+    playground.run = harness_run
+    try:
+        exec(compile(source, str(sketch), "exec"), namespace)
+    finally:
+        playground.run = original
+    if not out.exists():
+        raise RuntimeError(f"{sketch.name} did not reach frame {frames}; nothing saved")
+    return out
+
+
+def main(argv: list[str]) -> int:
+    os.environ["PLAYGROUND_HEADLESS"] = "1"
+    wanted = set(argv)
+    sketches = sorted(SKETCHES.glob("*.py"))
+    if wanted:
+        sketches = [s for s in sketches if s.stem in wanted or s.name in wanted]
+        missing = wanted - {s.stem for s in sketches} - {s.name for s in sketches}
+        if missing:
+            print(f"no such reference sketch: {', '.join(sorted(missing))}", file=sys.stderr)
+            return 2
+    for sketch in sketches:
+        out = render(sketch, IMAGES / f"{sketch.stem}.png")
+        print(f"{sketch.relative_to(ROOT)} -> {out.relative_to(ROOT)}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
