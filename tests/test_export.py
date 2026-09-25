@@ -83,3 +83,37 @@ def test_pdf_export_from_a_session1_sketch(tmp_path):
     patched.write_text(src, encoding="utf-8")
     run_sketch(patched, frames=2)
     assert out.read_bytes()[:5] == b"%PDF-" and out.stat().st_size > 1000
+
+
+def test_png_saves_what_is_on_screen_including_earlier_frames(tmp_path):
+    """A sketch that paints without clearing: the PNG holds every frame's drawing."""
+    import cairo
+
+    from playground import api
+    from playground.platform.headless import HeadlessPlatform
+    from playground.sketch import Sketch
+
+    out = tmp_path / "painting.png"
+    s = api.use_sketch(Sketch(platform=HeadlessPlatform()))
+
+    def setup():
+        p.size(100, 50)
+        p.background("white")
+
+    def draw():
+        p.no_stroke()
+        p.fill("red")
+        p.rect(p.frame_count * 30, 10, 20, 20)        # a new square each frame, nothing cleared
+        if p.frame_count == 2:
+            p.save(str(out))
+
+    s.run_namespace({"setup": setup, "draw": draw}, max_frames=3)
+    surf = cairo.ImageSurface.create_from_png(str(out))
+    data, stride = surf.get_data(), surf.get_stride()
+
+    def rgb(x, y):
+        i = y * stride + x * 4
+        return (data[i + 2], data[i + 1], data[i])
+
+    assert rgb(10, 20) == (255, 0, 0) and rgb(40, 20) == (255, 0, 0) and rgb(70, 20) == (255, 0, 0)
+    assert rgb(25, 20) == (255, 255, 255)

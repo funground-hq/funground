@@ -29,6 +29,10 @@ p.run(max_frames=1)
 | `.pdf` | A document made of shapes: sharp at any size, good for printing |
 | `.svg` | Shapes for the web or for editing in a drawing program |
 
+A **PNG** holds exactly what is in the window — including everything earlier frames left there.
+A **PDF or SVG** holds the shapes drawn in *that one frame*, so for those, draw the whole picture
+in the frame you save (start `draw()` with `p.background(...)`).
+
 In PDF and SVG files, text is saved as letter *shapes*, so it looks right everywhere but cannot
 yet be selected or searched.
 

@@ -262,11 +262,14 @@ class Sketch:
     def _flush_saves(self) -> None:
         if not self._pending_saves:
             return
-        from .export import save_frame
+        from .export import format_of, save_frame, save_pixels
 
         paths, self._pending_saves = self._pending_saves, []
         for path in paths:
-            save_frame(self.frame, path, self.width, self.height, self._platform.backing_scale)
+            if format_of(path) == "png":
+                save_pixels(self._renderer.pixels(), path)      # what is on screen
+            else:
+                save_frame(self.frame, path, self.width, self.height, self._platform.backing_scale)
 
     # ------------------------------------------------------------ style
     def fill(self, color: ColorLike) -> None:
