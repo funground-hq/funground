@@ -100,6 +100,20 @@ ADDED_FUNCTIONS = {
     "noise": "(x: 'float', y: 'float' = 0.0, z: 'float' = 0.0) -> 'float'",
     "noise_seed": "(seed: 'int') -> 'None'",
     "noise_detail": "(octaves: 'int', falloff: 'float | None' = None) -> 'None'",
+    # Sprint 5, S-048: loop control and the clock (contract R10).
+    "exit": "() -> 'None'",
+    "no_loop": "() -> 'None'",
+    "loop": "() -> 'None'",
+    "redraw": "() -> 'None'",
+    "is_looping": "() -> 'bool'",
+    "millis": "() -> 'int'",
+    "frame_rate": "() -> 'float'",
+    "second": "() -> 'int'",
+    "minute": "() -> 'int'",
+    "hour": "() -> 'int'",
+    "day": "() -> 'int'",
+    "month": "() -> 'int'",
+    "year": "() -> 'int'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

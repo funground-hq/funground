@@ -44,6 +44,27 @@ x += 150 * p.delta_time      # 150 pixels per second
 | `p.delta_time` | Seconds taken by the previous frame (`0.0` in the first) |
 | `p.size(..., fps=30)` | Ask for 30 frames per second instead of 60 |
 
-*Coming in Sprint 5:* `no_loop()`, `loop()`, `redraw()`, `millis()`, `frame_rate()` and the clock.
+## Pausing: no_loop, loop and redraw
+
+| Function | What it does |
+|---|---|
+| `p.no_loop()` | Stop calling `draw()` every frame. The window stays open. `draw()` still runs **once** at the start — even if `no_loop()` is in `setup()` — so a still picture needs nothing else |
+| `p.loop()` | Call `draw()` every frame again |
+| `p.redraw()` | Call `draw()` just once more, e.g. when a key is pressed |
+| `p.is_looping()` | `True` while `draw()` runs every frame |
+| `p.exit()` | End the sketch — the same as `p.stop()` |
+
+`p.frame_count` only counts frames that were actually drawn.
+
+## Clocks and timers
+
+| Function | Gives |
+|---|---|
+| `p.millis()` | Whole milliseconds since the sketch started |
+| `p.frame_rate()` | Frames per second actually achieved |
+| `p.second()`, `p.minute()`, `p.hour()` | The computer's clock |
+| `p.day()`, `p.month()`, `p.year()` | Today's date |
+
+![A clock](../gallery/images/animation-03_clock.png)
 
 **Next:** [8. Transforms and saved_state](08_transforms.md)

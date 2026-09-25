@@ -9,7 +9,9 @@ wrappers over the active Sketch.
 from __future__ import annotations
 
 import contextlib
+import datetime
 import math
+import time
 import random as _random
 import warnings
 from collections.abc import Callable, Iterator
@@ -92,6 +94,11 @@ class Sketch:
         self.frame_count = 0
         self.delta_time = 0.0
         self.running = False
+        # Loop control and clock (S-048, contract R10).
+        self._looping = True
+        self._redraw_pending = False
+        self._start_time = time.perf_counter()
+        self._fps_measured = 0.0
         self._has_window = False
         # ((width, height), RGB bytes) of the final frame when run(max_frames=)
         # stops the sketch; used by the regression suite.
@@ -236,11 +243,12 @@ class Sketch:
     def _render(self) -> None:
         """Draw everything recorded so far and present it; the frame then starts empty."""
         self._end_draw()
-        if self.frame or self._pending_saves:
-            self._renderer.render(self.frame)
-            self._platform.present(self._renderer.pixels())
-            self._flush_saves()
-            self.frame.clear()
+        # Always present, even a frame that drew nothing: the canvas is still a frame
+        # (the headless platform has nothing to capture otherwise).
+        self._renderer.render(self.frame)
+        self._platform.present(self._renderer.pixels())
+        self._flush_saves()
+        self.frame.clear()
 
     # ------------------------------------------------------------ export
     def save(self, path: str) -> None:
@@ -596,6 +604,53 @@ class Sketch:
     def stop(self) -> None:
         self.running = False
 
+    # ---- loop control and clock (S-048, contract R10)
+    def exit(self) -> None:
+        """Same as stop(): the sketch ends after the current frame."""
+        self.stop()
+
+    def no_loop(self) -> None:
+        self._looping = False
+
+    def loop(self) -> None:
+        self._looping = True
+
+    def redraw(self) -> None:
+        self._redraw_pending = True
+
+    def is_looping(self) -> bool:
+        return self._looping
+
+    def millis(self) -> int:
+        return int((time.perf_counter() - self._start_time) * 1000)
+
+    def frame_rate(self) -> float:
+        return self._fps_measured
+
+    @staticmethod
+    def second() -> int:
+        return datetime.datetime.now().second
+
+    @staticmethod
+    def minute() -> int:
+        return datetime.datetime.now().minute
+
+    @staticmethod
+    def hour() -> int:
+        return datetime.datetime.now().hour
+
+    @staticmethod
+    def day() -> int:
+        return datetime.datetime.now().day
+
+    @staticmethod
+    def month() -> int:
+        return datetime.datetime.now().month
+
+    @staticmethod
+    def year() -> int:
+        return datetime.datetime.now().year
+
     def run_namespace(
         self, namespace: Namespace, *, fps: int | None = None, max_frames: int | None = None
     ) -> None:
@@ -615,6 +670,11 @@ class Sketch:
         self.running = True
         self.frame_count = 0
         self.delta_time = 0.0
+        self._looping = True
+        self._redraw_pending = False
+        self._start_time = time.perf_counter()
+        self._fps_measured = 0.0
+        iterations = 0          # run(max_frames=n) counts loop iterations, so no_loop() sketches end too
         if fps is not None:
             self.fps = int(fps)
 
@@ -632,19 +692,26 @@ class Sketch:
                 inp = self._platform.input_state()
                 self.mouse_x, self.mouse_y, self.mouse_pressed = inp.mouse_x, inp.mouse_y, inp.mouse_pressed
 
-                if not self._smooth:
-                    self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
-                draw()
-                self._end_draw()  # unbalanced push()es never leak into the next frame
-                if max_frames is not None and self.frame_count + 1 >= max_frames:
-                    self.last_ops = self.frame.ops  # what the final frame asked for (IR snapshot)
-                self._render()   # draws, presents, flushes p.save()
+                # draw() runs every frame while looping, once after redraw(), and always on
+                # the first frame - even after no_loop() in setup(), as in p5.
+                if self._looping or self._redraw_pending or self.frame_count == 0:
+                    self._redraw_pending = False
+                    if not self._smooth:
+                        self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
+                    draw()
+                    self._end_draw()  # unbalanced push()es never leak into the next frame
+                    self.last_ops = self.frame.ops  # what the latest drawn frame asked for (IR snapshot)
+                    self._render()   # draws, presents, flushes p.save()
+                    self.frame_count += 1
 
-                self.frame_count += 1
-                if max_frames is not None and self.frame_count >= max_frames:
+                iterations += 1
+                if max_frames is not None and iterations >= max_frames:
                     self.last_frame = self._platform.capture()
                     self.running = False
                 self.delta_time = self._platform.tick(self.fps)
+                if self.delta_time > 0:
+                    now = 1.0 / self.delta_time
+                    self._fps_measured = now if self._fps_measured == 0 else self._fps_measured * 0.9 + now * 0.1
         finally:
             self.running = False
             self.frame.clear()

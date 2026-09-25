@@ -59,6 +59,7 @@ provide capabilities.* This table is what "owns" means.
 | R7 | Re-running | **v0.5 bug:** a second `p.run()` in one process crashed unless `setup()` called `size()` (dead display surface kept). Fixed in Phase 0 | Works | Pinned |
 | R8 | Headless | Works with `SDL_VIDEODRIVER=dummy`; used by the test suite | A first-class headless/export mode later | Pinned |
 | R9 | Errors | Drawing before `size()` → `RuntimeError` naming `p.size`; non-positive size/fps → `ValueError` | Same; unsupported-capability errors name the extra to install | Pinned |
+| R10 | Loop control and clock (S-048) | — | `no_loop()` stops calling `draw()` each frame; the window stays open and events are still handled. `draw()` **always runs on the first frame**, even after `no_loop()` in `setup()` (p5). `redraw()` runs `draw()` once more; `loop()` resumes; `is_looping()`. `frame_count` counts `draw()` calls only. `run(max_frames=n)` counts loop iterations, so non-looping sketches end too. `millis()` = whole milliseconds since `run()` started; `frame_rate()` = measured fps (smoothed; 0.0 before the second frame). `exit()` = `stop()`. `second() minute() hour() day() month() year()` from the local clock | Pinned (Sprint 5) |
 
 ## Input and helpers
 
