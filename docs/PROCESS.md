@@ -67,7 +67,9 @@ line. Any DECISION it depends on is named.
 
 **Done** — all tasks checked; tests added or updated and the whole suite green on the CI matrix;
 `docs/design/Semantic_Contract.md` updated in the same change if a semantic moved; goldens
-regenerated only as a deliberate, reviewed act.
+regenerated only as a deliberate, reviewed act. **From Sprint 5 (D-015):** a story that adds a
+public feature also adds its Examples Gallery sketch (with golden and IR snapshot) and its User
+Guide section, in the same story.
 
 ## Decisions
 

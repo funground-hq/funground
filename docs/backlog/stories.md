@@ -100,10 +100,10 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-043 | E-10 | `shear_x/shear_y`, `apply_matrix`, `reset_matrix` | 5 |
 | S-044 | E-25 | `color_mode(RGB|HSB|HSL, max…)`, `color()` objects with component getters, `lerp_color` | 5 |
 | S-045 | E-26 | `pmouse_x/y`, `mouse_button`, wheel, drag; `mouse_pressed()/mouse_released()/mouse_moved()/key_pressed()/key_released()` callbacks; `key`, `key_code` | 5 |
-| S-046 | E-27 | `map`, `lerp`, `norm`, `mag`, `random_gaussian`, `random_choice` | 5 |
+| S-046 | E-27 | `map_range`, `lerp`, `norm`, `mag`, `random_gaussian`, `random_choice` | 5 |
 | S-047 | E-27 | `noise(x[, y[, z]])`, `noise_seed`, `noise_detail` — deterministic, seeded | 5 |
 | S-048 | E-29 | `no_loop`, `loop`, `redraw`, `millis`, `frame_rate()` query, `exit()` | 5 |
-| S-049 | E-15 | `text_align(h, v)`, `text_ascent/descent`, cap height; `text_width` already in S-037 | 5 |
+| S-049 | E-15 | `text_align(h, v)`, `text_ascent/descent`, cap height; `text_width` already in S-037 | 6 (moved: designed with multi-line layout) |
 | S-050 | E-25 | Linear and radial gradients for fill and stroke (IR op + Cairo + export) | 6 |
 | S-051 | E-25 | `blend_mode`, global `opacity`, `shadow` | 6 |
 | S-052 | E-28 | Off-screen canvas: `c = p.create_canvas(w, h)`; draw with the same verbs on `c`; `p.image(c, x, y)` | 6 |
@@ -128,3 +128,15 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-064 | E-31 | `playground.js` loader, `<playground-run>`, GitHub launcher URL | directional |
 | S-065 | E-31 | Browser export: PNG download; IR→SVG writer | directional |
 | S-066 | E-31 | Classroom page: editor + canvas + share-by-URL | directional |
+
+## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
+
+| ID | Epic | Story | Sprint |
+|---|---|---|---|
+| S-067 | E-10/E-11/E-13 | Sprint 4 follow-ups: F2 wording, empty-path clip warns, Linux window route narrowed, minor verifier items | 5 |
+| S-068 | E-22 | Examples Gallery foundation: `examples/gallery/`, golden + snapshot per example, `tools/make_gallery.py`, rendered index, API-coverage test | 5 |
+| S-069 | E-22 | User Guide skeleton and first chapters (`docs/guide/`), runnable-snippet test | 5 |
+| S-070 | E-02 | Version `0.7.0.dev0` | 5 |
+| S-071 | E-22 | User Guide completed for every v0.7 feature; "Coming from p5/Processing" and "Coming from DrawBot" chapters | 6 |
+| S-072 | E-22 | Examples Gallery completed: coverage test green for all of `__all__`; curated showcase page | 6 |
+| S-073 | E-02 | Release v0.7: changelog, Quick Reference v0.7, version `0.7.0`, tagged, CI green (needs S-039) | 6 |

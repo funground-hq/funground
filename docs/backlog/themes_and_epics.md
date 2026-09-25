@@ -74,5 +74,5 @@ Phase exit criteria come from the architecture document, sharpened by the review
 
 | Epic | Outcome | Phase | Status |
 |---|---|---|---|
-| E-22 Quick Reference v0.6 and teaching docs | Learner docs updated for every additive API | 2 | ready |
+| E-22 Teaching material: Quick Reference, User Guide, Examples Gallery | Learner docs updated for every additive API; v0.7 ships a User Guide and a Gallery covering every feature (D-015) | 2 | in progress |
 | E-23 SDLC process, ADRs, contributor docs | This backlog, `docs/PROCESS.md`, ADR series, sprint records | 0 | done (Sprint 0) |

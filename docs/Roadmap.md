@@ -16,17 +16,22 @@ dates; sprint length is the maintainer's call. The backlog (`docs/backlog/`) hol
 | 1 Architecture | 1–3 | `Sketch`, platform split, draw-op IR, Cairo renderer, text as outlines (DejaVu Sans), HiDPI (Windows), headless, PNG/PDF/SVG export |
 | 2a Public vocabulary | 4 | transforms, `push/pop`, `with p.saved_state():`, paths and clipping, `text_width`, Quick Reference v0.6 *(awaiting sign-off)* |
 
-## Phase 2 — the p5/Processing core (Sprints 5–6) → release **v0.6**
+## Phase 2 — the p5/Processing core (Sprints 5–6) → release **v0.7** (D-015)
 
 **Exit:** a typical p5/Processing 2D sketch and a typical DrawBot single-page composition port
 with only naming changes.
 
+**v0.7 deliverables:** the code; a **User Guide** (`docs/guide/`, chapters from getting started to
+"coming from p5/DrawBot"); an **Examples Gallery** (`examples/gallery/`, rendered index in
+`docs/gallery/`) with at least one example for every public name — enforced by a coverage test.
+Both grow story by story from Sprint 5 and are finished in Sprint 6.
+
 | Sprint | Content |
 |---|---|
-| 5 — vocabulary, events, helpers | Feature Map verified against live references (S-040); `square/triangle/quad/arc/polygon`; stroke cap/join/dash/miter, `no_smooth`; shear/`apply_matrix`/`reset_matrix`; `color_mode` HSB/HSL, `color()`, `lerp_color`; input events and callbacks, `pmouse`, buttons, wheel; `map/lerp/norm/random_gaussian/random_choice`; `noise`; `no_loop/loop/redraw/millis/frame_rate/exit`; `text_align`, text metrics; ADR-003 out-of-scope list; Sprint 4 follow-ups (F2 wording, empty-path clip, Linux window route) |
-| 6 — compositing, canvases, text layout | linear/radial gradients; blend modes, opacity, shadow; off-screen canvas (Processing `PGraphics`); multi-line text, leading, word-wrap in a box; `load_font`, bold/italic; `Vector`; frame-sequence export; cursor, full screen, resize; Quick Reference v0.7 |
+| 5 — vocabulary, events, helpers | Feature Map verified (S-040); gallery and guide foundations (S-068, S-069); `square/triangle/quad/arc/polygon`; stroke cap/join/dash/miter, `no_smooth`; shear/`apply_matrix`/`reset_matrix`; `color_mode` HSB/HSL, `color()`, `lerp_color`; input events and callbacks, `pmouse`, buttons, wheel; `map_range/lerp/norm/random_gaussian/random_choice`; `noise`; `no_loop/loop/redraw/millis/frame_rate/exit`; ADR-003; Sprint 4 follow-ups |
+| 6 — compositing, canvases, text layout, release | `text_align` and text metrics; linear/radial gradients; blend modes, opacity, shadow; off-screen canvas (Processing `PGraphics`); multi-line text, leading, word-wrap in a box; `load_font`, bold/italic; `Vector`; frame-sequence export; cursor, full screen, resize; User Guide and Gallery completed; Quick Reference v0.7; release |
 
-**Release v0.6** after Sprint 6: first versioned release since v0.5. Prerequisites: git remote,
+**Release v0.7** after Sprint 6: first versioned release since v0.5. Prerequisites: git remote,
 CI green on the 12-cell matrix (S-039), package name decided.
 
 ## Phase 3 — DrawBot and Processing depth (Sprints 7–11) → release **v0.8**
@@ -74,15 +79,15 @@ covers most of these).
 ## Milestones
 
 ```
-Sprint 4 sign-off ── Sprint 5 ── Sprint 6 ── v0.6 ── Sprints 7–11 ── v0.8 ── Sprints 12–14 ── v1.0 ─ ─ directional: web, GPU, 3D
+Sprint 4 sign-off ── Sprint 5 ── Sprint 6 ── v0.7 ── Sprints 7–11 ── v0.8 ── Sprints 12–14 ── v1.0 ─ ─ directional: web, GPU, 3D
 ```
 
 ## Decisions ahead
 
 | When | Decision |
 |---|---|
-| Before v0.6 | Package name on PyPI; release cadence; git remote and CI host |
-| Sprint 5 | Event-callback naming (p5's `mousePressed` is both a value and a callback); `rect_mode`-style switches (postponed so far) |
+| Before v0.7 | Package name on PyPI; release cadence; git remote and CI host |
+| Sprint 5 | D-016 event-callback naming (p5's `mousePressed` is both a value and a callback); D-017 colour-mode scope; `rect_mode`-style switches (postponed so far) |
 | Sprint 6 | Whether off-screen canvases and images share one type |
 | Phase 3 | Page/document model shape (DrawBot-like vs Processing-like); sound backend scope |
 | v1.0 | What "1.0 stable" guarantees: API freeze scope, supported Python versions |
