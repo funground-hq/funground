@@ -502,6 +502,11 @@ p.run()
 | `p.random_seed(seed)` | **New:** make `p.random()` repeatable — the same seed gives the same sequence. Never touches Python's own `random` module. | `p.random_seed(7)` |
 | `p.constrain(value, low, high)` | Keep a value inside a minimum and maximum. | `x = p.constrain(x, 20, p.width - 20)` |
 | `p.distance(x1, y1, x2, y2)` | Straight-line distance between two points. | `d = p.distance(x, y, p.mouse_x, p.mouse_y)` |
+| `p.map_range(v, a1, b1, a2, b2, clamp=False)` | Re-scale `v` from one range to another. | `p.map_range(p.mouse_x, 0, p.width, 0, 255)` |
+| `p.lerp(a, b, t)` / `p.norm(v, a, b)` | Part of the way from `a` to `b` / where `v` sits between them (0–1). | `p.lerp(0, 100, 0.25)` |
+| `p.mag(x, y)` | Length of the arrow (x, y). | `p.mag(3, 4)` |
+| `p.random_gaussian(mean=0, sd=1)` | Bell-curve random number. | `p.random_gaussian(200, 30)` |
+| `p.random_choice(items)` | One item picked at random. | `p.random_choice(["red", "gold"])` |
 | `p.radians(degrees)` | **New:** degrees → radians, for `math.sin` / `math.cos`. | `math.sin(p.radians(45))` |
 | `p.degrees(radians)` | **New:** radians → degrees, e.g. to feed `rotate()`. | `p.rotate(p.degrees(math.atan2(dy, dx)))` |
 

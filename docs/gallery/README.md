@@ -183,6 +183,24 @@ p.random(high) or p.random(low, high) gives a random number; p.random_seed(n) ma
 
 Source: [`examples/gallery/randomness/01_confetti.py`](../../examples/gallery/randomness/01_confetti.py)
 
+### Bell-curve randomness and random choices
+
+![Bell-curve randomness and random choices](images/randomness-02_gaussian_and_choice.png)
+
+random_gaussian gives numbers that cluster around a middle value, like heights in a class; random_choice picks one item from a list. random_seed makes both repeat exactly.
+
+Source: [`examples/gallery/randomness/02_gaussian_and_choice.py`](../../examples/gallery/randomness/02_gaussian_and_choice.py)
+
+## Useful maths
+
+### Mapping and blending numbers
+
+![Mapping and blending numbers](images/maths-01_map_and_lerp.png)
+
+map_range re-scales a number from one range to another; lerp finds a point part of the way between two numbers; norm says how far along a range a number is; mag measures an arrow.
+
+Source: [`examples/gallery/maths/01_map_and_lerp.py`](../../examples/gallery/maths/01_map_and_lerp.py)
+
 ## Interaction
 
 ### Follow the mouse

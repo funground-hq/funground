@@ -89,6 +89,13 @@ ADDED_FUNCTIONS = {
     "bezier_tangent": "(a: 'float', b: 'float', c: 'float', d: 'float', t: 'float') -> 'float'",
     "curve_point": "(a: 'float', b: 'float', c: 'float', d: 'float', t: 'float') -> 'float'",
     "curve_tangent": "(a: 'float', b: 'float', c: 'float', d: 'float', t: 'float') -> 'float'",
+    # Sprint 5, S-046: mapping, interpolation and random helpers (contract H3).
+    "random_gaussian": "(mean: 'float' = 0.0, sd: 'float' = 1.0) -> 'float'",
+    "random_choice": "(items)",
+    "map_range": "(value: 'float', start1: 'float', stop1: 'float', start2: 'float', stop2: 'float', clamp: 'bool' = False) -> 'float'",
+    "lerp": "(start: 'float', stop: 'float', amount: 'float') -> 'float'",
+    "norm": "(value: 'float', start: 'float', stop: 'float') -> 'float'",
+    "mag": "(x: 'float', y: 'float') -> 'float'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

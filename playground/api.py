@@ -361,6 +361,36 @@ def random_seed(seed: int | None = None) -> None:
     active_sketch().random_seed(seed)
 
 
+def random_gaussian(mean: float = 0.0, sd: float = 1.0) -> float:
+    """A random number from a bell curve: most near *mean*, about 2/3 within *sd* of it."""
+    return active_sketch().random_gaussian(mean, sd)
+
+
+def random_choice(items):
+    """One item picked at random from a list, tuple or string (repeatable with random_seed)."""
+    return active_sketch().random_choice(items)
+
+
+def map_range(value: float, start1: float, stop1: float, start2: float, stop2: float, clamp: bool = False) -> float:
+    """Re-scale *value* from one range to another, e.g. map_range(p.mouse_x, 0, p.width, 0, 255)."""
+    return Sketch.map_range(value, start1, stop1, start2, stop2, clamp)
+
+
+def lerp(start: float, stop: float, amount: float) -> float:
+    """The number *amount* of the way from start to stop: 0 gives start, 1 gives stop, 0.5 halfway."""
+    return Sketch.lerp(start, stop, amount)
+
+
+def norm(value: float, start: float, stop: float) -> float:
+    """Where *value* sits between start and stop, as 0 to 1."""
+    return Sketch.norm(value, start, stop)
+
+
+def mag(x: float, y: float) -> float:
+    """The length of the arrow (x, y): distance from (0, 0)."""
+    return Sketch.mag(x, y)
+
+
 def constrain(value: float, low: float, high: float) -> float:
     return Sketch.constrain(value, low, high)
 

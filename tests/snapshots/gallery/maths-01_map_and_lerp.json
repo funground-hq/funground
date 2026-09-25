@@ -1,0 +1,414 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    230,
+    230,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 40.0,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    211,
+    211,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 90.9090909090909,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    193,
+    193,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 141.8181818181818,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    175,
+    175,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 192.72727272727272,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    157,
+    157,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 243.63636363636363,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    139,
+    139,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 294.5454545454545,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    120,
+    120,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 345.45454545454544,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    102,
+    102,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 396.3636363636364,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    84,
+    84,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 447.27272727272725,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    66,
+    66,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 498.1818181818182,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    48,
+    48,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 549.090909090909,
+  "y": 80
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    30,
+    30,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 600.0,
+  "y": 80
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    30,
+    30,
+    255,
+    255
+   ],
+   "stroke": [
+    179,
+    179,
+    179,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x1": 60,
+  "x2": 580,
+  "y1": 300,
+  "y2": 180
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 60.0,
+  "y": 300.0
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 125.0,
+  "y": 285.0
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 190.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 255.0,
+  "y": 255.0
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 320.0,
+  "y": 240.0
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 385.0,
+  "y": 225.0
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 450.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 515.0,
+  "y": 195.0
+ },
+ {
+  "diameter": 24,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 580.0,
+  "y": 180.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "text": "that arrow is 534 pixels long",
+  "x": 60,
+  "y": 340
+ }
+]
