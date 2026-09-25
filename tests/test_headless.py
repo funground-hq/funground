@@ -25,7 +25,7 @@ def test_headless_run_captures_pixels_and_never_needs_a_display(monkeypatch):
         p.no_stroke()
         p.fill("red")
         p.rect(0, 0, 40, 15)
-        seen.append((p.mouse_x, p.mouse_y, p.mouse_pressed, p.key_down("left")))
+        seen.append((p.mouse_x, p.mouse_y, p.is_mouse_pressed, p.key_down("left")))
 
     s.run_namespace({"setup": setup, "draw": draw}, max_frames=3)
     (w, h), rgb = s.last_frame

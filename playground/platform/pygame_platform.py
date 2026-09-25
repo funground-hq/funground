@@ -11,7 +11,7 @@ import sys
 
 import pygame
 
-from .base import KEY_NAMES, InputState, Pixels
+from .base import KEY_NAMES, InputEvent, InputState, Pixels
 
 _NAMED_KEYS = {
     "left": pygame.K_LEFT,
@@ -23,6 +23,7 @@ _NAMED_KEYS = {
     "escape": pygame.K_ESCAPE,
 }
 assert set(_NAMED_KEYS) == set(KEY_NAMES)
+_KEY_NAMES_BY_CODE = {code: name for name, code in _NAMED_KEYS.items()}
 
 
 def key_code(key: str | int) -> int:
@@ -129,6 +130,8 @@ class PygamePlatform:
         self._clock: pygame.time.Clock | None = None
         self._scale = 1.0
         self._input_scale = 1.0   # divisor for mouse coordinates (see input_state)
+        self._events: list[InputEvent] = []
+        self._held_keys: set[int] = set()     # key codes currently down (for p.is_key_pressed)
 
     @property
     def backing_scale(self) -> float:
@@ -166,17 +169,61 @@ class PygamePlatform:
 
     def poll(self) -> bool:
         keep_running = True
+        self._events = []
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 keep_running = False
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                keep_running = False
+                continue
+            if event.type == pygame.KEYDOWN:
+                self._held_keys.add(event.key)
+                if event.key == pygame.K_ESCAPE:
+                    keep_running = False
+            elif event.type == pygame.KEYUP:
+                self._held_keys.discard(event.key)
+            elif event.type == pygame.WINDOWFOCUSLOST:
+                self._held_keys.clear()           # key-ups are not delivered while unfocused
+            translated = self._translate(event)
+            if translated is not None:
+                self._events.append(translated)
         return keep_running
+
+    def events(self) -> list[InputEvent]:
+        return self._events
+
+    _BUTTONS = {1: "left", 2: "center", 3: "right"}
+
+    def _logical(self, pos) -> tuple[int, int]:
+        s = self._input_scale
+        return round(pos[0] / s), round(pos[1] / s)
+
+    def _translate(self, event) -> InputEvent | None:
+        t = event.type
+        if t in (pygame.MOUSEBUTTONDOWN, pygame.MOUSEBUTTONUP):
+            button = self._BUTTONS.get(event.button)
+            if button is None:          # 4/5 are the legacy wheel, 6+ side buttons: not mouse presses
+                return None
+            x, y = self._logical(event.pos)
+            kind = "mouse_pressed" if t == pygame.MOUSEBUTTONDOWN else "mouse_released"
+            return InputEvent(kind, x, y, button=button)
+        if t == pygame.MOUSEMOTION:
+            x, y = self._logical(event.pos)
+            return InputEvent("mouse_dragged" if any(event.buttons[:3]) else "mouse_moved", x, y)
+        if t == pygame.MOUSEWHEEL:
+            x, y = self._logical(pygame.mouse.get_pos())
+            return InputEvent("mouse_wheel", x, y, delta=-float(getattr(event, "precise_y", event.y)))
+        if t in (pygame.KEYDOWN, pygame.KEYUP):
+            ch = getattr(event, "unicode", "") or ""
+            printable = len(ch) == 1 and ch.isprintable()
+            name = ch if printable else _KEY_NAMES_BY_CODE.get(event.key) or pygame.key.name(event.key)
+            kind = "key_pressed" if t == pygame.KEYDOWN else "key_released"
+            return InputEvent(kind, key=name, key_code=event.key)
+        return None
 
     def input_state(self) -> InputState:
         x, y = pygame.mouse.get_pos()
         s = self._input_scale
-        return InputState(round(x / s), round(y / s), any(pygame.mouse.get_pressed(3)))
+        return InputState(round(x / s), round(y / s), any(pygame.mouse.get_pressed(3)),
+                          bool(self._held_keys))
 
     def key_down(self, key: str | int) -> bool:
         return bool(pygame.key.get_pressed()[key_code(key)])

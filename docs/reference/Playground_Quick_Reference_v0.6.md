@@ -445,7 +445,12 @@ Mouse values are updated automatically before each call to `draw()`.
 |---|---|---|
 | `p.mouse_x` | Current mouse x-coordinate. | `p.circle(p.mouse_x, p.mouse_y, 30)` |
 | `p.mouse_y` | Current mouse y-coordinate. | |
-| `p.mouse_pressed` | `True` while any of the first three mouse buttons is held. | `if p.mouse_pressed: p.fill("tomato")` |
+| `p.is_mouse_pressed` | `True` while any of the first three mouse buttons is held. | `if p.mouse_pressed: p.fill("tomato")` |
+| `p.pmouse_x`, `p.pmouse_y` | Where the mouse was in the previous frame. | `p.line(p.pmouse_x, p.pmouse_y, p.mouse_x, p.mouse_y)` |
+| `p.mouse_button` | The last button pressed: `"left"`, `"center"`, `"right"` (or `None`). | `if p.mouse_button == "right": ...` |
+| `p.is_key_pressed` | `True` while any key is held. | `if p.is_key_pressed: ...` |
+| `p.key` / `p.key_code` | The last key: a character (`"a"`, `" "`) or a name (`"left"`, `"enter"`) / its code. | `if p.key == "r": ...` |
+| `def mouse_pressed():` … | **Callbacks** you define, called when input happens: `mouse_pressed`, `mouse_released`, `mouse_clicked`, `mouse_moved`, `mouse_dragged`, `mouse_wheel(delta)`, `key_pressed`, `key_released`, `key_typed`. | `def key_pressed(): p.redraw()` |
 
 **Keyboard.** `p.key_down(key)` is `True` while a key is held. It recognises `"left"`, `"right"`,
 `"up"`, `"down"`, `"space"`, `"enter"`, `"escape"` and single-character keys such as `"a"` or `"7"`
@@ -475,7 +480,7 @@ def draw():
     p.background("white")
 
     # Mouse: live values, read once before each draw().
-    if p.mouse_pressed:
+    if p.is_mouse_pressed:
         p.fill("tomato")
     else:
         p.fill("skyblue")
@@ -870,7 +875,9 @@ The public v0.6 student-facing API. Everything is reached as `p.<name>`.
 |---|---|
 | `p.width` / `p.height` | Window dimensions. |
 | `p.mouse_x` / `p.mouse_y` | Mouse position. |
-| `p.mouse_pressed` | Any mouse button held. |
+| `p.is_mouse_pressed` / `p.is_key_pressed` | Any mouse button / key held. |
+| `p.pmouse_x` `p.pmouse_y` `p.mouse_button` `p.key` `p.key_code` | Previous mouse, last button, last key. |
+| `def mouse_pressed():` etc. | Input callbacks (see section 5). |
 | `p.frame_count` | Frames completed. |
 | `p.delta_time` | Seconds for previous frame. |
 
@@ -937,7 +944,7 @@ appendix still works and renders the same on every platform and renderer. Capita
 
 **Constants and live values.** There are no uppercase constants such as `RED`, `LEFT` or `CENTER`.
 Colours and keys are strings. These module values are live state, not constants: `p.width`,
-`p.height`, `p.mouse_x`, `p.mouse_y`, `p.mouse_pressed`, `p.frame_count`, `p.delta_time`.
+`p.height`, `p.mouse_x`, `p.mouse_y`, `p.is_mouse_pressed`, `p.pmouse_x`, `p.pmouse_y`, `p.mouse_button`, `p.key`, `p.key_code`, `p.is_key_pressed`, `p.frame_count`, `p.delta_time`.
 `p.__version__` reports `"0.7.0.dev0"`.
 
 **Fixed key-name strings.** `p.key_down(...)` recognises `"left"`, `"right"`, `"up"`, `"down"`,

@@ -15,7 +15,8 @@ from .sketch import Sketch
 _active: Sketch | None = None
 
 LIVE_NAMES = frozenset(
-    {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}
+    {"width", "height", "mouse_x", "mouse_y", "is_mouse_pressed", "pmouse_x", "pmouse_y", "mouse_button",
+     "key", "key_code", "is_key_pressed", "frame_count", "delta_time"}
 )
 
 

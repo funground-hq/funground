@@ -9,12 +9,17 @@ from __future__ import annotations
 import os
 import time
 
-from .base import KEY_NAMES, InputState, Pixels
+from .base import KEY_NAMES, InputEvent, InputState, Pixels
 
 
 class HeadlessPlatform:
     def __init__(self) -> None:
         self._last: Pixels | None = None
+        self._queue: list[InputEvent] = []     # events posted for the next poll()
+        self._events: list[InputEvent] = []
+        self._mouse = (0, 0)
+        self._buttons: set[str] = set()
+        self._keys: set[str] = set()
         self._t = time.perf_counter()
         self._size = (0, 0)
 
@@ -31,16 +36,35 @@ class HeadlessPlatform:
     def start(self) -> None:
         self._t = time.perf_counter()
 
+    def post(self, *events: InputEvent) -> None:
+        """Script input: the events are delivered by the next poll(), in order."""
+        self._queue.extend(events)
+
     def poll(self) -> bool:
+        self._events, self._queue = self._queue, []
+        for ev in self._events:                # keep the polled state consistent with the events
+            if ev.kind.startswith("mouse"):
+                self._mouse = (ev.x, ev.y)
+            if ev.kind == "mouse_pressed" and ev.button:
+                self._buttons.add(ev.button)
+            elif ev.kind == "mouse_released" and ev.button:
+                self._buttons.discard(ev.button)
+            elif ev.kind == "key_pressed" and ev.key:
+                self._keys.add(ev.key.lower())
+            elif ev.kind == "key_released" and ev.key:
+                self._keys.discard(ev.key.lower())
         return True
 
+    def events(self) -> list[InputEvent]:
+        return self._events
+
     def input_state(self) -> InputState:
-        return InputState()
+        return InputState(self._mouse[0], self._mouse[1], bool(self._buttons), bool(self._keys))
 
     def key_down(self, key: str | int) -> bool:
         if isinstance(key, str) and key.lower() not in KEY_NAMES and len(key) != 1:
             raise ValueError(f"unknown key name: {key!r}")
-        return False
+        return isinstance(key, str) and key.lower() in self._keys
 
     def present(self, pixels: Pixels) -> None:
         self._last = pixels

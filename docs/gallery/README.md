@@ -137,6 +137,14 @@ hour(), minute() and second() read the computer's clock; day(), month() and year
 
 Source: [`examples/gallery/animation/03_clock.py`](../../examples/gallery/animation/03_clock.py)
 
+### Pause, step and quit
+
+![Pause, step and quit](images/animation-04_pause.png)
+
+no_loop() stops draw() being called every frame (it still runs once); a key callback can call redraw() to draw one more frame or loop() to carry on. is_looping() says which it is doing, and exit() ends the sketch.
+
+Source: [`examples/gallery/animation/04_pause.py`](../../examples/gallery/animation/04_pause.py)
+
 ## Transforms
 
 ### Rotating squares
@@ -231,9 +239,25 @@ Source: [`examples/gallery/maths/01_map_and_lerp.py`](../../examples/gallery/mat
 
 ![Follow the mouse](images/interaction-01_follow_the_mouse.png)
 
-p.mouse_x and p.mouse_y are where the mouse is; p.mouse_pressed is True while a button is held; p.key_down("left") is True while that key is held.
+p.mouse_x and p.mouse_y are where the mouse is; p.is_mouse_pressed is True while a button is held; p.key_down("left") is True while that key is held.
 
 Source: [`examples/gallery/interaction/01_follow_the_mouse.py`](../../examples/gallery/interaction/01_follow_the_mouse.py)
+
+### A paint program
+
+![A paint program](images/interaction-02_paint.png)
+
+Callbacks are functions you define with special names; Playground calls them when something happens. mouse_dragged draws, mouse_wheel changes the brush, key_pressed clears or picks a colour, and pmouse_x/pmouse_y (last frame's mouse) join the strokes up smoothly.
+
+Source: [`examples/gallery/interaction/02_paint.py`](../../examples/gallery/interaction/02_paint.py)
+
+### Move with the keyboard
+
+![Move with the keyboard](images/interaction-03_keyboard_mover.png)
+
+Two ways to read the keyboard. For smooth movement, ask every frame whether a key is held: p.key_down("left"). For one-off actions, define key_pressed(), which runs once per press; p.key says which key it was. key_released() runs when the key comes back up.
+
+Source: [`examples/gallery/interaction/03_keyboard_mover.py`](../../examples/gallery/interaction/03_keyboard_mover.py)
 
 ## Saving your work
 
