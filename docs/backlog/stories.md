@@ -100,7 +100,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-043 | E-10 | `shear_x/shear_y`, `apply_matrix`, `reset_matrix` | 5 — done |
 | S-044 | E-25 | `color_mode(RGB|HSB|HSL, max…)`, `color()` objects with component getters, `lerp_color` | 5 |
 | S-045 | E-26 | `pmouse_x/y`, `mouse_button`, wheel, drag; `mouse_pressed()/mouse_released()/mouse_moved()/key_pressed()/key_released()` callbacks; `key`, `key_code` | 5 |
-| S-046 | E-27 | `map_range`, `lerp`, `norm`, `mag`, `random_gaussian`, `random_choice` | 5 |
+| S-046 | E-27 | `map_range`, `lerp`, `norm`, `mag`, `random_gaussian`, `random_choice` | 5 — done |
 | S-047 | E-27 | `noise(x[, y[, z]])`, `noise_seed`, `noise_detail` — deterministic, seeded | 5 |
 | S-048 | E-29 | `no_loop`, `loop`, `redraw`, `millis`, `frame_rate()` query, `exit()` | 5 |
 | S-049 | E-15 | `text_align(h, v)`, `text_ascent/descent`, cap height; `text_width` already in S-037 | 6 (moved: designed with multi-line layout) |

@@ -521,6 +521,43 @@ class Sketch:
     def random_seed(self, seed: int | None = None) -> None:
         self._rng.seed(seed)
 
+    def random_gaussian(self, mean: float = 0.0, sd: float = 1.0) -> float:
+        """A normally distributed random number: most values near *mean*, spread *sd*."""
+        if sd < 0:
+            raise ValueError("p.random_gaussian(): the spread (sd) cannot be negative")
+        return self._rng.gauss(mean, sd)
+
+    def random_choice(self, items):
+        """One item picked at random from a list, tuple or string."""
+        if len(items) == 0:
+            raise ValueError("p.random_choice() needs at least one item to choose from")
+        return self._rng.choice(items)
+
+    @staticmethod
+    def map_range(value: float, start1: float, stop1: float, start2: float, stop2: float,
+                  clamp: bool = False) -> float:
+        if start1 == stop1:
+            raise ValueError("p.map_range(): the first range is empty (start1 == stop1)")
+        result = start2 + (value - start1) * (stop2 - start2) / (stop1 - start1)
+        if clamp:
+            low, high = min(start2, stop2), max(start2, stop2)
+            result = max(low, min(high, result))
+        return result
+
+    @staticmethod
+    def lerp(start: float, stop: float, amount: float) -> float:
+        return start + (stop - start) * amount
+
+    @staticmethod
+    def norm(value: float, start: float, stop: float) -> float:
+        if start == stop:
+            raise ValueError("p.norm(): the range is empty (start == stop)")
+        return (value - start) / (stop - start)
+
+    @staticmethod
+    def mag(x: float, y: float) -> float:
+        return math.hypot(x, y)
+
     @staticmethod
     def constrain(value: float, low: float, high: float) -> float:
         return max(low, min(high, value))

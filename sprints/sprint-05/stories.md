@@ -86,9 +86,9 @@ lives; alignment is designed once for both.
 - [x] S-043.2 Contract F2 extended; tests; gallery `transforms/`; guide chapter 8 addendum
 *Acceptance:* `apply_matrix` with a rotation matrix equals `rotate` pixel-for-pixel.
 
-### S-046 Mapping and interpolation helpers — E-27
-- [ ] S-046.1 `map_range(value, start1, stop1, start2, stop2, clamp=False)` (named to avoid shadowing Python's `map` in `from playground import *`), `lerp`, `norm`, `mag`, `random_gaussian(mean=0, sd=1)`, `random_choice(seq)`
-- [ ] S-046.2 All deterministic under `random_seed`; tests; gallery `maths/`; guide chapter 12
+### S-046 Mapping and interpolation helpers — E-27 ✅
+- [x] S-046.1 `map_range(value, start1, stop1, start2, stop2, clamp=False)` (named to avoid shadowing Python's `map` in `from playground import *`), `lerp`, `norm`, `mag`, `random_gaussian(mean=0, sd=1)`, `random_choice(seq)`
+- [x] S-046.2 All deterministic under `random_seed`; tests; gallery `maths/`; guide chapter 12
 *Acceptance:* same seed, same sequence, across `random`, `random_gaussian` and `random_choice`.
 
 ### S-047 Noise — E-27
