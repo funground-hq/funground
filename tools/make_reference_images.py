@@ -4,8 +4,9 @@
     python tools/make_reference_images.py 05_text    # just one
 
 Each ``examples/reference/*.py`` sketch is run headless (``PLAYGROUND_HEADLESS=1``,
-no window, no SDL) for ``FRAMES`` frames; on the last frame the harness asks
-Playground to ``p.save()`` the picture to ``docs/reference/images/<stem>.png``.
+no window, no SDL) for ``FRAMES`` loop iterations; when the run ends the harness
+saves the last frame shown to ``docs/reference/images/<stem>.png`` - so a sketch
+that calls ``p.no_loop()`` still gets its picture.
 The sketches are ordinary learner sketches - they call ``p.run()`` themselves -
 so a picture in the reference can never drift from the code beside it.
 """
@@ -22,6 +23,7 @@ if str(ROOT) not in sys.path:
 
 import playground  # noqa: E402
 from playground import api  # noqa: E402
+from playground.export import save_pixels  # noqa: E402
 from playground.platform.headless import HeadlessPlatform  # noqa: E402
 from playground.sketch import Sketch  # noqa: E402
 
@@ -30,23 +32,30 @@ IMAGES = ROOT / "docs" / "reference" / "images"
 FRAMES = 30  # the same length as the Session-1 golden runs; deterministic sketches only
 
 
+class _SavingPlatform(HeadlessPlatform):
+    """Headless, and on close() writes the last presented frame to a PNG."""
+
+    def __init__(self, out: Path) -> None:
+        super().__init__()
+        self._out = out
+
+    def close(self) -> None:
+        if self._last is not None:
+            save_pixels(self._last, str(self._out))
+        super().close()
+
+
 def render(sketch: Path, out: Path, frames: int = FRAMES) -> Path:
-    """Run *sketch* headless for *frames* frames and p.save() the last one to *out*."""
+    """Run *sketch* headless for *frames* iterations and save the last frame shown to *out*."""
     out.parent.mkdir(parents=True, exist_ok=True)
-    api.use_sketch(Sketch(platform=HeadlessPlatform()))
+    if out.exists():
+        out.unlink()                    # a failed run must not leave the old picture looking fresh
+    api.use_sketch(Sketch(platform=_SavingPlatform(out)))
     source = sketch.read_text(encoding="utf-8")
     namespace: dict[str, object] = {"__name__": "__sketch__", "__file__": str(sketch)}
 
     def harness_run(*, fps=None, max_frames=frames):
         sketch_globals = inspect.currentframe().f_back.f_globals
-        draw = sketch_globals.get("draw")
-        if callable(draw):
-            def draw_and_save():
-                draw()
-                if api.active_sketch().frame_count == max_frames - 1:
-                    playground.save(str(out))
-
-            sketch_globals["draw"] = draw_and_save
         api.active_sketch().run_namespace(sketch_globals, fps=1000, max_frames=max_frames)
 
     original = playground.run
@@ -56,7 +65,7 @@ def render(sketch: Path, out: Path, frames: int = FRAMES) -> Path:
     finally:
         playground.run = original
     if not out.exists():
-        raise RuntimeError(f"{sketch.name} did not reach frame {frames}; nothing saved")
+        raise RuntimeError(f"{sketch.name} never showed a frame; nothing saved")
     return out
 
 
