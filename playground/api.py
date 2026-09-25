@@ -94,6 +94,36 @@ def point(x: float, y: float) -> None:
     active_sketch().point(x, y)
 
 
+def square(x: float, y: float, size: float) -> None:
+    """A square placed by its top-left corner, like rect()."""
+    active_sketch().square(x, y, size)
+
+
+def triangle(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> None:
+    """A filled triangle through three corners."""
+    active_sketch().triangle(x1, y1, x2, y2, x3, y3)
+
+
+def quad(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float, x4: float, y4: float) -> None:
+    """A four-sided shape through four corners, in order."""
+    active_sketch().quad(x1, y1, x2, y2, x3, y3, x4, y4)
+
+
+def polygon(points: list[tuple[float, float]]) -> None:
+    """A closed shape through a list of (x, y) points."""
+    active_sketch().polygon(points)
+
+
+def arc(x: float, y: float, width: float, height: float, start: float, stop: float, mode: str = "open") -> None:
+    """Part of an ellipse centred at (x, y), from start to stop degrees clockwise; mode "open", "chord" or "pie"."""
+    active_sketch().arc(x, y, width, height, start, stop, mode)
+
+
+def clear() -> None:
+    """Make the whole canvas transparent; a PNG saved afterwards keeps the transparency."""
+    active_sketch().clear()
+
+
 def text(message: object, x: float, y: float, color: Color | None = None) -> None:
     active_sketch().text(message, x, y, color)
 
@@ -188,6 +218,11 @@ def path() -> PathBuilder:
 def draw_path(path: PathBuilder) -> None:
     """Fill (if closed) and stroke a path made with p.path(), using the current style."""
     active_sketch().draw_path(path)
+
+
+def no_clip() -> None:
+    """Remove clipping until the enclosing pop() / end of the saved_state block."""
+    active_sketch().no_clip()
 
 
 def clip(path: PathBuilder) -> None:

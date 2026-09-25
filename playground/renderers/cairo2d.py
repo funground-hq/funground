@@ -109,6 +109,8 @@ class CairoRenderer:
                 ctx.transform(cairo.Matrix(m.a, m.b, m.c, m.d, m.e, m.f))
             elif t is ir.ClipPath:
                 self._path(ctx, op.path); ctx.clip()
+            elif t is ir.ResetClip:
+                ctx.reset_clip()
             elif t is ir.FillPath:
                 self._path(ctx, op.path); self._source(ctx, op.color); ctx.fill()
             elif t is ir.StrokePath:

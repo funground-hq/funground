@@ -56,6 +56,14 @@ ADDED_FUNCTIONS = {
     "clip": "(path: 'PathBuilder') -> 'None'",
     # Sprint 4, S-037: text measurement (contract T6).
     "text_width": "(message: 'object') -> 'float'",
+    # Sprint 5, S-041: more shapes, clear, no_clip (contract F5-F7).
+    "square": "(x: 'float', y: 'float', size: 'float') -> 'None'",
+    "triangle": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float') -> 'None'",
+    "quad": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float', x4: 'float', y4: 'float') -> 'None'",
+    "polygon": "(points: 'list[tuple[float, float]]') -> 'None'",
+    "arc": "(x: 'float', y: 'float', width: 'float', height: 'float', start: 'float', stop: 'float', mode: 'str' = 'open') -> 'None'",
+    "clear": "() -> 'None'",
+    "no_clip": "() -> 'None'",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

@@ -44,6 +44,7 @@ def test_every_op_round_trips_through_json():
         ir.Restore(),
         ir.Concat(Transform.rotation(30)),
         ir.ClipPath(path),
+        ir.ResetClip(),
         ir.FillPath(path, Color(9, 9, 9)),
         ir.StrokePath(path, Color(9, 9, 9), 2.5),
     ]

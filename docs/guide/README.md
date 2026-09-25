@@ -8,7 +8,7 @@ Every complete example in this guide is tested: it runs exactly as printed.
 |---|---|---|
 | 1 | [Getting started](01_getting_started.md) | ready |
 | 2 | [The sketch: setup, draw and run](02_the_sketch.md) | ready |
-| 3 | [Shapes](03_shapes.md) | partial — more shapes in Sprint 5 (S-041) |
+| 3 | [Shapes](03_shapes.md) | ready |
 | 4 | [Colour](04_colour.md) | partial — HSB/HSL and colour objects in Sprint 5 (S-044) |
 | 5 | [Fill, stroke and lines](05_fill_stroke_lines.md) | partial — caps, joins and dashes in Sprint 5 (S-042) |
 | 6 | [Text](06_text.md) | partial — alignment and multi-line text in Sprint 6 |

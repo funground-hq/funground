@@ -1,0 +1,384 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "ClipPath",
+  "path": [
+   [
+    "move",
+    [
+     200,
+     60
+    ]
+   ],
+   [
+    "line",
+    [
+     440,
+     60
+    ]
+   ],
+   [
+    "line",
+    [
+     440,
+     340
+    ]
+   ],
+   [
+    "line",
+    [
+     200,
+     340
+    ]
+   ],
+   [
+    "close"
+   ]
+  ]
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    235,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 0,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 40,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    235,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 80,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 120,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    235,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 160,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 200,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    235,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 240,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 280,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    235,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 320,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 360,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    235,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 400,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 440,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    235,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 480,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 520,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    235,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 560,
+  "y": 0
+ },
+ {
+  "height": 400,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40,
+  "x": 600,
+  "y": 0
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "ResetClip"
+ },
+ {
+  "diameter": 160,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    200
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 160,
+  "y": 200
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "diameter": 160,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 470,
+  "y": 200
+ },
+ {
+  "op": "Restore"
+ }
+]

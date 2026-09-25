@@ -67,11 +67,11 @@ lives; alignment is designed once for both.
 - [x] S-070.1 `__version__` and `pyproject.toml` → `0.7.0.dev0`; Quick Reference title follows the release (renamed at release in Sprint 6)
 *Acceptance:* one commit, suite green.
 
-### S-041 Remaining basic shapes — E-24
-- [ ] S-041.1 `square(x, y, size)` (top-left, like `rect`), `triangle(x1, y1, x2, y2, x3, y3)`, `quad(...)` (4 points), `polygon(points)` (list of `(x, y)`, closed)
-- [ ] S-041.2 `arc(x, y, w, h, start, stop, mode="open")` — centre-anchored like `ellipse`, angles in **degrees** (D-002), clockwise on screen; modes `open` / `chord` / `pie`
-- [ ] S-041.4 `clear()` (transparent background — keeps alpha in PNG export) and `no_clip()` (from S-040)
-- [ ] S-041.3 All emit existing IR ops (paths); contract rows added; tests; gallery example `shapes/`; guide chapter 3 completed
+### S-041 Remaining basic shapes — E-24 ✅
+- [x] S-041.1 `square(x, y, size)` (top-left, like `rect`), `triangle(x1, y1, x2, y2, x3, y3)`, `quad(...)` (4 points), `polygon(points)` (list of `(x, y)`, closed)
+- [x] S-041.2 `arc(x, y, w, h, start, stop, mode="open")` — centre-anchored like `ellipse`, angles in **degrees** (D-002), clockwise on screen; modes `open` / `chord` / `pie`
+- [x] S-041.4 `clear()` (transparent background — keeps alpha in PNG export) and `no_clip()` (from S-040)
+- [x] S-041.3 All emit existing IR ops (paths); contract rows added; tests; gallery example `shapes/`; guide chapter 3 completed
 *Acceptance:* each shape matches its contract row pixel-for-pixel in tests; exports to PDF.
 
 ### S-042 Stroke styles and smoothing — E-24
