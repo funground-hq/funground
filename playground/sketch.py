@@ -326,7 +326,17 @@ class Sketch:
 
     def clip(self, path: PathBuilder | Path) -> None:
         """Limit later drawing to *path* (implicitly closed); pop() lifts it, so use it inside push()/pop()."""
-        self._emit(ir.ClipPath(_geometry_of(path, "clip")))
+        geometry = _geometry_of(path, "clip")
+        if geometry.is_empty:
+            # Clipping to nothing would silently hide everything drawn afterwards (S-067).
+            warnings.warn(
+                "p.clip() was given an empty path, so it was ignored. "
+                "Add points with move_to()/line_to() before clipping.",
+                PlaygroundWarning,
+                stacklevel=3,
+            )
+            return
+        self._emit(ir.ClipPath(geometry))
 
     def _emit_path(self, geometry: Path) -> None:
         self._require_window()

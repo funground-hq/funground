@@ -267,7 +267,7 @@ def draw():
     p.fill((255, 200, 0, 120))
     p.circle(185, 220, 130)
 
-    # Every pygame-ce colour name works, on every platform, spelt in lowercase.
+    # Every pygame-ce colour name works, on every platform (capitals and spaces are ignored).
     for i, name in enumerate(["gray25", "tomato3", "darkslategrey", "aqua"]):
         p.fill(name)
         p.circle(390 + i * 70, 290, 50)
@@ -388,6 +388,31 @@ frame. Leave it out if you intentionally want trails.
 | `p.delta_time` | Seconds taken by the previous frame (0.0 in the first). For time-based motion. | `x += 120 * p.delta_time  # ~120 px per second` |
 | `p.stop()` | Ask the main loop to stop. | `if x > p.width: p.stop()` |
 | `p.run(max_frames=n)` | Stop automatically after `n` frames. | `p.run(max_frames=300)` |
+
+**Moving at the same speed on any computer.** `p.delta_time` makes motion depend on time, not on
+how many frames the computer manages:
+
+```python
+import playground as p
+
+x = 0
+
+
+def setup():
+    p.size(640, 400)
+
+
+def draw():
+    global x
+    p.background("white")
+    p.circle(x, p.height / 2, 40)
+    x += 120 * p.delta_time          # 120 pixels per second, at 30 fps or 144 fps alike
+    if x > p.width:
+        x = 0
+
+
+p.run()
+```
 
 Styles you set at the top of the file or in `setup()` persist; a style or transform changed inside a
 `with p.saved_state():` block (section 7) is undone at the end of the block.
@@ -851,8 +876,8 @@ p.fill("#FF6347")             # HEX
 ```
 
 **Named colours.** Playground bundles the pygame-ce colour-name table, so every name in the v0.5
-appendix still works and renders the same on every platform and renderer. Use the lowercase spelling
-shown there. The appendix — colours grouped by visual family with their RGB and HEX equivalents — is
+appendix still works and renders the same on every platform and renderer. Capitals and spaces are ignored
+(`"Tomato"`, `"light blue"` work), though the appendix shows the lowercase spelling. The appendix — colours grouped by visual family with their RGB and HEX equivalents — is
 **unchanged; see pages 8–19 of the v0.5 Quick Reference**
 (`Playground_v0.5_Quick_Reference_Color_Organized.pdf`).
 

@@ -283,3 +283,20 @@ def test_unbalanced_push_in_a_run_loop_does_not_leak_between_frames():
         api.active_sketch().run_namespace({"draw": draw}, fps=1000, max_frames=3)
     assert seen == [0, 0, 0]
     assert api.active_sketch().style.fill.rgb == WHITE
+
+
+def test_style_set_without_push_carries_into_the_next_frame_like_p5():
+    """Contract F2 (S-067 wording): transforms reset every frame; unpushed style does not."""
+    from playground import api
+
+    seen = []
+
+    def draw():
+        seen.append(api.active_sketch().style.fill.rgb)
+        p.fill("blue")
+
+    import pygame
+
+    pygame.init()
+    api.active_sketch().run_namespace({"draw": draw}, fps=1000, max_frames=3)
+    assert seen == [WHITE, BLUE, BLUE]

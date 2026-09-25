@@ -38,11 +38,11 @@ lives; alignment is designed once for both.
 - [ ] S-040.2 Adjust Sprint 5–6 story scope if the check finds gaps; note changes in this file
 *Acceptance:* Feature Map carries a "verified on <date> against <versions>" line; any scope change is listed here before feature work starts.
 
-### S-067 Sprint 4 follow-ups — E-10 / E-11 / E-13
-- [ ] S-067.1 Contract F2 wording: only *pushed* state is unwound at frame end; a bare `p.fill()` in `draw()` carries to the next frame (as in p5). Update the row and its "Test coverage" paragraph
-- [ ] S-067.2 `p.clip()` with an empty path: warn (`PlaygroundWarning`) and ignore, instead of silently clipping everything; test
-- [ ] S-067.3 Linux window route: take the SDL high-DPI `pygame.Window` route only when it can matter (Wayland / an explicit opt-in), keep plain `set_mode` on X11; tests with simulated platforms
-- [ ] S-067.4 Minor verifier items: direct unit test for `StateStack.unwind()`; "lowercase colour names" wording in the reference relaxed; `delta_time` gets a full reference example
+### S-067 Sprint 4 follow-ups — E-10 / E-11 / E-13 ✅
+- [x] S-067.1 Contract F2 wording: only *pushed* state is unwound at frame end; a bare `p.fill()` in `draw()` carries to the next frame (as in p5). Update the row and its "Test coverage" paragraph
+- [x] S-067.2 `p.clip()` with an empty path: warn (`PlaygroundWarning`) and ignore, instead of silently clipping everything; test
+- [x] S-067.3 Linux window route: take the SDL high-DPI `pygame.Window` route only when it can matter (Wayland / an explicit opt-in), keep plain `set_mode` on X11; tests with simulated platforms
+- [x] S-067.4 Minor verifier items: direct unit test for `StateStack.unwind()`; "lowercase colour names" wording in the reference relaxed; `delta_time` gets a full reference example
 *Acceptance:* the Sprint 4 review's open verifier findings are closed or explicitly carried.
 
 ### S-068 Examples Gallery foundation — E-22
@@ -60,8 +60,8 @@ lives; alignment is designed once for both.
 - [ ] S-069.4 A test that every code snippet in the guide marked as runnable executes headless without error
 *Acceptance:* a newcomer can go from install to a saved PNG using chapters 1–2 alone; snippet test green.
 
-### S-070 Version bump for the v0.7 cycle — E-02
-- [ ] S-070.1 `__version__` and `pyproject.toml` → `0.7.0.dev0`; Quick Reference title follows the release (renamed at release in Sprint 6)
+### S-070 Version bump for the v0.7 cycle — E-02 ✅ (8a47e88)
+- [x] S-070.1 `__version__` and `pyproject.toml` → `0.7.0.dev0`; Quick Reference title follows the release (renamed at release in Sprint 6)
 *Acceptance:* one commit, suite green.
 
 ### S-041 Remaining basic shapes — E-24

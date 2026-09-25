@@ -48,9 +48,19 @@ def _uses_sdl_highdpi_window() -> bool:
     """
     if os.environ.get("PLAYGROUND_BACKING_SCALE"):
         return False
-    if os.environ.get("SDL_VIDEODRIVER", "").lower() == "dummy":
+    driver = os.environ.get("SDL_VIDEODRIVER", "").lower()
+    if driver == "dummy":
         return False
-    return sys.platform == "darwin" or sys.platform.startswith("linux")
+    if os.environ.get("PLAYGROUND_HIGHDPI", "").lower() in ("1", "true", "yes"):
+        return True                      # explicit opt-in, any platform
+    if sys.platform == "darwin":
+        return True
+    if sys.platform.startswith("linux"):
+        # X11 has no drawable/window scaling (the ratio is always 1.0), and the
+        # Window route changes how the display surface is obtained, so only
+        # Wayland sessions take it (S-067, narrowing S-038).
+        return driver == "wayland" or (driver == "" and bool(os.environ.get("WAYLAND_DISPLAY")))
+    return False
 
 
 def _drawable_ratio(window) -> float:
