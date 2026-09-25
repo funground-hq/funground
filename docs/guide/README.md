@@ -16,7 +16,7 @@ Every complete example in this guide is tested: it runs exactly as printed.
 | 8 | [Transforms and saved_state](08_transforms.md) | ready |
 | 9 | [Paths and clipping](09_paths_and_clipping.md) | ready |
 | 10 | [Interaction: mouse and keyboard](10_interaction.md) | planned — Sprint 5 (S-045) |
-| 11 | [Randomness and noise](11_randomness_and_noise.md) | partial — noise in Sprint 5 (S-047) |
+| 11 | [Randomness and noise](11_randomness_and_noise.md) | ready |
 | 12 | [Useful maths](12_useful_maths.md) | ready |
 | 13 | [Saving your work](13_saving_your_work.md) | ready |
 | 14 | [Coming from p5.js and Processing](14_coming_from_p5_processing.md) | planned — Sprint 6 (S-071) |

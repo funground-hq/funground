@@ -361,6 +361,21 @@ def random_seed(seed: int | None = None) -> None:
     active_sketch().random_seed(seed)
 
 
+def noise(x: float, y: float = 0.0, z: float = 0.0) -> float:
+    """Smooth random values from 0 to 1: nearby inputs give nearby outputs (p5's noise)."""
+    return active_sketch().noise(x, y, z)
+
+
+def noise_seed(seed: int) -> None:
+    """Make noise() repeatable; the same seed gives the same values as p5's noiseSeed."""
+    active_sketch().noise_seed(seed)
+
+
+def noise_detail(octaves: int, falloff: float | None = None) -> None:
+    """How many layers of detail noise() adds (default 4) and how much each fades (default 0.5)."""
+    active_sketch().noise_detail(octaves, falloff)
+
+
 def random_gaussian(mean: float = 0.0, sd: float = 1.0) -> float:
     """A random number from a bell curve: most near *mean*, about 2/3 within *sd* of it."""
     return active_sketch().random_gaussian(mean, sd)

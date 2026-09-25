@@ -91,10 +91,11 @@ lives; alignment is designed once for both.
 - [x] S-046.2 All deterministic under `random_seed`; tests; gallery `maths/`; guide chapter 12
 *Acceptance:* same seed, same sequence, across `random`, `random_gaussian` and `random_choice`.
 
-### S-047 Noise — E-27
-- [ ] S-047.1 `noise(x, y=0, z=0)` returning 0–1, `noise_seed(n)`, `noise_detail(octaves, falloff)` — p5-compatible octave behaviour, pure Python, deterministic
-- [ ] S-047.2 Performance: 10 000 samples per frame within a few ms, or a note and a cached/vectorised path
-- [ ] S-047.3 Tests (determinism, range, continuity); gallery `noise/` (landscape line, flow field, texture); guide chapter 11
+### S-047 Noise — E-27 ✅
+*As built:* p5.js's algorithm and seed generator ported exactly — after `noise_seed(42)` the values equal p5's (verified against the JS algorithm in Node, pinned in `tests/test_noise.py`). Performance, the acceptance note: ~7 µs per sample at 4 octaves (10 000 samples ≈ 68 ms), so ~1 500 samples per frame fit 60 fps; fewer octaves are faster. No vectorised path: it would need numpy in the base install.
+- [x] S-047.1 `noise(x, y=0, z=0)` returning 0–1, `noise_seed(n)`, `noise_detail(octaves, falloff)` — p5-compatible octave behaviour, pure Python, deterministic
+- [x] S-047.2 Performance: 10 000 samples per frame within a few ms, or a note and a cached/vectorised path
+- [x] S-047.3 Tests (determinism, range, continuity); gallery `noise/` (landscape line, flow field, texture); guide chapter 11
 *Acceptance:* same seed gives the same field on every platform.
 
 ### S-048 Loop control and time — E-29

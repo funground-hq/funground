@@ -191,6 +191,14 @@ random_gaussian gives numbers that cluster around a middle value, like heights i
 
 Source: [`examples/gallery/randomness/02_gaussian_and_choice.py`](../../examples/gallery/randomness/02_gaussian_and_choice.py)
 
+### Noise: smooth randomness
+
+![Noise: smooth randomness](images/randomness-03_noise.png)
+
+noise(x) gives a value from 0 to 1 that changes smoothly as x changes: hills instead of static. noise(x, y) makes a smooth 2-D pattern. noise_seed(n) picks the pattern; noise_detail sets how rough it is. The same seed gives the same values as p5.js.
+
+Source: [`examples/gallery/randomness/03_noise.py`](../../examples/gallery/randomness/03_noise.py)
+
 ## Useful maths
 
 ### Mapping and blending numbers

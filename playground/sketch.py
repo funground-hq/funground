@@ -20,6 +20,7 @@ from .capabilities import Capability, PlaygroundWarning, missing_capability
 from .color import WHITE, Color, ColorLike
 from .geometry import Path, Transform
 from .paths import PathBuilder
+from .noise import Noise
 from .shapes import ShapeBuilder, catmull_rom_controls
 from .platform.base import KEY_NAMES, Platform
 from .renderers import Renderer
@@ -77,6 +78,8 @@ class Sketch:
         # Playground keeps its own generator so random_seed() never disturbs a
         # learner's own `import random`.
         self._rng = _random.Random()
+        # Smooth noise, ported from p5.js (S-047); seeded separately, as in p5.
+        self._noise = Noise()
 
         # Live values (contract R1, R4, R5, I1) and window settings.
         self.width = 640
@@ -520,6 +523,19 @@ class Sketch:
 
     def random_seed(self, seed: int | None = None) -> None:
         self._rng.seed(seed)
+
+    def noise(self, x: float, y: float = 0.0, z: float = 0.0) -> float:
+        return self._noise(x, y, z)
+
+    def noise_seed(self, seed: int) -> None:
+        self._noise.seed(seed)
+
+    def noise_detail(self, octaves: int, falloff: float | None = None) -> None:
+        if octaves < 1:
+            raise ValueError("p.noise_detail(): octaves must be at least 1")
+        if falloff is not None and not 0 < falloff < 1:
+            raise ValueError("p.noise_detail(): falloff must be between 0 and 1, e.g. 0.5")
+        self._noise.detail(octaves, falloff)
 
     def random_gaussian(self, mean: float = 0.0, sd: float = 1.0) -> float:
         """A normally distributed random number: most values near *mean*, spread *sd*."""
