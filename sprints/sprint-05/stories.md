@@ -55,11 +55,12 @@ lives; alignment is designed once for both.
 - [x] S-068.5 A test that every public name in `playground.__all__` is used by at least one gallery example — fails until the gallery covers the API; the list of uncovered names is the gallery backlog
 *Acceptance:* `python tools/make_gallery.py` regenerates the gallery index and images unchanged; the coverage test passes for every name that exists at sprint end.
 
-### S-069 User Guide skeleton and first chapters — E-22
-- [ ] S-069.1 `docs/guide/` in Markdown, one file per chapter, `docs/guide/README.md` as the table of contents. Planned chapters: 1 Getting started · 2 The sketch: `setup`, `draw`, `run` · 3 Shapes · 4 Colour · 5 Fill, stroke and lines · 6 Text · 7 Animation and time · 8 Transforms and `saved_state` · 9 Paths and clipping · 10 Interaction: mouse and keyboard · 11 Randomness and noise · 12 Useful maths · 13 Saving your work · 14 Coming from p5/Processing · 15 Coming from DrawBot. Chapter 14 includes **a table of every deliberate difference from p5/Processing** (maintainer request with D-017): snake_case names, `map_range`, `is_mouse_pressed` (D-016), no `color_mode()` — use `p.hsb()`/`p.hsl()` (D-017), degrees for angles (D-002), `text_size` as an em (D-012), `saved_state()` (D-013), tuples for colours
-- [ ] S-069.2 Write chapters for features that exist now (1, 2, 3 partial, 5 partial, 6, 7, 8, 9, 13), each with runnable snippets and images generated from gallery sketches
-- [ ] S-069.3 Guide ↔ reference ↔ gallery cross-links: the guide teaches, the Quick Reference is for lookup, the gallery shows
-- [ ] S-069.4 A test that every code snippet in the guide marked as runnable executes headless without error
+### S-069 User Guide skeleton and first chapters — E-22 ✅
+*As built:* `docs/guide/` with a table of contents and 15 chapter files; chapters 1, 2, 8, 9, 13 complete, 3–7 and 11 partial (marked with what is coming), 10, 12, 14, 15 stubs. `tests/test_guide.py` runs every ```` ```python ```` block as printed (```` ```py ```` = fragment), checks the contents list and every relative link/image.
+- [x] S-069.1 `docs/guide/` in Markdown, one file per chapter, `docs/guide/README.md` as the table of contents. Planned chapters: 1 Getting started · 2 The sketch: `setup`, `draw`, `run` · 3 Shapes · 4 Colour · 5 Fill, stroke and lines · 6 Text · 7 Animation and time · 8 Transforms and `saved_state` · 9 Paths and clipping · 10 Interaction: mouse and keyboard · 11 Randomness and noise · 12 Useful maths · 13 Saving your work · 14 Coming from p5/Processing · 15 Coming from DrawBot. Chapter 14 includes **a table of every deliberate difference from p5/Processing** (maintainer request with D-017): snake_case names, `map_range`, `is_mouse_pressed` (D-016), no `color_mode()` — use `p.hsb()`/`p.hsl()` (D-017), degrees for angles (D-002), `text_size` as an em (D-012), `saved_state()` (D-013), tuples for colours
+- [x] S-069.2 Write chapters for features that exist now (1, 2, 3 partial, 5 partial, 6, 7, 8, 9, 13), each with runnable snippets and images generated from gallery sketches
+- [x] S-069.3 Guide ↔ reference ↔ gallery cross-links: the guide teaches, the Quick Reference is for lookup, the gallery shows
+- [x] S-069.4 A test that every code snippet in the guide marked as runnable executes headless without error
 *Acceptance:* a newcomer can go from install to a saved PNG using chapters 1–2 alone; snippet test green.
 
 ### S-070 Version bump for the v0.7 cycle — E-02 ✅ (8a47e88)

@@ -135,7 +135,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 |---|---|---|---|
 | S-067 | E-10/E-11/E-13 | Sprint 4 follow-ups: F2 wording, empty-path clip warns, Linux window route narrowed, minor verifier items | 5 — done |
 | S-068 | E-22 | Examples Gallery foundation: `examples/gallery/`, golden + snapshot per example, `tools/make_gallery.py`, rendered index, API-coverage test | 5 — done |
-| S-069 | E-22 | User Guide skeleton and first chapters (`docs/guide/`), runnable-snippet test | 5 |
+| S-069 | E-22 | User Guide skeleton and first chapters (`docs/guide/`), runnable-snippet test | 5 — done |
 | S-070 | E-02 | Version `0.7.0.dev0` | 5 — done |
 | S-071 | E-22 | User Guide completed for every v0.7 feature; "Coming from p5/Processing" and "Coming from DrawBot" chapters | 6 |
 | S-072 | E-22 | Examples Gallery completed: coverage test green for all of `__all__`; curated showcase page | 6 |
