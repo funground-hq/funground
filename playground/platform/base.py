@@ -22,7 +22,27 @@ KEY_NAMES = ("left", "right", "up", "down", "space", "enter", "escape")
 class InputState:
     mouse_x: int = 0
     mouse_y: int = 0
-    mouse_pressed: bool = False
+    mouse_pressed: bool = False        # any of the first three buttons held (p.is_mouse_pressed)
+    key_pressed: bool = False          # any key held (p.is_key_pressed)
+
+
+# Event kinds, named after the learner callbacks they trigger (contract I3, D-016).
+EVENT_KINDS = ("mouse_pressed", "mouse_released", "mouse_moved", "mouse_dragged", "mouse_wheel",
+               "key_pressed", "key_released", "key_typed")
+MOUSE_BUTTONS = ("left", "center", "right")
+
+
+@dataclass(frozen=True, slots=True)
+class InputEvent:
+    """One input event, in logical coordinates, delivered in the order it happened."""
+
+    kind: str
+    x: int = 0
+    y: int = 0
+    button: str | None = None          # "left" | "center" | "right" for mouse button events
+    key: str | None = None             # a character ("a", "A", "7", " ") or a name ("left", "enter", "f1")
+    key_code: int | None = None        # the backend's key code
+    delta: float = 0.0                 # mouse wheel: positive when scrolling down/towards you
 
 
 @dataclass(frozen=True, slots=True)
@@ -48,6 +68,9 @@ class Platform(Protocol):
 
     def poll(self) -> bool:
         """Pump OS events. Return True if the sketch should keep running."""
+
+    def events(self) -> list[InputEvent]:
+        """The input events gathered by the last poll(), oldest first."""
 
     def input_state(self) -> InputState:
         """Mouse position in logical pixels, button state."""

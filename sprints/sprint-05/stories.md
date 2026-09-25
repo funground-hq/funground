@@ -112,12 +112,13 @@ lives; alignment is designed once for both.
 - [x] S-044.4 Contract S1 extended; tests; gallery `colour/`; guide chapter 4
 *Acceptance:* every v0.5 colour form still parses unchanged (frozen API).
 
-### S-045 Input events — E-26 *(D-016 decided)*
-- [ ] S-045.0 Contract change (D-016): live value `mouse_pressed` → `is_mouse_pressed`; `p.mouse_pressed` raises an AttributeError naming the new name; update `08_mouse.py`, contract I1, API contract test, Quick Reference, snapshots if their serialised names change
-- [ ] S-045.1 Live values: `pmouse_x`, `pmouse_y`, `mouse_button` (`"left"|"right"|"center"|None`), `key` (last character), `key_code`, `is_key_pressed`
-- [ ] S-045.2 Callbacks discovered by name like `setup`/`draw`: `mouse_pressed`, `mouse_released`, `mouse_moved`, `mouse_dragged`, `mouse_clicked`, `mouse_wheel(delta)`, `key_pressed`, `key_released`, `key_typed`
-- [ ] S-045.3 Platform: events from pygame queued per frame and dispatched after input sampling, before `draw()`; headless platform supports scripted events for tests
-- [ ] S-045.4 Tests with scripted events; gallery `interaction/` (paint program, keyboard mover); guide chapter 10
+### S-045 Input events — E-26 *(D-016 decided)* ✅
+*As built:* events are gathered at poll() and dispatched after input sampling, before draw(), so callbacks also run while paused. pygame key state is tracked from KEYDOWN/KEYUP (cleared on focus loss). Found on the way: `p.save()` to PNG replayed only the current frame, fixed separately; the gallery render harness now saves the last frame shown so `no_loop()` sketches get a picture.
+- [x] S-045.0 Contract change (D-016): live value `mouse_pressed` → `is_mouse_pressed`; `p.mouse_pressed` raises an AttributeError naming the new name; update `08_mouse.py`, contract I1, API contract test, Quick Reference, snapshots if their serialised names change
+- [x] S-045.1 Live values: `pmouse_x`, `pmouse_y`, `mouse_button` (`"left"|"right"|"center"|None`), `key` (last character), `key_code`, `is_key_pressed`
+- [x] S-045.2 Callbacks discovered by name like `setup`/`draw`: `mouse_pressed`, `mouse_released`, `mouse_moved`, `mouse_dragged`, `mouse_clicked`, `mouse_wheel(delta)`, `key_pressed`, `key_released`, `key_typed`
+- [x] S-045.3 Platform: events from pygame queued per frame and dispatched after input sampling, before `draw()`; headless platform supports scripted events for tests
+- [x] S-045.4 Tests with scripted events; gallery `interaction/` (paint program, keyboard mover); guide chapter 10
 *Acceptance:* callbacks fire once per event in order; polling via `is_mouse_pressed` and `key_down` works; the old name fails with a helpful message.
 
 ### S-074 Curve vocabulary aligned with Processing/p5 — E-11 *(D-018 = A)* ✅

@@ -215,14 +215,30 @@ __all__ = [
     "height",
     "mouse_x",
     "mouse_y",
-    "mouse_pressed",
+    "is_mouse_pressed",
+    "pmouse_x",
+    "pmouse_y",
+    "mouse_button",
+    "key",
+    "key_code",
+    "is_key_pressed",
     "frame_count",
     "delta_time",
 ]
+
+
+# D-016: v0.5's live value mouse_pressed became is_mouse_pressed, because mouse_pressed() is
+# now the name of the callback (as in p5). The old name fails with a pointer to the new one.
+_RENAMED = {
+    "mouse_pressed": "p.mouse_pressed was renamed to p.is_mouse_pressed (True while a mouse button is "
+                     "held). To react to a click, define a function called mouse_pressed() in your sketch.",
+}
 
 
 def __getattr__(name: str):
     """Expose live values without copying stale integers into this module."""
     if name in _api.LIVE_NAMES:
         return _api.live_value(name)
+    if name in _RENAMED:
+        raise AttributeError(_RENAMED[name])
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

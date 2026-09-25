@@ -8,7 +8,7 @@ def setup():
 def draw():
     p.background("white")
 
-    if p.mouse_pressed:
+    if p.is_mouse_pressed:
         p.fill("tomato")
     else:
         p.fill("skyblue")

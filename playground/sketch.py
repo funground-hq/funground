@@ -90,7 +90,15 @@ class Sketch:
         self.title = "playground"
         self.mouse_x = 0
         self.mouse_y = 0
-        self.mouse_pressed = False
+        self.is_mouse_pressed = False       # D-016 (was mouse_pressed in v0.5)
+        # Input events (S-045, contract I3).
+        self.pmouse_x = 0
+        self.pmouse_y = 0
+        self.mouse_button: str | None = None
+        self.key: str | None = None
+        self.key_code: int | None = None
+        self.is_key_pressed = False
+        self._callbacks: dict[str, Callable] = {}
         self.frame_count = 0
         self.delta_time = 0.0
         self.running = False
@@ -607,6 +615,29 @@ class Sketch:
     def stop(self) -> None:
         self.running = False
 
+    # ---- input events (S-045, contract I3, D-016)
+    def _dispatch_events(self) -> None:
+        """Update the input live values and call the learner's callbacks, in event order."""
+        for ev in self._platform.events():
+            if ev.kind in ("mouse_pressed", "mouse_released") and ev.button:
+                self.mouse_button = ev.button
+            if ev.kind in ("key_pressed", "key_released"):
+                self.key, self.key_code = ev.key, ev.key_code
+            self._call(ev.kind, ev)
+            if ev.kind == "mouse_released":
+                self._call("mouse_clicked", ev)
+            if ev.kind == "key_pressed" and ev.key and len(ev.key) == 1:
+                self._call("key_typed", ev)
+
+    def _call(self, name: str, ev) -> None:
+        fn = self._callbacks.get(name)
+        if fn is None:
+            return
+        if name == "mouse_wheel" and _takes_an_argument(fn):
+            fn(ev.delta)
+        else:
+            fn()
+
     # ---- loop control and clock (S-048, contract R10)
     def exit(self) -> None:
         """Same as stop(): the sketch ends after the current frame."""
@@ -659,6 +690,7 @@ class Sketch:
     ) -> None:
         """Run the setup()/draw() found in *namespace* (the sketch's globals)."""
         setup, draw = _sketch_functions(namespace)
+        self._callbacks = _event_callbacks(namespace)
         if max_frames is not None and max_frames <= 0:
             raise ValueError("max_frames must be positive")
         if fps is not None and fps <= 0:
@@ -692,8 +724,11 @@ class Sketch:
                 if not self._platform.poll():
                     self.running = False
 
+                self.pmouse_x, self.pmouse_y = self.mouse_x, self.mouse_y
                 inp = self._platform.input_state()
-                self.mouse_x, self.mouse_y, self.mouse_pressed = inp.mouse_x, inp.mouse_y, inp.mouse_pressed
+                self.mouse_x, self.mouse_y = inp.mouse_x, inp.mouse_y
+                self.is_mouse_pressed, self.is_key_pressed = inp.mouse_pressed, inp.key_pressed
+                self._dispatch_events()
 
                 # draw() runs every frame while looping, once after redraw(), and always on
                 # the first frame - even after no_loop() in setup(), as in p5.
@@ -730,6 +765,34 @@ def _geometry_of(path: PathBuilder | Path, name: str) -> Path:
     if isinstance(path, Path):
         return path
     raise TypeError(f"p.{name}() needs a path made with p.path(), not {type(path).__name__}")
+
+
+CALLBACK_NAMES = ("mouse_pressed", "mouse_released", "mouse_moved", "mouse_dragged", "mouse_clicked",
+                  "mouse_wheel", "key_pressed", "key_released", "key_typed")
+
+
+def _event_callbacks(namespace: Namespace) -> dict[str, Callable]:
+    """Input callbacks are found by name, like setup() and draw() (D-016)."""
+    found = {}
+    for name in CALLBACK_NAMES:
+        fn = namespace.get(name)
+        if fn is None:
+            continue
+        if not callable(fn):
+            raise TypeError(f"{name} must be a function (it is called when that input happens)")
+        found[name] = fn
+    return found
+
+
+def _takes_an_argument(fn: Callable) -> bool:
+    import inspect
+
+    try:
+        params = [p for p in inspect.signature(fn).parameters.values()
+                  if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD, p.VAR_POSITIONAL)]
+    except (TypeError, ValueError):
+        return True
+    return bool(params)
 
 
 def _sketch_functions(namespace: Namespace) -> tuple[Callable[[], None] | None, Callable[[], None]]:

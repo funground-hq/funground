@@ -65,7 +65,8 @@ provide capabilities.* This table is what "owns" means.
 
 | # | Semantic | v0.5 verified behaviour | v0.6 rule | Status |
 |---|---|---|---|---|
-| I1 | Mouse | `mouse_x`/`mouse_y` sampled once before each `draw()`; `mouse_pressed` = any of the first three buttons | Same | Pinned |
+| I1 | Mouse | `mouse_x`/`mouse_y` sampled once before each `draw()`; `mouse_pressed` = any of the first three buttons | Same | Pinned — **renamed `is_mouse_pressed` (D-016, approved change to the v0.5 contract)**; `p.mouse_pressed` raises an `AttributeError` naming the new name |
+| I3 | Input events and callbacks (S-045, D-016) | — | Callbacks are found by name like `setup`/`draw`: `mouse_pressed`, `mouse_released`, `mouse_clicked` (after each release), `mouse_moved`, `mouse_dragged` (moved with a button held), `mouse_wheel` (given `delta`, positive when scrolling down, if it takes an argument), `key_pressed`, `key_released`, `key_typed` (printable characters only). Called **once per event, in order, after the mouse is sampled and before `draw()`**. Live values: `pmouse_x/y` (previous frame), `mouse_button` (last button pressed: `"left"`, `"center"`, `"right"`, `None` before any), `key` (a character, or a name such as `"left"`, `"enter"`, `"f1"`), `key_code` (backend code), `is_key_pressed` (any key held). Escape still stops the sketch (R6) after its `key_pressed` | Pinned (Sprint 5) |
 | I2 | Keyboard | `key_down(name)`: `left right up down space enter escape`, any single character, or a pygame key int; case-insensitive; unknown → `ValueError` | Same names; key names become Playground's, not pygame's | Pinned |
 | H1 | `random(high)` / `random(low, high)` | Uniform float; **Phase 0:** uses Playground's own generator, `random_seed(seed)` makes it repeatable and never touches the learner's `import random` | Same | Pinned |
 | H2 | `constrain`, `distance` | Clamp; Euclidean distance | Same | Pinned |

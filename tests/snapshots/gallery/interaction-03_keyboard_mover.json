@@ -1,0 +1,51 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "x": 320,
+  "y": 200
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "arrow keys move  |  space: change colour",
+  "x": 10,
+  "y": 372
+ }
+]

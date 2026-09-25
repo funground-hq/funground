@@ -1,0 +1,43 @@
+[
+ {
+  "height": 40,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "width": 640,
+  "x": 0,
+  "y": 360
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "drag to paint  |  wheel: brush 8  |  r g b: colour  |  c: clear  |  last key: None",
+  "x": 10,
+  "y": 372
+ }
+]

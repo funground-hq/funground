@@ -35,10 +35,7 @@ GOLDEN_PLATFORM = "Windows"
 
 # Public names not yet shown by any example. This list may only shrink: the test below
 # fails if a listed name is now covered, and S-072 (release v0.7) requires it empty.
-NOT_YET_IN_GALLERY: set[str] = {
-    # S-048 names whose natural example needs an input callback: added with S-045.
-    "no_loop", "loop", "redraw", "is_looping", "exit",
-}
+NOT_YET_IN_GALLERY: set[str] = set()
 
 
 @pytest.fixture(autouse=True)
