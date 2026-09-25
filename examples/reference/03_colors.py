@@ -28,7 +28,7 @@ def draw():
     p.fill((255, 200, 0, 120))
     p.circle(185, 220, 130)
 
-    # Every pygame-ce colour name works, on every platform, spelt in lowercase.
+    # Every pygame-ce colour name works, on every platform (capitals and spaces are ignored).
     for i, name in enumerate(["gray25", "tomato3", "darkslategrey", "aqua"]):
         p.fill(name)
         p.circle(390 + i * 70, 290, 50)

@@ -97,7 +97,8 @@ class _FakeWindow:
 def sdl_highdpi(monkeypatch, request):
     """Pretend to be macOS / Linux with a real display and a 2x pygame.Window."""
     monkeypatch.delenv("PLAYGROUND_BACKING_SCALE", raising=False)
-    monkeypatch.setenv("SDL_VIDEODRIVER", "x11")     # not "dummy": the probe path is taken
+    # macOS takes the high-DPI route on any driver; Linux only on Wayland (S-067).
+    monkeypatch.setenv("SDL_VIDEODRIVER", "cocoa" if request.param == "darwin" else "wayland")
     monkeypatch.setattr(sys, "platform", request.param)
     monkeypatch.setattr(pygame, "Window", _FakeWindow)
     monkeypatch.setattr(pygame.display, "init", lambda: None)   # x11 is not available here
@@ -163,3 +164,24 @@ def test_windows_path_is_unchanged_by_platform_guard(monkeypatch):
     monkeypatch.setenv("SDL_VIDEODRIVER", "windows")
     monkeypatch.setattr(sys, "platform", "win32")
     assert not _uses_sdl_highdpi_window()
+
+
+# ---- S-067: Linux X11 keeps the plain set_mode route; Wayland or an explicit opt-in takes the SDL route.
+@pytest.mark.parametrize("driver, wayland_display, opt_in, expected", [
+    ("x11", "", "", False),
+    ("", "", "", False),            # no driver hint, no Wayland session: X11
+    ("", "wayland-0", "", True),     # Wayland session detected from the environment
+    ("wayland", "", "", True),
+    ("x11", "", "1", True),          # explicit opt-in wins
+])
+def test_linux_route_is_narrowed_to_wayland(monkeypatch, driver, wayland_display, opt_in, expected):
+    from playground.platform.pygame_platform import _uses_sdl_highdpi_window
+
+    monkeypatch.delenv("PLAYGROUND_BACKING_SCALE", raising=False)
+    monkeypatch.setattr(sys, "platform", "linux")
+    for name, value in (("SDL_VIDEODRIVER", driver), ("WAYLAND_DISPLAY", wayland_display), ("PLAYGROUND_HIGHDPI", opt_in)):
+        if value:
+            monkeypatch.setenv(name, value)
+        else:
+            monkeypatch.delenv(name, raising=False)
+    assert _uses_sdl_highdpi_window() is expected

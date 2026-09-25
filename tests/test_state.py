@@ -38,3 +38,14 @@ def test_stack_save_restore_nesting():
 def test_restore_without_save_is_an_error():
     with pytest.raises(RuntimeError):
         StateStack().restore()
+
+
+def test_unwind_restores_the_bottom_state_and_reports_the_count():
+    st = StateStack()
+    st.update(fill=Color(1, 1, 1))
+    base = st.current
+    st.save(); st.update(fill=Color(2, 2, 2))
+    st.save(); st.update(stroke_width=7)
+    assert st.unwind() == 2
+    assert st.current == base and st.depth == 0
+    assert st.unwind() == 0 and st.current == base   # nothing open: a no-op

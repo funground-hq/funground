@@ -320,3 +320,18 @@ def test_sample_sketch_exports_to_pdf_headless(tmp_path, monkeypatch):
     assert any(isinstance(op, ir.FillPath) for op in ops)
     assert any(isinstance(op, ir.StrokePath) and any(s[0] == "cubic" for s in op.path) for op in ops)
     assert out.read_bytes()[:5] == b"%PDF-" and out.stat().st_size > 1000
+
+
+def test_clip_with_an_empty_path_warns_and_is_ignored(sketch, canvas):
+    """S-067: clipping to nothing would silently hide everything drawn afterwards."""
+    from playground.capabilities import PlaygroundWarning
+
+    p.background("white")
+    with p.saved_state():
+        with pytest.warns(PlaygroundWarning, match="empty path"):
+            p.clip(p.path())
+        p.no_stroke()
+        p.fill("red")
+        p.rect(0, 0, 50, 50)
+    assert not any(type(op).__name__ == "ClipPath" for op in sketch.frame.ops)
+    assert tuple(canvas.get_at((25, 25))[:3]) == (255, 0, 0)
