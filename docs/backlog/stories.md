@@ -94,7 +94,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 
 | ID | Epic | Story | Sprint |
 |---|---|---|---|
-| S-040 | E-23 | Verify `Feature_Map.md` against the live p5.js 2.x, Processing 4 and DrawBot 3.x references; correct the inventory | 5 (first) |
+| S-040 | E-23 | Verify `Feature_Map.md` against the live p5.js 2.x, Processing 4 and DrawBot 3.x references; correct the inventory | 5 — done |
 | S-041 | E-24 | `square`, `triangle`, `quad`, `arc` (open/chord/pie), `polygon(points)` | 5 |
 | S-042 | E-24 | `stroke_cap`, `stroke_join`, `stroke_dash`, miter limit; `no_smooth()` opt-out | 5 |
 | S-043 | E-10 | `shear_x/shear_y`, `apply_matrix`, `reset_matrix` | 5 |
@@ -134,7 +134,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | ID | Epic | Story | Sprint |
 |---|---|---|---|
 | S-067 | E-10/E-11/E-13 | Sprint 4 follow-ups: F2 wording, empty-path clip warns, Linux window route narrowed, minor verifier items | 5 — done |
-| S-068 | E-22 | Examples Gallery foundation: `examples/gallery/`, golden + snapshot per example, `tools/make_gallery.py`, rendered index, API-coverage test | 5 |
+| S-068 | E-22 | Examples Gallery foundation: `examples/gallery/`, golden + snapshot per example, `tools/make_gallery.py`, rendered index, API-coverage test | 5 — done |
 | S-069 | E-22 | User Guide skeleton and first chapters (`docs/guide/`), runnable-snippet test | 5 |
 | S-070 | E-02 | Version `0.7.0.dev0` | 5 — done |
 | S-071 | E-22 | User Guide completed for every v0.7 feature; "Coming from p5/Processing" and "Coming from DrawBot" chapters | 6 |

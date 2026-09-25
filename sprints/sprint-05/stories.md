@@ -46,12 +46,13 @@ lives; alignment is designed once for both.
 - [x] S-067.4 Minor verifier items: direct unit test for `StateStack.unwind()`; "lowercase colour names" wording in the reference relaxed; `delta_time` gets a full reference example
 *Acceptance:* the Sprint 4 review's open verifier findings are closed or explicitly carried.
 
-### S-068 Examples Gallery foundation — E-22
-- [ ] S-068.1 `examples/gallery/<area>/NN_name.py` — plain, deterministic learner sketches (no mouse/keyboard dependence unless the example is about input, in which case it must still render a sensible frame headless)
-- [ ] S-068.2 Tests discover the gallery as well as `examples/session1`: every gallery sketch runs headless, has a golden and an IR snapshot (extend `tests/conftest.py`, `test_examples_golden.py`, `test_ops_snapshot.py`)
-- [ ] S-068.3 `tools/make_gallery.py`: renders every gallery sketch headless with `p.save()` to `docs/gallery/images/`, and writes `docs/gallery/README.md` — an index grouped by area with image, one-line description and a link to the source
-- [ ] S-068.4 Seed the gallery with the features that already exist (shapes, colour, fill/stroke, text, animation, transforms, `saved_state`, paths, clipping, `text_width`, `save`), re-using the Session-1 and reference sketches where they fit
-- [ ] S-068.5 A test that every public name in `playground.__all__` is used by at least one gallery example — fails until the gallery covers the API; the list of uncovered names is the gallery backlog
+### S-068 Examples Gallery foundation — E-22 ✅
+*As built:* 15 examples in 11 areas; tests in `tests/test_gallery.py` (goldens `tests/golden/gallery/`, snapshots `tests/snapshots/gallery/`, both `<area>-<stem>`; examples marked `# gallery: time-dependent` are smoke-tested only); existing Session-1 goldens and snapshots untouched. The coverage test uses a shrink-only allowlist `NOT_YET_IN_GALLERY` (today: `curve_vertex`, pending S-074) that must be empty for the v0.7 release.
+- [x] S-068.1 `examples/gallery/<area>/NN_name.py` — plain, deterministic learner sketches (no mouse/keyboard dependence unless the example is about input, in which case it must still render a sensible frame headless)
+- [x] S-068.2 Tests discover the gallery as well as `examples/session1`: every gallery sketch runs headless, has a golden and an IR snapshot (extend `tests/conftest.py`, `test_examples_golden.py`, `test_ops_snapshot.py`)
+- [x] S-068.3 `tools/make_gallery.py`: renders every gallery sketch headless with `p.save()` to `docs/gallery/images/`, and writes `docs/gallery/README.md` — an index grouped by area with image, one-line description and a link to the source
+- [x] S-068.4 Seed the gallery with the features that already exist (shapes, colour, fill/stroke, text, animation, transforms, `saved_state`, paths, clipping, `text_width`, `save`), re-using the Session-1 and reference sketches where they fit
+- [x] S-068.5 A test that every public name in `playground.__all__` is used by at least one gallery example — fails until the gallery covers the API; the list of uncovered names is the gallery backlog
 *Acceptance:* `python tools/make_gallery.py` regenerates the gallery index and images unchanged; the coverage test passes for every name that exists at sprint end.
 
 ### S-069 User Guide skeleton and first chapters — E-22

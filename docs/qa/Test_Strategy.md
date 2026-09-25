@@ -13,6 +13,7 @@ Implements §10 of the architecture document as it stands after Sprint 0. Run wi
 | Golden images | The sample suite renders exactly what it did before | `tests/test_examples_golden.py::test_sketch_matches_golden`, `tests/golden/*.png` | live |
 | **IR snapshots** (primary cross-backend contract) | Learner code → expected draw-op list of the final frame, JSON, platform-independent | `tests/test_ops_snapshot.py`, `tests/snapshots/*.json` | live (Sprint 2) |
 | Capability / error contract | Unsupported features fail at `p.size()`/`run()` with a learner-readable message | `tests/test_capabilities.py` | live (Sprint 2) |
+| Examples Gallery | Every gallery example runs headless, matches its golden and IR snapshot; together the examples use every public name | `tests/test_gallery.py`, `tests/golden/gallery/`, `tests/snapshots/gallery/`, `tools/make_gallery.py` | live (Sprint 5) |
 | Provider contract | Every renderer/platform obeys its protocol | planned, Sprint 3 |
 | Cross-renderer conformance | Same ops → same semantics on pygame and Cairo (pixel tolerance) | planned, Sprint 3 |
 | Export checks | PDF/SVG structure + rendered comparison | planned, Sprint 4 |
