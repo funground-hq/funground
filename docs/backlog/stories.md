@@ -140,3 +140,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-071 | E-22 | User Guide completed for every v0.7 feature; "Coming from p5/Processing" and "Coming from DrawBot" chapters | 6 |
 | S-072 | E-22 | Examples Gallery completed: coverage test green for all of `__all__`; curated showcase page | 6 |
 | S-073 | E-02 | Release v0.7: changelog, Quick Reference v0.7, version `0.7.0`, tagged, CI green (needs S-039) | 6 |
+| S-074 | E-11 | Curve vocabulary aligned with Processing/p5 (D-018): Bézier / quadratic / Catmull-Rom vertices, contours, `bezier()`/`curve()` shapes, `bezier_point`/`tangent` | 5 |

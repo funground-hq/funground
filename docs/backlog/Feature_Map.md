@@ -6,8 +6,8 @@ owns the gap; and which sprint it is planned for. It is the source for the Phase
 below and for `themes_and_epics.md`. Status: `have` · `planned (sprint)` · `epic, no stories` ·
 `no epic` · `out of scope`.
 
-Inventory taken from p5.js 1.x/2.0 and Processing 4 references and the DrawBot 3.x reference,
-from memory on 25 Sept 2026 — story S-040 verifies it against the live docs before Sprint 5.
+Inventory first drafted from memory; **verified on 25 Sept 2026 (S-040) against p5.js 2.3.3,
+Processing 4 and DrawBot 3.132** — see "Corrections from S-040" at the end.
 
 ## 1. Sketch lifecycle and runtime
 
@@ -144,3 +144,38 @@ DrawBot's ~100 Core Image filters (a handful via Pillow instead); data-loading h
 events, noise, text) and a typical DrawBot single-page composition (paths, gradients, text box,
 PDF) with only naming changes. Phase 3 then adds images, pages, rich typography, SVG import,
 sound, GIF/video, controls.
+
+## Corrections from S-040 (verified 25 Sept 2026: p5.js 2.3.3, Processing 4, DrawBot 3.132)
+
+**Conflict — curve names.** Playground's `curve_vertex(cx1, cy1, cx2, cy2, x, y)` (Sprint 4) is a
+*cubic Bézier*. In both references that name means something else:
+
+| | cubic Bézier segment | smooth curve *through* points (Catmull-Rom) |
+|---|---|---|
+| Processing 4 | `bezierVertex(cx1, cy1, cx2, cy2, x, y)` | `curveVertex(x, y)` |
+| p5.js 2.x | `bezierVertex(...)` (with `bezierOrder`) | `splineVertex(x, y)` (was `curveVertex` in 1.x) |
+| DrawBot | `curveTo((cx1, cy1), (cx2, cy2), (x, y))` on a path | — |
+| Playground today | `curve_vertex(cx1, cy1, cx2, cy2, x, y)` | — |
+
+A learner porting a Processing sketch would call `curve_vertex(x, y)` and get an error, or read
+our examples and learn the wrong meaning. → **decision D-018** (rename before v0.7 ships).
+
+**Missing from the map, now added:**
+
+| Feature | Reference | Owner | Sprint |
+|---|---|---|---|
+| `quadratic_vertex`, `begin_contour`/`end_contour` (holes) | Processing, p5 | E-11 | 5 (with D-018) |
+| `bezier(x1, y1, …)` and `curve(…)` one-call shapes; `bezier_point`, `bezier_tangent` | Processing, p5 | E-11 | 5 (with D-018) |
+| `clear()` — transparent background (matters for PNG export) | Processing, p5 | E-24 | 5 |
+| `no_clip()` | Processing | E-11 | 5 |
+| `mouse_clicked()` callback | Processing, p5 | E-26 | 5 (S-045) |
+| `second()`, `minute()`, `hour()`, `day()`, `month()`, `year()` | Processing, p5 | E-29 | 5 (S-048) |
+| `text_leading`, `text_font` | Processing, p5 | E-15 | 6 (already planned as fonts/leading) |
+| `print_matrix` | Processing | — | out of scope (debugging aid) |
+| Arithmetic/trig built-ins (`abs`, `sqrt`, `sin`, `atan2`, …) | Processing, p5 | — | out of scope: Python's `math` covers them; the guide says so |
+| `cmykFill`, `cmykLinearGradient`, `cmykShadow` | DrawBot | — | out of scope (ADR-003) |
+
+**Confirmed, no change:** DrawBot's quick reference (canvas/pages, shapes, paths, stroke
+attributes incl. `lineDash`, gradients, `shadow`, `clipPath`, text/`textBox`/`font`, `image`,
+`BezierPath`, `skew`, `saveImage`) matches sections 1–6 of this map; Processing's input, colour,
+transform, image and rendering lists match sections 3, 4, 6 and 7.

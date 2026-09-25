@@ -18,6 +18,8 @@ section; the guide and gallery build from the code (screenshots generated headle
 **To be presented before the story that needs it:**
 - ~~D-016 event-callback naming~~ — **decided 25 Sept 2026**: callbacks `mouse_pressed()` etc. (p5 names,
   snake_case); live booleans `is_mouse_pressed`, `is_key_pressed`. Approved contract change to v0.5.
+- **D-018 curve naming** (before S-074): our Sprint-4 `curve_vertex` is a Bézier, but Processing/p5 use
+  that name for Catmull-Rom curves through points.
 - **D-017 colour-mode scope** (before S-044): whether `color_mode()` changes how *every* colour
   argument is read (p5/Processing behaviour) or only `p.color()`.
 
@@ -25,7 +27,7 @@ section; the guide and gallery build from the code (screenshots generated headle
 
 1. Foundations: S-040 (verify the Feature Map — may add or drop items below), S-068 (gallery),
    S-069 (guide skeleton), S-067 (Sprint 4 follow-ups), S-070 (version bump).
-2. Features, in dependency order: S-041 → S-042 → S-043 → S-046 → S-047 → S-048 → S-044 → S-045.
+2. Features, in dependency order: S-041 → S-042 → S-043 → S-074 → S-046 → S-047 → S-048 → S-044 → S-045.
 3. Close: S-058 (ADR-003), sprint review and reviewer's guide.
 
 `text_align` and text metrics (formerly S-049) move to Sprint 6, where multi-line text layout
@@ -33,9 +35,10 @@ lives; alignment is designed once for both.
 
 ## Story set
 
-### S-040 Verify the Feature Map against the live references — E-23
-- [ ] S-040.1 Check `docs/backlog/Feature_Map.md` against the current p5.js, Processing 4 and DrawBot 3.x references; mark corrections
-- [ ] S-040.2 Adjust Sprint 5–6 story scope if the check finds gaps; note changes in this file
+### S-040 Verify the Feature Map against the live references — E-23 ✅
+**Result (25 Sept 2026, p5.js 2.3.3 / Processing 4 / DrawBot 3.132):** one conflict (our `curve_vertex` is a Bézier; in Processing/p5 `curveVertex`/`splineVertex` is Catmull-Rom → **D-018**) and small gaps: `quadratic_vertex`, contours, `bezier()`/`curve()` shapes, `clear()`, `no_clip()`, `mouse_clicked()`, date/time helpers. Scope changes below: new story **S-074**; `clear`/`no_clip` added to S-041; `mouse_clicked` to S-045; date/time to S-048.
+- [x] S-040.1 Check `docs/backlog/Feature_Map.md` against the current p5.js, Processing 4 and DrawBot 3.x references; mark corrections
+- [x] S-040.2 Adjust Sprint 5–6 story scope if the check finds gaps; note changes in this file
 *Acceptance:* Feature Map carries a "verified on <date> against <versions>" line; any scope change is listed here before feature work starts.
 
 ### S-067 Sprint 4 follow-ups — E-10 / E-11 / E-13 ✅
@@ -67,6 +70,7 @@ lives; alignment is designed once for both.
 ### S-041 Remaining basic shapes — E-24
 - [ ] S-041.1 `square(x, y, size)` (top-left, like `rect`), `triangle(x1, y1, x2, y2, x3, y3)`, `quad(...)` (4 points), `polygon(points)` (list of `(x, y)`, closed)
 - [ ] S-041.2 `arc(x, y, w, h, start, stop, mode="open")` — centre-anchored like `ellipse`, angles in **degrees** (D-002), clockwise on screen; modes `open` / `chord` / `pie`
+- [ ] S-041.4 `clear()` (transparent background — keeps alpha in PNG export) and `no_clip()` (from S-040)
 - [ ] S-041.3 All emit existing IR ops (paths); contract rows added; tests; gallery example `shapes/`; guide chapter 3 completed
 *Acceptance:* each shape matches its contract row pixel-for-pixel in tests; exports to PDF.
 
@@ -95,7 +99,7 @@ lives; alignment is designed once for both.
 
 ### S-048 Loop control and time — E-29
 - [ ] S-048.1 `no_loop()`, `loop()`, `redraw()` — the window stays open and responsive when not looping; `is_looping()`
-- [ ] S-048.2 `millis()` (since `run()` started), `frame_rate()` (measured fps, live), `exit()` (alias semantics of `stop()` documented)
+- [ ] S-048.2 `millis()` (since `run()` started), `frame_rate()` (measured fps, live), `exit()` (alias semantics of `stop()` documented); `second()`, `minute()`, `hour()`, `day()`, `month()`, `year()` (from S-040)
 - [ ] S-048.3 Tests with the headless platform; gallery `animation/`; guide chapter 7 completed
 *Acceptance:* a `no_loop()` sketch draws exactly once and still responds to `redraw()`.
 
@@ -109,10 +113,18 @@ lives; alignment is designed once for both.
 ### S-045 Input events — E-26 *(D-016 decided)*
 - [ ] S-045.0 Contract change (D-016): live value `mouse_pressed` → `is_mouse_pressed`; `p.mouse_pressed` raises an AttributeError naming the new name; update `08_mouse.py`, contract I1, API contract test, Quick Reference, snapshots if their serialised names change
 - [ ] S-045.1 Live values: `pmouse_x`, `pmouse_y`, `mouse_button` (`"left"|"right"|"center"|None`), `key` (last character), `key_code`, `is_key_pressed`
-- [ ] S-045.2 Callbacks discovered by name like `setup`/`draw`: `mouse_pressed`, `mouse_released`, `mouse_moved`, `mouse_dragged`, `mouse_wheel(delta)`, `key_pressed`, `key_released`, `key_typed`
+- [ ] S-045.2 Callbacks discovered by name like `setup`/`draw`: `mouse_pressed`, `mouse_released`, `mouse_moved`, `mouse_dragged`, `mouse_clicked`, `mouse_wheel(delta)`, `key_pressed`, `key_released`, `key_typed`
 - [ ] S-045.3 Platform: events from pygame queued per frame and dispatched after input sampling, before `draw()`; headless platform supports scripted events for tests
 - [ ] S-045.4 Tests with scripted events; gallery `interaction/` (paint program, keyboard mover); guide chapter 10
 *Acceptance:* callbacks fire once per event in order; polling via `is_mouse_pressed` and `key_down` works; the old name fails with a helpful message.
+
+### S-074 Curve vocabulary aligned with Processing/p5 — E-11 *(needs D-018)*
+- [ ] S-074.1 Apply D-018 to the existing `curve_vertex` (Sprint 4): rename or change meaning; update contract F3, tests, `14_paths.py`, reference and guide
+- [ ] S-074.2 `bezier_vertex(cx1, cy1, cx2, cy2, x, y)`, `quadratic_vertex(cx, cy, x, y)`, Catmull-Rom `curve_vertex(x, y)` / `spline_vertex(x, y)` per D-018, `curve_tightness(t)`
+- [ ] S-074.3 `begin_contour()` / `end_contour()` for holes (non-zero fill with reversed winding, contract F3 extended)
+- [ ] S-074.4 One-call shapes `bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2)` and `curve(...)`; `bezier_point(a, b, c, d, t)`, `bezier_tangent(...)`
+- [ ] S-074.5 Tests; gallery `curves/`; guide chapter 9
+*Acceptance:* a Processing curve sketch ports with only snake_case renames.
 
 ### S-058 ADR-003: deliberately out of scope — E-23
 - [ ] S-058.1 `docs/design/ADR-003-out-of-scope.md`: CMYK/print colour; sound synthesis; large filter libraries; Processing data/serial/network/video libraries; 3D before 1.0; browser before 1.0 (D-014) — each with the reason and what a learner uses instead
