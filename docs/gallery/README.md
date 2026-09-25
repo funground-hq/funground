@@ -59,6 +59,22 @@ fill is the inside, stroke the outline. no_fill() and no_stroke() switch either 
 
 Source: [`examples/gallery/lines/01_fill_and_stroke.py`](../../examples/gallery/lines/01_fill_and_stroke.py)
 
+### Line ends, corners and dashes
+
+![Line ends, corners and dashes](images/lines-02_caps_joins_dashes.png)
+
+stroke_cap sets how a line ends, stroke_join how corners look, and stroke_dash draws dashed outlines. They are style, like fill: saved_state puts them back.
+
+Source: [`examples/gallery/lines/02_caps_joins_dashes.py`](../../examples/gallery/lines/02_caps_joins_dashes.py)
+
+### Pixel art with no_smooth
+
+![Pixel art with no_smooth](images/lines-03_pixel_art.png)
+
+no_smooth() turns off the soft edges, so every pixel is either the shape's colour or not. Draw big and blocky with scale() and it looks like a retro game. smooth() switches back: compare the two white circles.
+
+Source: [`examples/gallery/lines/03_pixel_art.py`](../../examples/gallery/lines/03_pixel_art.py)
+
 ## Text
 
 ### Text
