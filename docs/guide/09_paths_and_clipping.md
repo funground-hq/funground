@@ -61,6 +61,11 @@ with p.saved_state():
 
 ![Paths and clipping](../gallery/images/paths-02_path_and_clip.png)
 
+`p.no_clip()` switches clipping off until the end of its own `saved_state` block; when that block
+ends, the clip from outside it comes back.
+
+![Clipping on and off](../gallery/images/paths-03_no_clip.png)
+
 *Coming in Sprint 5:* Bézier, quadratic and smooth curves through points, holes in shapes,
 and `bezier()` / `curve()` in one call (these follow Processing's names).
 

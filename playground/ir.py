@@ -107,6 +107,11 @@ class ClipPath(Op):
 
 
 @dataclass(frozen=True, slots=True)
+class ResetClip(Op):
+    """Remove every clip until the enclosing Restore brings the previous one back (S-041)."""
+
+
+@dataclass(frozen=True, slots=True)
 class FillPath(Op):
     path: Path
     color: Color
@@ -119,10 +124,10 @@ class StrokePath(Op):
     width: float
 
 
-AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, FillPath, StrokePath]
+AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath]
 OP_TYPES: dict[str, type] = {
     cls.__name__: cls
-    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, FillPath, StrokePath)
+    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath)
 }
 
 

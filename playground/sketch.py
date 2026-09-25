@@ -271,6 +271,64 @@ class Sketch:
     def point(self, x: float, y: float) -> None:
         self._emit(ir.Point(x, y, self.style))
 
+    # ---- more shapes (S-041, contract F5-F7)
+    def square(self, x: float, y: float, size: float) -> None:
+        """A square placed by its top-left corner, like rect()."""
+        self._emit(ir.Rect(x, y, size, size, self.style))
+
+    def triangle(self, x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> None:
+        self._emit_path(Path().move_to(x1, y1).line_to(x2, y2).line_to(x3, y3).close())
+
+    def quad(self, x1: float, y1: float, x2: float, y2: float,
+             x3: float, y3: float, x4: float, y4: float) -> None:
+        self._emit_path(Path().move_to(x1, y1).line_to(x2, y2).line_to(x3, y3).line_to(x4, y4).close())
+
+    def polygon(self, points) -> None:
+        """A closed shape through a list of (x, y) points."""
+        pts = [tuple(pt) for pt in points]
+        if any(len(pt) != 2 for pt in pts):
+            raise ValueError("p.polygon() needs a list of (x, y) points")
+        if len(pts) < 2:
+            raise ValueError("p.polygon() needs at least two points")
+        path = Path().move_to(*pts[0])
+        for pt in pts[1:]:
+            path = path.line_to(*pt)
+        self._emit_path(path.close())
+
+    ARC_MODES = ("open", "chord", "pie")
+
+    def arc(self, x: float, y: float, width: float, height: float,
+            start: float, stop: float, mode: str = "open") -> None:
+        """Part of an ellipse centred at (x, y), from *start* to *stop* degrees, clockwise.
+
+        mode "open": the region is filled but the outline is not closed (as in p5);
+        "chord": closed by a straight line; "pie": closed through the centre.
+        """
+        if mode not in self.ARC_MODES:
+            raise ValueError(f"p.arc() mode must be one of {', '.join(self.ARC_MODES)}, not {mode!r}")
+        while stop < start:
+            stop += 360
+        stop = min(stop, start + 360)
+        rx, ry = width / 2, height / 2
+        if mode == "pie":
+            self._emit_path(Path().move_to(x, y).arc_to(x, y, rx, ry, start, stop).close())
+            return
+        outline = Path().arc_to(x, y, rx, ry, start, stop)
+        closed = outline.close()
+        if mode == "chord":
+            self._emit_path(closed)
+            return
+        style = self.style                      # "open": fill the chord area, stroke only the curve
+        self._require_window()
+        if style.fill is not None:
+            self._emit(ir.FillPath(closed, style.fill))
+        if style.stroke is not None:
+            self._emit(ir.StrokePath(outline, style.stroke, float(style.stroke_width)))
+
+    def clear(self) -> None:
+        """Make the whole canvas transparent (saved PNGs keep the transparency)."""
+        self._emit(ir.Clear(Color(0, 0, 0, 0)))
+
     def text(self, message: object, x: float, y: float, color: ColorLike | None = None) -> None:
         style = self.style
         if color is not None:
@@ -337,6 +395,10 @@ class Sketch:
             )
             return
         self._emit(ir.ClipPath(geometry))
+
+    def no_clip(self) -> None:
+        """Remove clipping until the enclosing pop() / end of the saved_state block."""
+        self._emit(ir.ResetClip())
 
     def _emit_path(self, geometry: Path) -> None:
         self._require_window()

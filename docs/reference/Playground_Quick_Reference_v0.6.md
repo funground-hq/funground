@@ -97,7 +97,13 @@ center_y = p.height / 2
 | `p.rect(x, y, width, height)` | Rectangle whose (x, y) is the **top-left** corner. | `p.rect(40, 160, 120, 60)` |
 | `p.line(x1, y1, x2, y2)` | Line from one point to another. | `p.line(220, 160, 340, 220)` |
 | `p.point(x, y)` | A dot in the stroke colour, about `stroke_width` across. | `p.point(400, 100)` |
+| `p.square(x, y, size)` | Square whose (x, y) is the **top-left** corner. | `p.square(40, 40, 60)` |
+| `p.triangle(x1, y1, x2, y2, x3, y3)` | Filled triangle through three corners. | `p.triangle(10, 90, 90, 90, 50, 10)` |
+| `p.quad(x1, y1, … x4, y4)` | Four-sided shape through four corners in order. | `p.quad(20, 20, 80, 20, 80, 80, 20, 80)` |
+| `p.polygon(points)` | Closed shape through a list of `(x, y)` points. | `p.polygon([(0, 0), (50, 20), (20, 60)])` |
+| `p.arc(x, y, w, h, start, stop, mode="open")` | Part of an ellipse centred at (x, y); angles in **degrees**, clockwise from the right. Modes `"open"`, `"chord"`, `"pie"`. | `p.arc(100, 100, 80, 80, 0, 270, "pie")` |
 | `p.background(color)` | Fill the whole window with one colour (ignores fill, stroke, transforms and clips). | `p.background("white")` |
+| `p.clear()` | Make every pixel transparent; a saved PNG keeps the transparency (the window shows it black). | `p.clear()` |
 
 *Changed in v0.6:* fractional coordinates such as `p.circle(500.5, 80.25, 40)` are honoured and every
 edge is anti-aliased, so shapes have smooth edges instead of stair-steps. Drawing before `p.size()` is
@@ -693,6 +699,7 @@ you can draw again and again.
 | `.close()` | Join back to where the sub-path started. Only closed paths are filled. | |
 | `p.draw_path(path)` | Fill (if closed) and stroke a path with the current style, under the current transform. | `p.draw_path(tri)` |
 | `p.clip(path)` | Limit **later** drawing to the inside of `path` until the enclosing `pop()` / end of the `with p.saved_state():` block. | `with p.saved_state(): p.clip(tri); ...` |
+| `p.no_clip()` | Remove clipping until the enclosing `pop()` / end of the block, which brings the previous clip back. | `with p.saved_state(): p.no_clip(); ...` |
 
 **Rules worth knowing**
 
@@ -796,6 +803,9 @@ The public v0.6 student-facing API. Everything is reached as `p.<name>`.
 | `p.rect(x, y, w, h)` | Top-left rectangle. |
 | `p.line(x1, y1, x2, y2)` | Line. |
 | `p.point(x, y)` | Dot in the stroke colour. |
+| `p.square(x, y, s)` / `p.triangle(...)` / `p.quad(...)` / `p.polygon(points)` | More shapes. |
+| `p.arc(x, y, w, h, start, stop, mode)` | Part of an ellipse (degrees, clockwise). |
+| `p.clear()` | Transparent canvas. |
 | `p.text(msg, x, y)` / `p.text(msg, x, y, color=...)` | Draw text, top-left at (x, y). |
 
 | STYLE | |
@@ -821,6 +831,7 @@ The public v0.6 student-facing API. Everything is reached as `p.<name>`.
 | `p.path()` | Builder: `.move_to .line_to .curve_to .quad_to .close`. |
 | `p.draw_path(path)` | Fill (if closed) and stroke a path. |
 | `p.clip(path)` | Draw only inside `path` until the enclosing `pop()`. |
+| `p.no_clip()` | Stop clipping until the enclosing `pop()`. |
 
 | LIVE VALUES | |
 |---|---|
@@ -920,7 +931,7 @@ repairs the frame and prints a `PlaygroundWarning` that says what it did.
 | Random | — | `p.random_seed(seed)` |
 | Saving | — | `p.save()` to PNG, PDF or SVG |
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with p.saved_state():`, `radians`/`degrees` |
-| Shapes | — | `begin_shape`/`vertex`/`curve_vertex`/`end_shape`, `p.path()`, `draw_path`, `clip` |
+| Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`curve_vertex`/`end_shape`, `p.path()`, `draw_path`, `clip`, `no_clip` |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 
 Everything a v0.5 sketch called still exists with the same arguments; the only visible differences are

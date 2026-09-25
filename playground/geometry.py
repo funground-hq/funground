@@ -129,6 +129,33 @@ class Path:
             .close()
         )
 
+    def arc_to(self, cx: float, cy: float, rx: float, ry: float, start: float, stop: float) -> "Path":
+        """Append the elliptical arc from angle *start* to *stop* (degrees, clockwise on screen).
+
+        The point at angle a is (cx + rx*cos a, cy + ry*sin a): 0 is +x, 90 is straight down
+        (contract F1/F5). The arc begins with a line from the current point to the arc's
+        start, or a move_to if the path is empty. Split into <= 90 degree cubic pieces.
+        """
+        start_pt = (cx + rx * math.cos(math.radians(start)), cy + ry * math.sin(math.radians(start)))
+        path = self.move_to(*start_pt) if self.is_empty else self.line_to(*start_pt)
+        sweep = stop - start
+        if sweep <= 0:
+            return path
+        pieces = max(1, math.ceil(sweep / 90 - 1e-9))
+        step = math.radians(sweep / pieces)
+        k = 4 / 3 * math.tan(step / 4)
+        a = math.radians(start)
+        for _ in range(pieces):
+            b = a + step
+            ca, sa, cb, sb = math.cos(a), math.sin(a), math.cos(b), math.sin(b)
+            path = path.cubic_to(
+                cx + rx * (ca - k * sa), cy + ry * (sa + k * ca),
+                cx + rx * (cb + k * sb), cy + ry * (sb - k * cb),
+                cx + rx * cb, cy + ry * sb,
+            )
+            a = b
+        return path
+
     # ---- queries
     def __iter__(self) -> Iterator[Segment]:
         return iter(self.segments)

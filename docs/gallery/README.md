@@ -31,6 +31,14 @@ rect is placed by its top-left corner; circle and ellipse by their centre. line 
 
 Source: [`examples/gallery/shapes/01_basic_shapes.py`](../../examples/gallery/shapes/01_basic_shapes.py)
 
+### More shapes
+
+![More shapes](images/shapes-02_more_shapes.png)
+
+square, triangle, quad and polygon for straight-sided shapes; arc for part of an ellipse, with angles in degrees turning clockwise from the right, in three modes: open, chord and pie.
+
+Source: [`examples/gallery/shapes/02_more_shapes.py`](../../examples/gallery/shapes/02_more_shapes.py)
+
 ## Colour
 
 ### Four ways to say a colour
@@ -115,6 +123,14 @@ p.path() builds a shape you can draw many times with draw_path(). clip(path) kee
 
 Source: [`examples/gallery/paths/02_path_and_clip.py`](../../examples/gallery/paths/02_path_and_clip.py)
 
+### Clipping on and off
+
+![Clipping on and off](images/paths-03_no_clip.png)
+
+no_clip() removes clipping until the end of the saved_state block; when the block ends, the clip that was there before comes back.
+
+Source: [`examples/gallery/paths/03_no_clip.py`](../../examples/gallery/paths/03_no_clip.py)
+
 ## Randomness and noise
 
 ### Confetti
@@ -144,3 +160,11 @@ Source: [`examples/gallery/interaction/01_follow_the_mouse.py`](../../examples/g
 p.save("name.png") writes the frame when it is finished. Use .pdf or .svg for a picture made of shapes that stays sharp at any size.
 
 Source: [`examples/gallery/saving/01_save_a_picture.py`](../../examples/gallery/saving/01_save_a_picture.py)
+
+### A picture with a transparent background
+
+![A picture with a transparent background](images/saving-02_transparent_png.png)
+
+clear() makes every pixel transparent. A PNG saved afterwards keeps the transparency, so the shape can be placed on any background later. (The window shows transparent as black.)
+
+Source: [`examples/gallery/saving/02_transparent_png.py`](../../examples/gallery/saving/02_transparent_png.py)

@@ -32,6 +32,14 @@ p.run(max_frames=1)
 In PDF and SVG files, text is saved as letter *shapes*, so it looks right everywhere but cannot
 yet be selected or searched.
 
+## A transparent background
+
+`p.clear()` makes every pixel transparent instead of painting a colour. A PNG saved afterwards
+keeps the transparency — handy for stickers, icons and pictures to place on a web page. In the
+window, transparent shows as black.
+
+![Transparent PNG](../gallery/images/saving-02_transparent_png.png)
+
 ## Saving without a window
 
 Set the environment variable `PLAYGROUND_HEADLESS=1` and Playground draws without opening a
