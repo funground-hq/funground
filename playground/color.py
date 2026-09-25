@@ -87,11 +87,16 @@ class Color:
 
 
 def _component(c: object) -> int:
+    """v0.5 behaviour (pygame-ce): a number is truncated toward zero, then must be 0..255.
+
+    So 211.8 -> 211 and -0.5 -> 0 are accepted, as v0.5 accepted them; NaN is not.
+    Computed colours such as p.map_range(...) results therefore just work.
+    """
     if isinstance(c, bool) or not isinstance(c, (int, float)):
         raise ValueError(f"colour component {c!r} must be a number from 0 to 255")
     if isinstance(c, float):
-        if not c.is_integer():
-            raise ValueError(f"colour component {c!r} must be a whole number from 0 to 255")
+        if c != c:
+            raise ValueError("colour component nan must be a number from 0 to 255")
         c = int(c)
     return c
 

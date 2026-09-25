@@ -58,7 +58,7 @@ def test_aliases_are_identical():
     assert Color.parse("gray") == Color.parse("grey")
 
 
-@pytest.mark.parametrize("bad", ["banana", "#12345", "#GGGGGG", (1, 2), (1, 2, 3, 4, 5), (256, 0, 0), (-1, 0, 0), (1.5, 0, 0), None, True, (True, 0, 0), object()])
+@pytest.mark.parametrize("bad", ["banana", "#12345", "#GGGGGG", (1, 2), (1, 2, 3, 4, 5), (256, 0, 0), (-1, 0, 0), (256.0, 0, 0), (float("nan"), 0, 0), None, True, (True, 0, 0), object()])
 def test_invalid_forms_raise_learner_readable_error(bad):
     with pytest.raises(ValueError) as e:
         Color.parse(bad)
@@ -75,3 +75,15 @@ def test_color_is_immutable_and_hashable():
     with pytest.raises(AttributeError):
         c.r = 5  # type: ignore[misc]
     assert len({c, Color(1, 2, 3)}) == 1
+
+
+@pytest.mark.parametrize("value, expected", [
+    ((211.8, 10.5, 255.0), (211, 10, 255, 255)),
+    ((255.99, 0, 0), (255, 0, 0, 255)),
+    ((-0.5, 0, 0), (0, 0, 0, 255)),
+    ((0, 0, 0, 127.9), (0, 0, 0, 127)),
+])
+def test_fractional_components_are_truncated_like_v05(value, expected):
+    """v0.5 passed tuples to pygame-ce, which truncates; computed colours must keep working."""
+    pygame = pytest.importorskip("pygame")
+    assert Color.parse(value).rgba == expected == tuple(pygame.Color(value))
