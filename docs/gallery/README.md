@@ -49,6 +49,14 @@ A name, an (r, g, b) tuple from 0 to 255, a hex string, or an (r, g, b, a) tuple
 
 Source: [`examples/gallery/colour/01_colour_forms.py`](../../examples/gallery/colour/01_colour_forms.py)
 
+### Hue-based colour: hsb, hsl and colour objects
+
+![Hue-based colour: hsb, hsl and colour objects](images/colour-02_hsb_and_hsl.png)
+
+p.hsb(hue, saturation, brightness) and p.hsl(hue, saturation, lightness) make colours by hue: 0 red, 120 green, 240 blue, and around again. A tuple always means red, green, blue. p.color() makes a colour you can read (.hue, .brightness ...), and lerp_color mixes two colours.
+
+Source: [`examples/gallery/colour/02_hsb_and_hsl.py`](../../examples/gallery/colour/02_hsb_and_hsl.py)
+
 ## Fill, stroke and lines
 
 ### Fill and stroke

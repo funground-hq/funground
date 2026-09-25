@@ -114,6 +114,11 @@ ADDED_FUNCTIONS = {
     "day": "() -> 'int'",
     "month": "() -> 'int'",
     "year": "() -> 'int'",
+    # Sprint 5, S-044: colour constructors and colour objects (D-017 = C, contract S12).
+    "color": "(*values)",
+    "hsb": "(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255)",
+    "hsl": "(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255)",
+    "lerp_color": "(c1: 'Color', c2: 'Color', amount: 'float')",
 }
 
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "mouse_pressed", "frame_count", "delta_time"}

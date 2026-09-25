@@ -5,6 +5,7 @@ Playground parses those once into an RGBA ``Color`` so renderers never see backe
 """
 from __future__ import annotations
 
+import colorsys
 from dataclasses import dataclass
 from typing import Any
 
@@ -33,6 +34,59 @@ class Color:
     @property
     def rgba(self) -> tuple[int, int, int, int]:
         return (self.r, self.g, self.b, self.a)
+
+    # ---- readable components (S-044, contract S12). RGB and alpha 0-255; hue 0-360;
+    # saturation and brightness are HSB, lightness is HSL, all 0-100.
+    @property
+    def red(self) -> int:
+        return self.r
+
+    @property
+    def green(self) -> int:
+        return self.g
+
+    @property
+    def blue(self) -> int:
+        return self.b
+
+    @property
+    def alpha(self) -> int:
+        return self.a
+
+    @property
+    def hue(self) -> float:
+        h, _, _ = colorsys.rgb_to_hsv(self.r / 255, self.g / 255, self.b / 255)
+        return h * 360
+
+    @property
+    def saturation(self) -> float:
+        _, s, _ = colorsys.rgb_to_hsv(self.r / 255, self.g / 255, self.b / 255)
+        return s * 100
+
+    @property
+    def brightness(self) -> float:
+        _, _, v = colorsys.rgb_to_hsv(self.r / 255, self.g / 255, self.b / 255)
+        return v * 100
+
+    @property
+    def lightness(self) -> float:
+        _, l, _ = colorsys.rgb_to_hls(self.r / 255, self.g / 255, self.b / 255)
+        return l * 100
+
+    @classmethod
+    def from_hsb(cls, h: float, s: float, b: float, a: float = 255) -> "Color":
+        r, g, bl = colorsys.hsv_to_rgb(*_hue_and_percents(h, s, b))
+        return cls(round(r * 255), round(g * 255), round(bl * 255), _component(a))
+
+    @classmethod
+    def from_hsl(cls, h: float, s: float, l: float, a: float = 255) -> "Color":
+        hh, ss, ll = _hue_and_percents(h, s, l)
+        r, g, b = colorsys.hls_to_rgb(hh, ll, ss)
+        return cls(round(r * 255), round(g * 255), round(b * 255), _component(a))
+
+    def lerp(self, other: "Color", amount: float) -> "Color":
+        t = max(0.0, min(1.0, float(amount)))
+        return Color(*(round(x + (y - x) * t) for x, y in zip(self.rgba, other.rgba)))
 
     @classmethod
     def parse(cls, value: ColorLike) -> "Color":
@@ -99,6 +153,14 @@ def _component(c: object) -> int:
             raise ValueError("colour component nan must be a number from 0 to 255")
         c = int(c)
     return c
+
+
+def _hue_and_percents(h: float, s: float, v: float) -> tuple[float, float, float]:
+    """Hue wraps (370 is 10); the two percentages are clamped to 0..100 (S-044)."""
+    for value, name in ((h, "hue"), (s, "saturation"), (v, "brightness/lightness")):
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or value != value:
+            raise ValueError(f"colour {name} {value!r} must be a number")
+    return (h % 360) / 360, max(0.0, min(100.0, s)) / 100, max(0.0, min(100.0, v)) / 100
 
 
 WHITE = Color(255, 255, 255)

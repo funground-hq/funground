@@ -199,6 +199,42 @@ def text_width(message: object) -> float:
 
 
 # ---- style
+def color(*values):
+    """A colour you can read and reuse: p.color("tomato"), p.color(255, 99, 71) or p.color((255, 99, 71, 128)).
+
+    Its parts are .red .green .blue .alpha (0-255), .hue (0-360), .saturation .brightness
+    .lightness (0-100). Tuples always mean red, green, blue - use p.hsb() or p.hsl() for hue.
+    """
+    from .color import Color as _Color
+
+    if len(values) == 1:
+        return _Color.parse(values[0])
+    if len(values) in (3, 4):
+        return _Color.parse(tuple(values))
+    raise ValueError("p.color() takes one colour, or 3 or 4 numbers (red, green, blue[, alpha])")
+
+
+def hsb(hue: float, saturation: float, brightness: float, alpha: float = 255):
+    """A colour from hue (0-360), saturation and brightness (0-100); alpha 0-255."""
+    from .color import Color as _Color
+
+    return _Color.from_hsb(hue, saturation, brightness, alpha)
+
+
+def hsl(hue: float, saturation: float, lightness: float, alpha: float = 255):
+    """A colour from hue (0-360), saturation and lightness (0-100); alpha 0-255."""
+    from .color import Color as _Color
+
+    return _Color.from_hsl(hue, saturation, lightness, alpha)
+
+
+def lerp_color(c1: Color, c2: Color, amount: float):
+    """The colour *amount* of the way from c1 to c2 (0 to 1), mixing red, green, blue and alpha."""
+    from .color import Color as _Color
+
+    return _Color.parse(c1).lerp(_Color.parse(c2), amount)
+
+
 def fill(color: Color) -> None:
     active_sketch().fill(color)
 
