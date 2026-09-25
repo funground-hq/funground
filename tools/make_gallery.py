@@ -2,6 +2,7 @@
 
     python tools/make_gallery.py              # every example: images + index
     python tools/make_gallery.py --index      # rewrite docs/gallery/README.md only
+    python tools/make_gallery.py --force      # also re-render time-dependent examples
 
 Every ``examples/gallery/<area>/NN_name.py`` is an ordinary learner sketch. It is run
 headless for ``FRAMES`` frames and its last frame is saved to
@@ -117,7 +118,12 @@ def main(argv: list[str]) -> int:
             os.chdir(scratch)           # examples that p.save() write their own files here, not in the repo
             try:
                 for path in examples():
-                    out = render(path, IMAGES / f"{example_id(path)}.png", FRAMES)
+                    target = IMAGES / f"{example_id(path)}.png"
+                    if is_time_dependent(path) and target.exists() and "--force" not in argv:
+                        # Its picture differs on every run; keep the committed one stable.
+                        print(f"{path.relative_to(ROOT)} (time-dependent, kept)")
+                        continue
+                    out = render(path, target, FRAMES)
                     print(f"{path.relative_to(ROOT)} -> {out.relative_to(ROOT)}")
             finally:
                 os.chdir(here)
