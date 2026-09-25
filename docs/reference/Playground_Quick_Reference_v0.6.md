@@ -180,6 +180,9 @@ dropped the fourth value). Lists, `"0xRRGGBB"` and packed integers are still acc
 
 | Call | What it does | Example |
 |---|---|---|
+| `p.hsb(h, s, b, a=255)` / `p.hsl(h, s, l, a=255)` | Colour by hue: hue 0–360 (wraps), the rest 0–100. No `color_mode()`: tuples are always RGB. | `p.fill(p.hsb(200, 80, 90))` |
+| `p.color(value)` / `p.color(r, g, b, a)` | A colour you can read: `.red .green .blue .alpha .hue .saturation .brightness .lightness`. | `p.color("tomato").hue` |
+| `p.lerp_color(c1, c2, t)` | Mix two colours; 0 gives c1, 1 gives c2. | `p.lerp_color("red", "blue", 0.5)` |
 | `p.fill(color)` | Set the inside colour of later shapes. | `p.fill("gold")` |
 | `p.no_fill()` | Do not fill later shapes. | `p.no_fill()` |
 | `p.stroke(color)` | Set the outline / line colour. | `p.stroke("black")` |

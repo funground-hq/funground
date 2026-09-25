@@ -105,11 +105,11 @@ lives; alignment is designed once for both.
 - [x] S-048.3 Tests with the headless platform; gallery `animation/`; guide chapter 7 completed
 *Acceptance:* a `no_loop()` sketch draws exactly once and still responds to `redraw()`.
 
-### S-044 Colour constructors and colour objects — E-25 *(D-017 = C)*
-- [ ] S-044.1 `p.color(value)` turns any colour form into a colour object with `red/green/blue/alpha/hue/saturation/brightness/lightness`; accepted everywhere a colour is
-- [ ] S-044.2 `p.hsb(h, s, b, a=255)` and `p.hsl(h, s, l, a=255)` — hue 0–360, s/b/l 0–100, alpha 0–255. **No `color_mode()`**: tuples always mean RGB
-- [ ] S-044.3 `lerp_color(c1, c2, t)`
-- [ ] S-044.4 Contract S1 extended; tests; gallery `colour/`; guide chapter 4
+### S-044 Colour constructors and colour objects — E-25 *(D-017 = C)* ✅
+- [x] S-044.1 `p.color(value)` turns any colour form into a colour object with `red/green/blue/alpha/hue/saturation/brightness/lightness`; accepted everywhere a colour is
+- [x] S-044.2 `p.hsb(h, s, b, a=255)` and `p.hsl(h, s, l, a=255)` — hue 0–360, s/b/l 0–100, alpha 0–255. **No `color_mode()`**: tuples always mean RGB
+- [x] S-044.3 `lerp_color(c1, c2, t)`
+- [x] S-044.4 Contract S1 extended; tests; gallery `colour/`; guide chapter 4
 *Acceptance:* every v0.5 colour form still parses unchanged (frozen API).
 
 ### S-045 Input events — E-26 *(D-016 decided)*

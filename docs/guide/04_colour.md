@@ -35,7 +35,50 @@ p.run()
 
 Translucent colours mix where they overlap.
 
-*Coming in Sprint 5:* `p.hsb(...)`, `p.hsl(...)` for hue-based colour, colour objects and
-`p.lerp_color`. Playground has no `color_mode()`: a tuple always means red, green, blue.
+## Colour by hue
+
+A **tuple always means red, green, blue** in Playground. For colour by hue, ask for it by name:
+
+| Function | Makes a colour from |
+|---|---|
+| `p.hsb(hue, saturation, brightness, alpha=255)` | hue 0–360 (0 red, 120 green, 240 blue), saturation and brightness 0–100 |
+| `p.hsl(hue, saturation, lightness, alpha=255)` | hue 0–360, saturation and lightness 0–100 (50 is the pure colour) |
+
+Hue goes round: `p.hsb(370, 80, 90)` is the same as `p.hsb(10, 80, 90)`, so
+`p.hsb(p.frame_count, 80, 90)` cycles through the rainbow forever.
+
+## Colours you can read and mix
+
+`p.color(...)` turns any colour into one you can ask about: `.red`, `.green`, `.blue`,
+`.alpha` (0–255), `.hue` (0–360), `.saturation`, `.brightness` and `.lightness` (0–100).
+`p.lerp_color(c1, c2, t)` mixes two colours: 0 gives `c1`, 1 gives `c2`.
+
+```python
+import playground as p
+
+
+def setup():
+    p.size(640, 200)
+
+
+def draw():
+    p.background("white")
+    p.no_stroke()
+    for i in range(24):
+        p.fill(p.hsb(i * 15, 90, 95))
+        p.rect(20 + i * 25, 30, 25, 60)
+    start, end = p.color("tomato"), p.color("royalblue")
+    for i in range(11):
+        p.fill(p.lerp_color(start, end, i / 10))
+        p.circle(47 + i * 54, 150, 44)
+
+
+p.run()
+```
+
+![Hue-based colour](../gallery/images/colour-02_hsb_and_hsl.png)
+
+*Coming from p5 or Processing?* There is no `colorMode()`: write `p.fill(p.hsb(200, 80, 90))`
+instead of switching modes, so a tuple never changes meaning halfway through a sketch.
 
 **Next:** [5. Fill, stroke and lines](05_fill_stroke_lines.md)
