@@ -23,6 +23,8 @@ class GraphicsState:
     miter_limit: float = 10.0
     dash: tuple[float, ...] = ()
     dash_offset: float = 0.0
+    # S-074: 0 = Catmull-Rom, 1 = straight lines (Processing's curveTightness). Contract F9.
+    curve_tightness: float = 0.0
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)

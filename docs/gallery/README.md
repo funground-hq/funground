@@ -75,6 +75,24 @@ no_smooth() turns off the soft edges, so every pixel is either the shape's colou
 
 Source: [`examples/gallery/lines/03_pixel_art.py`](../../examples/gallery/lines/03_pixel_art.py)
 
+## Curves
+
+### Curves
+
+![Curves](images/curves-01_curves.png)
+
+bezier_vertex bends toward two control points; curve_vertex draws a smooth curve through the points (the first and last only steer it); curve_tightness straightens it. bezier and curve draw one curve in a single call; bezier_point and bezier_tangent find places and directions along it.
+
+Source: [`examples/gallery/curves/01_curves.py`](../../examples/gallery/curves/01_curves.py)
+
+### Shapes with holes
+
+![Shapes with holes](images/curves-02_holes.png)
+
+Between begin_contour() and end_contour(), list the corners of a hole. Playground makes the hole cut out of the shape whichever way round you draw it.
+
+Source: [`examples/gallery/curves/02_holes.py`](../../examples/gallery/curves/02_holes.py)
+
 ## Text
 
 ### Text

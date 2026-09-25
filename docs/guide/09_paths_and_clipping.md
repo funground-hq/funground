@@ -66,7 +66,54 @@ ends, the clip from outside it comes back.
 
 ![Clipping on and off](../gallery/images/paths-03_no_clip.png)
 
-*Coming in Sprint 5:* Bézier, quadratic and smooth curves through points, holes in shapes,
-and `bezier()` / `curve()` in one call (these follow Processing's names).
+## Curves
+
+Inside a shape, three kinds of curve follow Processing's names:
+
+| Function | What it does |
+|---|---|
+| `p.bezier_vertex(cx1, cy1, cx2, cy2, x, y)` | A curve from the previous point to `(x, y)` that bends toward two control points |
+| `p.quadratic_vertex(cx, cy, x, y)` | The same with one control point |
+| `p.curve_vertex(x, y)` | A smooth curve **through** the points. The first and last points only steer the curve, so give at least four |
+| `p.curve_tightness(t)` | 0 (default) for smooth curves, up to 1 for straight lines |
+
+For a single curve there are `p.bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2)` and
+`p.curve(x1, y1, x2, y2, x3, y3, x4, y4)` (from point 2 to point 3). They are open, so they
+are drawn as lines, never filled. `p.bezier_point(a, b, c, d, t)` gives one coordinate of a point
+along the curve for `t` from 0 to 1 — call it once for x and once for y.
+
+![Curves](../gallery/images/curves-01_curves.png)
+
+## Holes
+
+List a hole's corners between `p.begin_contour()` and `p.end_contour()`, inside the shape:
+
+```python
+import playground as p
+
+
+def setup():
+    p.size(320, 320)
+
+
+def draw():
+    p.background("white")
+    p.fill("gold")
+    p.begin_shape()
+    for x, y in [(40, 40), (280, 40), (280, 280), (40, 280)]:
+        p.vertex(x, y)
+    p.begin_contour()
+    for x, y in [(100, 100), (220, 100), (220, 220), (100, 220)]:
+        p.vertex(x, y)
+    p.end_contour()
+    p.end_shape(close=True)
+
+
+p.run()
+```
+
+Playground cuts the hole out whichever way round you list its corners.
+
+![Holes](../gallery/images/curves-02_holes.png)
 
 **Next:** [10. Interaction](10_interaction.md)
