@@ -1,0 +1,123 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 40
+  },
+  "text": "Hello, Playground!",
+  "x": 136.103515625,
+  "y": 60
+ },
+ {
+  "color": [
+   102,
+   102,
+   102,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    102,
+    102,
+    102,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 18
+  },
+  "text": "placed by the top-left corner",
+  "x": 40,
+  "y": 160
+ },
+ {
+  "color": [
+   102,
+   102,
+   102,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    102,
+    102,
+    102,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 18
+  },
+  "text": "3.14159",
+  "x": 40,
+  "y": 200
+ },
+ {
+  "color": [
+   255,
+   99,
+   71,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    102,
+    102,
+    102,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 18
+  },
+  "text": "frame 29",
+  "x": 40,
+  "y": 240
+ }
+]
