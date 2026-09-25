@@ -48,8 +48,8 @@ def test_reference_sketches_are_present():
 def test_every_public_name_is_documented(reference_text):
     missing = [name for name in playground.__all__ if f"p.{name}" not in reference_text]
     assert not missing, f"names in playground.__all__ absent from the Quick Reference: {missing}"
-    assert "0.6.0.dev0" in reference_text and "p.__version__" in reference_text
-    assert playground.__version__ == "0.6.0.dev0"
+    # The reference must state the version it documents (follows S-070 / releases).
+    assert playground.__version__ in reference_text and "p.__version__" in reference_text
 
 
 @pytest.mark.parametrize("sketch", SKETCHES, ids=lambda s: s.name)
