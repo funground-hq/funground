@@ -128,6 +128,9 @@ ADDED_FUNCTIONS = {
     # S-053 multi-line text and text boxes
     "text_box": "(message: 'object', x: 'float', y: 'float', width: 'float', height: 'float | None' = None, color: 'Color | None' = None) -> 'str'",
     "text_leading": "(leading: 'float | None') -> 'None'",
+    # S-050 gradients
+    "linear_gradient": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors, stops=None)",
+    "radial_gradient": "(x: 'float', y: 'float', radius: 'float', colors, stops=None)",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

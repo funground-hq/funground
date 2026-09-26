@@ -19,6 +19,7 @@ from .. import ir
 from ..capabilities import Capability
 from ..color import Color
 from ..geometry import Path
+from ..paint import Gradient
 from ..platform.base import Pixels
 from ..state import GraphicsState
 
@@ -148,7 +149,17 @@ class CairoRenderer:
 
     # ---- helpers
     @staticmethod
-    def _source(ctx, c: Color) -> None:
+    def _source(ctx, c) -> None:
+        if isinstance(c, Gradient):                     # S-050: in user space, so it follows the transform
+            if c.kind == "linear":
+                pattern = cairo.LinearGradient(*c.points)
+            else:
+                x, y, r = c.points
+                pattern = cairo.RadialGradient(x, y, 0.0, x, y, r)
+            for offset, stop in c.stops:
+                pattern.add_color_stop_rgba(offset, stop.r / 255, stop.g / 255, stop.b / 255, stop.a / 255)
+            ctx.set_source(pattern)
+            return
         ctx.set_source_rgba(c.r / 255, c.g / 255, c.b / 255, c.a / 255)
 
     @staticmethod

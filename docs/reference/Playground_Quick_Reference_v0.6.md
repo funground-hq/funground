@@ -183,6 +183,8 @@ dropped the fourth value). Lists, `"0xRRGGBB"` and packed integers are still acc
 | `p.hsb(h, s, b, a=255)` / `p.hsl(h, s, l, a=255)` | Colour by hue: hue 0–360 (wraps), the rest 0–100. No `color_mode()`: tuples are always RGB. | `p.fill(p.hsb(200, 80, 90))` |
 | `p.color(value)` / `p.color(r, g, b, a)` | A colour you can read: `.red .green .blue .alpha .hue .saturation .brightness .lightness`. | `p.color("tomato").hue` |
 | `p.lerp_color(c1, c2, t)` | Mix two colours; 0 gives c1, 1 gives c2. | `p.lerp_color("red", "blue", 0.5)` |
+| `p.linear_gradient(x1, y1, x2, y2, colors, stops=None)` | **New:** colours blended along a line; use it in `fill`, `stroke` or `background`. | `p.fill(p.linear_gradient(0, 0, 200, 0, ["red", "blue"]))` |
+| `p.radial_gradient(x, y, radius, colors, stops=None)` | **New:** colours blended outward from a centre. | `p.background(p.radial_gradient(320, 200, 300, ["white", "navy"]))` |
 | `p.fill(color)` | Set the inside colour of later shapes. | `p.fill("gold")` |
 | `p.no_fill()` | Do not fill later shapes. | `p.no_fill()` |
 | `p.stroke(color)` | Set the outline / line colour. | `p.stroke("black")` |
