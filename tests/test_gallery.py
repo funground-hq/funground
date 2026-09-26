@@ -34,7 +34,7 @@ GALLERY_SNAPSHOTS = ROOT / "tests" / "snapshots" / "gallery"
 GOLDEN_PLATFORM = "Windows"
 
 # Public names not yet shown by any example. This list may only shrink: the test below
-# fails if a listed name is now covered, and S-072 (release v0.7) requires it empty.
+# fails if a listed name is now covered, and S-072 (release 0.1) requires it empty.
 NOT_YET_IN_GALLERY: set[str] = set()
 
 
@@ -95,7 +95,7 @@ def _names_used() -> set[str]:
 
 
 def test_every_public_name_is_shown_by_an_example():
-    """D-015: v0.7 ships a gallery that highlights every feature."""
+    """D-015, D-019: release 0.1 ships a gallery that highlights every feature."""
     public = set(playground.__all__)
     uncovered = public - _names_used()
     unexpected = uncovered - NOT_YET_IN_GALLERY

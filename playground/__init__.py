@@ -115,7 +115,7 @@ from .api import (
     year,
 )
 
-__version__ = "0.7.0.dev0"
+__version__ = "0.1.0.dev0"
 
 __all__ = [
     "apply_matrix",
