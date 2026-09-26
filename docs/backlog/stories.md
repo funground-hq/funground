@@ -106,7 +106,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-049 | E-15 | `text_align(h, v)`, `text_ascent/descent`, cap height; `text_width` already in S-037 | 6 (moved: designed with multi-line layout) |
 | S-050 | E-25 | Linear and radial gradients for fill and stroke (IR op + Cairo + export) | 6 |
 | S-051 | E-25 | `blend_mode`, global `opacity`, `shadow` | 6 |
-| S-052 | E-28 | Off-screen canvas: `c = p.create_canvas(w, h)`; draw with the same verbs on `c`; `p.image(c, x, y)` | 6 |
+| S-052 | E-28 | Off-screen canvas, name and type per D-021; draw with the same verbs on it; `p.image(g, x, y)` | 6 |
 | S-053 | E-15 | Multi-line text, `text_leading`, word-wrap in a box with alignment and overflow | 6 |
 | S-054 | E-15 | `font(path_or_name)`, bold/italic styles, per-sketch font resources | 6 |
 | S-055 | E-27 | `Vector` (add, sub, mult, mag, normalize, heading, rotate, dist, lerp) | 6 |
