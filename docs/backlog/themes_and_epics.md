@@ -46,7 +46,7 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-25 Colour, gradients and compositing | `color_mode` HSB/HSL, colour objects, `lerp_color`; linear/radial gradients; blend modes; opacity; shadow | 2 | ready (Feature_Map §3) |
 | E-28 Off-screen canvas | `create_canvas()` buffers drawn with the same API and used like images | 2 | ready (Feature_Map §1) |
 
-**Phase 2 exit criterion (revised 25 Sept 2026, see `Feature_Map.md`):** a learner can port a typical p5 "core" sketch (shapes, transforms, colour modes, events, noise, text) and a typical DrawBot single-page composition (paths, gradients, text box, PDF) with only naming changes; Quick Reference v0.7 documents it; default examples ≤ 720p hold 60 fps on the teaching machine.
+**Phase 2 exit criterion (revised 25 Sept 2026, see `Feature_Map.md`):** a learner can port a typical p5 "core" sketch (shapes, transforms, colour modes, events, noise, text) and a typical DrawBot single-page composition (paths, gradients, text box, PDF) with only naming changes; the Quick Reference documents it; published on PyPI as 0.1 (D-019); default examples ≤ 720p hold 60 fps on the teaching machine.
 
 ## TH-4 Creative Media *(directional)*
 
@@ -74,5 +74,5 @@ Phase exit criteria come from the architecture document, sharpened by the review
 
 | Epic | Outcome | Phase | Status |
 |---|---|---|---|
-| E-22 Teaching material: Quick Reference, User Guide, Examples Gallery | Learner docs updated for every additive API; v0.7 ships a User Guide and a Gallery covering every feature (D-015) | 2 | in progress |
+| E-22 Teaching material: Quick Reference, User Guide, Examples Gallery | Learner docs updated for every additive API; release 0.1 ships a User Guide and a Gallery covering every feature (D-015, D-019) | 2 | in progress |
 | E-23 SDLC process, ADRs, contributor docs | This backlog, `docs/PROCESS.md`, ADR series, sprint records | 0 | done (Sprint 0) |

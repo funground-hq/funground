@@ -1,6 +1,6 @@
 # Playground roadmap to 1.0
 
-**Status:** agreed direction, 25 September 2026 (D-014). Sprint numbers show sequence, not
+**Status:** agreed direction, 25 September 2026 (D-014); release numbering changed 26 September 2026 (D-019). Sprint numbers show sequence, not
 dates; sprint length is the maintainer's call. The backlog (`docs/backlog/`) holds the stories;
 `docs/backlog/Feature_Map.md` holds the feature-by-feature comparison this roadmap is built from.
 
@@ -16,12 +16,12 @@ dates; sprint length is the maintainer's call. The backlog (`docs/backlog/`) hol
 | 1 Architecture | 1–3 | `Sketch`, platform split, draw-op IR, Cairo renderer, text as outlines (DejaVu Sans), HiDPI (Windows), headless, PNG/PDF/SVG export |
 | 2a Public vocabulary | 4 | transforms, `push/pop`, `with p.saved_state():`, paths and clipping, `text_width`, Quick Reference v0.6 *(awaiting sign-off)* |
 
-## Phase 2 — the p5/Processing core (Sprints 5–6) → release **v0.7** (D-015)
+## Phase 2 — the p5/Processing core (Sprints 5–6) → release **0.1**, the first PyPI release (D-019)
 
 **Exit:** a typical p5/Processing 2D sketch and a typical DrawBot single-page composition port
 with only naming changes.
 
-**v0.7 deliverables:** the code; a **User Guide** (`docs/guide/`, chapters from getting started to
+**0.1 deliverables:** the code; a **User Guide** (`docs/guide/`, chapters from getting started to
 "coming from p5/DrawBot"); an **Examples Gallery** (`examples/gallery/`, rendered index in
 `docs/gallery/`) with at least one example for every public name — enforced by a coverage test.
 Both grow story by story from Sprint 5 and are finished in Sprint 6.
@@ -29,12 +29,14 @@ Both grow story by story from Sprint 5 and are finished in Sprint 6.
 | Sprint | Content |
 |---|---|
 | 5 — vocabulary, events, helpers | Feature Map verified (S-040); gallery and guide foundations (S-068, S-069); `square/triangle/quad/arc/polygon`; stroke cap/join/dash/miter, `no_smooth`; shear/`apply_matrix`/`reset_matrix`; `color_mode` HSB/HSL, `color()`, `lerp_color`; input events and callbacks, `pmouse`, buttons, wheel; `map_range/lerp/norm/random_gaussian/random_choice`; `noise`; `no_loop/loop/redraw/millis/frame_rate/exit`; ADR-003; Sprint 4 follow-ups |
-| 6 — compositing, canvases, text layout, release | `text_align` and text metrics; linear/radial gradients; blend modes, opacity, shadow; off-screen canvas (Processing `PGraphics`); multi-line text, leading, word-wrap in a box; `load_font`, bold/italic; `Vector`; frame-sequence export; cursor, full screen, resize; User Guide and Gallery completed; Quick Reference v0.7; release |
+| 6 — compositing, canvases, text layout, release | `text_align` and text metrics; linear/radial gradients; blend modes, opacity, shadow; off-screen canvas (Processing `PGraphics`); multi-line text, leading, word-wrap in a box; `load_font`, bold/italic; `Vector`; frame-sequence export; cursor, full screen, resize; User Guide and Gallery completed; Quick Reference for 0.1; PyPI packaging; release 0.1 |
 
-**Release v0.7** after Sprint 6: first versioned release since v0.5. Prerequisites: git remote,
-CI green on the 12-cell matrix (S-039), package name decided.
+**Release 0.1** after Sprint 6: the first release published on PyPI (D-019). v0.5 was a
+teaching zip, never published, so public numbering starts again at 0.1. Prerequisites: git remote,
+CI green on the 12-cell matrix (S-039), a PyPI distribution name (D-020 — `playground` is taken).
+The import name stays `import playground as p`.
 
-## Phase 3 — DrawBot and Processing depth (Sprints 7–11) → release **v0.8**
+## Phase 3 — DrawBot and Processing depth (Sprints 7–11) → releases **0.2, 0.3, …**
 
 **Exit:** DrawBot-style document work and Processing-style media sketches are both at home.
 
@@ -70,7 +72,7 @@ Engine watch continues (S-036): if the Blend2D binding matures, re-run the Spike
 | GPU renderer | E-20 | IR consumer; Skia or a GPU engine re-evaluated when needed |
 | 3D (Processing P3D) | E-21 | Not in 1.0; 1.0 means the 2D surface |
 
-## Deliberately out of scope (to be recorded in ADR-003, S-058)
+## Deliberately out of scope — [ADR-003](design/ADR-003-out-of-scope.md)
 
 CMYK/print colour spaces; sound synthesis; DrawBot's large Core Image filter library (a handful
 via Pillow instead); Processing's data, serial, network and video/camera libraries (plain Python
@@ -79,14 +81,14 @@ covers most of these).
 ## Milestones
 
 ```
-Sprint 4 sign-off ── Sprint 5 ── Sprint 6 ── v0.7 ── Sprints 7–11 ── v0.8 ── Sprints 12–14 ── v1.0 ─ ─ directional: web, GPU, 3D
+Sprint 5 ── Sprint 6 ── 0.1 on PyPI ── Sprints 7–11 ── 0.2, 0.3 … ── Sprints 12–14 ── 1.0 ─ ─ directional: web, GPU, 3D
 ```
 
 ## Decisions ahead
 
 | When | Decision |
 |---|---|
-| Before v0.7 | Package name on PyPI; release cadence; git remote and CI host |
+| Before 0.1 | PyPI distribution name (D-020); release cadence; git remote and CI host |
 | Sprint 5 | `rect_mode`-style switches (postponed so far); D-016, D-017, D-018 decided 25 Sept 2026 |
 | Sprint 6 | Whether off-screen canvases and images share one type |
 | Phase 3 | Page/document model shape (DrawBot-like vs Processing-like); sound backend scope |
