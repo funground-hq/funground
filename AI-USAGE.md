@@ -65,7 +65,7 @@ AI-written tests checking AI-written code is a real risk. funground reduces it i
    written to be checked in about an hour, and signs off before the sprint closes.
 
 **Known limits:**
-- CI covers Windows, macOS and Linux, but macOS and Linux HiDPI is untested on real screens.
+- CI runs on Windows, macOS and Linux. On 26 Sept 2026 only Windows passed; the macOS and Linux fixes are story S-039. HiDPI on real macOS and Linux screens is still untested.
 - The browser track is research only.
 
 ## Sprint log
