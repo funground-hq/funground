@@ -1,59 +1,96 @@
-# playground v0.5
+# funground
 
-A tiny teaching wrapper around `pygame-ce`.
+**Creative coding for learners.** funground is a small Python library for drawing and animation,
+in the spirit of [Processing](https://processing.org), [p5.js](https://p5js.org) and
+[DrawBot](https://www.drawbot.com). You write a short Python file, run it, and a window opens with
+your picture in it.
 
-## Folder layout
+> **Status: pre-release.** The first release, 0.1, will be published on PyPI as `funground`.
+> Until then, install from this repository (below). Names may still change before 0.1.
 
-For the simplest classroom use, copy the **whole `playground` folder** beside the learner's script:
-
-```text
-python-dsf/
-├── hello_visual.py
-└── playground/
-    ├── __init__.py
-    └── _core.py
-```
-
-The `__init__.py` file is important. Without it, Python may treat the folder as a namespace package; `import playground` can then succeed while `playground.run` is missing.
-
-Install the only external dependency:
-
-```powershell
-python -m pip install pygame-ce
-```
-
-## Example
+> **Built with AI.** funground is developed by Samir Joshi with substantial help from Anthropic's
+> Claude, used through Claude Code: most of the code, tests and documentation were written by
+> Claude under the maintainer's direction. The maintainer sets the direction, takes every design
+> decision, and reviews and signs off each sprint. The full test suite of more than 650 tests,
+> including pixel-exact images, checks every change. Commits Claude helped write say so in a
+> `Co-Authored-By: Claude …` line. See [AI disclosure](#ai-disclosure) below.
 
 ```python
-import playground as p
-
-x = 50
+import funground as f
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    global x
-
-    p.background("white")
-    p.fill("tomato")
-    p.circle(x, p.height / 2, 40)
-    x += 2
+    f.background("white")
+    f.fill("tomato")
+    f.circle(f.mouse_x, f.mouse_y, 80)
 
 
-p.run()
+f.run()
 ```
 
-`p.run()` automatically looks for `setup()` and `draw()` in the calling script. `setup()` is optional; `draw()` is required.
+## Install (before 0.1)
 
-Live values are module attributes, e.g. `p.width`, `p.height`, `p.mouse_x`, `p.frame_count`, and `p.delta_time`.
+You need Python 3.11 or newer.
 
-## Quick diagnostic
-
-```powershell
-python -c "import playground; print(playground.__file__); print(playground.__version__); print(playground.run)"
+```
+python -m pip install git+https://github.com/funground-hq/funground
 ```
 
-For a local copy, `playground.__file__` should end in `playground\\__init__.py`, the version should be `0.5.0`, and `playground.run` should print as a function.
+- **Windows:** nothing else is needed.
+- **macOS:** usually nothing else. If the install fails while building `pycairo`, run
+  `brew install cairo pkg-config` first.
+- **Linux:** install the Cairo library first, for example on Debian or Ubuntu:
+  `sudo apt install libcairo2-dev pkg-config python3-dev`.
+
+## Learn
+
+- [User Guide](docs/guide/README.md): chapters from your first sketch to animation, interaction,
+  text, pictures and saving your work.
+- [Examples Gallery](docs/gallery/README.md): every feature shown in a small sketch, with its picture.
+- [Quick Reference](docs/reference/Playground_Quick_Reference_v0.6.md): every function on one page.
+
+## What it can do
+
+Shapes, curves and paths; colour, gradients, blend modes and shadows; transforms; text with
+alignment, text boxes and fonts; animation and loop control; mouse and keyboard events; noise and
+randomness; vectors; off-screen pictures; saving as PNG, PDF, SVG or numbered frames. Text is drawn
+the same way on every computer. PDF and SVG output stays sharp at any size.
+
+## How it is built
+
+funground draws with [Cairo](https://www.cairographics.org) and opens its window with
+[pygame-ce](https://pyga.me). The project is run as a small software process: sprints with
+reviews, a decision log and architecture decision records. See [docs/PROCESS.md](docs/PROCESS.md),
+[docs/Roadmap.md](docs/Roadmap.md) and [docs/design/](docs/design/).
+
+## AI disclosure
+
+- **Who does what.** The maintainer, Samir Joshi, decides what funground is and how it behaves. Every
+  decision is recorded in [docs/design/Decision_Log.md](docs/design/Decision_Log.md). Claude proposes
+  options and recommendations, writes code, tests and documentation, and runs the checks. The
+  maintainer reviews each sprint before it closes.
+- **Models.** The commit history names the models that helped:
+  - Claude Fable 5.1;
+  - Claude Opus 5;
+  - Claude Opus 5.5;
+  - Claude Sonnet 5, as a sub-agent for well-specified stories, reviewed by the main model before
+    commit.
+
+  How work is split between models is described in [docs/PROCESS.md](docs/PROCESS.md), under
+  "Who does what".
+- **How changes are checked.** Nothing is merged without the full test suite passing:
+  - the public API contract;
+  - behaviour pinned in [docs/design/Semantic_Contract.md](docs/design/Semantic_Contract.md);
+  - drawing-operation snapshots;
+  - pixel-exact golden images.
+- **Attribution.** Commits written with Claude's help end with a `Co-Authored-By: Claude …` line,
+  so GitHub shows Claude as a co-author.
+
+## Licence
+
+Not chosen yet; it will be settled before the 0.1 release. The bundled DejaVu fonts carry their
+own free licence (`funground/fonts/DejaVu-LICENSE.txt`).
