@@ -57,6 +57,14 @@ p.hsb(hue, saturation, brightness) and p.hsl(hue, saturation, lightness) make co
 
 Source: [`examples/gallery/colour/02_hsb_and_hsl.py`](../../examples/gallery/colour/02_hsb_and_hsl.py)
 
+### Gradients
+
+![Gradients](images/colour-03_gradients.png)
+
+p.linear_gradient() blends colours along a line; p.radial_gradient() blends them outward from a centre. Either can be used wherever a colour goes - fill, stroke or background - and it follows p.translate() and p.rotate() like any shape. Saved as PDF or SVG, it stays smooth.
+
+Source: [`examples/gallery/colour/03_gradients.py`](../../examples/gallery/colour/03_gradients.py)
+
 ## Fill, stroke and lines
 
 ### Fill and stroke

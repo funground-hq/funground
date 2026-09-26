@@ -20,6 +20,7 @@ from typing import Any
 from . import ir
 from .capabilities import Capability, PlaygroundWarning, missing_capability
 from .color import WHITE, Color, ColorLike
+from .paint import parse_paint
 from .geometry import Path, Transform
 from .paths import PathBuilder
 from .noise import Noise
@@ -281,13 +282,13 @@ class Sketch:
 
     # ------------------------------------------------------------ style
     def fill(self, color: ColorLike) -> None:
-        self._states.update(fill=Color.parse(color))
+        self._states.update(fill=parse_paint(color))      # a colour or a gradient (S-050)
 
     def no_fill(self) -> None:
         self._states.update(fill=None)
 
     def stroke(self, color: ColorLike) -> None:
-        self._states.update(stroke=Color.parse(color))
+        self._states.update(stroke=parse_paint(color))
 
     def no_stroke(self) -> None:
         self._states.update(stroke=None)
@@ -397,7 +398,7 @@ class Sketch:
 
     def _text_color(self, color: ColorLike | None, style) -> Color:
         if color is not None:
-            return Color.parse(color)
+            return parse_paint(color)
         return style.fill or style.stroke or WHITE  # contract T4
 
     def text_box(self, message: object, x: float, y: float, width: float, height: float | None = None,
@@ -428,7 +429,7 @@ class Sketch:
 
     # ------------------------------------------------------------ drawing
     def background(self, color: ColorLike) -> None:
-        self._emit(ir.Clear(Color.parse(color)))
+        self._emit(ir.Clear(parse_paint(color)))
 
     def circle(self, x: float, y: float, diameter: float) -> None:
         self._emit(ir.Circle(x, y, diameter, self.style))

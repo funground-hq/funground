@@ -149,12 +149,13 @@ What would change this: a hard install-size budget for classrooms.
 - [x] S-053.3 Contract rows; tests; gallery `text/` (a poster); guide chapter 6
 *Acceptance:* a DrawBot `textBox` layout ports with naming changes only.
 
-### S-050 Gradients — E-25
-- [ ] S-050.1 `p.linear_gradient(x1, y1, x2, y2, colours, stops=None)` and
+### S-050 Gradients — E-25 ✅
+*As built:* `playground/paint.py` (`Gradient`, `parse_paint`); the list parameter is `colors`, matching `p.color` and `color=`. A gradient is data in the IR; the Cairo renderer makes a pattern in user space. Contract S13.
+- [x] S-050.1 `p.linear_gradient(x1, y1, x2, y2, colours, stops=None)` and
   `p.radial_gradient(x, y, r, colours, stops=None)`, usable wherever a fill or stroke colour is
-- [ ] S-050.2 IR op or style field, omitted when unused so snapshots stay identical; Cairo
+- [x] S-050.2 IR op or style field, omitted when unused so snapshots stay identical; Cairo
   renderer; PDF/SVG export keeps gradients as vectors
-- [ ] S-050.3 Contract row; tests; gallery `colour/`; guide chapter 4
+- [x] S-050.3 Contract row; tests; gallery `colour/`; guide chapter 4
 *Acceptance:* a gradient-filled shape exports to PDF as a vector gradient.
 
 ### S-051 Blend modes, opacity, shadow — E-25

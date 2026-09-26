@@ -81,4 +81,42 @@ p.run()
 *Coming from p5 or Processing?* There is no `colorMode()`: write `p.fill(p.hsb(200, 80, 90))`
 instead of switching modes, so a tuple never changes meaning halfway through a sketch.
 
+## Gradients
+
+A gradient blends colours smoothly. Make one, then use it anywhere a colour goes: in
+`p.fill()`, `p.stroke()`, `p.background()`, or `p.text(..., color=...)`.
+
+| Function | Blends |
+|---|---|
+| `p.linear_gradient(x1, y1, x2, y2, colors)` | along the line from `(x1, y1)` to `(x2, y2)` |
+| `p.radial_gradient(x, y, radius, colors)` | outward from the centre `(x, y)` to `radius` |
+
+`colors` is a list of two or more colours. Add `stops=[0, 0.3, 1]`, one number from 0 to 1 per
+colour, to say where each colour sits; otherwise they are spread evenly. A colour with a fourth
+value fades to transparent.
+
+```python
+import playground as p
+
+
+def setup():
+    p.size(640, 200)
+
+
+def draw():
+    p.background(p.linear_gradient(0, 0, 0, 200, ["midnightblue", "coral"]))
+    p.no_stroke()
+    p.fill(p.radial_gradient(320, 160, 80, ["lightyellow", "gold", (255, 140, 0, 0)]))
+    p.circle(320, 160, 160)
+
+
+p.run()
+```
+
+![Gradients](../gallery/images/colour-03_gradients.png)
+
+A gradient's positions are measured in the same space as the shapes, so after `p.translate()`
+or `p.rotate()` the gradient moves and turns with the shape. Saved as PDF or SVG, a gradient
+stays smooth at any zoom.
+
 **Next:** [5. Fill, stroke and lines](05_fill_stroke_lines.md)

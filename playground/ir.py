@@ -17,6 +17,7 @@ from dataclasses import dataclass, fields, is_dataclass
 from typing import Any, Iterator, Union
 
 from .color import Color
+from .paint import Gradient
 from .geometry import Path, Transform
 from .state import GraphicsState
 
@@ -203,6 +204,8 @@ def _fields_to_jsonable(obj: Any) -> dict[str, Any]:
 def _value_to_jsonable(v: Any) -> Any:
     if isinstance(v, Color):
         return list(v.rgba)
+    if isinstance(v, Gradient):
+        return {"gradient": v.kind, "points": list(v.points), "stops": [[o, list(c.rgba)] for o, c in v.stops]}
     if isinstance(v, Transform):
         return list(v.as_tuple())
     if isinstance(v, Path):
@@ -226,12 +229,18 @@ def op_to_jsonable(op: Op) -> dict[str, Any]:
 def _state_from_jsonable(d: dict[str, Any]) -> GraphicsState:
     extra = {k: (tuple(d[k]) if k == "dash" else d[k]) for k in OMIT_WHEN_DEFAULT if k in d}
     return GraphicsState(
-        fill=Color(*d["fill"]) if d["fill"] is not None else None,
-        stroke=Color(*d["stroke"]) if d["stroke"] is not None else None,
+        fill=_paint_from_jsonable(d["fill"]) if d["fill"] is not None else None,
+        stroke=_paint_from_jsonable(d["stroke"]) if d["stroke"] is not None else None,
         stroke_width=d["stroke_width"],
         text_size=d["text_size"],
         **extra,
     )
+
+
+def _paint_from_jsonable(v: Any) -> Any:
+    if isinstance(v, dict):
+        return Gradient(v["gradient"], tuple(v["points"]), tuple((o, Color(*c)) for o, c in v["stops"]))
+    return Color(*v)
 
 
 def _path_from_jsonable(segs: list) -> Path:
@@ -250,7 +259,7 @@ def op_from_jsonable(d: dict[str, Any]) -> Op:
         elif f.name == "style":
             kwargs[f.name] = _state_from_jsonable(v)
         elif f.name == "color":
-            kwargs[f.name] = Color(*v)
+            kwargs[f.name] = _paint_from_jsonable(v)
         elif f.name == "transform":
             kwargs[f.name] = Transform(*v)
         elif f.name == "path":

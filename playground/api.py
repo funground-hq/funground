@@ -256,6 +256,20 @@ def hsl(hue: float, saturation: float, lightness: float, alpha: float = 255):
     return _Color.from_hsl(hue, saturation, lightness, alpha)
 
 
+def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors, stops=None):
+    """Colours blended along the line from (x1, y1) to (x2, y2); use it like a colour in fill/stroke/background."""
+    from .paint import linear_gradient as make
+
+    return make(x1, y1, x2, y2, colors, stops)
+
+
+def radial_gradient(x: float, y: float, radius: float, colors, stops=None):
+    """Colours blended outward from (x, y) to *radius*; the first colour is at the centre."""
+    from .paint import radial_gradient as make
+
+    return make(x, y, radius, colors, stops)
+
+
 def lerp_color(c1: Color, c2: Color, amount: float):
     """The colour *amount* of the way from c1 to c2 (0 to 1), mixing red, green, blue and alpha."""
     from .color import Color as _Color
