@@ -1,6 +1,6 @@
 """Quick Reference v0.6 (story S-030): the document is produced by the code it documents.
 
-Acceptance line of the story: every name in ``playground.__all__`` appears in the
+Acceptance line of the story: every name in ``funground.__all__`` appears in the
 reference with a runnable example. The runnable examples are the sketches in
 examples/reference/, embedded verbatim in the markdown; the pictures are made
 from them by tools/make_reference_images.py.
@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 
-import playground
+import funground
 
 from conftest import ROOT
 
@@ -46,10 +46,10 @@ def test_reference_sketches_are_present():
 
 
 def test_every_public_name_is_documented(reference_text):
-    missing = [name for name in playground.__all__ if f"p.{name}" not in reference_text]
-    assert not missing, f"names in playground.__all__ absent from the Quick Reference: {missing}"
+    missing = [name for name in funground.__all__ if f"f.{name}" not in reference_text]
+    assert not missing, f"names in funground.__all__ absent from the Quick Reference: {missing}"
     # The reference must state the version it documents (follows S-070 / releases).
-    assert playground.__version__ in reference_text and "p.__version__" in reference_text
+    assert funground.__version__ in reference_text and "f.__version__" in reference_text
 
 
 @pytest.mark.parametrize("sketch", SKETCHES, ids=lambda s: s.name)

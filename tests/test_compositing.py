@@ -4,11 +4,11 @@ from __future__ import annotations
 import cairo
 import pytest
 
-import playground as p
-from playground import api, ir
-from playground.platform.headless import HeadlessPlatform
-from playground.renderers.cairo2d import CairoRenderer
-from playground.sketch import Sketch
+import funground as p
+from funground import api, ir
+from funground.platform.headless import HeadlessPlatform
+from funground.renderers.cairo2d import CairoRenderer
+from funground.sketch import Sketch
 
 
 def render(draw, size=(100, 100)):

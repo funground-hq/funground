@@ -141,4 +141,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-072 | E-22 | Examples Gallery completed: coverage test green for all of `__all__`; curated showcase page | 6 |
 | S-073 | E-02 | Release 0.1 on PyPI (D-019): distribution name (D-020), packaging metadata and wheel, changelog, Quick Reference for 0.1, version `0.1.0`, tagged, CI green (needs S-039) | 6 |
 | S-074 | E-11 | Curve vocabulary aligned with Processing/p5 (D-018): Bézier / quadratic / Catmull-Rom vertices, contours, `bezier()`/`curve()` shapes, `bezier_point`/`tangent` | 5 — done |
-| S-075 | E-02 | Rename to `funground` (D-020): package, `pyproject`, examples, guide, reference, tests; `import funground as f`; history not rewritten | 6 |
+| S-075 | E-02 | Rename to `funground` (D-020): package, `pyproject`, examples, guide, reference, tests; `import funground as f`; history not rewritten | 6 — done |

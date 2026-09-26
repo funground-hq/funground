@@ -3,24 +3,24 @@
 Change a variable a little in every draw() and you have motion; flip the speed at the edges and
 it bounces.
 """
-import playground as p
+import funground as f
 
 x = 60
 speed = 7
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
     global x, speed
-    p.background("white")
-    p.fill("tomato")
-    p.circle(x, p.height / 2, 80)
+    f.background("white")
+    f.fill("tomato")
+    f.circle(x, f.height / 2, 80)
     x += speed
-    if x > p.width - 40 or x < 40:
+    if x > f.width - 40 or x < 40:
         speed = -speed
 
 
-p.run()
+f.run()

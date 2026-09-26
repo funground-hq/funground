@@ -1,6 +1,6 @@
-# Playground SDLC process
+# funground SDLC process
 
-How work on Playground is planned, tracked, built and reviewed from Sprint 0 onward.
+How work on funground is planned, tracked, built and reviewed from Sprint 0 onward.
 
 ## Hierarchy
 
@@ -145,7 +145,7 @@ decisions and are not logged.
   the context. Never let two stories' changes sit staged together (Sprint 1 retro).
 - Learner code in `examples/session1/` never changes to make a test pass.
 - A change to a pinned semantic is a contract change: ADR or contract row first, then code.
-- Backend types (`pygame.Surface`, `cairo.Context`, …) never appear in `playground/api.py` or in tests of public behaviour.
+- Backend types (`pygame.Surface`, `cairo.Context`, …) never appear in `funground/api.py` or in tests of public behaviour.
 - **Providers are selected per capability and workload, not per framework** (D-010). Interactive
   raster, vector export, shaping and font model may be different libraries behind the one IR;
   learners must never see the seam. An engine is chosen by measurement (a bake-off spike) and

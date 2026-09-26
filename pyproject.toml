@@ -3,9 +3,9 @@ requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "playground"
+name = "funground"
 version = "0.1.0.dev0"
-description = "A tiny teaching-friendly visual programming wrapper around pygame-ce."
+description = "Creative coding for learners: p5.js/Processing and DrawBot-style 2D drawing in Python."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["pygame-ce>=2.5", "pycairo>=1.27", "fonttools>=4.55", "uharfbuzz>=0.45"]
@@ -14,10 +14,10 @@ dependencies = ["pygame-ce>=2.5", "pycairo>=1.27", "fonttools>=4.55", "uharfbuzz
 dev = ["pytest>=8"]
 
 [tool.setuptools]
-packages = ["playground", "playground.platform", "playground.renderers", "playground.export"]
+packages = ["funground", "funground.platform", "funground.renderers", "funground.export"]
 
 [tool.setuptools.package-data]
-playground = ["fonts/*.ttf", "fonts/*.txt"]
+funground = ["fonts/*.ttf", "fonts/*.txt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

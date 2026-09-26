@@ -8,7 +8,7 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-PACKAGE = Path(__file__).resolve().parent.parent / "playground"
+PACKAGE = Path(__file__).resolve().parent.parent / "funground"
 BACKENDS = {"pygame", "cairo", "skia", "blend2d", "moderngl", "OpenGL"}
 # Which backend each provider directory may import (S-026: pygame is platform-only now).
 ALLOWED = {"platform/": {"pygame"}, "renderers/": {"cairo", "skia", "blend2d", "pygame"}, "export/": {"cairo"}}

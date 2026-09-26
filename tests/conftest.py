@@ -1,4 +1,4 @@
-"""Shared fixtures for the Playground regression suite.
+"""Shared fixtures for the funground regression suite.
 
 Everything runs headless: the SDL dummy video/audio drivers are selected
 before pygame is imported, so the suite works in CI without a display.
@@ -19,15 +19,15 @@ sys.path.insert(0, str(ROOT))
 import pygame  # noqa: E402
 import pytest  # noqa: E402
 
-import playground  # noqa: E402
-from playground import api  # noqa: E402
-from playground.sketch import Sketch  # noqa: E402
+import funground  # noqa: E402
+from funground import api  # noqa: E402
+from funground.sketch import Sketch  # noqa: E402
 
 EXAMPLES = ROOT / "examples" / "session1"
 GOLDEN = ROOT / "tests" / "golden"
 
 
-def reset_playground() -> Sketch:
+def reset_funground() -> Sketch:
     """Give the public API a fresh Sketch between tests."""
     sketch = api.use_sketch(Sketch())
     sketch.random_seed(0)
@@ -36,11 +36,11 @@ def reset_playground() -> Sketch:
 
 @pytest.fixture(autouse=True)
 def _fresh_state():
-    reset_playground()
+    reset_funground()
     yield
     if pygame.get_init():
         pygame.quit()
-    reset_playground()
+    reset_funground()
 
 
 @pytest.fixture
@@ -70,14 +70,14 @@ class LiveCanvas:
 def canvas():
     """A live 200x100 drawing surface for pixel-level semantic tests."""
     pygame.init()
-    playground.size(200, 100)
+    funground.size(200, 100)
     return LiveCanvas(api.active_sketch())
 
 
 def run_sketch(path: Path, frames: int = 30, fps: int = 1000):
     """Execute a learner sketch file unchanged, stopping after *frames*.
 
-    The sketch calls ``p.run()`` itself; we swap in a wrapper that forwards the
+    The sketch calls ``f.run()`` itself; we swap in a wrapper that forwards the
     sketch's own globals to ``Sketch.run_namespace`` with ``max_frames`` set.
     Returns ``((width, height), rgb_bytes)`` of the final frame.
     """
@@ -88,12 +88,12 @@ def run_sketch(path: Path, frames: int = 30, fps: int = 1000):
         caller = inspect.currentframe().f_back
         api.active_sketch().run_namespace(caller.f_globals, fps=fps, max_frames=max_frames)
 
-    original = playground.run
-    playground.run = harness_run
+    original = funground.run
+    funground.run = harness_run
     try:
         exec(compile(source, str(path), "exec"), namespace)
     finally:
-        playground.run = original
+        funground.run = original
 
     frame = api.active_sketch().last_frame
     assert frame is not None, "sketch did not reach max_frames"

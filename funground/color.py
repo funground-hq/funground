@@ -1,7 +1,7 @@
-"""Playground's own colour type.
+"""funground's own colour type.
 
 Learners keep writing ``"tomato"``, ``(255, 99, 71)`` or ``"#FF6347"`` (contract row S1);
-Playground parses those once into an RGBA ``Color`` so renderers never see backend types.
+funground parses those once into an RGBA ``Color`` so renderers never see backend types.
 """
 from __future__ import annotations
 
@@ -144,7 +144,7 @@ def _component(c: object) -> int:
     """v0.5 behaviour (pygame-ce): a number is truncated toward zero, then must be 0..255.
 
     So 211.8 -> 211 and -0.5 -> 0 are accepted, as v0.5 accepted them; NaN is not.
-    Computed colours such as p.map_range(...) results therefore just work.
+    Computed colours such as f.map_range(...) results therefore just work.
     """
     if isinstance(c, bool) or not isinstance(c, (int, float)):
         raise ValueError(f"colour component {c!r} must be a number from 0 to 255")

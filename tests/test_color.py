@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pytest
 
-from playground._colornames import NAMED_COLORS
-from playground.color import BLACK, WHITE, Color
+from funground._colornames import NAMED_COLORS
+from funground.color import BLACK, WHITE, Color
 
 
 @pytest.mark.parametrize(

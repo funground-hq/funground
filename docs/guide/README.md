@@ -1,4 +1,4 @@
-# Playground User Guide
+# funground User Guide
 
 For learners and teachers. The guide *teaches*; the [Quick Reference](../reference/Playground_Quick_Reference_v0.6.md)
 is for looking things up; the [Examples Gallery](../gallery/README.md) *shows* every feature.

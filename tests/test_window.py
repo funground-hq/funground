@@ -3,11 +3,11 @@ from __future__ import annotations
 
 import pytest
 
-import playground as p
-from playground import api
-from playground.platform.base import CURSOR_KINDS
-from playground.platform.headless import HeadlessPlatform
-from playground.sketch import Sketch
+import funground as p
+from funground import api
+from funground.platform.base import CURSOR_KINDS
+from funground.platform.headless import HeadlessPlatform
+from funground.sketch import Sketch
 
 
 def run(setup, draw, frames=3):
@@ -43,7 +43,7 @@ def test_a_cursor_chosen_before_the_window_is_applied_when_it_opens():
 
 
 def test_resize_canvas_while_running_updates_width_height_and_pixels(monkeypatch):
-    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
+    monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     sizes = []
 
     def draw():
@@ -84,7 +84,7 @@ def test_unknown_cursor_is_explained():
 
 def test_pygame_platform_resizes_one_window_and_goes_full_screen():
     """With SDL's dummy video driver (conftest): the real platform code paths run without a display."""
-    from playground.platform.pygame_platform import PygamePlatform
+    from funground.platform.pygame_platform import PygamePlatform
 
     plat = PygamePlatform()
     try:

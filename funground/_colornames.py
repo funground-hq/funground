@@ -1,4 +1,4 @@
-"""Named colours accepted by Playground.
+"""Named colours accepted by funground.
 
 Generated from pygame-ce 2.5.8 ``pygame.colordict.THECOLORS`` (the X11 rgb.txt
 vocabulary the v0.5 Quick Reference documents). Bundled so every renderer and

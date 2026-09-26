@@ -1,4 +1,4 @@
-"""The Sketch: one running (or runnable) Playground program.
+"""The Sketch: one running (or runnable) funground program.
 
 Owns the lifecycle, live values, graphics state and helpers that v0.5 kept as
 module globals in ``_core.py``. Talks to the OS only through a ``Platform`` and
@@ -18,7 +18,7 @@ from collections.abc import Callable, Iterator
 from typing import Any
 
 from . import ir
-from .capabilities import Capability, PlaygroundWarning, missing_capability
+from .capabilities import Capability, FungroundWarning, missing_capability
 from .color import WHITE, Color, ColorLike
 from .paint import parse_paint
 from .geometry import Path, Transform
@@ -33,14 +33,14 @@ from .state import GraphicsState, StateStack
 REQUIRED_CAPABILITIES: dict[Capability, str] = {Capability.RASTER_2D: "Drawing shapes"}
 
 # Renderer selection (S-023.4). Future optional renderers (e.g. Blend2D, S-036) register here.
-RENDERERS = {"cairo": "playground.renderers.cairo2d:CairoRenderer"}
+RENDERERS = {"cairo": "funground.renderers.cairo2d:CairoRenderer"}
 DEFAULT_RENDERER = "cairo"
 
 
 def default_platform() -> Platform:
     import os
 
-    if os.environ.get("PLAYGROUND_HEADLESS", "").lower() in ("1", "true", "yes"):
+    if os.environ.get("FUNGROUND_HEADLESS", "").lower() in ("1", "true", "yes"):
         from .platform.headless import HeadlessPlatform
 
         return HeadlessPlatform()
@@ -53,9 +53,9 @@ def default_renderer() -> Renderer:
     import importlib
     import os
 
-    name = os.environ.get("PLAYGROUND_RENDERER", DEFAULT_RENDERER).lower()
+    name = os.environ.get("FUNGROUND_RENDERER", DEFAULT_RENDERER).lower()
     if name not in RENDERERS:
-        raise ValueError(f"PLAYGROUND_RENDERER must be one of {sorted(RENDERERS)}, not {name!r}")
+        raise ValueError(f"FUNGROUND_RENDERER must be one of {sorted(RENDERERS)}, not {name!r}")
     module, cls = RENDERERS[name].split(":")
     return getattr(importlib.import_module(module), cls)()
 
@@ -80,7 +80,7 @@ class Sketch:
         self._smooth = True
         # The shape between begin_shape() and end_shape(), if one is open (S-028).
         self._shape: ShapeBuilder | None = None
-        # Playground keeps its own generator so random_seed() never disturbs a
+        # funground keeps its own generator so random_seed() never disturbs a
         # learner's own `import random`.
         self._rng = _random.Random()
         # Smooth noise, ported from p5.js (S-047); seeded separately, as in p5.
@@ -90,7 +90,7 @@ class Sketch:
         self.width = 640
         self.height = 480
         self.fps = 60
-        self.title = "playground"
+        self.title = "funground"
         self.mouse_x = 0
         self.mouse_y = 0
         self.is_mouse_pressed = False       # D-016 (was mouse_pressed in v0.5)
@@ -135,8 +135,8 @@ class Sketch:
     def pop(self) -> None:
         if self._states.depth == 0:
             warnings.warn(
-                "p.pop() called without a matching p.push(); ignored.",
-                PlaygroundWarning, stacklevel=3,
+                "f.pop() called without a matching f.push(); ignored.",
+                FungroundWarning, stacklevel=3,
             )
             return
         self._states.restore()
@@ -144,7 +144,7 @@ class Sketch:
 
     @contextlib.contextmanager
     def saved_state(self) -> Iterator[None]:
-        """``with p.saved_state():`` - push on entry, pop on exit, even when the body raises."""
+        """``with f.saved_state():`` - push on entry, pop on exit, even when the body raises."""
         self.push()
         depth = self._states.depth
         try:
@@ -159,19 +159,19 @@ class Sketch:
         if self._shape is not None:
             self._shape = None
             warnings.warn(
-                "draw() finished inside a shape: p.begin_shape() had no p.end_shape(), "
+                "draw() finished inside a shape: f.begin_shape() had no f.end_shape(), "
                 "so nothing was drawn for it.",
-                PlaygroundWarning, stacklevel=2,
+                FungroundWarning, stacklevel=2,
             )
         open_pushes = self._states.unwind()
         if open_pushes:
             for _ in range(open_pushes):
                 self.frame.append(ir.Restore())
             warnings.warn(
-                f"draw() finished with {open_pushes} p.push() call(s) still open; "
-                "Playground popped them for you. Add a matching p.pop(), or use "
-                "`with p.saved_state():`.",
-                PlaygroundWarning, stacklevel=2,
+                f"draw() finished with {open_pushes} f.push() call(s) still open; "
+                "funground popped them for you. Add a matching f.pop(), or use "
+                "`with f.saved_state():`.",
+                FungroundWarning, stacklevel=2,
             )
 
     # ------------------------------------------------------------ transforms
@@ -207,7 +207,7 @@ class Sketch:
         """Multiply in x' = a*x + c*y + e, y' = b*x + d*y + f (the p5 / Canvas order)."""
         t = Transform(float(a), float(b), float(c), float(d), float(e), float(f))
         if t.determinant() == 0:
-            raise ValueError("p.apply_matrix(): this matrix squashes everything flat (its determinant is 0)")
+            raise ValueError("f.apply_matrix(): this matrix squashes everything flat (its determinant is 0)")
         self._emit(ir.Concat(t))
 
     def reset_matrix(self) -> None:
@@ -223,7 +223,7 @@ class Sketch:
         return math.degrees(radians)
 
     # ------------------------------------------------------------ window
-    def size(self, width: int, height: int, *, title: str = "playground", fps: int = 60) -> None:
+    def size(self, width: int, height: int, *, title: str = "funground", fps: int = 60) -> None:
         if width <= 0 or height <= 0:
             raise ValueError("width and height must be positive")
         if fps <= 0:
@@ -247,7 +247,7 @@ class Sketch:
         self.size(width, height, title=self.title, fps=self.fps)
 
     def full_screen(self) -> None:
-        """Make the canvas fill the screen; p.width and p.height become the screen's size."""
+        """Make the canvas fill the screen; f.width and f.height become the screen's size."""
         self._check_capabilities()
         pw, ph = self._platform.open_full_screen(self.title)
         scale = self._platform.backing_scale
@@ -258,7 +258,7 @@ class Sketch:
 
     def cursor(self, kind: str = "arrow") -> None:
         if kind not in self.CURSOR_KINDS:
-            raise ValueError(f"p.cursor() takes one of {', '.join(map(repr, self.CURSOR_KINDS))}, not {kind!r}")
+            raise ValueError(f"f.cursor() takes one of {', '.join(map(repr, self.CURSOR_KINDS))}, not {kind!r}")
         self._cursor = kind
         if self._has_window:
             self._platform.set_cursor(kind)
@@ -276,7 +276,7 @@ class Sketch:
 
     def _require_window(self) -> None:
         if not self._has_window:
-            raise RuntimeError("No drawing window yet. Call p.size(...) first.")
+            raise RuntimeError("No drawing window yet. Call f.size(...) first.")
 
     def _emit(self, op: ir.Op) -> None:
         self._require_window()
@@ -310,11 +310,11 @@ class Sketch:
 
         runs = re.findall(r"#+", pattern)
         if len(runs) != 1:
-            raise ValueError(f"p.save_frames() needs one run of # in the name for the number, "
+            raise ValueError(f"f.save_frames() needs one run of # in the name for the number, "
                              f"e.g. \"frames/####.png\", not {pattern!r}")
         format_of(pattern)
         if isinstance(count, bool) or not isinstance(count, int) or count < 1:
-            raise ValueError(f"p.save_frames() needs a whole number of frames, 1 or more, not {count!r}")
+            raise ValueError(f"f.save_frames() needs a whole number of frames, 1 or more, not {count!r}")
         self._require_window()
         self._frame_sequence = [pattern, 1, count]
 
@@ -371,24 +371,24 @@ class Sketch:
 
     def stroke_cap(self, cap: str) -> None:
         if cap not in self.STROKE_CAPS:
-            raise ValueError(f"p.stroke_cap() takes one of {', '.join(map(repr, self.STROKE_CAPS))}, not {cap!r}")
+            raise ValueError(f"f.stroke_cap() takes one of {', '.join(map(repr, self.STROKE_CAPS))}, not {cap!r}")
         self._states.update(stroke_cap=cap)
 
     def stroke_join(self, join: str) -> None:
         if join not in self.STROKE_JOINS:
-            raise ValueError(f"p.stroke_join() takes one of {', '.join(map(repr, self.STROKE_JOINS))}, not {join!r}")
+            raise ValueError(f"f.stroke_join() takes one of {', '.join(map(repr, self.STROKE_JOINS))}, not {join!r}")
         self._states.update(stroke_join=join)
 
     def miter_limit(self, limit: float) -> None:
         if limit < 1:
-            raise ValueError("p.miter_limit() must be at least 1")
+            raise ValueError("f.miter_limit() must be at least 1")
         self._states.update(miter_limit=float(limit))
 
     def stroke_dash(self, pattern, offset: float = 0) -> None:
         """Dashed strokes: stroke_dash(10) or stroke_dash([12, 4, 2, 4]); offset shifts the pattern."""
         values = (pattern,) if isinstance(pattern, (int, float)) else tuple(pattern)
         if not values or any((not isinstance(v, (int, float))) or v < 0 for v in values) or sum(values) == 0:
-            raise ValueError("p.stroke_dash() needs one or more lengths of 0 or more, not all 0, e.g. p.stroke_dash([10, 5])")
+            raise ValueError("f.stroke_dash() needs one or more lengths of 0 or more, not all 0, e.g. f.stroke_dash([10, 5])")
         self._states.update(dash=tuple(float(v) for v in values), dash_offset=float(offset))
 
     def no_dash(self) -> None:
@@ -417,9 +417,9 @@ class Sketch:
 
     def text_align(self, horizontal: str, vertical: str | None = None) -> None:
         if horizontal not in self.TEXT_ALIGNS:
-            raise ValueError(f"p.text_align() takes one of {', '.join(map(repr, self.TEXT_ALIGNS))} first, not {horizontal!r}")
+            raise ValueError(f"f.text_align() takes one of {', '.join(map(repr, self.TEXT_ALIGNS))} first, not {horizontal!r}")
         if vertical is not None and vertical not in self.TEXT_VALIGNS:
-            raise ValueError(f"p.text_align()'s second value is one of {', '.join(map(repr, self.TEXT_VALIGNS))}, not {vertical!r}")
+            raise ValueError(f"f.text_align()'s second value is one of {', '.join(map(repr, self.TEXT_VALIGNS))}, not {vertical!r}")
         changes = {"text_align": horizontal}
         if vertical is not None:
             changes["text_valign"] = vertical
@@ -437,7 +437,7 @@ class Sketch:
 
     def text_leading(self, leading: float | None) -> None:
         if leading is not None and not leading >= 0:
-            raise ValueError("p.text_leading() takes a distance of 0 or more pixels, or None for automatic")
+            raise ValueError("f.text_leading() takes a distance of 0 or more pixels, or None for automatic")
         self._states.update(text_leading=None if leading is None else float(leading))
 
     @staticmethod
@@ -474,7 +474,7 @@ class Sketch:
         from .typography import text_metrics, wrap_lines
 
         if not width > 0 or (height is not None and not height >= 0):
-            raise ValueError("p.text_box() needs a width above 0 and a height of 0 or more (or no height)")
+            raise ValueError("f.text_box() needs a width above 0 and a height of 0 or more (or no height)")
         style = self.style
         lines, rests = wrap_lines(str(message), width, style.text_size)
         ascent, descent = text_metrics(style.text_size)
@@ -529,9 +529,9 @@ class Sketch:
         """A closed shape through a list of (x, y) points."""
         pts = [tuple(pt) for pt in points]
         if any(len(pt) != 2 for pt in pts):
-            raise ValueError("p.polygon() needs a list of (x, y) points")
+            raise ValueError("f.polygon() needs a list of (x, y) points")
         if len(pts) < 2:
-            raise ValueError("p.polygon() needs at least two points")
+            raise ValueError("f.polygon() needs at least two points")
         path = Path().move_to(*pts[0])
         for pt in pts[1:]:
             path = path.line_to(*pt)
@@ -547,7 +547,7 @@ class Sketch:
         "chord": closed by a straight line; "pie": closed through the centre.
         """
         if mode not in self.ARC_MODES:
-            raise ValueError(f"p.arc() mode must be one of {', '.join(self.ARC_MODES)}, not {mode!r}")
+            raise ValueError(f"f.arc() mode must be one of {', '.join(self.ARC_MODES)}, not {mode!r}")
         while stop < start:
             stop += 360
         stop = min(stop, start + 360)
@@ -584,7 +584,7 @@ class Sketch:
     # ------------------------------------------------------------ shapes, paths, clipping (S-028)
     def begin_shape(self) -> None:
         if self._shape is not None:
-            raise RuntimeError("p.begin_shape() called again before p.end_shape(); finish the first shape.")
+            raise RuntimeError("f.begin_shape() called again before f.end_shape(); finish the first shape.")
         self._shape = ShapeBuilder()
 
     def vertex(self, x: float, y: float) -> None:
@@ -636,7 +636,7 @@ class Sketch:
 
     def _open_shape(self, name: str) -> ShapeBuilder:
         if self._shape is None:
-            raise RuntimeError(f"p.{name}() called outside a shape: call p.begin_shape() first.")
+            raise RuntimeError(f"f.{name}() called outside a shape: call f.begin_shape() first.")
         return self._shape
 
     @staticmethod
@@ -652,9 +652,9 @@ class Sketch:
         if geometry.is_empty:
             # Clipping to nothing would silently hide everything drawn afterwards (S-067).
             warnings.warn(
-                "p.clip() was given an empty path, so it was ignored. "
+                "f.clip() was given an empty path, so it was ignored. "
                 "Add points with move_to()/line_to() before clipping.",
-                PlaygroundWarning,
+                FungroundWarning,
                 stacklevel=3,
             )
             return
@@ -692,17 +692,17 @@ class Sketch:
 
     def blend_mode(self, mode: str) -> None:
         if mode not in self.BLEND_MODES:
-            raise ValueError(f"p.blend_mode() takes one of {', '.join(map(repr, self.BLEND_MODES))}, not {mode!r}")
+            raise ValueError(f"f.blend_mode() takes one of {', '.join(map(repr, self.BLEND_MODES))}, not {mode!r}")
         self._states.update(blend_mode=mode)
 
     def opacity(self, amount: float) -> None:
         if isinstance(amount, bool) or not isinstance(amount, (int, float)) or not 0 <= amount <= 255:
-            raise ValueError(f"p.opacity() takes a number from 0 (invisible) to 255 (solid), not {amount!r}")
+            raise ValueError(f"f.opacity() takes a number from 0 (invisible) to 255 (solid), not {amount!r}")
         self._states.update(opacity=int(amount))
 
     def shadow(self, x_offset: float, y_offset: float, blur: float = 5, color: ColorLike = (0, 0, 0, 128)) -> None:
         if not blur >= 0:
-            raise ValueError("p.shadow() needs a blur of 0 or more")
+            raise ValueError("f.shadow() needs a blur of 0 or more")
         self._states.update(shadow=(float(x_offset), float(y_offset), float(blur), Color.parse(color)))
 
     def no_shadow(self) -> None:
@@ -726,28 +726,28 @@ class Sketch:
 
     def noise_detail(self, octaves: int, falloff: float | None = None) -> None:
         if octaves < 1:
-            raise ValueError("p.noise_detail(): octaves must be at least 1")
+            raise ValueError("f.noise_detail(): octaves must be at least 1")
         if falloff is not None and not 0 < falloff < 1:
-            raise ValueError("p.noise_detail(): falloff must be between 0 and 1, e.g. 0.5")
+            raise ValueError("f.noise_detail(): falloff must be between 0 and 1, e.g. 0.5")
         self._noise.detail(octaves, falloff)
 
     def random_gaussian(self, mean: float = 0.0, sd: float = 1.0) -> float:
         """A normally distributed random number: most values near *mean*, spread *sd*."""
         if sd < 0:
-            raise ValueError("p.random_gaussian(): the spread (sd) cannot be negative")
+            raise ValueError("f.random_gaussian(): the spread (sd) cannot be negative")
         return self._rng.gauss(mean, sd)
 
     def random_choice(self, items):
         """One item picked at random from a list, tuple or string."""
         if len(items) == 0:
-            raise ValueError("p.random_choice() needs at least one item to choose from")
+            raise ValueError("f.random_choice() needs at least one item to choose from")
         return self._rng.choice(items)
 
     @staticmethod
     def map_range(value: float, start1: float, stop1: float, start2: float, stop2: float,
                   clamp: bool = False) -> float:
         if start1 == stop1:
-            raise ValueError("p.map_range(): the first range is empty (start1 == stop1)")
+            raise ValueError("f.map_range(): the first range is empty (start1 == stop1)")
         result = start2 + (value - start1) * (stop2 - start2) / (stop1 - start1)
         if clamp:
             low, high = min(start2, stop2), max(start2, stop2)
@@ -761,7 +761,7 @@ class Sketch:
     @staticmethod
     def norm(value: float, start: float, stop: float) -> float:
         if start == stop:
-            raise ValueError("p.norm(): the range is empty (start == stop)")
+            raise ValueError("f.norm(): the range is empty (start == stop)")
         return (value - start) / (stop - start)
 
     @staticmethod
@@ -914,7 +914,7 @@ class Sketch:
                     draw()
                     self._end_draw()  # unbalanced push()es never leak into the next frame
                     self.last_ops = self.frame.ops  # what the latest drawn frame asked for (IR snapshot)
-                    self._render()   # draws, presents, flushes p.save()
+                    self._render()   # draws, presents, flushes f.save()
                     self.frame_count += 1
 
                 iterations += 1
@@ -940,7 +940,7 @@ def _geometry_of(path: PathBuilder | Path, name: str) -> Path:
         return path.geometry
     if isinstance(path, Path):
         return path
-    raise TypeError(f"p.{name}() needs a path made with p.path(), not {type(path).__name__}")
+    raise TypeError(f"f.{name}() needs a path made with f.path(), not {type(path).__name__}")
 
 
 CALLBACK_NAMES = ("mouse_pressed", "mouse_released", "mouse_moved", "mouse_dragged", "mouse_clicked",
@@ -978,7 +978,7 @@ def _sketch_functions(namespace: Namespace) -> tuple[Callable[[], None] | None, 
     if setup is not None and not callable(setup):
         raise TypeError("setup must be a function")
     if draw is None:
-        raise RuntimeError("Define a draw() function before calling p.run().")
+        raise RuntimeError("Define a draw() function before calling f.run().")
     if not callable(draw):
         raise TypeError("draw must be a function")
 

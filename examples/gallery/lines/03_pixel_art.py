@@ -4,7 +4,7 @@ no_smooth() turns off the soft edges, so every pixel is either the shape's colou
 big and blocky with scale() and it looks like a retro game. smooth() switches back: compare the
 two white circles.
 """
-import playground as p
+import funground as f
 
 INVADER = [
     "..X.....X..",
@@ -19,25 +19,25 @@ INVADER = [
 
 
 def setup():
-    p.size(640, 400)
-    p.no_smooth()
+    f.size(640, 400)
+    f.no_smooth()
 
 
 def draw():
-    p.background("black")
-    p.no_stroke()
-    p.fill("lime")
-    with p.saved_state():
-        p.translate(100, 80)
-        p.scale(30)
+    f.background("black")
+    f.no_stroke()
+    f.fill("lime")
+    with f.saved_state():
+        f.translate(100, 80)
+        f.scale(30)
         for row, line in enumerate(INVADER):
             for col, ch in enumerate(line):
                 if ch == "X":
-                    p.rect(col, row, 1, 1)
-    p.fill("white")
-    p.circle(520, 330, 41)            # a jagged circle: no anti-aliasing
-    p.smooth()                        # smooth edges again for the rest of this frame
-    p.circle(590, 330, 41)
+                    f.rect(col, row, 1, 1)
+    f.fill("white")
+    f.circle(520, 330, 41)            # a jagged circle: no anti-aliasing
+    f.smooth()                        # smooth edges again for the rest of this frame
+    f.circle(590, 330, 41)
 
 
-p.run()
+f.run()

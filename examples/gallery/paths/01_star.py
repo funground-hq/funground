@@ -5,34 +5,34 @@ open ones are only stroked.
 """
 import math
 
-import playground as p
+import funground as f
 
 
 def star(cx, cy, outer, inner, points):
-    p.begin_shape()
+    f.begin_shape()
     for i in range(points * 2):
         r = outer if i % 2 == 0 else inner
         a = math.pi * i / points - math.pi / 2
-        p.vertex(cx + r * math.cos(a), cy + r * math.sin(a))
-    p.end_shape(close=True)
+        f.vertex(cx + r * math.cos(a), cy + r * math.sin(a))
+    f.end_shape(close=True)
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.background("white")
-    p.fill("gold")
-    p.stroke("darkorange")
-    p.stroke_width(4)
+    f.background("white")
+    f.fill("gold")
+    f.stroke("darkorange")
+    f.stroke_width(4)
     star(200, 200, 140, 60, 5)
-    p.no_fill()
-    p.stroke("navy")
-    p.begin_shape()                  # an open zig-zag: stroked, never filled
+    f.no_fill()
+    f.stroke("navy")
+    f.begin_shape()                  # an open zig-zag: stroked, never filled
     for i in range(8):
-        p.vertex(380 + i * 30, 140 if i % 2 else 260)
-    p.end_shape()
+        f.vertex(380 + i * 30, 140 if i % 2 else 260)
+    f.end_shape()
 
 
-p.run()
+f.run()

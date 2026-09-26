@@ -182,12 +182,13 @@ What would change this: a hard install-size budget for classrooms.
 - [x] S-057.2 The headless platform accepts and ignores them; tests; guide chapter 2
 *Acceptance:* resizing mid-run keeps drawing sharp on a scaled display.
 
-### S-075 Rename to funground — E-02 *(D-020 decided)*
-- [ ] S-075.1 Package folder `playground/` → `funground/`; `pyproject.toml` name `funground`, description no longer "a wrapper around pygame-ce"; `import funground as f` in every example (`examples/`), the guide, the Quick Reference, the README and the tools
-- [ ] S-075.2 Tests import `funground`; error messages and warnings that say "playground" (e.g. `PlaygroundWarning`) renamed where learners see them; environment variables `PLAYGROUND_*` renamed `FUNGROUND_*`
-- [ ] S-075.3 Historical records keep the old name: `src_v0.5/`, spikes, earlier sprint folders, ADRs and the decision log are not rewritten; the Roadmap and backlog say "funground" from here on
-- [ ] S-075.4 Guide chapter 1: install with `pip install funground`; one line warning not to name your own variables `f`
-- [ ] S-075.5 Full suite green; every golden image and IR snapshot byte-identical (a rename changes no drawing)
+### S-075 Rename to funground — E-02 *(D-020 decided)* ✅
+*As built:* by the Sonnet `story-builder` subagent (first delegated story), reviewed and committed by the main session. `PlaygroundError` also became `FungroundError`. Kept on purpose: the drawn text "Hello, Playground!" in `gallery/text/01_text.py`, because changing it moves pixels and needs a reviewed golden regeneration; and "Coming from Playground 0.5", which names the old version. Follow-ups for S-071/S-073: the Semantic Contract's prose and the root README still say Playground.
+- [x] S-075.1 Package folder `playground/` → `funground/`; `pyproject.toml` name `funground`, description no longer "a wrapper around pygame-ce"; `import funground as f` in every example (`examples/`), the guide, the Quick Reference, the README and the tools
+- [x] S-075.2 Tests import `funground`; error messages and warnings that say "playground" (e.g. `PlaygroundWarning`) renamed where learners see them; environment variables `PLAYGROUND_*` renamed `FUNGROUND_*`
+- [x] S-075.3 Historical records keep the old name: `src_v0.5/`, spikes, earlier sprint folders, ADRs and the decision log are not rewritten; the Roadmap and backlog say "funground" from here on
+- [x] S-075.4 Guide chapter 1: install with `pip install funground`; one line warning not to name your own variables `f`
+- [x] S-075.5 Full suite green; every golden image and IR snapshot byte-identical (a rename changes no drawing)
 *Acceptance:* `grep -ri playground` over the package, examples, guide and tests finds only deliberate historical mentions; nothing learners run says "playground".
 
 ### S-054 Fonts and styles — E-15 *(D-022 = A)*

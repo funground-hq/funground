@@ -1,12 +1,12 @@
-import playground as p
+import funground as f
 
 
 def draw():
-    p.background("white")
-    p.fill("tomato")
-    p.circle(p.width / 2, p.height / 2, 80)
-    if p.frame_count > 200:
-        p.stop()
+    f.background("white")
+    f.fill("tomato")
+    f.circle(f.width / 2, f.height / 2, 80)
+    if f.frame_count > 200:
+        f.stop()
 
 
-p.run()
+f.run()

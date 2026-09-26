@@ -1,8 +1,8 @@
 """HeadlessPlatform: run a sketch with no window at all (story S-034).
 
-Selected by PLAYGROUND_HEADLESS=1. No OS, no SDL, no waiting: `tick` returns
+Selected by FUNGROUND_HEADLESS=1. No OS, no SDL, no waiting: `tick` returns
 real elapsed time without sleeping, input is always idle, and `present`
-keeps the last frame so `capture()` and `p.save()` work.
+keeps the last frame so `capture()` and `f.save()` work.
 """
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ class HeadlessPlatform:
 
     @property
     def backing_scale(self) -> float:
-        forced = os.environ.get("PLAYGROUND_BACKING_SCALE")
+        forced = os.environ.get("FUNGROUND_BACKING_SCALE")
         return max(0.5, float(forced)) if forced else 1.0
 
     def open_window(self, width: int, height: int, title: str) -> tuple[int, int]:

@@ -1,9 +1,9 @@
-"""PathBuilder: the object ``p.path()`` returns (story S-028, contract F3).
+"""PathBuilder: the object ``f.path()`` returns (story S-028, contract F3).
 
-A chainable wrapper over the immutable :class:`playground.geometry.Path`:
+A chainable wrapper over the immutable :class:`funground.geometry.Path`:
 every call swaps in a new Path and returns the builder itself, so a shape can
-be written as one expression and then drawn (``p.draw_path``) or used as a
-clip (``p.clip``) as many times as the sketch likes. The geometry underneath
+be written as one expression and then drawn (``f.draw_path``) or used as a
+clip (``f.clip``) as many times as the sketch likes. The geometry underneath
 never changes once built, which is what makes reuse safe.
 """
 from __future__ import annotations

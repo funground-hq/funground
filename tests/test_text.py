@@ -6,9 +6,9 @@ import os
 
 import pytest
 
-from playground import ir
-from playground.color import BLACK
-from playground.typography import DEFAULT_FONT, FontResource, TextRun, default_font
+from funground import ir
+from funground.color import BLACK
+from funground.typography import DEFAULT_FONT, FontResource, TextRun, default_font
 
 
 def test_bundled_font_and_licence_ship_with_the_package():
@@ -61,9 +61,9 @@ def test_unicode_shaping_is_not_latin_only():
 
 # ---------------------------------------------------------------- S-037: text polish
 def test_renderer_text_run_cache_is_an_lru_capped_at_256():
-    """S-037.1: `p.text(p.frame_count, ...)` must not grow the per-window cache without bound."""
-    from playground.renderers.cairo2d import TEXT_RUN_CACHE_SIZE, CairoRenderer
-    from playground.state import GraphicsState
+    """S-037.1: `f.text(f.frame_count, ...)` must not grow the per-window cache without bound."""
+    from funground.renderers.cairo2d import TEXT_RUN_CACHE_SIZE, CairoRenderer
+    from funground.state import GraphicsState
 
     assert TEXT_RUN_CACHE_SIZE == 256
     r = CairoRenderer()
@@ -78,8 +78,8 @@ def test_renderer_text_run_cache_is_an_lru_capped_at_256():
 
 
 def test_text_run_cache_evicts_least_recently_used_not_oldest_inserted():
-    from playground.renderers.cairo2d import CairoRenderer
-    from playground.state import GraphicsState
+    from funground.renderers.cairo2d import CairoRenderer
+    from funground.state import GraphicsState
 
     r = CairoRenderer()
     r.attach(50, 50)
@@ -92,8 +92,8 @@ def test_text_run_cache_evicts_least_recently_used_not_oldest_inserted():
 
 
 def test_text_width_is_the_shaped_advance_in_logical_pixels():
-    import playground as p
-    from playground.typography import text_width
+    import funground as p
+    from funground.typography import text_width
 
     p.text_size(20)
     assert p.text_width("") == 0.0
@@ -107,7 +107,7 @@ def test_text_width_is_the_shaped_advance_in_logical_pixels():
 
 
 def test_text_width_is_kerned_like_the_rendered_text():
-    import playground as p
+    import funground as p
 
     p.text_size(24)
     f = default_font()
@@ -116,7 +116,7 @@ def test_text_width_is_kerned_like_the_rendered_text():
 
 
 def test_text_width_ignores_transforms(canvas):
-    import playground as p
+    import funground as p
 
     p.text_size(20)
     w = p.text_width("scaled?")
@@ -127,7 +127,7 @@ def test_text_width_ignores_transforms(canvas):
 
 def test_text_width_centres_text(canvas):
     """The learner recipe: p.text(msg, (p.width - p.text_width(msg)) / 2, y)."""
-    import playground as p
+    import funground as p
     from tests.test_semantics import _ink_bbox
 
     msg = "Centred"

@@ -5,7 +5,7 @@ import math
 
 import pytest
 
-from playground.geometry import Path, Transform
+from funground.geometry import Path, Transform
 
 
 def close(p, q, eps=1e-9):

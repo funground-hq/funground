@@ -5,7 +5,7 @@ edge with round joins/caps (D-004), fractional coordinates anti-aliased
 (D-005). Draws into a Cairo ImageSurface at physical resolution behind a
 HiDPI base scale (S-024); the platform presents the pixels (BGRA
 premultiplied on little-endian == pygame "BGRA" for opaque frames). Text is
-materialised through the outline route (playground.typography).
+materialised through the outline route (funground.typography).
 """
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ if TYPE_CHECKING:
     from ..typography import TextRun
 
 # S-037: shaped text runs are cached per (text, size); an LRU cap keeps
-# `p.text(p.frame_count, ...)` from growing the cache without bound.
+# `f.text(f.frame_count, ...)` from growing the cache without bound.
 TEXT_RUN_CACHE_SIZE = 256
 
 
@@ -57,7 +57,7 @@ class CairoRenderer:
         self._ctx = self.context_for(self._surface, scale)
 
     def context_for(self, surface, scale: float = 1.0) -> cairo.Context:
-        """A context with Playground's stroke defaults and the HiDPI base transform."""
+        """A context with funground's stroke defaults and the HiDPI base transform."""
         ctx = cairo.Context(surface)
         ctx.set_line_join(cairo.LINE_JOIN_ROUND)
         ctx.set_line_cap(cairo.LINE_CAP_ROUND)

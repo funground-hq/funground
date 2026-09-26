@@ -1,24 +1,24 @@
-import playground as p
+import funground as f
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.background("white")
+    f.background("white")
 
     for _ in range(20):
-        x = p.random(p.width)
-        y = p.random(p.height)
-        x = p.constrain(x, 20, p.width - 20)
-        y = p.constrain(y, 20, p.height - 20)
-        d = p.distance(x, y, p.width / 2, p.height / 2)
+        x = f.random(f.width)
+        y = f.random(f.height)
+        x = f.constrain(x, 20, f.width - 20)
+        y = f.constrain(y, 20, f.height - 20)
+        d = f.distance(x, y, f.width / 2, f.height / 2)
         if d < 150:
-            p.fill("tomato")
+            f.fill("tomato")
         else:
-            p.fill("skyblue")
-        p.circle(x, y, 20)
+            f.fill("skyblue")
+        f.circle(x, y, 20)
 
 
-p.run()
+f.run()

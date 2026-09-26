@@ -4,10 +4,10 @@ from __future__ import annotations
 import cairo
 import pytest
 
-import playground as p
-from playground import api
-from playground.platform.headless import HeadlessPlatform
-from playground.sketch import Sketch
+import funground as p
+from funground import api
+from funground.platform.headless import HeadlessPlatform
+from funground.sketch import Sketch
 
 from conftest import ROOT, run_sketch
 

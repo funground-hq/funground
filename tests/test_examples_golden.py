@@ -4,7 +4,7 @@ Golden PNGs live in tests/golden/. They are exact-match because the renderer is
 still pygame on every platform; when a second rasteriser arrives, this becomes
 a tolerance comparison (or an op-list comparison - see the architecture review).
 
-Regenerate deliberately with:  PLAYGROUND_UPDATE_GOLDENS=1 pytest tests/test_examples_golden.py
+Regenerate deliberately with:  FUNGROUND_UPDATE_GOLDENS=1 pytest tests/test_examples_golden.py
 Golden comparison is skipped on platforms other than the one that produced the
 goldens (font rasterisation differs); those platforms still run every sketch.
 """
@@ -23,7 +23,7 @@ SKETCHES = sorted(EXAMPLES.glob("*.py"))
 # Their output depends on wall-clock timing, so they are smoke-tested only.
 TIME_DEPENDENT = {"11_delta_time.py"}
 GOLDEN_PLATFORM = "Windows"
-UPDATE = os.environ.get("PLAYGROUND_UPDATE_GOLDENS") == "1"
+UPDATE = os.environ.get("FUNGROUND_UPDATE_GOLDENS") == "1"
 
 
 def test_sample_suite_is_present():

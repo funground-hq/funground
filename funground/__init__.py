@@ -2,20 +2,20 @@
 
 Typical use::
 
-    import playground as p
+    import funground as f
 
     x = 50
 
     def setup():
-        p.size(640, 400)
+        f.size(640, 400)
 
     def draw():
         global x
-        p.background("white")
-        p.circle(x, p.height / 2, 40)
+        f.background("white")
+        f.circle(x, f.height / 2, 40)
         x += 2
 
-    p.run()
+    f.run()
 """
 
 from . import api as _api
@@ -264,7 +264,7 @@ __all__ = [
 # D-016: v0.5's live value mouse_pressed became is_mouse_pressed, because mouse_pressed() is
 # now the name of the callback (as in p5). The old name fails with a pointer to the new one.
 _RENAMED = {
-    "mouse_pressed": "p.mouse_pressed was renamed to p.is_mouse_pressed (True while a mouse button is "
+    "mouse_pressed": "f.mouse_pressed was renamed to f.is_mouse_pressed (True while a mouse button is "
                      "held). To react to a click, define a function called mouse_pressed() in your sketch.",
 }
 

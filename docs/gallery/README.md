@@ -1,4 +1,4 @@
-# Playground Examples Gallery
+# funground Examples Gallery
 
 Every picture below is made by running the example beside it — `python tools/make_gallery.py`
 regenerates them. Each example is a complete sketch: copy it into a file and run it.
@@ -17,7 +17,7 @@ Source: [`examples/gallery/basics/01_first_sketch.py`](../../examples/gallery/ba
 
 ![setup() once, draw() every frame](images/basics-02_setup_and_draw.png)
 
-setup() runs once; draw() runs again and again. p.frame_count counts the frames, p.width and p.height are the window size, and p.stop() ends the sketch.
+setup() runs once; draw() runs again and again. f.frame_count counts the frames, f.width and f.height are the window size, and f.stop() ends the sketch.
 
 Source: [`examples/gallery/basics/02_setup_and_draw.py`](../../examples/gallery/basics/02_setup_and_draw.py)
 
@@ -53,7 +53,7 @@ Source: [`examples/gallery/colour/01_colour_forms.py`](../../examples/gallery/co
 
 ![Hue-based colour: hsb, hsl and colour objects](images/colour-02_hsb_and_hsl.png)
 
-p.hsb(hue, saturation, brightness) and p.hsl(hue, saturation, lightness) make colours by hue: 0 red, 120 green, 240 blue, and around again. A tuple always means red, green, blue. p.color() makes a colour you can read (.hue, .brightness ...), and lerp_color mixes two colours.
+f.hsb(hue, saturation, brightness) and f.hsl(hue, saturation, lightness) make colours by hue: 0 red, 120 green, 240 blue, and around again. A tuple always means red, green, blue. f.color() makes a colour you can read (.hue, .brightness ...), and lerp_color mixes two colours.
 
 Source: [`examples/gallery/colour/02_hsb_and_hsl.py`](../../examples/gallery/colour/02_hsb_and_hsl.py)
 
@@ -61,7 +61,7 @@ Source: [`examples/gallery/colour/02_hsb_and_hsl.py`](../../examples/gallery/col
 
 ![Gradients](images/colour-03_gradients.png)
 
-p.linear_gradient() blends colours along a line; p.radial_gradient() blends them outward from a centre. Either can be used wherever a colour goes - fill, stroke or background - and it follows p.translate() and p.rotate() like any shape. Saved as PDF or SVG, it stays smooth.
+f.linear_gradient() blends colours along a line; f.radial_gradient() blends them outward from a centre. Either can be used wherever a colour goes - fill, stroke or background - and it follows f.translate() and f.rotate() like any shape. Saved as PDF or SVG, it stays smooth.
 
 Source: [`examples/gallery/colour/03_gradients.py`](../../examples/gallery/colour/03_gradients.py)
 
@@ -105,7 +105,7 @@ Source: [`examples/gallery/curves/01_curves.py`](../../examples/gallery/curves/0
 
 ![Shapes with holes](images/curves-02_holes.png)
 
-Between begin_contour() and end_contour(), list the corners of a hole. Playground makes the hole cut out of the shape whichever way round you draw it.
+Between begin_contour() and end_contour(), list the corners of a hole. funground makes the hole cut out of the shape whichever way round you draw it.
 
 Source: [`examples/gallery/curves/02_holes.py`](../../examples/gallery/curves/02_holes.py)
 
@@ -123,7 +123,7 @@ Source: [`examples/gallery/text/01_text.py`](../../examples/gallery/text/01_text
 
 ![Aligning text](images/text-02_align.png)
 
-p.text_align() says which point of the text the (x, y) you give is: left, center or right, then top, center, baseline or bottom. Each red cross below is the (x, y) passed to p.text(). text_ascent() and text_descent() measure how far letters reach above and below the baseline.
+f.text_align() says which point of the text the (x, y) you give is: left, center or right, then top, center, baseline or bottom. Each red cross below is the (x, y) passed to f.text(). text_ascent() and text_descent() measure how far letters reach above and below the baseline.
 
 Source: [`examples/gallery/text/02_align.py`](../../examples/gallery/text/02_align.py)
 
@@ -131,7 +131,7 @@ Source: [`examples/gallery/text/02_align.py`](../../examples/gallery/text/02_ali
 
 ![Text in boxes and columns](images/text-03_text_box.png)
 
-p.text_box() wraps text inside a box and gives back whatever did not fit, so the rest can flow on into the next box - the way DrawBot's textBox() works. A "\n" inside p.text() starts a new line, and p.text_leading() sets the distance from one line to the next.
+f.text_box() wraps text inside a box and gives back whatever did not fit, so the rest can flow on into the next box - the way DrawBot's textBox() works. A "\n" inside f.text() starts a new line, and f.text_leading() sets the distance from one line to the next.
 
 Source: [`examples/gallery/text/03_text_box.py`](../../examples/gallery/text/03_text_box.py)
 
@@ -149,7 +149,7 @@ Source: [`examples/gallery/animation/01_bounce.py`](../../examples/gallery/anima
 
 ![Time-based motion](images/animation-02_time_based.png)
 
-p.delta_time is the number of seconds the last frame took. Moving by speed * delta_time keeps the same speed on a fast or a slow computer. *(Uses real time, so the picture varies from run to run.)*
+f.delta_time is the number of seconds the last frame took. Moving by speed * delta_time keeps the same speed on a fast or a slow computer. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/animation/02_time_based.py`](../../examples/gallery/animation/02_time_based.py)
 
@@ -183,7 +183,7 @@ Source: [`examples/gallery/transforms/01_rotating_squares.py`](../../examples/ga
 
 ![saved_state and angles](images/transforms-02_saved_state.png)
 
-with p.saved_state(): is push() and pop() in one block: whatever the block changes is undone at the end. rotate() takes degrees; p.radians() converts for math.sin and math.cos.
+with f.saved_state(): is push() and pop() in one block: whatever the block changes is undone at the end. rotate() takes degrees; f.radians() converts for math.sin and math.cos.
 
 Source: [`examples/gallery/transforms/02_saved_state.py`](../../examples/gallery/transforms/02_saved_state.py)
 
@@ -209,7 +209,7 @@ Source: [`examples/gallery/paths/01_star.py`](../../examples/gallery/paths/01_st
 
 ![Reusable paths and clipping](images/paths-02_path_and_clip.png)
 
-p.path() builds a shape you can draw many times with draw_path(). clip(path) keeps later drawing inside the path until the end of the saved_state block.
+f.path() builds a shape you can draw many times with draw_path(). clip(path) keeps later drawing inside the path until the end of the saved_state block.
 
 Source: [`examples/gallery/paths/02_path_and_clip.py`](../../examples/gallery/paths/02_path_and_clip.py)
 
@@ -227,7 +227,7 @@ Source: [`examples/gallery/paths/03_no_clip.py`](../../examples/gallery/paths/03
 
 ![Confetti](images/randomness-01_confetti.png)
 
-p.random(high) or p.random(low, high) gives a random number; p.random_seed(n) makes the same "random" picture every time. constrain keeps a value in range; distance measures between points.
+f.random(high) or f.random(low, high) gives a random number; f.random_seed(n) makes the same "random" picture every time. constrain keeps a value in range; distance measures between points.
 
 Source: [`examples/gallery/randomness/01_confetti.py`](../../examples/gallery/randomness/01_confetti.py)
 
@@ -263,7 +263,7 @@ Source: [`examples/gallery/maths/01_map_and_lerp.py`](../../examples/gallery/mat
 
 ![Follow the mouse](images/interaction-01_follow_the_mouse.png)
 
-p.mouse_x and p.mouse_y are where the mouse is; p.is_mouse_pressed is True while a button is held; p.key_down("left") is True while that key is held.
+f.mouse_x and f.mouse_y are where the mouse is; f.is_mouse_pressed is True while a button is held; f.key_down("left") is True while that key is held.
 
 Source: [`examples/gallery/interaction/01_follow_the_mouse.py`](../../examples/gallery/interaction/01_follow_the_mouse.py)
 
@@ -271,7 +271,7 @@ Source: [`examples/gallery/interaction/01_follow_the_mouse.py`](../../examples/g
 
 ![A paint program](images/interaction-02_paint.png)
 
-Callbacks are functions you define with special names; Playground calls them when something happens. mouse_dragged draws, mouse_wheel changes the brush, key_pressed clears or picks a colour, and pmouse_x/pmouse_y (last frame's mouse) join the strokes up smoothly.
+Callbacks are functions you define with special names; funground calls them when something happens. mouse_dragged draws, mouse_wheel changes the brush, key_pressed clears or picks a colour, and pmouse_x/pmouse_y (last frame's mouse) join the strokes up smoothly.
 
 Source: [`examples/gallery/interaction/02_paint.py`](../../examples/gallery/interaction/02_paint.py)
 
@@ -279,7 +279,7 @@ Source: [`examples/gallery/interaction/02_paint.py`](../../examples/gallery/inte
 
 ![Move with the keyboard](images/interaction-03_keyboard_mover.png)
 
-Two ways to read the keyboard. For smooth movement, ask every frame whether a key is held: p.key_down("left"). For one-off actions, define key_pressed(), which runs once per press; p.key says which key it was. key_released() runs when the key comes back up.
+Two ways to read the keyboard. For smooth movement, ask every frame whether a key is held: f.key_down("left"). For one-off actions, define key_pressed(), which runs once per press; f.key says which key it was. key_released() runs when the key comes back up.
 
 Source: [`examples/gallery/interaction/03_keyboard_mover.py`](../../examples/gallery/interaction/03_keyboard_mover.py)
 
@@ -287,7 +287,7 @@ Source: [`examples/gallery/interaction/03_keyboard_mover.py`](../../examples/gal
 
 ![The window: cursor, size and full screen](images/interaction-04_window.png)
 
-p.cursor() picks the mouse pointer - here a hand over the button, crosshairs elsewhere - and p.no_cursor() hides it. Press f for p.full_screen(), where p.width and p.height become the screen's size, and 1, 2 or 3 for p.resize_canvas(). Everything is placed using p.width and p.height, so the drawing fits whatever the size.
+f.cursor() picks the mouse pointer - here a hand over the button, crosshairs elsewhere - and f.no_cursor() hides it. Press f for f.full_screen(), where f.width and f.height become the screen's size, and 1, 2 or 3 for f.resize_canvas(). Everything is placed using f.width and f.height, so the drawing fits whatever the size.
 
 Source: [`examples/gallery/interaction/04_window.py`](../../examples/gallery/interaction/04_window.py)
 
@@ -297,7 +297,7 @@ Source: [`examples/gallery/interaction/04_window.py`](../../examples/gallery/int
 
 ![Saving your work](images/saving-01_save_a_picture.png)
 
-p.save("name.png") writes the frame when it is finished. Use .pdf or .svg for a picture made of shapes that stays sharp at any size.
+f.save("name.png") writes the frame when it is finished. Use .pdf or .svg for a picture made of shapes that stays sharp at any size.
 
 Source: [`examples/gallery/saving/01_save_a_picture.py`](../../examples/gallery/saving/01_save_a_picture.py)
 
@@ -313,7 +313,7 @@ Source: [`examples/gallery/saving/02_transparent_png.py`](../../examples/gallery
 
 ![Saving an animation as frames](images/saving-03_save_frames.png)
 
-p.save_frames("frames/####.png", 30) saves this frame and the next 29 as numbered pictures: frames/0001.png, frames/0002.png and so on. A program such as ffmpeg can join them into a video or a GIF - see chapter 13 of the guide.
+f.save_frames("frames/####.png", 30) saves this frame and the next 29 as numbered pictures: frames/0001.png, frames/0002.png and so on. A program such as ffmpeg can join them into a video or a GIF - see chapter 13 of the guide.
 
 Source: [`examples/gallery/saving/03_save_frames.py`](../../examples/gallery/saving/03_save_frames.py)
 
@@ -323,7 +323,7 @@ Source: [`examples/gallery/saving/03_save_frames.py`](../../examples/gallery/sav
 
 ![Blend modes, opacity and shadows](images/compositing-01_blend_opacity_shadow.png)
 
-p.blend_mode() changes how new drawing mixes with what is already on the canvas: "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights. p.opacity() makes everything after it see-through, and p.shadow() gives it a soft shadow.
+f.blend_mode() changes how new drawing mixes with what is already on the canvas: "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights. f.opacity() makes everything after it see-through, and f.shadow() gives it a soft shadow.
 
 Source: [`examples/gallery/compositing/01_blend_opacity_shadow.py`](../../examples/gallery/compositing/01_blend_opacity_shadow.py)
 

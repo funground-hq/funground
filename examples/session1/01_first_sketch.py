@@ -1,14 +1,14 @@
-import playground as p
+import funground as f
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.background("white")
-    p.fill("tomato")
-    p.circle(320, 200, 80)
+    f.background("white")
+    f.fill("tomato")
+    f.circle(320, 200, 80)
 
 
-p.run()
+f.run()

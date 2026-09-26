@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pytest
 
-import playground as p
-from playground import api, ir
+import funground as p
+from funground import api, ir
 
 WHITE, BLACK = (255, 255, 255), (0, 0, 0)
 

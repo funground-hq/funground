@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pytest
 
-import playground as p
-from playground.color import Color
+import funground as p
+from funground.color import Color
 
 WHITE, RED = (255, 255, 255), (255, 0, 0)
 
@@ -78,8 +78,8 @@ def test_public_color_function_and_internal_color_module_coexist():
     """p.color is the learner-facing function; the colour module stays importable by path."""
     import importlib
 
-    import playground
+    import funground
 
-    assert callable(playground.color) and playground.color("red").rgb == (255, 0, 0)
-    module = importlib.import_module("playground.color")
+    assert callable(funground.color) and funground.color("red").rgb == (255, 0, 0)
+    module = importlib.import_module("funground.color")
     assert module.Color is Color

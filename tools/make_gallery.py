@@ -73,7 +73,7 @@ def title_and_description(path: Path) -> tuple[str, str]:
 
 def build_index() -> str:
     parts = [
-        "# Playground Examples Gallery",
+        "# funground Examples Gallery",
         "",
         "Every picture below is made by running the example beside it — `python tools/make_gallery.py`",
         "regenerates them. Each example is a complete sketch: copy it into a file and run it.",
@@ -108,14 +108,14 @@ def _renderer():
 
 
 def main(argv: list[str]) -> int:
-    os.environ["PLAYGROUND_HEADLESS"] = "1"
+    os.environ["FUNGROUND_HEADLESS"] = "1"
     OUT.mkdir(parents=True, exist_ok=True)
     if "--index" not in argv:
         render = _renderer()
         IMAGES.mkdir(parents=True, exist_ok=True)
         here = os.getcwd()
         with tempfile.TemporaryDirectory() as scratch:
-            os.chdir(scratch)           # examples that p.save() write their own files here, not in the repo
+            os.chdir(scratch)           # examples that f.save() write their own files here, not in the repo
             try:
                 for path in examples():
                     target = IMAGES / f"{example_id(path)}.png"

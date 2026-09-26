@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pytest
 
-from playground.color import BLACK, WHITE, Color
-from playground.state import GraphicsState, StateStack
+from funground.color import BLACK, WHITE, Color
+from funground.state import GraphicsState, StateStack
 
 
 def test_defaults_match_contract_row_s3():
