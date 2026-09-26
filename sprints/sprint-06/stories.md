@@ -21,7 +21,7 @@ section; the Phase 2 exit criterion in `themes_and_epics.md` is demonstrated by 
 
 1. Stories needing no decision: S-055 → S-049 → S-053 → S-050 → S-051 → S-056 → S-057.
 2. S-075, the rename to `funground` (D-020), before any more stories, so all later work uses the new name.
-3. After D-022: S-054. After D-021: S-052.
+3. S-052 (D-021 decided). After D-022: S-054.
 4. Close: S-071 (guide), S-072 (gallery), S-039 (CI, needs a git remote), S-073 (release).
 
 ## Decisions to take
@@ -57,7 +57,7 @@ and our own guide use. Different install and import names are common, and the gu
 can say it once. B is equally workable. C only makes sense if you want to drop the name
 "playground" altogether.
 
-### D-021 Off-screen canvases and images: one type or two — needed before S-052
+### D-021 Off-screen canvases and images: one type or two — **decided 26 Sept 2026: A, `create_graphics`**
 
 **Context.** S-052 adds off-screen drawing: make a picture in memory, draw on it with the usual
 verbs, then place it on the main canvas. Phase 3 adds `load_image`. The roadmap flagged the
@@ -196,8 +196,8 @@ What would change this: a hard install-size budget for classrooms.
 - [ ] S-054.3 Contract rows; tests; gallery `text/`; guide chapter 6
 *Acceptance:* the same text in a loaded font renders identically on every run.
 
-### S-052 Off-screen graphics — E-28 *(needs D-021)*
-- [ ] S-052.1 Per D-021: an off-screen picture with the full drawing vocabulary, its own state and
+### S-052 Off-screen graphics — E-28 *(D-021 = A)*
+- [ ] S-052.1 `g = f.create_graphics(w, h)`: one picture type (Phase 3's `load_image` returns the same type); an off-screen picture with the full drawing vocabulary, its own state and
   transform, drawn onto the canvas with `p.image(g, x, y, w=None, h=None)`
 - [ ] S-052.2 IR: a picture's ops are recorded separately and rendered to their own surface;
   vector export replays them as vectors
