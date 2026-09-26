@@ -97,6 +97,8 @@ Rules:
 - **Edits of one or two commands stay in the main session.** Delegating them costs more than it
   saves.
 - **Each sprint review names the stories built by subagents,** so their track record can be judged.
+- **Each sprint review adds its entry to the sprint log in [AI-USAGE.md](../AI-USAGE.md):** what the
+  maintainer asked for and what came of it, in a few lines (D-024). Nothing personal goes in it.
 
 ## Decisions
 

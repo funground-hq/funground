@@ -13,7 +13,8 @@ your picture in it.
 > Claude under the maintainer's direction. The maintainer sets the direction, takes every design
 > decision, and reviews and signs off each sprint. The full test suite of more than 650 tests,
 > including pixel-exact images, checks every change. Commits Claude helped write say so in a
-> `Co-Authored-By: Claude …` line. See [AI disclosure](#ai-disclosure) below.
+> `Co-Authored-By: Claude …` line. See [AI disclosure](#ai-disclosure) below and
+> [AI-USAGE.md](AI-USAGE.md) for the full account.
 
 ```python
 import funground as f
@@ -89,6 +90,8 @@ reviews, a decision log and architecture decision records. See [docs/PROCESS.md]
   - pixel-exact golden images.
 - **Attribution.** Commits written with Claude's help end with a `Co-Authored-By: Claude …` line,
   so GitHub shows Claude as a co-author.
+- **The full account,** with the instructions that steer the work and a sprint-by-sprint log, is in
+  [AI-USAGE.md](AI-USAGE.md).
 
 ## Licence
 
