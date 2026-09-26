@@ -9,7 +9,7 @@ parallel, the renderer bake-off (Spike 07) produces the numbers for D-011.
 
 ## Story set
 
-### S-018 Draw-op IR — E-06 ✅ (73e26fa, f3be412, a3ab4a5)
+### S-018 Draw-op IR — E-06 ✅ (0d88583, 634a078, fb08ebf)
 - [x] S-018.1 `playground/ir.py`: frozen op dataclasses for the current primitives — `Clear`, `Circle`, `Ellipse`, `Rect`, `Line`, `Point`, `Text` — each carrying the `GraphicsState` snapshot it was issued under
 - [x] S-018.2 Internal-only ops the vector renderer will need: `Save`, `Restore`, `Transform` (affine 2×3), `ClipPath`, `Path` (`move/line/cubic/close`) — no public API (PROCESS "internal first")
 - [x] S-018.3 `playground/geometry.py`: `Transform` (compose, apply, invert, from translate/rotate(deg)/scale) and `Path` builder; unit tests
@@ -17,7 +17,7 @@ parallel, the renderer bake-off (Spike 07) produces the numbers for D-011.
 - [x] S-018.5 `Sketch` drawing methods append ops instead of calling the renderer; renderer is invoked once per frame with the whole list
 *Acceptance:* `Sketch` has no per-primitive renderer calls; ops are plain data (hashable, reprable).
 
-### S-019 `LegacyPygameRenderer` consumes the IR — E-06 ✅ (a3ab4a5)
+### S-019 `LegacyPygameRenderer` consumes the IR — E-06 ✅ (fb08ebf)
 - [x] S-019.1 Rename `renderers/pygame2d.py` → `renderers/legacy_pygame.py`, class `LegacyPygameRenderer`; single entry `render(frame, target)`
 - [x] S-019.2 Per-op dispatch reproducing today's `pygame.draw` calls exactly (rounding, inside strokes, alpha dropped, font cache)
 - [x] S-019.3 Renderer protocol in `renderers/__init__.py` becomes `render(ops)` + `capabilities`

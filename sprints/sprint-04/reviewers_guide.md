@@ -5,16 +5,16 @@ claim: **sixteen new learner-facing names sit on top of the IR the previous spri
 that existed before changed — not one pre-existing golden or snapshot byte — and every new
 semantic is a pinned contract row with its own tests, sample sketch and reference page.**
 
-Diff under review: `git diff 0d97587..HEAD -- playground tests` (21 files, +2 809 / −18).
-Documents: `git diff 0d97587..HEAD -- docs sprints`.
+Diff under review: `git diff 311bf7f..HEAD -- playground tests` (21 files, +2 809 / −18).
+Documents: `git diff 311bf7f..HEAD -- docs sprints`.
 
 ## 1. Verify the claim first (10 minutes)
 
 ```powershell
 .venv\Scripts\python -m pytest                                          # expect: 275 passed
 .venv\Scripts\python -m pytest --co -q | Select-Object -Last 1          # expect: 275 tests collected (the -q addopts hides the summary line)
-git diff --stat 3e4eccd..HEAD -- tests/golden tests/snapshots            # expect: ONLY 13_transforms.* and 14_paths.* (4 new files); no existing file listed
-git log --oneline 0d97587..HEAD                                          # expect: 7 commits: 2 spike, 5 stories (578dba7 42dc6fb d885fb7 bd79d45 3dcc718)
+git diff --stat ef97c53..HEAD -- tests/golden tests/snapshots            # expect: ONLY 13_transforms.* and 14_paths.* (4 new files); no existing file listed
+git log --oneline 311bf7f..HEAD                                          # expect: 7 commits: 2 spike, 5 stories (7ad600a a024bb6 e654ba1 2ca3683 d8d49b0)
 git grep -n "import cairo\|import pygame" -- playground | findstr /v "platform/ renderers/"   # expect: only playground/export/__init__.py (pre-existing, D-011)
 .venv\Scripts\python examples\session1\13_transforms.py                  # real window: spinning square, nested state blocks, nothing leaks frame to frame
 .venv\Scripts\python examples\session1\14_paths.py                       # real window: star filled through its centre (non-zero), open polyline stroked only, clipped pattern
@@ -29,12 +29,12 @@ the image exists; only you can judge whether a beginner can read it.
 
 | Commit | Story | Read | Why |
 |---|---|---|---|
-| `578dba7` | S-027 | `playground/api.py` (`translate`…`degrees`), `sketch.py` (`push/pop/state/_end_draw`, transforms), `state.py` (`StateStack.unwind`), `capabilities.py` (`PlaygroundWarning`), `renderers/cairo2d.py` (`_draw_ops` save/restore), `tests/test_transforms.py`, `Semantic_Contract.md` F2 | The state stack and the one renderer change that could have leaked. Read `_end_draw()` first. |
-| `42dc6fb` | S-028 | `playground/paths.py`, `geometry.py` (`Path.is_closed`), `sketch.py` (`begin_shape`…`clip`), `ir.py`, `renderers/cairo2d.py` (`FILL_RULE_WINDING`), `tests/test_paths.py`, contract F3/F4 | Paths as a thin layer over `FillPath`/`StrokePath`/`ClipPath`. Check open-shape and error behaviour against F3. |
-| `d885fb7` | S-037 | `renderers/cairo2d.py` (`_text_runs` OrderedDict, `TEXT_RUN_CACHE_SIZE`), `typography.py` (`text_width`), `sketch.py`, `tests/test_text.py`, contract T6 | Closes the "unbounded cache" question from the Sprint 3 guide. |
-| `bd79d45` | S-038 | `platform/pygame_platform.py` (`detect_backing_scale`, `open_window`, `present`), `tests/test_hidpi.py` | The unverified code path. Read with the pygame-ce/SDL notes in `stories.md` beside you. |
-| `3dcc718` | S-030 | `docs/reference/Playground_Quick_Reference_v0.6.md`, `examples/reference/*.py`, `tools/make_reference_images.py`, `tests/test_reference.py` | The learner-facing document; the only place D-012/D-004/D-003 are restated in learner terms. |
-| `2eb318d`, `6cfadc2` | S-059 (spike) | `spikes/RESULTS.md` §8, `spikes/08_browser_pyodide/README.md`, `docs/design/Browser_Mode_Note.md` | Research only; nothing in `playground/` changed. Skim for the S-060/S-062/S-063 implications. |
+| `7ad600a` | S-027 | `playground/api.py` (`translate`…`degrees`), `sketch.py` (`push/pop/state/_end_draw`, transforms), `state.py` (`StateStack.unwind`), `capabilities.py` (`PlaygroundWarning`), `renderers/cairo2d.py` (`_draw_ops` save/restore), `tests/test_transforms.py`, `Semantic_Contract.md` F2 | The state stack and the one renderer change that could have leaked. Read `_end_draw()` first. |
+| `a024bb6` | S-028 | `playground/paths.py`, `geometry.py` (`Path.is_closed`), `sketch.py` (`begin_shape`…`clip`), `ir.py`, `renderers/cairo2d.py` (`FILL_RULE_WINDING`), `tests/test_paths.py`, contract F3/F4 | Paths as a thin layer over `FillPath`/`StrokePath`/`ClipPath`. Check open-shape and error behaviour against F3. |
+| `e654ba1` | S-037 | `renderers/cairo2d.py` (`_text_runs` OrderedDict, `TEXT_RUN_CACHE_SIZE`), `typography.py` (`text_width`), `sketch.py`, `tests/test_text.py`, contract T6 | Closes the "unbounded cache" question from the Sprint 3 guide. |
+| `2ca3683` | S-038 | `platform/pygame_platform.py` (`detect_backing_scale`, `open_window`, `present`), `tests/test_hidpi.py` | The unverified code path. Read with the pygame-ce/SDL notes in `stories.md` beside you. |
+| `d8d49b0` | S-030 | `docs/reference/Playground_Quick_Reference_v0.6.md`, `examples/reference/*.py`, `tools/make_reference_images.py`, `tests/test_reference.py` | The learner-facing document; the only place D-012/D-004/D-003 are restated in learner terms. |
+| `c776345`, `4f21ea3` | S-059 (spike) | `spikes/RESULTS.md` §8, `spikes/08_browser_pyodide/README.md`, `docs/design/Browser_Mode_Note.md` | Research only; nothing in `playground/` changed. Skim for the S-060/S-062/S-063 implications. |
 
 ## 3. What changed — the map
 
@@ -169,7 +169,7 @@ row F4 stays Proposed as "not offered".
 
 ## 7. Sign-off checklist
 
-- [ ] 275 tests pass; `git diff --stat 3e4eccd..HEAD -- tests/golden tests/snapshots` lists only the four new `13_transforms.*` / `14_paths.*` files
+- [ ] 275 tests pass; `git diff --stat ef97c53..HEAD -- tests/golden tests/snapshots` lists only the four new `13_transforms.*` / `14_paths.*` files
 - [ ] `13_transforms.py` and `14_paths.py` look right in a real window (nothing leaks frame to frame; star filled through the centre; open shape stroked only)
 - [ ] `tools/make_reference_images.py` reproduces `docs/reference/images/*` unchanged; three reference pages read well to you
 - [ ] `_end_draw()` runs on every frame path; the warn-vs-raise split (stray `pop()` soft, `scale(0)` hard) is acceptable

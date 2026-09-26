@@ -5,15 +5,15 @@ claim: **62 new learner-facing names, each with a contract row or semantic test,
 example and a guide section; nothing that existed before changed except the two renames you
 approved (D-016, D-018); every public name appears in the gallery.**
 
-Diff under review: `git diff 980a056..HEAD -- playground` (14 files, +1 409 / −67).
-Tests: `git diff 980a056..HEAD -- tests` (mostly new goldens and snapshots).
-Documents: `git diff 980a056..HEAD -- docs sprints examples`.
+Diff under review: `git diff 6c8984b..HEAD -- playground` (14 files, +1 409 / −67).
+Tests: `git diff 6c8984b..HEAD -- tests` (mostly new goldens and snapshots).
+Documents: `git diff 6c8984b..HEAD -- docs sprints examples`.
 
 ## 1. Verify the claim first (10 minutes)
 
 ```powershell
 .venv\Scripts\python -m pytest -o addopts="" -q                         # expect: 506 passed
-git diff --stat --diff-filter=MD 980a056..HEAD -- tests/golden tests/snapshots docs/reference/images   # expect: empty
+git diff --stat --diff-filter=MD 6c8984b..HEAD -- tests/golden tests/snapshots docs/reference/images   # expect: empty
 git grep -n "import cairo\|import pygame" -- playground | findstr /v "platform/ renderers/"             # expect: only playground/export/__init__.py
 .venv\Scripts\python tools\make_gallery.py                               # then `git status`: expect nothing changed
 .venv\Scripts\python examples\gallery\interaction\02_paint.py            # real window: drag to paint, wheel changes brush, r/g/b colour, c clears, right-click dots
@@ -28,16 +28,16 @@ judge whether a beginner would learn from it.
 
 | Commit | Story | Read | Why |
 |---|---|---|---|
-| 058bf03, 3b4a1a2 | S-068, S-069 | `tools/make_gallery.py`, `tests/test_gallery.py`, `tests/test_guide.py` | The machinery every later story relies on |
-| f3ccf92 | S-041 | `sketch.py` shape verbs | Straightforward; check `arc` modes |
-| 2365056 | S-042 | `sketch.py` `_stroke_op`, `cairo2d.py` | New style fields are omitted from snapshots when default, which is why old snapshots stayed identical |
-| e2b1e72 | S-074 | `shapes.py` | Catmull-Rom maths and contour winding: the densest new code |
-| e6aea81 | S-047 | `noise.py` | A literal port; compare against p5's `noise()` if you want |
-| fae806e | S-048 | `sketch.py` run loop | The loop changed shape: draw runs when looping, after `redraw()`, or on frame 0 |
-| 6a236c2 | S-044 | `color.py` | Colour objects and HSB/HSL conversions |
-| 3ffbcb6 | fix | `export/__init__.py`, `_flush_saves` | PNG now saves the pixels on screen |
-| f034a6e | S-045 | `platform/*.py`, `_dispatch_events` | Events: the one area touching the OS layer |
-| a16eed2, 65c17c1 | D-019, S-058 | docs only | Release renumbering; ADR-003 |
+| 6b9ef79, 6c20219 | S-068, S-069 | `tools/make_gallery.py`, `tests/test_gallery.py`, `tests/test_guide.py` | The machinery every later story relies on |
+| 22b8c59 | S-041 | `sketch.py` shape verbs | Straightforward; check `arc` modes |
+| 7f8b10d | S-042 | `sketch.py` `_stroke_op`, `cairo2d.py` | New style fields are omitted from snapshots when default, which is why old snapshots stayed identical |
+| 5ad6223 | S-074 | `shapes.py` | Catmull-Rom maths and contour winding: the densest new code |
+| 7c705a1 | S-047 | `noise.py` | A literal port; compare against p5's `noise()` if you want |
+| dd184c7 | S-048 | `sketch.py` run loop | The loop changed shape: draw runs when looping, after `redraw()`, or on frame 0 |
+| 3e14144 | S-044 | `color.py` | Colour objects and HSB/HSL conversions |
+| b86ca6b | fix | `export/__init__.py`, `_flush_saves` | PNG now saves the pixels on screen |
+| 89d8200 | S-045 | `platform/*.py`, `_dispatch_events` | Events: the one area touching the OS layer |
+| b330099, 5200be0 | D-019, S-058 | docs only | Release renumbering; ADR-003 |
 
 ## 3. What changed — the map
 

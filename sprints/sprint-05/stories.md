@@ -63,7 +63,7 @@ lives; alignment is designed once for both.
 - [x] S-069.4 A test that every code snippet in the guide marked as runnable executes headless without error
 *Acceptance:* a newcomer can go from install to a saved PNG using chapters 1–2 alone; snippet test green.
 
-### S-070 Version bump for the v0.7 cycle — E-02 ✅ (8a47e88)
+### S-070 Version bump for the v0.7 cycle — E-02 ✅ (76d07e0)
 - [x] S-070.1 `__version__` and `pyproject.toml` → `0.7.0.dev0`; Quick Reference title follows the release (renamed at release in Sprint 6)
 *Acceptance:* one commit, suite green.
 

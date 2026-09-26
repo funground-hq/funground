@@ -12,11 +12,11 @@ snapshots committed.** One decision raised: D-011 (interactive engine), accepted
 
 | Story | Result | Commit |
 |---|---|---|
-| S-018 Draw-op IR | `geometry.py` (`Transform`, `Path`), `ir.py` (13 op types, `Frame`, JSON round-trip); `Sketch` emits ops, renders once per loop | 73e26fa, f3be412, a3ab4a5 |
-| S-019 `LegacyPygameRenderer` | `render(frame)` dispatch, v0.5 drawing verbatim, `capabilities` | a3ab4a5 |
-| S-020 IR snapshots | `tests/test_ops_snapshot.py`, 11 JSON files, test hierarchy in `Test_Strategy.md` | e090148 |
-| S-021 Capability registry | `Capability`, `PlaygroundError`, check at `size()`/`run()`, extra-naming message | 4291a1d |
-| S-035 Spike 07 bake-off | Cairo / Skia / Blend2D on the real IR; D-011 presented | 60c3f41 |
+| S-018 Draw-op IR | `geometry.py` (`Transform`, `Path`), `ir.py` (13 op types, `Frame`, JSON round-trip); `Sketch` emits ops, renders once per loop | 0d88583, 634a078, fb08ebf |
+| S-019 `LegacyPygameRenderer` | `render(frame)` dispatch, v0.5 drawing verbatim, `capabilities` | fb08ebf |
+| S-020 IR snapshots | `tests/test_ops_snapshot.py`, 11 JSON files, test hierarchy in `Test_Strategy.md` | d96d179 |
+| S-021 Capability registry | `Capability`, `PlaygroundError`, check at `size()`/`run()`, extra-naming message | f509769 |
+| S-035 Spike 07 bake-off | Cairo / Skia / Blend2D on the real IR; D-011 presented | d1bd424 |
 | S-033 Architecture v2 | `docs/design/Playground_Technology_Architecture_v2.md` | this commit |
 
 ## Test results
@@ -28,7 +28,7 @@ snapshots committed.** One decision raised: D-011 (interactive engine), accepted
   test_geometry 13 · test_ir 4 · test_ops_snapshot 13 · test_capabilities 6
 ```
 
-Windows 11, Python 3.14.7, pygame-ce 2.5.8. Goldens unchanged since Sprint 0 (`18a5d21`).
+Windows 11, Python 3.14.7, pygame-ce 2.5.8. Goldens unchanged since Sprint 0 (`4dd11d6`).
 Code diff for the sprint: 23 files, +2298 / −100.
 
 ## Findings

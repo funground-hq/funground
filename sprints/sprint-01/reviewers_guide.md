@@ -4,7 +4,7 @@ For the maintainer reviewing Sprint 1 before closing it. Budget: about an hour. 
 claim is narrow and checkable: **the package was restructured and no learner-visible behaviour
 changed.** Everything below is organised to let you confirm or refute that claim.
 
-Diff under review: `git diff 34bc581..a80d07f` — 18 code/test files, +1674 / −395 lines
+Diff under review: `git diff 902af7e..0c33f6e` — 18 code/test files, +1674 / −395 lines
 (the 675-line generated colour table accounts for most of the additions).
 
 ## 1. Verify the claim first (10 minutes)
@@ -12,7 +12,7 @@ Diff under review: `git diff 34bc581..a80d07f` — 18 code/test files, +1674 / �
 ```powershell
 .venv\Scripts\python -m pytest            # expect: 115 passed
 git status --short                        # expect: empty (goldens untouched)
-git diff --stat 18a5d21..HEAD -- tests/golden   # expect: no output - not one golden changed since Sprint 0
+git diff --stat 4dd11d6..HEAD -- tests/golden   # expect: no output - not one golden changed since Sprint 0
 ```
 
 Then run one learner sketch for real, in a window, exactly as a student would:
@@ -28,14 +28,14 @@ whether it works.
 
 | Commit | Story | Read | Why in this order |
 |---|---|---|---|
-| `27927fe` | S-016 | `playground/color.py`, `tests/test_color.py` | Leaf module, no dependencies. Warm-up. |
-| `b0b4832` | S-015 | `playground/state.py`, `tests/test_state.py` | Leaf module. 46 lines. |
-| `fa5c66e` | S-014 | `platform/base.py` → `platform/pygame_platform.py` → `renderers/__init__.py` → `renderers/pygame2d.py` | The two provider boundaries. Read the protocol before its implementation. |
-| `503264f` | S-013 | `sketch.py` → `api.py` → `__init__.py` → `tests/conftest.py` | The centre of the sprint; `_core.py` deleted here. Diff `sketch.py` against `src_v0.5/playground/_core.py` side by side. |
-| `5a5ca04` | S-017 | `tests/test_boundaries.py` | The rule that keeps S-014 honest. |
-| `0f750fe` | S-031 | `spikes/06_text_outlines/spike.py`, the PNGs, `spikes/RESULTS.md` §6 | Not production code; evidence for D-009. |
+| `c4450b9` | S-016 | `playground/color.py`, `tests/test_color.py` | Leaf module, no dependencies. Warm-up. |
+| `31774dc` | S-015 | `playground/state.py`, `tests/test_state.py` | Leaf module. 46 lines. |
+| `2d29c01` | S-014 | `platform/base.py` → `platform/pygame_platform.py` → `renderers/__init__.py` → `renderers/pygame2d.py` | The two provider boundaries. Read the protocol before its implementation. |
+| `f75e5e0` | S-013 | `sketch.py` → `api.py` → `__init__.py` → `tests/conftest.py` | The centre of the sprint; `_core.py` deleted here. Diff `sketch.py` against `src_v0.5/playground/_core.py` side by side. |
+| `684d308` | S-017 | `tests/test_boundaries.py` | The rule that keeps S-014 honest. |
+| `228f14d` | S-031 | `spikes/06_text_outlines/spike.py`, the PNGs, `spikes/RESULTS.md` §6 | Not production code; evidence for D-009. |
 
-`git show <commit>` on each; `git diff 34bc581..HEAD -- playground` for the whole picture.
+`git show <commit>` on each; `git diff 902af7e..HEAD -- playground` for the whole picture.
 
 ## 3. Map of the package after the sprint
 
@@ -115,7 +115,7 @@ Live value: `p.width` → `playground.__getattr__("width")` → `api.live_value`
   `playground.run` for a wrapper that forwards the sketch's own globals. Read this once; it is the
   mechanism the whole golden layer rests on.
 - `test_semantics.py` changed only in how it reaches internals (`sketch` fixture instead of
-  `_core._style`); the assertions are identical. `git diff 34bc581..HEAD -- tests/test_semantics.py`
+  `_core._style`); the assertions are identical. `git diff 902af7e..HEAD -- tests/test_semantics.py`
   should show no changed `assert` lines except the defaults test.
 - `test_boundaries.py`: an AST walk. Allowed dirs are `platform/` and `renderers/`. Note it checks
   *imports*, not string mentions — the `__init__.py` docstring says "pygame-ce" and that is fine.
@@ -149,7 +149,7 @@ repo, and record that in `PROCESS.md`.
 
 ## 8. Sign-off checklist
 
-- [ ] 115 tests pass locally; goldens unchanged since `18a5d21`
+- [ ] 115 tests pass locally; goldens unchanged since `4dd11d6`
 - [ ] One sketch run in a real window behaves as before
 - [ ] `sketch.py::run_namespace` loop order matches v0.5 `_core.run`
 - [ ] No backend import outside `platform/` and `renderers/` (lint passes; spot-check `sketch.py`, `api.py`)

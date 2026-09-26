@@ -15,7 +15,7 @@ deletes it. Order below respects that.
 
 ## Story set
 
-### S-023 `CairoRenderer` consumes the IR — E-09 ✅ (c730711, 93751b8)
+### S-023 `CairoRenderer` consumes the IR — E-09 ✅ (0200c65, 20356eb)
 - [x] S-023.1 `pycairo` becomes a base dependency (`pyproject.toml`)
 - [x] S-023.2 `renderers/cairo2d.py`: `CairoRenderer` — every IR op incl. `Save/Restore/Concat/ClipPath/FillPath/StrokePath`; v0.6 semantics (alpha, centred round-join strokes, AA, fractional coords); `capabilities` = RASTER_2D, ALPHA, ANTIALIAS, TRANSFORMS, VECTOR_PATHS, CLIP_PATH
 - [x] S-023.3 Presentation: Cairo `ImageSurface` → `pygame.image.frombuffer(..., "BGRA")` → blit, zero-copy; `attach(target)` receives the platform surface
@@ -23,21 +23,21 @@ deletes it. Order below respects that.
 - [x] S-023.5 Unit tests: each op renders; alpha honoured; centred stroke geometry; sub-pixel AA present
 *Acceptance:* sample suite renders through Cairo (goldens differ as expected, not yet regenerated).
 
-### S-029 Text subsystem v1 (outline route) — E-15 ✅ (54e35c6)
+### S-029 Text subsystem v1 (outline route) — E-15 ✅ (929a000)
 - [x] S-029.1 `fontTools` + `uharfbuzz` base dependencies; `playground/fonts/DejaVuSans.ttf` + `DejaVu-LICENSE.txt` bundled (D-009); package data in `pyproject`
 - [x] S-029.2 `playground/text.py`: `FontResource` (HarfBuzz font, fontTools glyph set, glyph-outline cache), `TextRun` (text, size, shaped glyphs, `outline_ops()` → `FillPath`s), top-left anchor (contract T1)
 - [x] S-029.3 `CairoRenderer` handles `ir.Text` by materialising a `TextRun` (cached per (text, size)) — `ir.Text` stays in the IR (reserved for embedded-font export, S-032)
 - [x] S-029.4 Tests: deterministic bytes across two runs; kerning/ligature; anchor; `p.text()` unchanged for learners
 *Acceptance:* `05_text.py` renders through Cairo with DejaVu Sans; no pygame font code on the Cairo path.
 
-### S-025 Semantic migration and golden regeneration — E-03 ✅ (3e4eccd)
+### S-025 Semantic migration and golden regeneration — E-03 ✅ (ef97c53)
 - [x] S-025.1 `test_semantics.py` rows S2/S4/C6/T2 rewritten to the v0.6 rule (alpha honoured, stroke centred, fractional + AA, DejaVu text)
 - [x] S-025.2 Default renderer → Cairo; `PLAYGROUND_UPDATE_GOLDENS=1` once; each visual change listed in `review.md` with before/after PNGs
 - [x] S-025.3 IR snapshots must be byte-identical before and after (proof the learner-facing request did not change)
 - [x] S-025.4 `Semantic_Contract.md` status column: "applies when Cairo lands" → "in effect since Sprint 3"
 *Acceptance:* suite green; snapshot diff empty; golden diff reviewed.
 
-### S-026 Delete the legacy renderer — E-09 (D-008) ✅ (9fa90ca)
+### S-026 Delete the legacy renderer — E-09 (D-008) ✅ (984c957)
 - [x] S-026.1 Remove `renderers/legacy_pygame.py`, the `legacy` selection value, and all `pygame.draw`/`pygame.font` usage
 - [x] S-026.2 Boundary lint: `pygame` allowed only under `platform/`; `cairo` only under `renderers/` and `export/`
 *Acceptance:* `grep -r "pygame.draw" playground` empty.

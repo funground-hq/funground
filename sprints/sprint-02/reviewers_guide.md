@@ -3,13 +3,13 @@
 For the maintainer reviewing Sprint 2 before closing it. Budget: about an hour. The sprint's
 claim: **drawing now goes through a backend-neutral IR, and no learner-visible pixel changed.**
 
-Diff under review: `git diff 07c9faa..HEAD -- playground tests` — 23 files, +2298 / −100.
+Diff under review: `git diff 41505d4..HEAD -- playground tests` — 23 files, +2298 / −100.
 
 ## 1. Verify the claim first (10 minutes)
 
 ```powershell
 .venv\Scripts\python -m pytest                       # expect: 153 passed
-git diff --stat 18a5d21..HEAD -- tests/golden        # expect: no output - goldens untouched since Sprint 0
+git diff --stat 4dd11d6..HEAD -- tests/golden        # expect: no output - goldens untouched since Sprint 0
 git status --short                                   # expect: empty
 dir tests\snapshots                                  # expect: 11 JSON files
 .venv\Scripts\python examples\session1\04_fill_stroke.py   # a real window; Escape closes
@@ -22,12 +22,12 @@ sketch asked for — a `Clear`, then shapes with their style — with no pygame 
 
 | Commit | Story | Read | Why |
 |---|---|---|---|
-| `73e26fa` | S-018.3 | `playground/geometry.py`, `tests/test_geometry.py` | Leaf types. Check the conventions: degrees, y-down, `then()` vs `concat()`. |
-| `f3be412` | S-018 | `playground/ir.py`, `tests/test_ir.py` | The contract. 13 ops, `Frame`, JSON round-trip. |
-| `a3ab4a5` | S-018.5 / S-019 | `playground/sketch.py` (diff), `renderers/legacy_pygame.py`, `renderers/__init__.py`, `capabilities.py`, `tests/conftest.py` (diff) | The wiring. This is the commit that could have moved a pixel; it didn't. |
-| `e090148` | S-020 | `tests/test_ops_snapshot.py`, `tests/snapshots/`, `docs/qa/Test_Strategy.md` | The new primary regression layer. |
-| `4291a1d` | S-021 | `tests/test_capabilities.py` | Error UX. |
-| `60c3f41` | S-035 | `spikes/07_renderer_bakeoff/{scenes,adapter_*,bench}.py`, `spikes/RESULTS.md` §7 | Evidence for D-011. Not production code. |
+| `0d88583` | S-018.3 | `playground/geometry.py`, `tests/test_geometry.py` | Leaf types. Check the conventions: degrees, y-down, `then()` vs `concat()`. |
+| `634a078` | S-018 | `playground/ir.py`, `tests/test_ir.py` | The contract. 13 ops, `Frame`, JSON round-trip. |
+| `fb08ebf` | S-018.5 / S-019 | `playground/sketch.py` (diff), `renderers/legacy_pygame.py`, `renderers/__init__.py`, `capabilities.py`, `tests/conftest.py` (diff) | The wiring. This is the commit that could have moved a pixel; it didn't. |
+| `d96d179` | S-020 | `tests/test_ops_snapshot.py`, `tests/snapshots/`, `docs/qa/Test_Strategy.md` | The new primary regression layer. |
+| `f509769` | S-021 | `tests/test_capabilities.py` | Error UX. |
+| `d1bd424` | S-035 | `spikes/07_renderer_bakeoff/{scenes,adapter_*,bench}.py`, `spikes/RESULTS.md` §7 | Evidence for D-011. Not production code. |
 | this commit | S-033 | `docs/design/Playground_Technology_Architecture_v2.md` | The document a new contributor reads first. |
 
 ## 3. What to scrutinise
@@ -44,7 +44,7 @@ sketch asked for — a `Clear`, then shapes with their style — with no pygame 
 - Internal ops (`Save … StrokePath`) have no emitter in `api.py`. That's deliberate (PROCESS "internal first"). `test_renderer_refuses_unknown_ops_loudly` proves the legacy renderer raises rather than skips if one leaks.
 
 ### `renderers/legacy_pygame.py`
-- Every `_handler` is the Sprint-1 method body with `op.` in front. Diff against `git show fa5c66e:playground/renderers/pygame2d.py` to confirm nothing changed inside the drawing calls.
+- Every `_handler` is the Sprint-1 method body with `op.` in front. Diff against `git show 2d29c01:playground/renderers/pygame2d.py` to confirm nothing changed inside the drawing calls.
 - `_HANDLERS` maps op type → method. An op type missing from it raises `NotImplementedError` naming the op.
 
 ### `geometry.py`
@@ -52,7 +52,7 @@ sketch asked for — a `Clear`, then shapes with their style — with no pygame 
 - `Path` segments are tuples, not objects — on purpose, for hashing and JSON. `quad_to` stores a cubic so renderers need one curve kind.
 
 ### `tests/conftest.py`
-- `LiveCanvas.get_at` calls `_render()` first. This is the only change that touched the 42 semantic tests, and it touched their *fixture*, not their assertions (`git diff 07c9faa..HEAD -- tests/test_semantics.py` is empty).
+- `LiveCanvas.get_at` calls `_render()` first. This is the only change that touched the 42 semantic tests, and it touched their *fixture*, not their assertions (`git diff 41505d4..HEAD -- tests/test_semantics.py` is empty).
 
 ### Spike 07 (evidence, not code)
 - All three adapters consume `playground.ir` directly (`scenes.py` puts the repo root on `sys.path`). Compare `cairo_A_primitives_640x400.png` with `blend2d_…` and `skia_…`: identical.
@@ -73,7 +73,7 @@ options, trade-off table, recommendation D and what would change it). It blocks 
 
 ## 6. Sign-off checklist
 
-- [ ] 153 tests pass; goldens unchanged since `18a5d21`; 11 snapshots present
+- [ ] 153 tests pass; goldens unchanged since `4dd11d6`; 11 snapshots present
 - [ ] One sketch run in a real window behaves as before
 - [ ] `sketch.py::run_namespace` differs from Sprint 1 only by `_render()` before `present()`
 - [ ] Legacy renderer handlers are verbatim Sprint-1 drawing code

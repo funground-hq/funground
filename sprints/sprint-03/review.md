@@ -13,12 +13,12 @@ package. One decision raised: D-012 (`text_size` meaning), accepted as A at sign
 
 | Story | Result | Commit |
 |---|---|---|
-| S-029 Text subsystem v1 | `typography.py`: `FontResource`, `TextRun`, DejaVu Sans + licence bundled | 54e35c6 |
-| S-023 `CairoRenderer` | Every IR op incl. clip/transform/paths/text; v0.6 semantics; `PLAYGROUND_RENDERER` | c730711, 93751b8 |
-| S-025 Semantic migration | Cairo default; 5 semantic tests to v0.6 rules; 11 goldens regenerated; snapshots unchanged | 3e4eccd |
-| S-026 Delete legacy renderer | pygame is platform-only; lint asserts per-provider backend imports | 9fa90ca |
-| S-024 HiDPI | physical window + base scale; logical `p.width`; mouse logical; verified at 125 % | 888b8a3 |
-| S-034 Headless + export | `HeadlessPlatform`; `p.save()` PNG/PDF/SVG by replaying the frame's ops | 8bf07c9 |
+| S-029 Text subsystem v1 | `typography.py`: `FontResource`, `TextRun`, DejaVu Sans + licence bundled | 929a000 |
+| S-023 `CairoRenderer` | Every IR op incl. clip/transform/paths/text; v0.6 semantics; `PLAYGROUND_RENDERER` | 0200c65, 20356eb |
+| S-025 Semantic migration | Cairo default; 5 semantic tests to v0.6 rules; 11 goldens regenerated; snapshots unchanged | ef97c53 |
+| S-026 Delete legacy renderer | pygame is platform-only; lint asserts per-provider backend imports | 984c957 |
+| S-024 HiDPI | physical window + base scale; logical `p.width`; mouse logical; verified at 125 % | 7d82e4a |
+| S-034 Headless + export | `HeadlessPlatform`; `p.save()` PNG/PDF/SVG by replaying the frame's ops | 6ce1078 |
 
 ## Test results
 

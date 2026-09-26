@@ -11,12 +11,12 @@ One decision raised and left open for the maintainer (D-009, font file).
 
 | Story | Result | Commit |
 |---|---|---|
-| S-012 Decide DECISION rows | All accepted as recommended before sprint start (D-001…D-008) | 34bc581 |
-| S-016 `Color` + bundled name table | 665 names from pygame-ce colordict; every Quick Reference colour form parses | 27927fe |
-| S-015 `GraphicsState` + `StateStack` | Immutable state, save/restore | b0b4832 |
-| S-014 `Platform`/`Renderer` protocols + pygame implementations | `PygamePlatform`, `PygameRenderer` (pixel-identical `pygame.draw`) | fa5c66e |
-| S-013 `Sketch` replaces `_core` globals | `api.py` facade over the active sketch; live values via `__getattr__`; two sketches per process; `_core.py` deleted | 503264f |
-| S-017 Provider-boundary lint | AST test: backend imports only under `platform/`, `renderers/` | 5a5ca04 |
+| S-012 Decide DECISION rows | All accepted as recommended before sprint start (D-001…D-008) | 902af7e |
+| S-016 `Color` + bundled name table | 665 names from pygame-ce colordict; every Quick Reference colour form parses | c4450b9 |
+| S-015 `GraphicsState` + `StateStack` | Immutable state, save/restore | 31774dc |
+| S-014 `Platform`/`Renderer` protocols + pygame implementations | `PygamePlatform`, `PygameRenderer` (pixel-identical `pygame.draw`) | 2d29c01 |
+| S-013 `Sketch` replaces `_core` globals | `api.py` facade over the active sketch; live values via `__getattr__`; two sketches per process; `_core.py` deleted | f75e5e0 |
+| S-017 Provider-boundary lint | AST test: backend imports only under `platform/`, `renderers/` | 684d308 |
 | S-031 Spike 06 deterministic text | Outlines route validated on 4 fonts; D-009 raised | this commit |
 
 ## Test results

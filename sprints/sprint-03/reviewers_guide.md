@@ -4,14 +4,14 @@ For the maintainer reviewing Sprint 3 before closing it. Budget: about an hour. 
 claim: **Cairo now draws everything; the only pixels that changed are the ones the contract said
 would change; learner code asked for exactly the same things.**
 
-Diff under review: `git diff a16a900..HEAD -- playground tests`.
+Diff under review: `git diff 9d9bdab..HEAD -- playground tests`.
 
 ## 1. Verify the claim first (10 minutes)
 
 ```powershell
 .venv\Scripts\python -m pytest                          # expect: 185 passed
-git diff --stat 3d0612f..HEAD -- tests/snapshots         # expect: no output - IR snapshots unchanged since they were created
-git log --oneline -- tests/golden                        # expect: exactly two commits touching goldens: 18a5d21 (created) and 3e4eccd (regenerated once)
+git diff --stat db18b08..HEAD -- tests/snapshots         # expect: no output - IR snapshots unchanged since they were created
+git log --oneline -- tests/golden                        # expect: exactly two commits touching goldens: 4dd11d6 (created) and ef97c53 (regenerated once)
 git grep -n "pygame.draw\|pygame.font" -- playground     # expect: nothing
 .venv\Scripts\python examples\session1\04_fill_stroke.py # real window: round line caps, crisp edges
 ```
@@ -23,13 +23,13 @@ Then open `sprints/sprint-03/before_after_04_fill_stroke.png` and `before_after_
 
 | Commit | Story | Read | Why |
 |---|---|---|---|
-| `54e35c6` | S-029 | `playground/typography.py`, `tests/test_text.py` | Text as outlines. Leaf module (imports fontTools, uharfbuzz — not rendering backends). |
-| `c730711` | S-023 | `renderers/cairo2d.py`, `tests/test_cairo_renderer.py` | The renderer. Read `draw()` op by op against the contract rows. |
-| `93751b8` | S-023.4 | `sketch.py` (renderer selection), the `text.py → typography.py` rename | The shadowing bug and its fix. |
-| `3e4eccd` | S-025 | `tests/test_semantics.py` (5 rewritten tests), `tests/golden/`, `Semantic_Contract.md` | The deliberate semantic change. |
-| `9fa90ca` | S-026 | deleted `legacy_pygame.py`, `tests/test_boundaries.py` | pygame is platform-only. |
-| `888b8a3` | S-024 | `platform/base.py`, `platform/pygame_platform.py`, `renderers/__init__.py`, `sketch.py`, `tests/test_hidpi.py` | Presentation moves to the platform; HiDPI. |
-| `8bf07c9` | S-034 | `platform/headless.py`, `export/__init__.py`, `api.py` (`save`), `tests/test_export.py`, `tests/test_headless.py` | Headless and export. |
+| `929a000` | S-029 | `playground/typography.py`, `tests/test_text.py` | Text as outlines. Leaf module (imports fontTools, uharfbuzz — not rendering backends). |
+| `0200c65` | S-023 | `renderers/cairo2d.py`, `tests/test_cairo_renderer.py` | The renderer. Read `draw()` op by op against the contract rows. |
+| `20356eb` | S-023.4 | `sketch.py` (renderer selection), the `text.py → typography.py` rename | The shadowing bug and its fix. |
+| `ef97c53` | S-025 | `tests/test_semantics.py` (5 rewritten tests), `tests/golden/`, `Semantic_Contract.md` | The deliberate semantic change. |
+| `984c957` | S-026 | deleted `legacy_pygame.py`, `tests/test_boundaries.py` | pygame is platform-only. |
+| `7d82e4a` | S-024 | `platform/base.py`, `platform/pygame_platform.py`, `renderers/__init__.py`, `sketch.py`, `tests/test_hidpi.py` | Presentation moves to the platform; HiDPI. |
+| `6ce1078` | S-034 | `platform/headless.py`, `export/__init__.py`, `api.py` (`save`), `tests/test_export.py`, `tests/test_headless.py` | Headless and export. |
 
 ## 3. What to scrutinise
 
@@ -69,7 +69,7 @@ Then open `sprints/sprint-03/before_after_04_fill_stroke.png` and `before_after_
 
 ### Tests
 - The five rewritten semantic tests each say which contract row and decision they implement.
-  `git diff 3d0612f..HEAD -- tests/test_semantics.py` should show only those five.
+  `git diff db18b08..HEAD -- tests/test_semantics.py` should show only those five.
 - `test_boundaries.py` now allows each backend only in its provider dir and asserts
   `pygame.draw`/`pygame.font` are gone.
 
