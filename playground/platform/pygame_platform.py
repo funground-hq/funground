@@ -140,6 +140,14 @@ class PygamePlatform:
     # ---- window
     def open_window(self, width: int, height: int, title: str) -> tuple[int, int]:
         pygame.display.init()
+        if self._window is not None:
+            # resize_canvas() on the SDL high-DPI route: resize this window, never open a second one
+            self._window.set_windowed()
+            self._window.size = (width, height)
+            self._window.title = title
+            self._screen = self._window.get_surface()
+            self._scale = detect_backing_scale(self._window)
+            return self._screen.get_size()
         if _uses_sdl_highdpi_window():
             # macOS / Linux: ask SDL for a high-DPI window at the *logical* size;
             # the window surface comes back at drawable (physical) size and the
@@ -157,6 +165,35 @@ class PygamePlatform:
         self._screen = pygame.display.set_mode(physical)
         pygame.display.set_caption(title)
         return physical
+
+    def open_full_screen(self, title: str) -> tuple[int, int]:
+        pygame.display.init()
+        if self._window is None and _uses_sdl_highdpi_window():
+            self.open_window(640, 400, title)
+        if self._window is not None:
+            self._window.set_fullscreen(desktop=True)
+            self._screen = self._window.get_surface()
+            self._scale = detect_backing_scale(self._window)
+            return self._screen.get_size()
+        self._scale = detect_backing_scale()
+        self._input_scale = self._scale
+        physical = pygame.display.get_desktop_sizes()[0]          # physical pixels of the main display
+        self._screen = pygame.display.set_mode(physical, pygame.FULLSCREEN)
+        pygame.display.set_caption(title)
+        return self._screen.get_size()
+
+    _CURSORS = {"arrow": "SYSTEM_CURSOR_ARROW", "cross": "SYSTEM_CURSOR_CROSSHAIR", "hand": "SYSTEM_CURSOR_HAND",
+                "move": "SYSTEM_CURSOR_SIZEALL", "text": "SYSTEM_CURSOR_IBEAM", "wait": "SYSTEM_CURSOR_WAIT"}
+
+    def set_cursor(self, kind: str | None) -> None:
+        if kind is None:
+            pygame.mouse.set_visible(False)
+            return
+        pygame.mouse.set_visible(True)
+        try:
+            pygame.mouse.set_cursor(getattr(pygame, self._CURSORS[kind]))
+        except pygame.error:
+            pass                    # a display without system cursors (e.g. the dummy driver)
 
     @property
     def target(self) -> pygame.Surface | None:

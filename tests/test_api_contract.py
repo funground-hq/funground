@@ -138,6 +138,11 @@ ADDED_FUNCTIONS = {
     "no_shadow": "() -> 'None'",
     # S-056 frame sequences
     "save_frames": "(pattern: 'str', count: 'int') -> 'None'",
+    # S-057 window control
+    "resize_canvas": "(width: 'int', height: 'int') -> 'None'",
+    "full_screen": "() -> 'None'",
+    "cursor": "(kind: 'str' = 'arrow') -> 'None'",
+    "no_cursor": "() -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

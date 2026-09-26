@@ -583,6 +583,9 @@ p.run()
 |---|---|---|
 | `p.save(path)` | Write the current frame to a file when the frame is complete. `.png` saves pixels; `.pdf` and `.svg` save a true vector drawing of the same frame. | `p.save("my_sketch.png")` |
 | `p.save_frames(pattern, count)` | **New:** save this frame and the next ones, `count` in all; `####` in the name becomes 0001, 0002, … | `p.save_frames("frames/####.png", 60)` |
+| `p.resize_canvas(w, h)` | **New:** change the canvas size while running. | `p.resize_canvas(800, 600)` |
+| `p.full_screen()` | **New:** fill the screen (instead of `p.size`); `p.width`/`p.height` become the screen size. | `p.full_screen()` |
+| `p.cursor(kind)` / `p.no_cursor()` | **New:** the mouse pointer: `"arrow"`, `"cross"`, `"hand"`, `"move"`, `"text"`, `"wait"`; or hide it. | `p.cursor("hand")` |
 
 - Call it anywhere inside `draw()`; the file holds everything that frame drew, including what comes
   after the call. Any other extension is a `ValueError` naming the three choices.

@@ -1,0 +1,79 @@
+[
+ {
+  "color": [
+   230,
+   230,
+   250,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 60,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    147,
+    112,
+    219,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14,
+   "text_valign": "bottom"
+  },
+  "width": 180,
+  "x": 230.0,
+  "y": 170.0
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "text": "a button",
+  "x": 277.7099609375,
+  "y": 188.359375
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14,
+   "text_valign": "bottom"
+  },
+  "text": "640 x 400   f: full screen   1, 2, 3: sizes   h: hide the pointer",
+  "x": 10,
+  "y": 373.703125
+ }
+]
