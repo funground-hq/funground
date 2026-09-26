@@ -44,6 +44,41 @@ window, transparent shows as black.
 
 ![Transparent PNG](../gallery/images/saving-02_transparent_png.png)
 
+## Saving an animation
+
+`p.save_frames("frames/####.png", 60)` saves this frame and the next 59 as numbered pictures:
+`frames/0001.png`, `frames/0002.png`, and so on. The `####` becomes the number.
+
+```python
+import playground as p
+
+
+def setup():
+    p.size(640, 200)
+
+
+def draw():
+    p.background("black")
+    p.fill("gold")
+    p.circle(p.frame_count * 10, 100, 40)
+    if p.frame_count == 0:
+        p.save_frames("frames/####.png", 60)
+
+
+p.run()
+```
+
+![Saving an animation as frames](../gallery/images/saving-03_save_frames.png)
+
+To turn the pictures into a video or a GIF, use a program such as [ffmpeg](https://ffmpeg.org):
+
+```
+ffmpeg -framerate 30 -i frames/%04d.png my_animation.mp4
+ffmpeg -framerate 30 -i frames/%04d.png my_animation.gif
+```
+
+`%04d` is ffmpeg's way of writing `####`.
+
 ## Saving without a window
 
 Set the environment variable `PLAYGROUND_HEADLESS=1` and Playground draws without opening a

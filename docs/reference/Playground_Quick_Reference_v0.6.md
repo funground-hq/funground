@@ -582,6 +582,7 @@ p.run()
 | Call | What it does | Example |
 |---|---|---|
 | `p.save(path)` | Write the current frame to a file when the frame is complete. `.png` saves pixels; `.pdf` and `.svg` save a true vector drawing of the same frame. | `p.save("my_sketch.png")` |
+| `p.save_frames(pattern, count)` | **New:** save this frame and the next ones, `count` in all; `####` in the name becomes 0001, 0002, … | `p.save_frames("frames/####.png", 60)` |
 
 - Call it anywhere inside `draw()`; the file holds everything that frame drew, including what comes
   after the call. Any other extension is a `ValueError` naming the three choices.

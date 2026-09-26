@@ -166,10 +166,11 @@ What would change this: a hard install-size budget for classrooms.
 - [x] S-051.3 Contract rows; tests; gallery `compositing/`; guide chapter 5
 *Acceptance:* each blend mode matches Cairo's operator of the same name, pixel-tested.
 
-### S-056 Frame-sequence export — E-19
-- [ ] S-056.1 `p.save_frames("frames/####.png", count)`: saves the next `count` frames, numbered;
+### S-056 Frame-sequence export — E-19 ✅
+*As built:* numbering starts at 1, which ffmpeg's `%04d` reads directly; the folder is created. A test proves the gallery example's 30 frames loop seamlessly. Contract R11.
+- [x] S-056.1 `p.save_frames("frames/####.png", count)`: saves the next `count` frames, numbered;
   works headless
-- [ ] S-056.2 Tests; gallery `saving/`; guide chapter 13, including how to make a GIF or video
+- [x] S-056.2 Tests; gallery `saving/`; guide chapter 13, including how to make a GIF or video
   from the frames
 *Acceptance:* a headless run writes exactly `count` numbered files.
 
