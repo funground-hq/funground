@@ -18,7 +18,7 @@ git grep -n "import cairo\|import pygame" -- playground | findstr /v "platform/ 
 .venv\Scripts\python tools\make_gallery.py                               # then `git status`: expect nothing changed
 .venv\Scripts\python examples\gallery\interaction\02_paint.py            # real window: drag to paint, wheel changes brush, r/g/b colour, c clears, right-click dots
 .venv\Scripts\python examples\gallery\animation\04_pause.py              # starts paused; space runs/pauses, s steps one frame, q quits
-.venv\Scripts\python examples\gallery\noise\01_landscape.py              # smooth ridge line, same every run
+.venv\Scripts\python examples\gallery\randomness\03_noise.py           # noise-driven drawing, identical on every run
 ```
 
 Then read `docs/gallery/README.md` top to bottom, which lists every example with its picture. It is the sprint's showcase, and only you can
