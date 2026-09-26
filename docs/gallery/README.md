@@ -111,6 +111,14 @@ text_size sets the size in pixels; text is placed by its top-left corner. text_w
 
 Source: [`examples/gallery/text/01_text.py`](../../examples/gallery/text/01_text.py)
 
+### Aligning text
+
+![Aligning text](images/text-02_align.png)
+
+p.text_align() says which point of the text the (x, y) you give is: left, center or right, then top, center, baseline or bottom. Each red cross below is the (x, y) passed to p.text(). text_ascent() and text_descent() measure how far letters reach above and below the baseline.
+
+Source: [`examples/gallery/text/02_align.py`](../../examples/gallery/text/02_align.py)
+
 ## Animation and time
 
 ### Bounce

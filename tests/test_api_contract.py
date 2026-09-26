@@ -121,6 +121,10 @@ ADDED_FUNCTIONS = {
     "lerp_color": "(c1: 'Color', c2: 'Color', amount: 'float')",
     # S-055 Vector
     "Vector": "(x: 'float' = 0.0, y: 'float' = 0.0) -> 'None'",
+    # S-049 text alignment and metrics
+    "text_align": "(horizontal: 'str', vertical: 'str | None' = None) -> 'None'",
+    "text_ascent": "() -> 'float'",
+    "text_descent": "() -> 'float'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

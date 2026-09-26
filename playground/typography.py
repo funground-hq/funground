@@ -120,6 +120,13 @@ class TextRun:
         return ops
 
 
+def text_metrics(size: float) -> tuple[float, float]:
+    """(ascent, descent) of the default font at *size*, both positive, in logical pixels (T8)."""
+    font = default_font()
+    scale = size / font.units_per_em
+    return font.ascent * scale, -font.descent * scale
+
+
 def text_width(text: str, size: float) -> float:
     """Advance width of *text* in logical pixels at *size* (S-037): what `p.text` moves the pen by."""
     if not text:

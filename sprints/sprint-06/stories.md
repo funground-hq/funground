@@ -131,12 +131,13 @@ What would change this: a hard install-size budget for classrooms.
   guide chapter 12 section
 *Acceptance:* a p5 "mover" sketch using `createVector`, `add` and `limit` ports by renaming only.
 
-### S-049 Text alignment and metrics — E-15
-- [ ] S-049.1 `text_align(horizontal, vertical="top")`: `"left" | "center" | "right"` and `"top" |
+### S-049 Text alignment and metrics — E-15 ✅
+*As built:* alignment lives in the drawing state and is resolved by the Sketch, so the renderer and IR meaning are unchanged (a Text op's x, y is always top-left). Contract T7, T8.
+- [x] S-049.1 `text_align(horizontal, vertical="top")`: `"left" | "center" | "right"` and `"top" |
   "center" | "baseline" | "bottom"`. The default stays top-left (v0.5 contract). p5's baseline
   default is listed among the differences in chapter 14
-- [ ] S-049.2 `text_ascent()`, `text_descent()` for the current size
-- [ ] S-049.3 Contract rows; tests; gallery `text/`; guide chapter 6
+- [x] S-049.2 `text_ascent()`, `text_descent()` for the current size
+- [x] S-049.3 Contract rows; tests; gallery `text/`; guide chapter 6
 *Acceptance:* centred text stays centred when its size or content changes.
 
 ### S-053 Multi-line text and text boxes — E-15
