@@ -109,7 +109,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-052 | E-28 | Off-screen canvas, name and type per D-021; draw with the same verbs on it; `p.image(g, x, y)` | 6 |
 | S-053 | E-15 | Multi-line text, `text_leading`, word-wrap in a box with alignment and overflow | 6 |
 | S-054 | E-15 | `font(path_or_name)`, bold/italic styles, per-sketch font resources | 6 |
-| S-055 | E-27 | `Vector` (add, sub, mult, mag, normalize, heading, rotate, dist, lerp) | 6 |
+| S-055 | E-27 | `Vector` (add, sub, mult, mag, normalize, heading, rotate, dist, lerp) | 6 — done |
 | S-056 | E-19 | `save_frames(pattern, count)` sequence export (headless-friendly) | 6 |
 | S-057 | E-29 | `cursor`/`no_cursor`, `full_screen`, `resize_canvas` | 6 |
 | S-058 | E-23 | ADR-003 "Deliberately out of scope": CMYK/print, sound synthesis, Core-Image-scale filters, data loaders | 5 — done |

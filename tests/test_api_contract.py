@@ -119,6 +119,8 @@ ADDED_FUNCTIONS = {
     "hsb": "(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255)",
     "hsl": "(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255)",
     "lerp_color": "(c1: 'Color', c2: 'Color', amount: 'float')",
+    # S-055 Vector
+    "Vector": "(x: 'float' = 0.0, y: 'float' = 0.0) -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

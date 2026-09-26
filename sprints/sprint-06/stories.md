@@ -120,13 +120,14 @@ What would change this: a hard install-size budget for classrooms.
 
 ## Story set
 
-### S-055 Vector — E-27
-- [ ] S-055.1 `p.Vector(x, y)` with p5's meaning: methods change the vector in place and return it
+### S-055 Vector — E-27 ✅
+*As built:* `playground/vector.py`; contract H5. `cross` returns a number (p5 returns a 3D vector), listed for chapter 14's differences table.
+- [x] S-055.1 `p.Vector(x, y)` with p5's meaning: methods change the vector in place and return it
   (`add`, `sub`, `mult`, `div`, `normalize`, `limit`, `set_mag`, `rotate`, `lerp`); queries return
   values (`mag`, `mag_sq`, `heading`, `dist`, `dot`, `cross`, `angle_between`); `copy()`;
   operators `+ - * /` return new vectors; unpacking `x, y = v`; `Vector.from_angle`,
   `Vector.random_2d`. Angles in degrees (D-002)
-- [ ] S-055.2 Contract row; tests; gallery `motion/` (a mover with velocity and acceleration);
+- [x] S-055.2 Contract row; tests; gallery `motion/` (a mover with velocity and acceleration);
   guide chapter 12 section
 *Acceptance:* a p5 "mover" sketch using `createVector`, `add` and `limit` ports by renaming only.
 

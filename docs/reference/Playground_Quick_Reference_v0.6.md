@@ -522,6 +522,7 @@ p.run()
 | `p.noise(x, y=0, z=0)` | Smooth random value 0–1; nearby inputs give nearby values. | `p.noise(x * 0.01)` |
 | `p.noise_seed(n)` | Repeatable noise (same values as p5.js's `noiseSeed`). | `p.noise_seed(1)` |
 | `p.noise_detail(octaves, falloff=None)` | Layers of detail (default 4); fewer is smoother and faster. | `p.noise_detail(2)` |
+| `p.Vector(x, y)` | An x and y kept together. `v.add(w)`, `v.mult(n)`, `v.limit(n)`, `v.normalize()`, `v.rotate(deg)` change `v`, as in p5.js; `v + w` makes a new one. `v.mag()`, `v.heading()` (degrees), `v.dist(w)`. | `velocity.add(gravity)` |
 | `p.radians(degrees)` | **New:** degrees → radians, for `math.sin` / `math.cos`. | `math.sin(p.radians(45))` |
 | `p.degrees(radians)` | **New:** radians → degrees, e.g. to feed `rotate()`. | `p.rotate(p.degrees(math.atan2(dy, dx)))` |
 

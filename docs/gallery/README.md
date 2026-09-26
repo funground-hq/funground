@@ -276,3 +276,13 @@ Source: [`examples/gallery/saving/01_save_a_picture.py`](../../examples/gallery/
 clear() makes every pixel transparent. A PNG saved afterwards keeps the transparency, so the shape can be placed on any background later. (The window shows transparent as black.)
 
 Source: [`examples/gallery/saving/02_transparent_png.py`](../../examples/gallery/saving/02_transparent_png.py)
+
+## Motion
+
+### Movers with vectors
+
+![Movers with vectors](images/motion-01_movers.png)
+
+A Vector holds an x and a y together: a position, a velocity, a force. Each frame the forces add to the velocity and the velocity adds to the position, just as in p5.js - methods like add() and limit() change the vector itself. heading() gives the direction, for the arrows.
+
+Source: [`examples/gallery/motion/01_movers.py`](../../examples/gallery/motion/01_movers.py)
