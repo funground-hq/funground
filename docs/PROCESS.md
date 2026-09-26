@@ -71,6 +71,30 @@ regenerated only as a deliberate, reviewed act. **From Sprint 5 (D-015):** a sto
 public feature also adds its Examples Gallery sketch (with golden and IR snapshot) and its User
 Guide section, in the same story.
 
+## Who does what: models and agents
+
+Work is matched to the model it needs (maintainer, 26 Sept 2026). The main session plans, and
+subagents defined in `.claude/agents/` do the routine parts, each on a fixed model:
+
+| Agent | Model | Takes |
+|---|---|---|
+| main session | Opus | design, contract rows, decisions put to the maintainer, briefs, reviewing every subagent's diff, all commits |
+| `story-builder` | Sonnet | a story whose design and contract row are pinned: code, tests, gallery example, guide and reference |
+| `mechanical-editor` | Haiku | fully specified edits: renames, find-and-replace, status ticks, table updates |
+| `test-runner` | Haiku | running the suite and summarising failures; changes no files |
+
+Rules:
+
+- **The main session writes the brief:** scope, files to touch and not to touch, and the command
+  that proves it done.
+- **Subagents never commit.** The main session reviews the diff, reruns the suite, and commits.
+  Authorship and the quality gate are unchanged.
+- **A subagent stops and reports** on ambiguity or on a failure it cannot explain; the main
+  session takes over.
+- **Edits of one or two commands stay in the main session.** Delegating them costs more than it
+  saves.
+- **Each sprint review names the stories built by subagents,** so their track record can be judged.
+
 ## Decisions
 
 Two records are kept, and both are part of the definition of done for any story that needs a call
