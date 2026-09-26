@@ -112,7 +112,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-055 | E-27 | `Vector` (add, sub, mult, mag, normalize, heading, rotate, dist, lerp) | 6 |
 | S-056 | E-19 | `save_frames(pattern, count)` sequence export (headless-friendly) | 6 |
 | S-057 | E-29 | `cursor`/`no_cursor`, `full_screen`, `resize_canvas` | 6 |
-| S-058 | E-23 | ADR-003 "Deliberately out of scope": CMYK/print, sound synthesis, Core-Image-scale filters, data loaders | 5 |
+| S-058 | E-23 | ADR-003 "Deliberately out of scope": CMYK/print, sound synthesis, Core-Image-scale filters, data loaders | 5 — done |
 
 ## Directional — after 1.0 (D-014)
 

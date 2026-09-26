@@ -129,8 +129,8 @@ lives; alignment is designed once for both.
 - [x] S-074.5 Tests; gallery `curves/`; guide chapter 9
 *Acceptance:* a Processing curve sketch ports with only snake_case renames.
 
-### S-058 ADR-003: deliberately out of scope — E-23
-- [ ] S-058.1 `docs/design/ADR-003-out-of-scope.md`: CMYK/print colour; sound synthesis; large filter libraries; Processing data/serial/network/video libraries; 3D before 1.0; browser before 1.0 (D-014) — each with the reason and what a learner uses instead
+### S-058 ADR-003: deliberately out of scope — E-23 ✅
+- [x] S-058.1 `docs/design/ADR-003-out-of-scope.md`: CMYK/print colour; sound synthesis; large filter libraries; Processing data/serial/network/video libraries; 3D before 1.0; browser before 1.0 (D-014) — each with the reason and what a learner uses instead
 *Acceptance:* referenced from the Roadmap and the guide's "Coming from…" chapters.
 
 ### S-039 CI first run — E-02 *(carried; blocked until a git remote exists)*
