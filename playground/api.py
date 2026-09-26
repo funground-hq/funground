@@ -11,6 +11,7 @@ from contextlib import AbstractContextManager
 from .color import ColorLike as Color
 from .paths import PathBuilder
 from .sketch import Sketch
+from .vector import Vector  # noqa: F401  (public: p.Vector, S-055)
 
 _active: Sketch | None = None
 

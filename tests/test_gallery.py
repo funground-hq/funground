@@ -90,7 +90,7 @@ def test_example_ops_match_snapshot(path: Path):
 def _names_used() -> set[str]:
     used = set()
     for path in EXAMPLES:
-        used |= set(re.findall(r"\bp\.([a-z_]+)\b", path.read_text(encoding="utf-8")))
+        used |= set(re.findall(r"\bp\.([A-Za-z_]+)\b", path.read_text(encoding="utf-8")))
     return used
 
 
