@@ -91,6 +91,9 @@ Rules:
   Authorship and the quality gate are unchanged.
 - **A subagent stops and reports** on ambiguity or on a failure it cannot explain; the main
   session takes over.
+- **Anything irreversible or public stays in the main session, even when the steps are mechanical:**
+  history rewrites, pushes, publishing a package, creating or changing remote repositories, and
+  deleting data. A mistake there cannot be taken back after review (maintainer, 26 Sept 2026).
 - **Edits of one or two commands stay in the main session.** Delegating them costs more than it
   saves.
 - **Each sprint review names the stories built by subagents,** so their track record can be judged.
