@@ -1,0 +1,130 @@
+# How AI is used to build funground
+
+funground is built by one maintainer, Samir Joshi, working with Anthropic's Claude through
+[Claude Code](https://claude.com/claude-code). This file says how, so that teachers, contributors
+and reviewers can judge the work for themselves. The short version is in the
+[README](README.md#ai-disclosure). This file was adopted by decision D-024.
+
+## Who does what
+
+| | The maintainer | Claude |
+|---|---|---|
+| Direction | Sets goals, scope and priorities; changes the plan | Proposes plans, backlogs and sprint scopes |
+| Decisions | Takes every decision about behaviour, names, dependencies, releases and publishing | Presents each decision as context, options, trade-offs, a recommendation and the reasons ([process](docs/PROCESS.md#how-a-pending-decision-is-presented)) |
+| Code, tests and docs | Reviews; asks for changes | Writes almost all of it |
+| Checking | Reviews each sprint's review and reviewer's guide, and signs off before a sprint closes | Runs the full test suite before every commit; reports results as they are, failures included |
+| Public actions | Approves (repository, release) | Carries them out only after approval |
+
+Every decision, with the options offered and the outcome, is recorded in
+[docs/design/Decision_Log.md](docs/design/Decision_Log.md). Longer arguments live in the
+[architecture decision records](docs/design/).
+
+## Models
+
+| Model | Role | When |
+|---|---|---|
+| Claude Opus 5 | Main session | Planning to the end of Sprint 2 (24–25 Sept 2026) |
+| Claude Fable 5.1 | Main session, including a multi-agent workflow for Sprint 4 and Spike 08 | End of Sprint 2 to the Sprint 4 review (25 Sept 2026) |
+| Claude Opus 5.5 | Main session | End of Sprint 4 onwards (25 Sept 2026 –) |
+| Claude Sonnet 5 | Sub-agent building well-specified stories (S-075, S-054, S-052), reviewed by the main session before commit | Sprint 6 onwards |
+
+The model that helped with each commit is named in its `Co-Authored-By` line. During early planning
+the maintainer also relayed reviews from a separate AI assistant; its points were weighed in the
+design documents like any other review.
+
+## Instructions that steer the work
+
+- **Anthropic's Claude Code system instructions.** These are Anthropic's own and are not
+  reproduced here.
+- **This project's instructions,** all in the repository:
+  - [docs/PROCESS.md](docs/PROCESS.md): the development process, the Definition of Done, how
+    decisions are presented, and "Who does what", which says which work goes to which model.
+    Irreversible or public actions always stay with the main session.
+  - [.claude/agents/](.claude/agents/): the sub-agent definitions (story builder, mechanical
+    editor, test runner), each with its model and rules. For example, sub-agents never commit.
+  - [docs/design/Semantic_Contract.md](docs/design/Semantic_Contract.md): the pinned behaviour
+    every change must keep.
+- **Standing preferences given in conversation,** kept by Claude Code between sessions:
+  - commit often, one story per commit;
+  - present decisions one at a time;
+  - send routine work to smaller models;
+  - never publish or rewrite history without approval.
+
+## How the output is checked
+
+AI-written tests checking AI-written code is a real risk. funground reduces it in four ways:
+
+1. **The v0.5 library was frozen as tests before any change** (Sprint 0). New code must keep the
+   old behaviour unless a recorded decision changes it.
+2. **Pixel-exact golden images and drawing-operation snapshots.** A change that moves a single
+   pixel or operation fails, and regenerating one is a deliberate, reviewed act.
+3. **Examples as tests.** Every public function has a gallery example that runs in the test suite,
+   and every code block in the User Guide runs as a test. Writing examples found bugs that unit tests
+   had missed (Sprint 5 review).
+4. **Human review.** The maintainer reads each sprint's review and reviewer's guide, which are
+   written to be checked in about an hour, and signs off before the sprint closes.
+
+**Known limits:**
+- CI covers Windows, macOS and Linux, but macOS and Linux HiDPI is untested on real screens.
+- The browser track is research only.
+
+## Sprint log
+
+A few lines per sprint: what the maintainer asked for, and what came of it. From Sprint 6 on, each
+sprint review adds its entry here.
+
+### Planning (24 Sept 2026)
+- The maintainer asked for a critique of the proposed architecture. The result was an
+  [architecture review](docs/design/Playground_Architecture_Review.md) and a revised plan.
+- The maintainer asked for spikes, each in its own virtual environment, run unattended during a
+  break. Spikes 01–05 tested pygame's limits, Skia versus Cairo and install cost
+  ([results](spikes/RESULTS.md)).
+- The maintainer asked for a full SDLC: themes, epics, stories, tasks, sprints, backlog, design
+  and QA. They also asked for decisions to be explained one at a time, and accepted D-001–D-008.
+  ADRs, a decision log and a fixed format for presenting decisions became part of the process.
+
+### Sprint 0: freeze v0.5
+- The v0.5 behaviour became executable tests: API, semantics, the Session-1 sketches and golden
+  images.
+- The maintainer's standing rule: commit often, in logical groups, as Samir Joshi.
+
+### Sprint 1: the Sketch and the platform split
+- Spike 06 proved text could be drawn from a bundled font, identical everywhere.
+- The maintainer required a retrospective review and a reviewer's guide before any sprint closes.
+- They kept v0.5's undocumented colour forms: pygame's namespace is not ours to trim.
+- D-009: DejaVu Sans as the bundled font.
+- D-010: the renderer choice was reopened for a broader bake-off, after the relayed AI review raised
+  Blend2D.
+
+### Sprint 2: the drawing-operation IR
+- Spike 07 compared Cairo, Skia and Blend2D on the real IR. D-011: Cairo renders and exports;
+  Blend2D stays an option to revisit.
+
+### Sprint 3: Cairo, HiDPI, headless, export
+- D-012: `text_size(n)` is an n-pixel em, the CSS, p5 and DrawBot convention.
+
+### Sprint 4: the public vocabulary
+- The maintainer stepped back to check parity with p5/Processing and DrawBot. The result was the
+  Feature Map, seven new epics, and a browser-mode study inspired by Pyxel (Spike 08).
+- The sprint was run as a multi-agent workflow, at the maintainer's request.
+- D-013: the maintainer asked for a more descriptive name, which became `with saved_state():`.
+- D-014: 1.0 is desktop, Cairo and 2D; the browser is a post-1.0 direction.
+
+### Sprint 5: vocabulary, events and helpers
+- D-015: the release comes with a User Guide and an Examples Gallery covering every feature.
+- The maintainer asked for no workflow, story by story.
+- D-016: the maintainer approved a contract change for p5-aligned event names.
+- D-017: clarity over portability, so no `color_mode()`. D-018: p5/Processing curve names.
+- Five bugs were found and fixed, three of them by writing gallery examples.
+
+### Sprint 6: text layout, compositing, pictures, release preparation
+- D-019: the first public release will be 0.1 on PyPI.
+- D-020: `playground` was taken on PyPI. The maintainer weighed a dozen names and chose
+  **funground**, `import funground as f`.
+- The maintainer asked for routine work to go to smaller models. The result was the sub-agent
+  definitions and the "Who does what" rules. The rename, fonts and pictures stories were built
+  by Sonnet sub-agents and reviewed before commit.
+- D-021: one picture type made with `create_graphics`. D-022: bundled bold and italic fonts.
+- D-023: a public GitHub repository under `funground-hq`. Before the first push, history was
+  rewritten to use the maintainer's GitHub no-reply address.
+- The maintainer asked for this disclosure: a README section and this file (D-024 = B).
