@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import inspect
 
-import playground as p
+import funground as p
 
 V05_FUNCTIONS = {
     "background": "(color: 'Color') -> 'None'",
@@ -23,7 +23,7 @@ V05_FUNCTIONS = {
     "point": "(x: 'float', y: 'float') -> 'None'",
     "random": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "rect": "(x: 'float', y: 'float', width: 'float', height: 'float') -> 'None'",
-    "size": "(width: 'int', height: 'int', *, title: 'str' = 'playground', fps: 'int' = 60) -> 'None'",
+    "size": "(width: 'int', height: 'int', *, title: 'str' = 'funground', fps: 'int' = 60) -> 'None'",
     "stop": "() -> 'None'",
     "stroke": "(color: 'Color') -> 'None'",
     "stroke_width": "(pixels: 'int') -> 'None'",

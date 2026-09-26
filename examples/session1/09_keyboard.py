@@ -1,27 +1,27 @@
-import playground as p
+import funground as f
 
 x = 320
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
     global x
 
-    p.background("white")
+    f.background("white")
 
-    if p.key_down("left"):
+    if f.key_down("left"):
         x -= 3
-    if p.key_down("right"):
+    if f.key_down("right"):
         x += 3
-    if p.key_down("space"):
-        p.fill("gold")
+    if f.key_down("space"):
+        f.fill("gold")
     else:
-        p.fill("tomato")
+        f.fill("tomato")
 
-    p.circle(x, 200, 60)
+    f.circle(x, 200, 60)
 
 
-p.run()
+f.run()

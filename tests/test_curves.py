@@ -5,9 +5,9 @@ import math
 
 import pytest
 
-import playground as p
-from playground import ir
-from playground.shapes import catmull_rom_controls
+import funground as p
+from funground import ir
+from funground.shapes import catmull_rom_controls
 
 WHITE, RED, BLUE = (255, 255, 255), (255, 0, 0), (0, 0, 255)
 
@@ -31,13 +31,13 @@ def test_curve_vertex_passes_through_the_inner_points(sketch, canvas):
 
 
 def test_fewer_than_four_curve_points_warn_and_draw_nothing(sketch, canvas):
-    from playground.capabilities import PlaygroundWarning
+    from funground.capabilities import FungroundWarning
 
     p.begin_shape()
     p.curve_vertex(0, 0)
     p.curve_vertex(10, 10)
     p.curve_vertex(20, 0)
-    with pytest.warns(PlaygroundWarning, match="at least 4"):
+    with pytest.warns(FungroundWarning, match="at least 4"):
         p.end_shape()
     assert not sketch.frame.ops
 
@@ -64,7 +64,7 @@ def test_quadratic_vertex(sketch, canvas):
     p.end_shape()
     seg = sketch.frame.ops[-1].path.segments[1]
     assert seg[0] == "cubic" and seg[3] == (200, 100)
-    with pytest.raises(RuntimeError, match=r"p\.vertex"):
+    with pytest.raises(RuntimeError, match=r"f\.vertex"):
         p.begin_shape()
         p.quadratic_vertex(0, 0, 1, 1)
 

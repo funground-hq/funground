@@ -4,12 +4,12 @@ from __future__ import annotations
 import cairo
 import pytest
 
-from playground import ir
-from playground.capabilities import Capability
-from playground.color import Color
-from playground.geometry import Path, Transform
-from playground.renderers.cairo2d import CairoRenderer
-from playground.state import GraphicsState
+from funground import ir
+from funground.capabilities import Capability
+from funground.color import Color
+from funground.geometry import Path, Transform
+from funground.renderers.cairo2d import CairoRenderer
+from funground.state import GraphicsState
 
 WHITE, BLACK, RED = Color(255, 255, 255), Color(0, 0, 0), Color(255, 0, 0)
 

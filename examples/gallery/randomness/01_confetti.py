@@ -1,25 +1,25 @@
 """Confetti
 
-p.random(high) or p.random(low, high) gives a random number; p.random_seed(n) makes the same
+f.random(high) or f.random(low, high) gives a random number; f.random_seed(n) makes the same
 "random" picture every time. constrain keeps a value in range; distance measures between points.
 """
-import playground as p
+import funground as f
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.random_seed(7)                 # the same confetti every frame
-    p.background("white")
-    p.no_stroke()
+    f.random_seed(7)                 # the same confetti every frame
+    f.background("white")
+    f.no_stroke()
     for _ in range(160):
-        x = p.random(p.width)
-        y = p.constrain(p.random(-40, p.height + 40), 10, p.height - 10)
-        near = p.distance(x, y, p.width / 2, p.height / 2) < 120
-        p.fill("tomato" if near else "skyblue")
-        p.circle(x, y, p.random(6, 18))
+        x = f.random(f.width)
+        y = f.constrain(f.random(-40, f.height + 40), 10, f.height - 10)
+        near = f.distance(x, y, f.width / 2, f.height / 2) < 120
+        f.fill("tomato" if near else "skyblue")
+        f.circle(x, y, f.random(6, 18))
 
 
-p.run()
+f.run()

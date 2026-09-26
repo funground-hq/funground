@@ -1,10 +1,10 @@
 """Sketch object and active-sketch facade (story S-013)."""
 from __future__ import annotations
 
-import playground as p
-from playground import api
-from playground.color import Color
-from playground.sketch import Sketch
+import funground as p
+from funground import api
+from funground.color import Color
+from funground.sketch import Sketch
 
 
 def test_two_sketches_do_not_share_state():

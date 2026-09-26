@@ -6,25 +6,25 @@ import sys
 import pygame
 import pytest
 
-import playground as p
-from playground import api
-from playground.platform.pygame_platform import detect_backing_scale
-from playground.sketch import Sketch
+import funground as p
+from funground import api
+from funground.platform.pygame_platform import detect_backing_scale
+from funground.sketch import Sketch
 
 
 def test_dummy_driver_reports_scale_one(monkeypatch):
-    monkeypatch.delenv("PLAYGROUND_BACKING_SCALE", raising=False)
+    monkeypatch.delenv("FUNGROUND_BACKING_SCALE", raising=False)
     monkeypatch.setenv("SDL_VIDEODRIVER", "dummy")
     assert detect_backing_scale() == 1.0
 
 
 def test_forced_scale_is_honoured(monkeypatch):
-    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
+    monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     assert detect_backing_scale() == 2.0
 
 
 def test_window_is_physical_but_width_height_stay_logical(monkeypatch):
-    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
+    monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     api.use_sketch(Sketch())
     pygame.init()
     p.size(100, 50)
@@ -35,7 +35,7 @@ def test_window_is_physical_but_width_height_stay_logical(monkeypatch):
 
 
 def test_a_logical_rect_covers_scaled_physical_pixels(monkeypatch):
-    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
+    monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     api.use_sketch(Sketch())
     pygame.init()
     p.size(100, 50)
@@ -51,9 +51,9 @@ def test_a_logical_rect_covers_scaled_physical_pixels(monkeypatch):
 
 
 def test_mouse_is_reported_in_logical_pixels(monkeypatch):
-    from playground.platform.pygame_platform import PygamePlatform
+    from funground.platform.pygame_platform import PygamePlatform
 
-    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
+    monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     plat = PygamePlatform()
     pygame.init()
     plat.open_window(100, 50, "t")
@@ -96,7 +96,7 @@ class _FakeWindow:
 @pytest.fixture(params=["darwin", "linux"])
 def sdl_highdpi(monkeypatch, request):
     """Pretend to be macOS / Linux with a real display and a 2x pygame.Window."""
-    monkeypatch.delenv("PLAYGROUND_BACKING_SCALE", raising=False)
+    monkeypatch.delenv("FUNGROUND_BACKING_SCALE", raising=False)
     # macOS takes the high-DPI route on any driver; Linux only on Wayland (S-067).
     monkeypatch.setenv("SDL_VIDEODRIVER", "cocoa" if request.param == "darwin" else "wayland")
     monkeypatch.setattr(sys, "platform", request.param)
@@ -120,8 +120,8 @@ def test_ratio_one_display_reports_scale_one(sdl_highdpi):
 
 
 def test_open_window_returns_physical_size_and_keeps_mouse_logical(sdl_highdpi, monkeypatch):
-    from playground.platform.base import Pixels
-    from playground.platform.pygame_platform import PygamePlatform
+    from funground.platform.base import Pixels
+    from funground.platform.pygame_platform import PygamePlatform
 
     plat = PygamePlatform()
     assert plat.open_window(100, 50, "t") == (200, 100)
@@ -149,18 +149,18 @@ def test_probe_failure_degrades_to_scale_one(sdl_highdpi, monkeypatch):
 
 
 def test_forced_scale_bypasses_the_sdl_window_route(sdl_highdpi, monkeypatch):
-    from playground.platform.pygame_platform import _uses_sdl_highdpi_window
+    from funground.platform.pygame_platform import _uses_sdl_highdpi_window
 
-    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
+    monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     assert detect_backing_scale() == 2.0
     assert not _uses_sdl_highdpi_window()
     assert _FakeWindow.created == []
 
 
 def test_windows_path_is_unchanged_by_platform_guard(monkeypatch):
-    from playground.platform.pygame_platform import _uses_sdl_highdpi_window
+    from funground.platform.pygame_platform import _uses_sdl_highdpi_window
 
-    monkeypatch.delenv("PLAYGROUND_BACKING_SCALE", raising=False)
+    monkeypatch.delenv("FUNGROUND_BACKING_SCALE", raising=False)
     monkeypatch.setenv("SDL_VIDEODRIVER", "windows")
     monkeypatch.setattr(sys, "platform", "win32")
     assert not _uses_sdl_highdpi_window()
@@ -175,11 +175,11 @@ def test_windows_path_is_unchanged_by_platform_guard(monkeypatch):
     ("x11", "", "1", True),          # explicit opt-in wins
 ])
 def test_linux_route_is_narrowed_to_wayland(monkeypatch, driver, wayland_display, opt_in, expected):
-    from playground.platform.pygame_platform import _uses_sdl_highdpi_window
+    from funground.platform.pygame_platform import _uses_sdl_highdpi_window
 
-    monkeypatch.delenv("PLAYGROUND_BACKING_SCALE", raising=False)
+    monkeypatch.delenv("FUNGROUND_BACKING_SCALE", raising=False)
     monkeypatch.setattr(sys, "platform", "linux")
-    for name, value in (("SDL_VIDEODRIVER", driver), ("WAYLAND_DISPLAY", wayland_display), ("PLAYGROUND_HIGHDPI", opt_in)):
+    for name, value in (("SDL_VIDEODRIVER", driver), ("WAYLAND_DISPLAY", wayland_display), ("FUNGROUND_HIGHDPI", opt_in)):
         if value:
             monkeypatch.setenv(name, value)
         else:

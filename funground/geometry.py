@@ -1,7 +1,7 @@
 """Backend-neutral geometry: affine Transform and Path (story S-018.3).
 
 Internal in Phase 1 (PROCESS: internal capability first); the public
-`p.translate()` (S-027) and `p.path()` (S-028, `playground.paths.PathBuilder`)
+`f.translate()` (S-027) and `f.path()` (S-028, `funground.paths.PathBuilder`)
 vocabulary arrived in Sprint 4.
 
 Conventions (contract C1, F1): y grows downward; angles in degrees; a

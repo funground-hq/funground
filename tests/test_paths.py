@@ -9,13 +9,13 @@ import math
 
 import pytest
 
-import playground as p
-from playground import api, ir
-from playground.capabilities import PlaygroundWarning
-from playground.geometry import Path
-from playground.paths import PathBuilder
-from playground.platform.headless import HeadlessPlatform
-from playground.sketch import Sketch
+import funground as p
+from funground import api, ir
+from funground.capabilities import FungroundWarning
+from funground.geometry import Path
+from funground.paths import PathBuilder
+from funground.platform.headless import HeadlessPlatform
+from funground.sketch import Sketch
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -117,18 +117,18 @@ def test_bezier_vertex_is_stroked_through_its_midpoint(sketch, canvas):
 
 def test_bezier_vertex_needs_a_starting_vertex(canvas):
     p.begin_shape()
-    with pytest.raises(RuntimeError, match=r"p\.vertex"):
+    with pytest.raises(RuntimeError, match=r"f\.vertex"):
         p.bezier_vertex(0, 0, 10, 10, 20, 20)
     p.end_shape()
 
 
 def test_vertex_and_end_shape_outside_a_shape_name_begin_shape(canvas):
-    with pytest.raises(RuntimeError, match=r"p\.begin_shape"):
+    with pytest.raises(RuntimeError, match=r"f\.begin_shape"):
         p.vertex(1, 1)
-    with pytest.raises(RuntimeError, match=r"p\.begin_shape"):
+    with pytest.raises(RuntimeError, match=r"f\.begin_shape"):
         p.end_shape()
     p.begin_shape()
-    with pytest.raises(RuntimeError, match=r"p\.end_shape"):
+    with pytest.raises(RuntimeError, match=r"f\.end_shape"):
         p.begin_shape()
 
 
@@ -145,7 +145,7 @@ def test_shape_left_open_at_frame_end_is_dropped_with_a_warning(sketch, canvas):
     p.vertex(0, 0)
     p.vertex(50, 0)
     p.vertex(50, 50)
-    with pytest.warns(PlaygroundWarning, match=r"p\.end_shape"):
+    with pytest.warns(FungroundWarning, match=r"f\.end_shape"):
         assert px(canvas, 10, 10) == WHITE       # rendering ends the frame; the shape never drew
     assert sketch._shape is None
     p.begin_shape()                              # the next frame can start a fresh shape
@@ -221,7 +221,7 @@ def test_draw_path_with_no_fill_and_no_stroke_emits_nothing(sketch, canvas):
 
 
 def test_draw_path_rejects_things_that_are_not_paths(canvas):
-    with pytest.raises(TypeError, match=r"p\.path\(\)"):
+    with pytest.raises(TypeError, match=r"f\.path\(\)"):
         p.draw_path([(0, 0), (10, 10)])  # type: ignore[arg-type]
 
 
@@ -305,13 +305,13 @@ def test_sample_sketch_exports_to_pdf_headless(tmp_path, monkeypatch):
     """S-028 acceptance: a star, a Bezier curve and a clipped pattern export to PDF."""
     from conftest import EXAMPLES, run_sketch
 
-    monkeypatch.setenv("PLAYGROUND_HEADLESS", "1")
+    monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
     sketch = api.use_sketch(Sketch())                 # picks the headless platform from the environment
     assert isinstance(sketch._platform, HeadlessPlatform)
     out = tmp_path / "paths.pdf"
     src = (EXAMPLES / "14_paths.py").read_text(encoding="utf-8")
-    assert 'p.background("white")' in src
-    src = src.replace('    p.background("white")\n', f'    p.background("white")\n    p.save(r"{out}")\n', 1)
+    assert 'f.background("white")' in src
+    src = src.replace('    f.background("white")\n', f'    f.background("white")\n    f.save(r"{out}")\n', 1)
     patched = tmp_path / "14_paths_save.py"
     patched.write_text(src, encoding="utf-8")
     run_sketch(patched, frames=2)
@@ -324,11 +324,11 @@ def test_sample_sketch_exports_to_pdf_headless(tmp_path, monkeypatch):
 
 def test_clip_with_an_empty_path_warns_and_is_ignored(sketch, canvas):
     """S-067: clipping to nothing would silently hide everything drawn afterwards."""
-    from playground.capabilities import PlaygroundWarning
+    from funground.capabilities import FungroundWarning
 
     p.background("white")
     with p.saved_state():
-        with pytest.warns(PlaygroundWarning, match="empty path"):
+        with pytest.warns(FungroundWarning, match="empty path"):
             p.clip(p.path())
         p.no_stroke()
         p.fill("red")

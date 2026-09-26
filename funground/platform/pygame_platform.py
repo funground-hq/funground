@@ -27,7 +27,7 @@ _KEY_NAMES_BY_CODE = {code: name for name, code in _NAMED_KEYS.items()}
 
 
 def key_code(key: str | int) -> int:
-    """Map a Playground key name / character / backend code to a pygame key code."""
+    """Map a funground key name / character / backend code to a pygame key code."""
     if isinstance(key, int):
         return key
     lowered = key.lower()
@@ -47,12 +47,12 @@ def _uses_sdl_highdpi_window() -> bool:
     flag; pygame.Window(allow_high_dpi=True) does (S-038). The override and the
     dummy driver keep the plain set_mode path so tests behave the same everywhere.
     """
-    if os.environ.get("PLAYGROUND_BACKING_SCALE"):
+    if os.environ.get("FUNGROUND_BACKING_SCALE"):
         return False
     driver = os.environ.get("SDL_VIDEODRIVER", "").lower()
     if driver == "dummy":
         return False
-    if os.environ.get("PLAYGROUND_HIGHDPI", "").lower() in ("1", "true", "yes"):
+    if os.environ.get("FUNGROUND_HIGHDPI", "").lower() in ("1", "true", "yes"):
         return True                      # explicit opt-in, any platform
     if sys.platform == "darwin":
         return True
@@ -84,7 +84,7 @@ def _drawable_ratio(window) -> float:
 def detect_backing_scale(window=None) -> float:
     """Physical pixels per logical pixel (contract C3, stories S-024 / S-038).
 
-    PLAYGROUND_BACKING_SCALE overrides (tests, unusual setups). The dummy video
+    FUNGROUND_BACKING_SCALE overrides (tests, unusual setups). The dummy video
     driver has no display, so it is always 1.0. On Windows the process declares
     per-monitor DPI awareness so the OS stops bitmap-stretching the window and
     we can render at physical resolution instead. On macOS / Linux the scale is
@@ -92,7 +92,7 @@ def detect_backing_scale(window=None) -> float:
     else a hidden probe window that is destroyed again. UNVERIFIED on real
     macOS / Wayland hardware: the teaching machine is Windows (S-038.2).
     """
-    forced = os.environ.get("PLAYGROUND_BACKING_SCALE")
+    forced = os.environ.get("FUNGROUND_BACKING_SCALE")
     if forced:
         return max(0.5, float(forced))
     if os.environ.get("SDL_VIDEODRIVER", "").lower() == "dummy":
@@ -113,7 +113,7 @@ def detect_backing_scale(window=None) -> float:
             return _drawable_ratio(window)
         try:
             pygame.display.init()
-            probe = pygame.Window("playground", (64, 64), hidden=True, allow_high_dpi=True)
+            probe = pygame.Window("funground", (64, 64), hidden=True, allow_high_dpi=True)
         except Exception:
             return 1.0
         try:
@@ -131,7 +131,7 @@ class PygamePlatform:
         self._scale = 1.0
         self._input_scale = 1.0   # divisor for mouse coordinates (see input_state)
         self._events: list[InputEvent] = []
-        self._held_keys: set[int] = set()     # key codes currently down (for p.is_key_pressed)
+        self._held_keys: set[int] = set()     # key codes currently down (for f.is_key_pressed)
 
     @property
     def backing_scale(self) -> float:

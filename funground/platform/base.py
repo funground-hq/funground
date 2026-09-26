@@ -1,6 +1,6 @@
-"""The Platform protocol: what Playground needs from an OS/window layer.
+"""The Platform protocol: what funground needs from an OS/window layer.
 
-Playground owns the sketch loop; a platform supplies window creation, event
+funground owns the sketch loop; a platform supplies window creation, event
 pumping, input sampling, frame pacing and presentation of a finished frame.
 Nothing here mentions a concrete library.
 
@@ -13,11 +13,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-# Key names Playground understands (contract row I2). Single characters and
+# Key names funground understands (contract row I2). Single characters and
 # backend key codes are also accepted and passed to the platform.
 KEY_NAMES = ("left", "right", "up", "down", "space", "enter", "escape")
 
-# Mouse pointer shapes for p.cursor() (S-057): p5's ARROW, CROSS, HAND, MOVE, TEXT, WAIT.
+# Mouse pointer shapes for f.cursor() (S-057): p5's ARROW, CROSS, HAND, MOVE, TEXT, WAIT.
 CURSOR_KINDS = ("arrow", "cross", "hand", "move", "text", "wait")
 
 
@@ -25,8 +25,8 @@ CURSOR_KINDS = ("arrow", "cross", "hand", "move", "text", "wait")
 class InputState:
     mouse_x: int = 0
     mouse_y: int = 0
-    mouse_pressed: bool = False        # any of the first three buttons held (p.is_mouse_pressed)
-    key_pressed: bool = False          # any key held (p.is_key_pressed)
+    mouse_pressed: bool = False        # any of the first three buttons held (f.is_mouse_pressed)
+    key_pressed: bool = False          # any key held (f.is_key_pressed)
 
 
 # Event kinds, named after the learner callbacks they trigger (contract I3, D-016).

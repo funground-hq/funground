@@ -11,7 +11,7 @@ from contextlib import AbstractContextManager
 from .color import ColorLike as Color
 from .paths import PathBuilder
 from .sketch import Sketch
-from .vector import Vector  # noqa: F401  (public: p.Vector, S-055)
+from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
 
 _active: Sketch | None = None
 
@@ -42,7 +42,7 @@ def live_value(name: str) -> object:
 
 
 # ---- window / lifecycle
-def size(width: int, height: int, *, title: str = "playground", fps: int = 60) -> None:
+def size(width: int, height: int, *, title: str = "funground", fps: int = 60) -> None:
     """Create or resize the sketch window."""
     active_sketch().size(width, height, title=title, fps=fps)
 
@@ -56,7 +56,7 @@ def run(*, fps: int | None = None, max_frames: int | None = None) -> None:
     """
     caller = inspect.currentframe()
     if caller is None or caller.f_back is None:
-        raise RuntimeError("Could not find the sketch that called p.run().")
+        raise RuntimeError("Could not find the sketch that called f.run().")
     active_sketch().run_namespace(caller.f_back.f_globals, fps=fps, max_frames=max_frames)
 
 
@@ -64,8 +64,8 @@ def stop() -> None:
     active_sketch().stop()
 
 
-def exit() -> None:  # noqa: A001 - p5/Processing name; shadows the REPL helper only inside playground
-    """End the sketch after this frame (the same as p.stop())."""
+def exit() -> None:  # noqa: A001 - p5/Processing name; shadows the REPL helper only inside funground
+    """End the sketch after this frame (the same as f.stop())."""
     active_sketch().exit()
 
 
@@ -135,12 +135,12 @@ def save(path: str) -> None:
 
 
 def resize_canvas(width: int, height: int) -> None:
-    """Change the canvas size while the sketch runs; p.width and p.height follow."""
+    """Change the canvas size while the sketch runs; f.width and f.height follow."""
     active_sketch().resize_canvas(width, height)
 
 
 def full_screen() -> None:
-    """Fill the whole screen (use it instead of p.size in setup); Escape still ends the sketch."""
+    """Fill the whole screen (use it instead of f.size in setup); Escape still ends the sketch."""
     active_sketch().full_screen()
 
 
@@ -247,16 +247,16 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
 
 
 def text_width(message: object) -> float:
-    """How wide *message* will be at the current text_size, e.g. to centre it: p.text(msg, (p.width - p.text_width(msg)) / 2, y)."""
+    """How wide *message* will be at the current text_size, e.g. to centre it: f.text(msg, (f.width - f.text_width(msg)) / 2, y)."""
     return active_sketch().text_width(message)
 
 
 # ---- style
 def color(*values):
-    """A colour you can read and reuse: p.color("tomato"), p.color(255, 99, 71) or p.color((255, 99, 71, 128)).
+    """A colour you can read and reuse: f.color("tomato"), f.color(255, 99, 71) or f.color((255, 99, 71, 128)).
 
     Its parts are .red .green .blue .alpha (0-255), .hue (0-360), .saturation .brightness
-    .lightness (0-100). Tuples always mean red, green, blue - use p.hsb() or p.hsl() for hue.
+    .lightness (0-100). Tuples always mean red, green, blue - use f.hsb() or f.hsl() for hue.
     """
     from .color import Color as _Color
 
@@ -264,7 +264,7 @@ def color(*values):
         return _Color.parse(values[0])
     if len(values) in (3, 4):
         return _Color.parse(tuple(values))
-    raise ValueError("p.color() takes one colour, or 3 or 4 numbers (red, green, blue[, alpha])")
+    raise ValueError("f.color() takes one colour, or 3 or 4 numbers (red, green, blue[, alpha])")
 
 
 def hsb(hue: float, saturation: float, brightness: float, alpha: float = 255):
@@ -428,7 +428,7 @@ def pop() -> None:
 
 
 def saved_state() -> AbstractContextManager[None]:
-    """``with p.saved_state():`` - push() on entry, pop() on exit, even after an error."""
+    """``with f.saved_state():`` - push() on entry, pop() on exit, even after an error."""
     return active_sketch().saved_state()
 
 
@@ -513,12 +513,12 @@ def end_shape(close: bool = False) -> None:
 
 
 def path() -> PathBuilder:
-    """A reusable path: p.path().move_to(0, 0).line_to(40, 0).curve_to(...).close(); draw it with draw_path()."""
+    """A reusable path: f.path().move_to(0, 0).line_to(40, 0).curve_to(...).close(); draw it with draw_path()."""
     return active_sketch().path()
 
 
 def draw_path(path: PathBuilder) -> None:
-    """Fill (if closed) and stroke a path made with p.path(), using the current style."""
+    """Fill (if closed) and stroke a path made with f.path(), using the current style."""
     active_sketch().draw_path(path)
 
 
@@ -545,7 +545,7 @@ def random(low: float = 1.0, high: float | None = None) -> float:
 
 
 def random_seed(seed: int | None = None) -> None:
-    """Make p.random() repeatable: the same seed gives the same sequence."""
+    """Make f.random() repeatable: the same seed gives the same sequence."""
     active_sketch().random_seed(seed)
 
 
@@ -575,7 +575,7 @@ def random_choice(items):
 
 
 def map_range(value: float, start1: float, stop1: float, start2: float, stop2: float, clamp: bool = False) -> float:
-    """Re-scale *value* from one range to another, e.g. map_range(p.mouse_x, 0, p.width, 0, 255)."""
+    """Re-scale *value* from one range to another, e.g. map_range(f.mouse_x, 0, f.width, 0, 255)."""
     return Sketch.map_range(value, start1, stop1, start2, stop2, clamp)
 
 

@@ -5,10 +5,10 @@ import json
 
 import pytest
 
-from playground import ir
-from playground.color import Color
-from playground.geometry import Path, Transform
-from playground.state import GraphicsState
+from funground import ir
+from funground.color import Color
+from funground.geometry import Path, Transform
+from funground.state import GraphicsState
 
 
 def test_ops_are_frozen_hashable_data():

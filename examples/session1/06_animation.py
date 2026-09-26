@@ -1,20 +1,20 @@
-import playground as p
+import funground as f
 
 x = 50
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
     global x
 
-    p.background("white")
-    p.fill("tomato")
-    p.circle(x, p.height / 2, 40)
+    f.background("white")
+    f.fill("tomato")
+    f.circle(x, f.height / 2, 40)
 
     x += 2
 
 
-p.run()
+f.run()

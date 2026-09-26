@@ -5,11 +5,11 @@ import zlib
 
 import pytest
 
-import playground as p
-from playground import api, ir
-from playground.paint import Gradient
-from playground.platform.headless import HeadlessPlatform
-from playground.sketch import Sketch
+import funground as p
+from funground import api, ir
+from funground.paint import Gradient
+from funground.platform.headless import HeadlessPlatform
+from funground.sketch import Sketch
 
 
 def render(draw, size=(100, 100)):

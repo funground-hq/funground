@@ -4,32 +4,32 @@ Transforms move, turn and resize **everything you draw afterwards**.
 
 | Function | Effect |
 |---|---|
-| `p.translate(dx, dy)` | Moves the origin by `(dx, dy)` |
-| `p.rotate(degrees)` | Turns around the current origin — `90` is a quarter turn clockwise |
-| `p.scale(s)` / `p.scale(sx, sy)` | Grows or shrinks; two numbers stretch differently across and down |
-| `p.push()` / `p.pop()` | Save the current transform **and** style; bring them back |
-| `with p.saved_state():` | `push()` at the start of the block, `pop()` at the end — even if something goes wrong |
+| `f.translate(dx, dy)` | Moves the origin by `(dx, dy)` |
+| `f.rotate(degrees)` | Turns around the current origin — `90` is a quarter turn clockwise |
+| `f.scale(s)` / `f.scale(sx, sy)` | Grows or shrinks; two numbers stretch differently across and down |
+| `f.push()` / `f.pop()` | Save the current transform **and** style; bring them back |
+| `with f.saved_state():` | `push()` at the start of the block, `pop()` at the end — even if something goes wrong |
 
 ```python
-import playground as p
+import funground as f
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.background("white")
-    p.fill("gold")
-    p.stroke("black")
+    f.background("white")
+    f.fill("gold")
+    f.stroke("black")
     for angle in range(0, 360, 30):
-        with p.saved_state():
-            p.translate(200, 200)
-            p.rotate(angle)
-            p.rect(60, -8, 80, 16)
+        with f.saved_state():
+            f.translate(200, 200)
+            f.rotate(angle)
+            f.rect(60, -8, 80, 16)
 
 
-p.run()
+f.run()
 ```
 
 ![saved_state](../gallery/images/transforms-02_saved_state.png)
@@ -38,15 +38,15 @@ p.run()
 
 | Function | Effect |
 |---|---|
-| `p.shear_x(degrees)` / `p.shear_y(degrees)` | Slant later drawing sideways / up and down |
-| `p.apply_matrix(a, b, c, d, e, f)` | Multiply in a whole transform: `x' = a·x + c·y + e`, `y' = b·x + d·y + f` |
-| `p.reset_matrix()` | Forget every transform so far, until the end of the `saved_state` block |
+| `f.shear_x(degrees)` / `f.shear_y(degrees)` | Slant later drawing sideways / up and down |
+| `f.apply_matrix(a, b, c, d, e, f)` | Multiply in a whole transform: `x' = a·x + c·y + e`, `y' = b·x + d·y + f` |
+| `f.reset_matrix()` | Forget every transform so far, until the end of the `saved_state` block |
 
 ![Shear and matrices](../gallery/images/transforms-03_shear_and_matrices.png)
 
 ## Order matters
 
-`p.translate(100, 0)` then `p.rotate(45)` turns the drawing around the **new** origin. The other
+`f.translate(100, 0)` then `f.rotate(45)` turns the drawing around the **new** origin. The other
 way round, the translation itself is turned. Read transforms bottom-up: the last one written is
 the first applied to your shape.
 
@@ -54,14 +54,14 @@ the first applied to your shape.
 
 - **Transforms reset at the start of every frame.** A `rotate()` in one `draw()` does not carry
   into the next.
-- **Style stays.** A `p.fill("blue")` in `draw()` is still in force next frame — unless it was
+- **Style stays.** A `f.fill("blue")` in `draw()` is still in force next frame — unless it was
   inside a `saved_state` block or between `push()` and `pop()`.
 - A `push()` without its `pop()` is closed for you at the end of the frame, with a warning.
 
 ## Angles
 
 `rotate()` takes **degrees**. Python's `math.sin` and `math.cos` want radians, so convert:
-`math.sin(p.radians(30))`, and back with `p.degrees(math.atan2(dy, dx))`.
+`math.sin(f.radians(30))`, and back with `f.degrees(math.atan2(dy, dx))`.
 
 ![Rotating squares](../gallery/images/transforms-01_rotating_squares.png)
 

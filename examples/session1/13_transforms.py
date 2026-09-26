@@ -1,51 +1,51 @@
-import playground as p
+import funground as f
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.background("white")
+    f.background("white")
 
     # Move the origin, then draw: everything after translate() is shifted.
-    p.fill("gold")
-    p.stroke("black")
-    p.translate(120, 100)
-    p.rect(-40, -25, 80, 50)
+    f.fill("gold")
+    f.stroke("black")
+    f.translate(120, 100)
+    f.rect(-40, -25, 80, 50)
 
     # push() remembers the transform and the style; pop() brings them back.
-    p.push()
-    p.rotate(30)            # degrees, clockwise on screen
-    p.fill("tomato")
-    p.no_stroke()
-    p.rect(-40, -25, 80, 50)
+    f.push()
+    f.rotate(30)            # degrees, clockwise on screen
+    f.fill("tomato")
+    f.no_stroke()
+    f.rect(-40, -25, 80, 50)
 
-    p.push()                # nested: this one is inside the rotated space
-    p.translate(150, 0)
-    p.scale(0.5)
-    p.fill("navy")
-    p.rect(-40, -25, 80, 50)
-    p.pop()
+    f.push()                # nested: this one is inside the rotated space
+    f.translate(150, 0)
+    f.scale(0.5)
+    f.fill("navy")
+    f.rect(-40, -25, 80, 50)
+    f.pop()
 
-    p.pop()                 # back to gold fill, black stroke, no rotation
+    f.pop()                 # back to gold fill, black stroke, no rotation
 
     # A fan of rectangles: each turn adds to the one before (transforms are cumulative).
-    with p.saved_state():
-        p.translate(280, 150)
+    with f.saved_state():
+        f.translate(280, 150)
         for _ in range(6):
-            p.rect(0, -6, 100, 12)
-            p.rotate(15)
+            f.rect(0, -6, 100, 12)
+            f.rotate(15)
 
     # A spinning square: frame_count makes it turn a little more each frame.
-    with p.saved_state():
-        p.translate(180, 150)
-        p.rotate(p.frame_count * 3)
-        p.fill("skyblue")
-        p.rect(-30, -30, 60, 60)
+    with f.saved_state():
+        f.translate(180, 150)
+        f.rotate(f.frame_count * 3)
+        f.fill("skyblue")
+        f.rect(-30, -30, 60, 60)
 
     # Nothing above leaks out: this text is drawn at the shifted origin from line 12 only.
-    p.text("transforms", 200, 220, "black")
+    f.text("transforms", 200, 220, "black")
 
 
-p.run()
+f.run()

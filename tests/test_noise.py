@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-import playground as p
+import funground as p
 
 # Reference values computed by p5.js's noise/noiseSeed algorithm (run in Node during S-047).
 P5_SEED_42 = [((0,), 0.236574), ((0.5,), 0.202788), ((1.3, 2.7), 0.463387), ((0.1, 0.2, 0.3), 0.312246)]

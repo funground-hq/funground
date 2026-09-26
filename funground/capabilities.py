@@ -1,7 +1,7 @@
 """Capability identifiers and learner-facing errors (story S-021).
 
 A renderer declares a frozenset of Capability; a feature that needs one the
-selected renderer lacks fails at p.size()/p.run() - never mid-loop - with a
+selected renderer lacks fails at f.size()/f.run() - never mid-loop - with a
 message that names the feature and what to install (contract R9).
 """
 from __future__ import annotations
@@ -28,17 +28,17 @@ class Capability(Enum):
 EXTRA_FOR: dict[Capability, str] = {}
 
 
-class PlaygroundError(RuntimeError):
-    """A clear, learner-facing error raised by Playground itself."""
+class FungroundError(RuntimeError):
+    """A clear, learner-facing error raised by funground itself."""
 
 
-class PlaygroundWarning(UserWarning):
+class FungroundWarning(UserWarning):
     """A learner-facing warning: something was fixed up rather than crashing mid-lesson."""
 
 
-def missing_capability(cap: Capability, feature: str, renderer_name: str) -> PlaygroundError:
+def missing_capability(cap: Capability, feature: str, renderer_name: str) -> FungroundError:
     extra = EXTRA_FOR.get(cap)
-    hint = f" Install it with:  pip install playground[{extra}]" if extra else ""
-    return PlaygroundError(
+    hint = f" Install it with:  pip install funground[{extra}]" if extra else ""
+    return FungroundError(
         f"{feature} needs {cap.value}, which the {renderer_name} renderer cannot do.{hint}"
     )

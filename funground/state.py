@@ -1,7 +1,7 @@
 """Backend-neutral graphics state (contract rows S3–S9, T3).
 
 ``GraphicsState`` is immutable; a sketch replaces it on every style call and
-keeps a stack so ``push()``/``pop()`` and ``with p.saved_state():`` are trivial and
+keeps a stack so ``push()``/``pop()`` and ``with f.saved_state():`` are trivial and
 exception-safe.
 """
 from __future__ import annotations

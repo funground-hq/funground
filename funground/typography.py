@@ -170,7 +170,7 @@ def wrap_lines(text: str, width: float, size: float) -> tuple[list[str], list[st
 
 
 def text_width(text: str, size: float) -> float:
-    """Advance width of *text* in logical pixels at *size* (S-037): what `p.text` moves the pen by."""
+    """Advance width of *text* in logical pixels at *size* (S-037): what `f.text` moves the pen by."""
     if not text:
         return 0.0
     return default_font().shape(text, size).advance

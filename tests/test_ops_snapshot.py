@@ -5,7 +5,7 @@ snapshot is the op list of the *final* frame of a 30-frame headless run,
 serialised to JSON. It is platform-independent by construction: no pixels,
 no fonts, no anti-aliasing - just what the learner's code requested.
 
-Regenerate deliberately:  PLAYGROUND_UPDATE_SNAPSHOTS=1 pytest tests/test_ops_snapshot.py
+Regenerate deliberately:  FUNGROUND_UPDATE_SNAPSHOTS=1 pytest tests/test_ops_snapshot.py
 A failure writes the actual ops to tests/snapshots/_actual/<sketch>.json.
 """
 from __future__ import annotations
@@ -17,12 +17,12 @@ from pathlib import Path
 import pytest
 
 from conftest import EXAMPLES, run_sketch
-from playground import api, ir
+from funground import api, ir
 
 SNAPSHOTS = Path(__file__).resolve().parent / "snapshots"
 SKETCHES = sorted(EXAMPLES.glob("*.py"))
 TIME_DEPENDENT = {"11_delta_time.py"}  # positions depend on wall-clock delta_time
-UPDATE = os.environ.get("PLAYGROUND_UPDATE_SNAPSHOTS") == "1"
+UPDATE = os.environ.get("FUNGROUND_UPDATE_SNAPSHOTS") == "1"
 
 
 def _dump(ops) -> str:

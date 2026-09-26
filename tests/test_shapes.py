@@ -5,8 +5,8 @@ import math
 
 import pytest
 
-import playground as p
-from playground import ir
+import funground as p
+from funground import ir
 
 WHITE, RED, BLACK = (255, 255, 255), (255, 0, 0), (0, 0, 0)
 
@@ -86,7 +86,7 @@ def test_arc_modes(sketch, canvas):
 
 
 def test_arc_is_close_to_a_true_circle():
-    from playground.geometry import Path
+    from funground.geometry import Path
 
     path = Path().arc_to(0, 0, 100, 100, 0, 360)
     for seg in path.segments[1:]:
@@ -106,7 +106,7 @@ def test_clear_makes_pixels_transparent(sketch, canvas):
 def test_clear_is_kept_in_a_saved_png(tmp_path):
     import cairo
 
-    from playground import api
+    from funground import api
 
     out = tmp_path / "clear.png"
 

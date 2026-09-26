@@ -3,24 +3,24 @@
 translate moves the origin, rotate turns everything drawn afterwards (in degrees), scale grows
 it. push() saves the current transform and style, pop() brings them back.
 """
-import playground as p
+import funground as f
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.background("white")
-    p.no_stroke()
+    f.background("white")
+    f.no_stroke()
     for i in range(5):
-        p.push()
-        p.translate(80 + i * 120, 200)
-        p.rotate(p.frame_count * 3 + i * 18)
-        p.scale(1 + i * 0.2)
-        p.fill((40 + i * 50, 90, 200))
-        p.rect(-25, -25, 50, 50)
-        p.pop()
+        f.push()
+        f.translate(80 + i * 120, 200)
+        f.rotate(f.frame_count * 3 + i * 18)
+        f.scale(1 + i * 0.2)
+        f.fill((40 + i * 50, 90, 200))
+        f.rect(-25, -25, 50, 50)
+        f.pop()
 
 
-p.run()
+f.run()

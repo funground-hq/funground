@@ -1,22 +1,22 @@
-import playground as p
+import funground as f
 
 x = 50
 speed = 3
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
     global x, speed
 
-    p.background("white")
-    p.circle(x, p.height / 2, 40)
+    f.background("white")
+    f.circle(x, f.height / 2, 40)
 
     x += speed
-    if x > p.width - 20 or x < 20:
+    if x > f.width - 20 or x < 20:
         speed = -speed
 
 
-p.run()
+f.run()

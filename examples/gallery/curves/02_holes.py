@@ -1,11 +1,11 @@
 """Shapes with holes
 
-Between begin_contour() and end_contour(), list the corners of a hole. Playground makes the hole
+Between begin_contour() and end_contour(), list the corners of a hole. funground makes the hole
 cut out of the shape whichever way round you draw it.
 """
 import math
 
-import playground as p
+import funground as f
 
 
 def ring_of_points(cx, cy, r, n):
@@ -13,34 +13,34 @@ def ring_of_points(cx, cy, r, n):
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.background("white")
-    p.fill("gold")
-    p.stroke("darkorange")
-    p.stroke_width(3)
+    f.background("white")
+    f.fill("gold")
+    f.stroke("darkorange")
+    f.stroke_width(3)
 
-    p.begin_shape()                       # a square frame
+    f.begin_shape()                       # a square frame
     for x, y in [(40, 60), (280, 60), (280, 300), (40, 300)]:
-        p.vertex(x, y)
-    p.begin_contour()
+        f.vertex(x, y)
+    f.begin_contour()
     for x, y in [(100, 120), (220, 120), (220, 240), (100, 240)]:
-        p.vertex(x, y)
-    p.end_contour()
-    p.end_shape(close=True)
+        f.vertex(x, y)
+    f.end_contour()
+    f.end_shape(close=True)
 
-    p.fill("skyblue")
-    p.stroke("navy")
-    p.begin_shape()                       # a wheel: many-sided outline, hexagonal hole
+    f.fill("skyblue")
+    f.stroke("navy")
+    f.begin_shape()                       # a wheel: many-sided outline, hexagonal hole
     for x, y in ring_of_points(460, 180, 130, 40):
-        p.vertex(x, y)
-    p.begin_contour()
+        f.vertex(x, y)
+    f.begin_contour()
     for x, y in ring_of_points(460, 180, 60, 6):
-        p.vertex(x, y)
-    p.end_contour()
-    p.end_shape(close=True)
+        f.vertex(x, y)
+    f.end_contour()
+    f.end_shape(close=True)
 
 
-p.run()
+f.run()

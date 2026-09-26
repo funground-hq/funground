@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import warnings
 
-from .capabilities import PlaygroundWarning
+from .capabilities import FungroundWarning
 from .geometry import Path
 
 
@@ -57,25 +57,25 @@ class ShapeBuilder:
 
     def begin_contour(self) -> None:
         if self.in_contour:
-            raise RuntimeError("p.begin_contour() called again before p.end_contour(); finish the first hole.")
+            raise RuntimeError("f.begin_contour() called again before f.end_contour(); finish the first hole.")
         if not self.contours[0]:
-            raise RuntimeError("p.begin_contour() comes after the outline's vertices: add them first.")
+            raise RuntimeError("f.begin_contour() comes after the outline's vertices: add them first.")
         self.contours.append([])
         self.in_contour = True
 
     def end_contour(self) -> None:
         if not self.in_contour:
-            raise RuntimeError("p.end_contour() without p.begin_contour().")
+            raise RuntimeError("f.end_contour() without f.begin_contour().")
         self.in_contour = False
 
     def _require_point(self, name: str) -> None:
         if not self._entries:
-            raise RuntimeError(f"p.{name}() needs a starting point: call p.vertex(x, y) first.")
+            raise RuntimeError(f"f.{name}() needs a starting point: call f.vertex(x, y) first.")
 
     # ---- building
     def build(self, close: bool, tightness: float) -> Path:
         if self.in_contour:
-            raise RuntimeError("p.end_shape() inside a hole: call p.end_contour() first.")
+            raise RuntimeError("f.end_shape() inside a hole: call f.end_contour() first.")
         outline = _contour_path(self.contours[0], tightness)
         if close and not outline.is_empty:
             outline = outline.close()
@@ -105,9 +105,9 @@ def _contour_path(entries: list[tuple], tightness: float) -> Path:
             return
         if len(run) < 4:
             warnings.warn(
-                f"p.curve_vertex() needs at least 4 points in a row to draw a curve; got {len(run)}, "
+                f"f.curve_vertex() needs at least 4 points in a row to draw a curve; got {len(run)}, "
                 "so they were skipped. The first and last points only steer the curve.",
-                PlaygroundWarning, stacklevel=5,
+                FungroundWarning, stacklevel=5,
             )
         else:
             to(run[1])
@@ -125,8 +125,8 @@ def _contour_path(entries: list[tuple], tightness: float) -> Path:
         if kind == "vertex":
             to(entry[1])
         elif path.is_empty:
-            raise RuntimeError(f"p.{'bezier_vertex' if kind == 'bezier' else 'quadratic_vertex'}() "
-                               "needs a starting point: call p.vertex(x, y) first.")
+            raise RuntimeError(f"f.{'bezier_vertex' if kind == 'bezier' else 'quadratic_vertex'}() "
+                               "needs a starting point: call f.vertex(x, y) first.")
         elif kind == "bezier":
             path = path.cubic_to(*entry[1], *entry[2], *entry[3])
         elif kind == "quad":

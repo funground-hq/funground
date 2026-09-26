@@ -1,14 +1,14 @@
 """HeadlessPlatform (S-034): a sketch runs with no window at all."""
 from __future__ import annotations
 
-import playground as p
-from playground import api
-from playground.platform.headless import HeadlessPlatform
-from playground.sketch import Sketch, default_platform
+import funground as p
+from funground import api
+from funground.platform.headless import HeadlessPlatform
+from funground.sketch import Sketch, default_platform
 
 
 def test_env_selects_headless(monkeypatch):
-    monkeypatch.setenv("PLAYGROUND_HEADLESS", "1")
+    monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
     assert isinstance(default_platform(), HeadlessPlatform)
 
 
@@ -36,7 +36,7 @@ def test_headless_run_captures_pixels_and_never_needs_a_display(monkeypatch):
 
 
 def test_headless_honours_forced_scale(monkeypatch):
-    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
+    monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     s = api.use_sketch(Sketch(platform=HeadlessPlatform()))
     s.run_namespace({"setup": lambda: p.size(10, 10), "draw": lambda: p.background("black")}, max_frames=1)
     assert s.last_frame[0] == (20, 20)

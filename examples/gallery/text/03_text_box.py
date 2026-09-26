@@ -1,10 +1,10 @@
 """Text in boxes and columns
 
-p.text_box() wraps text inside a box and gives back whatever did not fit, so the rest can
-flow on into the next box - the way DrawBot's textBox() works. A "\n" inside p.text() starts
-a new line, and p.text_leading() sets the distance from one line to the next.
+f.text_box() wraps text inside a box and gives back whatever did not fit, so the rest can
+flow on into the next box - the way DrawBot's textBox() works. A "\n" inside f.text() starts
+a new line, and f.text_leading() sets the distance from one line to the next.
 """
-import playground as p
+import funground as f
 
 STORY = (
     "A sketch is a small program that draws. It starts with setup(), which runs once, and "
@@ -17,30 +17,30 @@ STORY = (
 
 
 def setup():
-    p.size(640, 400)
+    f.size(640, 400)
 
 
 def draw():
-    p.background("ivory")
-    p.fill("darkslategray")
-    p.text_size(34)
-    p.text_leading(36)
-    p.text("Columns\nof words", 30, 24)
+    f.background("ivory")
+    f.fill("darkslategray")
+    f.text_size(34)
+    f.text_leading(36)
+    f.text("Columns\nof words", 30, 24)
 
-    p.text_size(15)
-    p.text_leading(None)                     # back to automatic: 1.25 x the text size
-    p.no_fill()
-    p.stroke("lightgray")
-    p.rect(30, 130, 280, 240)
-    p.rect(330, 130, 280, 240)
+    f.text_size(15)
+    f.text_leading(None)                     # back to automatic: 1.25 x the text size
+    f.no_fill()
+    f.stroke("lightgray")
+    f.rect(30, 130, 280, 240)
+    f.rect(330, 130, 280, 240)
 
-    p.no_stroke()
-    p.fill("black")
-    rest = p.text_box(STORY, 42, 142, 256, 216)      # returns what did not fit...
-    rest = p.text_box(rest, 342, 142, 256, 216)      # ...which flows on into the next box
+    f.no_stroke()
+    f.fill("black")
+    rest = f.text_box(STORY, 42, 142, 256, 216)      # returns what did not fit...
+    rest = f.text_box(rest, 342, 142, 256, 216)      # ...which flows on into the next box
     if rest:
-        p.fill("firebrick")
-        p.text("(more did not fit)", 342, 376)
+        f.fill("firebrick")
+        f.text("(more did not fit)", 342, 376)
 
 
-p.run()
+f.run()

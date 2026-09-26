@@ -17,8 +17,8 @@ from pathlib import Path
 import pygame
 import pytest
 
-import playground
-from playground import api, ir
+import funground
+from funground import api, ir
 
 from conftest import GOLDEN, ROOT, run_sketch, surface_from_frame
 
@@ -40,7 +40,7 @@ NOT_YET_IN_GALLERY: set[str] = set()
 
 @pytest.fixture(autouse=True)
 def _scratch_cwd(tmp_path, monkeypatch):
-    """Examples that p.save() write into a throwaway directory, never the repo."""
+    """Examples that f.save() write into a throwaway directory, never the repo."""
     monkeypatch.chdir(tmp_path)
 
 
@@ -90,13 +90,13 @@ def test_example_ops_match_snapshot(path: Path):
 def _names_used() -> set[str]:
     used = set()
     for path in EXAMPLES:
-        used |= set(re.findall(r"\bp\.([A-Za-z_]+)\b", path.read_text(encoding="utf-8")))
+        used |= set(re.findall(r"\bf\.([A-Za-z_]+)\b", path.read_text(encoding="utf-8")))
     return used
 
 
 def test_every_public_name_is_shown_by_an_example():
     """D-015, D-019: release 0.1 ships a gallery that highlights every feature."""
-    public = set(playground.__all__)
+    public = set(funground.__all__)
     uncovered = public - _names_used()
     unexpected = uncovered - NOT_YET_IN_GALLERY
     assert not unexpected, f"public names with no gallery example: {sorted(unexpected)}"

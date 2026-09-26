@@ -10,10 +10,10 @@ import warnings
 
 import pytest
 
-import playground as p
-from playground import ir
-from playground.capabilities import PlaygroundWarning
-from playground.geometry import Transform
+import funground as p
+from funground import ir
+from funground.capabilities import FungroundWarning
+from funground.geometry import Transform
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -178,7 +178,7 @@ def test_pop_restores_the_style_as_well_as_the_transform(sketch, canvas):
 
 
 def test_pop_without_push_warns_and_is_ignored(sketch, canvas):
-    with pytest.warns(PlaygroundWarning, match="without a matching"):
+    with pytest.warns(FungroundWarning, match="without a matching"):
         p.pop()
     assert not any(isinstance(op, ir.Restore) for op in sketch.frame.ops)
 
@@ -231,7 +231,7 @@ def test_unbalanced_push_warns_naming_the_count_and_does_not_leak(sketch, canvas
     p.fill("blue")
     p.translate(50, 0)
     p.rect(0, 0, 10, 10)     # blue, at (50, 0)
-    with pytest.warns(PlaygroundWarning, match=r"2 p\.push\(\)"):
+    with pytest.warns(FungroundWarning, match=r"2 f\.push\(\)"):
         assert px(canvas, 55, 5) == BLUE   # rendering ends the frame
     # Next frame: style and transform are back to what they were before the pushes.
     assert sketch._states.depth == 0
@@ -247,7 +247,7 @@ def test_unbalanced_push_is_closed_in_the_frame_itself(sketch, canvas):
     p.push()
     p.translate(5, 5)
     p.push()
-    with pytest.warns(PlaygroundWarning):
+    with pytest.warns(FungroundWarning):
         sketch._end_draw()
     kinds = [type(op).__name__ for op in sketch.frame.ops]
     assert kinds == ["Save", "Concat", "Save", "Restore", "Restore"]
@@ -266,7 +266,7 @@ def test_top_level_transform_resets_at_the_start_of_the_next_frame(canvas):
 
 def test_unbalanced_push_in_a_run_loop_does_not_leak_between_frames():
     """A learner's draw() that forgets pop() still gets a stable picture every frame."""
-    from playground import api
+    from funground import api
 
     seen = []
 
@@ -279,7 +279,7 @@ def test_unbalanced_push_in_a_run_loop_does_not_leak_between_frames():
     import pygame
 
     pygame.init()
-    with pytest.warns(PlaygroundWarning, match=r"1 p\.push\(\)"):
+    with pytest.warns(FungroundWarning, match=r"1 f\.push\(\)"):
         api.active_sketch().run_namespace({"draw": draw}, fps=1000, max_frames=3)
     assert seen == [0, 0, 0]
     assert api.active_sketch().style.fill.rgb == WHITE
@@ -287,7 +287,7 @@ def test_unbalanced_push_in_a_run_loop_does_not_leak_between_frames():
 
 def test_style_set_without_push_carries_into_the_next_frame_like_p5():
     """Contract F2 (S-067 wording): transforms reset every frame; unpushed style does not."""
-    from playground import api
+    from funground import api
 
     seen = []
 
@@ -357,9 +357,9 @@ def test_reset_matrix_forgets_transforms_until_pop(canvas):
 
 
 def test_reset_matrix_keeps_the_hidpi_scale(monkeypatch):
-    monkeypatch.setenv("PLAYGROUND_BACKING_SCALE", "2")
-    from playground import api
-    from playground.sketch import Sketch
+    monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
+    from funground import api
+    from funground.sketch import Sketch
 
     api.use_sketch(Sketch())
     import pygame

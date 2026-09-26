@@ -9,9 +9,9 @@ from __future__ import annotations
 import pygame
 import pytest
 
-import playground as p
-from playground import api
-from playground.platform.pygame_platform import key_code
+import funground as p
+from funground import api
+from funground.platform.pygame_platform import key_code
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -29,7 +29,7 @@ def test_default_style_and_state(sketch):
     assert sketch.style.text_size == 20
     assert (sketch.width, sketch.height) == (640, 480)
     assert sketch.fps == 60
-    assert sketch.title == "playground"
+    assert sketch.title == "funground"
 
 
 def test_size_sets_live_values(canvas):
@@ -50,7 +50,7 @@ def test_size_rejects_non_positive_fps():
 
 
 def test_drawing_before_size_is_a_clear_error():
-    with pytest.raises(RuntimeError, match="p.size"):
+    with pytest.raises(RuntimeError, match="f.size"):
         p.circle(0, 0, 10)
 
 

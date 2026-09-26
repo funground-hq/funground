@@ -3,11 +3,11 @@
     python tools/make_reference_images.py            # every sketch
     python tools/make_reference_images.py 05_text    # just one
 
-Each ``examples/reference/*.py`` sketch is run headless (``PLAYGROUND_HEADLESS=1``,
+Each ``examples/reference/*.py`` sketch is run headless (``FUNGROUND_HEADLESS=1``,
 no window, no SDL) for ``FRAMES`` loop iterations; when the run ends the harness
 saves the last frame shown to ``docs/reference/images/<stem>.png`` - so a sketch
-that calls ``p.no_loop()`` still gets its picture.
-The sketches are ordinary learner sketches - they call ``p.run()`` themselves -
+that calls ``f.no_loop()`` still gets its picture.
+The sketches are ordinary learner sketches - they call ``f.run()`` themselves -
 so a picture in the reference can never drift from the code beside it.
 """
 from __future__ import annotations
@@ -21,11 +21,11 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-import playground  # noqa: E402
-from playground import api  # noqa: E402
-from playground.export import save_pixels  # noqa: E402
-from playground.platform.headless import HeadlessPlatform  # noqa: E402
-from playground.sketch import Sketch  # noqa: E402
+import funground  # noqa: E402
+from funground import api  # noqa: E402
+from funground.export import save_pixels  # noqa: E402
+from funground.platform.headless import HeadlessPlatform  # noqa: E402
+from funground.sketch import Sketch  # noqa: E402
 
 SKETCHES = ROOT / "examples" / "reference"
 IMAGES = ROOT / "docs" / "reference" / "images"
@@ -58,19 +58,19 @@ def render(sketch: Path, out: Path, frames: int = FRAMES) -> Path:
         sketch_globals = inspect.currentframe().f_back.f_globals
         api.active_sketch().run_namespace(sketch_globals, fps=1000, max_frames=max_frames)
 
-    original = playground.run
-    playground.run = harness_run
+    original = funground.run
+    funground.run = harness_run
     try:
         exec(compile(source, str(sketch), "exec"), namespace)
     finally:
-        playground.run = original
+        funground.run = original
     if not out.exists():
         raise RuntimeError(f"{sketch.name} never showed a frame; nothing saved")
     return out
 
 
 def main(argv: list[str]) -> int:
-    os.environ["PLAYGROUND_HEADLESS"] = "1"
+    os.environ["FUNGROUND_HEADLESS"] = "1"
     wanted = set(argv)
     sketches = sorted(SKETCHES.glob("*.py"))
     if wanted:

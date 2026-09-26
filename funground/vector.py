@@ -2,7 +2,7 @@
 
 Methods such as ``add`` change the vector *in place* and return it, exactly as in p5, so ported
 code like ``position.add(velocity)`` keeps working. Operators (``+ - * /``) return a *new*
-vector, which is the Python habit. Angles are in degrees, like every angle in Playground (D-002).
+vector, which is the Python habit. Angles are in degrees, like every angle in funground (D-002).
 """
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ def _number(v, what: str) -> float:
 
 
 class Vector:
-    """A 2D vector: ``v = p.Vector(3, 4)``; ``v.x``, ``v.y``; ``v.mag()`` is 5."""
+    """A 2D vector: ``v = f.Vector(3, 4)``; ``v.x``, ``v.y``; ``v.mag()`` is 5."""
 
     __slots__ = ("x", "y")
     __hash__ = None  # mutable: never a dict key
@@ -47,7 +47,7 @@ class Vector:
 
     @classmethod
     def random_2d(cls) -> Vector:
-        """A vector of length 1 in a random direction. ``p.random_seed()`` makes it repeatable."""
+        """A vector of length 1 in a random direction. ``f.random_seed()`` makes it repeatable."""
         from . import api
 
         return cls.from_angle(api.active_sketch()._rng.uniform(0.0, 360.0))
@@ -111,7 +111,7 @@ class Vector:
         return self
 
     def rotate(self, angle: float) -> Vector:
-        """Turn by *angle* degrees (positive turns clockwise on screen, like p.rotate)."""
+        """Turn by *angle* degrees (positive turns clockwise on screen, like f.rotate)."""
         a = math.radians(_number(angle, "rotate"))
         c, s = math.cos(a), math.sin(a)
         self.x, self.y = self.x * c - self.y * s, self.x * s + self.y * c

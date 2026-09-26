@@ -7,12 +7,12 @@ import cairo
 import pygame
 import pytest
 
-import playground as p
-from playground import api, ir
-from playground.color import Color
-from playground.export import format_of, save_frame
-from playground.geometry import Path
-from playground.state import GraphicsState
+import funground as p
+from funground import api, ir
+from funground.color import Color
+from funground.export import format_of, save_frame
+from funground.geometry import Path
+from funground.state import GraphicsState
 
 
 def test_format_validation_names_the_choices():
@@ -78,7 +78,7 @@ def test_pdf_export_from_a_session1_sketch(tmp_path):
 
     out = tmp_path / "shapes.pdf"
     src = (EXAMPLES / "02_shapes.py").read_text(encoding="utf-8")
-    src = src.replace("    p.background(\"white\")\n", f"    p.background(\"white\")\n    p.save(r'{out}')\n", 1)
+    src = src.replace("    f.background(\"white\")\n", f"    f.background(\"white\")\n    f.save(r'{out}')\n", 1)
     patched = tmp_path / "02_shapes_save.py"
     patched.write_text(src, encoding="utf-8")
     run_sketch(patched, frames=2)
@@ -89,9 +89,9 @@ def test_png_saves_what_is_on_screen_including_earlier_frames(tmp_path):
     """A sketch that paints without clearing: the PNG holds every frame's drawing."""
     import cairo
 
-    from playground import api
-    from playground.platform.headless import HeadlessPlatform
-    from playground.sketch import Sketch
+    from funground import api
+    from funground.platform.headless import HeadlessPlatform
+    from funground.sketch import Sketch
 
     out = tmp_path / "painting.png"
     s = api.use_sketch(Sketch(platform=HeadlessPlatform()))
