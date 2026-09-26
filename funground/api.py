@@ -381,6 +381,39 @@ def text_size(size: int) -> None:
     active_sketch().text_size(size)
 
 
+# ---- fonts and styles (S-054, contract T11/T12)
+def load_font(path: str):
+    """Load a TrueType/OpenType font file; pass the result to f.text_font(). A relative path is
+    looked for next to the sketch file first, then in the current folder."""
+    caller = inspect.currentframe()
+    base_dir = None
+    if caller is not None and caller.f_back is not None:
+        sketch_file = caller.f_back.f_globals.get("__file__")
+        if sketch_file:
+            import os
+
+            base_dir = os.path.dirname(os.path.abspath(sketch_file))
+    return active_sketch().load_font(path, base_dir=base_dir)
+
+
+def text_font(font, size: float | None = None) -> None:
+    """Use *font* (from f.load_font(), a path, or None for the built-in family) for later text."""
+    caller = inspect.currentframe()
+    base_dir = None
+    if isinstance(font, str) and caller is not None and caller.f_back is not None:
+        sketch_file = caller.f_back.f_globals.get("__file__")
+        if sketch_file:
+            import os
+
+            base_dir = os.path.dirname(os.path.abspath(sketch_file))
+    active_sketch().text_font(font, size, base_dir=base_dir)
+
+
+def text_style(style: str) -> None:
+    """Use one of the four built-in styles for later text: "normal", "bold", "italic", "bold_italic"."""
+    active_sketch().text_style(style)
+
+
 # ---- transforms and the state stack (S-027)
 def translate(dx: float, dy: float) -> None:
     """Move the origin: everything drawn afterwards is shifted by (dx, dy)."""

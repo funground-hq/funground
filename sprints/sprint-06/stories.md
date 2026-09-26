@@ -191,10 +191,11 @@ What would change this: a hard install-size budget for classrooms.
 - [x] S-075.5 Full suite green; every golden image and IR snapshot byte-identical (a rename changes no drawing)
 *Acceptance:* `grep -ri playground` over the package, examples, guide and tests finds only deliberate historical mentions; nothing learners run says "playground".
 
-### S-054 Fonts and styles — E-15 *(D-022 = A)*
-- [ ] S-054.1 `p.text_font(path_or_font)` uses a TTF/OTF file; `p.load_font(path)` returns a font
-- [ ] S-054.2 Bundle DejaVu Sans Bold, Oblique, Bold Oblique (2.37) with the licence; `text_style("normal" | "bold" | "italic" | "bold_italic")`, part of the saved state
-- [ ] S-054.3 Contract rows; tests; gallery `text/`; guide chapter 6
+### S-054 Fonts and styles — E-15 *(D-022 = A)* ✅
+*As built:* by the Sonnet `story-builder` subagent from pinned rows T11/T12; reviewed here, and one duplicated style list removed. DejaVu 2.37 was verified byte-identical to the bundled regular face before the new files were added: Bold 706 KB, Oblique 635 KB, Bold Oblique 643 KB. Known limit: a loaded font's IR key only resolves in the process that loaded it, so replaying saved IR elsewhere needs the file. That matters for the browser track, not for 0.1.
+- [x] S-054.1 `p.text_font(path_or_font)` uses a TTF/OTF file; `p.load_font(path)` returns a font
+- [x] S-054.2 Bundle DejaVu Sans Bold, Oblique, Bold Oblique (2.37) with the licence; `text_style("normal" | "bold" | "italic" | "bold_italic")`, part of the saved state
+- [x] S-054.3 Contract rows; tests; gallery `text/`; guide chapter 6
 *Acceptance:* the same text in a loaded font renders identically on every run.
 
 ### S-052 Off-screen graphics — E-28 *(D-021 = A)*

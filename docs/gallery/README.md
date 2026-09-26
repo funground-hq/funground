@@ -135,6 +135,14 @@ f.text_box() wraps text inside a box and gives back whatever did not fit, so the
 
 Source: [`examples/gallery/text/03_text_box.py`](../../examples/gallery/text/03_text_box.py)
 
+### Fonts and styles
+
+![Fonts and styles](images/text-04_fonts.png)
+
+f.text_style() switches between the four built-in styles: normal, bold, italic and bold_italic. f.load_font() reads a font file from disk and f.text_font() switches to it; f.text_font(None) goes back to the built-in family, remembering whatever style was set.
+
+Source: [`examples/gallery/text/04_fonts.py`](../../examples/gallery/text/04_fonts.py)
+
 ## Animation and time
 
 ### Bounce

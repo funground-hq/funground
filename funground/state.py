@@ -35,6 +35,11 @@ class GraphicsState:
     blend_mode: str = "normal"
     opacity: int = 255
     shadow: tuple | None = None
+    # S-054 fonts and styles (contract T11/T12). font is the typography registry key
+    # (None = the built-in family); text_style names one of its four built-in files, and is
+    # ignored once a font has been loaded.
+    font: str | None = None
+    text_style: str = "normal"
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)
