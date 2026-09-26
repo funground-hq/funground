@@ -85,4 +85,41 @@ p.run()
 
 ![Pixel art](../gallery/images/lines-03_pixel_art.png)
 
+## Mixing, see-through and shadows
+
+Three settings change how everything drawn after them lands on the canvas. Like `p.fill()`,
+they last until you change them, and `with p.saved_state():` restores them.
+
+| Function | What it does |
+|---|---|
+| `p.blend_mode(mode)` | How new drawing mixes with what is there. `"multiply"` darkens like overlapping inks, `"screen"` and `"add"` lighten like overlapping lights, `"difference"` inverts. `"normal"` is the default. |
+| `p.opacity(amount)` | Makes everything see-through: 0 is invisible, 255 is solid. |
+| `p.shadow(x, y, blur, color)` | A shadow moved by `(x, y)` and softened by `blur` pixels. The colour defaults to half-transparent black. |
+| `p.no_shadow()` | No more shadows. |
+
+```python
+import playground as p
+
+
+def setup():
+    p.size(640, 200)
+
+
+def draw():
+    p.background("white")
+    p.no_stroke()
+    p.blend_mode("multiply")
+    for i, colour in enumerate(["cyan", "magenta", "yellow"]):
+        p.fill(colour)
+        p.circle(250 + i * 70, 100, 140)
+    p.blend_mode("normal")
+
+
+p.run()
+```
+
+![Blend modes, opacity and shadows](../gallery/images/compositing-01_blend_opacity_shadow.png)
+
+`p.background()` ignores all three, so each frame still starts clean.
+
 **Next:** [6. Text](06_text.md)

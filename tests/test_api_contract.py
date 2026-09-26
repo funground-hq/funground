@@ -131,6 +131,11 @@ ADDED_FUNCTIONS = {
     # S-050 gradients
     "linear_gradient": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors, stops=None)",
     "radial_gradient": "(x: 'float', y: 'float', radius: 'float', colors, stops=None)",
+    # S-051 blend modes, opacity, shadow
+    "blend_mode": "(mode: 'str') -> 'None'",
+    "opacity": "(amount: 'float') -> 'None'",
+    "shadow": "(x_offset: 'float', y_offset: 'float', blur: 'float' = 5, color: 'Color' = (0, 0, 0, 128)) -> 'None'",
+    "no_shadow": "() -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

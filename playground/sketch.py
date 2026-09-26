@@ -496,7 +496,7 @@ class Sketch:
         style = self.style                      # "open": fill the chord area, stroke only the curve
         self._require_window()
         if style.fill is not None:
-            self._emit(ir.FillPath(closed, style.fill))
+            self._emit(self._fill_op(closed, style))
         if style.stroke is not None:
             self._emit(self._stroke_op(outline, style))
 
@@ -603,15 +603,43 @@ class Sketch:
             return
         style = self.style
         if style.fill is not None and geometry.is_closed:      # F3: open shapes are never filled
-            self._emit(ir.FillPath(geometry, style.fill))
+            self._emit(self._fill_op(geometry, style))
         if style.stroke is not None:                           # S5: stroke on top of the fill
             self._emit(self._stroke_op(geometry, style))
+
+    @staticmethod
+    def _fill_op(geometry: Path, style: GraphicsState) -> ir.FillPath:
+        return ir.FillPath(geometry, style.fill, style.blend_mode, style.opacity, style.shadow)
 
     @staticmethod
     def _stroke_op(geometry: Path, style: GraphicsState) -> ir.StrokePath:
         return ir.StrokePath(geometry, style.stroke, float(style.stroke_width),
                              style.stroke_cap, style.stroke_join, style.miter_limit,
-                             style.dash, style.dash_offset)
+                             style.dash, style.dash_offset,
+                             style.blend_mode, style.opacity, style.shadow)
+
+    # ---- compositing (S-051, contract S14)
+    BLEND_MODES = ("normal", "multiply", "screen", "overlay", "darken", "lighten", "add", "difference",
+                   "exclusion", "dodge", "burn", "hard_light", "soft_light", "hue", "saturation", "color",
+                   "luminosity")
+
+    def blend_mode(self, mode: str) -> None:
+        if mode not in self.BLEND_MODES:
+            raise ValueError(f"p.blend_mode() takes one of {', '.join(map(repr, self.BLEND_MODES))}, not {mode!r}")
+        self._states.update(blend_mode=mode)
+
+    def opacity(self, amount: float) -> None:
+        if isinstance(amount, bool) or not isinstance(amount, (int, float)) or not 0 <= amount <= 255:
+            raise ValueError(f"p.opacity() takes a number from 0 (invisible) to 255 (solid), not {amount!r}")
+        self._states.update(opacity=int(amount))
+
+    def shadow(self, x_offset: float, y_offset: float, blur: float = 5, color: ColorLike = (0, 0, 0, 128)) -> None:
+        if not blur >= 0:
+            raise ValueError("p.shadow() needs a blur of 0 or more")
+        self._states.update(shadow=(float(x_offset), float(y_offset), float(blur), Color.parse(color)))
+
+    def no_shadow(self) -> None:
+        self._states.update(shadow=None)
 
     # ------------------------------------------------------------ helpers
     def random(self, low: float = 1.0, high: float | None = None) -> float:

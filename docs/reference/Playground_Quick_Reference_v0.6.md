@@ -185,6 +185,9 @@ dropped the fourth value). Lists, `"0xRRGGBB"` and packed integers are still acc
 | `p.lerp_color(c1, c2, t)` | Mix two colours; 0 gives c1, 1 gives c2. | `p.lerp_color("red", "blue", 0.5)` |
 | `p.linear_gradient(x1, y1, x2, y2, colors, stops=None)` | **New:** colours blended along a line; use it in `fill`, `stroke` or `background`. | `p.fill(p.linear_gradient(0, 0, 200, 0, ["red", "blue"]))` |
 | `p.radial_gradient(x, y, radius, colors, stops=None)` | **New:** colours blended outward from a centre. | `p.background(p.radial_gradient(320, 200, 300, ["white", "navy"]))` |
+| `p.blend_mode(mode)` | **New:** how new drawing mixes with the canvas: `"normal"`, `"multiply"`, `"screen"`, `"add"`, `"difference"`, … | `p.blend_mode("multiply")` |
+| `p.opacity(amount)` | **New:** everything drawn after is see-through; 0 invisible, 255 solid. | `p.opacity(128)` |
+| `p.shadow(x, y, blur=5, color=...)` / `p.no_shadow()` | **New:** a soft shadow under everything drawn after. | `p.shadow(4, 6, blur=8)` |
 | `p.fill(color)` | Set the inside colour of later shapes. | `p.fill("gold")` |
 | `p.no_fill()` | Do not fill later shapes. | `p.no_fill()` |
 | `p.stroke(color)` | Set the outline / line colour. | `p.stroke("black")` |

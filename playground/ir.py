@@ -121,6 +121,9 @@ class ResetClip(Op):
 class FillPath(Op):
     path: Path
     color: Color
+    blend_mode: str = "normal"       # S-051: recorded only when not default
+    opacity: int = 255
+    shadow: tuple | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -133,6 +136,9 @@ class StrokePath(Op):
     miter_limit: float = 10.0
     dash: tuple[float, ...] = ()
     dash_offset: float = 0.0
+    blend_mode: str = "normal"       # S-051
+    opacity: int = 255
+    shadow: tuple | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -188,7 +194,8 @@ class Frame:
 # Fields added after the snapshot format was frozen (Sprint 2) are written only when they
 # differ from their default, so every existing IR snapshot stays byte-identical (S-042).
 OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash", "dash_offset", "cap", "join",
-                               "curve_tightness", "text_align", "text_valign", "text_leading"})
+                               "curve_tightness", "text_align", "text_valign", "text_leading",
+                               "blend_mode", "opacity", "shadow"})
 
 
 def _fields_to_jsonable(obj: Any) -> dict[str, Any]:
@@ -227,7 +234,7 @@ def op_to_jsonable(op: Op) -> dict[str, Any]:
 
 
 def _state_from_jsonable(d: dict[str, Any]) -> GraphicsState:
-    extra = {k: (tuple(d[k]) if k == "dash" else d[k]) for k in OMIT_WHEN_DEFAULT if k in d}
+    extra = {k: _extra_from_jsonable(k, d[k]) for k in OMIT_WHEN_DEFAULT if k in d}
     return GraphicsState(
         fill=_paint_from_jsonable(d["fill"]) if d["fill"] is not None else None,
         stroke=_paint_from_jsonable(d["stroke"]) if d["stroke"] is not None else None,
@@ -235,6 +242,14 @@ def _state_from_jsonable(d: dict[str, Any]) -> GraphicsState:
         text_size=d["text_size"],
         **extra,
     )
+
+
+def _extra_from_jsonable(name: str, v: Any) -> Any:
+    if name == "dash":
+        return tuple(v)
+    if name == "shadow":
+        return None if v is None else (v[0], v[1], v[2], Color(*v[3]))
+    return v
 
 
 def _paint_from_jsonable(v: Any) -> Any:
@@ -254,8 +269,8 @@ def op_from_jsonable(d: dict[str, Any]) -> Op:
         if f.name not in d and f.name in OMIT_WHEN_DEFAULT:
             continue                                   # omitted because it was the default
         v = d[f.name]
-        if f.name == "dash":
-            kwargs[f.name] = tuple(v)
+        if f.name in ("dash", "shadow"):
+            kwargs[f.name] = _extra_from_jsonable(f.name, v)
         elif f.name == "style":
             kwargs[f.name] = _state_from_jsonable(v)
         elif f.name == "color":
