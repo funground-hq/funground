@@ -25,7 +25,7 @@ from .geometry import Path, Transform
 from .paths import PathBuilder
 from .noise import Noise
 from .shapes import ShapeBuilder, catmull_rom_controls
-from .platform.base import KEY_NAMES, Platform
+from .platform.base import CURSOR_KINDS, KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
 
@@ -75,6 +75,7 @@ class Sketch:
         self.frame = ir.Frame()
         self._pending_saves: list[str] = []
         self._frame_sequence: list | None = None      # S-056: [pattern, next number, last number]
+        self._cursor: str | None = "arrow"              # S-057: applied whenever a window opens
         # no_smooth() is a sketch setting, re-applied at the start of every frame (S-042).
         self._smooth = True
         # The shape between begin_shape() and end_shape(), if one is open (S-028).
@@ -233,8 +234,39 @@ class Sketch:
         self.title = title
         self._check_capabilities()
         pw, ph = self._platform.open_window(self.width, self.height, self.title)
+        self._attach(pw, ph)
+
+    def _attach(self, pw: int, ph: int) -> None:
         self._renderer.attach(pw, ph, self._platform.backing_scale)
         self._has_window = True
+        self._platform.set_cursor(self._cursor)
+
+    # ---- window control (S-057, contract R12)
+    def resize_canvas(self, width: int, height: int) -> None:
+        """A new canvas size while the sketch runs; the canvas starts blank, like p5's resizeCanvas."""
+        self.size(width, height, title=self.title, fps=self.fps)
+
+    def full_screen(self) -> None:
+        """Make the canvas fill the screen; p.width and p.height become the screen's size."""
+        self._check_capabilities()
+        pw, ph = self._platform.open_full_screen(self.title)
+        scale = self._platform.backing_scale
+        self.width, self.height = round(pw / scale), round(ph / scale)
+        self._attach(pw, ph)
+
+    CURSOR_KINDS = CURSOR_KINDS          # the names every platform understands (platform.base)
+
+    def cursor(self, kind: str = "arrow") -> None:
+        if kind not in self.CURSOR_KINDS:
+            raise ValueError(f"p.cursor() takes one of {', '.join(map(repr, self.CURSOR_KINDS))}, not {kind!r}")
+        self._cursor = kind
+        if self._has_window:
+            self._platform.set_cursor(kind)
+
+    def no_cursor(self) -> None:
+        self._cursor = None
+        if self._has_window:
+            self._platform.set_cursor(None)
 
     def _check_capabilities(self) -> None:
         """Refuse up front (contract R9) rather than failing on frame 200."""

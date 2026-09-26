@@ -17,6 +17,9 @@ from typing import Protocol
 # backend key codes are also accepted and passed to the platform.
 KEY_NAMES = ("left", "right", "up", "down", "space", "enter", "escape")
 
+# Mouse pointer shapes for p.cursor() (S-057): p5's ARROW, CROSS, HAND, MOVE, TEXT, WAIT.
+CURSOR_KINDS = ("arrow", "cross", "hand", "move", "text", "wait")
+
 
 @dataclass(frozen=True, slots=True)
 class InputState:
@@ -62,6 +65,12 @@ class Platform(Protocol):
 
     def open_window(self, width: int, height: int, title: str) -> tuple[int, int]:
         """Create or resize the window for a *logical* size; return the physical size."""
+
+    def open_full_screen(self, title: str) -> tuple[int, int]:
+        """Make the window fill the display; return the physical size (S-057)."""
+
+    def set_cursor(self, kind: str | None) -> None:
+        """Show a CURSOR_KINDS pointer over the window, or hide it for None (S-057)."""
 
     def start(self) -> None:
         """Called once by the sketch loop before setup()."""

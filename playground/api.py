@@ -134,6 +134,26 @@ def save(path: str) -> None:
     active_sketch().save(path)
 
 
+def resize_canvas(width: int, height: int) -> None:
+    """Change the canvas size while the sketch runs; p.width and p.height follow."""
+    active_sketch().resize_canvas(width, height)
+
+
+def full_screen() -> None:
+    """Fill the whole screen (use it instead of p.size in setup); Escape still ends the sketch."""
+    active_sketch().full_screen()
+
+
+def cursor(kind: str = "arrow") -> None:
+    """The mouse pointer over the canvas: "arrow", "cross", "hand", "move", "text" or "wait"."""
+    active_sketch().cursor(kind)
+
+
+def no_cursor() -> None:
+    """Hide the mouse pointer over the canvas."""
+    active_sketch().no_cursor()
+
+
 def save_frames(pattern: str, count: int) -> None:
     """Save this frame and the next ones, *count* in all: "frames/####.png" gives frames/0001.png, 0002.png, ..."""
     active_sketch().save_frames(pattern, count)

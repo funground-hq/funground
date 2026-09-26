@@ -174,10 +174,11 @@ What would change this: a hard install-size budget for classrooms.
   from the frames
 *Acceptance:* a headless run writes exactly `count` numbered files.
 
-### S-057 Window control — E-29
-- [ ] S-057.1 `cursor(kind)` / `no_cursor()`; `full_screen()`; `resize_canvas(w, h)` at run time,
+### S-057 Window control — E-29 ✅
+*As built:* the Platform protocol gains `open_full_screen` and `set_cursor`. Headless full screen is a fixed 1920 × 1080. The frozen Spike 08 platform was not updated. Tested on the real pygame platform with SDL's dummy driver; not tried on a physical full screen. Contract R12.
+- [x] S-057.1 `cursor(kind)` / `no_cursor()`; `full_screen()`; `resize_canvas(w, h)` at run time,
   keeping HiDPI correct
-- [ ] S-057.2 The headless platform accepts and ignores them; tests; guide chapter 2
+- [x] S-057.2 The headless platform accepts and ignores them; tests; guide chapter 2
 *Acceptance:* resizing mid-run keeps drawing sharp on a scaled display.
 
 ### S-054 Fonts and styles — E-15 *(needs D-022)*

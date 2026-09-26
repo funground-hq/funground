@@ -13,7 +13,12 @@ from .base import KEY_NAMES, InputEvent, InputState, Pixels
 
 
 class HeadlessPlatform:
+    # full_screen() with no display: a fixed, repeatable size in logical pixels (contract R12).
+    SCREEN_SIZE = (1920, 1080)
+
     def __init__(self) -> None:
+        self.cursor: str | None = "arrow"
+        self.full_screen = False
         self._last: Pixels | None = None
         self._queue: list[InputEvent] = []     # events posted for the next poll()
         self._events: list[InputEvent] = []
@@ -32,6 +37,13 @@ class HeadlessPlatform:
         s = self.backing_scale
         self._size = (round(width * s), round(height * s))
         return self._size
+
+    def open_full_screen(self, title: str) -> tuple[int, int]:
+        self.full_screen = True
+        return self.open_window(*self.SCREEN_SIZE, title)
+
+    def set_cursor(self, kind: str | None) -> None:
+        self.cursor = kind
 
     def start(self) -> None:
         self._t = time.perf_counter()

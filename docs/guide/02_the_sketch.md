@@ -50,4 +50,18 @@ def draw():
 `p.background(...)` paints the whole window. Call it first in `draw()` to start each frame
 clean; leave it out and everything you drew before stays — useful for trails and paintings.
 
+## The window
+
+| Function | What it does |
+|---|---|
+| `p.resize_canvas(width, height)` | A new size while the sketch runs; `p.width` and `p.height` follow. |
+| `p.full_screen()` | Fill the whole screen. Use it in `setup()` instead of `p.size()`. `p.width` and `p.height` become the screen's size. Escape still ends the sketch. |
+| `p.cursor(kind)` | The mouse pointer over the canvas: `"arrow"` (the default), `"cross"`, `"hand"`, `"move"`, `"text"` or `"wait"`. |
+| `p.no_cursor()` | Hide the pointer, for example in a full-screen piece. |
+
+A sketch that places everything using `p.width` and `p.height` fits any size, including full
+screen.
+
+![The window: cursor, size and full screen](../gallery/images/interaction-04_window.png)
+
 **Next:** [3. Shapes](03_shapes.md)

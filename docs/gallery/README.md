@@ -283,6 +283,14 @@ Two ways to read the keyboard. For smooth movement, ask every frame whether a ke
 
 Source: [`examples/gallery/interaction/03_keyboard_mover.py`](../../examples/gallery/interaction/03_keyboard_mover.py)
 
+### The window: cursor, size and full screen
+
+![The window: cursor, size and full screen](images/interaction-04_window.png)
+
+p.cursor() picks the mouse pointer - here a hand over the button, crosshairs elsewhere - and p.no_cursor() hides it. Press f for p.full_screen(), where p.width and p.height become the screen's size, and 1, 2 or 3 for p.resize_canvas(). Everything is placed using p.width and p.height, so the drawing fits whatever the size.
+
+Source: [`examples/gallery/interaction/04_window.py`](../../examples/gallery/interaction/04_window.py)
+
 ## Saving your work
 
 ### Saving your work
