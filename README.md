@@ -95,5 +95,10 @@ reviews, a decision log and architecture decision records. See [docs/PROCESS.md]
 
 ## Licence
 
-Not chosen yet; it will be settled before the 0.1 release. The bundled DejaVu fonts carry their
-own free licence (`funground/fonts/DejaVu-LICENSE.txt`).
+funground is licensed under the **GNU Lesser General Public License, version 2.1 or later**
+(`LGPL-2.1-or-later`), the same family as p5.js, Processing's core library and pygame-ce. See
+[LICENSE](LICENSE). In short: you may use funground in any project, under any licence. If you
+change funground itself and share the result, share those changes under the LGPL too.
+
+funground's dependencies and the bundled DejaVu fonts **keep their own licences**. They are listed
+in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

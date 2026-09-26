@@ -4,6 +4,9 @@ Generated from pygame-ce 2.5.8 ``pygame.colordict.THECOLORS`` (the X11 rgb.txt
 vocabulary the v0.5 Quick Reference documents). Bundled so every renderer and
 platform resolves ``"tomato"`` to exactly the same RGBA. Do not edit by hand;
 regenerate with the snippet in docs/design/Semantic_Contract.md (row S1).
+
+Licence: derived from pygame-ce's colour table (LGPL-2.1), itself the X11 rgb.txt
+colour names; see THIRD_PARTY_LICENSES.md.
 """
 
 NAMED_COLORS: dict[str, tuple[int, int, int, int]] = {
