@@ -74,6 +74,7 @@ class Sketch:
         # Ops recorded since the last render; consumed once per loop iteration.
         self.frame = ir.Frame()
         self._pending_saves: list[str] = []
+        self._frame_sequence: list | None = None      # S-056: [pattern, next number, last number]
         # no_smooth() is a sketch setting, re-applied at the start of every frame (S-042).
         self._smooth = True
         # The shape between begin_shape() and end_shape(), if one is open (S-028).
@@ -256,6 +257,7 @@ class Sketch:
         # (the headless platform has nothing to capture otherwise).
         self._renderer.render(self.frame)
         self._platform.present(self._renderer.pixels())
+        self._queue_sequence_frame()
         self._flush_saves()
         self.frame.clear()
 
@@ -267,6 +269,39 @@ class Sketch:
         format_of(path)  # validate early so the learner sees the error at the call site
         self._require_window()
         self._pending_saves.append(path)
+
+    def save_frames(self, pattern: str, count: int) -> None:
+        """Save this frame and the ones after it, *count* in all, numbered into *pattern* (S-056)."""
+        import re
+
+        from .export import format_of
+
+        runs = re.findall(r"#+", pattern)
+        if len(runs) != 1:
+            raise ValueError(f"p.save_frames() needs one run of # in the name for the number, "
+                             f"e.g. \"frames/####.png\", not {pattern!r}")
+        format_of(pattern)
+        if isinstance(count, bool) or not isinstance(count, int) or count < 1:
+            raise ValueError(f"p.save_frames() needs a whole number of frames, 1 or more, not {count!r}")
+        self._require_window()
+        self._frame_sequence = [pattern, 1, count]
+
+    def _queue_sequence_frame(self) -> None:
+        seq = self._frame_sequence
+        if seq is None:
+            return
+        import os
+        import re
+
+        pattern, number, last = seq
+        path = re.sub(r"#+", lambda m: str(number).zfill(len(m.group())), pattern)
+        folder = os.path.dirname(path)
+        if folder:
+            os.makedirs(folder, exist_ok=True)
+        self._pending_saves.append(path)
+        seq[1] += 1
+        if seq[1] > last:
+            self._frame_sequence = None
 
     def _flush_saves(self) -> None:
         if not self._pending_saves:
@@ -862,6 +897,7 @@ class Sketch:
             self.running = False
             self.frame.clear()
             self._pending_saves.clear()
+            self._frame_sequence = None
             self._renderer.attach(0, 0)
             self._platform.close()
             self._has_window = False

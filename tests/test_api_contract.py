@@ -136,6 +136,8 @@ ADDED_FUNCTIONS = {
     "opacity": "(amount: 'float') -> 'None'",
     "shadow": "(x_offset: 'float', y_offset: 'float', blur: 'float' = 5, color: 'Color' = (0, 0, 0, 128)) -> 'None'",
     "no_shadow": "() -> 'None'",
+    # S-056 frame sequences
+    "save_frames": "(pattern: 'str', count: 'int') -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

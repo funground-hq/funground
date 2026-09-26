@@ -301,6 +301,14 @@ clear() makes every pixel transparent. A PNG saved afterwards keeps the transpar
 
 Source: [`examples/gallery/saving/02_transparent_png.py`](../../examples/gallery/saving/02_transparent_png.py)
 
+### Saving an animation as frames
+
+![Saving an animation as frames](images/saving-03_save_frames.png)
+
+p.save_frames("frames/####.png", 30) saves this frame and the next 29 as numbered pictures: frames/0001.png, frames/0002.png and so on. A program such as ffmpeg can join them into a video or a GIF - see chapter 13 of the guide.
+
+Source: [`examples/gallery/saving/03_save_frames.py`](../../examples/gallery/saving/03_save_frames.py)
+
 ## Compositing
 
 ### Blend modes, opacity and shadows

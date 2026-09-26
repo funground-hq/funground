@@ -134,6 +134,11 @@ def save(path: str) -> None:
     active_sketch().save(path)
 
 
+def save_frames(pattern: str, count: int) -> None:
+    """Save this frame and the next ones, *count* in all: "frames/####.png" gives frames/0001.png, 0002.png, ..."""
+    active_sketch().save_frames(pattern, count)
+
+
 # ---- drawing
 def background(color: Color) -> None:
     active_sketch().background(color)
