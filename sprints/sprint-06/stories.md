@@ -21,7 +21,7 @@ section; the Phase 2 exit criterion in `themes_and_epics.md` is demonstrated by 
 
 1. Stories needing no decision: S-055 → S-049 → S-053 → S-050 → S-051 → S-056 → S-057.
 2. S-075, the rename to `funground` (D-020), before any more stories, so all later work uses the new name.
-3. S-052 (D-021 decided). After D-022: S-054.
+3. S-052 and S-054 (D-021, D-022 decided).
 4. Close: S-071 (guide), S-072 (gallery), S-039 (CI, needs a git remote), S-073 (release).
 
 ## Decisions to take
@@ -90,7 +90,7 @@ both p5 and Processing use. `create_canvas` would mislead p5 users, for whom it 
 window. What would change this: if you prefer "canvas" as the word learners see, the type stays
 the same and only the function name changes.
 
-### D-022 Bold and italic text — needed before S-054
+### D-022 Bold and italic text — **decided 26 Sept 2026: A, bundle the DejaVu Sans family**
 
 **Context.** S-054 adds font choice and styles. Today one font ships: DejaVu Sans Regular
 (757 KB). p5's `textStyle(BOLD)` lets a learner write bold text without finding a font file.
@@ -190,9 +190,9 @@ What would change this: a hard install-size budget for classrooms.
 - [ ] S-075.5 Full suite green; every golden image and IR snapshot byte-identical (a rename changes no drawing)
 *Acceptance:* `grep -ri playground` over the package, examples, guide and tests finds only deliberate historical mentions; nothing learners run says "playground".
 
-### S-054 Fonts and styles — E-15 *(needs D-022)*
+### S-054 Fonts and styles — E-15 *(D-022 = A)*
 - [ ] S-054.1 `p.text_font(path_or_font)` uses a TTF/OTF file; `p.load_font(path)` returns a font
-- [ ] S-054.2 `p.text_style(…)` per D-022
+- [ ] S-054.2 Bundle DejaVu Sans Bold, Oblique, Bold Oblique (2.37) with the licence; `text_style("normal" | "bold" | "italic" | "bold_italic")`, part of the saved state
 - [ ] S-054.3 Contract rows; tests; gallery `text/`; guide chapter 6
 *Acceptance:* the same text in a loaded font renders identically on every run.
 
