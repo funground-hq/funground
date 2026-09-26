@@ -20,12 +20,13 @@ section; the Phase 2 exit criterion in `themes_and_epics.md` is demonstrated by 
 ## Ordering
 
 1. Stories needing no decision: S-055 → S-049 → S-053 → S-050 → S-051 → S-056 → S-057.
-2. After D-022: S-054. After D-021: S-052.
-3. Close: S-071 (guide), S-072 (gallery), S-039 (CI, needs a git remote), S-073 (release, needs D-020).
+2. S-075, the rename to `funground` (D-020), before any more stories, so all later work uses the new name.
+3. After D-022: S-054. After D-021: S-052.
+4. Close: S-071 (guide), S-072 (gallery), S-039 (CI, needs a git remote), S-073 (release).
 
 ## Decisions to take
 
-### D-020 PyPI distribution name — needed before S-073
+### D-020 PyPI distribution name — **decided 26 Sept 2026: `funground`, `import funground as f`** (options below kept as presented; the maintainer also weighed funfair, vizzard, vizkid, viswonder, wonderland, funbot, playbot, funlab and playlab — see the decision log)
 
 **Context.** Publishing on PyPI needs a distribution name, the name in `pip install …`. The name
 `playground` belongs to Google DeepMind's MuJoCo Playground, which is actively released (0.2.0,
@@ -180,6 +181,14 @@ What would change this: a hard install-size budget for classrooms.
   keeping HiDPI correct
 - [x] S-057.2 The headless platform accepts and ignores them; tests; guide chapter 2
 *Acceptance:* resizing mid-run keeps drawing sharp on a scaled display.
+
+### S-075 Rename to funground — E-02 *(D-020 decided)*
+- [ ] S-075.1 Package folder `playground/` → `funground/`; `pyproject.toml` name `funground`, description no longer "a wrapper around pygame-ce"; `import funground as f` in every example (`examples/`), the guide, the Quick Reference, the README and the tools
+- [ ] S-075.2 Tests import `funground`; error messages and warnings that say "playground" (e.g. `PlaygroundWarning`) renamed where learners see them; environment variables `PLAYGROUND_*` renamed `FUNGROUND_*`
+- [ ] S-075.3 Historical records keep the old name: `src_v0.5/`, spikes, earlier sprint folders, ADRs and the decision log are not rewritten; the Roadmap and backlog say "funground" from here on
+- [ ] S-075.4 Guide chapter 1: install with `pip install funground`; one line warning not to name your own variables `f`
+- [ ] S-075.5 Full suite green; every golden image and IR snapshot byte-identical (a rename changes no drawing)
+*Acceptance:* `grep -ri playground` over the package, examples, guide and tests finds only deliberate historical mentions; nothing learners run says "playground".
 
 ### S-054 Fonts and styles — E-15 *(needs D-022)*
 - [ ] S-054.1 `p.text_font(path_or_font)` uses a TTF/OTF file; `p.load_font(path)` returns a font

@@ -33,8 +33,8 @@ Both grow story by story from Sprint 5 and are finished in Sprint 6.
 
 **Release 0.1** after Sprint 6: the first release published on PyPI (D-019). v0.5 was a
 teaching zip, never published, so public numbering starts again at 0.1. Prerequisites: git remote,
-CI green on the 12-cell matrix (S-039), a PyPI distribution name (D-020 — `playground` is taken).
-The import name stays `import playground as p`.
+CI green on the 12-cell matrix (S-039). The package is published as **funground**
+(D-020, renamed in S-075): `pip install funground`, then `import funground as f`.
 
 ## Phase 3 — DrawBot and Processing depth (Sprints 7–11) → releases **0.2, 0.3, …**
 
@@ -88,7 +88,7 @@ Sprint 5 ── Sprint 6 ── 0.1 on PyPI ── Sprints 7–11 ── 0.2, 0.
 
 | When | Decision |
 |---|---|
-| Before 0.1 | PyPI distribution name (D-020); release cadence; git remote and CI host |
+| Before 0.1 | Release cadence; git remote and CI host (the name is decided: funground, D-020) |
 | Sprint 5 | `rect_mode`-style switches (postponed so far); D-016, D-017, D-018 decided 25 Sept 2026 |
 | Sprint 6 | Whether off-screen canvases and images share one type |
 | Phase 3 | Page/document model shape (DrawBot-like vs Processing-like); sound backend scope |
