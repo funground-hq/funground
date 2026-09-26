@@ -143,6 +143,10 @@ ADDED_FUNCTIONS = {
     "full_screen": "() -> 'None'",
     "cursor": "(kind: 'str' = 'arrow') -> 'None'",
     "no_cursor": "() -> 'None'",
+    # S-054 fonts and styles
+    "load_font": "(path: 'str')",
+    "text_font": "(font, size: 'float | None' = None) -> 'None'",
+    "text_style": "(style: 'str') -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

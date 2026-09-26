@@ -26,6 +26,15 @@ from .geometry import Path, Transform
 FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 DEFAULT_FONT = os.path.join(FONT_DIR, "DejaVuSans.ttf")
 
+# T12 (D-022 = A): the built-in family is four real bundled files, one per style.
+STYLE_FILES = {
+    "normal": "DejaVuSans.ttf",
+    "bold": "DejaVuSans-Bold.ttf",
+    "italic": "DejaVuSans-Oblique.ttf",
+    "bold_italic": "DejaVuSans-BoldOblique.ttf",
+}
+TEXT_STYLES = tuple(STYLE_FILES)
+
 
 class _PathPen(BasePen):
     def __init__(self, glyph_set) -> None:
@@ -121,25 +130,27 @@ class TextRun:
         return ops
 
 
-def text_metrics(size: float) -> tuple[float, float]:
-    """(ascent, descent) of the default font at *size*, both positive, in logical pixels (T8)."""
-    font = default_font()
+def text_metrics(size: float, font: FontResource | None = None) -> tuple[float, float]:
+    """(ascent, descent) of *font* (the default font if not given) at *size*, both positive,
+    in logical pixels (T8)."""
+    font = font or default_font()
     scale = size / font.units_per_em
     return font.ascent * scale, -font.descent * scale
 
 
-def wrap_lines(text: str, width: float, size: float) -> tuple[list[str], list[str]]:
-    """Break *text* into lines no wider than *width* at *size* (contract T10).
+def wrap_lines(text: str, width: float, size: float, font: FontResource | None = None) -> tuple[list[str], list[str]]:
+    """Break *text* into lines no wider than *width* at *size* in *font* (contract T10).
 
     Returns (lines, rests): rests[i] is the text from the start of line i onward, so a caller that
     shows only the first n lines can hand back rests[n] as the overflow. Lines break at spaces;
     a word wider than the box is broken between letters; '\\n' always breaks.
     """
+    font = font or default_font()
     lines: list[str] = []
     rests: list[str] = []
 
     def fits(s: str) -> bool:
-        return text_width(s, size) <= width
+        return text_width(s, size, font) <= width
 
     def emit(line: str, start: int) -> None:
         lines.append(line)
@@ -169,18 +180,106 @@ def wrap_lines(text: str, width: float, size: float) -> tuple[list[str], list[st
     return lines, rests
 
 
-def text_width(text: str, size: float) -> float:
-    """Advance width of *text* in logical pixels at *size* (S-037): what `f.text` moves the pen by."""
+def text_width(text: str, size: float, font: FontResource | None = None) -> float:
+    """Advance width of *text* in logical pixels at *size* in *font* (S-037, T11): what
+    `f.text` moves the pen by. Uses the default font when *font* is not given."""
     if not text:
         return 0.0
-    return default_font().shape(text, size).advance
+    return (font or default_font()).shape(text, size).advance
 
 
-_default: FontResource | None = None
+# ---- font registry (S-054, contract T11/T12): FontResource objects, cached by key. Built-in
+# keys are the bundled file names; a loaded file's key is its own file name, disambiguated with
+# "~2", "~3", ... when another loaded file already has that name.
+_registry: dict[str, FontResource] = {}
+_path_to_key: dict[str, str] = {}
+
+
+class Font:
+    """A font loaded with `f.load_font()`; pass it to `f.text_font()` (contract T11)."""
+
+    __slots__ = ("name",)
+
+    def __init__(self, name: str) -> None:
+        self.name = name              # the registry key: the file name, or "name~2" etc.
+
+    def __repr__(self) -> str:
+        return f"Font({self.name!r})"
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, Font) and self.name == other.name
+
+    def __hash__(self) -> int:
+        return hash(self.name)
+
+
+def _builtin(filename: str) -> FontResource:
+    resource = _registry.get(filename)
+    if resource is None:
+        resource = _registry[filename] = FontResource(os.path.join(FONT_DIR, filename))
+    return resource
 
 
 def default_font() -> FontResource:
-    global _default  # module is named typography so it never shadows api.text
-    if _default is None:
-        _default = FontResource(DEFAULT_FONT)
-    return _default
+    """The built-in family's normal style (module named typography so it never shadows api.text)."""
+    return _builtin(STYLE_FILES["normal"])
+
+
+def _resolve_font_path(path: str, base_dir: str | None) -> str:
+    """Contract T11: a relative path is found next to the sketch file first, then the cwd."""
+    if os.path.isabs(path):
+        if os.path.exists(path):
+            return os.path.normpath(path)
+        raise FileNotFoundError(f"f.load_font(): no font file found at {path!r}")
+    tried = []
+    if base_dir is not None:
+        candidate = os.path.join(base_dir, path)
+        tried.append(candidate)
+        if os.path.exists(candidate):
+            return os.path.normpath(candidate)
+    candidate = os.path.join(os.getcwd(), path)
+    tried.append(candidate)
+    if os.path.exists(candidate):
+        return os.path.normpath(candidate)
+    raise FileNotFoundError(
+        f"f.load_font(): no font file found at '{tried[0]}'" +
+        (f" or '{tried[1]}'" if len(tried) > 1 else "")
+    )
+
+
+def load_font(path: str, base_dir: str | None = None) -> Font:
+    """Load a TrueType/OpenType font file and return a `Font` (contract T11).
+
+    A relative *path* is looked for next to the sketch file (*base_dir*) first, then in the
+    current folder. A missing file raises `FileNotFoundError` naming both places looked; a file
+    that is not a font raises `ValueError`. Loading the same file again returns the same key;
+    a different file with the same name gets "name~2", then "name~3".
+    """
+    resolved = _resolve_font_path(path, base_dir)
+    cache_key = os.path.normcase(resolved)
+    key = _path_to_key.get(cache_key)
+    if key is None:
+        try:
+            resource = FontResource(resolved)
+        except Exception as exc:
+            raise ValueError(f"f.load_font(): {path!r} is not a font funground can read ({exc})") from exc
+        name = os.path.basename(resolved)
+        key, n = name, 2
+        while key in _registry:
+            key = f"{name}~{n}"
+            n += 1
+        _registry[key] = resource
+        _path_to_key[cache_key] = key
+    return Font(key)
+
+
+def effective_font(state) -> FontResource:
+    """The font a Text op should shape with, from a GraphicsState (contract T11/T12):
+    the built-in family for the current text_style when no font was loaded, otherwise the
+    loaded font (text_style is then ignored, as p5 does)."""
+    if state.font is None:
+        return _builtin(STYLE_FILES[state.text_style])
+    resource = _registry.get(state.font)
+    if resource is None:
+        raise RuntimeError(f"no font loaded for key {state.font!r} (was it loaded in this process?)")
+    return resource

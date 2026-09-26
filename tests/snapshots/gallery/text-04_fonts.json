@@ -1,0 +1,184 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 32
+  },
+  "text": "Normal - the default",
+  "x": 30,
+  "y": 20
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 32,
+   "text_style": "bold"
+  },
+  "text": "Bold",
+  "x": 30,
+  "y": 80
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 32,
+   "text_style": "italic"
+  },
+  "text": "Italic",
+  "x": 30,
+  "y": 140
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 32,
+   "text_style": "bold_italic"
+  },
+  "text": "Bold italic",
+  "x": 30,
+  "y": 200
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "font": "DejaVuSansMono.ttf",
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 28,
+   "text_style": "bold_italic"
+  },
+  "text": "A loaded font: DejaVu Sans Mono",
+  "x": 30,
+  "y": 270
+ },
+ {
+  "color": [
+   190,
+   190,
+   190,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    190,
+    190,
+    190,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "text_font(None) returns to the built-in family",
+  "x": 30,
+  "y": 340
+ }
+]

@@ -93,6 +93,63 @@ rest = f.text_box(rest, 340, 140, 260, 220)     # the rest carries on here
 | `f.text_leading(n)` | Distance between lines, in pixels. `None` means automatic. |
 | `f.text_box(message, x, y, width, height)` | Wraps `message` inside the box and returns what did not fit. Leave out `height` for a box that grows downwards. |
 
-*Coming in Sprint 6:* choosing a font.
+## Fonts and styles
+
+Every example so far has used funground's built-in font, DejaVu Sans, which is why text looks
+the same on every computer. `f.text_style(style)` picks one of its four real styles: `"normal"`
+(the default), `"bold"`, `"italic"`, or `"bold_italic"`.
+
+If you want a font of your own, `f.load_font(path)` reads a `.ttf` or `.otf` file from disk and
+gives you back a font. A relative path is looked for next to your sketch file first, then in the
+current folder. `f.text_font(font)` switches later text to use it; `f.text_font(None)` goes back
+to the built-in family, remembering whichever style you last chose with `f.text_style()`. While a
+loaded font is in use, `f.text_style()` has no effect — load the bold or italic file itself
+instead, the way you would with any font on your computer.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 200)
+
+
+def draw():
+    f.background("white")
+    f.fill("black")
+    f.text_size(28)
+    f.text_style("bold")
+    f.text("Bold, built in", 30, 30)
+    f.text_style("italic")
+    f.text("Italic, built in", 30, 80)
+    f.text_style("normal")               # back to the default built-in style
+    f.text("Normal again", 30, 130)
+
+
+f.run()
+```
+
+Loading a font of your own looks like this:
+
+```py
+mono = f.load_font("fonts/DejaVuSansMono.ttf")
+f.text_font(mono)
+f.text("Now in a loaded font", 30, 30)
+f.text_font(None)                        # back to the built-in family
+```
+
+`f.text_font(font, size=n)` sets the text size at the same time, so you don't need a separate
+call to `f.text_size()`.
+
+![Fonts and styles](../gallery/images/text-04_fonts.png)
+
+| Function | What it does |
+|---|---|
+| `f.text_style(style)` | Choose one of the built-in family's four styles. |
+| `f.load_font(path)` | Load a font file; pass the result to `f.text_font()`. |
+| `f.text_font(font, size=None)` | Use a loaded font (or a path, or `None` for the built-in family) for later text. |
+
+Both are part of the drawing state, so `with f.saved_state():` restores them, exactly like
+`f.fill()` or `f.text_size()`.
 
 **Next:** [7. Animation and time](07_animation_and_time.md)

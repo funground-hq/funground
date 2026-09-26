@@ -21,6 +21,7 @@ from . import ir
 from .capabilities import Capability, FungroundWarning, missing_capability
 from .color import WHITE, Color, ColorLike
 from .paint import parse_paint
+from .typography import TEXT_STYLES
 from .geometry import Path, Transform
 from .paths import PathBuilder
 from .noise import Noise
@@ -411,6 +412,40 @@ class Sketch:
             raise ValueError("text size must be positive")
         self._states.update(text_size=int(size))
 
+    # ---- fonts and styles (S-054, contract T11/T12)
+    TEXT_STYLES = TEXT_STYLES          # one list, in typography (contract T12)
+
+    def load_font(self, path: str, base_dir: str | None = None):
+        """Load a TrueType/OpenType font file; pass the result to f.text_font()."""
+        from .typography import load_font as _load_font
+
+        return _load_font(path, base_dir)
+
+    def text_font(self, font, size: float | None = None, *, base_dir: str | None = None) -> None:
+        """Use *font* (from f.load_font(), a path, or None for the built-in family) for later text."""
+        from .typography import Font
+
+        if font is None:
+            key = None
+        elif isinstance(font, Font):
+            key = font.name
+        elif isinstance(font, str):
+            key = self.load_font(font, base_dir=base_dir).name
+        else:
+            raise TypeError(
+                f"f.text_font() needs a font from f.load_font(), a path, or None, not {type(font).__name__}"
+            )
+        changes = {"font": key}
+        if size is not None:
+            changes["text_size"] = int(size)
+        self._states.update(**changes)
+
+    def text_style(self, style: str) -> None:
+        """Use one of the four built-in styles for later text (ignored once a font is loaded)."""
+        if style not in self.TEXT_STYLES:
+            raise ValueError(f"f.text_style() takes one of {', '.join(map(repr, self.TEXT_STYLES))}, not {style!r}")
+        self._states.update(text_style=style)
+
     # ---- text alignment and metrics (S-049, contract T7/T8)
     TEXT_ALIGNS = ("left", "center", "right")
     TEXT_VALIGNS = ("top", "center", "baseline", "bottom")
@@ -426,14 +461,14 @@ class Sketch:
         self._states.update(**changes)
 
     def text_ascent(self) -> float:
-        from .typography import text_metrics
+        from .typography import effective_font, text_metrics
 
-        return text_metrics(self.style.text_size)[0]
+        return text_metrics(self.style.text_size, effective_font(self.style))[0]
 
     def text_descent(self) -> float:
-        from .typography import text_metrics
+        from .typography import effective_font, text_metrics
 
-        return text_metrics(self.style.text_size)[1]
+        return text_metrics(self.style.text_size, effective_font(self.style))[1]
 
     def text_leading(self, leading: float | None) -> None:
         if leading is not None and not leading >= 0:
@@ -447,9 +482,10 @@ class Sketch:
     def _emit_lines(self, lines: list[str], x: float, y: float, color: Color, style, top: float | None = None) -> None:
         """Emit one Text op per line, top-left anchored, so that (x, y) is the block's alignment point
         (contract T7/T9). *top*, when given, is the block's top edge (text boxes place it themselves)."""
-        from .typography import text_metrics, text_width
+        from .typography import effective_font, text_metrics, text_width
 
-        ascent, descent = text_metrics(style.text_size)
+        font = effective_font(style)
+        ascent, descent = text_metrics(style.text_size, font)
         leading = self._leading(style)
         if top is None:
             block = ascent + descent + leading * (len(lines) - 1)
@@ -458,7 +494,7 @@ class Sketch:
         for i, line in enumerate(lines):
             left = x
             if style.text_align != "left":
-                w = text_width(line, style.text_size)
+                w = text_width(line, style.text_size, font)
                 left -= w / 2 if style.text_align == "center" else w
             if line:
                 self._emit(ir.Text(line, left, top + i * leading if i else top, color, style))
@@ -471,13 +507,14 @@ class Sketch:
     def text_box(self, message: object, x: float, y: float, width: float, height: float | None = None,
                  color: ColorLike | None = None) -> str:
         """Wrap *message* inside the box; return the text that did not fit (contract T10)."""
-        from .typography import text_metrics, wrap_lines
+        from .typography import effective_font, text_metrics, wrap_lines
 
         if not width > 0 or (height is not None and not height >= 0):
             raise ValueError("f.text_box() needs a width above 0 and a height of 0 or more (or no height)")
         style = self.style
-        lines, rests = wrap_lines(str(message), width, style.text_size)
-        ascent, descent = text_metrics(style.text_size)
+        font = effective_font(style)
+        lines, rests = wrap_lines(str(message), width, style.text_size, font)
+        ascent, descent = text_metrics(style.text_size, font)
         leading = self._leading(style)
         fitting = len(lines)
         if height is not None:
@@ -577,9 +614,10 @@ class Sketch:
 
     def text_width(self, message: object) -> float:
         """Advance width of *message* in logical pixels at the current text_size (contract T6)."""
-        from .typography import text_width
+        from .typography import effective_font, text_width
 
-        return max(text_width(line, self.style.text_size) for line in str(message).split("\n"))
+        font = effective_font(self.style)
+        return max(text_width(line, self.style.text_size, font) for line in str(message).split("\n"))
 
     # ------------------------------------------------------------ shapes, paths, clipping (S-028)
     def begin_shape(self) -> None:

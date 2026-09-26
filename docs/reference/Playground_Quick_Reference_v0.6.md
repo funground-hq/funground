@@ -307,9 +307,12 @@ f.run()
 | `f.text_ascent()` / `f.text_descent()` | **New:** how far letters reach above / below the baseline at the current size. | `f.text_ascent()` |
 | `f.text_leading(n)` | **New:** distance between lines of text, in pixels; `None` = automatic (1.25 × size). A `"\n"` in `f.text()` starts a new line. | `f.text("two\nlines", 20, 20)` |
 | `f.text_box(message, x, y, width, height=None)` | **New:** wrap text inside a box; returns the text that did not fit, to flow into the next box. | `rest = f.text_box(story, 20, 60, 280, 300)` |
+| `f.load_font(path)` | **New:** load a `.ttf`/`.otf` font file; pass the result to `f.text_font()`. A relative path is looked for next to the sketch file first, then the current folder. | `mono = f.load_font("fonts/DejaVuSansMono.ttf")` |
+| `f.text_font(font, size=None)` | **New:** use `font` (from `f.load_font()`, a path, or `None`) for later text; `None` returns to the built-in family. | `f.text_font(mono)` / `f.text_font(None)` |
+| `f.text_style(style)` | **New:** choose one of the built-in family's four styles: `"normal"`, `"bold"`, `"italic"`, `"bold_italic"`. Ignored once a font is loaded, but remembered for when it is not. | `f.text_style("bold")` |
 
-*Changed in v0.6:* text is drawn with the bundled **DejaVu Sans** font on every platform (there is no
-font choice yet), and **`text_size(n)` is an n-pixel em** — the CSS / p5 convention. Capital letters
+*Changed in v0.6:* text is drawn with the bundled **DejaVu Sans** font on every platform, and
+**`text_size(n)` is an n-pixel em** — the CSS / p5 convention. Capital letters
 come out about three-quarters of `n`, and text renders about 1.4× larger than v0.5 did for the same
 number; `text_size(20)` is still the default. `text_width()` measures exactly the distance `text()`
 advances and does not change under `scale()`.
