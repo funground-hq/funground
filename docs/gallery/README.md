@@ -301,6 +301,16 @@ clear() makes every pixel transparent. A PNG saved afterwards keeps the transpar
 
 Source: [`examples/gallery/saving/02_transparent_png.py`](../../examples/gallery/saving/02_transparent_png.py)
 
+## Compositing
+
+### Blend modes, opacity and shadows
+
+![Blend modes, opacity and shadows](images/compositing-01_blend_opacity_shadow.png)
+
+p.blend_mode() changes how new drawing mixes with what is already on the canvas: "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights. p.opacity() makes everything after it see-through, and p.shadow() gives it a soft shadow.
+
+Source: [`examples/gallery/compositing/01_blend_opacity_shadow.py`](../../examples/gallery/compositing/01_blend_opacity_shadow.py)
+
 ## Motion
 
 ### Movers with vectors

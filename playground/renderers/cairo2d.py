@@ -40,6 +40,7 @@ class CairoRenderer:
     })
 
     def __init__(self) -> None:
+        self._alpha = 1.0      # S-051 opacity of the op being drawn
         self._surface: cairo.ImageSurface | None = None
         self._ctx: cairo.Context | None = None
         self._scale = 1.0
@@ -97,6 +98,9 @@ class CairoRenderer:
         depth = 0
         for op in frame:
             t = type(op)
+            composite = self._composite_of(op) if t in self._DRAWING else None
+            if composite is not None:
+                self._begin_composite(ctx, op, composite)
             if t is ir.Clear:
                 ctx.save(); ctx.reset_clip(); self._source(ctx, op.color)
                 ctx.set_operator(cairo.OPERATOR_SOURCE); ctx.paint(); ctx.restore()
@@ -144,12 +148,108 @@ class CairoRenderer:
                     self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
             else:
                 raise NotImplementedError(f"{self.name} renderer cannot draw {t.__name__}")
+            if composite is not None:
+                ctx.restore(); self._alpha = 1.0
         while depth:                      # an unbalanced frame must not leak state
             ctx.restore(); depth -= 1
 
-    # ---- helpers
+    # ---- compositing: blend mode, opacity, shadow (S-051, contract S14)
+    _DRAWING = frozenset({ir.Circle, ir.Ellipse, ir.Rect, ir.Line, ir.Point, ir.Text, ir.FillPath, ir.StrokePath})
+    _BLENDS = {
+        "normal": cairo.OPERATOR_OVER, "multiply": cairo.OPERATOR_MULTIPLY, "screen": cairo.OPERATOR_SCREEN,
+        "overlay": cairo.OPERATOR_OVERLAY, "darken": cairo.OPERATOR_DARKEN, "lighten": cairo.OPERATOR_LIGHTEN,
+        "add": cairo.OPERATOR_ADD, "difference": cairo.OPERATOR_DIFFERENCE, "exclusion": cairo.OPERATOR_EXCLUSION,
+        "dodge": cairo.OPERATOR_COLOR_DODGE, "burn": cairo.OPERATOR_COLOR_BURN,
+        "hard_light": cairo.OPERATOR_HARD_LIGHT, "soft_light": cairo.OPERATOR_SOFT_LIGHT,
+        "hue": cairo.OPERATOR_HSL_HUE, "saturation": cairo.OPERATOR_HSL_SATURATION,
+        "color": cairo.OPERATOR_HSL_COLOR, "luminosity": cairo.OPERATOR_HSL_LUMINOSITY,
+    }
+    MAX_SHADOW_LAYERS = 12
+
     @staticmethod
-    def _source(ctx, c) -> None:
+    def _composite_of(op):
+        src = getattr(op, "style", op)
+        blend, opacity, shadow = src.blend_mode, src.opacity, src.shadow
+        if blend == "normal" and opacity == 255 and shadow is None:
+            return None
+        return blend, opacity, shadow
+
+    def _begin_composite(self, ctx, op, composite) -> None:
+        blend, opacity, shadow = composite
+        ctx.save()
+        ctx.set_operator(self._BLENDS[blend])
+        self._alpha = opacity / 255
+        if shadow is not None:
+            self._draw_shadow(ctx, op, shadow)
+
+    def _geometry(self, ctx, op):
+        """The op's shape as (make_path, filled, stroke_width) parts, for drawing its shadow."""
+        t = type(op)
+        st = getattr(op, "style", None)
+        if t is ir.FillPath:
+            return [(lambda: self._path(ctx, op.path), True, None)]
+        if t is ir.StrokePath:
+            return [(lambda: self._path(ctx, op.path), False, op.width)]
+        if t is ir.Text:
+            return [((lambda p=sub.path: self._path(ctx, p)), True, None) for sub in self._text_ops(op)]
+        if t is ir.Point:
+            if st.stroke is None:
+                return []
+            r = max(0.5, st.stroke_width / 2)
+            return [(lambda: (ctx.new_path(), ctx.arc(op.x, op.y, r, 0, 2 * math.pi)), True, None)]
+        if t is ir.Line:
+            make = lambda: (ctx.new_path(), ctx.move_to(op.x1, op.y1), ctx.line_to(op.x2, op.y2))
+            return [(make, False, st.stroke_width)] if st.stroke is not None else []
+        if t is ir.Circle:
+            make = lambda: (ctx.new_path(), ctx.arc(op.x, op.y, max(0.0, op.diameter / 2), 0, 2 * math.pi))
+        elif t is ir.Ellipse:
+            make = lambda: self._ellipse(ctx, op.x, op.y, op.width / 2, op.height / 2)
+        else:  # Rect
+            make = lambda: (ctx.new_path(), ctx.rectangle(op.x, op.y, op.width, op.height))
+        return [(make, st.fill is not None, st.stroke_width if st.stroke is not None else None)]
+
+    def _draw_shadow(self, ctx, op, shadow) -> None:
+        """A soft shadow as layers of the shape grown outward, so it stays vector in PDF/SVG.
+
+        Offset and blur are in canvas pixels, whatever the transform. N layers grow the shape by
+        blur, (N-1)/N x blur, ... blur/N; each is painted as one group, so overlapping parts never
+        double up. Painted largest first, with alphas chosen so that a point covered by k layers ends
+        at k/N of the shadow's alpha: the shadow fades evenly from the edge to *blur* pixels out."""
+        dx, dy, blur, color = shadow
+        parts = self._geometry(ctx, op)
+        if not parts:
+            return
+        base = self._base_matrix
+        ddx, ddy = base.transform_distance(dx, dy)
+        ctx.save()
+        ctx.set_matrix(ctx.get_matrix().multiply(cairo.Matrix(x0=ddx, y0=ddy)))
+        per_px = math.hypot(*ctx.device_to_user_distance(*base.transform_distance(1, 0)))
+        total = (color.a / 255) * self._alpha
+        n = 1 if blur <= 0 else max(1, min(self.MAX_SHADOW_LAYERS, math.ceil(blur)))
+        ctx.set_line_join(cairo.LINE_JOIN_ROUND)
+        ctx.set_line_cap(cairo.LINE_CAP_ROUND)
+        for k in range(1, n + 1):
+            grow = (blur * (n - k + 1) / n) * per_px if blur > 0 else 0.0
+            layer_alpha = (total / n) / (1 - total * (k - 1) / n)
+            ctx.push_group()
+            ctx.set_source_rgb(color.r / 255, color.g / 255, color.b / 255)
+            for make, filled, width in parts:
+                make()
+                if filled:
+                    ctx.fill_preserve()
+                    if grow > 0:
+                        ctx.set_line_width(2 * grow); ctx.stroke_preserve()
+                    ctx.new_path()
+                if width is not None:
+                    make()
+                    ctx.set_line_width(width + 2 * grow); ctx.stroke()
+            ctx.pop_group_to_source()
+            ctx.paint_with_alpha(layer_alpha)
+        ctx.restore()
+
+    # ---- helpers
+    def _source(self, ctx, c) -> None:
+        k = self._alpha                                 # S-051 opacity multiplies every alpha
         if isinstance(c, Gradient):                     # S-050: in user space, so it follows the transform
             if c.kind == "linear":
                 pattern = cairo.LinearGradient(*c.points)
@@ -157,10 +257,10 @@ class CairoRenderer:
                 x, y, r = c.points
                 pattern = cairo.RadialGradient(x, y, 0.0, x, y, r)
             for offset, stop in c.stops:
-                pattern.add_color_stop_rgba(offset, stop.r / 255, stop.g / 255, stop.b / 255, stop.a / 255)
+                pattern.add_color_stop_rgba(offset, stop.r / 255, stop.g / 255, stop.b / 255, stop.a / 255 * k)
             ctx.set_source(pattern)
             return
-        ctx.set_source_rgba(c.r / 255, c.g / 255, c.b / 255, c.a / 255)
+        ctx.set_source_rgba(c.r / 255, c.g / 255, c.b / 255, c.a / 255 * k)
 
     @staticmethod
     def _path(ctx, p: Path) -> None:

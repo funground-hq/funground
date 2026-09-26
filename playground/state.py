@@ -31,6 +31,10 @@ class GraphicsState:
     text_valign: str = "top"
     # S-053: baseline-to-baseline distance in pixels; None = automatic, 1.25 x text_size (p5).
     text_leading: float | None = None
+    # S-051 compositing (contract S14). shadow = (dx, dy, blur, Color) or None.
+    blend_mode: str = "normal"
+    opacity: int = 255
+    shadow: tuple | None = None
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)

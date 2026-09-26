@@ -158,11 +158,12 @@ What would change this: a hard install-size budget for classrooms.
 - [x] S-050.3 Contract row; tests; gallery `colour/`; guide chapter 4
 *Acceptance:* a gradient-filled shape exports to PDF as a vector gradient.
 
-### S-051 Blend modes, opacity, shadow — E-25
-- [ ] S-051.1 `blend_mode(name)`: `"normal"`, `"multiply"`, `"screen"`, `"overlay"`, `"darken"`,
+### S-051 Blend modes, opacity, shadow — E-25 ✅
+*As built:* 17 blend modes, each exactly a Cairo operator. Opacity multiplies each fill's and stroke's alpha separately, as DrawBot does, so there are no groups and no cost. Shadows are layers of the shape grown outward, at most 12, and stay vector in PDF/SVG, because Cairo has no blur and a pure-Python pixel blur is too slow. They fade evenly from the edge, not as a Gaussian. Contract S14.
+- [x] S-051.1 `blend_mode(name)`: `"normal"`, `"multiply"`, `"screen"`, `"overlay"`, `"darken"`,
   `"lighten"`, `"add"`, `"difference"`, `"exclusion"`; `opacity(0–255)` for everything drawn after
-- [ ] S-051.2 `shadow(dx, dy, blur, colour)` and `no_shadow()`
-- [ ] S-051.3 Contract rows; tests; gallery `compositing/`; guide chapter 5
+- [x] S-051.2 `shadow(dx, dy, blur, colour)` and `no_shadow()`
+- [x] S-051.3 Contract rows; tests; gallery `compositing/`; guide chapter 5
 *Acceptance:* each blend mode matches Cairo's operator of the same name, pixel-tested.
 
 ### S-056 Frame-sequence export — E-19

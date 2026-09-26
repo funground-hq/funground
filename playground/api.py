@@ -270,6 +270,26 @@ def radial_gradient(x: float, y: float, radius: float, colors, stops=None):
     return make(x, y, radius, colors, stops)
 
 
+def blend_mode(mode: str) -> None:
+    """How what you draw next mixes with what is already there: "normal", "multiply", "screen", "add", ..."""
+    active_sketch().blend_mode(mode)
+
+
+def opacity(amount: float) -> None:
+    """Make everything drawn after this see-through: 0 invisible, 255 solid (the default)."""
+    active_sketch().opacity(amount)
+
+
+def shadow(x_offset: float, y_offset: float, blur: float = 5, color: Color = (0, 0, 0, 128)) -> None:
+    """Give everything drawn after this a shadow, moved by (x_offset, y_offset) and softened by *blur* pixels."""
+    active_sketch().shadow(x_offset, y_offset, blur, color)
+
+
+def no_shadow() -> None:
+    """Stop drawing shadows."""
+    active_sketch().no_shadow()
+
+
 def lerp_color(c1: Color, c2: Color, amount: float):
     """The colour *amount* of the way from c1 to c2 (0 to 1), mixing red, green, blue and alpha."""
     from .color import Color as _Color
