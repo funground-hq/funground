@@ -187,7 +187,7 @@ class Frame:
 # Fields added after the snapshot format was frozen (Sprint 2) are written only when they
 # differ from their default, so every existing IR snapshot stays byte-identical (S-042).
 OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash", "dash_offset", "cap", "join",
-                               "curve_tightness", "text_align", "text_valign"})
+                               "curve_tightness", "text_align", "text_valign", "text_leading"})
 
 
 def _fields_to_jsonable(obj: Any) -> dict[str, Any]:

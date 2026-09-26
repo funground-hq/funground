@@ -300,6 +300,8 @@ p.run()
 | `p.text_width(message)` | **New:** how wide `message` will be at the current size, in pixels — to centre or right-align it. | `p.text(msg, (p.width - p.text_width(msg)) / 2, y)` |
 | `p.text_align(horizontal, vertical=None)` | **New:** which point of the text `(x, y)` is: `"left"`/`"center"`/`"right"`, then `"top"`/`"center"`/`"baseline"`/`"bottom"`. Default left, top. | `p.text_align("center", "center")` |
 | `p.text_ascent()` / `p.text_descent()` | **New:** how far letters reach above / below the baseline at the current size. | `p.text_ascent()` |
+| `p.text_leading(n)` | **New:** distance between lines of text, in pixels; `None` = automatic (1.25 × size). A `"\n"` in `p.text()` starts a new line. | `p.text("two\nlines", 20, 20)` |
+| `p.text_box(message, x, y, width, height=None)` | **New:** wrap text inside a box; returns the text that did not fit, to flow into the next box. | `rest = p.text_box(story, 20, 60, 280, 300)` |
 
 *Changed in v0.6:* text is drawn with the bundled **DejaVu Sans** font on every platform (there is no
 font choice yet), and **`text_size(n)` is an n-pixel em** — the CSS / p5 convention. Capital letters

@@ -1,0 +1,463 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   240,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "color": [
+   47,
+   79,
+   79,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    47,
+    79,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_leading": 36.0,
+   "text_size": 34
+  },
+  "text": "Columns",
+  "x": 30,
+  "y": 24
+ },
+ {
+  "color": [
+   47,
+   79,
+   79,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    47,
+    79,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_leading": 36.0,
+   "text_size": 34
+  },
+  "text": "of words",
+  "x": 30,
+  "y": 60.0
+ },
+ {
+  "height": 240,
+  "op": "Rect",
+  "style": {
+   "fill": null,
+   "stroke": [
+    211,
+    211,
+    211,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "width": 280,
+  "x": 30,
+  "y": 130
+ },
+ {
+  "height": 240,
+  "op": "Rect",
+  "style": {
+   "fill": null,
+   "stroke": [
+    211,
+    211,
+    211,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "width": 280,
+  "x": 330,
+  "y": 130
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "A sketch is a small program that",
+  "x": 42,
+  "y": 142
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "draws. It starts with setup(),",
+  "x": 42,
+  "y": 160.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "which runs once, and then draw()",
+  "x": 42,
+  "y": 179.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "runs again and again, many",
+  "x": 42,
+  "y": 198.25
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "times a second. Each time, the",
+  "x": 42,
+  "y": 217.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "picture is made fresh: shapes,",
+  "x": 42,
+  "y": 235.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "colours and words placed with",
+  "x": 42,
+  "y": 254.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "numbers. Change a number and",
+  "x": 42,
+  "y": 273.25
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "the picture changes with it. That",
+  "x": 42,
+  "y": 292.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "is the whole trick, and it goes a",
+  "x": 42,
+  "y": 310.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "very long way.",
+  "x": 42,
+  "y": 329.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "Text is drawn with the same care",
+  "x": 342,
+  "y": 142
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "as shapes. It can be lined up left,",
+  "x": 342,
+  "y": 160.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "right or centred, and when a box",
+  "x": 342,
+  "y": 179.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "is full the words carry on in the",
+  "x": 342,
+  "y": 198.25
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "next one.",
+  "x": 342,
+  "y": 217.0
+ }
+]

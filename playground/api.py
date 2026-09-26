@@ -210,6 +210,17 @@ def text_descent() -> float:
     return active_sketch().text_descent()
 
 
+def text_leading(leading: float | None) -> None:
+    """The distance from one line's baseline to the next, in pixels; None = automatic (1.25 x text_size)."""
+    active_sketch().text_leading(leading)
+
+
+def text_box(message: object, x: float, y: float, width: float, height: float | None = None,
+             color: Color | None = None) -> str:
+    """Draw *message* wrapped inside a box; return whatever did not fit ("" if it all did)."""
+    return active_sketch().text_box(message, x, y, width, height, color)
+
+
 def text_width(message: object) -> float:
     """How wide *message* will be at the current text_size, e.g. to centre it: p.text(msg, (p.width - p.text_width(msg)) / 2, y)."""
     return active_sketch().text_width(message)

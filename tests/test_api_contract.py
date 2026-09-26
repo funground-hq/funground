@@ -125,6 +125,9 @@ ADDED_FUNCTIONS = {
     "text_align": "(horizontal: 'str', vertical: 'str | None' = None) -> 'None'",
     "text_ascent": "() -> 'float'",
     "text_descent": "() -> 'float'",
+    # S-053 multi-line text and text boxes
+    "text_box": "(message: 'object', x: 'float', y: 'float', width: 'float', height: 'float | None' = None, color: 'Color | None' = None) -> 'str'",
+    "text_leading": "(leading: 'float | None') -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

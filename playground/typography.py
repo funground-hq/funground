@@ -12,6 +12,7 @@ baseline = y + ascent * scale.
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass
 
 import uharfbuzz as hb
@@ -125,6 +126,47 @@ def text_metrics(size: float) -> tuple[float, float]:
     font = default_font()
     scale = size / font.units_per_em
     return font.ascent * scale, -font.descent * scale
+
+
+def wrap_lines(text: str, width: float, size: float) -> tuple[list[str], list[str]]:
+    """Break *text* into lines no wider than *width* at *size* (contract T10).
+
+    Returns (lines, rests): rests[i] is the text from the start of line i onward, so a caller that
+    shows only the first n lines can hand back rests[n] as the overflow. Lines break at spaces;
+    a word wider than the box is broken between letters; '\\n' always breaks.
+    """
+    lines: list[str] = []
+    rests: list[str] = []
+
+    def fits(s: str) -> bool:
+        return text_width(s, size) <= width
+
+    def emit(line: str, start: int) -> None:
+        lines.append(line)
+        rests.append(text[start:])
+
+    offset = 0
+    for paragraph in text.split("\n"):
+        words: list[str] = []
+        start: int | None = None
+        for m in re.finditer(r"[^ ]+", paragraph):
+            word, at = m.group(), offset + m.start()
+            if fits(" ".join(words + [word])):
+                words.append(word)
+                start = at if start is None else start
+                continue
+            if words:
+                emit(" ".join(words), start)
+            while len(word) > 1 and not fits(word):        # a word wider than the box
+                cut = len(word) - 1
+                while cut > 1 and not fits(word[:cut]):
+                    cut -= 1
+                emit(word[:cut], at)
+                word, at = word[cut:], at + cut
+            words, start = [word], at
+        emit(" ".join(words), offset if start is None else start)
+        offset += len(paragraph) + 1
+    return lines, rests
 
 
 def text_width(text: str, size: float) -> float:

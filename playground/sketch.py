@@ -367,19 +367,64 @@ class Sketch:
 
         return text_metrics(self.style.text_size)[1]
 
-    def _text_origin(self, message: str, x: float, y: float, style) -> tuple[float, float]:
-        """Where the top-left of *message* goes so that (x, y) is its alignment point."""
-        if style.text_align != "left":
-            from .typography import text_width
+    def text_leading(self, leading: float | None) -> None:
+        if leading is not None and not leading >= 0:
+            raise ValueError("p.text_leading() takes a distance of 0 or more pixels, or None for automatic")
+        self._states.update(text_leading=None if leading is None else float(leading))
 
-            w = text_width(message, style.text_size)
-            x -= w / 2 if style.text_align == "center" else w
-        if style.text_valign != "top":
-            from .typography import text_metrics
+    @staticmethod
+    def _leading(style) -> float:
+        return style.text_leading if style.text_leading is not None else style.text_size * 1.25
 
-            ascent, descent = text_metrics(style.text_size)
-            y -= {"baseline": ascent, "bottom": ascent + descent, "center": (ascent + descent) / 2}[style.text_valign]
-        return x, y
+    def _emit_lines(self, lines: list[str], x: float, y: float, color: Color, style, top: float | None = None) -> None:
+        """Emit one Text op per line, top-left anchored, so that (x, y) is the block's alignment point
+        (contract T7/T9). *top*, when given, is the block's top edge (text boxes place it themselves)."""
+        from .typography import text_metrics, text_width
+
+        ascent, descent = text_metrics(style.text_size)
+        leading = self._leading(style)
+        if top is None:
+            block = ascent + descent + leading * (len(lines) - 1)
+            shift = {"top": 0, "baseline": ascent, "bottom": block, "center": block / 2}[style.text_valign]
+            top = y - shift if shift else y      # untouched numbers keep old snapshots byte-identical
+        for i, line in enumerate(lines):
+            left = x
+            if style.text_align != "left":
+                w = text_width(line, style.text_size)
+                left -= w / 2 if style.text_align == "center" else w
+            if line:
+                self._emit(ir.Text(line, left, top + i * leading if i else top, color, style))
+
+    def _text_color(self, color: ColorLike | None, style) -> Color:
+        if color is not None:
+            return Color.parse(color)
+        return style.fill or style.stroke or WHITE  # contract T4
+
+    def text_box(self, message: object, x: float, y: float, width: float, height: float | None = None,
+                 color: ColorLike | None = None) -> str:
+        """Wrap *message* inside the box; return the text that did not fit (contract T10)."""
+        from .typography import text_metrics, wrap_lines
+
+        if not width > 0 or (height is not None and not height >= 0):
+            raise ValueError("p.text_box() needs a width above 0 and a height of 0 or more (or no height)")
+        style = self.style
+        lines, rests = wrap_lines(str(message), width, style.text_size)
+        ascent, descent = text_metrics(style.text_size)
+        leading = self._leading(style)
+        fitting = len(lines)
+        if height is not None:
+            fitting = 0
+            while fitting < len(lines) and fitting * leading + ascent + descent <= height + 1e-9:
+                fitting += 1
+        shown = lines[:fitting]
+        if shown:
+            block = ascent + descent + leading * (len(shown) - 1)
+            room = (height if height is not None else block) - block
+            drop = {"top": 0, "baseline": 0, "center": room / 2, "bottom": room}[style.text_valign]
+            top = y + drop if drop else y
+            anchor = x + {"left": 0, "center": width / 2, "right": width}[style.text_align]
+            self._emit_lines(shown, anchor, y, self._text_color(color, style), style, top=top)
+        return rests[fitting] if fitting < len(lines) else ""
 
     # ------------------------------------------------------------ drawing
     def background(self, color: ColorLike) -> None:
@@ -460,19 +505,13 @@ class Sketch:
 
     def text(self, message: object, x: float, y: float, color: ColorLike | None = None) -> None:
         style = self.style
-        if color is not None:
-            chosen = Color.parse(color)
-        else:
-            chosen = style.fill or style.stroke or WHITE  # contract T4
-        message = str(message)
-        x, y = self._text_origin(message, x, y, style)
-        self._emit(ir.Text(message, x, y, chosen, style))
+        self._emit_lines(str(message).split("\n"), x, y, self._text_color(color, style), style)
 
     def text_width(self, message: object) -> float:
         """Advance width of *message* in logical pixels at the current text_size (contract T6)."""
         from .typography import text_width
 
-        return text_width(str(message), self.style.text_size)
+        return max(text_width(line, self.style.text_size) for line in str(message).split("\n"))
 
     # ------------------------------------------------------------ shapes, paths, clipping (S-028)
     def begin_shape(self) -> None:

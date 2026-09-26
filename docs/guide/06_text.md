@@ -69,6 +69,30 @@ p.run()
 
 The alignment is part of the drawing state, so `with p.saved_state():` restores it.
 
-*Coming in Sprint 6:* several lines, word wrap and choosing a font.
+## Several lines and text boxes
+
+A `"\n"` inside the message starts a new line. `p.text_leading(n)` sets the distance from one
+line to the next; `p.text_leading(None)` goes back to the automatic 1.25 × the text size.
+
+For longer text, `p.text_box(message, x, y, width, height)` wraps the words inside a box. It
+**returns the text that did not fit**, so you can pour the rest into another box, the way
+DrawBot's `textBox()` works:
+
+```py
+rest = p.text_box(story, 40, 140, 260, 220)     # first column
+rest = p.text_box(rest, 340, 140, 260, 220)     # the rest carries on here
+```
+
+`p.text_align()` works inside the box: `"center"` centres each line in the box's width, and
+`"bottom"` sits the text on the box's bottom edge.
+
+![Text in boxes and columns](../gallery/images/text-03_text_box.png)
+
+| Function | What it does |
+|---|---|
+| `p.text_leading(n)` | Distance between lines, in pixels. `None` means automatic. |
+| `p.text_box(message, x, y, width, height)` | Wraps `message` inside the box and returns what did not fit. Leave out `height` for a box that grows downwards. |
+
+*Coming in Sprint 6:* choosing a font.
 
 **Next:** [7. Animation and time](07_animation_and_time.md)
