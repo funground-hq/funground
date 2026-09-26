@@ -140,12 +140,13 @@ What would change this: a hard install-size budget for classrooms.
 - [x] S-049.3 Contract rows; tests; gallery `text/`; guide chapter 6
 *Acceptance:* centred text stays centred when its size or content changes.
 
-### S-053 Multi-line text and text boxes — E-15
-- [ ] S-053.1 `\n` in `p.text()` starts a new line; `text_leading(n)` sets the line spacing
-- [ ] S-053.2 `p.text(message, x, y, width, height)` wraps words inside the box, honours
+### S-053 Multi-line text and text boxes — E-15 ✅
+*As built:* the box form is a separate `p.text_box(message, x, y, width, height=None, color=None)` returning the overflow, not extra `p.text()` parameters: `text()`'s v0.5 signature is frozen, and DrawBot uses the name `textBox`. p5's `text(s, x, y, w, h)` ports by renaming. Contract T9, T10.
+- [x] S-053.1 `\n` in `p.text()` starts a new line; `text_leading(n)` sets the line spacing
+- [x] S-053.2 `p.text(message, x, y, width, height)` wraps words inside the box, honours
   `text_align`, and drops lines that do not fit; the text that did not fit can be recovered, as
   DrawBot's `textBox` returns it
-- [ ] S-053.3 Contract rows; tests; gallery `text/` (a poster); guide chapter 6
+- [x] S-053.3 Contract rows; tests; gallery `text/` (a poster); guide chapter 6
 *Acceptance:* a DrawBot `textBox` layout ports with naming changes only.
 
 ### S-050 Gradients — E-25

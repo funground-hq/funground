@@ -119,6 +119,14 @@ p.text_align() says which point of the text the (x, y) you give is: left, center
 
 Source: [`examples/gallery/text/02_align.py`](../../examples/gallery/text/02_align.py)
 
+### Text in boxes and columns
+
+![Text in boxes and columns](images/text-03_text_box.png)
+
+p.text_box() wraps text inside a box and gives back whatever did not fit, so the rest can flow on into the next box - the way DrawBot's textBox() works. A "\n" inside p.text() starts a new line, and p.text_leading() sets the distance from one line to the next.
+
+Source: [`examples/gallery/text/03_text_box.py`](../../examples/gallery/text/03_text_box.py)
+
 ## Animation and time
 
 ### Bounce
