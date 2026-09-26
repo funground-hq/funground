@@ -1,6 +1,6 @@
 # Sprint 5 — Phase 2b: vocabulary, events, helpers (first half of release v0.7)
 
-**Dates:** opens on the maintainer's word, after Sprint 4 sign-off.
+**Dates:** opened 25 Sept 2026; all stories done 26 Sept 2026 except S-039 (blocked, carried). **Review written; awaiting the maintainer's sign-off** (`review.md`, `reviewers_guide.md`).
 **Release context (D-015):** Phase 2 ships as **v0.7** after Sprint 6. Its deliverables are the
 code, **a User Guide**, and **an Examples Gallery that highlights every feature**. Both are built
 *incrementally*: every feature story in Sprints 5–6 ships its gallery example and its guide
