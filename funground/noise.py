@@ -1,5 +1,10 @@
 """Smooth noise, ported from p5.js (S-047, contract H4).
 
+This file is a Python translation of p5.js's noise(), noiseSeed() and noiseDetail()
+(src/math/noise.js), Copyright the p5.js contributors, licensed under the GNU LGPL 2.1
+(https://github.com/processing/p5.js). It is distributed under that licence; see
+LICENSE and THIRD_PARTY_LICENSES.md.
+
 The algorithm, the lattice size, the octave rule and the seeding generator are
 p5's, so ``noise_seed(n)`` then ``noise(x, y, z)`` gives the same numbers as
 ``noiseSeed(n)`` / ``noise(x, y, z)`` in p5.js. Without a seed the lattice is

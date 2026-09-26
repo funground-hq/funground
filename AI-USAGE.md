@@ -128,3 +128,6 @@ sprint review adds its entry here.
 - D-023: a public GitHub repository under `funground-hq`. Before the first push, history was
   rewritten to use the maintainer's GitHub no-reply address.
 - The maintainer asked for this disclosure: a README section and this file (D-024 = B).
+- D-025: after reviewing the dependencies' licences, the maintainer chose LGPL-2.1-or-later,
+  the p5/Processing family's licence, and asked for the dependencies' own licences to be listed
+  ([THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)).
