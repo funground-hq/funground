@@ -25,6 +25,10 @@ class GraphicsState:
     dash_offset: float = 0.0
     # S-074: 0 = Catmull-Rom, 1 = straight lines (Processing's curveTightness). Contract F9.
     curve_tightness: float = 0.0
+    # S-049 text alignment (contract T7). Resolved by the Sketch before a Text op is emitted, so a
+    # Text op's (x, y) is always the top-left of its run; kept here so push/pop saves it.
+    text_align: str = "left"
+    text_valign: str = "top"
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)

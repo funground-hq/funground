@@ -343,6 +343,44 @@ class Sketch:
             raise ValueError("text size must be positive")
         self._states.update(text_size=int(size))
 
+    # ---- text alignment and metrics (S-049, contract T7/T8)
+    TEXT_ALIGNS = ("left", "center", "right")
+    TEXT_VALIGNS = ("top", "center", "baseline", "bottom")
+
+    def text_align(self, horizontal: str, vertical: str | None = None) -> None:
+        if horizontal not in self.TEXT_ALIGNS:
+            raise ValueError(f"p.text_align() takes one of {', '.join(map(repr, self.TEXT_ALIGNS))} first, not {horizontal!r}")
+        if vertical is not None and vertical not in self.TEXT_VALIGNS:
+            raise ValueError(f"p.text_align()'s second value is one of {', '.join(map(repr, self.TEXT_VALIGNS))}, not {vertical!r}")
+        changes = {"text_align": horizontal}
+        if vertical is not None:
+            changes["text_valign"] = vertical
+        self._states.update(**changes)
+
+    def text_ascent(self) -> float:
+        from .typography import text_metrics
+
+        return text_metrics(self.style.text_size)[0]
+
+    def text_descent(self) -> float:
+        from .typography import text_metrics
+
+        return text_metrics(self.style.text_size)[1]
+
+    def _text_origin(self, message: str, x: float, y: float, style) -> tuple[float, float]:
+        """Where the top-left of *message* goes so that (x, y) is its alignment point."""
+        if style.text_align != "left":
+            from .typography import text_width
+
+            w = text_width(message, style.text_size)
+            x -= w / 2 if style.text_align == "center" else w
+        if style.text_valign != "top":
+            from .typography import text_metrics
+
+            ascent, descent = text_metrics(style.text_size)
+            y -= {"baseline": ascent, "bottom": ascent + descent, "center": (ascent + descent) / 2}[style.text_valign]
+        return x, y
+
     # ------------------------------------------------------------ drawing
     def background(self, color: ColorLike) -> None:
         self._emit(ir.Clear(Color.parse(color)))
@@ -426,7 +464,9 @@ class Sketch:
             chosen = Color.parse(color)
         else:
             chosen = style.fill or style.stroke or WHITE  # contract T4
-        self._emit(ir.Text(str(message), x, y, chosen, style))
+        message = str(message)
+        x, y = self._text_origin(message, x, y, style)
+        self._emit(ir.Text(message, x, y, chosen, style))
 
     def text_width(self, message: object) -> float:
         """Advance width of *message* in logical pixels at the current text_size (contract T6)."""

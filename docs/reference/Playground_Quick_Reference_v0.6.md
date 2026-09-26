@@ -298,6 +298,8 @@ p.run()
 | `p.text(message, x, y)` | Draw text with its top-left corner at (x, y). Any object: `str()` is applied. | `p.text("Hello", 30, 40)` |
 | `p.text(..., color=...)` | Choose a colour just for this text. Otherwise text uses the fill, then the stroke, then white. | `p.text(p.frame_count, 30, 80, color="navy")` |
 | `p.text_width(message)` | **New:** how wide `message` will be at the current size, in pixels — to centre or right-align it. | `p.text(msg, (p.width - p.text_width(msg)) / 2, y)` |
+| `p.text_align(horizontal, vertical=None)` | **New:** which point of the text `(x, y)` is: `"left"`/`"center"`/`"right"`, then `"top"`/`"center"`/`"baseline"`/`"bottom"`. Default left, top. | `p.text_align("center", "center")` |
+| `p.text_ascent()` / `p.text_descent()` | **New:** how far letters reach above / below the baseline at the current size. | `p.text_ascent()` |
 
 *Changed in v0.6:* text is drawn with the bundled **DejaVu Sans** font on every platform (there is no
 font choice yet), and **`text_size(n)` is an n-pixel em** — the CSS / p5 convention. Capital letters
