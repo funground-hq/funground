@@ -335,6 +335,14 @@ f.blend_mode() changes how new drawing mixes with what is already on the canvas:
 
 Source: [`examples/gallery/compositing/01_blend_opacity_shadow.py`](../../examples/gallery/compositing/01_blend_opacity_shadow.py)
 
+### Off-screen graphics: a trail
+
+![Off-screen graphics: a trail](images/compositing-02_graphics.png)
+
+f.create_graphics() makes a picture: an off-screen canvas with the same drawing commands as the window. Painting a translucent rectangle over it every frame, instead of clearing it, makes older drawing fade instead of vanish - a comet trail, the same trick Processing's PGraphics is used for. f.image() then places the picture wherever you like, at any size.
+
+Source: [`examples/gallery/compositing/02_graphics.py`](../../examples/gallery/compositing/02_graphics.py)
+
 ## Motion
 
 ### Movers with vectors

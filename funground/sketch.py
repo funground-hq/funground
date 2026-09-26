@@ -115,6 +115,8 @@ class Sketch:
         # ((width, height), RGB bytes) of the final frame when run(max_frames=)
         # stops the sketch; used by the regression suite.
         self.last_frame: tuple[tuple[int, int], bytes] | None = None
+        # S-052: create_graphics() names pictures "graphics-N" in creation order per run.
+        self._graphics_counter = 0
 
     # ------------------------------------------------------------ state
     @property
@@ -268,6 +270,21 @@ class Sketch:
         self._cursor = None
         if self._has_window:
             self._platform.set_cursor(None)
+
+    # ---- pictures (S-052, contract P1)
+    def create_graphics(self, width: int, height: int):
+        """An off-screen picture width x height, transparent to start; needs the window first."""
+        from .picture import Picture
+
+        self._require_window()
+        if not _is_positive_whole(width) or not _is_positive_whole(height):
+            raise ValueError(
+                f"f.create_graphics() needs positive whole numbers for width and height, "
+                f"not ({width!r}, {height!r})"
+            )
+        self._graphics_counter += 1
+        return Picture(int(width), int(height), self._platform.backing_scale,
+                       f"graphics-{self._graphics_counter}")
 
     def _check_capabilities(self) -> None:
         """Refuse up front (contract R9) rather than failing on frame 200."""
@@ -913,6 +930,7 @@ class Sketch:
         self.frame.clear()
         self._states.unwind()
         self._shape = None
+        self._graphics_counter = 0
 
         self._platform.start()
         self.running = True
@@ -971,6 +989,10 @@ class Sketch:
             self._renderer.attach(0, 0)
             self._platform.close()
             self._has_window = False
+
+
+def _is_positive_whole(n: object) -> bool:
+    return isinstance(n, int) and not isinstance(n, bool) and n > 0
 
 
 def _geometry_of(path: PathBuilder | Path, name: str) -> Path:

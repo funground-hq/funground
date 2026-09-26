@@ -116,4 +116,66 @@ funground cuts the hole out whichever way round you list its corners.
 
 ![Holes](../gallery/images/curves-02_holes.png)
 
+## Drawing off-screen
+
+`f.create_graphics(width, height)` makes a **picture**: a canvas of its own, the same size
+as you ask for, that starts transparent. It has the same drawing commands as `f.` - fill,
+circle, text, push/pop, transforms, clip, everything above - but its own state, its own
+transform, and its own pixels, completely separate from the window. Unlike the window,
+**nothing about a picture resets between frames**: whatever you drew last time is still
+there, so you can build it up gradually.
+
+`f.image(picture, x, y, width=None, height=None)` draws a picture into the window (or into
+another picture), at (x, y), stretched to `width` x `height` if you give them (its own size
+otherwise). It draws the picture **as it is at that moment** - drawing on the picture
+afterwards never changes what was already placed.
+
+A common trick, borrowed from Processing's `PGraphics`: paint a translucent rectangle over
+a picture every frame, instead of clearing it, so older drawing fades instead of vanishing:
+
+```python
+import math
+
+import funground as f
+
+trail = None
+
+
+def setup():
+    global trail
+    f.size(640, 400)
+    trail = f.create_graphics(400, 400)
+
+
+def draw():
+    f.background("black")
+
+    trail.no_stroke()
+    trail.fill((0, 0, 0, 24))          # translucent: painted over the old trail, it fades
+    trail.rect(0, 0, trail.width, trail.height)
+
+    angle = f.radians(f.frame_count * 6)
+    x = trail.width / 2 + math.cos(angle) * 150
+    y = trail.height / 2 + math.sin(angle) * 150
+    trail.fill("gold")
+    trail.circle(x, y, 24)
+
+    f.image(trail, 0, 0)                    # full size
+    f.image(trail, 480, 20, 140, 140)       # a second, smaller copy: image() can scale
+
+
+f.run()
+```
+
+![Drawing off-screen](../gallery/images/compositing-02_graphics.png)
+
+| Call | What it does |
+|---|---|
+| `f.create_graphics(w, h)` | A new picture, `w` x `h`, transparent to start. It has the same drawing commands as `f.` |
+| `f.image(picture, x, y, w=None, h=None)` | Draw *picture* at (x, y), stretched to `w` x `h` (default: its own size) |
+
+A picture can hold another picture too, but never itself: `f.image(g, ...)` where `g` is
+drawing onto itself raises `ValueError`. Save a picture on its own with `g.save(path)`,
+exactly like `f.save(path)` for the window.
+
 **Next:** [10. Interaction](10_interaction.md)

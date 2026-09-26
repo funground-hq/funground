@@ -10,6 +10,7 @@ from contextlib import AbstractContextManager
 
 from .color import ColorLike as Color
 from .paths import PathBuilder
+from .picture import Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
 from .sketch import Sketch
 from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
 
@@ -563,6 +564,19 @@ def no_clip() -> None:
 def clip(path: PathBuilder) -> None:
     """Limit later drawing to the inside of *path* until the enclosing pop() / end of the saved_state() block."""
     active_sketch().clip(path)
+
+
+# ---- off-screen graphics (S-052, contract P1-P3)
+def create_graphics(width: int, height: int) -> Picture:
+    """A picture: an off-screen canvas width x height, transparent to start, with its own
+    drawing commands (fill, circle, push/pop, ...) and its own state and transform."""
+    return active_sketch().create_graphics(width, height)
+
+
+def image(picture, x: float, y: float, width: float | None = None, height: float | None = None) -> None:
+    """Draw *picture* at (x, y), stretched to width x height (default: its own size), as it
+    is at this moment - later drawing on it does not change what was placed."""
+    draw_image(active_sketch(), picture, x, y, width, height)
 
 
 # ---- input
