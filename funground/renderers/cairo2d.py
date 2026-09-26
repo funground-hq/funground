@@ -90,12 +90,23 @@ class CairoRenderer:
         ctx.save()
         self._base_matrix = ctx.get_matrix()      # reset_matrix() returns here (keeps the HiDPI scale)
         try:
-            self._draw_ops(ctx, frame)
+            depth = self._draw_ops(ctx, frame, 0)
+            while depth:                          # an unbalanced frame must not leak state
+                ctx.restore(); depth -= 1
         finally:
             ctx.restore()
 
-    def _draw_ops(self, ctx: cairo.Context, frame: ir.Frame) -> None:
-        depth = 0
+    def draw_batch(self, ctx: cairo.Context, frame: ir.Frame, depth: int = 0) -> int:
+        """Draw *frame* onto *ctx* without the per-frame Save/Restore wrapper or unwind that
+        ``draw()`` uses (contract P2, pictures): an open Save (from ``g.push()``) and the
+        transform/clip it holds carry over to the next batch instead of being reset. *depth*
+        is the Save depth carried in from the previous batch on this same *ctx* (0 to start);
+        the return value is what the next call should pass back in. ``self._base_matrix``
+        (what ``g.reset_matrix()`` returns to) is fixed by the caller once, before the first
+        batch on a given *ctx*, and is left untouched here."""
+        return self._draw_ops(ctx, frame, depth)
+
+    def _draw_ops(self, ctx: cairo.Context, frame: ir.Frame, depth: int) -> int:
         for op in frame:
             t = type(op)
             composite = self._composite_of(op) if t in self._DRAWING else None
@@ -146,15 +157,17 @@ class CairoRenderer:
             elif t is ir.Text:
                 for sub in self._text_ops(op):
                     self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
+            elif t is ir.Image:
+                self._draw_image(ctx, op, self._alpha)
             else:
                 raise NotImplementedError(f"{self.name} renderer cannot draw {t.__name__}")
             if composite is not None:
                 ctx.restore(); self._alpha = 1.0
-        while depth:                      # an unbalanced frame must not leak state
-            ctx.restore(); depth -= 1
+        return depth
 
     # ---- compositing: blend mode, opacity, shadow (S-051, contract S14)
-    _DRAWING = frozenset({ir.Circle, ir.Ellipse, ir.Rect, ir.Line, ir.Point, ir.Text, ir.FillPath, ir.StrokePath})
+    _DRAWING = frozenset({ir.Circle, ir.Ellipse, ir.Rect, ir.Line, ir.Point, ir.Text, ir.FillPath, ir.StrokePath,
+                          ir.Image})
     _BLENDS = {
         "normal": cairo.OPERATOR_OVER, "multiply": cairo.OPERATOR_MULTIPLY, "screen": cairo.OPERATOR_SCREEN,
         "overlay": cairo.OPERATOR_OVERLAY, "darken": cairo.OPERATOR_DARKEN, "lighten": cairo.OPERATOR_LIGHTEN,
@@ -168,6 +181,11 @@ class CairoRenderer:
 
     @staticmethod
     def _composite_of(op):
+        if type(op) is ir.Image:                       # no shadow field: shadow never applies (P3)
+            blend, opacity = op.blend_mode, op.opacity
+            if blend == "normal" and opacity == 255:
+                return None
+            return blend, opacity, None
         src = getattr(op, "style", op)
         blend, opacity, shadow = src.blend_mode, src.opacity, src.shadow
         if blend == "normal" and opacity == 255 and shadow is None:
@@ -247,6 +265,42 @@ class CairoRenderer:
             ctx.paint_with_alpha(layer_alpha)
         ctx.restore()
 
+    # ---- pictures (S-052, contract P3): draw a Picture's snapshot
+    def _draw_image(self, ctx: cairo.Context, op: "ir.Image", alpha: float) -> None:
+        snap = op.snapshot
+        if snap is None:
+            raise RuntimeError(
+                "this Image op has no snapshot to draw with (an Image op loaded back from a "
+                "saved IR snapshot cannot be rendered - snapshots never carry pixels, S-052)"
+            )
+        target = ctx.get_target()
+        if not isinstance(target, cairo.ImageSurface) and snap.history is not None:
+            saved_base = self._base_matrix          # a nested picture's ResetMatrix must not
+            try:                                      # disturb the frame around this Image op
+                self._replay_image_history(ctx, op, snap, alpha)
+            finally:
+                self._base_matrix = saved_base
+            return
+        paint_picture_pixels(ctx, snap.pixels, snap.phys_width, snap.phys_height,
+                              op.x, op.y, op.width, op.height, alpha)
+
+    def _replay_image_history(self, ctx: cairo.Context, op: "ir.Image", snap, alpha: float) -> None:
+        """PDF/SVG targets: replay the picture's history as vectors (contract P3)."""
+        ctx.save()
+        ctx.translate(op.x, op.y)
+        if snap.logical_width and snap.logical_height:
+            ctx.scale(op.width / snap.logical_width, op.height / snap.logical_height)
+        ctx.rectangle(0, 0, snap.logical_width, snap.logical_height)
+        ctx.clip()
+        self._base_matrix = ctx.get_matrix()
+        ctx.push_group()
+        depth = self._draw_ops(ctx, ir.Frame(list(snap.history)), 0)
+        while depth:
+            ctx.restore(); depth -= 1
+        ctx.pop_group_to_source()
+        ctx.paint_with_alpha(alpha)
+        ctx.restore()
+
     # ---- helpers
     def _source(self, ctx, c) -> None:
         k = self._alpha                                 # S-051 opacity multiplies every alpha
@@ -318,3 +372,27 @@ class CairoRenderer:
         else:
             self._text_runs.move_to_end(key)              # mark as most recently used
         return run.outline_ops(op.x, op.y, op.color)
+
+
+def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: int,
+                          x: float, y: float, logical_w: float, logical_h: float, alpha: float = 1.0) -> None:
+    """Paint a Picture's raw pixels (BGRA premultiplied, contract P3's raster path).
+
+    *pixel_bytes* is exactly what ``CairoRenderer.pixels()`` returns copied to bytes: Cairo's
+    own ARGB32 layout, so it can be wrapped in an ``ImageSurface`` with no conversion. The
+    surface is scaled so its *phys_w* x *phys_h* physical pixels fill *logical_w* x
+    *logical_h* logical units at (x, y) on *ctx* - crisp when that matches the picture's own
+    HiDPI scale. Used both to draw an ``Image`` op on a raster target and, without a history,
+    as ``Picture.save()``'s PDF/SVG fallback (funground.picture).
+    """
+    if phys_w <= 0 or phys_h <= 0:
+        return
+    stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_ARGB32, phys_w)
+    data = bytearray(pixel_bytes)
+    img = cairo.ImageSurface.create_for_data(data, cairo.FORMAT_ARGB32, phys_w, phys_h, stride)
+    ctx.save()
+    ctx.translate(x, y)
+    ctx.scale(logical_w / phys_w, logical_h / phys_h)
+    ctx.set_source_surface(img, 0, 0)
+    ctx.paint_with_alpha(alpha)
+    ctx.restore()

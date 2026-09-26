@@ -753,6 +753,13 @@ you can draw again and again.
 | `f.clip(path)` | Limit **later** drawing to the inside of `path` until the enclosing `pop()` / end of the `with f.saved_state():` block. | `with f.saved_state(): f.clip(tri); ...` |
 | `f.no_clip()` | Remove clipping until the enclosing `pop()` / end of the block, which brings the previous clip back. | `with f.saved_state(): f.no_clip(); ...` |
 
+**Off-screen pictures**
+
+| Call | What it does | Example |
+|---|---|---|
+| `f.create_graphics(w, h)` | **New:** an off-screen picture, `w` x `h`, transparent to start. It has the same drawing commands as `f.` (fill, circle, text, transforms, clip, ...), but its own state, transform and pixels; nothing about it resets between frames. | `trail = f.create_graphics(200, 100)` |
+| `f.image(picture, x, y, w=None, h=None)` | **New:** draw *picture* at (x, y), stretched to `w` x `h` (default: its own size), as it is at this moment. | `f.image(trail, 0, 0)` |
+
 **Rules worth knowing**
 
 - Shapes and paths use the fill and stroke in force when they are drawn: fill first, stroke on top,
@@ -989,6 +996,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Saving | — | `f.save()` to PNG, PDF or SVG |
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
+| Off-screen graphics | — | `create_graphics`, `image` |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 
 Everything a v0.5 sketch called still exists with the same arguments; the only visible differences are

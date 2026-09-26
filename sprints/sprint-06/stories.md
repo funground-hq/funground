@@ -198,12 +198,13 @@ What would change this: a hard install-size budget for classrooms.
 - [x] S-054.3 Contract rows; tests; gallery `text/`; guide chapter 6
 *Acceptance:* the same text in a loaded font renders identically on every run.
 
-### S-052 Off-screen graphics — E-28 *(D-021 = A)*
-- [ ] S-052.1 `g = f.create_graphics(w, h)`: one picture type (Phase 3's `load_image` returns the same type); an off-screen picture with the full drawing vocabulary, its own state and
+### S-052 Off-screen graphics — E-28 *(D-021 = A)* ✅
+*As built:* by the Sonnet `story-builder` subagent from pinned rows P1–P3, reviewed here. `funground/picture.py`, an `Image` IR op that is serialised without pixels, and `CairoRenderer.draw_batch` so a picture's state carries across flushes; `draw()` is unchanged in behaviour. A picture with no history saves or exports as embedded pixels. 300 frames of the gallery trail take about 2.2 ms per frame, with no slowdown over time. The guide section is in chapter 9, not a new chapter.
+- [x] S-052.1 `g = f.create_graphics(w, h)`: one picture type (Phase 3's `load_image` returns the same type); an off-screen picture with the full drawing vocabulary, its own state and
   transform, drawn onto the canvas with `p.image(g, x, y, w=None, h=None)`
-- [ ] S-052.2 IR: a picture's ops are recorded separately and rendered to their own surface;
+- [x] S-052.2 IR: a picture's ops are recorded separately and rendered to their own surface;
   vector export replays them as vectors
-- [ ] S-052.3 Contract rows; tests; gallery `compositing/`; a new guide chapter, "Pictures"
+- [x] S-052.3 Contract rows; tests; gallery `compositing/`; a new guide chapter, "Pictures"
 *Acceptance:* a Processing `PGraphics` trail effect ports by renaming only.
 
 ### S-071 User Guide completed — E-22

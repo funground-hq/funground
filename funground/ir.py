@@ -13,7 +13,7 @@ FillPath / StrokePath by `end_shape`, `draw_path` and `clip` since S-028.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, fields, is_dataclass
+from dataclasses import dataclass, field, fields, is_dataclass
 from typing import Any, Iterator, Union
 
 from .color import Color
@@ -148,10 +148,30 @@ class SetAntialias(Op):
     on: bool
 
 
-AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix]
+@dataclass(frozen=True, slots=True)
+class Image(Op):
+    """Draw a Picture (S-052, contract P3): *source* is its name ("graphics-1", ...), numbered
+
+    in creation order within a run; *version* is its content version at the moment of the
+    call. *snapshot* carries the actual pixels/history so the op can be drawn - it is never
+    serialised (see NEVER_SERIALISE) and never compared (a round trip loses only this field).
+    """
+
+    source: str
+    version: int
+    x: float
+    y: float
+    width: float
+    height: float
+    blend_mode: str = "normal"       # S-051, as FillPath/StrokePath
+    opacity: int = 255
+    snapshot: Any = field(default=None, compare=False, repr=False)
+
+
+AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image]
 OP_TYPES: dict[str, type] = {
     cls.__name__: cls
-    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix)
+    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image)
 }
 
 
@@ -197,10 +217,16 @@ OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash
                                "curve_tightness", "text_align", "text_valign", "text_leading",
                                "blend_mode", "opacity", "shadow", "font", "text_style"})
 
+# S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
+# op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).
+NEVER_SERIALISE = frozenset({"snapshot"})
+
 
 def _fields_to_jsonable(obj: Any) -> dict[str, Any]:
     out: dict[str, Any] = {}
     for f in fields(obj):
+        if f.name in NEVER_SERIALISE:
+            continue
         value = getattr(obj, f.name)
         if f.name in OMIT_WHEN_DEFAULT and value == f.default:
             continue
@@ -266,6 +292,8 @@ def op_from_jsonable(d: dict[str, Any]) -> Op:
     cls = OP_TYPES[d["op"]]
     kwargs: dict[str, Any] = {}
     for f in fields(cls):
+        if f.name in NEVER_SERIALISE:
+            continue                                   # left at its dataclass default (None)
         if f.name not in d and f.name in OMIT_WHEN_DEFAULT:
             continue                                   # omitted because it was the default
         v = d[f.name]

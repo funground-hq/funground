@@ -1,0 +1,29 @@
+[
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 400,
+  "op": "Image",
+  "source": "graphics-1",
+  "version": 30,
+  "width": 400,
+  "x": 0.0,
+  "y": 0.0
+ },
+ {
+  "height": 140.0,
+  "op": "Image",
+  "source": "graphics-1",
+  "version": 30,
+  "width": 140.0,
+  "x": 480.0,
+  "y": 20.0
+ }
+]

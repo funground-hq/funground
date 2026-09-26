@@ -147,6 +147,9 @@ ADDED_FUNCTIONS = {
     "load_font": "(path: 'str')",
     "text_font": "(font, size: 'float | None' = None) -> 'None'",
     "text_style": "(style: 'str') -> 'None'",
+    # S-052 off-screen graphics
+    "create_graphics": "(width: 'int', height: 'int') -> 'Picture'",
+    "image": "(picture, x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None) -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
