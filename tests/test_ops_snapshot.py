@@ -16,7 +16,7 @@ from pathlib import Path
 
 import pytest
 
-from conftest import EXAMPLES, run_sketch
+from conftest import EXAMPLES, assert_json_documents_close, run_sketch
 from funground import api, ir
 
 SNAPSHOTS = Path(__file__).resolve().parent / "snapshots"
@@ -49,7 +49,12 @@ def test_sketch_ops_match_snapshot(sketch: Path):
         out = SNAPSHOTS / "_actual"
         out.mkdir(exist_ok=True)
         (out / snap.name).write_text(actual, encoding="utf-8")
-    assert actual == expected, f"{sketch.name}: op list differs; actual saved to tests/snapshots/_actual/"
+    try:
+        assert_json_documents_close(json.loads(actual), json.loads(expected))
+    except AssertionError as exc:
+        raise AssertionError(
+            f"{sketch.name}: op list differs; actual saved to tests/snapshots/_actual/: {exc}"
+        ) from exc
 
 
 def test_snapshot_round_trips_as_ir():

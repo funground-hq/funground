@@ -13,6 +13,9 @@ python -m venv .venv
 python -m pip install funground
 ```
 
+On Linux, install the Cairo library first: `sudo apt install libcairo2-dev pkg-config python3-dev`
+(Debian or Ubuntu; other distributions have an equivalent package).
+
 ## Your first sketch
 
 Save this as `first.py` and run it with `python first.py`:
