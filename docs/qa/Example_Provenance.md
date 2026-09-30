@@ -10,7 +10,7 @@ and how that claim was checked.
 - `examples/gallery/*` and `examples/reference/*` — written for funground in Sprints
   4–6, from the feature each one shows, not from a sketch seen elsewhere.
 - `examples/session1/01_first_sketch.py` to `14_paths.py` — written to follow the v0.5
-  Quick Reference (`docs/reference/Playground_Quick_Reference_v0.6.md`), which was
+  Quick Reference (`docs/reference/Quick_Reference.md`), which was
   itself written by a different AI assistant at the maintainer's direction (see
   `AI-USAGE.md`). They are learner code and never change to make a test pass
   (`docs/PROCESS.md`).

@@ -18,7 +18,7 @@ import funground
 
 from conftest import ROOT
 
-REFERENCE = ROOT / "docs" / "reference" / "Playground_Quick_Reference_v0.6.md"
+REFERENCE = ROOT / "docs" / "reference" / "Quick_Reference.md"
 IMAGES = ROOT / "docs" / "reference" / "images"
 SKETCHES = sorted((ROOT / "examples" / "reference").glob("*.py"))
 TOOL = ROOT / "tools" / "make_reference_images.py"
