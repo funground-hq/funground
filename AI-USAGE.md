@@ -25,7 +25,8 @@ Every decision, with the options offered and the outcome, is recorded in
 |---|---|---|
 | Claude Opus 5 | Main session | Planning to the end of Sprint 2 (24–25 Sept 2026) |
 | Claude Fable 5.1 | Main session, including a multi-agent workflow for Sprint 4 and Spike 08 | End of Sprint 2 to the Sprint 4 review (25 Sept 2026) |
-| Claude Opus 5.5 | Main session | End of Sprint 4 onwards (25 Sept 2026 –) |
+| Claude Opus 5.5 | Main session | End of Sprint 4 to mid-Sprint 6 (25–26 Sept 2026) |
+| Claude Fable 5.1 | Main session again | Sprint 6, from 30 Sept 2026 |
 | Claude Sonnet 5 | Sub-agent building well-specified stories (S-075, S-054, S-052), reviewed by the main session before commit | Sprint 6 onwards |
 
 The model that helped with each commit is named in its `Co-Authored-By` line. During early planning
@@ -143,3 +144,6 @@ sprint review adds its entry here.
 - D-025: after reviewing the dependencies' licences, the maintainer chose LGPL-2.1-or-later,
   the p5/Processing family's licence, and asked for the dependencies' own licences to be listed
   ([THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)).
+- D-026: example code is CC0, so learners can reuse it freely. The maintainer made it a condition
+  that examples are checked to be original, now and in future. That became a process rule and
+  an originality check ([docs/qa/Example_Provenance.md](docs/qa/Example_Provenance.md)).

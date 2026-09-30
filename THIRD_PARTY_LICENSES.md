@@ -5,6 +5,13 @@ your option) any later version** (`LGPL-2.1-or-later`); see [LICENSE](LICENSE). 
 builds on keeps its own licence, listed here. Where the two differ, each component's own licence
 governs that component.
 
+## Example code
+
+The sketches in `examples/` and the code blocks in the User Guide and Quick Reference are **not**
+under the LGPL: they are dedicated to the public domain under **CC0 1.0**
+([examples/LICENSE](examples/LICENSE)), so learners can reuse them freely. They are original to
+funground; see [docs/qa/Example_Provenance.md](docs/qa/Example_Provenance.md).
+
 ## Included in funground
 
 These are part of the funground package itself.
@@ -14,6 +21,7 @@ These are part of the funground package itself.
 | DejaVu Sans fonts (Regular, Bold, Oblique, Bold Oblique), version 2.37 | `funground/fonts/` | Bitstream Vera Fonts licence; DejaVu's own changes are in the public domain | Full text in `funground/fonts/DejaVu-LICENSE.txt`, shipped with the package. The fonts may not be sold on their own, and a modified font must be renamed. |
 | Noise function | `funground/noise.py` | LGPL-2.1, from p5.js (© the p5.js contributors) | A Python translation of p5.js's `noise()`, `noiseSeed()` and `noiseDetail()`, so seeded values match p5 exactly. Source: <https://github.com/processing/p5.js> |
 | Colour-name table | `funground/_colornames.py` | Derived from pygame-ce's colour table (LGPL-2.1), which lists the X11 colour names from `rgb.txt` (X11/MIT-style licence) | Names and RGB values only |
+| DejaVu Sans Mono font, version 2.37 | `examples/gallery/text/fonts/` (repository only, not in the installed package) | Bitstream Vera Fonts licence, as above | Used by one gallery example to show `load_font`; its licence file sits beside it. |
 
 ## Installed alongside funground
 
