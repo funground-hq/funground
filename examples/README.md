@@ -5,7 +5,7 @@ Every sketch here is a complete program: run it with `python <file>.py`.
 | Folder | What is in it |
 |---|---|
 | [gallery/](gallery/) | One small sketch per feature, grouped by topic. The pictures are in the [Examples Gallery](../docs/gallery/README.md). |
-| [reference/](reference/) | The sketches printed in the [Quick Reference](../docs/reference/Playground_Quick_Reference_v0.6.md). |
+| [reference/](reference/) | The sketches printed in the [Quick Reference](../docs/reference/Quick_Reference.md). |
 | [session1/](session1/) | The first-lesson sketches, from a first window to transforms and paths. |
 
 ## Licence: do anything you like with these

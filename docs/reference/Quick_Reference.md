@@ -1,4 +1,4 @@
-# funground Quick Reference — v0.6
+# funground Quick Reference
 
 **Version 0.1.0.dev0** — a small visual-programming library. `import funground as f; print(f.__version__)`
 prints `0.1.0.dev0`.

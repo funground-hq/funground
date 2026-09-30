@@ -54,7 +54,7 @@ python -m pip install git+https://github.com/funground-hq/funground
 - [User Guide](docs/guide/README.md): chapters from your first sketch to animation, interaction,
   text, pictures and saving your work.
 - [Examples Gallery](docs/gallery/README.md): every feature shown in a small sketch, with its picture.
-- [Quick Reference](docs/reference/Playground_Quick_Reference_v0.6.md): every function on one page.
+- [Quick Reference](docs/reference/Quick_Reference.md): every function on one page.
 
 ## What it can do
 
