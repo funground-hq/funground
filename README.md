@@ -1,5 +1,7 @@
 # funground
 
+[![CI](https://github.com/funground-hq/funground/actions/workflows/ci.yml/badge.svg)](https://github.com/funground-hq/funground/actions/workflows/ci.yml)
+
 **Creative coding for learners.** funground is a small Python library for drawing and animation,
 in the spirit of [Processing](https://processing.org), [p5.js](https://p5js.org) and
 [DrawBot](https://www.drawbot.com). You write a short Python file, run it, and a window opens with

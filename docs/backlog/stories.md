@@ -88,7 +88,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 |---|---|---|---|---|
 | S-037 | E-15 | Text polish: LRU-capped `TextRun` cache; `p.text_width()` | 10k-frame headless run keeps the cache bounded | done (Sprint 4) |
 | S-038 | E-13 | macOS / Linux HiDPI via SDL high-DPI flag (unverifiable on the teaching machine) | forced-scale unit tests; documented as unverified on real hardware | done (Sprint 4) — code path only, real-hardware verification pending |
-| S-039 | E-02 | First CI run on a remote; 12-cell matrix green | green badge | Sprint 7 (remote exists, D-023; first run: Windows green, Linux/macOS red) |
+| S-039 | E-02 | First CI run on a remote; 12-cell matrix green | green badge | 7 — done (12 cells green, 30 Sept 2026) |
 
 ## Phase 2 story cuts from the Feature Map (25 Sept 2026) — Sprints 5–6, not yet scheduled
 

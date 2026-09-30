@@ -72,7 +72,7 @@ AI-written tests checking AI-written code is a real risk. funground reduces it i
    written to be checked in about an hour, and signs off before the sprint closes.
 
 **Known limits:**
-- CI runs on Windows, macOS and Linux. On 26 Sept 2026 only Windows passed; the macOS and Linux fixes are story S-039. HiDPI on real macOS and Linux screens is still untested.
+- CI runs every push on Windows, macOS and Linux with Python 3.11–3.14, all green since 30 Sept 2026. HiDPI on real macOS and Linux screens is still untested.
 - The browser track is research only.
 - AI-written code can occasionally echo code the model was trained on. For short teaching
   sketches the risk is small, and ideas such as a bouncing ball are not copyrightable, but it

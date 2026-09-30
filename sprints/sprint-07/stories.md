@@ -35,14 +35,15 @@ the main session (PROCESS.md, "Who does what").
 
 ## Story set
 
-### S-039 CI green on Windows, macOS and Linux — E-02 *(carried from Sprints 4–6)*
+### S-039 CI green on Windows, macOS and Linux — E-02 *(carried from Sprints 4–6)* ✅
+*As built:* by a Sonnet sub-agent, reviewed here. All 12 cells green on 30 Sept 2026 (run 36690119976). Snapshot numbers compare within a few units in the last place; no snapshot changed.
 First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
-- [ ] S-039.1 Linux: install the Cairo development files in the workflow so `pycairo` builds;
+- [x] S-039.1 Linux: install the Cairo development files in the workflow so `pycairo` builds;
   add the same line to the guide's install page and the README
-- [ ] S-039.2 macOS: IR snapshots differ in the last digit of some numbers (the maths library
+- [x] S-039.2 macOS: IR snapshots differ in the last digit of some numbers (the maths library
   rounds `sin`/`cos` differently). Compare snapshot numbers with a tolerance of a few units in
   the last place; structure, names and strings stay exact. No snapshot file is regenerated
-- [ ] S-039.3 All 12 cells green; a CI badge in the README
+- [x] S-039.3 All 12 cells green; a CI badge in the README
 *Acceptance:* a push to `main` shows 12 green cells.
 
 ### S-076 Script mode: sketches without `draw()` — E-18 *(needs D-029)*
