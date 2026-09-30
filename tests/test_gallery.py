@@ -20,7 +20,7 @@ import pytest
 import funground
 from funground import api, ir
 
-from conftest import GOLDEN, ROOT, run_sketch, surface_from_frame
+from conftest import GOLDEN, ROOT, assert_json_documents_close, run_sketch, surface_from_frame
 
 TOOL = ROOT / "tools" / "make_gallery.py"
 _spec = importlib.util.spec_from_file_location("make_gallery", TOOL)
@@ -84,7 +84,17 @@ def test_example_ops_match_snapshot(path: Path):
         GALLERY_SNAPSHOTS.mkdir(parents=True, exist_ok=True)
         snap.write_text(actual, encoding="utf-8", newline="\n")
         pytest.skip(f"snapshot written: {snap.name}")
-    assert actual == snap.read_text(encoding="utf-8"), f"{path.name}: op list differs from its snapshot"
+    expected = snap.read_text(encoding="utf-8")
+    if actual != expected:
+        out = ROOT / "tests" / "snapshots" / "_actual"
+        out.mkdir(parents=True, exist_ok=True)
+        (out / snap.name).write_text(actual, encoding="utf-8")
+    try:
+        assert_json_documents_close(json.loads(actual), json.loads(expected))
+    except AssertionError as exc:
+        raise AssertionError(
+            f"{path.name}: op list differs from its snapshot; actual saved to tests/snapshots/_actual/: {exc}"
+        ) from exc
 
 
 def _names_used() -> set[str]:

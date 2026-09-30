@@ -6,6 +6,7 @@ before pygame is imported, so the suite works in CI without a display.
 from __future__ import annotations
 
 import inspect
+import math
 import os
 import sys
 from pathlib import Path
@@ -103,3 +104,48 @@ def run_sketch(path: Path, frames: int = 30, fps: int = 1000):
 def surface_from_frame(frame) -> pygame.Surface:
     size, data = frame
     return pygame.image.frombuffer(data, size, "RGB")
+
+
+def assert_json_documents_close(
+    actual, expected, *, rel_tol: float = 1e-12, abs_tol: float = 1e-9
+) -> None:
+    """Compare two parsed JSON documents, tolerating last-digit float noise (S-039).
+
+    Dicts need the same keys, lists the same length; strings, bools, ``None`` and ints
+    compare exactly. Floats compare with ``math.isclose`` - a few units in the last place
+    for the coordinate sizes funground uses. An int on one side and a float on the other
+    with the same value still fails: untouched numbers stay ints in our snapshots.
+
+    Raises ``AssertionError`` naming the JSON path (``$.foo[2].bar``) of the first
+    difference.
+    """
+
+    def walk(a, b, path: str) -> None:
+        # bool is a subclass of int, so check it first.
+        if isinstance(a, bool) or isinstance(b, bool):
+            if type(a) is not type(b) or a != b:
+                raise AssertionError(f"{path}: {a!r} != {b!r}")
+        elif isinstance(a, float) or isinstance(b, float):
+            if type(a) is not type(b):
+                raise AssertionError(f"{path}: {a!r} != {b!r} (int vs float)")
+            if not math.isclose(a, b, rel_tol=rel_tol, abs_tol=abs_tol):
+                raise AssertionError(f"{path}: {a!r} != {b!r}")
+        elif isinstance(a, dict):
+            if not isinstance(b, dict):
+                raise AssertionError(f"{path}: {a!r} != {b!r}")
+            if a.keys() != b.keys():
+                raise AssertionError(f"{path}: keys differ: {sorted(a)} != {sorted(b)}")
+            for key in a:
+                walk(a[key], b[key], f"{path}.{key}")
+        elif isinstance(a, list):
+            if not isinstance(b, list):
+                raise AssertionError(f"{path}: {a!r} != {b!r}")
+            if len(a) != len(b):
+                raise AssertionError(f"{path}: length differs: {len(a)} != {len(b)}")
+            for i, (x, y) in enumerate(zip(a, b)):
+                walk(x, y, f"{path}[{i}]")
+        else:
+            if a != b:
+                raise AssertionError(f"{path}: {a!r} != {b!r}")
+
+    walk(actual, expected, "$")
