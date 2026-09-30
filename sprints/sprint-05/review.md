@@ -1,6 +1,6 @@
 # Sprint 5 review — Phase 2b: vocabulary, events, helpers
 
-**Dates:** 25–26 September 2026 (draft for the maintainer — not yet signed off)
+**Dates:** 25–26 September 2026; closed by the maintainer 30 September 2026
 **Goal:** the drawing vocabulary, colour, input events, helpers and loop control that a typical
 p5/Processing 2D sketch uses, each with pinned semantics, tests, a gallery example and a guide
 section; plus the gallery and guide foundations and the Sprint 4 follow-ups.
@@ -99,8 +99,14 @@ Windows 11, Python 3.14.7, pygame-ce 2.5.8, pycairo 1.29.1. **CI has still never
 
 ## Sign-off
 
-Sprint 5 closes when the maintainer has read this review and ticked the checklist in
-`reviewers_guide.md`.
+**Closed 30 September 2026** by the maintainer ("Close sprint 5 and 6").
+
+- The checklist in `reviewers_guide.md` was not ticked item by item; the maintainer closed the
+  sprint by instruction.
+- S-039 (first CI run) carried again. The remote now exists (D-023) and CI has run: Windows
+  passes, Linux and macOS fail for environment reasons. It is the first story of Sprint 7.
+- macOS and Linux HiDPI remain unverified on real hardware.
+- Decisions taken while the sprint was open: D-016, D-017, D-018, D-019.
 
 ## Retrospective
 
