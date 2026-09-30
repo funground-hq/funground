@@ -147,7 +147,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 
 | ID | Epic | Story | Sprint |
 |---|---|---|---|
-| S-076 | E-18 | Script mode: sketches without `draw()` (D-029) | 7 |
+| S-076 | E-18 | Script mode: sketches without `draw()` (D-029) | 7 — done |
 | S-077 | E-14 | `load_image` and `image()` for loaded pictures (D-028) | 7 |
 | S-078 | E-14 | `tint` / `no_tint`; drawing part of a picture | 7 |
 | S-079 | E-14 | Pixel access: get/set, whole-picture access | 7 |

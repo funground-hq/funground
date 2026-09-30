@@ -60,11 +60,17 @@ f.run()                              # finds setup() and draw() in this file and
 | `f.run()` | Run `setup()` once, then `draw()` repeatedly. | `f.run()` |
 | `f.run(fps=30)` | The same, overriding the frame rate. | `f.run(fps=30)` |
 | `f.run(max_frames=100)` | **New:** stop by itself after that many frames — for tests, scripts and headless runs. | `f.run(max_frames=100)` |
+| `f.show()` | **Scripts:** open a window on what you have drawn and wait until it is closed (or Escape). Needs `f.size()` first. Returns at once headless. | `f.show()` |
 | `f.stop()` | Ask the main loop to stop after the current `draw()`. | `if f.frame_count > 600: f.stop()` |
 | `f.width`, `f.height` | Current window size. Live values, exactly what you passed to `f.size()`. | `f.circle(f.width / 2, f.height / 2, 80)` |
 
 The window closes with the close button, the Escape key or `f.stop()`. If `setup()` never calls
 `f.size()`, `f.run()` opens a 640×480 window for you.
+
+**A file can also be a script.** With no `setup()`, no `draw()` and no `f.run()`, write the drawing at
+the top level: `f.size(w, h)` makes a canvas with no window, `f.save("a.png")` writes a file at once,
+and `f.show()` opens a window to look at it. A file is one style or the other — see chapter 2 of the
+[User Guide](../guide/02_the_sketch.md).
 
 **Running without a window.** Set the environment variable `FUNGROUND_HEADLESS=1` and the same sketch
 runs with no window at all — `f.save()` still writes files, `f.mouse_x` is 0 and no key is ever down.

@@ -64,6 +64,11 @@ def render(sketch: Path, out: Path, frames: int = FRAMES) -> Path:
         exec(compile(source, str(sketch), "exec"), namespace)
     finally:
         funground.run = original
+    script = api.active_sketch()
+    if not out.exists() and script._script:
+        # A script (S-076) never calls f.run(): its picture is the finished canvas.
+        script._script_flush()
+        save_pixels(script._renderer.pixels(), str(out))
     if not out.exists():
         raise RuntimeError(f"{sketch.name} never showed a frame; nothing saved")
     return out

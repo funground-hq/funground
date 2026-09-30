@@ -224,7 +224,8 @@ def test_state_blocks_nest(sketch, canvas):
 
 
 # ---------------------------------------------------------------- end-of-frame safety
-def test_unbalanced_push_warns_naming_the_count_and_does_not_leak(sketch, canvas):
+def test_unbalanced_push_warns_naming_the_count_and_does_not_leak(sketch, frame_canvas):
+    canvas = frame_canvas      # a running sketch's frames; a script keeps its pushes open (R14)
     red_rects()
     p.push()
     p.push()
@@ -254,7 +255,8 @@ def test_unbalanced_push_is_closed_in_the_frame_itself(sketch, canvas):
     assert sketch._states.depth == 0
 
 
-def test_top_level_transform_resets_at_the_start_of_the_next_frame(canvas):
+def test_top_level_transform_resets_at_the_start_of_the_next_frame(frame_canvas):
+    canvas = frame_canvas      # a running sketch's frames; a script's transform carries on (R14)
     red_rects()
     p.translate(50, 0)
     p.rect(0, 0, 10, 10)
@@ -362,10 +364,9 @@ def test_reset_matrix_keeps_the_hidpi_scale(monkeypatch):
     from funground.sketch import Sketch
 
     api.use_sketch(Sketch())
-    import pygame
+    from conftest import open_frame_window
 
-    pygame.init()
-    p.size(100, 50)
+    open_frame_window(100, 50)          # a running sketch's window (a top-level size() has none, R14)
     p.background("white")
     p.no_stroke()
     p.fill("red")

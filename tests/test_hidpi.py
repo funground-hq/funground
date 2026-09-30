@@ -7,6 +7,7 @@ import pygame
 import pytest
 
 import funground as p
+from conftest import open_frame_window
 from funground import api
 from funground.platform.pygame_platform import detect_backing_scale
 from funground.sketch import Sketch
@@ -26,9 +27,7 @@ def test_forced_scale_is_honoured(monkeypatch):
 def test_window_is_physical_but_width_height_stay_logical(monkeypatch):
     monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     api.use_sketch(Sketch())
-    pygame.init()
-    p.size(100, 50)
-    s = api.active_sketch()
+    s = open_frame_window(100, 50)          # a running sketch's window (a top-level size() has none, R14)
     assert (p.width, p.height) == (100, 50)
     assert s._platform.target.get_size() == (200, 100)
     assert s._renderer.surface.get_width() == 200
@@ -37,8 +36,7 @@ def test_window_is_physical_but_width_height_stay_logical(monkeypatch):
 def test_a_logical_rect_covers_scaled_physical_pixels(monkeypatch):
     monkeypatch.setenv("FUNGROUND_BACKING_SCALE", "2")
     api.use_sketch(Sketch())
-    pygame.init()
-    p.size(100, 50)
+    open_frame_window(100, 50)
     p.background("white")
     p.no_stroke()
     p.fill("red")

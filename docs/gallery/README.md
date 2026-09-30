@@ -21,6 +21,14 @@ setup() runs once; draw() runs again and again. f.frame_count counts the frames,
 
 Source: [`examples/gallery/basics/02_setup_and_draw.py`](../../examples/gallery/basics/02_setup_and_draw.py)
 
+### A script: draw once, no draw() needed
+
+![A script: draw once, no draw() needed](images/basics-03_a_script.png)
+
+Not every picture moves. A script has no functions: f.size() makes the canvas, the lines after it draw on it, f.save() writes a file at once, and f.show() opens a window to look at it.
+
+Source: [`examples/gallery/basics/03_a_script.py`](../../examples/gallery/basics/03_a_script.py)
+
 ## Shapes
 
 ### The basic shapes

@@ -46,9 +46,14 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
 - [x] S-039.3 All 12 cells green; a CI badge in the README
 *Acceptance:* a push to `main` shows 12 green cells.
 
-### S-076 Script mode: sketches without `draw()` — E-18 *(D-029 = D)*
-- [ ] S-076.1 Per D-029 = D and contract R13–R15: scripts (top-level drawing, immediate `save`, `show()`), clear errors for setup-only and mixed files, the exit hint
-- [ ] S-076.2 Contract row; tests; gallery example; guide chapter 2; Quick Reference
+### S-076 Script mode: sketches without `draw()` — E-18 *(D-029 = D)* ✅
+*As built:* by the Sonnet `story-builder`, reviewed here.
+- Seven existing tests that relied on a top-level `size()` opening a window now use a running-sketch test helper; their assertions are unchanged.
+- Added in review: the exit hint stays quiet after a crash.
+- Found in review: the builder killed all `python.exe` processes to clear a hung run, so a rule against that was added to its instructions.
+- Open follow-ups: `full_screen()` at the top level still opens a window; a script keeps every op for its whole run.
+- [x] S-076.1 Per D-029 = D and contract R13–R15: scripts (top-level drawing, immediate `save`, `show()`), clear errors for setup-only and mixed files, the exit hint
+- [x] S-076.2 Contract row; tests; gallery example; guide chapter 2; Quick Reference
 *Acceptance:* a DrawBot-style static page runs and saves with no `draw()` function.
 
 ### S-077 Load and draw images — E-14 *(needs D-028)*

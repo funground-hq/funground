@@ -28,6 +28,9 @@ already made the design decisions. Your job is to carry them out exactly and rep
   example from the feature it shows. Example code is published as CC0 (decision D-026).
 - **Learner-facing text is plain English:** short sentences, no jargon, British spelling in prose
   ("colour"), American spelling in API names (`color=`).
+- **Only stop processes you started yourself.** Never kill processes by name (`taskkill /IM python.exe`,
+  `pkill python`): that also stops the maintainer's own programs. Keep the process ID of anything you
+  start in the background and stop that one.
 - **Do not widen the scope.** If the brief is ambiguous, a test fails and you cannot explain why,
   or the work needs a decision, stop and report. Do not guess.
 

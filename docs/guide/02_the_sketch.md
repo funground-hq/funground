@@ -33,6 +33,49 @@ f.run()
 | `f.stop()` | Ends the sketch after this `draw()`. |
 | `f.run(max_frames=300)` | Stops by itself after 300 frames — handy for tests and screenshots. |
 
+## Scripts: drawing without draw()
+
+Not every picture moves. If you only want to draw something once, you can write a **script**:
+a file with no `setup()`, no `draw()` and no `f.run()`. The lines run from the top to the bottom,
+and what you draw stays on the canvas.
+
+```python
+import funground as f
+
+f.size(400, 300)                    # makes the canvas; no window opens yet
+f.background("lightskyblue")
+f.no_stroke()
+f.fill("gold")
+f.circle(300, 90, 70)
+f.fill("seagreen")
+f.rect(0, 220, 400, 80)
+f.save("scene.png")                 # the file is written right now
+f.show()                            # opens a window; close it or press Escape to finish
+```
+
+![A script](../gallery/images/basics-03_a_script.png)
+
+In a script:
+
+- `f.size()` makes the canvas but does not open a window.
+- `f.save("name.png")` writes the file at once. A `.pdf` or `.svg` keeps everything as shapes.
+- `f.show()` opens a window with your drawing and waits until you close it. Then the script goes
+  on, so you can draw more and call `f.show()` again.
+- Calling `f.size()` again gives you a new, blank canvas.
+- Functions that only make sense for animation (`f.no_loop()`, `f.loop()`, `f.redraw()`,
+  `f.save_frames()` and `f.exit()`) give an error. So does `f.show()` in an animated sketch,
+  because its window is already open.
+
+**Which style should I use?** Use a script for a picture, a poster or a file to print. Use an
+animated sketch when things move or react to the mouse and keyboard. A file is one or the other. If
+it has `setup()` without `draw()`, or drawing at the top level plus `f.run()`, funground stops with
+an error that tells you what to change.
+
+**Why do animated sketches still end with `f.run()`?** Python cannot start a sketch by itself.
+In IDLE and Thonny, only the lines you wrote are run, so a sketch without `f.run()` would just do
+nothing. If you run a file from a terminal and forget `f.run()`, funground reminds you as the
+program ends.
+
 ## Variables that change
 
 A variable made at the top of the file and changed inside `draw()` needs `global`:
