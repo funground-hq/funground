@@ -100,5 +100,8 @@ funground is licensed under the **GNU Lesser General Public License, version 2.1
 [LICENSE](LICENSE). In short: you may use funground in any project, under any licence. If you
 change funground itself and share the result, share those changes under the LGPL too.
 
+**Example code is freer still.** The sketches in [examples/](examples/README.md) and the code in the
+guide are public domain (CC0): copy them into your own work with no conditions.
+
 funground's dependencies and the bundled DejaVu fonts **keep their own licences**. They are listed
 in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

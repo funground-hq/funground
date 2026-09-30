@@ -146,6 +146,14 @@ decisions and are not logged.
 ## Rules that outrank the documents
 
 - The v0.5 source and the test suite are authoritative when a document disagrees with them.
+- **Examples are original** (D-026). Example code is published as CC0, which is only honest for code
+  that is ours. So: never copy or translate an example from another project, website, book or
+  tutorial, whatever its licence. Write each example from the feature it shows, not from a sketch
+  seen elsewhere; an example "in the style of" p5 or DrawBot is written fresh. Ideas and standard
+  algorithms are free to use; their written expression is not. Every new or changed example is
+  checked with `tools/check_originality.py` before its story is done, and the sprint review
+  records the result in `docs/qa/Example_Provenance.md`. If outside code is ever truly needed, it
+  is a decision for the maintainer, and the file carries its source and licence in a header.
 - **Commit as soon as a logical change exists** — one story or concern per commit, message states
   the context. Never let two stories' changes sit staged together (Sprint 1 retro).
 - Learner code in `examples/session1/` never changes to make a test pass.

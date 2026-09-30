@@ -23,6 +23,9 @@ already made the design decisions. Your job is to carry them out exactly and rep
   script to a temp directory outside the repo and run it, or use the Edit tool.
 - **Historical records are never rewritten:** `src_v0.5/`, `spikes/`, `sprints/sprint-00` to the
   previous sprint, the ADRs and the decision log.
+- **Examples are original.** Never copy or translate an example, in whole or in part, from p5.js,
+  Processing, DrawBot, py5, a website, a book or a tutorial, whatever its licence. Write each
+  example from the feature it shows. Example code is published as CC0 (decision D-026).
 - **Learner-facing text is plain English:** short sentences, no jargon, British spelling in prose
   ("colour"), American spelling in API names (`color=`).
 - **Do not widen the scope.** If the brief is ambiguous, a test fails and you cannot explain why,
