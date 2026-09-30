@@ -1,7 +1,7 @@
 # Sprint 6 — Phase 2c: compositing, canvases, text layout, release 0.1
 
-**Dates:** opened 26 Sept 2026 on the maintainer's word. Sprint 5's review awaits sign-off in
-parallel.
+**Dates:** opened 26 Sept 2026; **closed by the maintainer 30 Sept 2026** (`review.md`). Release 0.1
+moved to after Phase 3 (D-027): S-072 and S-073 carried to the release sprint, S-039 to Sprint 7.
 **Release context (D-019):** this sprint ends Phase 2. Its result is published on PyPI as
 **0.1**, the first public release. The D-015 deliverables stand: the code, a **User Guide**, and an
 **Examples Gallery** covering every public name.

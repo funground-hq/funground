@@ -88,7 +88,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 |---|---|---|---|---|
 | S-037 | E-15 | Text polish: LRU-capped `TextRun` cache; `p.text_width()` | 10k-frame headless run keeps the cache bounded | done (Sprint 4) |
 | S-038 | E-13 | macOS / Linux HiDPI via SDL high-DPI flag (unverifiable on the teaching machine) | forced-scale unit tests; documented as unverified on real hardware | done (Sprint 4) — code path only, real-hardware verification pending |
-| S-039 | E-02 | First CI run on a remote; 12-cell matrix green | green badge | blocked (no remote) |
+| S-039 | E-02 | First CI run on a remote; 12-cell matrix green | green badge | Sprint 7 (remote exists, D-023; first run: Windows green, Linux/macOS red) |
 
 ## Phase 2 story cuts from the Feature Map (25 Sept 2026) — Sprints 5–6, not yet scheduled
 
@@ -138,7 +138,18 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-069 | E-22 | User Guide skeleton and first chapters (`docs/guide/`), runnable-snippet test | 5 — done |
 | S-070 | E-02 | Version `0.7.0.dev0` | 5 — done |
 | S-071 | E-22 | User Guide completed for every 0.1 feature; "Coming from p5/Processing" and "Coming from DrawBot" chapters | 6 |
-| S-072 | E-22 | Examples Gallery completed: coverage test green for all of `__all__`; curated showcase page | 6 |
-| S-073 | E-02 | Release 0.1 on PyPI (D-019): distribution name (D-020), packaging metadata and wheel, changelog, Quick Reference for 0.1, version `0.1.0`, tagged, CI green (needs S-039) | 6 |
+| S-072 | E-22 | Examples Gallery completed: coverage test green for all of `__all__`; curated showcase page | carried to Sprint 11 (release sprint, D-027) |
+| S-073 | E-02 | Release 0.1 on PyPI (D-019, moved to Sprint 11 by D-027): distribution name (D-020), packaging metadata and wheel, changelog, Quick Reference for 0.1, version `0.1.0`, tagged, CI green (needs S-039) | 6 |
 | S-074 | E-11 | Curve vocabulary aligned with Processing/p5 (D-018): Bézier / quadratic / Catmull-Rom vertices, contours, `bezier()`/`curve()` shapes, `bezier_point`/`tangent` | 5 — done |
 | S-075 | E-02 | Rename to `funground` (D-020): package, `pyproject`, examples, guide, reference, tests; `import funground as f`; history not rewritten | 6 — done |
+
+## Phase 3 — part of release 0.1 (D-027, 30 Sept 2026)
+
+| ID | Epic | Story | Sprint |
+|---|---|---|---|
+| S-076 | E-18 | Script mode: sketches without `draw()` (D-029) | 7 |
+| S-077 | E-14 | `load_image` and `image()` for loaded pictures (D-028) | 7 |
+| S-078 | E-14 | `tint` / `no_tint`; drawing part of a picture | 7 |
+| S-079 | E-14 | Pixel access: get/set, whole-picture access | 7 |
+| S-080 | E-14 | `copy`, `resize`, `mask`, a few filters | 7 |
+| S-081 | E-24 | `rect_mode` / `ellipse_mode` / `image_mode`, only if D-030 says so | 7 |

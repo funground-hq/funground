@@ -16,7 +16,7 @@ dates; sprint length is the maintainer's call. The backlog (`docs/backlog/`) hol
 | 1 Architecture | 1–3 | `Sketch`, platform split, draw-op IR, Cairo renderer, text as outlines (DejaVu Sans), HiDPI (Windows), headless, PNG/PDF/SVG export |
 | 2a Public vocabulary | 4 | transforms, `push/pop`, `with p.saved_state():`, paths and clipping, `text_width`, Quick Reference v0.6 *(awaiting sign-off)* |
 
-## Phase 2 — the p5/Processing core (Sprints 5–6) → release **0.1**, the first PyPI release (D-019)
+## Phase 2 — the p5/Processing core (Sprints 5–6) — done 30 Sept 2026, not released on its own (D-027)
 
 **Exit:** a typical p5/Processing 2D sketch and a typical DrawBot single-page composition port
 with only naming changes.
@@ -31,12 +31,14 @@ Both grow story by story from Sprint 5 and are finished in Sprint 6.
 | 5 — vocabulary, events, helpers | Feature Map verified (S-040); gallery and guide foundations (S-068, S-069); `square/triangle/quad/arc/polygon`; stroke cap/join/dash/miter, `no_smooth`; shear/`apply_matrix`/`reset_matrix`; `color_mode` HSB/HSL, `color()`, `lerp_color`; input events and callbacks, `pmouse`, buttons, wheel; `map_range/lerp/norm/random_gaussian/random_choice`; `noise`; `no_loop/loop/redraw/millis/frame_rate/exit`; ADR-003; Sprint 4 follow-ups |
 | 6 — compositing, canvases, text layout, release | `text_align` and text metrics; linear/radial gradients; blend modes, opacity, shadow; off-screen canvas (Processing `PGraphics`); multi-line text, leading, word-wrap in a box; `load_font`, bold/italic; `Vector`; frame-sequence export; cursor, full screen, resize; User Guide and Gallery completed; Quick Reference for 0.1; PyPI packaging; release 0.1 |
 
-**Release 0.1** after Sprint 6: the first release published on PyPI (D-019). v0.5 was a
+**Release 0.1 moved (D-027, 30 Sept 2026):** the maintainer widened 0.1 to include Phase 3, so
+nothing is published after Sprint 6. The prerequisites below still apply; they now come due after
+Sprint 11. Original plan: the first release published on PyPI (D-019). v0.5 was a
 teaching zip, never published, so public numbering starts again at 0.1. Prerequisites: git remote,
 CI green on the 12-cell matrix (S-039). The package is published as **funground**
 (D-020, renamed in S-075): `pip install funground`, then `import funground as f`.
 
-## Phase 3 — DrawBot and Processing depth (Sprints 7–11) → releases **0.2, 0.3, …**
+## Phase 3 — DrawBot and Processing depth (Sprints 7–11) → release **0.1**, the first PyPI release (D-019, D-027)
 
 **Exit:** DrawBot-style document work and Processing-style media sketches are both at home.
 
@@ -50,6 +52,20 @@ CI green on the 12-cell matrix (S-039). The package is published as **funground*
 | Sound (E-17) | load/play/loop/volume; amplitude and FFT for visualisers; no synthesis | Processing Sound (basic) |
 | Motion export (E-19) | GIF and MP4 via ffmpeg | DrawBot `saveImage("x.mp4")`, p5 `saveGif` |
 | Controls (E-30) | sliders/toggles bound to sketch variables | DrawBot `Variable` |
+
+| Sprint | Content |
+|---|---|
+| 7 — CI, script mode, images | CI green on all three systems (S-039); sketches without `draw()`; `load_image`, `image`, tint, parts of images, pixels, resize/copy/mask, a few filters |
+| 8 — documents | pages and page sizes, `new_page`, multi-page PDF |
+| 9 — path depth | boolean operations, `point_inside`, bounds, `expand_stroke`, text to path, reusable shapes |
+| 10 — typography and SVG | formatted text runs, tracking, OpenType features, variable fonts, fallback, searchable PDF text; `load_svg` |
+| 11 — media, controls, release | sound playback and analysis; GIF and MP4 export; controls; guide and gallery completed; release 0.1 |
+
+Sprint contents are the starting plan; each sprint's planning confirms or moves them.
+
+**Release 0.1** after Sprint 11: the first release published on PyPI. Deliverables as D-015: the
+code, the User Guide and the Examples Gallery, now covering Phase 3 as well. Prerequisites: CI
+green (S-039), the maintainer's go-ahead to publish.
 
 Engine watch continues (S-036): if the Blend2D binding matures, re-run the Spike 07 bake-off.
 
@@ -81,7 +97,7 @@ covers most of these).
 ## Milestones
 
 ```
-Sprint 5 ── Sprint 6 ── 0.1 on PyPI ── Sprints 7–11 ── 0.2, 0.3 … ── Sprints 12–14 ── 1.0 ─ ─ directional: web, GPU, 3D
+Sprint 5 ── Sprint 6 ── Sprints 7–11 (Phase 3) ── 0.1 on PyPI ── 0.2, 0.3 … ── Sprints 12–14 ── 1.0 ─ ─ directional: web, GPU, 3D
 ```
 
 ## Decisions ahead

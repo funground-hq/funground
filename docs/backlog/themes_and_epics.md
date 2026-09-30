@@ -48,17 +48,17 @@ Phase exit criteria come from the architecture document, sharpened by the review
 
 **Phase 2 exit criterion (revised 25 Sept 2026, see `Feature_Map.md`):** a learner can port a typical p5 "core" sketch (shapes, transforms, colour modes, events, noise, text) and a typical DrawBot single-page composition (paths, gradients, text box, PDF) with only naming changes; the Quick Reference documents it; published on PyPI as 0.1 (D-019); default examples ≤ 720p hold 60 fps on the teaching machine.
 
-## TH-4 Creative Media *(directional)*
+## TH-4 Creative Media *(Phase 3, part of release 0.1 since D-027)*
 
 | Epic | Outcome | Phase | Status |
 |---|---|---|---|
-| E-14 Images | `load_image`, draw with transform, Pillow adapter | 3 | directional |
+| E-14 Images | `load_image`, draw with transform, tint, pixels, a few filters | 3 | ready (Sprint 7, part of 0.1 per D-027) |
 | E-15 Typography | v1 (Phase 2): bundled OFL font, uharfbuzz shaping + fontTools outlines as IR paths, `FontResource`/`TextRun` (S-031, S-029). Later: font choice, multiline layout, embedded-font export | 2 (v1) / 3 | ready (v1) |
-| E-16 SVG import | via `resvg-py` | 3 | directional |
-| E-17 Sound API | Simple `p.sound()` over pygame mixer | 3 | directional |
-| E-18 Document / page / frame model | Multi-page documents, frame sequences | 3 | directional |
-| E-19 Video export | frame sequences (Phase 2), GIF and mp4 via ffmpeg (Phase 3) | 2–3 | directional |
-| E-30 Controls | sliders/toggles bound to sketch variables (DrawBot `Variable`) | 3 | directional |
+| E-16 SVG import | via `resvg-py` | 3 | planned for 0.1 (D-027) |
+| E-17 Sound API | Simple `p.sound()` over pygame mixer | 3 | planned for 0.1 (D-027) |
+| E-18 Document / page / frame model | Multi-page documents, frame sequences | 3 | planned for 0.1 (D-027) |
+| E-19 Video export | frame sequences (Phase 2), GIF and mp4 via ffmpeg (Phase 3) | 2–3 | planned for 0.1 (D-027) |
+| E-30 Controls | sliders/toggles bound to sketch variables (DrawBot `Variable`) | 3 | planned for 0.1 (D-027) |
 
 ## TH-5 Beyond 1.0: GPU, 3D and the web *(directional, D-014)*
 
