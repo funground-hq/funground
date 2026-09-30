@@ -25,6 +25,10 @@ pygame-ce that was never published.
 - **Crisp on scaled displays**: coordinates are logical pixels, rendering is at full resolution.
 
 ### Added
+- **Scripts:** a file can be a script instead of an animated sketch: no `draw()`, no `f.run()`.
+  `f.size()` makes a canvas with no window, `f.save()` writes at once, and the new `f.show()` opens a
+  window to look at it. A file that mixes the two styles gets a clear error, and a program that has
+  a `draw()` but never calls `f.run()` gets a one-line hint when it ends (D-029).
 - **Shapes:** `square`, `triangle`, `quad`, `polygon`, `arc`; `begin_shape` … `end_shape` with
   `vertex`, `bezier_vertex`, `quadratic_vertex`, `curve_vertex`, contours for holes; `bezier`,
   `curve` and their point and tangent helpers; reusable paths with `path()` and `draw_path`.

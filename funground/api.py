@@ -5,7 +5,9 @@ them stable and keep this module free of any backend import.
 """
 from __future__ import annotations
 
+import atexit
 import inspect
+import sys
 from contextlib import AbstractContextManager
 
 from .color import ColorLike as Color
@@ -42,6 +44,42 @@ def live_value(name: str) -> object:
     return getattr(active_sketch(), name)
 
 
+HINT = "Your sketch has a draw() function but never started. Add f.run() as the last line."
+
+
+def exit_hint() -> None:
+    """At exit, remind the learner who wrote draw() but forgot f.run() (contract R13).
+
+    Only for a program run from a terminal that ended without an error: never in an
+    interactive session, never when f.run() was called, and never for a script.
+    """
+    from . import sketch as _sketch_module
+
+    if _crashed or _sketch_module._run_started or hasattr(sys, "ps1") or sys.flags.interactive:
+        return
+    if _active is not None and _active._script:
+        return
+    main = sys.modules.get("__main__")
+    if callable(getattr(main, "draw", None)):
+        print(HINT, file=sys.stderr)
+
+
+_crashed = False
+_previous_excepthook = sys.excepthook
+
+
+def _note_crash(exc_type, exc, tb) -> None:
+    """Remember that the program ended with an error, so the exit hint stays quiet: the error is
+    the thing to fix, and a hint about f.run() below it would point the wrong way."""
+    global _crashed
+    _crashed = True
+    _previous_excepthook(exc_type, exc, tb)
+
+
+sys.excepthook = _note_crash
+atexit.register(exit_hint)
+
+
 # ---- window / lifecycle
 def size(width: int, height: int, *, title: str = "funground", fps: int = 60) -> None:
     """Create or resize the sketch window."""
@@ -59,6 +97,11 @@ def run(*, fps: int | None = None, max_frames: int | None = None) -> None:
     if caller is None or caller.f_back is None:
         raise RuntimeError("Could not find the sketch that called f.run().")
     active_sketch().run_namespace(caller.f_back.f_globals, fps=fps, max_frames=max_frames)
+
+
+def show() -> None:
+    """Script style: open a window on what has been drawn and wait until it is closed (or Escape)."""
+    active_sketch().show()
 
 
 def stop() -> None:

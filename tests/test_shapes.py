@@ -94,7 +94,7 @@ def test_arc_is_close_to_a_true_circle():
         assert math.isclose(math.hypot(x, y), 100, rel_tol=1e-9)
 
 
-def test_clear_makes_pixels_transparent(sketch, canvas):
+def test_clear_makes_pixels_transparent(sketch, frame_canvas):
     p.background("red")
     p.clear()
     op = sketch.frame.ops[-1]

@@ -2,8 +2,8 @@
 
 DrawBot is further from funground than p5.js or Processing. It draws by running a script once
 from top to bottom, in points on a page whose origin is the bottom-left corner, with colours as
-floats from 0 to 1. funground draws by calling `setup()` once and `draw()` every frame, in pixels
-from a top-left origin, with colours mostly as 0–255 values or names. This chapter states the big
+floats from 0 to 1. funground draws in pixels from a top-left origin, with colours mostly as
+0–255 values or names, either as a script or by calling `setup()` once and `draw()` every frame. This chapter states the big
 differences plainly, then goes name by name.
 
 ## The drawing loop
@@ -13,9 +13,11 @@ Animation and multi-page documents come from calling `newPage()` again and again
 a page, and `saveImage(...)` at the end can write them out as a PDF, or as frames of a video or
 GIF.
 
-funground needs a `draw()` function, called once per frame by `f.run()`; there is no "run once"
-mode yet. A script without a `draw()` — the DrawBot style — is planned for Phase 3, without a
-firm shape yet.
+funground has both styles. A DrawBot script ports as a funground **script**: no `draw()`, no
+`f.run()`, the same top-to-bottom order. `f.size(w, h)` makes the canvas without opening a window,
+`f.save(path)` writes the file at once, and `f.show()` opens a window to look at the result.
+When you want movement, write an animated sketch instead, with `setup()`, `draw()` and `f.run()`
+(chapter 2). A file is one style or the other.
 
 ## Coordinates
 
@@ -118,15 +120,15 @@ its own already draws something.
 
 DrawBot's `saveImage(path, **options)` writes the current page (or every page, as a multi-page
 PDF or an animation) to a file whose extension picks the format — `pdf`, `png`, `svg`, `gif`,
-`mp4`, and several more. funground's `f.save(path)` writes the current frame, as `.png`, `.pdf` or
-`.svg` (chapter 13); `f.save_frames(pattern, count)` writes a numbered sequence of frames, which
+`mp4`, and several more. funground's `f.save(path)` writes the picture, as `.png`, `.pdf` or
+`.svg` (chapter 13). In a script it writes at once, like `saveImage`; `f.save_frames(pattern, count)` writes a numbered sequence of frames, which
 you then turn into a video or GIF with a tool such as ffmpeg.
 
 ## Pages
 
 DrawBot documents can hold many pages: `newPage(w, h)` starts a new one, and `pages()` returns
 them all, so drawing can be organised across several pages of one document. funground doesn't
-have multiple pages yet — one canvas per running sketch — though it is one of the things
+have multiple pages yet — one canvas per script or sketch — though it is one of the things
 Phase 3 may add, alongside `create_graphics` pictures (chapter 9), which already give you more
 than one drawing surface within a single run.
 
@@ -153,30 +155,25 @@ text("ten circles", (20, 20))
 saveImage("~/Desktop/circles.pdf")
 ```
 
-And the same picture in funground, with the y-flip and the 0–1 colours made explicit:
+And the same picture as a funground script, with the y-flip and the 0–1 colours made explicit:
 
 ```python
 import funground as f
 
+f.size(400, 200)
+f.background((13, 13, 20))
+for i in range(10):
+    x = 20 + i * 38 + 18                        # + 18: DrawBot's x was the oval's left edge
+    red, green, blue = 1 - i / 9, i / 18, i / 9
+    f.fill((red * 255, green * 255, blue * 255, int(.7 * 255)))
+    y = f.height - (70 + 36)                    # DrawBot's y counts up from the bottom
+    f.circle(x, y + 18, 36)
+f.fill("white")
+f.text_size(14)
+f.text("ten circles", 20, f.height - 20 - 14)   # y flipped from DrawBot's bottom-left origin
 
-def setup():
-    f.size(400, 200)
-
-
-def draw():
-    f.background((13, 13, 20))
-    for i in range(10):
-        x = 20 + i * 38 + 18                    # + 18: DrawBot's x was the oval's left edge
-        red, green, blue = 1 - i / 9, i / 18, i / 9
-        f.fill((red * 255, green * 255, blue * 255, int(.7 * 255)))
-        y = f.height - (70 + 36)                # DrawBot's y counts up from the bottom
-        f.circle(x, y + 18, 36)
-    f.fill("white")
-    f.text_size(14)
-    f.text("ten circles", 20, f.height - 20 - 14)   # y flipped from DrawBot's bottom-left origin
-
-
-f.run(max_frames=1)
+f.save("circles.pdf")                           # written at once, like saveImage
+f.show()                                        # look at it; close the window to finish
 ```
 
 ## What is not here yet

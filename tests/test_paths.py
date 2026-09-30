@@ -138,7 +138,8 @@ def test_empty_shape_draws_nothing(sketch, canvas):
     assert sketch.frame.ops == ()
 
 
-def test_shape_left_open_at_frame_end_is_dropped_with_a_warning(sketch, canvas):
+def test_shape_left_open_at_frame_end_is_dropped_with_a_warning(sketch, frame_canvas):
+    canvas = frame_canvas      # frames belong to a running sketch (a script has none, R14)
     p.background("white")
     p.fill("red")
     p.begin_shape()
@@ -289,7 +290,8 @@ def test_background_is_not_limited_by_a_clip(canvas):
     assert px(canvas, 75, 50) == BLUE
 
 
-def test_clip_persists_only_for_the_frame_when_used_without_push(canvas):
+def test_clip_persists_only_for_the_frame_when_used_without_push(frame_canvas):
+    canvas = frame_canvas      # frames belong to a running sketch (a script's clip carries on, R14)
     p.background("white")
     p.no_stroke()
     p.fill("red")

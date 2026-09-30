@@ -32,7 +32,7 @@ def test_guide_has_a_table_of_contents_listing_every_chapter():
 
 @pytest.mark.parametrize("chapter, code", list(_runnable_blocks()))
 def test_complete_examples_run_as_printed(chapter, code, tmp_path, monkeypatch):
-    assert "f.run(" in code, "a ```python block must be a complete sketch; use ```py for fragments"
+    assert "f.run(" in code or "f.show(" in code,         "a ```python block must be a complete sketch or script; use ```py for fragments"
     monkeypatch.chdir(tmp_path)               # examples that f.save() write here
     sketch = tmp_path / "example.py"
     sketch.write_text(code, encoding="utf-8")

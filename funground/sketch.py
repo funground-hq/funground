@@ -62,6 +62,8 @@ def default_renderer() -> Renderer:
 
 Namespace = dict[str, Any]
 
+_run_started = False          # set once any sketch has been run; the exit hint reads it (S-076)
+
 
 class Sketch:
     def __init__(self, platform: Platform | None = None, renderer: Renderer | None = None) -> None:
@@ -117,6 +119,13 @@ class Sketch:
         self.last_frame: tuple[tuple[int, int], bytes] | None = None
         # S-052: create_graphics() names pictures "graphics-N" in creation order per run.
         self._graphics_counter = 0
+        # S-076, contract R13-R15: a script is a top-level f.size() with no sketch running. Its
+        # canvas has no window; every op it draws stays in self.frame (show() and PDF/SVG saves
+        # replay them) and is drawn onto self._renderer's persistent surface on demand.
+        self._script = False
+        self._script_scale = 1.0
+        self._script_drawn = 0         # how many of self.frame's ops are already on the surface
+        self._script_depth = 0         # the persistent surface's open Save depth
 
     # ------------------------------------------------------------ state
     @property
@@ -236,8 +245,77 @@ class Sketch:
         self.fps = int(fps)
         self.title = title
         self._check_capabilities()
+        if not self.running:
+            self._begin_script()
+            return
+        self._script = False
         pw, ph = self._platform.open_window(self.width, self.height, self.title)
         self._attach(pw, ph)
+
+    # ---- scripts (S-076, contract R13-R15)
+    def _begin_script(self) -> None:
+        """A top-level f.size(): a blank canvas with no window (contract R14)."""
+        import os
+
+        forced = os.environ.get("FUNGROUND_BACKING_SCALE")
+        self._script_scale = max(0.5, float(forced)) if forced else 1.0
+        self._renderer.attach(round(self.width * self._script_scale), round(self.height * self._script_scale),
+                              self._script_scale)
+        self._renderer._base_matrix = self._renderer._ctx.get_matrix()   # what reset_matrix() returns to
+        self.frame.clear()
+        self._states.unwind()          # the old canvas's open pushes went with it
+        self._shape = None
+        self._script = True
+        self._has_window = True
+        self._script_drawn = 0
+        self._script_depth = 0
+        self._graphics_counter = 0
+        self._start_time = time.perf_counter()
+
+    def _script_flush(self) -> None:
+        """Draw the ops added since the last flush onto the script canvas's surface."""
+        new = self.frame.ops[self._script_drawn:]
+        if new:
+            self._script_depth = self._renderer.draw_batch(self._renderer._ctx, ir.Frame(list(new)),
+                                                           self._script_depth)
+            self._script_drawn += len(new)
+
+    def _only_in_animated(self, name: str) -> None:
+        if self._script:
+            raise RuntimeError(
+                f"f.{name}() is for animated sketches, and this file is a script (it has no draw()). "
+                "To animate, write a draw() function and end the file with f.run()."
+            )
+
+    def show(self) -> None:
+        """Open a window on the script's drawing and wait until it is closed (contract R15)."""
+        from .platform.headless import HeadlessPlatform
+
+        if self.running:
+            raise RuntimeError(
+                "f.show() is for scripts. An animated sketch already has its window: "
+                "remove f.show() and end the file with f.run()."
+            )
+        if not self._script:
+            raise RuntimeError("No drawing window yet. Call f.size(...) first.")
+        if isinstance(self._platform, HeadlessPlatform):
+            return
+        platform = self._platform
+        renderer = default_renderer()
+        try:
+            pw, ph = platform.open_window(self.width, self.height, self.title)
+            renderer.attach(pw, ph, platform.backing_scale)
+            renderer._base_matrix = renderer._ctx.get_matrix()
+            renderer.draw_batch(renderer._ctx, self.frame, 0)      # the kept drawing, at the window's scale
+            platform.start()
+            platform.set_cursor(self._cursor)
+            pixels = renderer.pixels()
+            platform.present(pixels)
+            while platform.poll():
+                platform.present(pixels)           # keeps the picture up if the window is uncovered
+                platform.tick(30)
+        finally:
+            platform.close()
 
     def _attach(self, pw: int, ph: int) -> None:
         self._renderer.attach(pw, ph, self._platform.backing_scale)
@@ -263,12 +341,12 @@ class Sketch:
         if kind not in self.CURSOR_KINDS:
             raise ValueError(f"f.cursor() takes one of {', '.join(map(repr, self.CURSOR_KINDS))}, not {kind!r}")
         self._cursor = kind
-        if self._has_window:
+        if self._has_window and not self._script:
             self._platform.set_cursor(kind)
 
     def no_cursor(self) -> None:
         self._cursor = None
-        if self._has_window:
+        if self._has_window and not self._script:
             self._platform.set_cursor(None)
 
     # ---- pictures (S-052, contract P1)
@@ -283,7 +361,8 @@ class Sketch:
                 f"not ({width!r}, {height!r})"
             )
         self._graphics_counter += 1
-        return Picture(int(width), int(height), self._platform.backing_scale,
+        scale = self._script_scale if self._script else self._platform.backing_scale
+        return Picture(int(width), int(height), scale,
                        f"graphics-{self._graphics_counter}")
 
     def _check_capabilities(self) -> None:
@@ -318,7 +397,19 @@ class Sketch:
 
         format_of(path)  # validate early so the learner sees the error at the call site
         self._require_window()
+        if self._script:                     # contract R14: a script's save writes at once
+            self._save_script(path)
+            return
         self._pending_saves.append(path)
+
+    def _save_script(self, path: str) -> None:
+        from .export import format_of, save_frame, save_pixels
+
+        if format_of(path) == "png":
+            self._script_flush()
+            save_pixels(self._renderer.pixels(), path)
+        else:
+            save_frame(self.frame, path, self.width, self.height, self._script_scale)
 
     def save_frames(self, pattern: str, count: int) -> None:
         """Save this frame and the ones after it, *count* in all, numbered into *pattern* (S-056)."""
@@ -326,6 +417,7 @@ class Sketch:
 
         from .export import format_of
 
+        self._only_in_animated("save_frames")
         runs = re.findall(r"#+", pattern)
         if len(runs) != 1:
             raise ValueError(f"f.save_frames() needs one run of # in the name for the number, "
@@ -871,15 +963,19 @@ class Sketch:
     # ---- loop control and clock (S-048, contract R10)
     def exit(self) -> None:
         """Same as stop(): the sketch ends after the current frame."""
+        self._only_in_animated("exit")
         self.stop()
 
     def no_loop(self) -> None:
+        self._only_in_animated("no_loop")
         self._looping = False
 
     def loop(self) -> None:
+        self._only_in_animated("loop")
         self._looping = True
 
     def redraw(self) -> None:
+        self._only_in_animated("redraw")
         self._redraw_pending = True
 
     def is_looping(self) -> bool:
@@ -919,6 +1015,18 @@ class Sketch:
         self, namespace: Namespace, *, fps: int | None = None, max_frames: int | None = None
     ) -> None:
         """Run the setup()/draw() found in *namespace* (the sketch's globals)."""
+        global _run_started
+        if self._script:
+            if self.frame:
+                raise RuntimeError(
+                    "This file mixes the two styles: it draws at the top level (a script) and also calls "
+                    "f.run() (an animated sketch). Pick one. For an animation, move the drawing into draw(). "
+                    "For a script, remove f.run() and end with f.show()."
+                )
+            self._script = False               # only f.size() so far: it sets the sketch's canvas size
+            self._has_window = False
+            self._renderer.attach(0, 0)
+        _run_started = True
         setup, draw = _sketch_functions(namespace)
         self._callbacks = _event_callbacks(namespace)
         if max_frames is not None and max_frames <= 0:
@@ -1037,6 +1145,12 @@ def _sketch_functions(namespace: Namespace) -> tuple[Callable[[], None] | None, 
 
     if setup is not None and not callable(setup):
         raise TypeError("setup must be a function")
+    if draw is None and setup is not None:
+        raise RuntimeError(
+            "f.run() found a setup() but no draw(). To animate, add a draw() function. "
+            "To draw once, remove setup() and f.run(), write the drawing at the top level "
+            "and end with f.show() (a script)."
+        )
     if draw is None:
         raise RuntimeError("Define a draw() function before calling f.run().")
     if not callable(draw):

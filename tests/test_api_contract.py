@@ -150,6 +150,8 @@ ADDED_FUNCTIONS = {
     # S-052 off-screen graphics
     "create_graphics": "(width: 'int', height: 'int') -> 'Picture'",
     "image": "(picture, x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None) -> 'None'",
+    # S-076 script mode
+    "show": "() -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
