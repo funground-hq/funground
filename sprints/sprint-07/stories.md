@@ -46,8 +46,8 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
 - [x] S-039.3 All 12 cells green; a CI badge in the README
 *Acceptance:* a push to `main` shows 12 green cells.
 
-### S-076 Script mode: sketches without `draw()` — E-18 *(needs D-029)*
-- [ ] S-076.1 Per D-029
+### S-076 Script mode: sketches without `draw()` — E-18 *(D-029 = D)*
+- [ ] S-076.1 Per D-029 = D and contract R13–R15: scripts (top-level drawing, immediate `save`, `show()`), clear errors for setup-only and mixed files, the exit hint
 - [ ] S-076.2 Contract row; tests; gallery example; guide chapter 2; Quick Reference
 *Acceptance:* a DrawBot-style static page runs and saves with no `draw()` function.
 
