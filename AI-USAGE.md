@@ -32,6 +32,12 @@ The model that helped with each commit is named in its `Co-Authored-By` line. Du
 the maintainer also relayed reviews from a separate AI assistant; its points were weighed in the
 design documents like any other review.
 
+**Where funground started.** The starting point, *playground* v0.5, was itself written by a
+different AI assistant at the maintainer's direction: the library, its examples and its Quick
+Reference. funground's Session-1 sketches (`examples/session1/01`–`12`) follow that Quick
+Reference topic by topic, and `examples/hello_visual.py` comes from the v0.5 package. No example
+was copied from p5.js, Processing, DrawBot or any other project.
+
 ## Instructions that steer the work
 
 - **Anthropic's Claude Code system instructions.** These are Anthropic's own and are not
@@ -67,6 +73,12 @@ AI-written tests checking AI-written code is a real risk. funground reduces it i
 **Known limits:**
 - CI runs on Windows, macOS and Linux. On 26 Sept 2026 only Windows passed; the macOS and Linux fixes are story S-039. HiDPI on real macOS and Linux screens is still untested.
 - The browser track is research only.
+- AI-written code can occasionally echo code the model was trained on. For short teaching
+  sketches the risk is small, and ideas such as a bouncing ball are not copyrightable, but it
+  cannot be ruled out entirely.
+- Copyright in purely AI-generated material is unsettled and differs between countries. The
+  licences cover everything the maintainer can own. Anthropic's terms, like most AI providers',
+  give the customer the rights in the output; no one else has a claim to funground's material.
 
 ## Sprint log
 
