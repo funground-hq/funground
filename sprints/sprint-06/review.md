@@ -35,14 +35,12 @@ This is empty, even across the full rename. **22 public names added** (106 → 1
 | S-075 Rename | `playground` → `funground`, `import funground as f` | **Sonnet sub-agent** |
 | S-054 Fonts | `load_font`, `text_font`, `text_style`, bundled bold and italic | **Sonnet sub-agent** |
 | S-052 Pictures | `create_graphics`, `image` | **Sonnet sub-agent** |
-| S-071 Guide chapters 14–15 | see the note below | **Sonnet sub-agent** |
+| S-071 Guide chapters 14–15 | "Coming from p5/Processing" with the table of deliberate differences; "Coming from DrawBot" with every claim checked against drawbot.com. One wrong row, about p5's `textSize`, was removed in review | **Sonnet sub-agent** |
 | S-072 Gallery showcase | carried to the release sprint (D-027) | — |
 | S-073 Release 0.1 | carried to the release sprint (D-027); `CHANGELOG.md` started | — |
 | S-039 CI | carried to Sprint 7. The first run was on 26 Sept: Windows green, Linux and macOS red | — |
 
-**S-071:** the "Coming from p5/Processing" and "Coming from DrawBot" chapters were being written
-when the sprint closed. They are committed separately, as the last Sprint 6 story, and this
-table is updated when they land.
+**S-071** was finished just after the maintainer closed the sprint and is counted in it.
 
 ## Test results
 

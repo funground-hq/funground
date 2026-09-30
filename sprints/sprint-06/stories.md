@@ -207,10 +207,11 @@ What would change this: a hard install-size budget for classrooms.
 - [x] S-052.3 Contract rows; tests; gallery `compositing/`; a new guide chapter, "Pictures"
 *Acceptance:* a Processing `PGraphics` trail effect ports by renaming only.
 
-### S-071 User Guide completed — E-22
-- [ ] S-071.1 Every chapter complete; chapter 14 "Coming from p5/Processing" with the table of
+### S-071 User Guide completed — E-22 ✅
+*As built:* by a Sonnet sub-agent; DrawBot claims checked against drawbot.com; originality check: nothing flagged. One incorrect row, about p5 `textSize`, was removed in review.
+- [x] S-071.1 Every chapter complete; chapter 14 "Coming from p5/Processing" with the table of
   deliberate differences; chapter 15 "Coming from DrawBot"; both link ADR-003
-- [ ] S-071.2 First page: how to install (`pip install <D-020 name>`) and run the first sketch
+- [x] S-071.2 First page: how to install (`pip install <D-020 name>`) and run the first sketch
 *Acceptance:* the guide test passes and no chapter says "planned".
 
 ### S-072 Examples Gallery completed — E-22
