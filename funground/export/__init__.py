@@ -64,6 +64,25 @@ def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 
     return fmt
 
 
+def save_document(pages: list, path: str) -> None:
+    """Write several pages, each ``(width, height, Frame)``, into one multi-page PDF (contract R17).
+
+    Each page is replayed as vectors at its own size (points = logical pixels); rasters embed as
+    they do on any PDF surface (contract P3, P7).
+    """
+    if format_of(path) != "pdf":
+        raise ValueError(f"a multi-page document is a .pdf, not {path!r}")
+    first_width, first_height, _ = pages[0]
+    surface = cairo.PDFSurface(path, first_width, first_height)
+    renderer = CairoRenderer()
+    for width, height, frame in pages:
+        surface.set_size(width, height)               # takes effect for the page about to be drawn
+        ctx = renderer.context_for(surface, 1.0)
+        renderer.draw(ctx, frame)
+        surface.show_page()
+    surface.finish()
+
+
 def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logical_height: int, path: str) -> str:
     """Write a Picture to *path* immediately (contract P2): PNG = its pixels; PDF/SVG replay
 

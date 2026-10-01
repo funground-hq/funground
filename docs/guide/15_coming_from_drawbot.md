@@ -11,7 +11,7 @@ differences plainly, then goes name by name.
 A DrawBot script has no loop: it runs once, in order, and whatever it draws stays on the page.
 Animation and multi-page documents come from calling `newPage()` again and again — each call adds
 a page, and `saveImage(...)` at the end can write them out as a PDF, or as frames of a video or
-GIF.
+GIF. funground has pages too: `f.new_page()` (see "Pages" below).
 
 funground has both styles. A DrawBot script ports as a funground **script**: no `draw()`, no
 `f.run()`, the same top-to-bottom order. `f.size(w, h)` makes the canvas without opening a window,
@@ -131,11 +131,25 @@ you then turn into a video or GIF with a tool such as ffmpeg.
 
 ## Pages
 
-DrawBot documents can hold many pages: `newPage(w, h)` starts a new one, and `pages()` returns
-them all, so drawing can be organised across several pages of one document. funground doesn't
-have multiple pages yet — one canvas per script or sketch — though it is one of the things
-Phase 3 may add, alongside `create_graphics` pictures (chapter 9), which already give you more
-than one drawing surface within a single run.
+DrawBot documents can hold many pages: `newPage(w, h)` starts a new one, and `pageCount()` says
+how many there are. A funground **script** can do the same:
+
+| DrawBot | funground |
+|---|---|
+| `newPage("A4")` | `f.new_page("A4")` |
+| `newPage(300, 200)` | `f.new_page(300, 200)` |
+| `newPage("A4Landscape")` | `f.new_page("A4Landscape")` |
+| `newPage()` | `f.new_page()` (keeps the size of the current page) |
+| `pageCount()` | `f.page_count()` |
+| `sizes("A4")` | `f.page_size("A4")` gives `(595, 842)` |
+| `saveImage("x.pdf")` | `f.save("x.pdf")` writes every page |
+
+Colours, fonts and other settings carry over to the new page; the transform and
+any open `f.push()` start afresh. `f.save("x.png")` writes one picture per page: `x_1.png`,
+`x_2.png`, and so on. `f.show()` shows the current page, and the left and right arrow keys turn the
+pages. funground does not have DrawBot's `pages()` list or `with page:` blocks: drawing always goes on
+the current page. Chapter 13 has a runnable example. Separately, `create_graphics` pictures
+(chapter 9) give you more drawing surfaces within a single page.
 
 ## A porting walk-through
 
@@ -183,8 +197,7 @@ f.show()                                        # look at it; close the window t
 
 ## What is not here yet
 
-DrawBot features funground doesn't have yet include multi-page documents, loading and filtering
-images, and video export. They are planned for Phase 3, before funground reaches 1.0, without a
-firm date yet. CMYK colour is out of scope for good — see the next line for why.
+DrawBot features funground doesn't have yet include video export. It is planned for Phase 3,
+before funground reaches 1.0, without a firm date yet. CMYK colour is out of scope for good — see the next line for why.
 
 Some features are left out on purpose. [ADR-003](../design/ADR-003-out-of-scope.md) lists them, with what to use instead.

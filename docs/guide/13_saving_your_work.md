@@ -79,6 +79,55 @@ ffmpeg -framerate 30 -i frames/%04d.png my_animation.gif
 
 `%04d` is ffmpeg's way of writing `####`.
 
+## Documents and pages
+
+A script (a file with no `draw()`, see chapter 2) can make a document with several pages.
+`f.new_page()` ends the page you are on and starts a blank one. Give it a size, `f.new_page(300, 200)`,
+or a page name, `f.new_page("A5")`. Use no size to keep the current one. The names are `"A3"`, `"A4"`,
+`"A5"`, `"B5"`, `"Letter"`, `"Legal"`, `"Tabloid"` and `"Square"`. Add `"Landscape"` to turn a page
+on its side, as in `"A4Landscape"`. `f.page_size("A4")` gives the size as numbers, `(595, 842)`, and
+`f.page_count()` says how many pages you have so far.
+
+Colours and other settings carry over to the next page. The transform, the clip and any open
+`f.push()` start afresh.
+
+```python
+import os
+import tempfile
+
+import funground as f
+
+f.new_page("A5")
+f.background("ivory")
+f.fill("tomato")
+f.circle(f.width / 2, 200, 120)
+
+f.new_page()                         # the same size again
+f.fill("black")
+f.text_box("The second page.", 40, 40, 300)
+
+f.new_page(*f.page_size("A5", landscape=True))
+f.background("midnightblue")
+print(f.page_count(), "pages")
+
+folder = tempfile.mkdtemp()
+f.save(os.path.join(folder, "booklet.pdf"))   # one PDF, every page at its own size
+f.save(os.path.join(folder, "booklet.png"))   # booklet_1.png, booklet_2.png, booklet_3.png
+
+f.show()                                     # look at it; the arrow keys turn the pages
+```
+
+![A booklet's last page](../gallery/images/documents-01_booklet.png)
+
+`f.save("booklet.pdf")` writes every page into one PDF, each page at its own size. A PNG or an
+SVG with more than one page is written as one file per page, `booklet_1.png`, `booklet_2.png`, and
+so on. With one page, the name is used as it is.
+
+`f.show()` shows the page you are on. With several pages, press the left and right arrow keys to
+turn them. The window title says "page 2 of 3". Close the window or press Escape to carry on.
+
+Pages belong to scripts. In an animated sketch, `f.new_page()` is an error.
+
 ## Saving without a window
 
 Set the environment variable `FUNGROUND_HEADLESS=1` and funground draws without opening a

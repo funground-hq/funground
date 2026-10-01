@@ -61,6 +61,10 @@ f.run()                              # finds setup() and draw() in this file and
 | `f.run(fps=30)` | The same, overriding the frame rate. | `f.run(fps=30)` |
 | `f.run(max_frames=100)` | **New:** stop by itself after that many frames — for tests, scripts and headless runs. | `f.run(max_frames=100)` |
 | `f.show()` | **Scripts:** open a window on what you have drawn and wait until it is closed (or Escape). Needs `f.size()` first. Returns at once headless. | `f.show()` |
+| `f.new_page()` | **Scripts:** end this page and start a blank one of the same size. The transform starts afresh; colours and other settings carry over. | `f.new_page()` |
+| `f.new_page(width, height)`, `f.new_page("A4")` | The same, with a size in points, or a page name: `"A3"`, `"A4"`, `"A5"`, `"B5"`, `"Letter"`, `"Legal"`, `"Tabloid"`, `"Square"` (add `"Landscape"` to turn it). `f.save("x.pdf")` then writes every page; PNG and SVG write `x_1.png`, `x_2.png`, …; `f.show()` turns pages with the arrow keys. | `f.new_page("A5")` |
+| `f.page_count()` | How many pages the document has so far. | `f.page_count()` |
+| `f.page_size(name, landscape=False)` | The `(width, height)` of a named page, in points. | `f.size(*f.page_size("A4"))` |
 | `f.stop()` | Ask the main loop to stop after the current `draw()`. | `if f.frame_count > 600: f.stop()` |
 | `f.width`, `f.height` | Current window size. Live values, exactly what you passed to `f.size()`. | `f.circle(f.width / 2, f.height / 2, 80)` |
 

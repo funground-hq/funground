@@ -128,6 +128,9 @@ class Sketch:
         self._script_scale = 1.0
         self._script_drawn = 0         # how many of self.frame's ops are already on the surface
         self._script_depth = 0         # the persistent surface's open Save depth
+        # S-084, contract R16: the pages before the current one, each (width, height, ops, BGRA pixels).
+        # The current page is the live canvas (self.frame, self._renderer).
+        self._pages: list[tuple[int, int, list, bytes]] = []
         # S-079, contract P7: reading the canvas mid-frame draws the ops recorded so far onto the
         # surface at once. The window frame is then drawn in steps: _frame_open says its Save is
         # open, _frame_drawn how many of self.frame's ops are already on the surface, _frame_depth
@@ -260,6 +263,7 @@ class Sketch:
         self.fps = int(fps)
         self.title = title
         self._check_capabilities()
+        self._pages = []
         if not self.running:
             self._begin_script()
             return
@@ -270,6 +274,12 @@ class Sketch:
     # ---- scripts (S-076, contract R13-R15)
     def _begin_script(self) -> None:
         """A top-level f.size(): a blank canvas with no window (contract R14)."""
+        self._start_page()
+        self._graphics_counter = 0
+        self._start_time = time.perf_counter()
+
+    def _start_page(self) -> None:
+        """A blank page at self.width x self.height with its own surface (contracts R14, R16)."""
         import os
 
         forced = os.environ.get("FUNGROUND_BACKING_SCALE")
@@ -285,8 +295,50 @@ class Sketch:
         self._script_drawn = 0
         self._script_depth = 0
         self._reset_pixel_state()
-        self._graphics_counter = 0
-        self._start_time = time.perf_counter()
+
+    # ---- pages (S-084, contract R16, R17, D1)
+    def new_page(self, width: Any = None, height: int | None = None) -> None:
+        """End the current page and start a blank one (scripts only)."""
+        from .pages import page_size
+
+        if self.running:
+            raise RuntimeError(
+                "f.new_page() is for scripts (a file with no draw()). An animated sketch has one canvas: "
+                "to make a document, remove draw() and f.run() and write the drawing at the top level."
+            )
+        if isinstance(width, str):
+            if height is not None:
+                raise ValueError("f.new_page(): a page-size name stands alone, e.g. f.new_page(\"A4\"), "
+                                 "without a height")
+            w, h = page_size(width)
+        elif width is None and height is None:
+            w, h = self.width, self.height
+        elif width is None or height is None:
+            raise ValueError("f.new_page() needs both width and height, a size name such as \"A4\", or nothing")
+        else:
+            w, h = width, height
+        if isinstance(w, bool) or isinstance(h, bool) or not isinstance(w, (int, float))                 or not isinstance(h, (int, float)):
+            raise TypeError(f"f.new_page() needs numbers for width and height, not ({width!r}, {height!r})")
+        if w <= 0 or h <= 0:
+            raise ValueError("width and height must be positive")
+        if not self._script:                      # the first page, as f.size() would start it
+            self.size(w, h)
+            return
+        self._sync_canvas()
+        self._pages.append((self.width, self.height, list(self.frame.ops), bytes(self._renderer.pixels().data)))
+        self.width, self.height = int(w), int(h)
+        self._start_page()
+
+    def page_count(self) -> int:
+        """How many pages the document has so far (0 before f.size())."""
+        if self._script:
+            return len(self._pages) + 1
+        return 1 if self._has_window else 0
+
+    def _document_pages(self) -> list[tuple[int, int, list, bytes | None]]:
+        """Every page, the current one last: (width, height, ops, pixels). The current page's pixels are None."""
+        self._flush_pixel_patch()
+        return [*self._pages, (self.width, self.height, list(self.frame.ops), None)]
 
     def _script_flush(self) -> None:
         """Draw the ops added since the last flush onto the script canvas's surface."""
@@ -319,6 +371,9 @@ class Sketch:
             return
         platform = self._platform
         renderer = default_renderer()
+        if self._pages:
+            self._show_pages(platform, renderer)
+            return
         try:
             pw, ph = platform.open_window(self.width, self.height, self.title)
             renderer.attach(pw, ph, platform.backing_scale)
@@ -330,6 +385,40 @@ class Sketch:
             platform.present(pixels)
             while platform.poll():
                 platform.present(pixels)           # keeps the picture up if the window is uncovered
+                platform.tick(30)
+        finally:
+            platform.close()
+
+    def _show_pages(self, platform, renderer) -> None:
+        """show() for a document: the current page first; Left and Right turn the pages (contract R17)."""
+        pages = self._document_pages()
+        total = len(pages)
+        index = total - 1
+        try:
+            def open_page(i: int):
+                w, h, ops, _ = pages[i]
+                title = f"{self.title} - page {i + 1} of {total}"
+                pw, ph = platform.open_window(w, h, title)
+                renderer.attach(pw, ph, platform.backing_scale)
+                renderer._base_matrix = renderer._ctx.get_matrix()
+                renderer.draw_batch(renderer._ctx, ir.Frame(list(ops)), 0)
+                shown = renderer.pixels()
+                platform.present(shown)
+                return shown
+
+            shown = open_page(index)
+            platform.start()
+            platform.set_cursor(self._cursor)
+            while platform.poll():
+                turn = 0
+                for event in platform.events():
+                    if event.kind == "key_pressed":
+                        turn += {"left": -1, "right": 1}.get(event.key, 0)
+                if turn and 0 <= index + turn < total:
+                    index += turn
+                    shown = open_page(index)
+                    platform.set_cursor(self._cursor)
+                platform.present(shown)           # keeps the picture up if the window is uncovered
                 platform.tick(30)
         finally:
             platform.close()
@@ -572,11 +661,37 @@ class Sketch:
         from .export import format_of, save_frame, save_pixels
 
         self._flush_pixel_patch()
-        if format_of(path) == "png":
+        fmt = format_of(path)
+        if self._pages:                                  # contract R17: several pages
+            self._save_pages(path, fmt)
+            return
+        if fmt == "png":
             self._script_flush()
             save_pixels(self._renderer.pixels(), path)
         else:
             save_frame(self.frame, path, self.width, self.height, self._script_scale)
+
+    def _save_pages(self, path: str, fmt: str) -> None:
+        import os
+
+        from .export import save_document, save_frame, save_pixels
+        from .platform.base import Pixels
+
+        pages = self._document_pages()
+        if fmt == "pdf":
+            save_document([(w, h, ir.Frame(list(ops))) for w, h, ops, _ in pages], path)
+            return
+        self._script_flush()
+        stem, ext = os.path.splitext(path)
+        scale = self._script_scale
+        for number, (w, h, ops, pixels) in enumerate(pages, 1):
+            numbered = f"{stem}_{number}{ext}"
+            if fmt == "png":
+                shown = self._renderer.pixels() if pixels is None else Pixels(
+                    pixels, round(w * scale), round(h * scale), "BGRA")
+                save_pixels(shown, numbered)
+            else:
+                save_frame(ir.Frame(list(ops)), numbered, w, h, scale)
 
     def save_frames(self, pattern: str, count: int) -> None:
         """Save this frame and the ones after it, *count* in all, numbered into *pattern* (S-056)."""

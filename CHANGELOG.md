@@ -27,6 +27,10 @@ pygame-ce that was never published.
 - **Crisp on scaled displays**: coordinates are logical pixels, rendering is at full resolution.
 
 ### Added
+- **Pages:** in a script, `f.new_page()` starts a new page (a size, or a name such as `"A5"`);
+  `f.page_count()` counts them and `f.page_size("A4")` gives a name's size. `f.save("x.pdf")` writes
+  every page into one PDF, PNG and SVG write `x_1.png`, `x_2.png`, …, and `f.show()` turns pages with
+  the arrow keys (S-084).
 - **Pixels:** `f.get(x, y)` reads a colour, `f.get(x, y, w, h)` copies a region into a new picture,
   `f.set(x, y, color)` writes one pixel, and `f.load_pixels()`, `f.pixels` and `f.update_pixels()`
   read and write them all at once, as in p5 (pixel density 1; also on pictures). Reading sees the

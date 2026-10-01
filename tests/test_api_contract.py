@@ -154,6 +154,10 @@ ADDED_FUNCTIONS = {
     "show": "() -> 'None'",
     # S-077 images
     "load_image": "(path: 'str') -> 'Picture'",
+    # S-084 pages
+    "new_page": "(width: 'int | str | None' = None, height: 'int | None' = None) -> 'None'",
+    "page_count": "() -> 'int'",
+    "page_size": "(name: 'str', landscape: 'bool' = False) -> 'tuple[int, int]'",
     # S-081 drawing modes
     "rect_mode": "(mode: 'str') -> 'None'",
     "ellipse_mode": "(mode: 'str') -> 'None'",
