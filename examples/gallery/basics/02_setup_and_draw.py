@@ -14,8 +14,9 @@ def draw():
     f.background("midnightblue")
     f.fill("gold")
     f.no_stroke()
-    # a dot that walks across the window, one step per frame
-    f.circle(40 + f.frame_count * 8, f.height / 2, 30)
+    # a dot that walks across the window, one step per frame, and starts again at the left edge
+    x = (40 + f.frame_count * 8) % f.width
+    f.circle(x, f.height / 2, 30)
     f.fill("white")
     f.text_size(20)
     f.text(f"frame {f.frame_count} of a {f.width} x {f.height} window", 20, 20)
