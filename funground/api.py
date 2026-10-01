@@ -222,6 +222,21 @@ def rect(x: float, y: float, width: float, height: float) -> None:
     active_sketch().rect(x, y, width, height)
 
 
+def rect_mode(mode: str) -> None:
+    """How rect() and square() read their numbers: "corner", "corners", "center" or "radius"."""
+    active_sketch().rect_mode(mode)
+
+
+def ellipse_mode(mode: str) -> None:
+    """How ellipse(), circle() and arc() read their numbers: "center", "radius", "corner" or "corners"."""
+    active_sketch().ellipse_mode(mode)
+
+
+def image_mode(mode: str) -> None:
+    """How image() reads its numbers: "corner", "corners" or "center"."""
+    active_sketch().image_mode(mode)
+
+
 def line(x1: float, y1: float, x2: float, y2: float) -> None:
     active_sketch().line(x1, y1, x2, y2)
 

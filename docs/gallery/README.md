@@ -47,6 +47,14 @@ square, triangle, quad and polygon for straight-sided shapes; arc for part of an
 
 Source: [`examples/gallery/shapes/02_more_shapes.py`](../../examples/gallery/shapes/02_more_shapes.py)
 
+### Placing shapes by their centre or corners
+
+![Placing shapes by their centre or corners](images/shapes-03_modes.png)
+
+The same four numbers, drawn under each drawing mode. The red dot marks (x, y) in every box. rect_mode and ellipse_mode have four modes each. image_mode has three.
+
+Source: [`examples/gallery/shapes/03_modes.py`](../../examples/gallery/shapes/03_modes.py)
+
 ## Colour
 
 ### Four ways to say a colour
