@@ -1,6 +1,6 @@
 # Sprint 8 — Phase 3b: documents and pages
 
-**Dates:** opened 1 Oct 2026 under D-034 (minimal intervention), while Sprint 7 awaits sign-off.
+**Dates:** opened 1 Oct 2026 under D-034 (minimal intervention); **closed by the maintainer 1 Oct 2026** (`review.md`).
 **Release context (D-027):** part of release 0.1, after Phase 3.
 
 **Goal:** DrawBot-style documents. A script draws pages of any size and saves them as one

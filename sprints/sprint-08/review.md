@@ -1,6 +1,6 @@
 # Sprint 8 review — Phase 3b: documents and pages
 
-**Dates:** 1 October 2026 (draft for the maintainer — not yet signed off)
+**Dates:** 1 October 2026; closed by the maintainer 1 October 2026
 **Goal:** DrawBot-style documents — pages of any size in one multi-page PDF, `show()` flipping
 through them — and the script follow-ups from Sprint 7.
 
@@ -46,11 +46,11 @@ CI: 12/12 green on every story commit
 | ID | Outcome | By |
 |---|---|---|
 | D-036 | Page API: DrawBot names, pages belong to scripts, `size()` unchanged | Claude, under D-034 |
-| D-037 | Path-boolean library for Sprint 9 | **pending — the maintainer's call** (a new dependency) |
+| D-037 | Path-boolean library for Sprint 9: skia-pathops (A) | maintainer |
 
 ## Sign-off
 
-Sprint 8 closes when the maintainer has read this review and the reviewer's guide.
+**Closed 1 October 2026** by the maintainer ("signed off"). D-036 stands as recorded; D-037 was answered (A). Nothing is carried over.
 
 ## Retrospective
 
