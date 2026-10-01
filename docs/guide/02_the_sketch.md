@@ -66,6 +66,11 @@ In a script:
   `f.save_frames()` and `f.exit()`) give an error. So does `f.show()` in an animated sketch,
   because its window is already open.
 
+**How big can a script get?** A script remembers every shape it draws, so that it can save a PDF
+or SVG as shapes. Each simple shape takes about 100 bytes, so a hundred shapes is about 10 KB and a
+million shapes is about 100 MB. That is fine for most pictures. If you draw millions of shapes, draw
+in parts: draw some, call `f.save()`, then call `f.size()` again to start a new, blank canvas.
+
 **Which style should I use?** Use a script for a picture, a poster or a file to print. Use an
 animated sketch when things move or react to the mouse and keyboard. A file is one or the other. If
 it has `setup()` without `draw()`, or drawing at the top level plus `f.run()`, funground stops with

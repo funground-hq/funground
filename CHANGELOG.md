@@ -27,6 +27,7 @@ pygame-ce that was never published.
 - **Crisp on scaled displays**: coordinates are logical pixels, rendering is at full resolution.
 
 ### Added
+- **Full screen in scripts:** `f.full_screen()` at the top of a script makes the canvas the screen's size, and `f.show()` shows it full screen (S-085).
 - **Pages:** in a script, `f.new_page()` starts a new page (a size, or a name such as `"A5"`);
   `f.page_count()` counts them and `f.page_size("A4")` gives a name's size. `f.save("x.pdf")` writes
   every page into one PDF, PNG and SVG write `x_1.png`, `x_2.png`, …, and `f.show()` turns pages with

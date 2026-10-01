@@ -613,3 +613,110 @@ def test_exit_hint_stays_quiet_after_a_crash(tmp_path):
     assert "ValueError: boom" in result.stderr
     assert "never started" not in result.stderr
 
+
+
+# ---------------------------------------------------------------- S-085: full_screen() in a script
+class FullScreenRecorder(RecordingPlatform):
+    def __init__(self) -> None:
+        super().__init__()
+        self.full_screens: list[str] = []
+
+    def open_full_screen(self, title):
+        self.full_screens.append(title)
+        return super().open_full_screen(title)
+
+
+def test_top_level_full_screen_opens_no_window_and_sizes_the_canvas():
+    platform = FullScreenRecorder()
+    script_sketch(platform)
+    p.full_screen()
+    assert (p.width, p.height) == HeadlessPlatform.SCREEN_SIZE == (1920, 1080)
+    assert platform.opened == [] and platform.full_screens == []
+    p.background("white")
+    p.circle(100, 100, 50)                      # a canvas: drawing works at once
+
+
+def test_show_after_full_screen_takes_the_full_screen_route():
+    platform = WindowPlatform(polls=2)
+    platform.full_screens = []
+
+    def open_full_screen(title):
+        platform.calls.append("open_full_screen")
+        platform.size = (640, 360)
+        return platform.size
+
+    platform.open_full_screen = open_full_screen
+    platform.display_size = lambda: (640, 360)
+    script_sketch(platform)
+    p.full_screen()
+    p.background("red")
+    p.show()
+    assert "open_full_screen" in platform.calls and "open_window" not in platform.calls
+    assert platform.calls[-1] == "close"
+    assert platform.presented[0][:2] == (640, 360)
+
+
+def test_only_pages_made_by_full_screen_are_shown_full_screen():
+    platform = WindowPlatform(polls=2)
+    platform.open_full_screen = lambda title: (platform.calls.append("open_full_screen"), (320, 200))[1]
+    platform.display_size = lambda: (320, 200)
+    platform.events = lambda: []
+    script_sketch(platform)
+    p.full_screen()
+    p.new_page(50, 50)
+    p.show()                                        # opens on the current page: a normal window
+    assert platform.calls.count("open_window") == 1 and "open_full_screen" not in platform.calls
+    p.size(30, 30)
+    p.full_screen()
+    p.show()
+    assert "open_full_screen" in platform.calls
+
+
+def test_show_after_full_screen_with_the_real_platform_ends_on_escape(monkeypatch):
+    monkeypatch.setenv("SDL_VIDEODRIVER", "dummy")
+    monkeypatch.delenv("FUNGROUND_HEADLESS", raising=False)
+    api.use_sketch(Sketch())
+    p.full_screen()
+    assert p.width > 0 and p.height > 0
+    assert not pygame.display.get_init()             # the size was read without leaving a display open
+    p.background("green")
+
+    def press_escape():
+        for _ in range(50):
+            if pygame.display.get_init():
+                pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=pygame.K_ESCAPE, unicode="", mod=0))
+                return
+            time.sleep(0.02)
+
+    timer = threading.Thread(target=press_escape)
+    timer.start()
+    started = time.perf_counter()
+    p.show()
+    timer.join()
+    assert time.perf_counter() - started < 5
+    assert not pygame.display.get_init()
+
+
+def test_full_screen_in_an_animated_sketch_is_unchanged():
+    seen = []
+    platform = FullScreenRecorder()
+    s = script_sketch(platform)
+    s.run_namespace({"setup": p.full_screen, "draw": lambda: seen.append((p.width, p.height))}, max_frames=1)
+    assert seen == [HeadlessPlatform.SCREEN_SIZE]
+    assert len(platform.full_screens) == 1
+
+
+# ---------------------------------------------------------------- S-085: memory (contract R14)
+def test_a_script_keeps_about_a_hundred_bytes_per_simple_shape():
+    import tracemalloc
+
+    script_sketch()
+    p.size(400, 400)
+    p.fill("red")
+    tracemalloc.start()
+    before = tracemalloc.get_traced_memory()[0]
+    for i in range(1000):
+        p.circle(i % 400, (i * 7) % 400, 5)
+    used = tracemalloc.get_traced_memory()[0] - before
+    tracemalloc.stop()
+    assert used < 300_000                           # measured: about 95 000; this catches a big regression
