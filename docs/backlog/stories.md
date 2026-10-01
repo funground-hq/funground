@@ -155,3 +155,5 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-081 | E-24 | `rect_mode` / `ellipse_mode` / `image_mode` (D-030 = B) | 7 — done |
 | S-082 | E-25 | `color_mode()` as in p5 (D-031 = B) and grey numbers (D-032 = B) | 7 — done |
 | S-083 | E-22 | Gallery browser: a funground app to browse, read and run the examples | 7 — done |
+| S-084 | E-18 | Pages and page sizes: `new_page`, `page_count`, `page_size`; multi-page PDF; `show()` flips pages | 8 |
+| S-085 | E-18 | Script follow-ups: top-level `full_screen()`, memory note | 8 |
