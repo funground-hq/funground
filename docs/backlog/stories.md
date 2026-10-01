@@ -152,4 +152,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-078 | E-14 | `tint` / `no_tint`; drawing part of a picture | 7 |
 | S-079 | E-14 | Pixel access: get/set, whole-picture access | 7 |
 | S-080 | E-14 | `copy`, `resize`, `mask`, a few filters | 7 |
-| S-081 | E-24 | `rect_mode` / `ellipse_mode` / `image_mode`, only if D-030 says so | 7 |
+| S-081 | E-24 | `rect_mode` / `ellipse_mode` / `image_mode` (D-030 = B) | 7 |

@@ -90,8 +90,9 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
 - [ ] S-080.2 `pic.filter(kind)`: blur, grey, invert, threshold. ADR-003 limits this to a handful
 - [ ] S-080.3 Contract rows; tests; gallery; guide; Quick Reference
 
-### S-081 Drawing modes — E-24 *(only if D-030 says so)*
-- [ ] S-081.1 Per D-030
+### S-081 Drawing modes — E-24 *(D-030 = B; contract F10)*
+- [ ] S-081.1 `rect_mode`, `ellipse_mode`, `image_mode` per F10; picture methods too
+- [ ] S-081.2 Tests; gallery example; guide (chapters 3 and 14: the difference row goes); Quick Reference; changelog
 
 ## Out of scope this sprint
 Pages and multi-page documents (Sprint 8); path booleans (Sprint 9); rich typography and SVG
