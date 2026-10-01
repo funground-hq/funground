@@ -369,6 +369,14 @@ f.tint() colours every picture drawn after it: the red, green and blue of each p
 
 Source: [`examples/gallery/images/02_tint_and_parts.py`](../../examples/gallery/images/02_tint_and_parts.py)
 
+### Reading and writing single pixels
+
+![Reading and writing single pixels](images/images-03_pixels.png)
+
+f.set() makes one pixel a colour, and f.get() reads one back as a colour. f.load_pixels() copies the whole canvas into the list f.pixels: four numbers for each pixel (red, green, blue, alpha), row by row. Change the list, then f.update_pixels() writes it back. A Python loop over every pixel is slow, so keep the area small.
+
+Source: [`examples/gallery/images/03_pixels.py`](../../examples/gallery/images/03_pixels.py)
+
 ## Compositing
 
 ### Blend modes, opacity and shadows

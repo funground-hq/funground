@@ -46,6 +46,8 @@ ALLOWED_METHODS = frozenset({
     "begin_contour", "end_contour", "curve_tightness", "end_shape",
     "bezier", "curve", "curve_point", "curve_tangent",   # curve_* use the picture's curve_tightness
     "path", "draw_path", "clip", "no_clip",
+    # S-079 pixels (contract P7, P8); the buffer itself is the ``pixels`` property below
+    "get", "set", "load_pixels", "update_pixels",
 })
 
 # contract P3: a Clear op (background() or clear()) that fully replaces every pixel - opaque
@@ -144,6 +146,7 @@ class Picture:
         # Fixed once, forever: g.reset_matrix() returns to this (contract P2), not to whatever
         # the transform happens to be at the start of a later flush.
         self._sketch._renderer._base_matrix = self._sketch._renderer._ctx.get_matrix()
+        self._sketch._render_hook = self._flush_ops    # reading pixels draws what is recorded first (S-079)
         self._persistent_depth = 0
         self._version = 0
         self._history: list[ir.Op] | None = []     # [] to start: a fresh, transparent picture
@@ -179,9 +182,22 @@ class Picture:
             "window-only functions like size()/run()/cursor() or pure helpers like random()/noise()."
         )
 
+    @property
+    def pixels(self) -> bytearray | None:
+        """Red, green, blue, alpha of every pixel after ``g.load_pixels()``; None before it (contract P8)."""
+        return self._sketch.pixels
+
+    @pixels.setter
+    def pixels(self, value) -> None:
+        self._sketch.pixels = value
+
     # ------------------------------------------------------------ flushing (contract P2)
     def _flush(self) -> None:
         """Render whatever has been drawn since the last flush onto the persistent surface."""
+        self._sketch._flush_pixel_patch()          # waiting g.set() calls become their one Pixels op
+        self._flush_ops()
+
+    def _flush_ops(self) -> None:
         frame = self._sketch.frame
         if not frame:
             return
@@ -194,14 +210,13 @@ class Picture:
         self._snapshot_cache.clear()
 
     def _update_history(self, ops: tuple) -> None:
-        reset_at = None
-        for i, op in enumerate(ops):
-            if _resets_history(op):
-                reset_at = i
-        if reset_at is not None:
-            self._history = list(ops[reset_at:])
-        elif self._history is not None:
-            self._history.extend(ops)
+        for op in ops:
+            if isinstance(op, ir.Pixels):
+                self._history = None               # raster writes cannot be replayed as vectors (P7)
+            elif _resets_history(op):
+                self._history = [op]
+            elif self._history is not None:
+                self._history.append(op)
         # else: still unavailable, and nothing in this batch resumed collecting.
         if self._history is not None and len(self._history) > HISTORY_LIMIT:
             self._history = None

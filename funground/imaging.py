@@ -14,6 +14,7 @@ checks that against the real surface and refuses to guess if it ever differs.
 """
 from __future__ import annotations
 
+import re
 import struct
 
 import pygame
@@ -137,3 +138,41 @@ def tint_pixels(bgra: bytes, width: int, height: int, red: int, green: int, blue
     surface = pygame.image.frombuffer(bytearray(bgra), (width, height), "BGRA")   # a copy: never change the snapshot
     surface.fill((red, green, blue), special_flags=pygame.BLEND_RGB_MULT)
     return pygame.image.tobytes(surface, "BGRA")
+
+
+# ------------------------------------------------------------------ pixel access (S-079, P7/P8)
+# Cairo keeps premultiplied BGRA; learners see plain RGBA. pygame-ce reorders the channels (fast, in C).
+# Only the pixels that are partly transparent need arithmetic, so a Python loop runs over those
+# alone: it is the soft edges of a drawing, not every pixel. Rounding is to the nearest whole number
+# in both directions, which makes premultiply(unpremultiply(p)) == p for every Cairo value, so
+# load_pixels() followed by update_pixels() changes nothing.
+_PARTIAL_ALPHA = re.compile(rb"[\x01-\xfe]")
+
+
+def bgra_to_rgba(bgra: bytes, width: int, height: int) -> bytearray:
+    """Premultiplied BGRA (Cairo) to RGBA that is not premultiplied (what ``pixels`` holds)."""
+    out = bytearray(pygame.image.tobytes(pygame.image.frombuffer(bytearray(bgra), (width, height), "BGRA"), "RGBA"))
+    alpha = bytes(out[3::4])
+    for m in _PARTIAL_ALPHA.finditer(alpha):
+        i = m.start()
+        a = alpha[i]
+        j = i * 4
+        out[j] = min(255, (out[j] * 255 + a // 2) // a)
+        out[j + 1] = min(255, (out[j + 1] * 255 + a // 2) // a)
+        out[j + 2] = min(255, (out[j + 2] * 255 + a // 2) // a)
+    return out
+
+
+def rgba_to_bgra(rgba: bytes, width: int, height: int) -> bytes:
+    """RGBA that is not premultiplied to premultiplied BGRA (Cairo's layout)."""
+    surface = pygame.image.frombuffer(bytearray(rgba), (width, height), "RGBA")
+    out = bytearray(pygame.image.tobytes(surface.premul_alpha(), "BGRA"))   # exact for alpha 0 and 255
+    alpha = bytes(rgba[3::4])
+    for m in _PARTIAL_ALPHA.finditer(alpha):
+        i = m.start()
+        a = alpha[i]
+        j = i * 4
+        out[j] = (rgba[j + 2] * a + 127) // 255        # blue
+        out[j + 1] = (rgba[j + 1] * a + 127) // 255
+        out[j + 2] = (rgba[j] * a + 127) // 255        # red
+    return bytes(out)

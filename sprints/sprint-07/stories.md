@@ -79,11 +79,11 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
   Processing's `copy()` do
 - [x] S-078.3 Contract rows; tests; gallery; guide; Quick Reference
 
-### S-079 Pixels — E-14
-- [ ] S-079.1 `pic.get(x, y)` returns a colour; `pic.set(x, y, colour)`; the same on the canvas
-  with `f.get_pixel` / `f.set_pixel` (names to be pinned in the contract row)
-- [ ] S-079.2 Whole-picture access for speed: load, change, update
-- [ ] S-079.3 Contract rows; tests; gallery (a picture made pixel by pixel); guide; Quick Reference
+### S-079 Pixels — E-14 ✅
+*As built:* by a Sonnet sub-agent, reviewed here. Names and meanings follow p5 (D-035, contract P7/P8): `get`, `set`, `load_pixels`, `pixels`, `update_pixels`, on the canvas and on pictures. Reading renders the ops recorded so far onto the surface (an incremental flush: `_render` then draws only the rest). Writes are one `Pixels` IR op (region and checksum, never bytes); many `set()` calls merge into one.
+- [x] S-079.1 `pic.get(x, y)` returns a colour; `pic.set(x, y, colour)`; the same on the canvas
+- [x] S-079.2 Whole-picture access for speed: load, change, update
+- [x] S-079.3 Contract rows; tests; gallery (a picture made pixel by pixel); guide; Quick Reference
 *Acceptance:* reading a pixel returns what was drawn there, on HiDPI screens too.
 
 ### S-080 Resize, copy, mask and a few filters — E-14 *(D-028 = E: pygame-ce; rarer filters with the Pillow extra)*

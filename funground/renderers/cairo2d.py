@@ -10,7 +10,10 @@ materialised through the outline route (funground.typography).
 from __future__ import annotations
 
 import math
+import zlib
+from array import array
 from collections import OrderedDict
+from operator import itemgetter
 from typing import TYPE_CHECKING
 
 import cairo
@@ -29,6 +32,11 @@ if TYPE_CHECKING:
 # S-037: shaped text runs are cached per (text, size); an LRU cap keeps
 # `f.text(f.frame_count, ...)` from growing the cache without bound.
 TEXT_RUN_CACHE_SIZE = 256
+
+
+def _u32(values) -> memoryview:
+    """32-bit values as a memoryview (native order, which is what Cairo's surface uses)."""
+    return memoryview(array("I", values))
 
 
 class CairoRenderer:
@@ -106,6 +114,22 @@ class CairoRenderer:
         batch on a given *ctx*, and is left untouched here."""
         return self._draw_ops(ctx, frame, depth)
 
+    # ---- a frame drawn in several steps (S-079, contract P7: reading the canvas mid-frame)
+    def begin_frame(self, ctx: cairo.Context) -> None:
+        """What ``draw()`` does before the first op: open a Save and fix the base matrix. Follow it
+        with any number of ``draw_batch()`` calls (carrying the depth along) and one ``end_frame()``;
+        together they draw exactly what one ``draw()`` of the same ops draws."""
+        ctx.save()
+        self._base_matrix = ctx.get_matrix()
+
+    def end_frame(self, ctx: cairo.Context, depth: int) -> None:
+        """What ``draw()`` does after the last op: unwind pushes left open, then restore."""
+        try:
+            while depth:
+                ctx.restore(); depth -= 1
+        finally:
+            ctx.restore()
+
     def _draw_ops(self, ctx: cairo.Context, frame: ir.Frame, depth: int) -> int:
         for op in frame:
             t = type(op)
@@ -159,6 +183,8 @@ class CairoRenderer:
                     self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
             elif t is ir.Image:
                 self._draw_image(ctx, op, self._alpha)
+            elif t is ir.Pixels:
+                self._draw_pixels(ctx, op)
             else:
                 raise NotImplementedError(f"{self.name} renderer cannot draw {t.__name__}")
             if composite is not None:
@@ -264,6 +290,150 @@ class CairoRenderer:
             ctx.pop_group_to_source()
             ctx.paint_with_alpha(layer_alpha)
         ctx.restore()
+
+    # ---- pixel access (S-079, contract P7/P8)
+    # A logical pixel covers the physical pixels from ceil(x * scale) up to (not including)
+    # ceil((x + 1) * scale): get reads the first of them, set paints all of them.
+    @staticmethod
+    def _up(v: float) -> int:
+        return math.ceil(v - 1e-9)
+
+    def _draw_pixels(self, ctx: cairo.Context, op: "ir.Pixels") -> None:
+        """Replace the region's pixels: no transform, clip, tint, opacity or blend mode applies."""
+        block = op.data
+        if block is None:
+            raise RuntimeError(
+                "this Pixels op has no pixels to draw with (an op loaded back from a saved IR "
+                "snapshot cannot be rendered - snapshots never carry pixels, S-079)"
+            )
+        image = cairo.ImageSurface.create_for_data(bytearray(block.bgra), cairo.FORMAT_ARGB32,
+                                                   block.width, block.height, block.width * 4)
+        s = block.scale
+        m = cairo.Matrix(1 / s, 0, 0, 1 / s, block.x / s, block.y / s).multiply(self._base_matrix)
+        if abs(m.xx - 1) < 1e-9 and abs(m.yy - 1) < 1e-9 and abs(m.xy) < 1e-9 and abs(m.yx) < 1e-9:
+            x0 = round(m.x0) if abs(m.x0 - round(m.x0)) < 1e-6 else m.x0       # no blur from rounding noise
+            y0 = round(m.y0) if abs(m.y0 - round(m.y0)) < 1e-6 else m.y0
+            m = cairo.Matrix(1, 0, 0, 1, x0, y0)
+        ctx.save()
+        ctx.reset_clip()
+        ctx.set_matrix(m)
+        ctx.set_source_surface(image, 0, 0)
+        ctx.get_source().set_filter(cairo.FILTER_NEAREST)
+        # PDF and SVG cannot "replace"; they get the pixels laid over the drawing (it is raster anyway)
+        ctx.set_operator(cairo.OPERATOR_SOURCE if isinstance(ctx.get_target(), cairo.ImageSurface)
+                         else cairo.OPERATOR_OVER)
+        ctx.new_path(); ctx.rectangle(0, 0, block.width, block.height); ctx.fill()
+        ctx.restore()
+
+    def _surface_view(self) -> memoryview:
+        """The surface as one 32-bit value per physical pixel (premultiplied BGRA, little-endian)."""
+        surface = self._surface
+        surface.flush()
+        if surface.get_stride() != surface.get_width() * 4:
+            raise RuntimeError("unexpected surface layout")
+        return memoryview(surface.get_data()).cast("B").cast("I")
+
+    def _sample(self, view: memoryview, bx: int, by: int, bw: int, bh: int,
+                x: int, y: int, w: int, h: int, limit: tuple[int, int]) -> bytearray:
+        """Logical pixels x, y, w, h (premultiplied BGRA, w*h*4 bytes) from a physical buffer.
+
+        *view* holds bw x bh physical pixels whose top-left is physical (bx, by). Each logical pixel
+        takes its top-left physical pixel. Logical pixels outside 0..limit stay transparent."""
+        out = bytearray(w * h * 4)
+        xs0, xs1 = max(x, 0), min(x + w, limit[0])
+        ys0, ys1 = max(y, 0), min(y + h, limit[1])
+        if xs0 >= xs1 or ys0 >= ys1 or bw <= 0 or bh <= 0:
+            return out
+        ov = memoryview(out).cast("I")
+        s, up = self._scale, self._up
+        cols = [min(max(up(xx * s) - bx, 0), bw - 1) for xx in range(xs0, xs1)]
+        n = len(cols)
+        contiguous = cols[-1] - cols[0] == n - 1
+        pick = None if contiguous or n == 1 else itemgetter(*cols)
+        for yy in range(ys0, ys1):
+            r = min(max(up(yy * s) - by, 0), bh - 1)
+            o = (yy - y) * w + (xs0 - x)
+            if contiguous:
+                ov[o:o + n] = view[r * bw + cols[0]:r * bw + cols[0] + n]
+            else:
+                row = view[r * bw:(r + 1) * bw]
+                ov[o:o + n] = _u32(pick(row))
+        return out
+
+    def read_logical(self, x: int, y: int, w: int, h: int, width: int, height: int) -> bytes:
+        """The canvas's logical pixels x, y, w, h as premultiplied BGRA; outside the canvas
+        (logical width x height) is transparent black (contract P7)."""
+        if self._surface is None:
+            raise RuntimeError("renderer has no surface")
+        view = self._surface_view()
+        return bytes(self._sample(view, 0, 0, self._surface.get_width(), self._surface.get_height(),
+                                  x, y, w, h, (width, height)))
+
+    def block_from_logical(self, bgra: bytes, x: int, y: int, w: int, h: int) -> "ir.PixelBlock":
+        """Logical premultiplied BGRA for the region x, y, w, h as a physical block: each logical
+        pixel fills all the physical pixels it covers."""
+        s, up = self._scale, self._up
+        px0, px1 = up(x * s), up((x + w) * s)
+        py0, py1 = up(y * s), up((y + h) * s)
+        if s == 1.0:
+            return ir.PixelBlock(s, px0, py0, px1 - px0, py1 - py0, bytes(bgra))
+        src = memoryview(bytes(bgra)).cast("I")
+        cols = [min(max(math.floor(pc / s + 1e-9) - x, 0), w - 1) for pc in range(px0, px1)]
+        pick = itemgetter(*cols) if len(cols) > 1 else None
+        pw = px1 - px0
+        out = bytearray(pw * (py1 - py0) * 4)
+        ov = memoryview(out).cast("I")
+        last_r, last = -1, None
+        for i, pr in enumerate(range(py0, py1)):
+            r = min(max(math.floor(pr / s + 1e-9) - y, 0), h - 1)
+            if r != last_r:
+                row = src[r * w:(r + 1) * w]
+                last = _u32(pick(row) if pick else (row[cols[0]],))
+                last_r = r
+            ov[i * pw:(i + 1) * pw] = last
+        return ir.PixelBlock(s, px0, py0, pw, py1 - py0, bytes(out))
+
+    def pixels_op(self, bgra: bytes, x: int, y: int, w: int, h: int) -> "ir.Pixels":
+        """A ``Pixels`` op for the logical region x, y, w, h whose pixels (premultiplied BGRA at
+        logical resolution) are *bgra*."""
+        return ir.Pixels(x, y, w, h, zlib.crc32(bgra), self.block_from_logical(bgra, x, y, w, h))
+
+    def patch_op(self, patch: dict) -> "ir.Pixels":
+        """One ``Pixels`` op for many single-pixel writes: *patch* maps a logical (x, y) to a Color.
+
+        The op covers the patch's bounding box. Pixels in it that were not written keep what the
+        canvas shows now (so the canvas must be up to date); written ones take their colour exactly."""
+        if self._surface is None:
+            raise RuntimeError("renderer has no surface")
+        xs = [k[0] for k in patch]
+        ys = [k[1] for k in patch]
+        x0, y0 = min(xs), min(ys)
+        w, h = max(xs) - x0 + 1, max(ys) - y0 + 1
+        s, up = self._scale, self._up
+        px0, py0 = up(x0 * s), up(y0 * s)
+        bw, bh = up((x0 + w) * s) - px0, up((y0 + h) * s) - py0
+        region = bytearray(bw * bh * 4)           # starts as what the canvas shows in that block
+        rv = memoryview(region).cast("I")
+        view = self._surface_view()
+        sw, sh = self._surface.get_width(), self._surface.get_height()
+        cx0, cx1 = max(px0, 0), min(px0 + bw, sw)
+        if cx0 < cx1:
+            for r in range(max(py0, 0), min(py0 + bh, sh)):
+                rv[(r - py0) * bw + (cx0 - px0):(r - py0) * bw + (cx1 - px0)] = view[r * sw + cx0:r * sw + cx1]
+        for (x, y), c in patch.items():
+            a = c.a
+            value = (((c.b * a + 127) // 255) | (((c.g * a + 127) // 255) << 8)
+                     | (((c.r * a + 127) // 255) << 16) | (a << 24))
+            bx0, by0 = up(x * s) - px0, up(y * s) - py0
+            bx1, by1 = max(up((x + 1) * s) - px0, bx0 + 1), max(up((y + 1) * s) - py0, by0 + 1)
+            if bx1 - bx0 == 1 and by1 - by0 == 1:
+                rv[by0 * bw + bx0] = value
+            else:
+                run = _u32((value,) * (bx1 - bx0))
+                for r in range(by0, by1):
+                    rv[r * bw + bx0:r * bw + bx1] = run
+        logical = self._sample(rv, px0, py0, bw, bh, x0, y0, w, h, (x0 + w, y0 + h))
+        return ir.Pixels(x0, y0, w, h, zlib.crc32(logical), ir.PixelBlock(s, px0, py0, bw, bh, bytes(region)))
 
     # ---- pictures (S-052, contract P3): draw a Picture's snapshot
     def _draw_image(self, ctx: cairo.Context, op: "ir.Image", alpha: float) -> None:

@@ -20,7 +20,7 @@ _active: Sketch | None = None
 
 LIVE_NAMES = frozenset(
     {"width", "height", "mouse_x", "mouse_y", "is_mouse_pressed", "pmouse_x", "pmouse_y", "mouse_button",
-     "key", "key_code", "is_key_pressed", "frame_count", "delta_time"}
+     "key", "key_code", "is_key_pressed", "frame_count", "delta_time", "pixels"}
 )
 
 
@@ -670,6 +670,28 @@ def tint(color, *more: float) -> None:
 def no_tint() -> None:
     """Stop tinting pictures."""
     active_sketch().no_tint()
+
+
+# ---- pixels (S-079, contract P7, P8)
+def get(x: float, y: float, w: float | None = None, h: float | None = None):
+    """The colour of the pixel at (x, y) as a colour object, as drawn so far. With w and h: a new
+    picture copying that region. Outside the canvas is transparent."""
+    return active_sketch().get(x, y, w, h)
+
+
+def set(x: float, y: float, color, *more: float) -> None:  # noqa: A001  (p5's name)
+    """Make the pixel at (x, y) exactly this colour. Fill, stroke, transform, clip and opacity do not apply."""
+    active_sketch().set(x, y, color, *more)
+
+
+def load_pixels() -> None:
+    """Copy the canvas into f.pixels: red, green, blue, alpha (0-255) for each pixel, row by row."""
+    active_sketch().load_pixels()
+
+
+def update_pixels() -> None:
+    """Write f.pixels back onto the canvas."""
+    active_sketch().update_pixels()
 
 
 # ---- input

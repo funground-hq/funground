@@ -173,10 +173,41 @@ class Image(Op):
     snapshot: Any = field(default=None, compare=False, repr=False)
 
 
-AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image]
+@dataclass(frozen=True, slots=True)
+class PixelBlock:
+    """The pixels behind a ``Pixels`` op (S-079): premultiplied BGRA (Cairo's layout) at the
+    physical resolution it was made at, *scale* physical pixels per logical one. Never serialised."""
+
+    scale: float
+    x: int            # physical left and top of the block
+    y: int
+    width: int        # physical size
+    height: int
+    bgra: bytes
+
+
+@dataclass(frozen=True, slots=True)
+class Pixels(Op):
+    """Write pixels exactly as given (S-079, contract P7/P8): the logical region x, y, width, height.
+
+    The renderer replaces what is there with the pixels, ignoring transform, clip, tint, opacity
+    and blend mode. *checksum* is a CRC32 of the region's premultiplied BGRA bytes at logical
+    resolution, so snapshots record the region and a checksum, never the pixels. *data* carries the
+    pixels so the op can be drawn; like ``Image.snapshot`` it is never serialised or compared.
+    """
+
+    x: int
+    y: int
+    width: int
+    height: int
+    checksum: int
+    data: Any = field(default=None, compare=False, repr=False)
+
+
+AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image, Pixels]
 OP_TYPES: dict[str, type] = {
     cls.__name__: cls
-    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image)
+    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image, Pixels)
 }
 
 
@@ -226,7 +257,7 @@ OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).
-NEVER_SERIALISE = frozenset({"snapshot"})
+NEVER_SERIALISE = frozenset({"snapshot", "data"})
 
 
 def _fields_to_jsonable(obj: Any) -> dict[str, Any]:
