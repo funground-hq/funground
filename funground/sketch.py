@@ -523,6 +523,15 @@ class Sketch:
     def no_fill(self) -> None:
         self._states.update(fill=None)
 
+    def tint(self, color: ColorLike, *more: float) -> None:
+        """Colour every picture drawn with image() from now on (contract P5). Any colour form but a gradient."""
+        if isinstance(color, Gradient):
+            raise ValueError("f.tint() takes a colour, not a gradient")
+        self._states.update(tint=self.read_color(color, *more))
+
+    def no_tint(self) -> None:
+        self._states.update(tint=None)
+
     def stroke(self, color: ColorLike, *more: float) -> None:
         self._states.update(stroke=self._paint(color, *more))
 

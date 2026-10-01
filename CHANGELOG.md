@@ -27,6 +27,9 @@ pygame-ce that was never published.
 - **Crisp on scaled displays**: coordinates are logical pixels, rendering is at full resolution.
 
 ### Added
+- **Tint and parts of a picture:** `f.tint(color)` / `f.no_tint()` multiply the colour and alpha of
+  pictures drawn with `f.image()`, and `f.image(picture, x, y, w, h, sx, sy, sw, sh)` draws only a
+  part of a picture, as in p5 (also on `g.image`).
 - **Gallery browser:** `python tools/gallery_browser.py` browses every example by topic, with its
   picture, description and code, and runs it in its own window. It is itself a funground app.
 - **Scripts:** a file can be a script instead of an animated sketch: no `draw()`, no `f.run()`.

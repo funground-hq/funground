@@ -49,6 +49,8 @@ class GraphicsState:
     # holds each mode's four ranges (rgb, hsb, hsl order) so switching back remembers them.
     color_mode: str = "rgb"
     color_ranges: tuple = DEFAULT_COLOR_RANGES
+    # S-078 tint (contract P5): a colour multiplied into every picture drawn with image(); None = no tint.
+    tint: Color | None = None
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)

@@ -149,7 +149,7 @@ ADDED_FUNCTIONS = {
     "text_style": "(style: 'str') -> 'None'",
     # S-052 off-screen graphics
     "create_graphics": "(width: 'int', height: 'int') -> 'Picture'",
-    "image": "(picture, x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None) -> 'None'",
+    "image": "(picture, x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'",
     # S-076 script mode
     "show": "() -> 'None'",
     # S-077 images
@@ -160,6 +160,9 @@ ADDED_FUNCTIONS = {
     "image_mode": "(mode: 'str') -> 'None'",
     # S-082 colour mode
     "color_mode": "(mode: 'str', max1: 'float | None' = None, max2: 'float | None' = None, max3: 'float | None' = None, max_alpha: 'float | None' = None) -> 'None'",
+    # S-078 tint and image parts (image's signature is under S-052)
+    "tint": "(color, *more: 'float') -> 'None'",
+    "no_tint": "() -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

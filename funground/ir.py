@@ -165,6 +165,11 @@ class Image(Op):
     height: float
     blend_mode: str = "normal"       # S-051, as FillPath/StrokePath
     opacity: int = 255
+    tint: Color | None = None        # S-078 (P5): recorded only when set
+    sx: float | None = None          # S-078 (P6): the part of the picture drawn, in its own logical
+    sy: float | None = None          # pixels (already clipped to the picture); recorded only when given
+    sw: float | None = None
+    sh: float | None = None
     snapshot: Any = field(default=None, compare=False, repr=False)
 
 
@@ -216,7 +221,8 @@ class Frame:
 OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash", "dash_offset", "cap", "join",
                                "curve_tightness", "text_align", "text_valign", "text_leading",
                                "blend_mode", "opacity", "shadow", "font", "text_style",
-                               "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges"})
+                               "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges",
+                               "tint", "sx", "sy", "sw", "sh"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).
@@ -278,6 +284,8 @@ def _extra_from_jsonable(name: str, v: Any) -> Any:
         return tuple(tuple(r) for r in v)
     if name == "shadow":
         return None if v is None else (v[0], v[1], v[2], Color(*v[3]))
+    if name == "tint":
+        return None if v is None else Color(*v)
     return v
 
 
@@ -300,7 +308,7 @@ def op_from_jsonable(d: dict[str, Any]) -> Op:
         if f.name not in d and f.name in OMIT_WHEN_DEFAULT:
             continue                                   # omitted because it was the default
         v = d[f.name]
-        if f.name in ("dash", "shadow"):
+        if f.name in ("dash", "shadow", "tint"):
             kwargs[f.name] = _extra_from_jsonable(f.name, v)
         elif f.name == "style":
             kwargs[f.name] = _state_from_jsonable(v)
