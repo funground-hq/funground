@@ -10,10 +10,10 @@ readme = "README.md"
 license = "LGPL-2.1-or-later"
 license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md", "funground/fonts/DejaVu-LICENSE.txt"]
 requires-python = ">=3.11"
-dependencies = ["pygame-ce>=2.5", "pycairo>=1.27", "fonttools>=4.55", "uharfbuzz>=0.45", "skia-pathops>=0.9", "svgelements>=1.9"]
+dependencies = ["pygame-ce>=2.5", "pycairo>=1.27", "fonttools>=4.55", "uharfbuzz>=0.45", "skia-pathops>=0.9", "svgelements>=1.9", "pypdf>=5"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pillow>=11"]   # CI tests both filter paths (P10)
+dev = ["pytest>=8", "pillow>=11", "pypdfium2>=4"]   # CI tests both filter paths (P10)
 extras = ["pillow>=11"]
 
 [tool.setuptools]
