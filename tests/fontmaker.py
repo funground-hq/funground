@@ -1,7 +1,9 @@
-"""Test-only helper: build a tiny variable font with fontTools (nothing is downloaded).
+"""Test-only helper: build tiny fonts with fontTools (nothing is downloaded).
 
-The font has one axis, ``wght`` from 100 to 900 (default 100), and one letter, "A": a box that is
-thin and narrow at 100 and wide at 900, so both the outline and the advance change with the axis.
+``make_variable_font``: one axis, ``wght`` from 100 to 900 (default 100), and one letter, "A": a box
+that is thin and narrow at 100 and wide at 900, so both the outline and the advance change with the
+axis. ``make_static_font`` (S-094): the letters A to E and a space, each a different simple shape,
+as TrueType or CFF outlines, with a chosen OS/2 ``fsType`` (embedding permission).
 """
 from __future__ import annotations
 
@@ -9,6 +11,7 @@ from pathlib import Path
 
 from fontTools.designspaceLib import AxisDescriptor, DesignSpaceDocument, SourceDescriptor
 from fontTools.fontBuilder import FontBuilder
+from fontTools.pens.t2CharStringPen import T2CharStringPen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.varLib import build as var_build
 
@@ -57,4 +60,53 @@ def make_variable_font(folder: Path) -> str:
     variable, _, _ = var_build(doc)
     out = folder / "TestVar.ttf"
     variable.save(str(out))
+    return str(out)
+
+
+# letter -> polygon (font units, y up); each letter a different shape so a misplaced one shows
+_SHAPES = {
+    "A": [(50, 0), (300, 700), (550, 0)],
+    "B": [(80, 0), (80, 700), (500, 700), (500, 0)],
+    "C": [(60, 350), (300, 700), (540, 350), (300, 0)],
+    "D": [(80, 0), (80, 700), (520, 350)],
+    "E": [(80, 0), (80, 700), (520, 700), (520, 560), (220, 560), (220, 140), (520, 140), (520, 0)],
+}
+
+
+def make_static_font(folder: Path, name: str = "TestStatic", cff: bool = False, fs_type: int = 0) -> str:
+    """Write ``<name>.ttf`` (or ``.otf`` with CFF outlines) into *folder* and return its path."""
+    order = [".notdef", "space", *_SHAPES]
+    fb = FontBuilder(UPEM, isTTF=not cff)
+    fb.setupGlyphOrder(order)
+    fb.setupCharacterMap({32: "space", **{ord(c): c for c in _SHAPES}})
+    shapes = {".notdef": [(50, 0), (50, 700), (450, 700), (450, 0)], "space": None, **_SHAPES}
+    if cff:
+        charstrings = {}
+        for glyph, points in shapes.items():
+            pen = T2CharStringPen(600, None)
+            if points:
+                pen.moveTo(points[0])
+                for pt in points[1:]:
+                    pen.lineTo(pt)
+                pen.closePath()
+            charstrings[glyph] = pen.getCharString()
+        fb.setupCFF(name, {"FullName": name}, charstrings, {})
+    else:
+        glyphs = {}
+        for glyph, points in shapes.items():
+            pen = TTGlyphPen(None)
+            if points:
+                pen.moveTo(points[0])
+                for pt in points[1:]:
+                    pen.lineTo(pt)
+                pen.closePath()
+            glyphs[glyph] = pen.glyph()
+        fb.setupGlyf(glyphs)
+    fb.setupHorizontalMetrics({g: (600, 50) for g in order})
+    fb.setupHorizontalHeader(ascent=800, descent=-200)
+    fb.setupNameTable({"familyName": name, "styleName": "Regular"})
+    fb.setupOS2(fsType=fs_type, sTypoAscender=800, sTypoDescender=-200, usWinAscent=800, usWinDescent=200)
+    fb.setupPost()
+    out = Path(folder) / f"{name}.{'otf' if cff else 'ttf'}"
+    fb.save(str(out))
     return str(out)

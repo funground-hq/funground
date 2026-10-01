@@ -55,6 +55,7 @@ class Glyph:
     x_advance: float
     x_offset: float
     y_offset: float
+    cluster: int = 0                      # S-094: HarfBuzz cluster (index into the run's text), for PDF text
 
 
 class FontResource:
@@ -122,7 +123,7 @@ class FontResource:
         buf.guess_segment_properties()
         hb.shape(self._at(location)[0], buf, {"kern": True, "liga": True, **dict(features)})
         glyphs = tuple(
-            Glyph(i.codepoint, p.x_advance, p.x_offset, p.y_offset)
+            Glyph(i.codepoint, p.x_advance, p.x_offset, p.y_offset, i.cluster)
             for i, p in zip(buf.glyph_infos, buf.glyph_positions)
         )
         return TextRun(self, text, size, glyphs, float(tracking), location)
@@ -144,6 +145,18 @@ class TextRun:
     @property
     def advance(self) -> float:
         return sum(g.x_advance for g in self.glyphs) * self.scale + self.tracking * len(self.glyphs)
+
+    def placements(self, x: float, y: float) -> list[tuple[Glyph, float, float]]:
+        """Each glyph with its origin on the baseline, anchored top-left at (x, y): exactly where
+        `outline_ops` puts its outline (S-094, real text in PDFs)."""
+        s = self.scale
+        baseline = y + self.font.ascent * s
+        pen_x = x
+        out = []
+        for g in self.glyphs:
+            out.append((g, pen_x + g.x_offset * s, baseline - g.y_offset * s))
+            pen_x += g.x_advance * s + self.tracking
+        return out
 
     def outline_ops(self, x: float, y: float, color: Color) -> list[ir.FillPath]:
         """Materialise as FillPath ops anchored top-left at (x, y)."""
