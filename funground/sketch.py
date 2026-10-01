@@ -544,6 +544,18 @@ class Sketch:
         bgra = imaging.rgba_to_bgra(rgba, self.width, self.height)
         self._append(self._renderer.pixels_op(bgra, 0, 0, self.width, self.height))
 
+    def filter(self, kind: str, value: float | None = None) -> None:
+        """Change every pixel drawn so far with a filter, in place (contract P10)."""
+        from . import imaging
+
+        self._require_window()
+        value = imaging.check_filter(kind, value)
+        self._sync_canvas()
+        w, h = self.width, self.height
+        bgra = self._renderer.read_logical(0, 0, w, h, w, h)
+        out = imaging.filter_bgra(bgra, w, h, kind, value)
+        self._append(self._renderer.pixels_op(out, 0, 0, w, h))
+
     # ------------------------------------------------------------ export
     def save(self, path: str) -> None:
         """Write this frame to a .png, .pdf or .svg file when the frame is complete."""

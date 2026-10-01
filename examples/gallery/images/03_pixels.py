@@ -38,7 +38,10 @@ def draw():
     f.background("ivory")
 
     # 1. The tile, drawn much bigger than it is. Each of its 256 pixels was set by hand.
+    # no_smooth() keeps the big pixels sharp instead of blurring them.
+    f.no_smooth()
     f.image(make_tile(), 20, 20, 160, 160)
+    f.smooth()
     label("a picture made with set()", 20, 200)
 
     # 2. A little scene, drawn on a picture so it stays in its box, and an eyedropper:
@@ -81,8 +84,12 @@ def draw():
         f.set(x, y, "crimson")
         f.set(x, y + 1, "crimson")
 
-    # 5. The whole canvas: the band along the bottom becomes grey. load_pixels() sees everything
-    # drawn so far, this frame included.
+    # 5. The whole canvas: the band along the bottom becomes grey. First, put some colour there.
+    # load_pixels() sees everything drawn so far, this frame included.
+    f.no_stroke()
+    for i, name in enumerate(["tomato", "gold", "seagreen", "dodgerblue", "orchid", "orange", "teal", "crimson"]):
+        f.fill(name)
+        f.rect(i * 80, 350, 80, 50)
     f.load_pixels()
     data = f.pixels
     width = 640

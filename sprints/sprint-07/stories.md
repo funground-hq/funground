@@ -86,10 +86,11 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
 - [x] S-079.3 Contract rows; tests; gallery (a picture made pixel by pixel); guide; Quick Reference
 *Acceptance:* reading a pixel returns what was drawn there, on HiDPI screens too.
 
-### S-080 Resize, copy, mask and a few filters — E-14 *(D-028 = E: pygame-ce; rarer filters with the Pillow extra)*
-- [ ] S-080.1 `pic.copy()`, `pic.resize(w, h)`, `pic.mask(other)`
-- [ ] S-080.2 `pic.filter(kind)`: blur, grey, invert, threshold. ADR-003 limits this to a handful
-- [ ] S-080.3 Contract rows; tests; gallery; guide; Quick Reference
+### S-080 Resize, copy, mask and a few filters — E-14 *(D-028 = E: pygame-ce; rarer filters with the Pillow extra)* ✅
+*As built:* by a Sonnet sub-agent, reviewed here. Contract P9/P10. Filters work on unpremultiplied RGBA at logical resolution through the same flush-read-`Pixels`-op path as `update_pixels`; blur works on premultiplied pixels. Posterize, erode and dilate use Pillow when installed, plain Python otherwise, with identical bytes (tested). Under `no_smooth()` pictures scale with the nearest pixel (P3).
+- [x] S-080.1 `pic.copy()`, `pic.resize(w, h)`, `pic.mask(other)`
+- [x] S-080.2 `pic.filter(kind)` and `f.filter(kind)`: eight kinds (P10)
+- [x] S-080.3 Contract rows; tests; gallery; guide; Quick Reference
 
 ### S-081 Drawing modes — E-24 *(D-030 = B; contract F10)* ✅
 *As built:* by the Sonnet `story-builder`, reviewed here. Modes are resolved before ops are recorded; default numbers pass untouched, so snapshots are unchanged. `image_mode("center")` without a size centres the picture's own size.

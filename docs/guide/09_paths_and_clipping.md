@@ -406,4 +406,122 @@ f.run()
 | `f.pixels` | Red, green, blue, alpha for every pixel, in a `bytearray`. |
 | `f.update_pixels()` | Write `f.pixels` back onto the canvas. |
 
+### Changing pictures: copy, resize, mask and filters
+
+A picture can change itself. These are methods of a picture, written `g.copy()` and so on.
+
+- `g.copy()` gives a **new picture** with the same pixels. Change the copy and the first one stays
+  as it was. Use it before you change a picture you want to keep.
+- `g.resize(w, h)` changes the picture to `w` by `h` pixels, in place. The pixels are scaled
+  smoothly. Give 0 for one side and the other side keeps the shape: `g.resize(100, 0)`. Giving
+  0 for both, or a negative number, is an error. After a resize, the picture starts again with
+  no transform, no clip and no open `f.push()`.
+- `g.mask(other)` multiplies the alpha of `g` by the alpha of `other`. Where `other` is
+  see-through, `g` becomes see-through. If `other` has another size, it is scaled to the size
+  of `g` first.
+- `g.filter(kind)` changes every pixel of `g`. `f.filter(kind)` does the same to the canvas, to
+  everything drawn so far. The kinds are:
+
+| Kind | What it does |
+|---|---|
+| `"threshold"`, value 0 to 1 (default 0.5) | Pixels brighter than the value become white. The others become black. |
+| `"gray"` | Every pixel becomes a grey of the same brightness. |
+| `"opaque"` | Every pixel becomes fully solid. |
+| `"invert"` | Red, green and blue are turned upside down: 255 minus the number. |
+| `"blur"`, value = radius in pixels (default 1) | Softens the picture. |
+| `"posterize"`, value 2 to 255 | Each colour keeps only that many levels. You must give the value. |
+| `"erode"` | Each pixel takes the darkest value of its 3 by 3 neighbours, for each colour. Dark areas grow. |
+| `"dilate"` | The same with the brightest value. Bright areas grow. |
+
+Alpha stays as it is, except with `"opaque"`. An unknown kind, or a value out of range, is an
+error that tells you what is allowed.
+
+Filters change pixels. They are raster, like `f.set()`: a picture that has been filtered loses
+its drawing history, so a saved PDF holds it as an image. A filter is quick: a 400 by 300
+picture takes a few hundredths of a second. `"posterize"`, `"erode"` and `"dilate"` are faster
+if you install the extras: `pip install funground[extras]`. The result is the same with or
+without them.
+
+**Crisp pixels.** When you draw a small picture big, funground blurs it a little by default.
+Call `f.no_smooth()` before `f.image()` and the big pixels stay sharp, like pixel art. Call
+`f.smooth()` to go back.
+
+This sketch makes a small picture, then shows copies of it with different changes:
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(450, 240)
+    f.no_loop()
+
+
+def draw():
+    f.background("ivory")
+
+    # The canvas has filter() too. It changes everything drawn so far, so do it early.
+    f.fill("blue")
+    f.rect(120, 100, 100, 70)
+    f.filter("invert")                 # the ivory canvas and the blue box turn into their opposites
+    f.fill("white")
+    f.text("drawn after the filter", 120, 190)
+
+    # A small picture to work on: a sun over some hills.
+    art = f.create_graphics(100, 70)
+    art.background("skyblue")
+    art.no_stroke()
+    art.fill("gold")
+    art.circle(70, 22, 26)
+    art.fill("seagreen")
+    art.circle(30, 85, 80)
+    art.circle(90, 80, 60)
+
+    f.image(art, 10, 10)
+
+    gray = art.copy()                  # a copy: art itself stays the same
+    gray.filter("gray")
+    f.image(gray, 120, 10)
+
+    poster = art.copy()
+    poster.filter("posterize", 3)
+    f.image(poster, 230, 10)
+
+    soft = art.copy()
+    soft.resize(50, 0)                 # 50 wide, and 35 high to keep the shape
+    soft.filter("blur", 1)
+    f.image(soft, 340, 10, 100, 70)
+
+    # A mask: the picture shows only where the mask is solid.
+    hole = f.create_graphics(100, 70)
+    hole.fill("black")
+    hole.circle(50, 35, 60)
+    round_one = art.copy()
+    round_one.mask(hole)
+    f.fill("tomato")
+    f.rect(10, 110, 100, 25)
+    f.image(round_one, 10, 100)
+
+    # Pixel art: no_smooth() keeps the enlarged pixels sharp.
+    tiny = f.create_graphics(4, 4)
+    for i in range(16):
+        tiny.set(i % 4, i // 4, (60 * (i % 4), 60 * (i // 4), 160))
+    f.no_smooth()
+    f.image(tiny, 240, 100, 80, 80)
+    f.smooth()
+
+
+f.run()
+```
+
+![Changing pictures: copy, resize, mask and filters](../gallery/images/images-04_filters.png)
+
+| Call | What it does |
+|---|---|
+| `g.copy()` | A new picture with the same pixels. |
+| `g.resize(w, h)` | Scale the picture to `w` by `h`. A 0 keeps the shape. |
+| `g.mask(other)` | Multiply the alpha of `g` by the alpha of `other`. |
+| `g.filter(kind, value)` | Change every pixel of the picture. |
+| `f.filter(kind, value)` | Change everything drawn on the canvas so far. |
+
 **Next:** [10. Interaction](10_interaction.md)

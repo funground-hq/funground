@@ -48,6 +48,8 @@ ALLOWED_METHODS = frozenset({
     "path", "draw_path", "clip", "no_clip",
     # S-079 pixels (contract P7, P8); the buffer itself is the ``pixels`` property below
     "get", "set", "load_pixels", "update_pixels",
+    # S-080 filters (contract P10); copy, resize and mask are real Picture methods below
+    "filter",
 })
 
 # contract P3: a Clear op (background() or clear()) that fully replaces every pixel - opaque
@@ -237,6 +239,72 @@ class Picture:
         self._snapshot_cache[self._version] = snap
         return snap
 
+    # ------------------------------------------------------------ copy, resize, mask (contract P9)
+    def copy(self) -> "Picture":
+        """A new picture with the same pixels and drawing history; changing one never changes the other.
+
+        The copy starts with the default drawing state and transform, like any new picture."""
+        snap = self._snapshot()
+        other = Picture(self.width, self.height, self._scale, self._sketch._next_graphics_name())
+        other._sketch._name_root = self._sketch._name_root
+        other._write_pixels(snap.pixels)
+        other._history = None if self._history is None else list(self._history)
+        return other
+
+    def resize(self, width: int, height: int) -> None:
+        """Change this picture to width x height logical pixels, scaling its pixels smoothly.
+
+        A 0 for one side keeps the shape of the picture. The drawing history is dropped, and the
+        transform, clip and any open push() start again (the surface is new)."""
+        from . import imaging
+
+        w, h = _size(width, "width"), _size(height, "height")
+        if w < 0 or h < 0:
+            raise ValueError("g.resize(): width and height cannot be negative")
+        if w == 0 and h == 0:
+            raise ValueError("g.resize(): give a width, a height, or both (a 0 keeps the shape)")
+        if w == 0:
+            w = max(1, round(self.width * h / self.height))
+        elif h == 0:
+            h = max(1, round(self.height * w / self.width))
+        snap = self._snapshot()
+        pw, ph = max(1, round(w * self._scale)), max(1, round(h * self._scale))
+        out = imaging.resize_bgra(snap.pixels, snap.phys_width, snap.phys_height, pw, ph)
+        sketch = self._sketch
+        sketch._states.unwind()
+        self.width = sketch.width = w
+        self.height = sketch.height = h
+        renderer = sketch._renderer
+        renderer.attach(pw, ph, self._scale)
+        renderer._base_matrix = renderer._ctx.get_matrix()
+        self._persistent_depth = 0
+        if not sketch._smooth:
+            sketch._append(ir.SetAntialias(False))
+        self._write_pixels(out)
+        self._history = None
+
+    def mask(self, other: "Picture") -> None:
+        """Multiply this picture's alpha by the alpha of *other*, which is scaled to this picture's size first."""
+        from . import imaging
+
+        if not isinstance(other, Picture):
+            raise TypeError(f"g.mask() needs a picture, not {type(other).__name__}")
+        snap = self._snapshot()
+        osnap = other._snapshot()
+        scaled = imaging.resize_bgra(osnap.pixels, osnap.phys_width, osnap.phys_height,
+                                     snap.phys_width, snap.phys_height)
+        self._write_pixels(imaging.mask_bgra(snap.pixels, scaled[3::4]))
+        self._history = None
+
+    def _write_pixels(self, bgra: bytes) -> None:
+        """Put premultiplied BGRA (this picture's physical size) on the surface; a new version."""
+        surface = self._sketch._renderer.surface
+        surface.flush()
+        surface.get_data()[:] = bgra
+        surface.mark_dirty()
+        self._version += 1
+        self._snapshot_cache.clear()
+
     # ------------------------------------------------------------ image() (contract P3)
     def image(self, picture: "Picture", x: float, y: float,
               width: float | None = None, height: float | None = None,
@@ -324,3 +392,9 @@ def _number(v: Any, name: str) -> float:
     if isinstance(v, bool) or not isinstance(v, (int, float)):
         raise TypeError(f"f.image(): {name} must be a number, not {v!r}")
     return float(v)
+
+
+def _size(v: Any, name: str) -> int:
+    if isinstance(v, bool) or not isinstance(v, (int, float)) or v != int(v):
+        raise ValueError(f"g.resize(): {name} must be a whole number, not {v!r}")
+    return int(v)

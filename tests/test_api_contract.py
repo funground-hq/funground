@@ -168,6 +168,8 @@ ADDED_FUNCTIONS = {
     "set": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",
     "load_pixels": "() -> 'None'",
     "update_pixels": "() -> 'None'",
+    # S-080 copy, resize, mask, filters (the picture methods copy/resize/mask/filter are in test_filters.py)
+    "filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

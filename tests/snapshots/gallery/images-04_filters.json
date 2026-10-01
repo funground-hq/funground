@@ -1,0 +1,461 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   240,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-1",
+  "version": 2,
+  "width": 148,
+  "x": 0.0,
+  "y": 0.0
+ },
+ {
+  "checksum": 3157663022,
+  "height": 400,
+  "op": "Pixels",
+  "width": 640,
+  "x": 0,
+  "y": 0
+ },
+ {
+  "color": [
+   255,
+   255,
+   240,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-3",
+  "version": 2,
+  "width": 148,
+  "x": 8.0,
+  "y": 8.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "copy + resize",
+  "x": 8,
+  "y": 123
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-2",
+  "version": 0,
+  "width": 148,
+  "x": 164.0,
+  "y": 8.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "f.filter threshold",
+  "x": 164,
+  "y": 123
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-4",
+  "version": 3,
+  "width": 148,
+  "x": 320.0,
+  "y": 8.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "gray",
+  "x": 320,
+  "y": 123
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-5",
+  "version": 3,
+  "width": 148,
+  "x": 476.0,
+  "y": 8.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "invert",
+  "x": 476,
+  "y": 123
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-6",
+  "version": 3,
+  "width": 148,
+  "x": 8.0,
+  "y": 138.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "blur, radius 3",
+  "x": 8,
+  "y": 253
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-7",
+  "version": 3,
+  "width": 148,
+  "x": 164.0,
+  "y": 138.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "posterize, 4 levels",
+  "x": 164,
+  "y": 253
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-8",
+  "version": 3,
+  "width": 148,
+  "x": 320.0,
+  "y": 138.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "erode",
+  "x": 320,
+  "y": 253
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-9",
+  "version": 3,
+  "width": 148,
+  "x": 476.0,
+  "y": 138.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "dilate",
+  "x": 476,
+  "y": 253
+ },
+ {
+  "height": 24,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "width": 148,
+  "x": 8,
+  "y": 296
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-10",
+  "version": 3,
+  "width": 148,
+  "x": 8.0,
+  "y": 268.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "mask",
+  "x": 8,
+  "y": 383
+ },
+ {
+  "height": 111,
+  "op": "Image",
+  "source": "graphics-12",
+  "version": 4,
+  "width": 148,
+  "x": 164.0,
+  "y": 268.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "mask, then opaque",
+  "x": 164,
+  "y": 383
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "Every little picture is a copy:",
+  "x": 330,
+  "y": 290
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "the photo is never changed.",
+  "x": 330,
+  "y": 310
+ }
+]

@@ -31,6 +31,12 @@ pygame-ce that was never published.
   `f.set(x, y, color)` writes one pixel, and `f.load_pixels()`, `f.pixels` and `f.update_pixels()`
   read and write them all at once, as in p5 (pixel density 1; also on pictures). Reading sees the
   drawing so far, this frame included.
+- **Copy, resize, mask and filters:** `g.copy()`, `g.resize(w, h)` (a 0 keeps the shape) and
+  `g.mask(other)` change pictures; `f.filter(kind, value)` and `g.filter(...)` apply `"threshold"`,
+  `"gray"`, `"opaque"`, `"invert"`, `"blur"`, `"posterize"`, `"erode"` or `"dilate"` to the canvas or
+  a picture. `pip install funground[extras]` makes `"posterize"`, `"erode"` and `"dilate"` faster;
+  the results are the same without it.
+- **Crisp pixel art:** under `f.no_smooth()`, `f.image()` scales pictures with the nearest pixel.
 - **Tint and parts of a picture:** `f.tint(color)` / `f.no_tint()` multiply the colour and alpha of
   pictures drawn with `f.image()`, and `f.image(picture, x, y, w, h, sx, sy, sw, sh)` draws only a
   part of a picture, as in p5 (also on `g.image`).

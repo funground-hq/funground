@@ -61,6 +61,9 @@ coming from p5.
 | `get(x, y)`, `get(x, y, w, h)` | same | `f.get(x, y)` is a colour object, not a list. `f.get(x, y, w, h)` is a picture. Pixels are logical (pixel density 1): on a high-resolution screen `get` reads the top-left real pixel of one |
 | `set(x, y, c)` | same | `f.set(x, y, c)`. Takes any colour form. Ignores fill, stroke, transform, clip, tint, opacity and blend mode. No `updatePixels()` is needed after it |
 | `loadPixels()`, `pixels`, `updatePixels()` | same | `f.load_pixels()`, `f.pixels`, `f.update_pixels()`. `f.pixels` is a flat `bytearray` of red, green, blue, alpha (not premultiplied), 4 per pixel, index `(y * f.width + x) * 4`, as p5 with `pixelDensity(1)`. It is `None` until `load_pixels()`. A picture has the same: `g.pixels` |
+| `filter(THRESHOLD, v)`, `filter(GRAY)`, `filter(OPAQUE)`, `filter(INVERT)`, `filter(POSTERIZE, n)`, `filter(BLUR, r)`, `filter(ERODE)`, `filter(DILATE)` | same | `f.filter("threshold", v)`, `f.filter("gray")`, and so on: the kind is a lower-case word. Works on the canvas (everything drawn so far) and on pictures: `g.filter(...)`. `"posterize"` needs its value. `"posterize"`, `"erode"` and `"dilate"` are faster with `pip install funground[extras]` |
+| `img.copy()`, `img.resize(w, h)`, `img.mask(m)` | same | `g.copy()` (a new picture), `g.resize(w, h)` (a 0 for one side keeps the shape; Processing's rule), `g.mask(other)` (multiplies alpha; `other` is a picture, scaled to fit). All three are methods of a picture, not `f.` functions |
+| `noSmooth()` for images | same | `f.no_smooth()` also makes `f.image()` scale pictures with the nearest pixel, so enlarged pixel art stays crisp |
 
 ### Transforms
 
