@@ -104,6 +104,25 @@ def show() -> None:
     active_sketch().show()
 
 
+def new_page(width: int | str | None = None, height: int | None = None) -> None:
+    """Script style: end this page and start a blank one. Give a size, a name such as "A4", or nothing
+    to keep the size. Colours, text and other settings carry over; the transform starts afresh."""
+    active_sketch().new_page(width, height)
+
+
+def page_count() -> int:
+    """How many pages the document has so far."""
+    return active_sketch().page_count()
+
+
+def page_size(name: str, landscape: bool = False) -> tuple[int, int]:
+    """The (width, height) in points of a named page: "A3", "A4", "A5", "B5", "Letter", "Legal",
+    "Tabloid" or "Square". landscape=True (or a name like "A4Landscape") turns it on its side."""
+    from .pages import page_size as _page_size
+
+    return _page_size(name, landscape)
+
+
 def stop() -> None:
     active_sketch().stop()
 

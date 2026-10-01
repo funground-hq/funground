@@ -351,6 +351,16 @@ f.save_frames("frames/####.png", 30) saves this frame and the next 29 as numbere
 
 Source: [`examples/gallery/saving/03_save_frames.py`](../../examples/gallery/saving/03_save_frames.py)
 
+## Documents and pages
+
+### A booklet with three pages
+
+![A booklet with three pages](images/documents-01_booklet.png)
+
+A script can make a document. f.new_page() ends one page and starts the next. A size name such as "A5" sets the page size, and f.page_size() gives the numbers for a name. f.save("booklet.pdf") writes every page into one PDF. The gallery picture shows the last page, which is on its side.
+
+Source: [`examples/gallery/documents/01_booklet.py`](../../examples/gallery/documents/01_booklet.py)
+
 ## Pictures and images
 
 ### Loading and drawing an image

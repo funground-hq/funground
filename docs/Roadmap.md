@@ -65,7 +65,7 @@ Sprint contents are the starting plan; each sprint's planning confirms or moves 
 
 **Release 0.1** after Sprint 11: the first release published on PyPI. Deliverables as D-015: the
 code, the User Guide and the Examples Gallery, now covering Phase 3 as well. Prerequisites: CI
-green (S-039), the maintainer's go-ahead to publish.
+green (S-039), the maintainer's go-ahead to publish; a manual run of the gallery browser on a real macOS and a real Linux desktop (CI runs them only headless: real windows, HiDPI/Retina, full screen and input are otherwise unverified).
 
 Engine watch continues (S-036): if the Blend2D binding matures, re-run the Spike 07 bake-off.
 

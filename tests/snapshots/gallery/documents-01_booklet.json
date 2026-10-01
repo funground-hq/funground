@@ -1,0 +1,209 @@
+[
+ {
+  "color": {
+   "gradient": "linear",
+   "points": [
+    0.0,
+    0.0,
+    595.0,
+    420.0
+   ],
+   "stops": [
+    [
+     0.0,
+     [
+      255,
+      215,
+      0,
+      255
+     ]
+    ],
+    [
+     0.5,
+     [
+      255,
+      99,
+      71,
+      255
+     ]
+    ],
+    [
+     1.0,
+     [
+      25,
+      25,
+      112,
+      255
+     ]
+    ]
+   ]
+  },
+  "op": "Clear"
+ },
+ {
+  "height": 340,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    200
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_align": "center",
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 515,
+  "x": 40,
+  "y": 40
+ },
+ {
+  "color": [
+   25,
+   25,
+   112,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    25,
+    25,
+    112,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 32
+  },
+  "text": "The end",
+  "x": 70,
+  "y": 70
+ },
+ {
+  "color": [
+   25,
+   25,
+   112,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    25,
+    25,
+    112,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16
+  },
+  "text": "Three pages, one file. Open",
+  "x": 70,
+  "y": 125
+ },
+ {
+  "color": [
+   25,
+   25,
+   112,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    25,
+    25,
+    112,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16
+  },
+  "text": "booklet.pdf to turn them over.",
+  "x": 70,
+  "y": 145.0
+ },
+ {
+  "diameter": 50,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16
+  },
+  "x": 450,
+  "y": 140
+ },
+ {
+  "diameter": 28,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16
+  },
+  "x": 490,
+  "y": 190
+ },
+ {
+  "height": 60,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    70,
+    130,
+    180,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16
+  },
+  "width": 170,
+  "x": 360,
+  "y": 270
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_align": "center",
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "page 3 of 3",
+  "x": 399.5,
+  "y": 290.6875
+ }
+]

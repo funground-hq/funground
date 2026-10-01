@@ -19,9 +19,9 @@ pushes and CI stay with the main session.
 ## Story set
 
 ### S-084 Pages and page sizes — E-18 *(contract R16, R17, D1)*
-- [ ] S-084.1 `new_page`, `page_count`, `page_size`; per-page state rules; the current page for drawing and pixels
-- [ ] S-084.2 Multi-page PDF; numbered PNG/SVG; `show()` flipping pages with the arrow keys
-- [ ] S-084.3 Tests; gallery `documents/` (a short multi-page booklet); a new guide section in chapter 2 or 13; Quick Reference; changelog
+- [x] S-084.1 `new_page`, `page_count`, `page_size`; per-page state rules; the current page for drawing and pixels
+- [x] S-084.2 Multi-page PDF; numbered PNG/SVG; `show()` flipping pages with the arrow keys
+- [x] S-084.3 Tests; gallery `documents/` (a short multi-page booklet); a new guide section in chapter 2 or 13; Quick Reference; changelog
 *Acceptance:* a DrawBot script with `newPage("A4")` and `saveImage("x.pdf")` ports by renaming, with the y-flip and colours handled as chapter 15 shows.
 
 ### S-085 Script follow-ups — E-18
