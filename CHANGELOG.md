@@ -32,6 +32,13 @@ pygame-ce that was never published.
 - **Rounded corners:** `f.rect(x, y, w, h, *radii)` and `f.square(x, y, size, *radii)` take one radius for all corners, or four in p5's order (top-left, top-right, bottom-right, bottom-left); the path builder's `rect` takes them too (S-089). This is an approved change to the v0.5 `rect` signature (D-040): calls without a radius draw exactly as before.
 - **Letters as a path:** `f.text_path(message, x, y)` returns the outlines of the text as a path, set exactly like `f.text()`, so you can cut them out of a shape, outline them, fill them with a gradient or clip with them (S-088).
 - **Tracking, OpenType features, variable fonts:** `f.text_tracking(pixels)` adds space after every letter, `f.text_features(liga=False)` turns OpenType features on or off, and `f.font_variations(wght=700)` sets a variable font's axes. They apply to `f.text`, `f.text_box`, `f.text_width` and `f.text_path`, and a saved state and a picture each keep their own (S-090).
+- **Real text in PDFs:** every PDF funground saves (`f.save("x.pdf")`, a document of several pages,
+  a picture's `g.save("x.pdf")`, and pictures drawn into any of these) holds its text as real text
+  that can be selected, searched and copied. Each font used is put into the file once, as a subset
+  of the letters used, and the page looks the same as before. A font that forbids being put in a
+  file is still saved as letter shapes, and so is all text in SVG files. Text-heavy PDFs are about
+  ten times smaller (S-094). **New dependency:** `pypdf`, a small pure-Python PDF library, now
+  installs with funground (D-043).
 - **Mixed styles in one text:** `f.FormattedString()` holds runs of text, and `append(text, size=, style=, color=, font=, tracking=, features=, variations=)` gives a run its own look; settings left out follow the drawing state. `f.text`, `f.text_box`, `f.text_width` and `f.text_path` take one, a line is as tall as its tallest run, and `f.text_box` returns the overflow as a FormattedString (S-091).
 - **Full screen in scripts:** `f.full_screen()` at the top of a script makes the canvas the screen's size, and `f.show()` shows it full screen (S-085).
 - **Pages:** in a script, `f.new_page()` starts a new page (a size, or a name such as `"A5"`);

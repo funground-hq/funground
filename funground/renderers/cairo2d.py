@@ -53,6 +53,10 @@ class CairoRenderer:
         self._ctx: cairo.Context | None = None
         self._scale = 1.0
         self._text_runs: OrderedDict[tuple[str, int], TextRun] = OrderedDict()
+        # S-094 (T15): set only by the PDF exporters (funground.export.pdf_text). When set, text
+        # is drawn as marker groups that the exporter swaps for real PDF text after the file is
+        # written. Never set for the window, PNG or SVG.
+        self.pdf_text = None
 
     # ---- lifecycle
     def attach(self, width: int, height: int, scale: float = 1.0) -> None:
@@ -179,8 +183,9 @@ class CairoRenderer:
                     ctx.new_path(); ctx.arc(op.x, op.y, max(0.5, op.style.stroke_width / 2), 0, 2 * math.pi)
                     self._source(ctx, op.style.stroke); ctx.fill()
             elif t is ir.Text:
-                for sub in self._text_ops(op):
-                    self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
+                if self.pdf_text is None or not self._pdf_text_marker(ctx, op):
+                    for sub in self._text_ops(op):
+                        self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
             elif t is ir.Image:
                 self._draw_image(ctx, op, self._alpha)
             elif t is ir.Pixels:
@@ -557,7 +562,36 @@ class CairoRenderer:
     def _state_stroke_style(self, ctx, st: GraphicsState) -> None:
         self._stroke_style(ctx, st.stroke_cap, st.stroke_join, st.miter_limit, st.dash, st.dash_offset)
 
+    def _pdf_text_marker(self, ctx, op: ir.Text) -> bool:
+        """S-094 (T15): draw *op* as a marker group for real PDF text; False to draw outlines.
+
+        The group holds the run's colour or gradient clipped to a marker shape that the PDF
+        exporter recognises after ``surface.finish()`` and replaces with the run's glyphs in clip
+        mode, so the paint fills exactly the glyphs. Painting the group back respects the clip,
+        transform, opacity (already in the source) and blend mode, as the outline fill would."""
+        run = self._text_run(op)
+        marker = self.pdf_text.add(run, op.x, op.y, tuple(ctx.get_matrix()))
+        if marker is None:
+            return False
+        ctx.push_group()
+        ctx.set_operator(cairo.OPERATOR_OVER)
+        ctx.set_fill_rule(cairo.FILL_RULE_WINDING)
+        ctx.new_path()
+        ctx.move_to(*marker[0])
+        for point in marker[1:]:
+            ctx.line_to(*point)
+        ctx.close_path()
+        ctx.clip()
+        self._source(ctx, op.color)
+        ctx.paint()
+        ctx.pop_group_to_source()
+        ctx.paint()
+        return True
+
     def _text_ops(self, op: ir.Text):
+        return self._text_run(op).outline_ops(op.x, op.y, op.color)
+
+    def _text_run(self, op: ir.Text) -> "TextRun":
         from ..typography import effective_font, text_settings
 
         style = op.style
@@ -578,7 +612,7 @@ class CairoRenderer:
                 self._text_runs.popitem(last=False)       # evict least recently used
         else:
             self._text_runs.move_to_end(key)              # mark as most recently used
-        return run.outline_ops(op.x, op.y, op.color)
+        return run
 
 
 def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: int,

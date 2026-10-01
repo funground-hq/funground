@@ -3,8 +3,9 @@
 - **PNG** (`save_pixels`): exactly what is on screen - the rendered pixels, including
   everything earlier frames left on the canvas.
 - **PDF / SVG** (`save_frame`): a *replay* of the frame's ops onto a document surface,
-  so the output is true vector (text as glyph outlines until S-032 embeds fonts). A
-  vector file therefore contains what *this* frame drew, not earlier frames.
+  so the output is true vector. A vector file therefore contains what *this* frame drew,
+  not earlier frames. SVG draws text as glyph outlines; every PDF carries real text with an
+  embedded font subset (S-094, contract T15: see `pdf_text`).
 - **`save_picture`** (S-052): the same idea for a Picture's own `g.save(path)` - PNG is its
   pixels, PDF/SVG replay its history when one is available, or embed its pixels when it is
   not (contract P2/P3). Cairo stays behind this provider, per funground's boundary rule: a
@@ -19,6 +20,7 @@ import cairo
 from ..ir import Frame
 from ..platform.base import Pixels
 from ..renderers.cairo2d import CairoRenderer, paint_picture_pixels
+from .pdf_text import PdfTextCollector
 
 FORMATS = ("png", "pdf", "svg")
 
@@ -28,6 +30,23 @@ def format_of(path: str) -> str:
     if ext not in FORMATS:
         raise ValueError(f"cannot save {path!r}: use one of {', '.join('.' + f for f in FORMATS)}")
     return ext
+
+
+def _write_pdf(path: str, draw) -> None:
+    """Write a PDF with real text (S-094, contract T15).
+
+    ``draw(renderer)`` writes the whole document to *path* with *renderer* and finishes the
+    surface. It is called once with a renderer that collects text runs as markers, which are then
+    swapped for real text. Should that step fail, the document is drawn again with text as glyph
+    outlines (exactly what funground wrote before T15), so a save never fails because of it.
+    """
+    renderer = CairoRenderer()
+    renderer.pdf_text = PdfTextCollector()
+    draw(renderer)
+    try:
+        renderer.pdf_text.finish(path)
+    except Exception:
+        draw(CairoRenderer())
 
 
 def save_pixels(pixels: Pixels, path: str) -> None:
@@ -57,10 +76,17 @@ def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 
         surface.finish()
     else:
         cls = cairo.PDFSurface if fmt == "pdf" else cairo.SVGSurface
-        surface = cls(path, width, height)          # document units == logical pixels (points)
-        ctx = renderer.context_for(surface, 1.0)
-        renderer.draw(ctx, frame)
-        surface.finish()
+
+        def draw(renderer: CairoRenderer) -> None:
+            surface = cls(path, width, height)      # document units == logical pixels (points)
+            ctx = renderer.context_for(surface, 1.0)
+            renderer.draw(ctx, frame)
+            surface.finish()
+
+        if fmt == "pdf":
+            _write_pdf(path, draw)
+        else:
+            draw(renderer)
     return fmt
 
 
@@ -73,14 +99,17 @@ def save_document(pages: list, path: str) -> None:
     if format_of(path) != "pdf":
         raise ValueError(f"a multi-page document is a .pdf, not {path!r}")
     first_width, first_height, _ = pages[0]
-    surface = cairo.PDFSurface(path, first_width, first_height)
-    renderer = CairoRenderer()
-    for width, height, frame in pages:
-        surface.set_size(width, height)               # takes effect for the page about to be drawn
-        ctx = renderer.context_for(surface, 1.0)
-        renderer.draw(ctx, frame)
-        surface.show_page()
-    surface.finish()
+
+    def draw(renderer: CairoRenderer) -> None:
+        surface = cairo.PDFSurface(path, first_width, first_height)
+        for width, height, frame in pages:
+            surface.set_size(width, height)           # takes effect for the page about to be drawn
+            ctx = renderer.context_for(surface, 1.0)
+            renderer.draw(ctx, frame)
+            surface.show_page()
+        surface.finish()
+
+    _write_pdf(path, draw)                            # one font subset per document, shared by pages
 
 
 def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logical_height: int, path: str) -> str:
@@ -96,15 +125,21 @@ def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logi
         save_pixels(pixels, path)
         return fmt
     cls = cairo.PDFSurface if fmt == "pdf" else cairo.SVGSurface
-    surface = cls(path, logical_width, logical_height)     # document units == the picture's logical pixels
-    renderer = CairoRenderer()
-    ctx = renderer.context_for(surface, 1.0)
-    if history is not None:
-        renderer._base_matrix = ctx.get_matrix()
-        depth = renderer._draw_ops(ctx, Frame(list(history)), 0)
-        while depth:
-            ctx.restore(); depth -= 1
+
+    def draw(renderer: CairoRenderer) -> None:
+        surface = cls(path, logical_width, logical_height)     # document units == the picture's logical pixels
+        ctx = renderer.context_for(surface, 1.0)
+        if history is not None:
+            renderer._base_matrix = ctx.get_matrix()
+            depth = renderer._draw_ops(ctx, Frame(list(history)), 0)
+            while depth:
+                ctx.restore(); depth -= 1
+        else:
+            paint_picture_pixels(ctx, pixels.data, pixels.width, pixels.height, 0, 0, logical_width, logical_height)
+        surface.finish()
+
+    if fmt == "pdf" and history is not None:
+        _write_pdf(path, draw)
     else:
-        paint_picture_pixels(ctx, pixels.data, pixels.width, pixels.height, 0, 0, logical_width, logical_height)
-    surface.finish()
+        draw(CairoRenderer())
     return fmt
