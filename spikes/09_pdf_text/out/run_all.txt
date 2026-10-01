@@ -1,0 +1,180 @@
+
+######## exp0_baseline
+== exp0_outlines.pdf 6812 bytes
+ pypdf    : ''
+ pymupdf  : ''
+ pdfminer : ''
+ pdfium   : ''
+ fonts    : []
+ search (word found in extracted text, per engine):
+   'office'  : []
+   'Search'  : []
+   'שלום'    : []
+   'مرحبا'   : []
+
+######## exp1_cairo_faces
+pycairo 1.29.1 cairo 1.18.4 HAS_FT_FONT = 0
+FontFace constructors available: ['FontFace', 'ToyFontFace']
+any FT / file-path factory: ['OPERATOR_SOFT_LIGHT']
+
+--- ToyFontFace( DejaVu Sans )
+== exp1_DejaVu_Sans.pdf 10447 bytes
+ pypdf    : '� o�ce'
+ pymupdf  : '\x01 o\x02 ce'
+ pdfminer : '� o� ce'
+ pdfium   : '� o� ce'
+ fonts    : [('JVEEMH+CairoFont-0-1', 'Type0'), ('JIMWCO+ArialMT', 'TrueType')]
+ search (word found in extracted text, per engine):
+   'office'  : []
+   'Search'  : []
+   'שלום'    : []
+   'مرحبا'   : []
+
+--- ToyFontFace( Arial )
+== exp1_Arial.pdf 10447 bytes
+ pypdf    : '� o�ce'
+ pymupdf  : '\x01 o\x02 ce'
+ pdfminer : '� o� ce'
+ pdfium   : '� o� ce'
+ fonts    : [('JVEEMH+CairoFont-0-1', 'Type0'), ('JIMWCO+ArialMT', 'TrueType')]
+ search (word found in extracted text, per engine):
+   'office'  : []
+   'Search'  : []
+   'שלום'    : []
+   'مرحبا'   : []
+
+--- ToyFontFace( NoSuchFontXYZ )
+== exp1_NoSuchFontXYZ.pdf 10447 bytes
+ pypdf    : '� o�ce'
+ pymupdf  : '\x01 o\x02 ce'
+ pdfminer : '� o� ce'
+ pdfium   : '� o� ce'
+ fonts    : [('JVEEMH+CairoFont-0-1', 'Type0'), ('JIMWCO+ArialMT', 'TrueType')]
+ search (word found in extracted text, per engine):
+   'office'  : []
+   'Search'  : []
+   'שלום'    : []
+   'مرحبا'   : []
+
+--- toy show_text (font chosen by the OS, not by us)
+== exp1_toy_show_text.pdf 9738 bytes
+ pypdf    : 'fi office'
+ pymupdf  : 'fi office'
+ pdfminer : 'fi office'
+ pdfium   : 'fi office'
+ fonts    : [('ANCXAM+ArialMT', 'TrueType')]
+ search (word found in extracted text, per engine):
+   'office'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'Search'  : []
+   'שלום'    : []
+   'مرحبا'   : []
+
+######## exp3_check_ligatures
+'fi office' -> 9 chars, 6 glyphs: [('fi', 0), ('space', 2), ('o', 3), ('uniFB03', 4), ('c', 7), ('e', 8)]
+'שלום' -> 4 chars, 4 glyphs: [('uni05DD', 3), ('uni05D5', 2), ('uni05DC', 1), ('uni05E9', 0)]
+'مرحبا' -> 5 chars, 5 glyphs: [('uniFE8E', 4), ('uniFE92', 3), ('uniFEA3', 2), ('uniFEAE', 1), ('uniFEE3', 0)]
+
+######## exp2_invisible_layer
+
+##### variant A_tj_visual  (+3862 bytes over outlines-only)
+== exp2_A_tj_visual.pdf 10674 bytes
+ pypdf    : 'fi office\nSearch me\nשלום\nمرحبا'
+ pymupdf  : 'fi office\nSearch me\nשלום\nمرحبا'
+ pdfminer : 'fi office\n\nSearch me\n\nםולש\n\nابحرم'
+ pdfium   : 'fi office\r\nSearch me\r\nשלום\r\nمرحبا'
+ fonts    : [('ABCDEF+DejaVuSans', 'Type0')]
+ search (word found in extracted text, per engine):
+   'office'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'Search'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'שלום'    : ['pypdf', 'pymupdf', 'pdfium', 'pymupdf.search_for']
+   'مرحبا'   : ['pypdf', 'pymupdf', 'pdfium', 'pymupdf.search_for']
+
+##### variant B_tm_logical  (+3967 bytes over outlines-only)
+== exp2_B_tm_logical.pdf 10779 bytes
+ pypdf    : 'fi office\nSearch me\nםולש\nابحرم'
+ pymupdf  : 'fi office\nSearch me\nשלום\nمرحبا'
+ pdfminer : 'fi office\n\nSearch me\n\nשלום\n\nمرحبا'
+ pdfium   : 'fi office\r\nSearch me\r\nשלום\r\nمرحبا'
+ fonts    : [('ABCDEF+DejaVuSans', 'Type0')]
+ search (word found in extracted text, per engine):
+   'office'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'Search'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'שלום'    : ['pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'مرحبا'   : ['pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+
+##### variant C_tm_logical_actualtext  (+4066 bytes over outlines-only)
+== exp2_C_tm_logical_actualtext.pdf 10878 bytes
+ pypdf    : 'fi office\nSearch me\nםולש\nابحرم'
+ pymupdf  : 'fi office\nSearch me\nשלום\nمرحبا'
+ pdfminer : 'fi office\n\nSearch me\n\nשלום\n\nمرحبا'
+ pdfium   : 'fi office\r\nSearch me\r\nשלום\r\nمرحبا'
+ fonts    : [('ABCDEF+DejaVuSans', 'Type0')]
+ search (word found in extracted text, per engine):
+   'office'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'Search'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'שלום'    : ['pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'مرحبا'   : ['pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+
+######## exp4_positions
+pixels differing between outlines-only and layered render: 0
+'fi office'    ink x   20.50.. 107.00   text box x   20.00.. 108.59   (left -0.50, right +1.59 pt)
+'Search me'    ink x   21.50.. 146.75   text box x   20.00.. 148.22   (left -1.50, right +1.47 pt)
+'שלום'         ink x   22.25..  71.75   text box x   20.00..  73.12   (left -2.25, right +1.37 pt)
+'مرحبا'        ink x   22.25..  73.25   text box x   20.00..  75.50   (left -2.25, right +2.25 pt)
+
+######## exp5_size
+2030 chars; outlines only 226,240 B; with invisible layer 240,670 B; cost 14,430 B (+6%)
+
+######## exp6_library_overlays
+##### C reportlab overlay  (+32914 B)
+== exp6_C_reportlab.pdf 39726 bytes
+ pypdf    : 'fi office\nSearch me\nשלום\nمرحبا'
+ pymupdf  : 'fi office\nSearch me\nשלום\nمرحبا'
+ pdfminer : 'fi office\n\nSearch me\n\nםולש\n\nابحرم'
+ pdfium   : 'fi office\r\nSearch me\r\nשלום\r\nمرحبا'
+ fonts    : [('Helvetica', 'Type1'), ('AAAAAA+DejaVuSans', 'TrueType')]
+ search (word found in extracted text, per engine):
+   'office'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'Search'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'שלום'    : ['pypdf', 'pymupdf', 'pdfium', 'pymupdf.search_for']
+   'مرحبا'   : ['pypdf', 'pymupdf', 'pdfium', 'pymupdf.search_for']
+
+##### D fpdf2 overlay  (+16626 B)
+== exp6_D_fpdf2.pdf 23438 bytes
+ pypdf    : 'fi office\nSearch me\nםולש\nابحرم'
+ pymupdf  : 'fi office\nSearch me\nםולש\nابحرم'
+ pdfminer : 'fi office\n\nSearch me\n\nשלום\n\nمرحبا'
+ pdfium   : 'fi office\r\nSearch me\r\nםולש\r\nابحرم'
+ fonts    : [('MPDFAA+DejaVuSansBook', 'Type0')]
+ search (word found in extracted text, per engine):
+   'office'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'Search'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'שלום'    : ['pdfminer']
+   'مرحبا'   : ['pdfminer']
+
+######## exp7_cairo_tags
+== exp7_tags.pdf 2351 bytes
+ pypdf    : ''
+ pymupdf  : ''
+ pdfminer : ''
+ pdfium   : ''
+ fonts    : []
+ search (word found in extracted text, per engine):
+   'office'  : []
+   'Search'  : []
+   'שלום'    : []
+   'مرحبا'   : []
+has /ActualText: False  has /StructTreeRoot: False  has 'Tj' or 'TJ': False
+
+######## exp8_skia_pdf
+== exp8_skia.pdf 7849 bytes
+ pypdf    : 'ﬁ oﬃce\nSearch me\nשלום\nﻣﺮﺣﺒﺎ'
+ pymupdf  : 'ﬁ oﬃce\nSearch me\nשלום\nﻣﺮﺣﺒﺎ'
+ pdfminer : 'ﬁ oﬃce\n\nSearch me\n\nםולש\n\nﺎﺒﺣﺮﻣ'
+ pdfium   : 'fi office\r\nSearch me\r\nשלום\r\nمرحبا'
+ fonts    : [('AAAAAA+DejaVuSans', 'Type0')]
+ search (word found in extracted text, per engine):
+   'office'  : ['pdfium']
+   'Search'  : ['pypdf', 'pymupdf', 'pdfminer', 'pdfium', 'pymupdf.search_for']
+   'שלום'    : ['pypdf', 'pymupdf', 'pdfium', 'pymupdf.search_for']
+   'مرحبا'   : ['pdfium']

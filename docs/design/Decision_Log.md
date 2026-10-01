@@ -50,7 +50,9 @@ are raised and closed.
 | D-040 | 2026-10-01 | Rounded corners for `rect` and `square` (p5's `rect(x, y, w, h, r)`) | add an optional radius (a v0.5 signature change) · leave it out | add | **accepted** (maintainer: "go ahead" on the recommendation). `rect(x, y, w, h, radius=0)` and `square(x, y, size, radius=0)`; old calls unchanged | 2026-10-01 | Sprint 10 S-089 |
 | D-041 | 2026-10-01 | SVG import: which library reads SVG files as paths (Sprint 10) | A svgelements (pure Python, MIT, no dependencies) · B picosvg (Google; needs lxml) · C SVG as a picture only, via pygame-ce (no new dependency, no vectors) · D our own reader for common SVG | A | **pending** — needed before S-092 | — | conversation 1 Oct 2026 |
 | D-042 | 2026-10-01 | Typography API: tracking, features, variations (S-090) | DrawBot names in snake_case vs others | DrawBot | **decided by Claude (D-034).** `text_tracking`, `text_features(**tags)`, `font_variations(**axes)`; DrawBot's names, `text_`-prefixed where funground's text settings are (`text_size`, `text_font`) | 2026-10-01 | contract T13 |
+| D-043 | 2026-10-01 | Searchable, selectable text in funground's PDFs (lifts D-006's limit) | A invisible text layer via `pypdf` (BSD, 0.4 MB) in the base · B the same as an optional extra · C keep outlines only (D-006) | A | **pending** — evidence in `spikes/09_pdf_text/README.md` | — | spike S-093 |
 
 ## Open
 
 - D-041 SVG import library (before S-092)
+- D-043 Searchable PDF text (pypdf)
