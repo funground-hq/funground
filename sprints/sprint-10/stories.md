@@ -25,7 +25,7 @@ Reference entry; CI green on 12 cells. Other tools' API names are cited with whe
 - [x] S-090.3 Tests; guide chapter 6; chapter 15 (DrawBot rows, checked in DrawBot's source); Quick Reference; changelog
 
 ### S-091 Mixed styles in one text — E-15 *(contract row to pin after S-090)*
-- [ ] S-091.1 A formatted-text object (DrawBot `FormattedString`): runs with their own font, size, colour, tracking and features, drawn with `text` and `text_box`
+- [x] S-091.1 A formatted-text object (DrawBot `FormattedString`): runs with their own font, size, colour, tracking and features, drawn with `text` and `text_box`
 
 ### S-092 SVG import — E-16 *(needs D-041)*
 - [ ] S-092.1 `f.load_svg(path)` returns a picture drawn from the SVG's shapes (vector in PDF/SVG); paths available for booleans

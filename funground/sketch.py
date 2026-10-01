@@ -9,6 +9,7 @@ wrappers over the active Sketch.
 from __future__ import annotations
 
 import contextlib
+from collections import namedtuple
 import datetime
 import math
 import time
@@ -21,6 +22,7 @@ from . import ir
 from .capabilities import Capability, FungroundWarning, missing_capability
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
 from .paint import Gradient, parse_paint
+from .formatted import FormattedString
 from .typography import TEXT_STYLES
 from .geometry import Path, Transform, rect_radii
 from .paths import PathBuilder
@@ -29,6 +31,8 @@ from .shapes import ShapeBuilder, catmull_rom_controls
 from .platform.base import CURSOR_KINDS, KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
+
+_Piece = namedtuple("_Piece", "text ri size ascent descent width")   # one measured piece of a line (T14)
 
 DEFAULT_SHADOW_COLOR = (0, 0, 0, 128)       # not read through the colour mode (S15)
 
@@ -1015,12 +1019,14 @@ class Sketch:
         return style.fill or style.stroke or WHITE  # contract T4
 
     def text_box(self, message: object, x: float, y: float, width: float, height: float | None = None,
-                 color: ColorLike | None = None) -> str:
-        """Wrap *message* inside the box; return the text that did not fit (contract T10)."""
+                 color: ColorLike | None = None) -> str | FormattedString:
+        """Wrap *message* inside the box; return the text that did not fit (contract T10, T14)."""
         from .typography import effective_font, text_metrics, text_settings, wrap_lines
 
         if not width > 0 or (height is not None and not height >= 0):
             raise ValueError("f.text_box() needs a width above 0 and a height of 0 or more (or no height)")
+        if isinstance(message, FormattedString):
+            return self._fs_text_box(message, x, y, width, height, color)
         style = self.style
         font = effective_font(style)
         lines, rests = wrap_lines(str(message), width, style.text_size, font, **text_settings(style))
@@ -1040,6 +1046,94 @@ class Sketch:
             anchor = x + {"left": 0, "center": width / 2, "right": width}[style.text_align]
             self._emit_lines(shown, anchor, y, self._text_color(color, style), style, top=top)
         return rests[fitting] if fitting < len(lines) else ""
+
+    # ---- mixed styles in one text (S-091, contract T14)
+    def _fs_resolve(self, fs: FormattedString, style, color: ColorLike | None) -> dict:
+        """For each run of *fs* (and None, for text with no run): the state to draw it with and its colour.
+        A setting the run gave is its own; the rest follows *style*, the drawing state of now."""
+        base = self._text_color(color, style)
+        out = {None: (style, base)}
+        for i, run in enumerate(fs.runs):
+            out[i] = (run.apply(style), run.color if run.color is not None else base)
+        return out
+
+    def _fs_pieces(self, line, resolved: dict) -> list:
+        """Measure the (text, run index) pieces of one line: size, ascent, descent and width of each."""
+        from .typography import effective_font, text_metrics, text_settings, text_width
+
+        out = []
+        for text, ri in line:
+            st = resolved[ri][0]
+            font = effective_font(st)
+            ascent, descent = text_metrics(st.text_size, font)
+            out.append(_Piece(text, ri, st.text_size, ascent, descent,
+                              text_width(text, st.text_size, font, **text_settings(st))))
+        return out
+
+    def _fs_metrics(self, measured: list, style):
+        """For each measured line: its ascent and descent (the tallest piece's), and the distance of its
+        baseline from the first line's. The step to a line is its leading: 1.25 x its largest size,
+        unless text_leading is set."""
+        ascents = [max((p.ascent for p in line), default=0.0) for line in measured]
+        descents = [max((p.descent for p in line), default=0.0) for line in measured]
+        leadings = [style.text_leading if style.text_leading is not None
+                    else max((p.size for p in line), default=style.text_size) * 1.25 for line in measured]
+        if len(set(leadings)) <= 1:
+            offsets = [i * leadings[0] for i in range(len(leadings))] if leadings else []
+        else:
+            offsets, total = [0.0], 0.0
+            for lead in leadings[1:]:
+                total += lead
+                offsets.append(total)
+        return ascents, descents, offsets
+
+    def _fs_layout(self, lines: list, x: float, y: float, style, resolved: dict, top: float | None = None):
+        """Yield (text, left, top, run index) for each non-empty piece: the layout of a FormattedString,
+        shared by text, text_box and text_path as `_line_layout` is for plain text (T7, T9, T14).
+        The pieces of a line share one baseline, which comes from the tallest ascent on the line."""
+        measured = [self._fs_pieces(line, resolved) for line in lines]
+        ascents, descents, offsets = self._fs_metrics(measured, style)
+        if top is None:
+            block = ascents[0] + descents[-1] + offsets[-1]
+            shift = {"top": 0, "baseline": ascents[0], "bottom": block, "center": block / 2}[style.text_valign]
+            top = y - shift if shift else y
+        for i, line in enumerate(measured):
+            line_top = top + offsets[i] if i else top
+            width = sum(p.width for p in line)
+            pen = x
+            if style.text_align != "left":
+                pen -= width / 2 if style.text_align == "center" else width
+            for p in line:
+                if p.text:
+                    delta = ascents[0] - p.ascent
+                    yield p.text, pen, line_top + delta if delta else line_top, p.ri
+                pen += p.width
+
+    def _fs_text_box(self, fs: FormattedString, x: float, y: float, width: float, height: float | None,
+                     color: ColorLike | None) -> FormattedString:
+        style = self.style
+        resolved = self._fs_resolve(fs, style, color)
+
+        def fits(pieces) -> bool:
+            return sum(p.width for p in self._fs_pieces(pieces, resolved)) <= width
+
+        lines, starts = fs.wrap(fits)
+        measured = [self._fs_pieces(line, resolved) for line in lines]
+        ascents, descents, offsets = self._fs_metrics(measured, style)
+        fitting = len(lines)
+        if height is not None:
+            fitting = 0
+            while fitting < len(lines) and offsets[fitting] + ascents[0] + descents[fitting] <= height + 1e-9:
+                fitting += 1
+        if fitting:
+            block = ascents[0] + descents[fitting - 1] + offsets[fitting - 1]
+            room = (height if height is not None else block) - block
+            drop = {"top": 0, "baseline": 0, "center": room / 2, "bottom": room}[style.text_valign]
+            top = y + drop if drop else y
+            anchor = x + {"left": 0, "center": width / 2, "right": width}[style.text_align]
+            for piece_text, left, piece_top, ri in self._fs_layout(lines[:fitting], anchor, y, style, resolved, top=top):
+                self._emit(ir.Text(piece_text, left, piece_top, resolved[ri][1], resolved[ri][0]))
+        return fs._from(starts[fitting]) if fitting < len(lines) else FormattedString()
 
     # ------------------------------------------------------------ drawing
     def background(self, color: ColorLike, *more: float) -> None:
@@ -1191,6 +1285,11 @@ class Sketch:
 
     def text(self, message: object, x: float, y: float, color: ColorLike | None = None) -> None:
         style = self.style
+        if isinstance(message, FormattedString):
+            resolved = self._fs_resolve(message, style, color)
+            for piece_text, left, top, ri in self._fs_layout(message.lines(), x, y, style, resolved):
+                self._emit(ir.Text(piece_text, left, top, resolved[ri][1], resolved[ri][0]))
+            return
         self._emit_lines(str(message).split("\n"), x, y, self._text_color(color, style), style)
 
     def text_path(self, message: object, x: float, y: float) -> PathBuilder:
@@ -1198,6 +1297,15 @@ class Sketch:
         from .typography import effective_font, text_settings
 
         style = self.style
+        if isinstance(message, FormattedString):
+            resolved = self._fs_resolve(message, style, None)
+            geometry = Path()
+            for piece_text, left, top, ri in self._fs_layout(message.lines(), x, y, style, resolved):
+                st = resolved[ri][0]
+                shaped = effective_font(st).shape(piece_text, st.text_size, **text_settings(st))
+                for op in shaped.outline_ops(left, top, WHITE):
+                    geometry = Path(geometry.segments + op.path.segments)
+            return PathBuilder(geometry)
         font = effective_font(style)
         settings = text_settings(style)
         geometry = Path()
@@ -1210,6 +1318,10 @@ class Sketch:
         """Advance width of *message* in logical pixels at the current text_size (contract T6)."""
         from .typography import effective_font, text_settings, text_width
 
+        if isinstance(message, FormattedString):
+            resolved = self._fs_resolve(message, self.style, None)
+            return max((sum(p.width for p in self._fs_pieces(line, resolved)) for line in message.lines()),
+                       default=0.0)
         font = effective_font(self.style)
         settings = text_settings(self.style)
         return max(text_width(line, self.style.text_size, font, **settings) for line in str(message).split("\n"))

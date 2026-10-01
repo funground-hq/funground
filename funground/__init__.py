@@ -20,6 +20,7 @@ Typical use::
 
 from . import api as _api
 from .api import (
+    FormattedString,
     Vector,
     apply_matrix,
     arc,
@@ -160,6 +161,7 @@ from .api import (
 __version__ = "0.1.0.dev0"
 
 __all__ = [
+    "FormattedString",
     "Vector",
     "apply_matrix",
     "arc",

@@ -162,6 +162,6 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-088 | E-15 | `f.text_path()`: letters as a path | 9 — done |
 | S-089 | E-24 | Rounded corners for `rect`/`square` (D-040) | 10 — done |
 | S-090 | E-15 | `text_tracking`, `text_features`, `font_variations` | 10 — done |
-| S-091 | E-15 | Mixed styles in one text (formatted text runs) | 10 |
+| S-091 | E-15 | Mixed styles in one text (formatted text runs) | 10 — done |
 | S-092 | E-16 | `load_svg` (D-041) | 10 |
 | S-093 | E-15 | Spike: searchable PDF text | 110 — done (D-043 raised) |

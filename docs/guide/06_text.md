@@ -215,6 +215,63 @@ They also change `f.text_path()`, and a picture from `f.create_graphics()` has i
 | `f.text_features(**features)` | Turn OpenType features on or off by name, like `liga=False`. No arguments: the font's defaults. |
 | `f.font_variations(**axes)` | Set a variable font's axes by name, like `wght=700`. No arguments: the font's defaults. |
 
+## Mixed styles in one text
+
+Sometimes one line needs more than one look: a bold word, a red word, a big word. A
+`f.FormattedString()` holds the text in runs. Each `append()` adds a run, and it can have its own
+`size`, `style`, `color`, `font`, `tracking`, `features` and `variations`. A setting you leave
+out is not remembered. It follows the drawing state at the moment you draw the text.
+
+```py
+import funground as f
+
+line = f.FormattedString()
+line.append("Plain, ")
+line.append("bold red", style="bold", color="red")
+line.append(" and ")
+line.append("BIG", size=48)
+line.append(" in one line.")
+
+
+def setup():
+    f.size(640, 160)
+
+
+def draw():
+    f.background("white")
+    f.fill("black")
+    f.text_size(22)                 # the plain runs use this size and colour
+    f.text(line, 20, 30)
+    f.text_box(line + " It wraps across the runs too.", 20, 90, 300, 60)
+
+
+f.run()
+```
+
+`append()` gives the same FormattedString back, so you can chain calls. `str(line)` is the plain
+text, `len(line)` is its length, and `line + other` joins two. A colour is read in the colour mode
+at the moment of `append()`.
+
+`f.text(fs, x, y)` and `f.text_box(fs, x, y, w, h)` work like they do for a string, with the
+current `f.text_align()` and `f.text_leading()`. The runs on a line sit on one baseline. A line is
+as tall as its tallest run: with the automatic leading, that is 1.25 times the largest size on the
+line. A `"
+"` in any run starts a new line, and `f.text_box()` breaks lines at spaces, even from
+one run to the next, measuring each run with its own settings.
+
+`f.text_box()` returns what did not fit as a FormattedString, and its runs keep their settings,
+so the next box carries on in the same styles. `f.text_width(fs)` and `f.text_path(fs, x, y)`
+take one too, and so does a picture from `f.create_graphics()`. A plain string works everywhere
+as before.
+
+![Mixed styles in one text](../gallery/images/text-07_formatted.png)
+
+| Function | What it does |
+|---|---|
+| `f.FormattedString()` | An empty formatted text. |
+| `fs.append(text, font=None, size=None, style=None, color=None, tracking=None, features=None, variations=None)` | Add a run with the settings you give. Returns `fs`. `features` and `variations` are dicts, like `{"liga": False}`. |
+| `str(fs)`, `len(fs)`, `fs + other` | The plain text, its length, and two joined. |
+
 ## Letters as shapes
 
 `f.text_path(message, x, y)` gives you the outlines of the letters as a path. It sets the text

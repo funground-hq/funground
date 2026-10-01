@@ -185,6 +185,14 @@ f.text_tracking() adds space after every letter, or takes it away. f.text_featur
 
 Source: [`examples/gallery/text/06_tracking_and_features.py`](../../examples/gallery/text/06_tracking_and_features.py)
 
+### Mixed styles in one text
+
+![Mixed styles in one text](images/text-07_formatted.png)
+
+A FormattedString holds runs of text. Each run can have its own size, style and colour. Settings you leave out follow the drawing state, so they can change between frames. f.text() draws it, and f.text_box() wraps it. Whatever does not fit comes back as a FormattedString too, still styled, ready for the next box. f.text_path() gives its outlines.
+
+Source: [`examples/gallery/text/07_formatted.py`](../../examples/gallery/text/07_formatted.py)
+
 ## Animation and time
 
 ### Bounce
