@@ -329,6 +329,7 @@ f.run()
 | `f.text_tracking(pixels)` | **New:** add this many pixels of space after every letter (the last one too); negative tightens. Changes `f.text_width()`, alignment, `f.text_box()` and `f.text_path()`. Default 0. | `f.text_tracking(4)` |
 | `f.text_features(**features)` | **New:** turn OpenType features on or off by their four-letter names. Calls add to each other; no arguments goes back to the font's defaults. | `f.text_features(liga=False)` |
 | `f.font_variations(**axes)` | **New:** set a variable font's axes by name. An axis the font lacks is ignored, so it is harmless with a static font. No arguments goes back to the defaults. | `f.font_variations(wght=700)` |
+| `f.FormattedString()` | **New:** text made of runs, each with its own look. `fs.append(text, font=None, size=None, style=None, color=None, tracking=None, features=None, variations=None)` adds a run and returns `fs`. A setting you leave out follows the drawing state when the text is drawn. `str(fs)`, `len(fs)` and `fs + other` work. Pass it to `f.text`, `f.text_box`, `f.text_width` and `f.text_path`; `f.text_box` returns the overflow as a FormattedString. | `fs = f.FormattedString().append("Hi ").append("there", style="bold", color="red")` |
 | `f.text_style(style)` | **New:** choose one of the built-in family's four styles: `"normal"`, `"bold"`, `"italic"`, `"bold_italic"`. Ignored once a font is loaded, but remembered for when it is not. | `f.text_style("bold")` |
 
 *Changed in v0.6:* text is drawn with the bundled **DejaVu Sans** font on every platform, and

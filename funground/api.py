@@ -14,6 +14,7 @@ from .color import ColorLike as Color
 from .paths import PathBuilder
 from .picture import Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
 from .sketch import DEFAULT_SHADOW_COLOR, Sketch
+from .formatted import FormattedString  # noqa: F401  (public: f.FormattedString, S-091)
 from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
 
 _active: Sketch | None = None
@@ -326,8 +327,8 @@ def text_leading(leading: float | None) -> None:
 
 
 def text_box(message: object, x: float, y: float, width: float, height: float | None = None,
-             color: Color | None = None) -> str:
-    """Draw *message* wrapped inside a box; return whatever did not fit ("" if it all did)."""
+             color: Color | None = None) -> str | FormattedString:
+    """Draw *message* (a string or a FormattedString) wrapped inside a box; return whatever did not fit ("" if it all did)."""
     return active_sketch().text_box(message, x, y, width, height, color)
 
 

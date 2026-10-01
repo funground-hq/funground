@@ -136,6 +136,25 @@ Spacing, features and variable fonts (contract T13). Checked in DrawBot's source
 | `fontVariations(wght=700)` | `f.font_variations(wght=700)` |
 | `fontVariations(resetVariations=True)` | `f.font_variations()` with no arguments |
 
+Mixed styles in one text (contract T14). Checked in DrawBot's source: `drawBot/context/baseContext.py`,
+class `FormattedString` (line 1154), `append` (1353), `__add__` (1552), `__len__` (1610), `__repr__` (1613);
+and `drawBot/drawBotDrawingTools.py`, `text` (1833) and `textBox` (1902).
+
+| DrawBot | funground |
+|---|---|
+| `FormattedString()` | `f.FormattedString()` |
+| `fs.append(txt, font=, fontSize=, fill=, tracking=, openTypeFeatures=, fontVariations=)` | `fs.append(text, font=, size=, style=, color=, tracking=, features=, variations=)`. Returns `fs`, so calls chain. A setting left out follows the drawing state when the text is drawn. |
+| `fs + txt` | `fs + other`, a FormattedString or a string |
+| `len(fs)` | `len(fs)` |
+| `repr(fs)` is the plain text | `str(fs)` is the plain text; `repr` shows the number of runs |
+| `text(fs, (x, y))`, `textBox(fs, (x, y, w, h))` | `f.text(fs, x, y)`, `f.text_box(fs, x, y, w, h)` |
+| `textBox` returns the overflow as a `FormattedString` | `f.text_box` returns the overflow as a `FormattedString`; an empty one when all fits |
+
+DrawBot's FormattedString also has methods that change its current settings (`fs.font()`,
+`fs.fontSize()`, `fs.fill()` and so on), `fallbackFont`, `baselineShift`, underline, tabs, indents,
+`copy()` and indexing. funground does not have them yet. It takes its settings only in `append()`.
+`fill` is `color` here, and a run has no stroke of its own.
+
 DrawBot's two functions also return the current settings and have `listOpenTypeFeatures()` and
 `listFontVariations()`. funground's do not return anything yet. As in DrawBot, an axis the font
 lacks is ignored. DrawBot picks the font by its installed name, funground by a font file.
