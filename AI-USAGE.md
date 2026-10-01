@@ -166,3 +166,12 @@ sprint review adds its entry here.
   session reviewed each one, and changed or added something in most of them.
 - One sub-agent stopped every `python.exe` on the maintainer's machine. A rule now forbids it.
 
+### Sprint 8: documents and pages (1 Oct 2026)
+- Under D-034, Claude planned the sprint and decided the page API (D-036: DrawBot names, pages
+  belong to scripts, no v0.5 change).
+- Both stories were built by Claude Sonnet 5 sub-agents and reviewed by the main session. One
+  measured number, script memory, corrected an estimate Claude had pinned too early.
+- The maintainer asked how macOS and Linux were checked. The honest answer (CI runs them headless
+  only) led to a release prerequisite: a manual run on real desktops.
+- D-037, a new dependency for path booleans, went to the maintainer as D-034 requires.
+
