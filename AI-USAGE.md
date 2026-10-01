@@ -175,3 +175,12 @@ sprint review adds its entry here.
   only) led to a release prerequisite: a manual run on real desktops.
 - D-037, a new dependency for path booleans, went to the maintainer as D-034 requires.
 
+### Sprint 9: path depth (1 Oct 2026)
+- The maintainer chose skia-pathops for path booleans (D-037) after asking what was inside the
+  library. A check of the wheel showed it is smaller than first stated (1.8 MB on Windows), and the
+  answer was corrected.
+- Claude decided the path API (D-038) and one exactness trade-off (D-039) under D-034.
+- Three stories were built by Claude Sonnet 5 sub-agents. A builder found in DrawBot's source that
+  DrawBot writes difference as `%`; review added it.
+- Rounded corners for `rect` (a v0.5 signature change) were left for the maintainer.
+
