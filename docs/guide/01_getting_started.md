@@ -56,4 +56,10 @@ Press **Escape** or close the window to stop.
 The origin `(0, 0)` is the **top-left** corner. `x` grows to the right and `y` grows **down**.
 `f.width` and `f.height` are the size of the window, so the centre is `(f.width / 2, f.height / 2)`.
 
+## More examples
+
+The [Examples Gallery](../gallery/README.md) shows every part of funground with a picture and
+the code that makes it. To browse it in a window, run `python tools/gallery_browser.py`. Click
+a picture to read its code, and press **Enter** to run it.
+
 **Next:** [2. The sketch: setup, draw and run](02_the_sketch.md)

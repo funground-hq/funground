@@ -79,6 +79,8 @@ def build_index() -> str:
         "Every picture below is made by running the example beside it — `python tools/make_gallery.py`",
         "regenerates them. Each example is a complete sketch: copy it into a file and run it.",
         "",
+        "Browse these examples interactively: `python tools/gallery_browser.py`",
+        "",
     ]
     current = None
     for path in examples():
