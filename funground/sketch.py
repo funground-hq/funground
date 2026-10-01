@@ -19,8 +19,8 @@ from typing import Any
 
 from . import ir
 from .capabilities import Capability, FungroundWarning, missing_capability
-from .color import WHITE, Color, ColorLike
-from .paint import parse_paint
+from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
+from .paint import Gradient, parse_paint
 from .typography import TEXT_STYLES
 from .geometry import Path, Transform
 from .paths import PathBuilder
@@ -29,6 +29,8 @@ from .shapes import ShapeBuilder, catmull_rom_controls
 from .platform.base import CURSOR_KINDS, KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
+
+DEFAULT_SHADOW_COLOR = (0, 0, 0, 128)       # not read through the colour mode (S15)
 
 # What the v0.5 public API needs from any renderer.
 REQUIRED_CAPABILITIES: dict[Capability, str] = {Capability.RASTER_2D: "Drawing shapes"}
@@ -469,14 +471,60 @@ class Sketch:
                 save_frame(self.frame, path, self.width, self.height, self._platform.backing_scale)
 
     # ------------------------------------------------------------ style
-    def fill(self, color: ColorLike) -> None:
-        self._states.update(fill=parse_paint(color))      # a colour or a gradient (S-050)
+    def read_color(self, value: ColorLike, *more: float) -> Color:
+        """A colour form read under the current colour mode (S-082, contract S15, S16).
+
+        ``read_color(255, 0, 0)`` is the same as ``read_color((255, 0, 0))``: 2 to 4 separate numbers.
+        """
+        if more:
+            if any(isinstance(v, bool) for v in (value, *more)):
+                raise TypeError("True and False are not numbers here: give numbers, e.g. fill(255, 0, 0)")
+            if not isinstance(value, (int, float)):
+                raise ValueError(f"f.fill() and friends take more than one argument only for numbers, not {value!r}: "
+                                 "give a name, hex string, colour or gradient on its own")
+            if len(more) > 3:
+                raise ValueError("a colour takes at most 4 numbers (red, green, blue, alpha)")
+            value = (value, *more)
+        state = self._states.current
+        return parse_in_mode(value, state.color_mode, state.color_ranges)
+
+    def _paint(self, value, *more):
+        if more and isinstance(value, Gradient):
+            raise ValueError("a gradient is given on its own, without more numbers")
+        return parse_paint(value, lambda v: self.read_color(v, *more))
+
+    def color_mode(self, mode: str, max1: float | None = None, max2: float | None = None,
+                   max3: float | None = None, max_alpha: float | None = None) -> None:
+        """Choose how numbers are read as a colour: "rgb", "hsb" or "hsl", with optional ranges."""
+        if mode not in COLOR_MODES:
+            raise ValueError(f"f.color_mode() takes one of {', '.join(map(repr, COLOR_MODES))}, not {mode!r}")
+        for m in (max1, max2, max3, max_alpha):
+            if m is not None and (isinstance(m, bool) or not isinstance(m, (int, float)) or not m > 0):
+                raise ValueError(f"f.color_mode() ranges must be numbers above 0, not {m!r}")
+        state = self._states.current
+        index = COLOR_MODES.index(mode)
+        old = state.color_ranges[index]
+        if max1 is None:
+            new = old
+        elif max2 is None:
+            new = (max1, max1, max1, max1)
+        elif max3 is None:
+            raise ValueError("f.color_mode() takes one range, three ranges or four, not two")
+        elif max_alpha is None:
+            new = (max1, max2, max3, old[3])
+        else:
+            new = (max1, max2, max3, max_alpha)
+        ranges = state.color_ranges[:index] + (tuple(new),) + state.color_ranges[index + 1:]
+        self._states.update(color_mode=mode, color_ranges=ranges)
+
+    def fill(self, color: ColorLike, *more: float) -> None:
+        self._states.update(fill=self._paint(color, *more))      # a colour or a gradient (S-050)
 
     def no_fill(self) -> None:
         self._states.update(fill=None)
 
-    def stroke(self, color: ColorLike) -> None:
-        self._states.update(stroke=parse_paint(color))
+    def stroke(self, color: ColorLike, *more: float) -> None:
+        self._states.update(stroke=self._paint(color, *more))
 
     def no_stroke(self) -> None:
         self._states.update(stroke=None)
@@ -621,7 +669,7 @@ class Sketch:
 
     def _text_color(self, color: ColorLike | None, style) -> Color:
         if color is not None:
-            return parse_paint(color)
+            return self._paint(color)
         return style.fill or style.stroke or WHITE  # contract T4
 
     def text_box(self, message: object, x: float, y: float, width: float, height: float | None = None,
@@ -652,8 +700,8 @@ class Sketch:
         return rests[fitting] if fitting < len(lines) else ""
 
     # ------------------------------------------------------------ drawing
-    def background(self, color: ColorLike) -> None:
-        self._emit(ir.Clear(parse_paint(color)))
+    def background(self, color: ColorLike, *more: float) -> None:
+        self._emit(ir.Clear(self._paint(color, *more)))
 
     # ---- drawing modes (S-081, contract F10). Resolved before an op is recorded, so the IR
     # always holds top-left geometry for rectangles and centre geometry for ellipses.
@@ -913,10 +961,12 @@ class Sketch:
             raise ValueError(f"f.opacity() takes a number from 0 (invisible) to 255 (solid), not {amount!r}")
         self._states.update(opacity=int(amount))
 
-    def shadow(self, x_offset: float, y_offset: float, blur: float = 5, color: ColorLike = (0, 0, 0, 128)) -> None:
+    def shadow(self, x_offset: float, y_offset: float, blur: float = 5, color: ColorLike = DEFAULT_SHADOW_COLOR) -> None:
         if not blur >= 0:
             raise ValueError("f.shadow() needs a blur of 0 or more")
-        self._states.update(shadow=(float(x_offset), float(y_offset), float(blur), Color.parse(color)))
+        self._states.update(shadow=(float(x_offset), float(y_offset), float(blur),
+                                       Color(*DEFAULT_SHADOW_COLOR) if color is DEFAULT_SHADOW_COLOR
+                                       else self.read_color(color)))   # the default is black at half strength in any mode
 
     def no_shadow(self) -> None:
         self._states.update(shadow=None)

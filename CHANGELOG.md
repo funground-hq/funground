@@ -15,6 +15,8 @@ pygame-ce that was never published.
 - Environment variables are `FUNGROUND_*`, for example `FUNGROUND_HEADLESS=1`.
 
 ### Changed from v0.5
+- **A single number is a grey, not a packed colour.** `fill(0xFF0000FF)` is no longer a colour; use
+  `"0xFF0000"` or a tuple (D-032).
 - **Drawing is done by Cairo** and is anti-aliased. Fractional coordinates are honoured (D-005).
 - **The fourth colour value (alpha) now works**: translucent fills and strokes (D-003).
 - **Strokes are centred on the shape's edge**, with round ends and corners by default (D-004).
@@ -25,6 +27,8 @@ pygame-ce that was never published.
 - **Crisp on scaled displays**: coordinates are logical pixels, rendering is at full resolution.
 
 ### Added
+- **Gallery browser:** `python tools/gallery_browser.py` browses every example by topic, with its
+  picture, description and code, and runs it in its own window. It is itself a funground app.
 - **Scripts:** a file can be a script instead of an animated sketch: no `draw()`, no `f.run()`.
   `f.size()` makes a canvas with no window, `f.save()` writes at once, and the new `f.show()` opens a
   window to look at it. A file that mixes the two styles gets a clear error, and a program that has
@@ -35,6 +39,12 @@ pygame-ce that was never published.
 - **Clipping:** `clip`, `no_clip`. **Transparent canvas:** `clear`.
 - **Strokes:** `stroke_cap`, `stroke_join`, `miter_limit`, `stroke_dash`, `no_dash`;
   `no_smooth` / `smooth` for pixel art.
+- **Colour mode:** `color_mode(mode, max1, max2, max3, max_alpha)` as in p5, with modes `"rgb"`,
+  `"hsb"` and `"hsl"`; `color_mode("rgb", 1)` reads DrawBot's 0–1 colours (D-031).
+- **Separate colour numbers:** `fill(255, 0, 0)`, `stroke(128)`, `background(30, 30, 60)` work as well as
+  tuples, read in the current colour mode (D-032).
+- **Grey numbers:** one number is a grey and two are a grey and an opacity, as in p5:
+  `fill(128)`, `fill(128, 100)` (D-032).
 - **Colour:** `hsb`, `hsl`, `color` objects, `lerp_color`; `linear_gradient` and
   `radial_gradient`, usable wherever a colour goes; `blend_mode`, `opacity`, `shadow`.
 - **Transforms:** `translate`, `rotate` (degrees), `scale`, `shear_x`, `shear_y`, `apply_matrix`,

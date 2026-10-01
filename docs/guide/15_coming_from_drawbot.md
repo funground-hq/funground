@@ -34,7 +34,11 @@ same: `fill(1, 0, 0, .5)` is half-transparent red, `fill(0)` is black, `fill(0, 
 half opacity. There are no colour names.
 
 funground's colours are **0–255** integers, or a name, or a hex string (contract S1), with alpha
-also 0–255 (contract S2): `f.fill(255, 0, 0, 128)`, `f.fill("red")`, or `f.fill("#FF000080")`.
+also 0–255 (contract S2): `f.fill((255, 0, 0, 128))`, `f.fill("red")`, or `f.fill("#FF000080")`.
+
+To use DrawBot's 0–1 numbers as they are, call `f.color_mode("rgb", 1)` once. Then
+`f.fill((1, 0, 0, 0.5))` is half-transparent red. One number is a grey and two are a grey and an
+opacity, as in DrawBot: `f.fill(0)` is black and `f.fill(0, 0.5)` is grey at half opacity.
 
 ## Shapes: `oval` and `rect`
 

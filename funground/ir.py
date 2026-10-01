@@ -216,7 +216,7 @@ class Frame:
 OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash", "dash_offset", "cap", "join",
                                "curve_tightness", "text_align", "text_valign", "text_leading",
                                "blend_mode", "opacity", "shadow", "font", "text_style",
-                               "rect_mode", "ellipse_mode", "image_mode"})
+                               "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).
@@ -274,6 +274,8 @@ def _state_from_jsonable(d: dict[str, Any]) -> GraphicsState:
 def _extra_from_jsonable(name: str, v: Any) -> Any:
     if name == "dash":
         return tuple(v)
+    if name == "color_ranges":
+        return tuple(tuple(r) for r in v)
     if name == "shadow":
         return None if v is None else (v[0], v[1], v[2], Color(*v[3]))
     return v

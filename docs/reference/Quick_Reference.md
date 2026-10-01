@@ -112,7 +112,7 @@ center_y = f.height / 2
 | `f.quad(x1, y1, … x4, y4)` | Four-sided shape through four corners in order. | `f.quad(20, 20, 80, 20, 80, 80, 20, 80)` |
 | `f.polygon(points)` | Closed shape through a list of `(x, y)` points. | `f.polygon([(0, 0), (50, 20), (20, 60)])` |
 | `f.arc(x, y, w, h, start, stop, mode="open")` | Part of an ellipse centred at (x, y); angles in **degrees**, clockwise from the right. Modes `"open"`, `"chord"`, `"pie"`. | `f.arc(100, 100, 80, 80, 0, 270, "pie")` |
-| `f.background(color)` | Fill the whole window with one colour (ignores fill, stroke, transforms and clips). | `f.background("white")` |
+| `f.background(color)` / `f.background(r, g, b)` | Fill the whole window with one colour; numbers may be separate arguments (ignores fill, stroke, transforms and clips). | `f.background("white")` |
 | `f.clear()` | Make every pixel transparent; a saved PNG keeps the transparency (the window shows it black). | `f.clear()` |
 
 *Changed in v0.6:* fractional coordinates such as `f.circle(500.5, 80.25, 40)` are honoured and every
@@ -184,13 +184,15 @@ f.fill("#FF000060")            # hex with alpha
 ```
 
 *Changed in v0.6:* **alpha is honoured.** `(0, 0, 255, 64)` draws translucent blue (v0.5 silently
-dropped the fourth value). Lists, `"0xRRGGBB"` and packed integers are still accepted.
+dropped the fourth value). Lists and `"0xRRGGBB"` are still accepted. A packed integer is no
+longer a colour: a single number is a grey (see below).
 
 **Fill and outline**
 
 | Call | What it does | Example |
 |---|---|---|
-| `f.hsb(h, s, b, a=255)` / `f.hsl(h, s, l, a=255)` | Colour by hue: hue 0–360 (wraps), the rest 0–100. No `color_mode()`: tuples are always RGB. | `f.fill(f.hsb(200, 80, 90))` |
+| `f.color_mode(mode, max1=None, max2=None, max3=None, max_alpha=None)` | How numbers are read as a colour: `"rgb"` (default, 255), `"hsb"` or `"hsl"` (360, 100, 100, opacity 0–1). One range sets all four; three keep the opacity range; each mode remembers its own. Names, hex and colour objects are not affected. | `f.color_mode("rgb", 1)` |
+| `f.hsb(h, s, b, a=255)` / `f.hsl(h, s, l, a=255)` | Colour by hue: hue 0–360 (wraps), the rest 0–100. Always these ranges, whatever the colour mode. | `f.fill(f.hsb(200, 80, 90))` |
 | `f.color(value)` / `f.color(r, g, b, a)` | A colour you can read: `.red .green .blue .alpha .hue .saturation .brightness .lightness`. | `f.color("tomato").hue` |
 | `f.lerp_color(c1, c2, t)` | Mix two colours; 0 gives c1, 1 gives c2. | `f.lerp_color("red", "blue", 0.5)` |
 | `f.linear_gradient(x1, y1, x2, y2, colors, stops=None)` | **New:** colours blended along a line; use it in `fill`, `stroke` or `background`. | `f.fill(f.linear_gradient(0, 0, 200, 0, ["red", "blue"]))` |
@@ -198,9 +200,9 @@ dropped the fourth value). Lists, `"0xRRGGBB"` and packed integers are still acc
 | `f.blend_mode(mode)` | **New:** how new drawing mixes with the canvas: `"normal"`, `"multiply"`, `"screen"`, `"add"`, `"difference"`, … | `f.blend_mode("multiply")` |
 | `f.opacity(amount)` | **New:** everything drawn after is see-through; 0 invisible, 255 solid. | `f.opacity(128)` |
 | `f.shadow(x, y, blur=5, color=...)` / `f.no_shadow()` | **New:** a soft shadow under everything drawn after. | `f.shadow(4, 6, blur=8)` |
-| `f.fill(color)` | Set the inside colour of later shapes. | `f.fill("gold")` |
+| `f.fill(color)` / `f.fill(r, g, b)` | Set the inside colour of later shapes. Numbers may be separate arguments or one tuple. | `f.fill("gold")` |
 | `f.no_fill()` | Do not fill later shapes. | `f.no_fill()` |
-| `f.stroke(color)` | Set the outline / line colour. | `f.stroke("black")` |
+| `f.stroke(color)` / `f.stroke(grey)` | Set the outline / line colour. Numbers may be separate arguments or one tuple. | `f.stroke("black")` |
 | `f.no_stroke()` | Do not draw outlines or lines. | `f.no_stroke()` |
 | `f.stroke_width(pixels)` | Set outline and line thickness. Minimum is 1. | `f.stroke_width(3)` |
 | `f.stroke_cap(cap)` | Line ends: `"round"` (default), `"square"` (extends past the end), `"butt"` (stops flat). | `f.stroke_cap("butt")` |
@@ -975,6 +977,8 @@ appendix still works and renders the same on every platform and renderer. Capita
 | `(R, G, B)` | Three integers 0–255. |
 | `(R, G, B, A)` | RGBA; `A` is the opacity, 0 (invisible) to 255 (solid). *Honoured since v0.6.* |
 | `[R, G, B]` / `[R, G, B, A]` | Lists work too. |
+| `N` / `N, A` / `(N, A)` | One number is a grey; two are a grey and its opacity. Read on the colour mode's third range and opacity range. `f.fill(128, 100)` |
+| `f.fill(R, G, B)` / `f.fill(R, G, B, A)` | `fill`, `stroke` and `background` also take the numbers as separate arguments, exactly like one tuple. A name, hex string, colour or gradient is one argument only: `f.fill("red", 100)` is an error. | `f.background(30, 30, 60)` |
 | `"#RRGGBB"` / `"#RRGGBBAA"` | HTML-style hex, with or without alpha. |
 | `"0xRRGGBB"` / `"0xRRGGBBAA"` | Alternative hex string form. |
 

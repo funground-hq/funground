@@ -6,7 +6,10 @@ Wherever funground wants a colour, you can give it in any of these forms:
 |---|---|---|
 | A name | `"tomato"`, `"skyblue"`, `"gray50"` | Hundreds of names; capitals and spaces are ignored |
 | An `(r, g, b)` tuple | `(255, 99, 71)` | Red, green, blue, each 0–255 |
+| Separate numbers | `f.fill(255, 99, 71)` | The same as the tuple. Two, three or four numbers work in `fill`, `stroke` and `background` |
 | An `(r, g, b, a)` tuple | `(255, 0, 0, 120)` | The last number is opacity: 0 invisible, 255 solid |
+| One number | `128` | A grey: 0 is black, 255 is white |
+| Two numbers | `128, 100` or `(128, 100)` | A grey and its opacity |
 | Hex | `"#FF6347"`, `"#FF634780"` | As on web pages; the optional last pair is opacity |
 
 ```python
@@ -37,7 +40,8 @@ Translucent colours mix where they overlap.
 
 ## Colour by hue
 
-A **tuple always means red, green, blue** in funground. For colour by hue, ask for it by name:
+By default a **tuple means red, green, blue**. For colour by hue, ask for it by name, or change
+the colour mode (see below):
 
 | Function | Makes a colour from |
 |---|---|
@@ -78,8 +82,68 @@ f.run()
 
 ![Hue-based colour](../gallery/images/colour-02_hsb_and_hsl.png)
 
-*Coming from p5 or Processing?* There is no `colorMode()`: write `f.fill(f.hsb(200, 80, 90))`
-instead of switching modes, so a tuple never changes meaning halfway through a sketch.
+`f.hsb()` and `f.hsl()` always use these ranges, whatever the colour mode is, so they stay handy
+shortcuts: `f.fill(f.hsb(200, 80, 90))` always means the same colour.
+
+## Colour mode
+
+`f.color_mode()` changes how **numbers** are read as a colour. It works like `colorMode()` in p5.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 400)
+
+
+def draw():
+    f.background((30, 30, 40))
+    f.no_stroke()
+
+    f.color_mode("hsb", 360, 100, 100)     # hue 0-360, saturation and brightness 0-100
+    for i in range(32):
+        f.fill((i * 360 / 32, 85, 95))
+        f.rect(20 + i * 19, 30, 19, 70)
+
+    f.color_mode("hsb", 1)                 # now every part runs from 0 to 1
+    for i in range(16):
+        f.fill((i / 16, 1, 0.5 + i / 32))
+        f.circle(36 + i * 38, 185, 30)
+
+    f.color_mode("rgb", 1)                 # red, green, blue from 0 to 1
+    for i in range(16):
+        f.fill((i / 15, 0.2, 1 - i / 15))
+        f.rect(20 + i * 38, 225, 38, 50)
+
+
+f.run()
+```
+
+![Colour mode](../gallery/images/colour-04_color_mode.png)
+
+You can give the mode `"rgb"`, `"hsb"` or `"hsl"`, and then:
+
+| Call | Meaning |
+|---|---|
+| `f.color_mode("hsb")` | switch mode, keep that mode's ranges |
+| `f.color_mode("hsb", 1)` | switch mode; all four ranges (three parts and opacity) are 1 |
+| `f.color_mode("hsb", 360, 100, 100)` | the three parts; the opacity range stays as it was |
+| `f.color_mode("hsb", 360, 100, 100, 255)` | all four ranges |
+
+The starting ranges are `rgb` 255 for every part, and `hsb` and `hsl` 360, 100, 100 with opacity 0
+to 1. Each mode remembers its own ranges, so you can switch back and forth. Hue goes round; the
+other parts stop at their largest and smallest values. `f.color_mode("rgb", 1)` reads colours
+the way DrawBot does.
+
+**Names and hex colours are not affected**: `"tomato"` and `"#FF6347"` mean the same in every
+mode. So do colour objects. The mode is part of the saved state, so `f.push()`, `f.pop()` and
+`with f.saved_state():` bring it back, and a picture from `f.create_graphics()` has its own.
+It stays set from one frame to the next, like `f.fill()`.
+
+A single number is a grey, and two numbers are a grey and its opacity. They are read on the third
+range of the mode, so `f.fill(128)` is mid grey in the default mode, and in `"hsb"` mode it is a
+brightness of 128 out of 100, which is white. Ranges must be above 0, or you get an error.
 
 ## Gradients
 

@@ -10,12 +10,12 @@ import inspect
 import funground as p
 
 V05_FUNCTIONS = {
-    "background": "(color: 'Color') -> 'None'",
+    "background": "(color: 'Color', *more: 'float') -> 'None'",
     "circle": "(x: 'float', y: 'float', diameter: 'float') -> 'None'",
     "constrain": "(value: 'float', low: 'float', high: 'float') -> 'float'",
     "distance": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float') -> 'float'",
     "ellipse": "(x: 'float', y: 'float', width: 'float', height: 'float') -> 'None'",
-    "fill": "(color: 'Color') -> 'None'",
+    "fill": "(color: 'Color', *more: 'float') -> 'None'",
     "key_down": "(key: 'str | int') -> 'bool'",
     "line": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float') -> 'None'",
     "no_fill": "() -> 'None'",
@@ -25,7 +25,7 @@ V05_FUNCTIONS = {
     "rect": "(x: 'float', y: 'float', width: 'float', height: 'float') -> 'None'",
     "size": "(width: 'int', height: 'int', *, title: 'str' = 'funground', fps: 'int' = 60) -> 'None'",
     "stop": "() -> 'None'",
-    "stroke": "(color: 'Color') -> 'None'",
+    "stroke": "(color: 'Color', *more: 'float') -> 'None'",
     "stroke_width": "(pixels: 'int') -> 'None'",
     "text": "(message: 'object', x: 'float', y: 'float', color: 'Color | None' = None) -> 'None'",
     "text_size": "(size: 'int') -> 'None'",
@@ -158,6 +158,8 @@ ADDED_FUNCTIONS = {
     "rect_mode": "(mode: 'str') -> 'None'",
     "ellipse_mode": "(mode: 'str') -> 'None'",
     "image_mode": "(mode: 'str') -> 'None'",
+    # S-082 colour mode
+    "color_mode": "(mode: 'str', max1: 'float | None' = None, max2: 'float | None' = None, max3: 'float | None' = None, max_alpha: 'float | None' = None) -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

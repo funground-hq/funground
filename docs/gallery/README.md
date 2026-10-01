@@ -3,6 +3,8 @@
 Every picture below is made by running the example beside it — `python tools/make_gallery.py`
 regenerates them. Each example is a complete sketch: copy it into a file and run it.
 
+Browse these examples interactively: `python tools/gallery_browser.py`
+
 ## Basics
 
 ### Your first sketch
@@ -69,7 +71,7 @@ Source: [`examples/gallery/colour/01_colour_forms.py`](../../examples/gallery/co
 
 ![Hue-based colour: hsb, hsl and colour objects](images/colour-02_hsb_and_hsl.png)
 
-f.hsb(hue, saturation, brightness) and f.hsl(hue, saturation, lightness) make colours by hue: 0 red, 120 green, 240 blue, and around again. A tuple always means red, green, blue. f.color() makes a colour you can read (.hue, .brightness ...), and lerp_color mixes two colours.
+f.hsb(hue, saturation, brightness) and f.hsl(hue, saturation, lightness) make colours by hue: 0 red, 120 green, 240 blue, and around again. By default a tuple means red, green, blue. f.color() makes a colour you can read (.hue, .brightness ...), and lerp_color mixes two colours.
 
 Source: [`examples/gallery/colour/02_hsb_and_hsl.py`](../../examples/gallery/colour/02_hsb_and_hsl.py)
 
@@ -80,6 +82,14 @@ Source: [`examples/gallery/colour/02_hsb_and_hsl.py`](../../examples/gallery/col
 f.linear_gradient() blends colours along a line; f.radial_gradient() blends them outward from a centre. Either can be used wherever a colour goes - fill, stroke or background - and it follows f.translate() and f.rotate() like any shape. Saved as PDF or SVG, it stays smooth.
 
 Source: [`examples/gallery/colour/03_gradients.py`](../../examples/gallery/colour/03_gradients.py)
+
+### Colour mode
+
+![Colour mode](images/colour-04_color_mode.png)
+
+f.color_mode() changes how a tuple of numbers is read as a colour. In "hsb" mode the three numbers are hue, saturation and brightness. In "rgb" mode with a range of 1, red, green and blue run from 0 to 1 instead of 0 to 255. Names like "tomato" and hex strings like "#FF6347" are not changed. Each mode remembers its own ranges.
+
+Source: [`examples/gallery/colour/04_color_mode.py`](../../examples/gallery/colour/04_color_mode.py)
 
 ## Fill, stroke and lines
 
