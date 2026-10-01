@@ -69,6 +69,7 @@ funground draws with [Cairo](https://www.cairographics.org) and opens its window
 [pygame-ce](https://pyga.me). The project is run as a small software process: sprints with
 reviews, a decision log and architecture decision records. See [docs/PROCESS.md](docs/PROCESS.md),
 [docs/Roadmap.md](docs/Roadmap.md) and [docs/design/](docs/design/).
+To contribute, start with the [developer documentation](docs/developer/README.md).
 
 ## AI disclosure
 
