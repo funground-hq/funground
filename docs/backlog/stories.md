@@ -153,4 +153,5 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-079 | E-14 | Pixel access: get/set, whole-picture access | 7 |
 | S-080 | E-14 | `copy`, `resize`, `mask`, a few filters | 7 |
 | S-081 | E-24 | `rect_mode` / `ellipse_mode` / `image_mode` (D-030 = B) | 7 — done |
-| S-082 | E-25 | `color_mode()` as in p5 (D-031 = B, supersedes D-017's "no color_mode") | 7 |
+| S-082 | E-25 | `color_mode()` as in p5 (D-031 = B) and grey numbers (D-032 = B) | 7 |
+| S-083 | E-22 | Gallery browser: a funground app to browse, read and run the examples | 7 |

@@ -95,10 +95,15 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
 - [x] S-081.1 `rect_mode`, `ellipse_mode`, `image_mode` per F10; picture methods too
 - [x] S-081.2 Tests; gallery example; guide (chapters 3 and 14: the difference row goes); Quick Reference; changelog
 
-### S-082 Colour mode — E-25 *(D-031 = B; contract S15)*
-- [ ] S-082.1 `color_mode(mode, max1, max2, max3, max_alpha)` per S15: one place where numbers become colours, used by every colour-taking function; pictures and scripts too
+### S-082 Colour mode and grey numbers — E-25 *(D-031 = B, D-032 = B; contract S15, S16)*
+- [ ] S-082.1 `color_mode(mode, max1, max2, max3, max_alpha)` per S15, and one/two numbers as grey per S16: one place where numbers become colours, used by every colour-taking function; pictures and scripts too
 - [ ] S-082.2 Tests; gallery `colour/`; guide chapter 4 (and chapter 14: the `colorMode` difference row goes); Quick Reference; changelog
 *Acceptance:* a p5 sketch using `colorMode(HSB)` ports by renaming only; every existing golden and snapshot unchanged.
+
+### S-083 Gallery browser — E-22 *(maintainer request, 1 Oct 2026)*
+- [ ] S-083.1 `tools/gallery_browser.py`: a funground sketch to browse the Examples Gallery by area: thumbnails, a detail view with picture, description and scrollable code, keyboard and mouse navigation, and a Run button that starts the example in its own process
+- [ ] S-083.2 Headless tests driving it with scripted events; a short section in `docs/gallery/README.md` (via the tool that writes it) and the guide's chapter 1
+*Acceptance:* `python tools/gallery_browser.py` opens the browser; every gallery example can be found, read and run from it.
 
 ## Out of scope this sprint
 Pages and multi-page documents (Sprint 8); path booleans (Sprint 9); rich typography and SVG
