@@ -255,6 +255,14 @@ Between begin_contour() and end_contour(), list the corners of a hole. funground
 
 Source: [`examples/gallery/paths/04_holes.py`](../../examples/gallery/paths/04_holes.py)
 
+### Combining shapes
+
+![Combining shapes](images/paths-05_booleans.png)
+
+Two shapes can be joined, overlapped, cut and mixed with union, intersection, difference and xor. Each one gives back a new path. The bottom panel shows remove_overlap, which turns a crossing outline into one clean edge.
+
+Source: [`examples/gallery/paths/05_booleans.py`](../../examples/gallery/paths/05_booleans.py)
+
 ## Randomness and noise
 
 ### Confetti

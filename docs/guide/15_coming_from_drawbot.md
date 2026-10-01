@@ -64,6 +64,24 @@ DrawBot builds a path with a `BezierPath` object (`path.moveTo(...)`, `path.line
 `f.draw_path(path)` (contract F3). The main difference is points: DrawBot takes an `(x, y)` pair
 for each point; funground's builder takes plain `x, y` numbers.
 
+Shapes and booleans (contract F11). DrawBot's names, in funground's style:
+
+| DrawBot `BezierPath` | funground `f.path()` |
+|---|---|
+| `path.rect(x, y, w, h)` | `path.rect(x, y, w, h)` (x, y is the **top-left**; DrawBot's is the bottom-left) |
+| `path.oval(x, y, w, h)` | `path.ellipse(x, y, w, h)` or `path.circle(x, y, d)` (x, y is the **centre**) |
+| `path.polygon(*points)` | `path.polygon(points)` (one list of `(x, y)`) |
+| `a.union(b)` / `a \| b` | `a.union(b)` / `a \| b` |
+| `a.intersection(b)` / `a & b` | `a.intersection(b)` / `a & b` |
+| `a.difference(b)` / `a % b` | `a.difference(b)` / `a % b` or `a - b` |
+| `a.xor(b)` / `a ^ b` | `a.xor(b)` / `a ^ b` |
+| `path.removeOverlap()` | `path.remove_overlap()` |
+
+Two differences. All
+the funground calls return a **new** path: DrawBot's `removeOverlap()` changes the path itself. And
+the drawn result is the same, but the order of points inside a result may differ, because funground
+uses a different library underneath.
+
 ## Saved state
 
 DrawBot recommends `with savedState():` over the older `save()`/`restore()`, to save and restore

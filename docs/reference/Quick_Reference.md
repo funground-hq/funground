@@ -765,6 +765,15 @@ you can draw again and again.
 | `.curve_to(cx1, cy1, cx2, cy2, x, y)` | Cubic Bézier: two control points, then the end point. | |
 | `.quad_to(cx, cy, x, y)` | Quadratic Bézier: one control point, then the end point. | |
 | `.close()` | Join back to where the sub-path started. Only closed paths are filled. | |
+| `.rect(x, y, w, h)` | Add a closed rectangle; (x, y) is its top-left corner. Not changed by `rect_mode`. | `f.path().rect(10, 10, 80, 50)` |
+| `.ellipse(x, y, w, h)` | Add a closed ellipse centred on (x, y), width `w`, height `h`. Not changed by `ellipse_mode`. | `f.path().ellipse(50, 50, 80, 40)` |
+| `.circle(x, y, d)` | Add a closed circle centred on (x, y), diameter `d`. | `f.path().circle(50, 50, 40)` |
+| `.polygon(points)` | Add a closed shape through a list of `(x, y)` corners (3 or more). | `f.path().polygon([(0, 0), (40, 0), (20, 30)])` |
+| `a.union(b)`, `a \| b` | **New:** a new path covering everything `a` or `b` covers. `a` and `b` are not changed. Only closed shapes count; each is read with the non-zero rule. | `both = ring \| star` |
+| `a.intersection(b)`, `a & b` | **New:** a new path covering only what both cover. | `lens = ring & star` |
+| `a.difference(b)`, `a - b` | **New:** a new path covering what `a` covers, minus what `b` covers. | `bite = ring - star` |
+| `a.xor(b)`, `a ^ b` | **New:** a new path covering what exactly one of them covers. | `either = ring ^ star` |
+| `a.remove_overlap()` | **New:** a new path with the same area and one clean outline, no overlapping parts. | `clean = crossing.remove_overlap()` |
 | `f.draw_path(path)` | Fill (if closed) and stroke a path with the current style, under the current transform. | `f.draw_path(tri)` |
 | `f.clip(path)` | Limit **later** drawing to the inside of `path` until the enclosing `pop()` / end of the `with f.saved_state():` block. | `with f.saved_state(): f.clip(tri); ...` |
 | `f.no_clip()` | Remove clipping until the enclosing `pop()` / end of the block, which brings the previous clip back. | `with f.saved_state(): f.no_clip(); ...` |
