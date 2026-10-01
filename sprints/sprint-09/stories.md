@@ -1,6 +1,6 @@
 # Sprint 9 — Phase 3c: path depth
 
-**Dates:** opened 1 Oct 2026 under D-034 (minimal intervention).
+**Dates:** opened 1 Oct 2026 under D-034 (minimal intervention); **closed by the maintainer 1 Oct 2026** (`review.md`).
 **Release context (D-027):** part of release 0.1, after Phase 3.
 
 **Goal:** DrawBot's path tools on funground's path builder: shapes combined with booleans,

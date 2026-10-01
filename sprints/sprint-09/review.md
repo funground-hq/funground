@@ -1,6 +1,6 @@
 # Sprint 9 review — Phase 3c: path depth
 
-**Dates:** 1 October 2026 (draft for the maintainer — not yet signed off)
+**Dates:** 1 October 2026; closed by the maintainer 1 October 2026
 **Goal:** DrawBot's path tools on funground's path builder: booleans, overlap removal, stroke
 outlines, measuring and testing paths, moving them, and letters as paths.
 
@@ -65,11 +65,11 @@ CI: 12/12 green on every story commit checked so far
 | D-037 | skia-pathops in the base install (ADR-005) | maintainer |
 | D-038 | Path API: DrawBot `BezierPath` names on `f.path()` | Claude, under D-034 |
 | D-039 | Accept the touching-letters anti-aliasing difference in `text_path` | Claude, under D-034 |
-| *(open)* | Rounded corners for `rect`/`square` (`rect(x, y, w, h, radius)`, as p5): a v0.5 signature change, so the maintainer's call | — |
+| D-040 | Rounded corners for `rect`/`square`, as p5 (approved v0.5 signature change) | maintainer |
 
 ## Sign-off
 
-Sprint 9 closes when the maintainer has read this review and the reviewer's guide.
+**Closed 1 October 2026** by the maintainer ("go ahead"). D-038 and D-039 stand. Rounded corners approved as D-040, built in Sprint 10.
 
 ## Retrospective
 
