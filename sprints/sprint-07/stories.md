@@ -94,6 +94,11 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
 - [ ] S-081.1 `rect_mode`, `ellipse_mode`, `image_mode` per F10; picture methods too
 - [ ] S-081.2 Tests; gallery example; guide (chapters 3 and 14: the difference row goes); Quick Reference; changelog
 
+### S-082 Colour mode — E-25 *(D-031 = B; contract S15)*
+- [ ] S-082.1 `color_mode(mode, max1, max2, max3, max_alpha)` per S15: one place where numbers become colours, used by every colour-taking function; pictures and scripts too
+- [ ] S-082.2 Tests; gallery `colour/`; guide chapter 4 (and chapter 14: the `colorMode` difference row goes); Quick Reference; changelog
+*Acceptance:* a p5 sketch using `colorMode(HSB)` ports by renaming only; every existing golden and snapshot unchanged.
+
 ## Out of scope this sprint
 Pages and multi-page documents (Sprint 8); path booleans (Sprint 9); rich typography and SVG
 import (Sprint 10); sound, GIF and video export, controls, and the release (Sprint 11).
