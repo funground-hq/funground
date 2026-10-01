@@ -51,6 +51,7 @@ are raised and closed.
 | D-041 | 2026-10-01 | SVG import: which library reads SVG files as paths (Sprint 10) | A svgelements (pure Python, MIT, no dependencies) · B picosvg (Google; needs lxml) · C SVG as a picture only, via pygame-ce (no new dependency, no vectors) · D our own reader for common SVG | A | **pending** — needed before S-092 | — | conversation 1 Oct 2026 |
 | D-042 | 2026-10-01 | Typography API: tracking, features, variations (S-090) | DrawBot names in snake_case vs others | DrawBot | **decided by Claude (D-034).** `text_tracking`, `text_features(**tags)`, `font_variations(**axes)`; DrawBot's names, `text_`-prefixed where funground's text settings are (`text_size`, `text_font`) | 2026-10-01 | contract T13 |
 | D-043 | 2026-10-01 | Searchable, selectable text in funground's PDFs (lifts D-006's limit) | A invisible text layer via `pypdf` (BSD, 0.4 MB) in the base · B the same as an optional extra · C keep outlines only (D-006) | A | **pending** — evidence in `spikes/09_pdf_text/README.md` | — | spike S-093 |
+| D-044 | 2026-10-01 | Mixed styles in one text: API (S-091) | DrawBot's `FormattedString` with `append(text, **settings)` vs a markup string | DrawBot | **decided by Claude (D-034).** `f.FormattedString()` (a class, like `f.Vector`), `append` with funground's setting names; runs without a setting follow the drawing state when drawn; accepted by `text`, `text_box`, `text_width`, `text_path` | 2026-10-01 | contract T14 |
 
 ## Open
 
