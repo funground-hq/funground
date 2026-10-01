@@ -26,15 +26,17 @@ f.run(max_frames=1)
 | Ending | What you get |
 |---|---|
 | `.png` | A picture, at your screen's full resolution |
-| `.pdf` | A document made of shapes: sharp at any size, good for printing |
+| `.pdf` | A document made of shapes and text: sharp at any size, good for printing |
 | `.svg` | Shapes for the web or for editing in a drawing program |
 
 A **PNG** holds exactly what is in the window — including everything earlier frames left there.
 A **PDF or SVG** holds the shapes drawn in *that one frame*, so for those, draw the whole picture
 in the frame you save (start `draw()` with `f.background(...)`).
 
-In PDF and SVG files, text is saved as letter *shapes*, so it looks right everywhere but cannot
-yet be selected or searched.
+In a PDF, text is real text: you can select it, search it and copy it, and it looks the same as
+in the window. The PDF carries the letters of each font it uses. A font that says it must not be
+put inside a file is saved as letter *shapes* instead, so it looks right but cannot be selected.
+SVG files always save text as letter shapes.
 
 ## A transparent background
 
