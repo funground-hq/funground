@@ -911,6 +911,44 @@ class Sketch:
             raise ValueError(f"f.text_style() takes one of {', '.join(map(repr, self.TEXT_STYLES))}, not {style!r}")
         self._states.update(text_style=style)
 
+    # ---- tracking, OpenType features, font variations (S-090, contract T13)
+    @staticmethod
+    def _tag(tag: str, who: str) -> str:
+        """A four-character OpenType tag; a shorter one is padded with spaces, as OpenType allows."""
+        if not isinstance(tag, str) or not 1 <= len(tag) <= 4 or not tag.isascii():
+            raise ValueError(f"f.{who}() names things by tags of 1 to 4 plain letters, like 'liga' or 'wght', not {tag!r}")
+        return tag.ljust(4)
+
+    def text_tracking(self, pixels: float) -> None:
+        """Add *pixels* of space after every letter (negative tightens)."""
+        if isinstance(pixels, bool) or not isinstance(pixels, (int, float)):
+            raise TypeError(f"f.text_tracking() takes a number of pixels, not {type(pixels).__name__}")
+        self._states.update(text_tracking=float(pixels))
+
+    def text_features(self, **features: bool) -> None:
+        """Turn OpenType features on or off by tag; no arguments goes back to the font's defaults."""
+        if not features:
+            self._states.update(text_features=())
+            return
+        merged = dict(self.style.text_features)
+        for tag, value in features.items():
+            if not isinstance(value, bool):
+                raise TypeError(f"f.text_features() takes True or False for each feature, not {value!r} for {tag!r}")
+            merged[self._tag(tag, "text_features")] = value
+        self._states.update(text_features=tuple(sorted(merged.items())))
+
+    def font_variations(self, **axes: float) -> None:
+        """Set a variable font's axes by tag, like wght=700; no arguments goes back to the font's defaults."""
+        if not axes:
+            self._states.update(font_variations=())
+            return
+        merged = dict(self.style.font_variations)
+        for tag, value in axes.items():
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise TypeError(f"f.font_variations() takes a number for each axis, not {value!r} for {tag!r}")
+            merged[self._tag(tag, "font_variations")] = float(value)
+        self._states.update(font_variations=tuple(sorted(merged.items())))
+
     # ---- text alignment and metrics (S-049, contract T7/T8)
     TEXT_ALIGNS = ("left", "center", "right")
     TEXT_VALIGNS = ("top", "center", "baseline", "bottom")
@@ -953,9 +991,10 @@ class Sketch:
     def _line_layout(self, lines: list[str], x: float, y: float, style, top: float | None = None):
         """Yield (line, left, top) for each non-empty line: the one layout `text`, `text_box` and
         `text_path` all share, so they cannot drift apart (contract T7/T9, F13)."""
-        from .typography import effective_font, text_metrics, text_width
+        from .typography import effective_font, text_metrics, text_settings, text_width
 
         font = effective_font(style)
+        settings = text_settings(style)
         ascent, descent = text_metrics(style.text_size, font)
         leading = self._leading(style)
         if top is None:
@@ -965,7 +1004,7 @@ class Sketch:
         for i, line in enumerate(lines):
             left = x
             if style.text_align != "left":
-                w = text_width(line, style.text_size, font)
+                w = text_width(line, style.text_size, font, **settings)
                 left -= w / 2 if style.text_align == "center" else w
             if line:
                 yield line, left, top + i * leading if i else top
@@ -978,13 +1017,13 @@ class Sketch:
     def text_box(self, message: object, x: float, y: float, width: float, height: float | None = None,
                  color: ColorLike | None = None) -> str:
         """Wrap *message* inside the box; return the text that did not fit (contract T10)."""
-        from .typography import effective_font, text_metrics, wrap_lines
+        from .typography import effective_font, text_metrics, text_settings, wrap_lines
 
         if not width > 0 or (height is not None and not height >= 0):
             raise ValueError("f.text_box() needs a width above 0 and a height of 0 or more (or no height)")
         style = self.style
         font = effective_font(style)
-        lines, rests = wrap_lines(str(message), width, style.text_size, font)
+        lines, rests = wrap_lines(str(message), width, style.text_size, font, **text_settings(style))
         ascent, descent = text_metrics(style.text_size, font)
         leading = self._leading(style)
         fitting = len(lines)
@@ -1156,22 +1195,24 @@ class Sketch:
 
     def text_path(self, message: object, x: float, y: float) -> PathBuilder:
         """The glyph outlines `text(message, x, y)` would draw now, as a new path (contract F13)."""
-        from .typography import effective_font
+        from .typography import effective_font, text_settings
 
         style = self.style
         font = effective_font(style)
+        settings = text_settings(style)
         geometry = Path()
         for line, left, top in self._line_layout(str(message).split("\n"), x, y, style):
-            for op in font.shape(line, style.text_size).outline_ops(left, top, WHITE):
+            for op in font.shape(line, style.text_size, **settings).outline_ops(left, top, WHITE):
                 geometry = Path(geometry.segments + op.path.segments)
         return PathBuilder(geometry)
 
     def text_width(self, message: object) -> float:
         """Advance width of *message* in logical pixels at the current text_size (contract T6)."""
-        from .typography import effective_font, text_width
+        from .typography import effective_font, text_settings, text_width
 
         font = effective_font(self.style)
-        return max(text_width(line, self.style.text_size, font) for line in str(message).split("\n"))
+        settings = text_settings(self.style)
+        return max(text_width(line, self.style.text_size, font, **settings) for line in str(message).split("\n"))
 
     # ------------------------------------------------------------ shapes, paths, clipping (S-028)
     def begin_shape(self) -> None:

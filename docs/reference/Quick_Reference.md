@@ -326,6 +326,9 @@ f.run()
 | `f.text_path(message, x, y)` | **New:** the outlines of `f.text(message, x, y)` as a new path, set with the current font, style, size, alignment and leading. Cut it, outline it, fill it or clip with it. It has no colour and is not moved by the current transform until you draw it. | `f.draw_path(f.text_path("Hi", 20, 20))` |
 | `f.load_font(path)` | **New:** load a `.ttf`/`.otf` font file; pass the result to `f.text_font()`. A relative path is looked for next to the sketch file first, then the current folder. | `mono = f.load_font("fonts/DejaVuSansMono.ttf")` |
 | `f.text_font(font, size=None)` | **New:** use `font` (from `f.load_font()`, a path, or `None`) for later text; `None` returns to the built-in family. | `f.text_font(mono)` / `f.text_font(None)` |
+| `f.text_tracking(pixels)` | **New:** add this many pixels of space after every letter (the last one too); negative tightens. Changes `f.text_width()`, alignment, `f.text_box()` and `f.text_path()`. Default 0. | `f.text_tracking(4)` |
+| `f.text_features(**features)` | **New:** turn OpenType features on or off by their four-letter names. Calls add to each other; no arguments goes back to the font's defaults. | `f.text_features(liga=False)` |
+| `f.font_variations(**axes)` | **New:** set a variable font's axes by name. An axis the font lacks is ignored, so it is harmless with a static font. No arguments goes back to the defaults. | `f.font_variations(wght=700)` |
 | `f.text_style(style)` | **New:** choose one of the built-in family's four styles: `"normal"`, `"bold"`, `"italic"`, `"bold_italic"`. Ignored once a font is loaded, but remembered for when it is not. | `f.text_style("bold")` |
 
 *Changed in v0.6:* text is drawn with the bundled **DejaVu Sans** font on every platform, and

@@ -69,33 +69,63 @@ class FontResource:
         self._order = self._tt.getGlyphOrder()
         self._glyph_set = self._tt.getGlyphSet()
         with open(path, "rb") as fh:
-            self._hb = hb.Font(hb.Face(fh.read()))
+            self._face = hb.Face(fh.read())
+        self._hb = hb.Font(self._face)
         self._hb.scale = (self.units_per_em, self.units_per_em)
-        self._outlines: dict[int, Path] = {}
+        # S-090: a variable font's axes (tag -> (min, max)); empty for a static font.
+        self.axes: dict[str, tuple[float, float]] = (
+            {a.axisTag: (a.minValue, a.maxValue) for a in self._tt["fvar"].axes} if "fvar" in self._tt else {}
+        )
+        self._outlines: dict[tuple, Path] = {}
+        self._located: dict[tuple, tuple] = {}      # location -> (hb font, glyph set), built once each
 
     @property
     def family(self) -> str:
         return self._tt["name"].getDebugName(1) or os.path.basename(self.path)
 
-    def outline(self, gid: int) -> Path:
-        """Glyph outline in font units, y-up; cached — built once per glyph, never per frame."""
-        p = self._outlines.get(gid)
+    def location(self, variations: tuple = ()) -> tuple:
+        """The variation settings this font can use: only its own axes, sorted (S-090, T13).
+        An axis the font lacks is ignored, so a static font always gives ()."""
+        return tuple((tag, float(v)) for tag, v in variations if tag in self.axes)
+
+    def _at(self, location: tuple):
+        """(HarfBuzz font, glyph set) at *location*; the plain ones for ()."""
+        if not location:
+            return self._hb, self._glyph_set
+        pair = self._located.get(location)
+        if pair is None:
+            font = hb.Font(self._face)                  # a copy: the shared font is never changed
+            font.scale = (self.units_per_em, self.units_per_em)
+            font.set_variations(dict(location))
+            pair = self._located[location] = (font, self._tt.getGlyphSet(location=dict(location)))
+        return pair
+
+    def outline(self, gid: int, location: tuple = ()) -> Path:
+        """Glyph outline in font units, y-up; cached — built once per glyph, never per frame.
+        *location* is a `location()` result: the outline at that variation."""
+        key = (location, gid)
+        p = self._outlines.get(key)
         if p is None:
-            pen = _PathPen(self._glyph_set)
-            self._glyph_set[self._order[gid]].draw(pen)
-            p = self._outlines[gid] = pen.path
+            glyph_set = self._at(location)[1]
+            pen = _PathPen(glyph_set)
+            glyph_set[self._order[gid]].draw(pen)
+            p = self._outlines[key] = pen.path
         return p
 
-    def shape(self, text: str, size: float) -> "TextRun":
+    def shape(self, text: str, size: float, tracking: float = 0.0, features: tuple = (),
+              variations: tuple = ()) -> "TextRun":
+        """Shape *text*. *tracking* (pixels, after every glyph), *features* ((tag, bool) pairs) and
+        *variations* ((tag, number) pairs) are the T13 settings."""
+        location = self.location(variations)
         buf = hb.Buffer()
         buf.add_str(text)
         buf.guess_segment_properties()
-        hb.shape(self._hb, buf, {"kern": True, "liga": True})
+        hb.shape(self._at(location)[0], buf, {"kern": True, "liga": True, **dict(features)})
         glyphs = tuple(
             Glyph(i.codepoint, p.x_advance, p.x_offset, p.y_offset)
             for i, p in zip(buf.glyph_infos, buf.glyph_positions)
         )
-        return TextRun(self, text, size, glyphs)
+        return TextRun(self, text, size, glyphs, float(tracking), location)
 
 
 @dataclass(frozen=True, slots=True)
@@ -104,6 +134,8 @@ class TextRun:
     text: str
     size: float
     glyphs: tuple[Glyph, ...]
+    tracking: float = 0.0                 # S-090: pixels added after every glyph (T13)
+    location: tuple = ()                  # S-090: the variation the outlines are drawn at
 
     @property
     def scale(self) -> float:
@@ -111,7 +143,7 @@ class TextRun:
 
     @property
     def advance(self) -> float:
-        return sum(g.x_advance for g in self.glyphs) * self.scale
+        return sum(g.x_advance for g in self.glyphs) * self.scale + self.tracking * len(self.glyphs)
 
     def outline_ops(self, x: float, y: float, color: Color) -> list[ir.FillPath]:
         """Materialise as FillPath ops anchored top-left at (x, y)."""
@@ -120,13 +152,13 @@ class TextRun:
         pen_x = x
         ops: list[ir.FillPath] = []
         for g in self.glyphs:
-            outline = self.font.outline(g.gid)
+            outline = self.font.outline(g.gid, self.location)
             if not outline.is_empty:
                 t = Transform.scaling(s, -s).then(
                     Transform.translation(pen_x + g.x_offset * s, baseline - g.y_offset * s)
                 )
                 ops.append(ir.FillPath(outline.transformed(t), color))
-            pen_x += g.x_advance * s
+            pen_x += g.x_advance * s + self.tracking
         return ops
 
 
@@ -138,7 +170,14 @@ def text_metrics(size: float, font: FontResource | None = None) -> tuple[float, 
     return font.ascent * scale, -font.descent * scale
 
 
-def wrap_lines(text: str, width: float, size: float, font: FontResource | None = None) -> tuple[list[str], list[str]]:
+def text_settings(state) -> dict:
+    """The T13 settings of a GraphicsState as keyword arguments for `shape`, `text_width`, `wrap_lines`."""
+    return {"tracking": state.text_tracking, "features": state.text_features,
+            "variations": state.font_variations}
+
+
+def wrap_lines(text: str, width: float, size: float, font: FontResource | None = None,
+               **settings) -> tuple[list[str], list[str]]:
     """Break *text* into lines no wider than *width* at *size* in *font* (contract T10).
 
     Returns (lines, rests): rests[i] is the text from the start of line i onward, so a caller that
@@ -150,7 +189,7 @@ def wrap_lines(text: str, width: float, size: float, font: FontResource | None =
     rests: list[str] = []
 
     def fits(s: str) -> bool:
-        return text_width(s, size, font) <= width
+        return text_width(s, size, font, **settings) <= width
 
     def emit(line: str, start: int) -> None:
         lines.append(line)
@@ -180,12 +219,12 @@ def wrap_lines(text: str, width: float, size: float, font: FontResource | None =
     return lines, rests
 
 
-def text_width(text: str, size: float, font: FontResource | None = None) -> float:
+def text_width(text: str, size: float, font: FontResource | None = None, **settings) -> float:
     """Advance width of *text* in logical pixels at *size* in *font* (S-037, T11): what
     `f.text` moves the pen by. Uses the default font when *font* is not given."""
     if not text:
         return 0.0
-    return (font or default_font()).shape(text, size).advance
+    return (font or default_font()).shape(text, size, **settings).advance
 
 
 # ---- font registry (S-054, contract T11/T12): FontResource objects, cached by key. Built-in

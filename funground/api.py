@@ -505,6 +505,22 @@ def text_style(style: str) -> None:
     active_sketch().text_style(style)
 
 
+# ---- tracking, OpenType features, font variations (S-090)
+def text_tracking(pixels: float) -> None:
+    """Add this many pixels of space after every letter. Negative numbers tighten the text."""
+    active_sketch().text_tracking(pixels)
+
+
+def text_features(**features: bool) -> None:
+    """Turn OpenType features on or off by tag, like f.text_features(liga=False). No arguments: the font's defaults."""
+    active_sketch().text_features(**features)
+
+
+def font_variations(**axes: float) -> None:
+    """Set the axes of a variable font by tag, like f.font_variations(wght=700). No arguments: the font's defaults."""
+    active_sketch().font_variations(**axes)
+
+
 # ---- transforms and the state stack (S-027)
 def translate(dx: float, dy: float) -> None:
     """Move the origin: everything drawn afterwards is shifted by (dx, dy)."""
