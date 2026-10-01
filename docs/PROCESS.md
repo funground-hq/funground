@@ -121,6 +121,14 @@ question, the options offered, the recommendation, the outcome, date decided, an
 reasoning lives. A trailing **Open** list shows what is still pending. The log is the index; the
 linked document is the argument.
 
+### Decisions Claude may take (D-034, Phase 3)
+
+The maintainer asked for minimal intervention during Phase 3. Routine design calls are made by Claude,
+pinned in the contract, and logged as "decided by Claude (D-034)" with the reasons, for review at
+sprint sign-off. Still brought to the maintainer, in the format below: new runtime dependencies or
+changes to the base install; changes to the frozen v0.5 API; anything irreversible or public beyond
+routine pushes to `main`; scope changes to release 0.1; closing a sprint.
+
 ### How a pending decision is presented
 
 Whenever work needs a call the maintainer has not made, it is raised — in the sprint's `stories.md`,
