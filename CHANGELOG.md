@@ -50,6 +50,7 @@ pygame-ce that was never published.
 - **Maths and randomness:** `map_range`, `lerp`, `norm`, `mag`, `radians`, `degrees`,
   `random_seed`, `random_gaussian`, `random_choice`, `noise` (the same values as p5.js),
   `noise_seed`, `noise_detail`, `Vector`.
+- **Drawing modes:** `rect_mode`, `ellipse_mode` and `image_mode` place shapes and pictures by their corner, opposite corners, centre or radius, as in p5.js. The defaults are unchanged (D-030).
 - **Off-screen pictures:** `create_graphics` and `image`.
 - **Image files:** `load_image` reads PNG, JPEG, GIF, BMP and TGA files into a picture. Phone photos are turned the right way up (ADR-004).
 - **Saving:** `save` to PNG, PDF or SVG; `save_frames` for numbered frames; PDF and SVG output is

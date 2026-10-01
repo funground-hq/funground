@@ -33,6 +33,7 @@ ALLOWED_METHODS = frozenset({
     "blend_mode", "opacity", "shadow", "no_shadow",
     # drawing
     "background", "clear",
+    "rect_mode", "ellipse_mode", "image_mode",
     "circle", "ellipse", "rect", "line", "point", "square", "triangle", "quad", "polygon", "arc",
     # text
     "text", "text_align", "text_ascent", "text_descent", "text_leading", "text_box",
@@ -264,5 +265,12 @@ def draw_image(target: Sketch, picture: Any, x: float, y: float,
     w = picture.width if width is None else float(width)
     h = picture.height if height is None else float(height)
     style = target.style
+    if style.image_mode == "corners":           # contract F10: (x, y) and the opposite corner
+        if width is None or height is None:
+            raise ValueError("f.image() in image_mode('corners') needs both width and height: "
+                             "the opposite corner, as image(picture, x1, y1, x2, y2)")
+        x, y, w, h = target._box_from_corners(x, y, w, h)
+    elif style.image_mode == "center":
+        x, y = x - w / 2, y - h / 2
     target._emit(ir.Image(picture.name, snap.version, float(x), float(y), w, h,
                            style.blend_mode, style.opacity, snap))

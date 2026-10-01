@@ -41,7 +41,8 @@ also 0–255 (contract S2): `f.fill(255, 0, 0, 128)`, `f.fill("red")`, or `f.fil
 DrawBot's `rect(x, y, w, h)` and `oval(x, y, w, h)` take the **same four numbers**: `x, y` is the
 corner of the shape's bounding box, for both of them. funground's `f.rect(x, y, w, h)` also uses
 the top-left corner (contract C4), but `f.ellipse(x, y, w, h)` and `f.circle(x, y, d)` are placed
-by their **centre** (contract C5) — the p5/Processing convention, not DrawBot's.
+by their **centre** (contract C5) — the p5/Processing convention, not DrawBot's. To place ellipses
+the DrawBot way, call `f.ellipse_mode("corner")` once.
 
 ```py
 oval(100, 100, 80, 80)          # bounding box from (100, 100)

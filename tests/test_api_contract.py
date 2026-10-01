@@ -154,6 +154,10 @@ ADDED_FUNCTIONS = {
     "show": "() -> 'None'",
     # S-077 images
     "load_image": "(path: 'str') -> 'Picture'",
+    # S-081 drawing modes
+    "rect_mode": "(mode: 'str') -> 'None'",
+    "ellipse_mode": "(mode: 'str') -> 'None'",
+    "image_mode": "(mode: 'str') -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

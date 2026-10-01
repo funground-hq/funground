@@ -655,13 +655,66 @@ class Sketch:
     def background(self, color: ColorLike) -> None:
         self._emit(ir.Clear(parse_paint(color)))
 
+    # ---- drawing modes (S-081, contract F10). Resolved before an op is recorded, so the IR
+    # always holds top-left geometry for rectangles and centre geometry for ellipses.
+    RECT_MODES = ("corner", "corners", "center", "radius")
+    ELLIPSE_MODES = ("center", "radius", "corner", "corners")
+    IMAGE_MODES = ("corner", "corners", "center")
+
+    def rect_mode(self, mode: str) -> None:
+        """Choose how rect() and square() read their numbers: corner, corners, center or radius."""
+        self._set_mode("rect_mode", mode, self.RECT_MODES)
+
+    def ellipse_mode(self, mode: str) -> None:
+        """Choose how ellipse(), circle() and arc() read their numbers: center, radius, corner or corners."""
+        self._set_mode("ellipse_mode", mode, self.ELLIPSE_MODES)
+
+    def image_mode(self, mode: str) -> None:
+        """Choose how image() reads its numbers: corner, corners or center."""
+        self._set_mode("image_mode", mode, self.IMAGE_MODES)
+
+    def _set_mode(self, name: str, mode: str, valid: tuple[str, ...]) -> None:
+        if mode not in valid:
+            raise ValueError(f"f.{name}() takes one of {', '.join(map(repr, valid))}, not {mode!r}")
+        self._states.update(**{name: mode})
+
+    @staticmethod
+    def _box_from_corners(x1: float, y1: float, x2: float, y2: float) -> tuple[float, float, float, float]:
+        return min(x1, x2), min(y1, y2), abs(x2 - x1), abs(y2 - y1)
+
+    def _rect_box(self, x: float, y: float, w: float, h: float, one_size: bool = False) -> tuple[float, float, float, float]:
+        """Top-left x, y, width, height for the current rect_mode."""
+        mode = self.style.rect_mode
+        if mode == "corners" and not one_size:
+            return self._box_from_corners(x, y, w, h)
+        if mode == "center":
+            return x - w / 2, y - h / 2, w, h
+        if mode == "radius":
+            return x - w, y - h, w * 2, h * 2
+        return x, y, w, h                       # "corner" (and "corners" for square): numbers untouched
+
+    def _ellipse_box(self, x: float, y: float, w: float, h: float, one_size: bool = False) -> tuple[float, float, float, float]:
+        """Centre x, y, width, height for the current ellipse_mode."""
+        mode = self.style.ellipse_mode
+        if mode == "corners" and not one_size:
+            left, top, w, h = self._box_from_corners(x, y, w, h)
+            return left + w / 2, top + h / 2, w, h
+        if mode in ("corner", "corners"):
+            return x + w / 2, y + h / 2, w, h
+        if mode == "radius":
+            return x, y, w * 2, h * 2
+        return x, y, w, h                       # "center": numbers untouched
+
     def circle(self, x: float, y: float, diameter: float) -> None:
-        self._emit(ir.Circle(x, y, diameter, self.style))
+        x, y, w, _ = self._ellipse_box(x, y, diameter, diameter, one_size=True)
+        self._emit(ir.Circle(x, y, w, self.style))
 
     def ellipse(self, x: float, y: float, width: float, height: float) -> None:
+        x, y, width, height = self._ellipse_box(x, y, width, height)
         self._emit(ir.Ellipse(x, y, width, height, self.style))
 
     def rect(self, x: float, y: float, width: float, height: float) -> None:
+        x, y, width, height = self._rect_box(x, y, width, height)
         self._emit(ir.Rect(x, y, width, height, self.style))
 
     def line(self, x1: float, y1: float, x2: float, y2: float) -> None:
@@ -672,8 +725,9 @@ class Sketch:
 
     # ---- more shapes (S-041, contract F5-F7)
     def square(self, x: float, y: float, size: float) -> None:
-        """A square placed by its top-left corner, like rect()."""
-        self._emit(ir.Rect(x, y, size, size, self.style))
+        """A square placed like rect(): by its top-left corner unless rect_mode() says otherwise."""
+        x, y, w, h = self._rect_box(x, y, size, size, one_size=True)
+        self._emit(ir.Rect(x, y, w, h, self.style))
 
     def triangle(self, x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> None:
         self._emit_path(Path().move_to(x1, y1).line_to(x2, y2).line_to(x3, y3).close())
@@ -708,6 +762,7 @@ class Sketch:
         while stop < start:
             stop += 360
         stop = min(stop, start + 360)
+        x, y, width, height = self._ellipse_box(x, y, width, height)
         rx, ry = width / 2, height / 2
         if mode == "pie":
             self._emit_path(Path().move_to(x, y).arc_to(x, y, rx, ry, start, stop).close())

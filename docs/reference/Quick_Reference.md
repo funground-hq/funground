@@ -102,6 +102,9 @@ center_y = f.height / 2
 | `f.circle(x, y, diameter)` | Circle centred at (x, y). The last argument is the **diameter**, not the radius. | `f.circle(100, 80, 40)` |
 | `f.ellipse(x, y, width, height)` | Ellipse centred at (x, y). | `f.ellipse(220, 80, 100, 50)` |
 | `f.rect(x, y, width, height)` | Rectangle whose (x, y) is the **top-left** corner. | `f.rect(40, 160, 120, 60)` |
+| `f.rect_mode(mode)` | How `rect` and `square` read their numbers: `"corner"` (default), `"corners"` (two opposite corners), `"center"`, `"radius"` (centre, then half-sizes). Saved by `push`/`pop`. | `f.rect_mode("center")` |
+| `f.ellipse_mode(mode)` | How `ellipse`, `circle` and `arc` read their numbers: `"center"` (default), `"radius"`, `"corner"` (top-left of the box), `"corners"`. Saved by `push`/`pop`. | `f.ellipse_mode("corner")` |
+| `f.image_mode(mode)` | How `image` reads its numbers: `"corner"` (default), `"center"`, `"corners"` (needs a width and height: the opposite corner). Saved by `push`/`pop`. | `f.image_mode("center")` |
 | `f.line(x1, y1, x2, y2)` | Line from one point to another. | `f.line(220, 160, 340, 220)` |
 | `f.point(x, y)` | A dot in the stroke colour, about `stroke_width` across. | `f.point(400, 100)` |
 | `f.square(x, y, size)` | Square whose (x, y) is the **top-left** corner. | `f.square(40, 40, 60)` |
@@ -868,6 +871,7 @@ The public v0.6 student-facing API. Everything is reached as `f.<name>`.
 | `f.circle(x, y, d)` | Centred circle (diameter). |
 | `f.ellipse(x, y, w, h)` | Centred ellipse. |
 | `f.rect(x, y, w, h)` | Top-left rectangle. |
+| `f.rect_mode(m)`, `f.ellipse_mode(m)`, `f.image_mode(m)` | Place by corner, corners, centre or radius. |
 | `f.line(x1, y1, x2, y2)` | Line. |
 | `f.point(x, y)` | Dot in the stroke colour. |
 | `f.square(x, y, s)` / `f.triangle(...)` / `f.quad(...)` / `f.polygon(points)` | More shapes. |

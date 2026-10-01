@@ -215,7 +215,8 @@ class Frame:
 # differ from their default, so every existing IR snapshot stays byte-identical (S-042).
 OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash", "dash_offset", "cap", "join",
                                "curve_tightness", "text_align", "text_valign", "text_leading",
-                               "blend_mode", "opacity", "shadow", "font", "text_style"})
+                               "blend_mode", "opacity", "shadow", "font", "text_style",
+                               "rect_mode", "ellipse_mode", "image_mode"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).

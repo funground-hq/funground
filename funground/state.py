@@ -40,6 +40,11 @@ class GraphicsState:
     # ignored once a font has been loaded.
     font: str | None = None
     text_style: str = "normal"
+    # S-081 drawing modes (contract F10): how rect/square, ellipse/circle/arc and image read their
+    # numbers. Resolved before an op is recorded; kept here so push/pop saves them.
+    rect_mode: str = "corner"
+    ellipse_mode: str = "center"
+    image_mode: str = "corner"
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)

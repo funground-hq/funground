@@ -55,7 +55,7 @@ coming from p5.
 |---|---|---|
 | `strokeWeight(n)` | `strokeWeight(n)` | `f.stroke_width(n)` |
 | `strokeCap(...)`, `strokeJoin(...)` | `strokeCap(...)`, `strokeJoin(...)` | `f.stroke_cap(...)`, `f.stroke_join(...)` |
-| `rectMode(...)`, `ellipseMode(...)` | same | *no equivalent — see differences below* |
+| `rectMode(...)`, `ellipseMode(...)`, `imageMode(...)` | same | `f.rect_mode(...)`, `f.ellipse_mode(...)`, `f.image_mode(...)`. Modes are lower-case words: `CORNER` is `"corner"`, `CORNERS` is `"corners"`, `CENTER` is `"center"`, `RADIUS` is `"radius"` |
 
 ### Transforms
 
@@ -166,7 +166,6 @@ named too.
 | No global opacity — you set alpha on each colour yourself | `f.opacity(0–255)` multiplies the alpha of every fill and stroke drawn after it | Borrowed from DrawBot; useful for fading a whole group of shapes (contract S14) |
 | `v.cross(w)` returns a 3D `p5.Vector` | `v.cross(w)` returns a **number** | funground's `Vector` is 2D only; a 2D cross product is a scalar (contract H5) |
 | A graphics buffer keeps its pixels between frames (Processing also needs `beginDraw()`/`endDraw()` around every use) | `f.create_graphics()` pictures keep their pixels between frames too, with no begin/end needed | Simpler than Processing's `PGraphics`; matches p5's `createGraphics()` (contract P1, P2; D-021) |
-| `rectMode(CENTER)`, `ellipseMode(CORNER)`, ... change how the next shapes are placed | No mode switches. `rect` is always placed by its top-left corner, `ellipse`/`circle` always by their centre | One rule to remember, not four (contract F4) |
 | A p5 sketch runs in a browser tab; nothing closes it from the keyboard. A Processing sketch quits on Escape by default | **Escape** always ends a funground sketch | A teaching convenience carried over from Processing (contract R6) |
 | `setup()`/`draw()` start running as soon as the script loads — no explicit call needed | The sketch runs only once you call `f.run()`, at the end of the file | Makes the starting point explicit, and lets a test harness or a script run several sketches in one process (contract R2, R3) |
 | `frameRate(fps)` both sets and reads the target rate | `f.run(fps=...)` sets it once, when the sketch starts; `f.frame_rate()` only reads the *measured* rate | funground's rate is fixed for the run rather than changeable mid-sketch (contract R3, R10) |
@@ -234,9 +233,9 @@ Every rename above is a one-for-one swap: `createCanvas` to `size`, `ellipse` to
 
 ## What is not here yet
 
-Some things a p5 or Processing sketch might use are not in funground yet: loading and filtering
-images, 3D, sound, and running in a browser. They are planned for Phase 3, before funground
-reaches 1.0, without a firm date yet.
+Some things a p5 or Processing sketch might use are not in funground yet. Image filters, pixel
+access, sound and video export are being added now, before the first release. 3D and running in a
+browser are planned for after 1.0.
 
 **Next:** [15. Coming from DrawBot](15_coming_from_drawbot.md)
 
