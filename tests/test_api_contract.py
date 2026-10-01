@@ -152,6 +152,8 @@ ADDED_FUNCTIONS = {
     "image": "(picture, x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None) -> 'None'",
     # S-076 script mode
     "show": "() -> 'None'",
+    # S-077 images
+    "load_image": "(path: 'str') -> 'Picture'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

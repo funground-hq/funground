@@ -41,6 +41,7 @@ AREAS = {
     "maths": "Useful maths",
     "interaction": "Interaction",
     "saving": "Saving your work",
+    "images": "Pictures and images",
 }
 
 
