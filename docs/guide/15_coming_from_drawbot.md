@@ -77,7 +77,23 @@ Shapes and booleans (contract F11). DrawBot's names, in funground's style:
 | `a.xor(b)` / `a ^ b` | `a.xor(b)` / `a ^ b` |
 | `path.removeOverlap()` | `path.remove_overlap()` |
 
-Two differences. All
+Outlines, queries and moves (contract F12):
+
+| DrawBot `BezierPath` | funground `f.path()` |
+|---|---|
+| `path.expandStroke(width, lineCap, lineJoin, miterLimit)` | `path.expand_stroke(width, cap, join, miter_limit, dash)` (open lines work too; `dash` replaces DrawBot's separate `dashStroke`) |
+| `path.bounds()` gives `(x min, y min, x max, y max)` | `path.bounds()` gives `(x, y, width, height)` |
+| `path.pointInside((x, y))` | `path.contains(x, y)` |
+| `path.translate(x, y)` | `path.translate(dx, dy)` |
+| `path.scale(x, y, center)` | `path.scale(sx, sy)` (about the origin) |
+| `path.rotate(angle, center)` | `path.rotate(degrees, cx, cy)` (clockwise on screen) |
+| `path.copy()` | `path.copy()` |
+
+DrawBot's `translate`, `scale` and `rotate` change the path itself. funground's give back a new
+path. DrawBot turns anticlockwise because its y axis points up; funground's y axis points down,
+so a positive angle turns clockwise, as in `f.rotate`.
+
+Two differences for the booleans. All
 the funground calls return a **new** path: DrawBot's `removeOverlap()` changes the path itself. And
 the drawn result is the same, but the order of points inside a result may differ, because funground
 uses a different library underneath.

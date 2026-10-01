@@ -111,3 +111,66 @@ def xor(a: Path, b: Path) -> Path:
 
 def remove_overlap(a: Path) -> Path:
     return from_skia(_sk.simplify(to_skia(a), fix_winding=True))
+
+
+# ---- stroke outlines and queries (story S-087, contract F12)
+
+_CAPS = {"round": _sk.LineCap.ROUND_CAP, "square": _sk.LineCap.SQUARE_CAP, "butt": _sk.LineCap.BUTT_CAP}
+_JOINS = {"round": _sk.LineJoin.ROUND_JOIN, "miter": _sk.LineJoin.MITER_JOIN, "bevel": _sk.LineJoin.BEVEL_JOIN}
+
+
+def _stroked_skia(path: Path) -> "_sk.Path":
+    """A Skia path with every sub-path that draws something, open ones too."""
+    sk = _sk.Path()
+    sk.fillType = _sk.FillType.WINDING
+    for seg in path.segments:
+        kind = seg[0]
+        if kind == "move":
+            sk.moveTo(*seg[1])
+        elif kind == "line":
+            sk.lineTo(*seg[1])
+        elif kind == "cubic":
+            sk.cubicTo(*seg[1], *seg[2], *seg[3])
+        else:
+            sk.close()
+    return sk
+
+
+def expand_stroke(path: Path, width: float, cap: str, join: str, miter_limit: float, dash) -> Path:
+    """The outline a stroke of *width* would paint, with overlaps removed."""
+    if not isinstance(width, (int, float)) or isinstance(width, bool) or not width > 0:
+        raise ValueError(f"expand_stroke() needs a width above 0, not {width!r}")
+    if cap not in _CAPS:
+        raise ValueError(f"expand_stroke() cap must be one of {', '.join(map(repr, _CAPS))}, not {cap!r}")
+    if join not in _JOINS:
+        raise ValueError(f"expand_stroke() join must be one of {', '.join(map(repr, _JOINS))}, not {join!r}")
+    if not isinstance(miter_limit, (int, float)) or miter_limit < 1:
+        raise ValueError("expand_stroke() miter_limit must be at least 1")
+    dash_array = None
+    if dash is not None:
+        values = [dash] if isinstance(dash, (int, float)) else list(dash)
+        if not values or any((not isinstance(v, (int, float))) or v < 0 for v in values) or sum(values) == 0:
+            raise ValueError("expand_stroke() dash needs one or more lengths of 0 or more, not all 0, e.g. [10, 5]")
+        if len(values) % 2:
+            values = values * 2          # Skia wants pairs; an odd list repeats, as in canvas drawing
+        dash_array = [float(v) for v in values]
+    if path.is_empty:
+        return Path()
+    sk = _stroked_skia(path)
+    sk.stroke(float(width), _CAPS[cap], _JOINS[join], float(miter_limit), dash_array, 0.0)
+    sk.convertConicsToQuads()           # round caps and joins come out as conics
+    sk.fillType = _sk.FillType.WINDING
+    return from_skia(_sk.simplify(sk, fix_winding=True))
+
+
+def exact_bounds(path: Path):
+    """(x, y, w, h) of the tight extent of the closed and open parts, or None."""
+    if path.is_empty or not any(seg[0] in ("line", "cubic") for seg in path.segments):
+        return None
+    x0, y0, x1, y1 = _stroked_skia(path).bounds
+    return (x0, y0, x1 - x0, y1 - y0)
+
+
+def contains(path: Path, x: float, y: float) -> bool:
+    """True when (x, y) is inside what the closed sub-paths fill (non-zero rule)."""
+    return bool(to_skia(path).contains((float(x), float(y))))

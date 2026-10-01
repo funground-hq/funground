@@ -9,7 +9,7 @@ never changes once built, which is what makes reuse safe.
 from __future__ import annotations
 
 from . import pathops
-from .geometry import Path
+from .geometry import Path, Transform
 
 
 class PathBuilder:
@@ -108,6 +108,38 @@ class PathBuilder:
 
     def __xor__(self, other: "PathBuilder") -> "PathBuilder":
         return self.xor(other)
+
+    # ---- outlines, queries and moves (each returns a NEW builder or a value; contract F12)
+    def expand_stroke(self, width: float, cap: str = "round", join: str = "round",
+                      miter_limit: float = 10, dash=None) -> "PathBuilder":
+        """The closed outline a stroke of this width would paint, open sub-paths included."""
+        return PathBuilder(pathops.expand_stroke(self._path, width, cap, join, miter_limit, dash))
+
+    def bounds(self):
+        """(x, y, w, h) of the exact extent of the path, or None when it is empty."""
+        return pathops.exact_bounds(self._path)
+
+    def contains(self, x: float, y: float) -> bool:
+        """True when the point is inside what the path fills (non-zero rule)."""
+        return pathops.contains(self._path, x, y)
+
+    def translate(self, dx: float, dy: float) -> "PathBuilder":
+        """The path moved by (dx, dy)."""
+        return PathBuilder(self._path.transformed(Transform.translation(dx, dy)))
+
+    def scale(self, sx: float, sy: float | None = None) -> "PathBuilder":
+        """The path scaled about the origin (0, 0); one number scales both ways."""
+        return PathBuilder(self._path.transformed(Transform.scaling(sx, sy)))
+
+    def rotate(self, degrees: float, cx: float = 0, cy: float = 0) -> "PathBuilder":
+        """The path turned clockwise on screen by *degrees* about (cx, cy)."""
+        t = (Transform.translation(-cx, -cy).then(Transform.rotation(degrees))
+             .then(Transform.translation(cx, cy)))
+        return PathBuilder(self._path.transformed(t))
+
+    def copy(self) -> "PathBuilder":
+        """An independent builder with the same path."""
+        return PathBuilder(self._path)
 
     @staticmethod
     def _other(other, name: str) -> Path:

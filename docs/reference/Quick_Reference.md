@@ -774,6 +774,13 @@ you can draw again and again.
 | `a.difference(b)`, `a - b` | **New:** a new path covering what `a` covers, minus what `b` covers. | `bite = ring - star` |
 | `a.xor(b)`, `a ^ b` | **New:** a new path covering what exactly one of them covers. | `either = ring ^ star` |
 | `a.remove_overlap()` | **New:** a new path with the same area and one clean outline, no overlapping parts. | `clean = crossing.remove_overlap()` |
+| `a.expand_stroke(width, cap="round", join="round", miter_limit=10, dash=None)` | **New:** a new closed path covering what a stroke of that width would paint. Cap and join names as `stroke_cap` and `stroke_join`; `dash` is a list as in `stroke_dash`. Open lines work too. Width 0 or less, or an unknown name, is an error. | `band = line.expand_stroke(12, dash=[20, 8])` |
+| `a.bounds()` | `(x, y, w, h)` of the path's exact extent (curves measured tightly), or `None` if it is empty. | `x, y, w, h = shape.bounds()` |
+| `a.contains(x, y)` | `True` when the point is inside what the path fills (non-zero rule). | `shape.contains(mouse_x, mouse_y)` |
+| `a.translate(dx, dy)` | **New:** a new path moved by `(dx, dy)`. | `shape.translate(50, 0)` |
+| `a.scale(sx, sy=None)` | **New:** a new path scaled about the origin; one number scales both ways. | `shape.scale(2)` |
+| `a.rotate(degrees, cx=0, cy=0)` | **New:** a new path turned clockwise on screen about `(cx, cy)`. | `shape.rotate(45, 100, 100)` |
+| `a.copy()` | An independent builder with the same path. | `twin = shape.copy()` |
 | `f.draw_path(path)` | Fill (if closed) and stroke a path with the current style, under the current transform. | `f.draw_path(tri)` |
 | `f.clip(path)` | Limit **later** drawing to the inside of `path` until the enclosing `pop()` / end of the `with f.saved_state():` block. | `with f.saved_state(): f.clip(tri); ...` |
 | `f.no_clip()` | Remove clipping until the enclosing `pop()` / end of the block, which brings the previous clip back. | `with f.saved_state(): f.no_clip(); ...` |
