@@ -45,3 +45,13 @@ D-041 SVG library: svgelements (maintainer).
 
 ## Out of scope this sprint
 Sound, GIF/MP4, controls and the release (Sprint 11).
+
+## Findings collected for the review (from S-092 and the documentation pass)
+- `stroke_width()` truncates floats (`int(pixels)`), against S6; `svg.py` works around it via the state.
+- Picture names clash: the counter resets at `size()`/`run()`, so a picture loaded before it and the first `create_graphics` after it are both `graphics-1` (P3/P4 say creation order within a run). Snapshots only.
+- `svg_paths` returns even-odd shapes as their original sub-paths, so `draw_path` fills the hole; P11 is silent.
+- `Frame.ops` copies the op list on every call; scripts calling `get()` in a loop slow down as they grow (unmeasured).
+- R16 does not say what `new_page` inside an open `push()` does (`unwind()` restores the outer style).
+- Variable fonts: `text_ascent`/`text_descent` use default-instance metrics.
+- No test saves a shadow or a blend mode to PDF.
+- Stale: `docs/qa/Test_Strategy.md`, the `capabilities.py` comment, unused renderer libraries in `tests/test_boundaries.py`.

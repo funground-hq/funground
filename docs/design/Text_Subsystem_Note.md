@@ -39,7 +39,7 @@ FontResource
 TextRun
   ├── semantic text, font, size                  (kept — see "reserved")
   ├── shaped glyphs (ids + positions)
-  └── materialise_outlines() → list of IR ops    (what Phase 1–2 renderers consume)
+  └── outline_ops() → list of IR ops    (what Phase 1–2 renderers consume)
 ```
 
 Anchor stays top-left (contract T1): the run's origin is offset by the font ascent.

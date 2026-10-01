@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| **Status** | Current architecture, as built through Sprint 2 and decided through D-010 |
+| **Status** | The Sprint 2 architecture record (as built through Sprint 2, decided through D-010). Superseded for current code by [`docs/developer/Architecture.md`](../developer/Architecture.md); the rest of this page is kept as history |
 | **Supersedes** | `Playground_Technology_Architecture.docx` (v1, 24 Sept 2026) — kept as the historical record |
 | **Baseline** | Playground v0.5.0 (`src_v0.5/`, never edited) → working package `playground/` at `0.6.0.dev0` |
 | **Audience** | Maintainers, contributors, instructors |

@@ -21,6 +21,7 @@ IDs never change or get reused. A story belongs to exactly one epic; an epic to 
 | `docs/Roadmap.md` | The arc to 1.0: phases, releases, what is directional, decisions ahead (D-014) |
 | `docs/backlog/themes_and_epics.md` | Themes, epics, the phase each epic belongs to, status |
 | `docs/backlog/stories.md` | Every story with its tasks, epic, sprint assignment and status — the single backlog |
+| `docs/developer/` | Developer guide: set-up, architecture as built, adding a feature, testing |
 | `docs/design/` | Architecture document, architecture review, semantic contract, ADRs (`ADR-nnn-*.md`), `Decision_Log.md`, design notes |
 | `docs/qa/` | Test strategy, golden-image policy, CI matrix, QA checklists |
 | `docs/reference/` | Learner-facing and historical material: Quick Reference, v0.5 README |
@@ -50,6 +51,10 @@ Sprint length is set by the maintainer; default one week. Sprint numbering is gl
    with their tasks unchecked; record the sprint goal and any DECISION rows that must be resolved.
 2. **Build** — tasks are checked off in the sprint's `stories.md` as they land; the backlog's
    status column is updated when a whole story completes.
+   **Design notes:** a story that adds a subsystem, a new dependency or a non-obvious mechanism
+   gets a design note in `docs/design/<Topic>_Note.md` (or an update to an existing one) in the same
+   sprint: problem, design, rejected alternatives, invariants, limits, where the tests are. The
+   developer guide (`docs/developer/`) is kept true to the code in the same change.
 3. **Review** — `sprints/sprint-NN/review.md` records: stories done / not done and why, test
    results (counts, CI), measurements, decisions taken (with links to ADRs or contract rows),
    findings that change later sprints, and a short retrospective. Alongside it,
