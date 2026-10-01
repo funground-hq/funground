@@ -163,12 +163,17 @@ ADDED_FUNCTIONS = {
     # S-078 tint and image parts (image's signature is under S-052)
     "tint": "(color, *more: 'float') -> 'None'",
     "no_tint": "() -> 'None'",
+    # S-079 pixels
+    "get": "(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None)",
+    "set": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",
+    "load_pixels": "() -> 'None'",
+    "update_pixels": "() -> 'None'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
 # S-045 added pmouse_x/y, mouse_button, key, key_code and is_key_pressed.
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "is_mouse_pressed", "pmouse_x", "pmouse_y",
-               "mouse_button", "key", "key_code", "is_key_pressed", "frame_count", "delta_time"}
+               "mouse_button", "key", "key_code", "is_key_pressed", "frame_count", "delta_time", "pixels"}
 
 
 def _sig(name: str) -> str:

@@ -314,4 +314,96 @@ f.run()
 | `f.no_tint()` | Stop tinting. |
 | `f.image(picture, x, y, width, height, sx, sy, sw, sh)` | Draw only the part `sx, sy, sw, sh` of the picture. |
 
+### Pixels
+
+`f.get(x, y)` tells you the colour of one pixel. It gives back a colour object, the same kind
+that `f.color()` makes, so you can use `.red`, `.green`, `.blue` and `.alpha`, or hand it to
+`f.fill()`. It sees everything drawn so far, this frame included. Outside the canvas the answer
+is transparent black. `x` and `y` are rounded down to whole pixels.
+
+`f.get(x, y, w, h)` copies a whole rectangle into a **new picture**. Parts of the rectangle
+outside the canvas are see-through.
+
+`f.set(x, y, color)` makes one pixel exactly that colour. It takes any colour form that
+`f.fill()` takes. It ignores the fill, the stroke, the transform, the clip, the tint, the
+opacity and the blend mode: what you set is what you get. Outside the canvas it does nothing.
+A picture has `g.get()` and `g.set()` too.
+
+On a high-resolution screen, a pixel here is a **logical** pixel, as everywhere in funground.
+It may cover several real pixels. `get` reads the top-left real one, and `set` paints all of
+them.
+
+To change many pixels, use the list `f.pixels`:
+
+1. `f.load_pixels()` copies the canvas into `f.pixels`. Before that, `f.pixels` is `None`.
+2. `f.pixels` is a `bytearray`. Each pixel takes four numbers, from 0 to 255: red, green, blue
+   and alpha. They are not premultiplied. The pixels come row by row, from the top left. The
+   pixel at (`x`, `y`) starts at index `(y * f.width + x) * 4`.
+3. Change the numbers. Nothing on the canvas changes yet.
+4. `f.update_pixels()` writes the whole list back. It is the same as calling `f.set()` for
+   every pixel. Calling it before `f.load_pixels()` is an error.
+
+Change the numbers in place (`f.pixels[i] = 0`). Do not replace the list with a new one. On a
+picture it works the same way: `g.load_pixels()`, `g.pixels`, `g.update_pixels()`.
+
+**Loops over every pixel are slow.** A Python loop that visits each pixel of a 640 by 400
+canvas has 256 000 pixels to do, and takes a second or more. Loading and updating the pixels
+without a loop is fast (a few hundredths of a second). So keep your loops to small areas, as
+the example below does, or work on a small picture.
+
+Pixel writes are raster. A saved PDF or SVG holds them as an image, not as vectors. A picture
+that has had pixel writes loses its drawing history, so when it is drawn onto a PDF it is
+embedded as an image too.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(400, 200)
+    f.no_loop()
+
+
+def draw():
+    f.background("ivory")
+
+    # A small picture, made one pixel at a time.
+    tile = f.create_graphics(10, 10)
+    for y in range(10):
+        for x in range(10):
+            tile.set(x, y, (x * 25, y * 25, 150))
+    f.image(tile, 10, 10, 100, 100)
+
+    # An eyedropper: read the colour at one point of the canvas.
+    f.no_stroke()
+    f.fill("tomato")
+    f.circle(200, 60, 80)
+    picked = f.get(200, 60)
+    f.fill(picked)
+    f.rect(160, 120, 80, 50)
+
+    # A copy of part of the canvas, with red and blue swapped.
+    part = f.get(160, 20, 80, 80)
+    part.load_pixels()
+    pixels = part.pixels
+    for i in range(0, len(pixels), 4):
+        pixels[i], pixels[i + 2] = pixels[i + 2], pixels[i]
+    part.update_pixels()
+    f.image(part, 300, 10)
+
+
+f.run()
+```
+
+![Reading and writing single pixels](../gallery/images/images-03_pixels.png)
+
+| Call | What it does |
+|---|---|
+| `f.get(x, y)` | The colour at one pixel (a colour object). |
+| `f.get(x, y, w, h)` | A new picture copied from a rectangle of the canvas. |
+| `f.set(x, y, color)` | Make one pixel exactly that colour. |
+| `f.load_pixels()` | Copy the canvas into `f.pixels`. |
+| `f.pixels` | Red, green, blue, alpha for every pixel, in a `bytearray`. |
+| `f.update_pixels()` | Write `f.pixels` back onto the canvas. |
+
 **Next:** [10. Interaction](10_interaction.md)

@@ -1,0 +1,209 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   240,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 160.0,
+  "op": "Image",
+  "source": "graphics-1",
+  "version": 1,
+  "width": 160.0,
+  "x": 20.0,
+  "y": 20.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "a picture made with set()",
+  "x": 20,
+  "y": 200
+ },
+ {
+  "height": 160,
+  "op": "Image",
+  "source": "graphics-2",
+  "version": 1,
+  "width": 180,
+  "x": 230.0,
+  "y": 20.0
+ },
+ {
+  "diameter": 14,
+  "op": "Circle",
+  "style": {
+   "fill": null,
+   "stroke": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "x": 250,
+  "y": 110
+ },
+ {
+  "height": 40,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    135,
+    206,
+    250,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 40,
+  "x": 230,
+  "y": 215
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "get(250, 110)",
+  "x": 280,
+  "y": 232
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "red 135, green 206, blue 250",
+  "x": 280,
+  "y": 252
+ },
+ {
+  "height": 160,
+  "op": "Image",
+  "source": "graphics-3",
+  "version": 1,
+  "width": 180,
+  "x": 440.0,
+  "y": 20.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "red and blue swapped",
+  "x": 440,
+  "y": 200
+ },
+ {
+  "checksum": 2900651339,
+  "height": 36,
+  "op": "Pixels",
+  "width": 600,
+  "x": 20,
+  "y": 283
+ },
+ {
+  "checksum": 2558959945,
+  "height": 400,
+  "op": "Pixels",
+  "width": 640,
+  "x": 0,
+  "y": 0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "grey, one pixel at a time",
+  "x": 20,
+  "y": 380
+ }
+]

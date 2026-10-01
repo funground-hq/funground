@@ -128,6 +128,18 @@ class Sketch:
         self._script_scale = 1.0
         self._script_drawn = 0         # how many of self.frame's ops are already on the surface
         self._script_depth = 0         # the persistent surface's open Save depth
+        # S-079, contract P7: reading the canvas mid-frame draws the ops recorded so far onto the
+        # surface at once. The window frame is then drawn in steps: _frame_open says its Save is
+        # open, _frame_drawn how many of self.frame's ops are already on the surface, _frame_depth
+        # the Save depth they left. _render() draws only the rest.
+        self._frame_open = False
+        self._frame_drawn = 0
+        self._frame_depth = 0
+        # set() calls waiting to become one Pixels op: {(x, y): Color}.
+        self._pending_pixels: dict[tuple[int, int], Color] = {}
+        self.pixels: bytearray | None = None       # contract P8: None until load_pixels()
+        self._render_hook: Callable[[], None] | None = None    # a picture's own flush
+        self._name_root: Sketch | None = None      # who numbers the pictures that get() makes
 
     # ------------------------------------------------------------ state
     @property
@@ -170,6 +182,7 @@ class Sketch:
 
     def _end_draw(self) -> None:
         """End-of-frame safety (S-027.4): unwind pushes draw() left open, with a warning."""
+        self._flush_pixel_patch()
         if self._shape is not None:
             self._shape = None
             warnings.warn(
@@ -180,7 +193,7 @@ class Sketch:
         open_pushes = self._states.unwind()
         if open_pushes:
             for _ in range(open_pushes):
-                self.frame.append(ir.Restore())
+                self._append(ir.Restore())
             warnings.warn(
                 f"draw() finished with {open_pushes} f.push() call(s) still open; "
                 "funground popped them for you. Add a matching f.pop(), or use "
@@ -271,6 +284,7 @@ class Sketch:
         self._has_window = True
         self._script_drawn = 0
         self._script_depth = 0
+        self._reset_pixel_state()
         self._graphics_counter = 0
         self._start_time = time.perf_counter()
 
@@ -300,6 +314,7 @@ class Sketch:
             )
         if not self._script:
             raise RuntimeError("No drawing window yet. Call f.size(...) first.")
+        self._flush_pixel_patch()
         if isinstance(self._platform, HeadlessPlatform):
             return
         platform = self._platform
@@ -321,6 +336,7 @@ class Sketch:
 
     def _attach(self, pw: int, ph: int) -> None:
         self._renderer.attach(pw, ph, self._platform.backing_scale)
+        self._reset_pixel_state()
         self._has_window = True
         self._platform.set_cursor(self._cursor)
 
@@ -362,10 +378,10 @@ class Sketch:
                 f"f.create_graphics() needs positive whole numbers for width and height, "
                 f"not ({width!r}, {height!r})"
             )
-        self._graphics_counter += 1
         scale = self._script_scale if self._script else self._platform.backing_scale
-        return Picture(int(width), int(height), scale,
-                       f"graphics-{self._graphics_counter}")
+        picture = Picture(int(width), int(height), scale, self._next_graphics_name())
+        picture._sketch._name_root = self._name_root or self
+        return picture
 
     def load_image(self, path: str, base_dir: str | None = None):
         """A picture made from an image file (contract P4). Needs no window, so it may come first."""
@@ -375,8 +391,15 @@ class Sketch:
 
         resolved = _resolve_path(path, base_dir, "f.load_image()", "image")
         width, height, bgra = imaging.decode(resolved)
-        self._graphics_counter += 1
-        return Picture.from_pixels(width, height, bgra, f"graphics-{self._graphics_counter}")
+        picture = Picture.from_pixels(width, height, bgra, self._next_graphics_name())
+        picture._sketch._name_root = self._name_root or self
+        return picture
+
+    def _next_graphics_name(self) -> str:
+        """The next picture name, numbered in creation order within a run (a picture's get() uses its window's count)."""
+        root = self._name_root or self
+        root._graphics_counter += 1
+        return f"graphics-{root._graphics_counter}"
 
     def _check_capabilities(self) -> None:
         """Refuse up front (contract R9) rather than failing on frame 200."""
@@ -390,6 +413,12 @@ class Sketch:
 
     def _emit(self, op: ir.Op) -> None:
         self._require_window()
+        self._append(op)
+
+    def _append(self, op: ir.Op) -> None:
+        """Record an op, after turning any waiting set() calls into their one Pixels op (contract P7)."""
+        if self._pending_pixels:
+            self._flush_pixel_patch()
         self.frame.append(op)
 
     def _render(self) -> None:
@@ -397,11 +426,123 @@ class Sketch:
         self._end_draw()
         # Always present, even a frame that drew nothing: the canvas is still a frame
         # (the headless platform has nothing to capture otherwise).
-        self._renderer.render(self.frame)
+        if self._frame_open:                 # part of the frame is already on the surface (S-079)
+            self._flush_frame()
+            self._renderer.end_frame(self._renderer._ctx, self._frame_depth)
+            self._frame_open, self._frame_drawn, self._frame_depth = False, 0, 0
+        else:
+            self._renderer.render(self.frame)
         self._platform.present(self._renderer.pixels())
         self._queue_sequence_frame()
         self._flush_saves()
         self.frame.clear()
+
+    # ------------------------------------------------------------ pixels (S-079, contract P7, P8)
+    def _reset_pixel_state(self) -> None:
+        """A new canvas (or a new run): nothing is half drawn, nothing is waiting, no pixels loaded."""
+        self._frame_open, self._frame_drawn, self._frame_depth = False, 0, 0
+        self._pending_pixels = {}
+        self.pixels = None
+
+    def _flush_frame(self) -> None:
+        """Draw the window frame's ops that are not on the surface yet, and remember how far it got."""
+        renderer = self._renderer
+        if not self._frame_open:
+            renderer.begin_frame(renderer._ctx)
+            self._frame_open, self._frame_drawn, self._frame_depth = True, 0, 0
+        new = self.frame.ops[self._frame_drawn:]
+        if new:
+            self._frame_depth = renderer.draw_batch(renderer._ctx, ir.Frame(list(new)), self._frame_depth)
+            self._frame_drawn += len(new)
+
+    def _render_so_far(self) -> None:
+        """Draw what is recorded so far onto the canvas's surface, so it can be read (contract P7)."""
+        if self._render_hook is not None:
+            self._render_hook()                    # a picture flushes itself
+        elif self._script:
+            self._script_flush()
+        else:
+            self._flush_frame()
+
+    def _sync_canvas(self) -> None:
+        self._flush_pixel_patch()
+        self._render_so_far()
+
+    def _flush_pixel_patch(self) -> None:
+        """Turn the waiting set() calls into one Pixels op (so many set()s are one op, never one each)."""
+        if not self._pending_pixels:
+            return
+        patch, self._pending_pixels = self._pending_pixels, {}
+        self._render_so_far()                      # pixels around the written ones keep what is drawn now
+        self.frame.append(self._renderer.patch_op(patch))
+
+    @staticmethod
+    def _whole(value: Any, name: str, call: str) -> int:
+        """A coordinate rounded down to a whole pixel (contract P7)."""
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise TypeError(f"f.{call}(): {name} must be a number, not {value!r}")
+        if isinstance(value, float) and not math.isfinite(value):
+            raise ValueError(f"f.{call}(): {name} must be a finite number, not {value!r}")
+        return math.floor(value)
+
+    def get(self, x: float, y: float, w: float | None = None, h: float | None = None):
+        """The colour at a pixel (a colour object), or the region x, y, w, h as a new picture (contract P7)."""
+        from .picture import Picture
+
+        self._require_window()
+        x, y = self._whole(x, "x", "get"), self._whole(y, "y", "get")
+        if (w is None) != (h is None):
+            raise ValueError("f.get(): to copy a region give both w and h, or neither for one pixel")
+        if w is not None:
+            w, h = self._whole(w, "w", "get"), self._whole(h, "h", "get")
+            if w <= 0 or h <= 0:
+                raise ValueError("f.get(): w and h must be above 0")
+        self._sync_canvas()
+        from . import imaging
+
+        if w is None:
+            r, g, b, a = imaging.bgra_to_rgba(self._renderer.read_logical(x, y, 1, 1, self.width, self.height), 1, 1)
+            return Color(r, g, b, a)
+        bgra = self._renderer.read_logical(x, y, w, h, self.width, self.height)
+        picture = Picture.from_pixels(w, h, bgra, self._next_graphics_name())
+        picture._sketch._name_root = self._name_root or self
+        return picture
+
+    def set(self, x: float, y: float, color: ColorLike, *more: float) -> None:
+        """Make one pixel exactly this colour, whatever the drawing state is (contract P7)."""
+        self._require_window()
+        x, y = self._whole(x, "x", "set"), self._whole(y, "y", "set")
+        c = self.read_color(color, *more)
+        if 0 <= x < self.width and 0 <= y < self.height:
+            self._pending_pixels[(x, y)] = c
+
+    def load_pixels(self) -> None:
+        """Copy the canvas into ``pixels``: red, green, blue, alpha for each pixel, row by row (contract P8)."""
+        self._require_window()
+        self._sync_canvas()
+        from . import imaging
+
+        bgra = self._renderer.read_logical(0, 0, self.width, self.height, self.width, self.height)
+        self.pixels = imaging.bgra_to_rgba(bgra, self.width, self.height)
+
+    def update_pixels(self) -> None:
+        """Write ``pixels`` back onto the canvas, as a set() of every pixel (contract P8)."""
+        self._require_window()
+        if self.pixels is None:
+            raise RuntimeError("f.update_pixels() needs f.load_pixels() first: it copies the canvas into "
+                               "pixels, which you then change")
+        try:
+            rgba = bytes(self.pixels)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("f.update_pixels(): pixels must hold numbers from 0 to 255") from exc
+        if len(rgba) != self.width * self.height * 4:
+            raise ValueError(f"f.update_pixels(): pixels must have {self.width * self.height * 4} values "
+                             f"(4 for each of {self.width} x {self.height} pixels), not {len(rgba)}")
+        self._flush_pixel_patch()
+        from . import imaging
+
+        bgra = imaging.rgba_to_bgra(rgba, self.width, self.height)
+        self._append(self._renderer.pixels_op(bgra, 0, 0, self.width, self.height))
 
     # ------------------------------------------------------------ export
     def save(self, path: str) -> None:
@@ -418,6 +559,7 @@ class Sketch:
     def _save_script(self, path: str) -> None:
         from .export import format_of, save_frame, save_pixels
 
+        self._flush_pixel_patch()
         if format_of(path) == "png":
             self._script_flush()
             save_pixels(self._renderer.pixels(), path)
@@ -576,13 +718,13 @@ class Sketch:
         """Hard, pixel-sharp edges (no anti-aliasing) from now on - for pixel art."""
         self._smooth = False
         if self._has_window:
-            self.frame.append(ir.SetAntialias(False))
+            self._append(ir.SetAntialias(False))
 
     def smooth(self) -> None:
         """Smooth (anti-aliased) edges again - the default."""
         self._smooth = True
         if self._has_window:
-            self.frame.append(ir.SetAntialias(True))
+            self._append(ir.SetAntialias(True))
 
     def text_size(self, size: int) -> None:
         if size <= 0:
@@ -1161,6 +1303,7 @@ class Sketch:
         self.last_frame = None
         self.last_ops: tuple[ir.Op, ...] | None = None
         self.frame.clear()
+        self._reset_pixel_state()
         self._states.unwind()
         self._shape = None
         self._graphics_counter = 0
@@ -1217,6 +1360,7 @@ class Sketch:
         finally:
             self.running = False
             self.frame.clear()
+            self._reset_pixel_state()
             self._pending_saves.clear()
             self._frame_sequence = None
             self._renderer.attach(0, 0)

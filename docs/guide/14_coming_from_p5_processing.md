@@ -58,6 +58,9 @@ coming from p5.
 | `rectMode(...)`, `ellipseMode(...)`, `imageMode(...)` | same | `f.rect_mode(...)`, `f.ellipse_mode(...)`, `f.image_mode(...)`. Modes are lower-case words: `CORNER` is `"corner"`, `CORNERS` is `"corners"`, `CENTER` is `"center"`, `RADIUS` is `"radius"` |
 | `tint(...)`, `noTint()` | same | `f.tint(...)`, `f.no_tint()`. Takes the same colour forms as `f.fill()`. Multiplies the colour and alpha of pictures drawn after it |
 | `image(img, x, y, w, h, sx, sy, sw, sh)` | same | `f.image(g, x, y, w, h, sx, sy, sw, sh)`: the nine-argument form draws only the part `sx, sy, sw, sh` of the picture. Give all four of them or none |
+| `get(x, y)`, `get(x, y, w, h)` | same | `f.get(x, y)` is a colour object, not a list. `f.get(x, y, w, h)` is a picture. Pixels are logical (pixel density 1): on a high-resolution screen `get` reads the top-left real pixel of one |
+| `set(x, y, c)` | same | `f.set(x, y, c)`. Takes any colour form. Ignores fill, stroke, transform, clip, tint, opacity and blend mode. No `updatePixels()` is needed after it |
+| `loadPixels()`, `pixels`, `updatePixels()` | same | `f.load_pixels()`, `f.pixels`, `f.update_pixels()`. `f.pixels` is a flat `bytearray` of red, green, blue, alpha (not premultiplied), 4 per pixel, index `(y * f.width + x) * 4`, as p5 with `pixelDensity(1)`. It is `None` until `load_pixels()`. A picture has the same: `g.pixels` |
 
 ### Transforms
 
