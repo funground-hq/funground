@@ -126,6 +126,49 @@ The picture below draws the same four numbers under every mode. The red dot is `
 
 ![Drawing modes](../gallery/images/shapes-03_modes.png)
 
+## Rounded corners
+
+Give `rect` or `square` one more number and all four corners are rounded by that radius.
+Give it four numbers and each corner gets its own radius. They go clockwise, starting at the top left:
+top-left, top-right, bottom-right, bottom-left. This works as it does in p5.
+
+A radius cannot be negative, and you must give one radius or four. A radius that is too big is cut
+down to half the shorter side, so corners never overlap. If you use `rect_mode`, the box is placed
+first and the radii are applied after. The fill, the outline and any shadow all follow the curves.
+A path from `f.path()` has the same `rect(x, y, w, h, radius)`, so you can join rounded shapes
+with `union` and the other path operations.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 400)
+
+
+def draw():
+    f.background(245)
+    f.fill("lightsteelblue")
+    f.stroke("navy")
+    f.stroke_width(2)
+    f.rect(30, 30, 160, 60, 12)                    # one radius for every corner
+    f.fill("gold")
+    f.rect(230, 30, 200, 80, 30, 30, 30, 4)        # four radii: one nearly sharp corner
+    f.fill("tomato")
+    f.square(30, 150, 100, 28)                     # square works the same way
+    tag = f.path().rect(200, 160, 120, 80, 20)
+    dot = f.path().circle(320, 170, 60)
+    f.fill("seagreen")
+    f.draw_path(tag | dot)                         # a rounded rectangle joined to a circle
+
+
+f.run()
+```
+
+The picture below shows more: buttons, a speech bubble, a shadow and radii that are cut down.
+
+![Rounded corners](../gallery/images/shapes-04_rounded.png)
+
 For any other outline, build it from points: see [9. Paths and clipping](09_paths_and_clipping.md).
 
 **Next:** [4. Colour](04_colour.md)

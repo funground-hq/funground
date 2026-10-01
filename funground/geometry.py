@@ -121,6 +121,26 @@ class Path:
         return cls().move_to(x, y).line_to(x + w, y).line_to(x + w, y + h).line_to(x, y + h).close()
 
     @classmethod
+    def rounded_rect(cls, x: float, y: float, w: float, h: float, radii: tuple[float, float, float, float]) -> "Path":
+        """A rectangle with quarter-ellipse corners; *radii* are top-left, top-right, bottom-right, bottom-left.
+
+        The radii must already be clamped (see rect_radii). A zero radius gives a sharp corner."""
+        tl, tr, br, bl = radii
+        path = cls()
+        corners = (
+            (tl, x + tl, y + tl, 180, (x, y)),
+            (tr, x + w - tr, y + tr, 270, (x + w, y)),
+            (br, x + w - br, y + h - br, 0, (x + w, y + h)),
+            (bl, x + bl, y + h - bl, 90, (x, y + h)),
+        )
+        for r, cx, cy, start, corner in corners:
+            if r > 0:
+                path = path.arc_to(cx, cy, r, r, start, start + 90)
+            else:
+                path = path.move_to(*corner) if path.is_empty else path.line_to(*corner)
+        return path.close()
+
+    @classmethod
     def ellipse(cls, cx: float, cy: float, rx: float, ry: float) -> "Path":
         """Four-cubic approximation (max radial error ~0.03 %)."""
         k = 0.5522847498307936
@@ -225,3 +245,22 @@ class Path:
         for seg in self.segments:
             out.append((seg[0], *(t.apply(*pt) for pt in seg[1:])))
         return Path(tuple(out))
+
+
+def rect_radii(radii: tuple, w: float, h: float, name: str = "rect") -> tuple[float, float, float, float]:
+    """Four corner radii (top-left, top-right, bottom-right, bottom-left) from 0, 1 or 4 numbers.
+
+    Each is cut down to half the shorter side (as p5 does), so neighbouring corners never overlap.
+    Returns (0, 0, 0, 0) for no radii. Contract F14."""
+    if len(radii) == 0:
+        return (0.0, 0.0, 0.0, 0.0)
+    if len(radii) == 1:
+        four = tuple(radii) * 4
+    elif len(radii) == 4:
+        four = tuple(radii)
+    else:
+        raise ValueError(f"{name}() takes no radius, one radius or four radii, not {len(radii)}")
+    if any(r < 0 for r in four):
+        raise ValueError(f"{name}() corner radii cannot be negative")
+    limit = min(abs(w), abs(h)) / 2
+    return tuple(float(min(r, limit)) for r in four)

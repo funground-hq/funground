@@ -168,7 +168,7 @@ class CairoRenderer:
             elif t is ir.Ellipse:
                 self._ellipse(ctx, op.x, op.y, op.width / 2, op.height / 2); self._paint(ctx, op.style)
             elif t is ir.Rect:
-                ctx.new_path(); ctx.rectangle(op.x, op.y, op.width, op.height); self._paint(ctx, op.style)
+                self._rect_path(ctx, op); self._paint(ctx, op.style)
             elif t is ir.Line:
                 if op.style.stroke is not None:
                     ctx.new_path(); ctx.move_to(op.x1, op.y1); ctx.line_to(op.x2, op.y2)
@@ -249,7 +249,7 @@ class CairoRenderer:
         elif t is ir.Ellipse:
             make = lambda: self._ellipse(ctx, op.x, op.y, op.width / 2, op.height / 2)
         else:  # Rect
-            make = lambda: (ctx.new_path(), ctx.rectangle(op.x, op.y, op.width, op.height))
+            make = lambda: self._rect_path(ctx, op)
         return [(make, st.fill is not None, st.stroke_width if st.stroke is not None else None)]
 
     def _draw_shadow(self, ctx, op, shadow) -> None:
@@ -522,6 +522,13 @@ class CairoRenderer:
             elif k == "line": ctx.line_to(*seg[1])
             elif k == "cubic": ctx.curve_to(*seg[1], *seg[2], *seg[3])
             elif k == "close": ctx.close_path()
+
+    @classmethod
+    def _rect_path(cls, ctx, op) -> None:
+        if op.radii:
+            cls._path(ctx, Path.rounded_rect(op.x, op.y, op.width, op.height, op.radii))
+        else:
+            ctx.new_path(); ctx.rectangle(op.x, op.y, op.width, op.height)
 
     @staticmethod
     def _ellipse(ctx, cx, cy, rx, ry) -> None:

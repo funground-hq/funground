@@ -27,7 +27,7 @@ coming from p5.
 
 | p5.js | Processing | funground |
 |---|---|---|
-| `rect(x, y, w, h)` | `rect(x, y, w, h)` | `f.rect(x, y, w, h)` |
+| `rect(x, y, w, h)` | `rect(x, y, w, h)` | `f.rect(x, y, w, h)`. The corner radius works as in p5: `f.rect(x, y, w, h, r)`, or four radii `f.rect(x, y, w, h, tl, tr, br, bl)` |
 | `ellipse(x, y, w, h)` | `ellipse(x, y, w, h)` | `f.ellipse(x, y, w, h)` |
 | `circle(x, y, d)` | `circle(x, y, d)` | `f.circle(x, y, d)` |
 | `line(x1, y1, x2, y2)` | `line(x1, y1, x2, y2)` | `f.line(x1, y1, x2, y2)` |

@@ -57,6 +57,7 @@ class Rect(Op):
     width: float
     height: float
     style: GraphicsState
+    radii: tuple = ()          # four clamped corner radii (tl, tr, br, bl); () = sharp corners (F14)
 
 
 @dataclass(frozen=True, slots=True)
@@ -253,7 +254,7 @@ OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash
                                "curve_tightness", "text_align", "text_valign", "text_leading",
                                "blend_mode", "opacity", "shadow", "font", "text_style",
                                "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges",
-                               "tint", "sx", "sy", "sw", "sh"})
+                               "tint", "sx", "sy", "sw", "sh", "radii"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).
@@ -339,7 +340,9 @@ def op_from_jsonable(d: dict[str, Any]) -> Op:
         if f.name not in d and f.name in OMIT_WHEN_DEFAULT:
             continue                                   # omitted because it was the default
         v = d[f.name]
-        if f.name in ("dash", "shadow", "tint"):
+        if f.name == "radii":
+            kwargs[f.name] = tuple(v)
+        elif f.name in ("dash", "shadow", "tint"):
             kwargs[f.name] = _extra_from_jsonable(f.name, v)
         elif f.name == "style":
             kwargs[f.name] = _state_from_jsonable(v)

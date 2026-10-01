@@ -57,6 +57,14 @@ The same four numbers, drawn under each drawing mode. The red dot marks (x, y) i
 
 Source: [`examples/gallery/shapes/03_modes.py`](../../examples/gallery/shapes/03_modes.py)
 
+### Rounded corners
+
+![Rounded corners](images/shapes-04_rounded.png)
+
+Give rect() or square() one more number and every corner is rounded by that radius. Give it four numbers and each corner gets its own radius. They go clockwise, starting at the top left. A radius that is too big is cut down to fit.
+
+Source: [`examples/gallery/shapes/04_rounded.py`](../../examples/gallery/shapes/04_rounded.py)
+
 ## Colour
 
 ### Four ways to say a colour

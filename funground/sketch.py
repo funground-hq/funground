@@ -22,7 +22,7 @@ from .capabilities import Capability, FungroundWarning, missing_capability
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
 from .paint import Gradient, parse_paint
 from .typography import TEXT_STYLES
-from .geometry import Path, Transform
+from .geometry import Path, Transform, rect_radii
 from .paths import PathBuilder
 from .noise import Noise
 from .shapes import ShapeBuilder, catmull_rom_controls
@@ -1064,9 +1064,23 @@ class Sketch:
         x, y, width, height = self._ellipse_box(x, y, width, height)
         self._emit(ir.Ellipse(x, y, width, height, self.style))
 
-    def rect(self, x: float, y: float, width: float, height: float) -> None:
+    def _emit_rect(self, name: str, x: float, y: float, w: float, h: float, radii: tuple) -> None:
+        r = rect_radii(radii, w, h, name)           # checks the count and signs even for an empty box
+        if any(r):
+            if w < 0:
+                x, w = x + w, -w                    # a negative size: the box spans the same area
+            if h < 0:
+                y, h = y + h, -h
+            r = rect_radii(r, w, h, name)
+            if any(r):
+                self._emit(ir.Rect(x, y, w, h, self.style, r))
+                return
+        self._emit(ir.Rect(x, y, w, h, self.style))
+
+    def rect(self, x: float, y: float, width: float, height: float, *radii: float) -> None:
+        """A rectangle. Optional corner radii: one for all corners, or four (top-left, top-right, bottom-right, bottom-left)."""
         x, y, width, height = self._rect_box(x, y, width, height)
-        self._emit(ir.Rect(x, y, width, height, self.style))
+        self._emit_rect("rect", x, y, width, height, radii)
 
     def line(self, x1: float, y1: float, x2: float, y2: float) -> None:
         self._emit(ir.Line(x1, y1, x2, y2, self.style))
@@ -1075,10 +1089,12 @@ class Sketch:
         self._emit(ir.Point(x, y, self.style))
 
     # ---- more shapes (S-041, contract F5-F7)
-    def square(self, x: float, y: float, size: float) -> None:
-        """A square placed like rect(): by its top-left corner unless rect_mode() says otherwise."""
+    def square(self, x: float, y: float, size: float, *radii: float) -> None:
+        """A square placed like rect(): by its top-left corner unless rect_mode() says otherwise.
+
+        Optional corner radii work as for rect()."""
         x, y, w, h = self._rect_box(x, y, size, size, one_size=True)
-        self._emit(ir.Rect(x, y, w, h, self.style))
+        self._emit_rect("square", x, y, w, h, radii)
 
     def triangle(self, x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> None:
         self._emit_path(Path().move_to(x1, y1).line_to(x2, y2).line_to(x3, y3).close())

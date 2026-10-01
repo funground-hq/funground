@@ -29,6 +29,7 @@ pygame-ce that was never published.
 ### Added
 - **Path shapes and booleans:** a path from `f.path()` gets `rect`, `ellipse`, `circle` and `polygon`, and `union`, `intersection`, `difference`, `xor` (also `|`, `&`, `-`, `^`) and `remove_overlap`, each giving a new path (S-086). **New dependency:** `skia-pathops`, a small Skia library, now installs with funground (D-037, ADR-005).
 - **Path outlines, queries and moves:** a path gets `expand_stroke` (cap, join, miter limit and dash, open lines too), `bounds`, `contains`, `translate`, `scale`, `rotate` and `copy` (S-087).
+- **Rounded corners:** `f.rect(x, y, w, h, *radii)` and `f.square(x, y, size, *radii)` take one radius for all corners, or four in p5's order (top-left, top-right, bottom-right, bottom-left); the path builder's `rect` takes them too (S-089). This is an approved change to the v0.5 `rect` signature (D-040): calls without a radius draw exactly as before.
 - **Letters as a path:** `f.text_path(message, x, y)` returns the outlines of the text as a path, set exactly like `f.text()`, so you can cut them out of a shape, outline them, fill them with a gradient or clip with them (S-088).
 - **Full screen in scripts:** `f.full_screen()` at the top of a script makes the canvas the screen's size, and `f.show()` shows it full screen (S-085).
 - **Pages:** in a script, `f.new_page()` starts a new page (a size, or a name such as `"A5"`);
