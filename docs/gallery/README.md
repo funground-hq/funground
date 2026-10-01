@@ -127,14 +127,6 @@ bezier_vertex bends toward two control points; curve_vertex draws a smooth curve
 
 Source: [`examples/gallery/curves/01_curves.py`](../../examples/gallery/curves/01_curves.py)
 
-### Shapes with holes
-
-![Shapes with holes](images/curves-02_holes.png)
-
-Between begin_contour() and end_contour(), list the corners of a hole. funground makes the hole cut out of the shape whichever way round you draw it.
-
-Source: [`examples/gallery/curves/02_holes.py`](../../examples/gallery/curves/02_holes.py)
-
 ## Text
 
 ### Text
@@ -254,6 +246,14 @@ Source: [`examples/gallery/paths/02_path_and_clip.py`](../../examples/gallery/pa
 no_clip() removes clipping until the end of the saved_state block; when the block ends, the clip that was there before comes back.
 
 Source: [`examples/gallery/paths/03_no_clip.py`](../../examples/gallery/paths/03_no_clip.py)
+
+### Shapes with holes
+
+![Shapes with holes](images/paths-04_holes.png)
+
+Between begin_contour() and end_contour(), list the corners of a hole. funground makes the hole cut out of the shape whichever way round you draw it.
+
+Source: [`examples/gallery/paths/04_holes.py`](../../examples/gallery/paths/04_holes.py)
 
 ## Randomness and noise
 

@@ -114,7 +114,7 @@ f.run()
 
 funground cuts the hole out whichever way round you list its corners.
 
-![Holes](../gallery/images/curves-02_holes.png)
+![Holes](../gallery/images/paths-04_holes.png)
 
 ## Drawing off-screen
 
