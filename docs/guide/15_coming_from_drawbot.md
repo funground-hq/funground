@@ -123,6 +123,23 @@ f.saved_state():` does exactly the same job (contract F2), alongside `f.push()`/
 | `text(str, (x, y))` | `f.text(message, x, y)` |
 | `textBox(str, (x, y, w, h))` | `f.text_box(message, x, y, w, h)` |
 
+Spacing, features and variable fonts (contract T13). Checked in DrawBot's source:
+`drawBot/drawBotDrawingTools.py` (`tracking`, `openTypeFeatures`, `fontVariations`) and
+`drawBot/context/baseContext.py`.
+
+| DrawBot | funground |
+|---|---|
+| `tracking(value)` — "an absolute number of points between the characters" | `f.text_tracking(pixels)` — space added after every letter, the last one too |
+| `tracking(None)` | `f.text_tracking(0)` |
+| `openTypeFeatures(liga=False, smcp=True)` | `f.text_features(liga=False, smcp=True)` |
+| `openTypeFeatures(resetFeatures=True)` | `f.text_features()` with no arguments |
+| `fontVariations(wght=700)` | `f.font_variations(wght=700)` |
+| `fontVariations(resetVariations=True)` | `f.font_variations()` with no arguments |
+
+DrawBot's two functions also return the current settings and have `listOpenTypeFeatures()` and
+`listFontVariations()`. funground's do not return anything yet. As in DrawBot, an axis the font
+lacks is ignored. DrawBot picks the font by its installed name, funground by a font file.
+
 Both `textBox` and `f.text_box` wrap text inside a box and **return the text that did not fit**,
 so the rest can flow into a second box (DrawBot: "if the text overflows the rectangle, the
 overflowed text is returned"; funground's contract T10 says the same). funground's text anchor

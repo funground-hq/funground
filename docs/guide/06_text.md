@@ -152,6 +152,69 @@ call to `f.text_size()`.
 Both are part of the drawing state, so `with f.saved_state():` restores them, exactly like
 `f.fill()` or `f.text_size()`.
 
+## Spacing, ligatures and variable fonts
+
+`f.text_tracking(pixels)` adds space after every letter. A negative number pulls the letters
+together. It is part of the text, so `f.text_width()`, `f.text_align()` and `f.text_box()` all
+count it. The last letter gets the space too.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 240)
+
+
+def draw():
+    f.background("white")
+    f.fill("black")
+    f.text_size(32)
+    for i, tracking in enumerate([-2, 0, 6, 14]):
+        f.text_tracking(tracking)
+        f.text("Spacing", 30, 20 + i * 50)
+    f.text_tracking(0)                      # back to normal
+    f.text_features(liga=False)             # no ligatures
+    f.text("office", 330, 20)
+    f.text_features()                       # the font's own choices again
+    f.text("office", 330, 70)
+
+
+f.run()
+```
+
+Fonts have extra skills called OpenType features. Each has a four-letter name.
+`f.text_features(liga=False)` turns the `liga` feature off. It joins letters such as f, f and i
+into one shape. `True` turns a feature on. Each call adds to the ones you set before, and
+`f.text_features()` with nothing in the brackets goes back to the font's own choices. DejaVu Sans
+has `liga`, `salt` (alternate letters), `dlig`, `hlig`, `case` and a few more. A feature that
+the font lacks does nothing.
+
+A variable font has axes you can slide, like weight. `f.font_variations(wght=700)` sets the
+`wght` axis. The letters and their spacing both change. An axis the font does not have is
+ignored, and so is `f.font_variations()` on a font that is not variable (the built-in font is not),
+so it is safe to leave in. With no arguments it goes back to the font's defaults.
+
+```py
+font = f.load_font("fonts/MyVariableFont.ttf")      # a variable font of your own
+f.text_font(font, 48)
+f.font_variations(wght=300)
+f.text("Light", 30, 30)
+f.font_variations(wght=800, wdth=75)                # two axes at once
+f.text("Heavy and narrow", 30, 100)
+```
+
+All three settings are part of the drawing state, so `with f.saved_state():` restores them.
+They also change `f.text_path()`, and a picture from `f.create_graphics()` has its own.
+
+![Spacing and ligatures](../gallery/images/text-06_tracking_and_features.png)
+
+| Function | What it does |
+|---|---|
+| `f.text_tracking(pixels)` | Add this much space after every letter; negative tightens. Default 0. |
+| `f.text_features(**features)` | Turn OpenType features on or off by name, like `liga=False`. No arguments: the font's defaults. |
+| `f.font_variations(**axes)` | Set a variable font's axes by name, like `wght=700`. No arguments: the font's defaults. |
+
 ## Letters as shapes
 
 `f.text_path(message, x, y)` gives you the outlines of the letters as a path. It sets the text

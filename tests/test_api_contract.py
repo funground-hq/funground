@@ -154,6 +154,10 @@ ADDED_FUNCTIONS = {
     "show": "() -> 'None'",
     # S-077 images
     "load_image": "(path: 'str') -> 'Picture'",
+    # S-090 tracking, features, variations
+    "text_tracking": "(pixels: 'float') -> 'None'",
+    "text_features": "(**features: 'bool') -> 'None'",
+    "font_variations": "(**axes: 'float') -> 'None'",
     # S-088 text as a path
     "text_path": "(message: 'object', x: 'float', y: 'float') -> 'PathBuilder'",
     # S-084 pages

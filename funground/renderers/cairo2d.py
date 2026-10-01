@@ -558,7 +558,7 @@ class CairoRenderer:
         self._stroke_style(ctx, st.stroke_cap, st.stroke_join, st.miter_limit, st.dash, st.dash_offset)
 
     def _text_ops(self, op: ir.Text):
-        from ..typography import effective_font
+        from ..typography import effective_font, text_settings
 
         style = op.style
         # S-054: the cache key gains the effective font only away from the plain default, so the
@@ -567,9 +567,12 @@ class CairoRenderer:
             key = (op.text, style.text_size)
         else:
             key = (op.text, style.text_size, style.font if style.font is not None else style.text_style)
+        settings = text_settings(style)
+        if style.text_tracking or style.text_features or style.font_variations:
+            key += (style.text_tracking, style.text_features, style.font_variations)    # S-090 (T13)
         run = self._text_runs.get(key)
         if run is None:
-            run = effective_font(op.style).shape(op.text, op.style.text_size)
+            run = effective_font(op.style).shape(op.text, op.style.text_size, **settings)
             self._text_runs[key] = run
             while len(self._text_runs) > TEXT_RUN_CACHE_SIZE:
                 self._text_runs.popitem(last=False)       # evict least recently used

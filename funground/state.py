@@ -40,6 +40,11 @@ class GraphicsState:
     # ignored once a font has been loaded.
     font: str | None = None
     text_style: str = "normal"
+    # S-090 (contract T13): pixels after every glyph; OpenType features as sorted (tag, bool) pairs;
+    # font variation axes as sorted (tag, number) pairs. The defaults are left out of the IR.
+    text_tracking: float = 0.0
+    text_features: tuple = ()
+    font_variations: tuple = ()
     # S-081 drawing modes (contract F10): how rect/square, ellipse/circle/arc and image read their
     # numbers. Resolved before an op is recorded; kept here so push/pop saves them.
     rect_mode: str = "corner"

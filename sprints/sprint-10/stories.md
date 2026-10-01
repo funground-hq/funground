@@ -20,9 +20,9 @@ Reference entry; CI green on 12 cells. Other tools' API names are cited with whe
 - [x] S-089.2 Tests; gallery `shapes/`; guide chapter 3; chapter 14 (p5 row); Quick Reference; changelog
 
 ### S-090 Tracking, OpenType features, variable fonts — E-15 *(D-042; contract T13)*
-- [ ] S-090.1 `text_tracking`, `text_features`, `font_variations`: shaping and outlines at the same variation location
-- [ ] S-090.2 A small variable test font generated in the tests (fontTools), never downloaded; gallery `text/` using DejaVu features where possible
-- [ ] S-090.3 Tests; guide chapter 6; chapter 15 (DrawBot rows, checked in DrawBot's source); Quick Reference; changelog
+- [x] S-090.1 `text_tracking`, `text_features`, `font_variations`: shaping and outlines at the same variation location
+- [x] S-090.2 A small variable test font generated in the tests (fontTools), never downloaded; gallery `text/` using DejaVu features where possible
+- [x] S-090.3 Tests; guide chapter 6; chapter 15 (DrawBot rows, checked in DrawBot's source); Quick Reference; changelog
 
 ### S-091 Mixed styles in one text — E-15 *(contract row to pin after S-090)*
 - [ ] S-091.1 A formatted-text object (DrawBot `FormattedString`): runs with their own font, size, colour, tracking and features, drawn with `text` and `text_box`

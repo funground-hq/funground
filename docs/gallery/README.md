@@ -177,6 +177,14 @@ f.text_path() gives the outlines of a word as a path, set exactly as f.text() wo
 
 Source: [`examples/gallery/text/05_text_path.py`](../../examples/gallery/text/05_text_path.py)
 
+### Spacing and ligatures
+
+![Spacing and ligatures](images/text-06_tracking_and_features.png)
+
+f.text_tracking() adds space after every letter, or takes it away. f.text_features() turns OpenType features on or off by name: "liga" joins letters like f, f and i into one shape, and "salt" picks alternate letters. f.text_features() with nothing in the brackets goes back to the font's own choices. A variable font has axes, like weight. f.font_variations(wght=700) sets them. This gallery has no variable font, so see the guide for that one.
+
+Source: [`examples/gallery/text/06_tracking_and_features.py`](../../examples/gallery/text/06_tracking_and_features.py)
+
 ## Animation and time
 
 ### Bounce

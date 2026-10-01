@@ -1,0 +1,466 @@
+[
+ {
+  "color": [
+   246,
+   243,
+   236,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "tracking -3",
+  "x": 24,
+  "y": 24
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 32,
+   "text_tracking": -3.0
+  },
+  "text": "Spacing",
+  "x": 200,
+  "y": 12
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "tracking 0",
+  "x": 24,
+  "y": 64
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 32
+  },
+  "text": "Spacing",
+  "x": 200,
+  "y": 52
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "tracking 4",
+  "x": 24,
+  "y": 104
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 32,
+   "text_tracking": 4.0
+  },
+  "text": "Spacing",
+  "x": 200,
+  "y": 92
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "tracking 12",
+  "x": 24,
+  "y": 144
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 32,
+   "text_tracking": 12.0
+  },
+  "text": "Spacing",
+  "x": 200,
+  "y": 132
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": [
+    200,
+    80,
+    60,
+    255
+   ],
+   "stroke_width": 2,
+   "text_size": 32,
+   "text_tracking": 12.0
+  },
+  "x1": 200,
+  "x2": 411.3125,
+  "y1": 172,
+  "y2": 172
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "default",
+  "x": 24,
+  "y": 216
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 42
+  },
+  "text": "fi ffl ffi",
+  "x": 200,
+  "y": 192
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "liga off",
+  "x": 24,
+  "y": 264
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_features": [
+    [
+     "liga",
+     false
+    ]
+   ],
+   "text_size": 42
+  },
+  "text": "fi ffl ffi",
+  "x": 200,
+  "y": 240
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "default",
+  "x": 24,
+  "y": 312
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 42
+  },
+  "text": "agave gas",
+  "x": 200,
+  "y": 288
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "text": "salt on",
+  "x": 24,
+  "y": 360
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_features": [
+    [
+     "salt",
+     true
+    ]
+   ],
+   "text_size": 42
+  },
+  "text": "agave gas",
+  "x": 200,
+  "y": 336
+ }
+]

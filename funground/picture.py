@@ -38,6 +38,7 @@ ALLOWED_METHODS = frozenset({
     # text
     "text", "text_align", "text_ascent", "text_descent", "text_leading", "text_box", "text_path",
     "text_width", "text_size", "load_font", "text_font", "text_style",
+    "text_tracking", "text_features", "font_variations",
     # transforms and the state stack
     "translate", "rotate", "scale", "shear_x", "shear_y", "apply_matrix", "reset_matrix",
     "push", "pop", "saved_state",
