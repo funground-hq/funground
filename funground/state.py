@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .color import BLACK, WHITE, Color
+from .color import BLACK, DEFAULT_COLOR_RANGES, WHITE, Color
 
 
 @dataclass(frozen=True, slots=True)
@@ -45,6 +45,10 @@ class GraphicsState:
     rect_mode: str = "corner"
     ellipse_mode: str = "center"
     image_mode: str = "corner"
+    # S-082 colour mode (contract S15): how a tuple of numbers is read as a colour. color_ranges
+    # holds each mode's four ranges (rgb, hsb, hsl order) so switching back remembers them.
+    color_mode: str = "rgb"
+    color_ranges: tuple = DEFAULT_COLOR_RANGES
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)

@@ -30,7 +30,7 @@ ALLOWED_METHODS = frozenset({
     "fill", "no_fill", "stroke", "no_stroke", "stroke_width",
     "stroke_cap", "stroke_join", "miter_limit", "stroke_dash", "no_dash",
     "no_smooth", "smooth",
-    "blend_mode", "opacity", "shadow", "no_shadow",
+    "blend_mode", "opacity", "shadow", "no_shadow", "color_mode",
     # drawing
     "background", "clear",
     "rect_mode", "ellipse_mode", "image_mode",

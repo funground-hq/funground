@@ -96,12 +96,10 @@ class Color:
         if isinstance(value, str):
             return cls._parse_str(value)
         if isinstance(value, bool):
-            raise ValueError(f"{value!r} is not a colour")
-        if isinstance(value, int):
-            # Backend-compatible packed form 0xRRGGBBAA, as pygame.Color(int) reads it.
-            if not 0 <= value <= 0xFFFFFFFF:
-                raise ValueError(f"packed colour {value:#x} must fit in 0xRRGGBBAA")
-            return cls((value >> 24) & 255, (value >> 16) & 255, (value >> 8) & 255, value & 255)
+            raise TypeError(f"{value!r} is not a colour: True and False are not numbers here")
+        if isinstance(value, (int, float)):
+            grey = _component(value)         # one number is a grey, as in p5 (S16)
+            return cls(grey, grey, grey)
         if all(hasattr(value, c) for c in "rgb"):
             # Any object exposing r/g/b[/a] - covers pygame.Color without importing pygame.
             return cls(
@@ -109,12 +107,15 @@ class Color:
                 _component(getattr(value, "a", 255)),
             )
         if isinstance(value, (tuple, list)):
+            if len(value) == 2:              # grey and alpha (S16)
+                grey, alpha = (_component(c) for c in value)
+                return cls(grey, grey, grey, alpha)
             if len(value) == 3:
                 return cls(*(_component(c) for c in value))
             if len(value) == 4:
                 return cls(*(_component(c) for c in value))
             raise ValueError(
-                f"a colour tuple needs 3 or 4 numbers (red, green, blue[, alpha]), got {len(value)}"
+                f"a colour tuple needs 2, 3 or 4 numbers (grey, alpha or red, green, blue[, alpha]), got {len(value)}"
             )
         raise ValueError(
             f"{value!r} is not a colour. Use a name like 'tomato', a tuple like (255, 99, 71) "
@@ -165,3 +166,49 @@ def _hue_and_percents(h: float, s: float, v: float) -> tuple[float, float, float
 
 WHITE = Color(255, 255, 255)
 BLACK = Color(0, 0, 0)
+
+
+# ---- colour mode (S-082, contract S15) -------------------------------------------------
+COLOR_MODES = ("rgb", "hsb", "hsl")
+# Ranges per mode, in COLOR_MODES order: (first, second, third, alpha). p5's defaults.
+DEFAULT_COLOR_RANGES: tuple[tuple[float, float, float, float], ...] = (
+    (255, 255, 255, 255),
+    (360, 100, 100, 1),
+    (360, 100, 100, 1),
+)
+
+
+def parse_in_mode(value: ColorLike, mode: str = "rgb", ranges=DEFAULT_COLOR_RANGES) -> Color:
+    """Read *value* as a colour under the colour mode (S15, S16). Only numbers change: a number,
+    or a tuple or list of 2, 3 or 4 numbers. Names, hex, colour objects and the like go to
+    Color.parse. The default mode is S1 exactly."""
+    if isinstance(value, bool):
+        raise TypeError(f"{value!r} is not a colour: True and False are not numbers here")
+    if mode == "rgb" and ranges[0] == DEFAULT_COLOR_RANGES[0]:
+        return Color.parse(value)
+    if isinstance(value, (int, float)):
+        parts = (value,)
+    elif isinstance(value, (tuple, list)) and len(value) in (2, 3, 4):
+        parts = tuple(value)
+    else:
+        return Color.parse(value)                # names, hex, objects; also raises the usual messages
+    for part in parts:
+        if isinstance(part, bool) or not isinstance(part, (int, float)) or part != part:
+            raise ValueError(f"colour component {part!r} must be a number")
+    max1, max2, max3, max_a = ranges[COLOR_MODES.index(mode)]
+    if len(parts) <= 2:                          # grey, or grey and alpha: on the third range (S16)
+        one, two, three = 0, 0, parts[0]
+        alpha = parts[1] if len(parts) == 2 else max_a
+        if mode == "rgb":
+            one = two = three
+            max1 = max2 = max3
+    else:
+        one, two, three = parts[:3]
+        alpha = parts[3] if len(parts) == 4 else max_a
+    alpha255 = round(max(0.0, min(1.0, alpha / max_a)) * 255)
+    if mode == "rgb":
+        r, g, b = (round(max(0.0, min(1.0, v / m)) * 255) for v, m in ((one, max1), (two, max2), (three, max3)))
+        return Color(r, g, b, alpha255)
+    hue = (one % max1) / max1 * 360
+    make = Color.from_hsb if mode == "hsb" else Color.from_hsl
+    return make(hue, two / max2 * 100, three / max3 * 100, alpha255)

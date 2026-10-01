@@ -9,10 +9,6 @@ from funground.color import Color
 WHITE, RED = (255, 255, 255), (255, 0, 0)
 
 
-def test_there_is_no_color_mode():
-    assert not hasattr(p, "color_mode")
-
-
 @pytest.mark.parametrize("h, s, b, expected", [
     (0, 100, 100, (255, 0, 0)), (120, 100, 100, (0, 255, 0)), (240, 100, 100, (0, 0, 255)),
     (60, 100, 100, (255, 255, 0)), (0, 0, 100, (255, 255, 255)), (0, 0, 0, (0, 0, 0)),
@@ -45,7 +41,7 @@ def test_color_accepts_every_form_and_reads_back():
     assert c.brightness == pytest.approx(100.0)
     assert p.color("gray50").lightness == pytest.approx(49.8, abs=0.1)
     with pytest.raises(ValueError):
-        p.color(1, 2)
+        p.color(1, 2, 3, 4, 5)       # (1, 2) is a grey and alpha since S16
 
 
 def test_hsb_round_trips_through_the_getters():

@@ -44,7 +44,7 @@ coming from p5.
 |---|---|---|
 | `fill(...)`, `stroke(...)` | `fill(...)`, `stroke(...)` | `f.fill(...)`, `f.stroke(...)` |
 | `noFill()`, `noStroke()` | `noFill()`, `noStroke()` | `f.no_fill()`, `f.no_stroke()` |
-| `colorMode(HSB, ...)` then `color(...)` | same | `f.hsb(...)` / `f.hsl(...)` — no mode switch |
+| `colorMode(HSB, 360, 100, 100)` | `colorMode(HSB, 360, 100, 100)` | `f.color_mode("hsb", 360, 100, 100)`; `f.hsb(...)` / `f.hsl(...)` still make a colour directly |
 | `lerpColor(c1, c2, amt)` | `lerpColor(c1, c2, amt)` | `f.lerp_color(c1, c2, t)` |
 
 ![Hue-based colour](../gallery/images/colour-02_hsb_and_hsl.png)
@@ -157,12 +157,11 @@ named too.
 | `createCanvas(w, h)` opens the window | `f.size(w, h)` | Same idea, funground's name (contract R1) |
 | `map(v, a1, b1, a2, b2)` | `f.map_range(v, a1, b1, a2, b2)` | `map` is a Python built-in; a helper called `map` would hide it (contract H3) |
 | `mouseIsPressed` is the live value; `mousePressed()` is the callback (p5 has to use two different names because JavaScript cannot tell a field from a method with the same name) | `f.is_mouse_pressed` is the live value; `f.mouse_pressed()` is the callback | Same split, `is_` prefix for the boolean (contract I1, I3; D-016) |
-| `colorMode(HSB, ...)` then colours are read as hue/saturation/brightness until you switch back | No `color_mode()`. `f.hsb(h, s, b)` and `f.hsl(h, s, l)` build a colour directly; `f.color(value)` turns any colour into one you can read (`.red`, `.hue`, ...); a plain tuple is always red, green, blue | A mode that changes what a tuple means made bugs hard to see (contract S12; D-017) |
 | `rotate()` takes radians by default (`angleMode(DEGREES)` switches it) | `f.rotate()` always takes degrees | Degrees read better for most sketches; `f.radians()`/`f.degrees()` convert for `math.sin` and friends (contract F1; D-002) |
 | The default text baseline is `BASELINE`: `(x, y)` sits text on that line | The default vertical anchor is the **top**: `(x, y)` is the top-left of the text. `f.text_align(h, v)` changes it | Matches funground's top-left convention for every other shape (contract T1, T7) |
 | `text(str, x, y, w, h)` wraps text in a box, as part of `text()` | `f.text_box(message, x, y, w, h)` is its own function, and **returns the text that did not fit** | `text()`'s existing signature is frozen; the returned overflow lets text flow into a second box, as in DrawBot (contract T10) |
 | `push()` / `pop()` | `f.push()` / `f.pop()`, and `with f.saved_state():` | The `with` form can never leave a `pop()` unbalanced (contract F2; D-013) |
-| Colours are numbers per component, or a CSS string | funground also takes one value everywhere — a name, an `(r, g, b[, a])` tuple, or a hex string — so the same colour goes into `fill`, `stroke`, `background` and `text(..., color=...)`, alpha always 0–255 | One consistent way to pass any colour anywhere (contract S1, S2) |
+| Colours are numbers per component, or a CSS string | funground takes the same: `f.fill(255, 0, 0)`, `f.fill(128)` (a grey), a name, a tuple, or a hex string, so the same colour goes into `fill`, `stroke`, `background` and `text(..., color=...)`, alpha is 0–255 unless you change `f.color_mode()`. A name or hex string is always one argument: `f.fill("red", 100)` is an error | One consistent way to pass any colour anywhere (contract S1, S2, S16) |
 | No global opacity — you set alpha on each colour yourself | `f.opacity(0–255)` multiplies the alpha of every fill and stroke drawn after it | Borrowed from DrawBot; useful for fading a whole group of shapes (contract S14) |
 | `v.cross(w)` returns a 3D `p5.Vector` | `v.cross(w)` returns a **number** | funground's `Vector` is 2D only; a 2D cross product is a scalar (contract H5) |
 | A graphics buffer keeps its pixels between frames (Processing also needs `beginDraw()`/`endDraw()` around every use) | `f.create_graphics()` pictures keep their pixels between frames too, with no begin/end needed | Simpler than Processing's `PGraphics`; matches p5's `createGraphics()` (contract P1, P2; D-021) |
@@ -228,7 +227,7 @@ f.run()
 ```
 
 Every rename above is a one-for-one swap: `createCanvas` to `size`, `ellipse` to `circle`,
-`colorMode(HSB, ...)` then `fill(h, s, b)` to `f.fill(f.hsb(h, s, b))`, `frameCount` to
+`colorMode(HSB, ...)` to `f.color_mode("hsb", ...)` (or `f.fill(f.hsb(h, s, b))`), `frameCount` to
 `f.frame_count`, and the trailing `f.run()` that starts the sketch.
 
 ## What is not here yet

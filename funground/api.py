@@ -13,7 +13,7 @@ from contextlib import AbstractContextManager
 from .color import ColorLike as Color
 from .paths import PathBuilder
 from .picture import Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
-from .sketch import Sketch
+from .sketch import DEFAULT_SHADOW_COLOR, Sketch
 from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
 
 _active: Sketch | None = None
@@ -204,8 +204,8 @@ def save_frames(pattern: str, count: int) -> None:
 
 
 # ---- drawing
-def background(color: Color) -> None:
-    active_sketch().background(color)
+def background(color: Color, *more: float) -> None:
+    active_sketch().background(color, *more)
 
 
 def circle(x: float, y: float, diameter: float) -> None:
@@ -320,10 +320,10 @@ def color(*values):
     from .color import Color as _Color
 
     if len(values) == 1:
-        return _Color.parse(values[0])
-    if len(values) in (3, 4):
-        return _Color.parse(tuple(values))
-    raise ValueError("f.color() takes one colour, or 3 or 4 numbers (red, green, blue[, alpha])")
+        return active_sketch().read_color(values[0])         # numbers follow color_mode (S15, S16)
+    if len(values) in (2, 3, 4):
+        return active_sketch().read_color(*values)           # follows color_mode (S15, S16)
+    raise ValueError("f.color() takes one colour, a grey and alpha, or 3 or 4 numbers (red, green, blue[, alpha])")
 
 
 def hsb(hue: float, saturation: float, brightness: float, alpha: float = 255):
@@ -344,14 +344,20 @@ def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors, stops=No
     """Colours blended along the line from (x1, y1) to (x2, y2); use it like a colour in fill/stroke/background."""
     from .paint import linear_gradient as make
 
-    return make(x1, y1, x2, y2, colors, stops)
+    return make(x1, y1, x2, y2, colors, stops, active_sketch().read_color)
 
 
 def radial_gradient(x: float, y: float, radius: float, colors, stops=None):
     """Colours blended outward from (x, y) to *radius*; the first colour is at the centre."""
     from .paint import radial_gradient as make
 
-    return make(x, y, radius, colors, stops)
+    return make(x, y, radius, colors, stops, active_sketch().read_color)
+
+
+def color_mode(mode: str, max1: float | None = None, max2: float | None = None,
+               max3: float | None = None, max_alpha: float | None = None) -> None:
+    """How numbers become a colour: "rgb", "hsb" or "hsl", with optional ranges, e.g. f.color_mode("hsb", 360, 100, 100)."""
+    active_sketch().color_mode(mode, max1, max2, max3, max_alpha)
 
 
 def blend_mode(mode: str) -> None:
@@ -364,7 +370,7 @@ def opacity(amount: float) -> None:
     active_sketch().opacity(amount)
 
 
-def shadow(x_offset: float, y_offset: float, blur: float = 5, color: Color = (0, 0, 0, 128)) -> None:
+def shadow(x_offset: float, y_offset: float, blur: float = 5, color: Color = DEFAULT_SHADOW_COLOR) -> None:
     """Give everything drawn after this a shadow, moved by (x_offset, y_offset) and softened by *blur* pixels."""
     active_sketch().shadow(x_offset, y_offset, blur, color)
 
@@ -381,16 +387,16 @@ def lerp_color(c1: Color, c2: Color, amount: float):
     return _Color.parse(c1).lerp(_Color.parse(c2), amount)
 
 
-def fill(color: Color) -> None:
-    active_sketch().fill(color)
+def fill(color: Color, *more: float) -> None:
+    active_sketch().fill(color, *more)
 
 
 def no_fill() -> None:
     active_sketch().no_fill()
 
 
-def stroke(color: Color) -> None:
-    active_sketch().stroke(color)
+def stroke(color: Color, *more: float) -> None:
+    active_sketch().stroke(color, *more)
 
 
 def no_stroke() -> None:

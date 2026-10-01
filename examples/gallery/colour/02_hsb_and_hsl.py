@@ -1,7 +1,7 @@
 """Hue-based colour: hsb, hsl and colour objects
 
 f.hsb(hue, saturation, brightness) and f.hsl(hue, saturation, lightness) make colours by hue:
-0 red, 120 green, 240 blue, and around again. A tuple always means red, green, blue. f.color()
+0 red, 120 green, 240 blue, and around again. By default a tuple means red, green, blue. f.color()
 makes a colour you can read (.hue, .brightness ...), and lerp_color mixes two colours.
 """
 import funground as f

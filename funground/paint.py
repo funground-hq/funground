@@ -27,11 +27,11 @@ class Gradient:
 Paint = Union[Color, Gradient]
 
 
-def parse_paint(value) -> Paint:
-    """A Gradient passes through; anything else is parsed as a colour (contract S1)."""
+def parse_paint(value, parse=Color.parse) -> Paint:
+    """A Gradient passes through; anything else is parsed as a colour (contract S1, S15)."""
     if isinstance(value, Gradient):
         return value
-    return Color.parse(value)
+    return parse(value)
 
 
 def _number(v, what: str) -> float:
@@ -40,10 +40,10 @@ def _number(v, what: str) -> float:
     return float(v)
 
 
-def _stops(colors, stops, what: str) -> tuple[tuple[float, Color], ...]:
+def _stops(colors, stops, what: str, parse=Color.parse) -> tuple[tuple[float, Color], ...]:
     if isinstance(colors, (str, bytes)) or not hasattr(colors, "__len__") or len(colors) < 2:
         raise ValueError(f"{what} needs a list of at least two colours, e.g. [\"red\", \"blue\"]")
-    parsed = [Color.parse(c) for c in colors]
+    parsed = [parse(c) for c in colors]
     if stops is None:
         offsets = [i / (len(parsed) - 1) for i in range(len(parsed))]
     else:
@@ -55,13 +55,13 @@ def _stops(colors, stops, what: str) -> tuple[tuple[float, Color], ...]:
     return tuple(zip(offsets, parsed))
 
 
-def linear_gradient(x1, y1, x2, y2, colors, stops=None) -> Gradient:
+def linear_gradient(x1, y1, x2, y2, colors, stops=None, parse=Color.parse) -> Gradient:
     points = tuple(_number(v, "linear_gradient") for v in (x1, y1, x2, y2))
-    return Gradient("linear", points, _stops(colors, stops, "linear_gradient"))
+    return Gradient("linear", points, _stops(colors, stops, "linear_gradient", parse))
 
 
-def radial_gradient(x, y, radius, colors, stops=None) -> Gradient:
+def radial_gradient(x, y, radius, colors, stops=None, parse=Color.parse) -> Gradient:
     points = tuple(_number(v, "radial_gradient") for v in (x, y, radius))
     if points[2] <= 0:
         raise ValueError("radial_gradient needs a radius above 0")
-    return Gradient("radial", points, _stops(colors, stops, "radial_gradient"))
+    return Gradient("radial", points, _stops(colors, stops, "radial_gradient", parse))

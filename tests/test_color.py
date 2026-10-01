@@ -45,9 +45,10 @@ def test_backend_compatible_forms_still_work():
     # pygame.Color objects, via duck-typed r/g/b/a - no pygame import in color.py
     assert Color.parse(pygame.Color("tomato")).rgba == (255, 99, 71, 255)
     assert Color.parse(pygame.Color(1, 2, 3, 4)).rgba == (1, 2, 3, 4)
-    # packed 0xRRGGBBAA integers, decoded exactly as pygame does
-    for packed in (0xFF634780, 0x00000000, 0xFFFFFFFF, 0x12345678):
-        assert Color.parse(packed).rgba == tuple(pygame.Color(packed))
+    # a single number is a grey, not a packed colour (S16, D-032); the string forms stay
+    assert Color.parse(128).rgba == (128, 128, 128, 255)
+    assert Color.parse(255).rgba == (255, 255, 255, 255)
+    assert Color.parse("0xFF634780").rgba == (255, 99, 71, 128)
     with pytest.raises(ValueError):
         Color.parse(0x1_0000_0000)
 
@@ -58,7 +59,7 @@ def test_aliases_are_identical():
     assert Color.parse("gray") == Color.parse("grey")
 
 
-@pytest.mark.parametrize("bad", ["banana", "#12345", "#GGGGGG", (1, 2), (1, 2, 3, 4, 5), (256, 0, 0), (-1, 0, 0), (256.0, 0, 0), (float("nan"), 0, 0), None, True, (True, 0, 0), object()])
+@pytest.mark.parametrize("bad", ["banana", "#12345", "#GGGGGG", (1,), (1, 2, 3, 4, 5), (1, 256), (256, 0, 0), (-1, 0, 0), (256.0, 0, 0), (float("nan"), 0, 0), None, (True, 0, 0), object()])
 def test_invalid_forms_raise_learner_readable_error(bad):
     with pytest.raises(ValueError) as e:
         Color.parse(bad)
