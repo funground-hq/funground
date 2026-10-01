@@ -25,8 +25,8 @@ pushes and CI stay with the main session.
 *Acceptance:* a DrawBot script with `newPage("A4")` and `saveImage("x.pdf")` ports by renaming, with the y-flip and colours handled as chapter 15 shows.
 
 ### S-085 Script follow-ups — E-18
-- [ ] S-085.1 `full_screen()` at the top level of a script: makes the canvas the screen size without opening a window (it opens with `show()`), headless 1920 × 1080 as R12
-- [ ] S-085.2 Pin and test the memory behaviour: a script keeps every op; document a rough size limit in the guide
+- [x] S-085.1 `full_screen()` at the top level of a script: makes the canvas the screen size without opening a window (it opens with `show()`), headless 1920 × 1080 as R12
+- [x] S-085.2 Pin and test the memory behaviour: a script keeps every op; document a rough size limit in the guide
 
 ## Out of scope this sprint
 Path booleans (Sprint 9), typography and SVG (Sprint 10), sound, video, controls, release (Sprint 11).

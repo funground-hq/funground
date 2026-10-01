@@ -131,6 +131,8 @@ class Sketch:
         # S-084, contract R16: the pages before the current one, each (width, height, ops, BGRA pixels).
         # The current page is the live canvas (self.frame, self._renderer).
         self._pages: list[tuple[int, int, list, bytes]] = []
+        self._pages_full: list[bool] = []      # for each earlier page: made by full_screen() (S-085)
+        self._page_full = False                # the same, for the current page
         # S-079, contract P7: reading the canvas mid-frame draws the ops recorded so far onto the
         # surface at once. The window frame is then drawn in steps: _frame_open says its Save is
         # open, _frame_drawn how many of self.frame's ops are already on the surface, _frame_depth
@@ -264,6 +266,7 @@ class Sketch:
         self.title = title
         self._check_capabilities()
         self._pages = []
+        self._pages_full = []
         if not self.running:
             self._begin_script()
             return
@@ -294,6 +297,7 @@ class Sketch:
         self._has_window = True
         self._script_drawn = 0
         self._script_depth = 0
+        self._page_full = False
         self._reset_pixel_state()
 
     # ---- pages (S-084, contract R16, R17, D1)
@@ -326,6 +330,7 @@ class Sketch:
             return
         self._sync_canvas()
         self._pages.append((self.width, self.height, list(self.frame.ops), bytes(self._renderer.pixels().data)))
+        self._pages_full.append(self._page_full)
         self.width, self.height = int(w), int(h)
         self._start_page()
 
@@ -375,7 +380,10 @@ class Sketch:
             self._show_pages(platform, renderer)
             return
         try:
-            pw, ph = platform.open_window(self.width, self.height, self.title)
+            if self._page_full:
+                pw, ph = platform.open_full_screen(self.title)
+            else:
+                pw, ph = platform.open_window(self.width, self.height, self.title)
             renderer.attach(pw, ph, platform.backing_scale)
             renderer._base_matrix = renderer._ctx.get_matrix()
             renderer.draw_batch(renderer._ctx, self.frame, 0)      # the kept drawing, at the window's scale
@@ -392,13 +400,17 @@ class Sketch:
     def _show_pages(self, platform, renderer) -> None:
         """show() for a document: the current page first; Left and Right turn the pages (contract R17)."""
         pages = self._document_pages()
+        full = [*self._pages_full, self._page_full]
         total = len(pages)
         index = total - 1
         try:
             def open_page(i: int):
                 w, h, ops, _ = pages[i]
                 title = f"{self.title} - page {i + 1} of {total}"
-                pw, ph = platform.open_window(w, h, title)
+                if full[i]:
+                    pw, ph = platform.open_full_screen(title)
+                else:
+                    pw, ph = platform.open_window(w, h, title)
                 renderer.attach(pw, ph, platform.backing_scale)
                 renderer._base_matrix = renderer._ctx.get_matrix()
                 renderer.draw_batch(renderer._ctx, ir.Frame(list(ops)), 0)
@@ -437,6 +449,13 @@ class Sketch:
     def full_screen(self) -> None:
         """Make the canvas fill the screen; f.width and f.height become the screen's size."""
         self._check_capabilities()
+        if not self.running:                   # a script: the screen's size, no window until show() (R14)
+            self.width, self.height = self._platform.display_size()
+            self._pages = []
+            self._pages_full = []
+            self._begin_script()
+            self._page_full = True
+            return
         pw, ph = self._platform.open_full_screen(self.title)
         scale = self._platform.backing_scale
         self.width, self.height = round(pw / scale), round(ph / scale)

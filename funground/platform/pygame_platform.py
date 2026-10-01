@@ -166,6 +166,18 @@ class PygamePlatform:
         pygame.display.set_caption(title)
         return physical
 
+    def display_size(self) -> tuple[int, int]:
+        """The main display in logical pixels, with no window (a script's full_screen, S-085)."""
+        was_open = pygame.display.get_init()
+        pygame.display.init()
+        try:
+            width, height = pygame.display.get_desktop_sizes()[0]
+        finally:
+            if not was_open:
+                pygame.display.quit()
+        scale = detect_backing_scale()
+        return round(width / scale), round(height / scale)
+
     def open_full_screen(self, title: str) -> tuple[int, int]:
         pygame.display.init()
         if self._window is None and _uses_sdl_highdpi_window():

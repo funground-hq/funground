@@ -66,6 +66,9 @@ class Platform(Protocol):
     def open_window(self, width: int, height: int, title: str) -> tuple[int, int]:
         """Create or resize the window for a *logical* size; return the physical size."""
 
+    def display_size(self) -> tuple[int, int]:
+        """The main display's size in logical pixels, without opening a window (S-085)."""
+
     def open_full_screen(self, title: str) -> tuple[int, int]:
         """Make the window fill the display; return the physical size (S-057)."""
 

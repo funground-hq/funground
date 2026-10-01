@@ -203,7 +203,9 @@ def resize_canvas(width: int, height: int) -> None:
 
 
 def full_screen() -> None:
-    """Fill the whole screen (use it instead of f.size in setup); Escape still ends the sketch."""
+    """Fill the whole screen (use it instead of f.size in setup); Escape still ends the sketch.
+
+    In a script it makes the canvas the screen's size; f.show() then shows it full screen."""
     active_sketch().full_screen()
 
 

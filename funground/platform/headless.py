@@ -38,6 +38,9 @@ class HeadlessPlatform:
         self._size = (round(width * s), round(height * s))
         return self._size
 
+    def display_size(self) -> tuple[int, int]:
+        return self.SCREEN_SIZE
+
     def open_full_screen(self, title: str) -> tuple[int, int]:
         self.full_screen = True
         return self.open_window(*self.SCREEN_SIZE, title)

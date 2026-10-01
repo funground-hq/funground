@@ -603,7 +603,7 @@ f.run()
 | `f.save(path)` | Write the current frame to a file when the frame is complete. `.png` saves pixels; `.pdf` and `.svg` save a true vector drawing of the same frame. | `f.save("my_sketch.png")` |
 | `f.save_frames(pattern, count)` | **New:** save this frame and the next ones, `count` in all; `####` in the name becomes 0001, 0002, … | `f.save_frames("frames/####.png", 60)` |
 | `f.resize_canvas(w, h)` | **New:** change the canvas size while running. | `f.resize_canvas(800, 600)` |
-| `f.full_screen()` | **New:** fill the screen (instead of `f.size`); `f.width`/`f.height` become the screen size. | `f.full_screen()` |
+| `f.full_screen()` | **New:** fill the screen (instead of `f.size`); `f.width`/`f.height` become the screen size. In a script: the screen size, shown full screen by `f.show()`. | `f.full_screen()` |
 | `f.cursor(kind)` / `f.no_cursor()` | **New:** the mouse pointer: `"arrow"`, `"cross"`, `"hand"`, `"move"`, `"text"`, `"wait"`; or hide it. | `f.cursor("hand")` |
 
 - Call it anywhere inside `draw()`; the file holds everything that frame drew, including what comes
