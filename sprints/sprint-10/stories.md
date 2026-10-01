@@ -39,9 +39,9 @@ D-041 SVG library: svgelements (maintainer).
 - Raised as D-043 for the maintainer.
 - [x] S-093.1 Can funground embed its fonts in PDFs so text is selectable and searchable (lifting D-006's limit) with pycairo, without new dependencies? Report options, effort and a recommendation; build nothing beyond the spike
 ### S-094 Real text in PDFs — E-15 *(D-043 = D; contract T15)*
-- [ ] S-094.1 Spike-check, then build: Cairo draws each text run as a marker group; a pypdf post-step swaps each marker for real text with an embedded font subset
-- [ ] S-094.2 Every PDF route (frame, document, picture save, pictures and SVGs drawn into a PDF); fallbacks (`fsType`, unsupported fonts); variable fonts as instances
-- [ ] S-094.3 Tests: text extraction (pypdf, pdfium), rendering compared with the outline version, file size; guide chapters 6 and 10; changelog; THIRD_PARTY_LICENSES
+- [x] S-094.1 Spike-check, then build: Cairo draws each text run as a marker group; a pypdf post-step swaps each marker for real text with an embedded font subset
+- [x] S-094.2 Every PDF route (frame, document, picture save, pictures and SVGs drawn into a PDF); fallbacks (`fsType`, unsupported fonts); variable fonts as instances
+- [x] S-094.3 Tests: text extraction (pypdf, pdfium), rendering compared with the outline version, file size; guide chapters 6 and 10; changelog; THIRD_PARTY_LICENSES
 
 ## Out of scope this sprint
 Sound, GIF/MP4, controls and the release (Sprint 11).

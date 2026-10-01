@@ -191,9 +191,9 @@ data and the line breaking. The `Sketch` does the measuring and drawing (`_fs_*`
 Notes: [Text_Subsystem_Note.md](../design/Text_Subsystem_Note.md) and
 [Typography_Note.md](../design/Typography_Note.md). Contract rows T1 to T15.
 
-PDF text: decision D-043 says funground's PDFs carry real text, written with pypdf in
-`export/` (story S-094). Check the contract row T15 and the sprint folder for how far that has
-got. SVG keeps outlines.
+PDF text (T15, D-043, S-094): every PDF carries real text. The renderer draws each text run as a
+marker group; `export/pdf_text.py` swaps the markers for text with an embedded font subset after
+Cairo has written the file. See [PDF_Text_Note.md](../design/PDF_Text_Note.md). SVG keeps outlines.
 
 ### Colour and paint: `color.py` and `paint.py`
 
@@ -361,5 +361,4 @@ Bundled in the package: DejaVu Sans (Bitstream Vera licence), the p5-derived noi
 and the colour-name table (from pygame-ce, LGPL-2.1). The library itself is `LGPL-2.1-or-later`.
 Example code is CC0 (D-026).
 
-pypdf is in `pyproject.toml` and allowed by the boundary test. Whether the export code uses it yet
-depends on story S-094; check `funground/export/__init__.py`.
+pypdf is used only by `funground/export/pdf_text.py` (S-094), to put real text into Cairo's PDFs.
