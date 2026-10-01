@@ -8,6 +8,7 @@ never changes once built, which is what makes reuse safe.
 """
 from __future__ import annotations
 
+from . import pathops
 from .geometry import Path
 
 
@@ -46,6 +47,73 @@ class PathBuilder:
         self._require_start("close")
         self._path = self._path.close()
         return self
+
+    # ---- shapes (each adds a closed sub-path and returns self; contract F11)
+    def rect(self, x: float, y: float, w: float, h: float) -> "PathBuilder":
+        """Add a rectangle; (x, y) is its top-left corner."""
+        self._path = Path(self._path.segments + Path.rect(x, y, w, h).segments)
+        return self
+
+    def ellipse(self, x: float, y: float, w: float, h: float) -> "PathBuilder":
+        """Add an ellipse centred on (x, y) with width w and height h."""
+        self._path = Path(self._path.segments + Path.ellipse(x, y, w / 2, h / 2).segments)
+        return self
+
+    def circle(self, x: float, y: float, d: float) -> "PathBuilder":
+        """Add a circle centred on (x, y) with diameter d."""
+        return self.ellipse(x, y, d, d)
+
+    def polygon(self, points) -> "PathBuilder":
+        """Add a closed shape through a list of (x, y) corners."""
+        pts = [(float(x), float(y)) for x, y in points]
+        if len(pts) < 3:
+            raise ValueError(f"polygon() needs at least 3 points, not {len(pts)}")
+        segs = [("move", pts[0])] + [("line", pt) for pt in pts[1:]] + [("close",)]
+        self._path = Path(self._path.segments + tuple(segs))
+        return self
+
+    # ---- booleans (each returns a NEW builder; contract F11)
+    def union(self, other: "PathBuilder") -> "PathBuilder":
+        """Everything either path covers."""
+        return PathBuilder(pathops.union(self._path, self._other(other, "union")))
+
+    def intersection(self, other: "PathBuilder") -> "PathBuilder":
+        """Only what both paths cover."""
+        return PathBuilder(pathops.intersection(self._path, self._other(other, "intersection")))
+
+    def difference(self, other: "PathBuilder") -> "PathBuilder":
+        """What this path covers, minus what *other* covers."""
+        return PathBuilder(pathops.difference(self._path, self._other(other, "difference")))
+
+    def xor(self, other: "PathBuilder") -> "PathBuilder":
+        """What exactly one of the two paths covers."""
+        return PathBuilder(pathops.xor(self._path, self._other(other, "xor")))
+
+    def remove_overlap(self) -> "PathBuilder":
+        """The same filled area, drawn as one clean outline with no overlapping parts."""
+        return PathBuilder(pathops.remove_overlap(self._path))
+
+    def __or__(self, other: "PathBuilder") -> "PathBuilder":
+        return self.union(other)
+
+    def __and__(self, other: "PathBuilder") -> "PathBuilder":
+        return self.intersection(other)
+
+    def __sub__(self, other: "PathBuilder") -> "PathBuilder":
+        return self.difference(other)
+
+    def __mod__(self, other: "PathBuilder") -> "PathBuilder":
+        """``a % b`` is ``a - b``: DrawBot writes difference with ``%`` (D-038)."""
+        return self.difference(other)
+
+    def __xor__(self, other: "PathBuilder") -> "PathBuilder":
+        return self.xor(other)
+
+    @staticmethod
+    def _other(other, name: str) -> Path:
+        if not isinstance(other, PathBuilder):
+            raise TypeError(f"f.path().{name}() needs another path made with f.path(), not {other!r}")
+        return other._path
 
     # ---- queries
     @property

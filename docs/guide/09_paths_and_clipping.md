@@ -48,6 +48,37 @@ f.draw_path(leaf)
 `f.draw_path(path)` fills (if closed) and strokes it with the current style, and transforms
 apply to it like to any shape.
 
+## Combining shapes
+
+A path can also be built from ready-made shapes. Each call adds a closed shape and gives the
+path back, so calls chain: `rect(x, y, w, h)` (x, y is the top-left corner), `ellipse(x, y, w, h)`
+and `circle(x, y, d)` (x, y is the centre), and `polygon(points)` (a list of `(x, y)` corners).
+
+Two paths can be joined, overlapped, cut and mixed. Each call gives back a **new** path. The two
+you started with do not change.
+
+```py
+ring = f.path().circle(100, 100, 120)
+star = f.path().polygon([(150, 40), (190, 160), (90, 90), (210, 90), (110, 160)])
+
+f.draw_path(ring | star)      # union: everything either one covers
+f.draw_path(ring & star)      # intersection: only where both cover
+f.draw_path(ring - star)      # difference: the ring, minus the star
+f.draw_path(ring ^ star)      # xor: where exactly one of them covers
+```
+
+The same four are also methods: `ring.union(star)`, `ring.intersection(star)`,
+`ring.difference(star)` and `ring.xor(star)`.
+
+Only closed shapes take part. A shape that is still open is left out. Curves stay curves, and a
+result you can draw, clip with, or combine again. If nothing is left, you get an empty path and
+nothing is drawn.
+
+`path.remove_overlap()` gives a path that covers the same area, with one clean outline and no
+crossing lines inside. Draw it with a stroke to see the difference.
+
+![Union, intersection, difference, xor and remove_overlap](../gallery/images/paths-05_booleans.png)
+
 ## Clipping
 
 `f.clip(path)` keeps everything drawn afterwards **inside** the path. It lasts until the end of

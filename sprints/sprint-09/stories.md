@@ -16,9 +16,9 @@ Quick Reference entry; CI green on 12 cells; the boundary test keeps `pathops` i
 ## Story set
 
 ### S-086 Path shapes and booleans — E-11 *(contract F11, ADR-005)*
-- [ ] S-086.1 `funground/pathops.py` (the only importer of `pathops`): Path ↔ Skia conversion; union, intersection, difference, xor, remove_overlap
-- [ ] S-086.2 Builder helpers `rect`, `ellipse`, `circle`, `polygon`; boolean methods and operators
-- [ ] S-086.3 Tests; gallery `paths/` (shapes cut and joined); guide chapter 9; chapter 15 (DrawBot `BezierPath` table); Quick Reference; changelog
+- [x] S-086.1 `funground/pathops.py` (the only importer of `pathops`): Path ↔ Skia conversion; union, intersection, difference, xor, remove_overlap
+- [x] S-086.2 Builder helpers `rect`, `ellipse`, `circle`, `polygon`; boolean methods and operators
+- [x] S-086.3 Tests; gallery `paths/` (shapes cut and joined); guide chapter 9; chapter 15 (DrawBot `BezierPath` table); Quick Reference; changelog
 
 ### S-087 Stroke outlines, queries, transforms — E-11 *(contract F12)*
 - [ ] S-087.1 `expand_stroke`, `bounds`, `contains`, `translate`, `scale`, `rotate`, `copy`
