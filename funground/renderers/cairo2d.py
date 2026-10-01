@@ -273,23 +273,48 @@ class CairoRenderer:
                 "this Image op has no snapshot to draw with (an Image op loaded back from a "
                 "saved IR snapshot cannot be rendered - snapshots never carry pixels, S-052)"
             )
+        pixels = snap.pixels
+        if op.tint is not None:                 # S-078 (P5): RGB multiplied, alpha multiplied (below)
+            from ..imaging import tint_pixels
+            t = op.tint
+            pixels = tint_pixels(pixels, snap.phys_width, snap.phys_height, t.r, t.g, t.b)
+            alpha = alpha * t.a / 255
         target = ctx.get_target()
-        if not isinstance(target, cairo.ImageSurface) and snap.history is not None:
+        # A tinted picture is embedded as (tinted) pixels in PDF/SVG: its colours changed, and
+        # the pixels are exactly what was tinted (a vector replay could only approximate partly
+        # transparent edges).
+        if not isinstance(target, cairo.ImageSurface) and snap.history is not None and op.tint is None:
             saved_base = self._base_matrix          # a nested picture's ResetMatrix must not
             try:                                      # disturb the frame around this Image op
                 self._replay_image_history(ctx, op, snap, alpha)
             finally:
                 self._base_matrix = saved_base
             return
-        paint_picture_pixels(ctx, snap.pixels, snap.phys_width, snap.phys_height,
-                              op.x, op.y, op.width, op.height, alpha)
+        if op.sw is None:
+            paint_picture_pixels(ctx, pixels, snap.phys_width, snap.phys_height,
+                                  op.x, op.y, op.width, op.height, alpha)
+            return
+        # S-078 (P6): the source rectangle (picture pixels) fills the destination box, clipped to it
+        ctx.save()
+        ctx.new_path(); ctx.rectangle(op.x, op.y, op.width, op.height); ctx.clip()
+        ctx.translate(op.x, op.y)
+        ctx.scale(op.width / op.sw, op.height / op.sh)
+        paint_picture_pixels(ctx, pixels, snap.phys_width, snap.phys_height,
+                              -op.sx, -op.sy, snap.logical_width, snap.logical_height, alpha)
+        ctx.restore()
 
     def _replay_image_history(self, ctx: cairo.Context, op: "ir.Image", snap, alpha: float) -> None:
         """PDF/SVG targets: replay the picture's history as vectors (contract P3)."""
         ctx.save()
-        ctx.translate(op.x, op.y)
-        if snap.logical_width and snap.logical_height:
-            ctx.scale(op.width / snap.logical_width, op.height / snap.logical_height)
+        if op.sw is not None:        # S-078 (P6): the source rectangle fills the destination box
+            ctx.new_path(); ctx.rectangle(op.x, op.y, op.width, op.height); ctx.clip()
+            ctx.translate(op.x, op.y)
+            ctx.scale(op.width / op.sw, op.height / op.sh)
+            ctx.translate(-op.sx, -op.sy)
+        else:
+            ctx.translate(op.x, op.y)
+            if snap.logical_width and snap.logical_height:
+                ctx.scale(op.width / snap.logical_width, op.height / snap.logical_height)
         ctx.rectangle(0, 0, snap.logical_width, snap.logical_height)
         ctx.clip()
         self._base_matrix = ctx.get_matrix()

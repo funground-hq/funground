@@ -770,7 +770,8 @@ you can draw again and again.
 | Call | What it does | Example |
 |---|---|---|
 | `f.create_graphics(w, h)` | **New:** an off-screen picture, `w` x `h`, transparent to start. It has the same drawing commands as `f.` (fill, circle, text, transforms, clip, ...), but its own state, transform and pixels; nothing about it resets between frames. | `trail = f.create_graphics(200, 100)` |
-| `f.image(picture, x, y, w=None, h=None)` | **New:** draw *picture* at (x, y), stretched to `w` x `h` (default: its own size), as it is at this moment. | `f.image(trail, 0, 0)` |
+| `f.image(picture, x, y, w=None, h=None, sx=None, sy=None, sw=None, sh=None)` | **New:** draw *picture* at (x, y), stretched to `w` x `h` (default: its own size), as it is at this moment. Give `sx, sy, sw, sh` (all four) to draw only that part of the picture, in its own pixels, into the box; a part reaching outside the picture is clipped and keeps its place. `sw` and `sh` must be above 0. | `f.image(trail, 0, 0)`, `f.image(photo, 0, 0, 200, 150, 40, 30, 100, 75)` |
+| `f.tint(color)` / `f.no_tint()` | **New:** colour every picture drawn after it. Takes any colour form `f.fill()` takes (not a gradient). Red, green and blue of each pixel are multiplied by the tint's, and its alpha is multiplied in: `f.tint(255, 128)` draws pictures half see-through. Shapes and text are not tinted. Saved by `push`/`pop`. | `f.tint("gold")` |
 | `f.load_image(path)` | **New:** read an image file (PNG, JPEG, GIF, BMP, TGA) and return a picture; draw it with `f.image()`. A relative path is looked for next to the sketch file first, then in the current folder. Phone photos are turned the right way up; transparency is kept. `pic.width` and `pic.height` are the image's size in pixels. You can draw on it like any picture. | `photo = f.load_image("photo.jpg")` |
 
 **Rules worth knowing**

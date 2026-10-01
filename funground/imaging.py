@@ -124,3 +124,16 @@ def _orient(surface: "pygame.Surface", orientation: int) -> "pygame.Surface":
     if orientation == 8:
         return rotate(surface, 90)
     return surface
+
+
+def tint_pixels(bgra: bytes, width: int, height: int, red: int, green: int, blue: int) -> bytes:
+    """Multiply the red, green and blue of premultiplied BGRA pixels by a tint colour (contract P5).
+
+    Alpha is left alone, so a transparent area stays transparent. Premultiplied colour times the
+    tint is exactly the multiplied colour at the same alpha. White (255, 255, 255) changes nothing.
+    """
+    if (red, green, blue) == (255, 255, 255):
+        return bgra
+    surface = pygame.image.frombuffer(bytearray(bgra), (width, height), "BGRA")   # a copy: never change the snapshot
+    surface.fill((red, green, blue), special_flags=pygame.BLEND_RGB_MULT)
+    return pygame.image.tobytes(surface, "BGRA")

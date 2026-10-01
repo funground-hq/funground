@@ -149,7 +149,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 |---|---|---|---|
 | S-076 | E-18 | Script mode: sketches without `draw()` (D-029) | 7 — done |
 | S-077 | E-14 | `load_image` and `image()` for loaded pictures (D-028) | 7 — done |
-| S-078 | E-14 | `tint` / `no_tint`; drawing part of a picture | 7 |
+| S-078 | E-14 | `tint` / `no_tint`; drawing part of a picture | 7 — done |
 | S-079 | E-14 | Pixel access: get/set, whole-picture access | 7 |
 | S-080 | E-14 | `copy`, `resize`, `mask`, a few filters | 7 |
 | S-081 | E-24 | `rect_mode` / `ellipse_mode` / `image_mode` (D-030 = B) | 7 — done |

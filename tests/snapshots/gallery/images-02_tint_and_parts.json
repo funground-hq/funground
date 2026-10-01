@@ -1,0 +1,257 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   240,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 40,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "width": 190,
+  "x": 440,
+  "y": 50
+ },
+ {
+  "height": 150.0,
+  "op": "Image",
+  "source": "graphics-1",
+  "tint": [
+   255,
+   170,
+   120,
+   255
+  ],
+  "version": 0,
+  "width": 200.0,
+  "x": 10.0,
+  "y": 10.0
+ },
+ {
+  "height": 150.0,
+  "op": "Image",
+  "source": "graphics-1",
+  "tint": [
+   120,
+   170,
+   255,
+   255
+  ],
+  "version": 0,
+  "width": 200.0,
+  "x": 220.0,
+  "y": 10.0
+ },
+ {
+  "height": 150.0,
+  "op": "Image",
+  "source": "graphics-1",
+  "tint": [
+   255,
+   255,
+   255,
+   120
+  ],
+  "version": 0,
+  "width": 200.0,
+  "x": 430.0,
+  "y": 10.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "warm",
+  "x": 10,
+  "y": 168
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "cool",
+  "x": 220,
+  "y": 168
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "half see-through",
+  "x": 430,
+  "y": 168
+ },
+ {
+  "height": 150.0,
+  "op": "Image",
+  "sh": 75.0,
+  "source": "graphics-1",
+  "sw": 100.0,
+  "sx": 130.0,
+  "sy": 160.0,
+  "version": 0,
+  "width": 200.0,
+  "x": 10.0,
+  "y": 215.0
+ },
+ {
+  "height": 150.0,
+  "op": "Image",
+  "sh": 79.0,
+  "source": "graphics-1",
+  "sw": 105.0,
+  "sx": 215.0,
+  "sy": 115.0,
+  "version": 0,
+  "width": 200.0,
+  "x": 220.0,
+  "y": 215.0
+ },
+ {
+  "height": 150.0,
+  "op": "Image",
+  "sh": 90.0,
+  "source": "graphics-1",
+  "sw": 120.0,
+  "sx": 10.0,
+  "sy": 10.0,
+  "tint": [
+   255,
+   215,
+   0,
+   255
+  ],
+  "version": 0,
+  "width": 200.0,
+  "x": 430.0,
+  "y": 215.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "the house",
+  "x": 10,
+  "y": 376
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "the sun",
+  "x": 220,
+  "y": 376
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "the stars, with a tint",
+  "x": 430,
+  "y": 376
+ }
+]

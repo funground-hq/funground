@@ -243,4 +243,75 @@ SVG files cannot be loaded as images yet; funground tells you so.
 | `f.load_image(path)` | Read an image file and return a picture. |
 | `photo.width`, `photo.height` | The image's size in pixels. |
 
+### Tinting a picture
+
+`f.tint(color)` colours every picture you draw with `f.image()` from then on. It takes a
+colour in any form that `f.fill()` takes: a name, a hex string, numbers, a grey, and so on,
+and it follows `f.color_mode()`. Each pixel's red, green and blue are **multiplied** by the
+tint's. White changes nothing. A red tint turns a white picture red. The tint's alpha is
+multiplied in too, so `f.tint(255, 128)` draws a picture half see-through. Parts of the
+picture that were already see-through stay see-through.
+
+`f.no_tint()` stops it. A tint only changes pictures. Shapes and text are not tinted. It
+combines with `f.opacity()` and `f.blend_mode()`. Like `f.fill()`, it is kept by `f.push()`
+and `f.pop()`, and it stays set from one frame to the next.
+
+### Drawing part of a picture
+
+Give `f.image()` four more numbers, `sx, sy, sw, sh`, and it draws only that part of the
+picture: the rectangle that starts at (`sx`, `sy`) and is `sw` wide and `sh` high, in the
+picture's own pixels. The part fills the box given by `x, y, width, height`. Without a
+width and a height, the box is as big as the part.
+
+```
+f.image(picture, x, y, width, height, sx, sy, sw, sh)
+```
+
+You must give all four of `sx, sy, sw, sh` or none of them, and `sw` and `sh` must be above
+0. If the part reaches outside the picture, only the inside is drawn, and it stays exactly
+where it would have been. `f.image_mode()`, transforms, clips, tint and opacity all work
+with parts. A picture made with `f.create_graphics()` can do it too: `g.image(...)`.
+
+This sketch makes its own picture, then shows it tinted and in parts:
+
+```python
+import funground as f
+
+f.size(400, 200)
+
+art = f.create_graphics(40, 40)           # a small picture to play with
+art.background("white")
+art.no_stroke()
+art.fill("crimson")
+art.circle(20, 20, 24)
+art.fill("navy")
+art.rect(0, 30, 40, 10)
+
+
+
+def draw():
+    f.background("ivory")
+    f.image(art, 10, 10, 80, 80)               # as it is
+    f.tint("gold")                             # a gold tint
+    f.image(art, 110, 10, 80, 80)
+    f.tint(255, 100)                           # white, but almost see-through
+    f.image(art, 210, 10, 80, 80)
+    f.no_tint()
+
+    f.image(art, 10, 110, 80, 80, 10, 10, 20, 20)    # a part: the middle, bigger
+    f.image(art, 110, 110, 80, 40, 0, 30, 40, 10)    # a part: the navy stripe, stretched
+    f.image(art, 210, 110, 80, 80, 20, 0, 60, 40)    # a part that reaches outside: clipped
+
+
+f.run()
+```
+
+![Tinting a picture and drawing part of it](../gallery/images/images-02_tint_and_parts.png)
+
+| Call | What it does |
+|---|---|
+| `f.tint(color)` | Multiply the colour (and alpha) of pictures drawn after it. |
+| `f.no_tint()` | Stop tinting. |
+| `f.image(picture, x, y, width, height, sx, sy, sw, sh)` | Draw only the part `sx, sy, sw, sh` of the picture. |
+
 **Next:** [10. Interaction](10_interaction.md)

@@ -30,7 +30,7 @@ ALLOWED_METHODS = frozenset({
     "fill", "no_fill", "stroke", "no_stroke", "stroke_width",
     "stroke_cap", "stroke_join", "miter_limit", "stroke_dash", "no_dash",
     "no_smooth", "smooth",
-    "blend_mode", "opacity", "shadow", "no_shadow", "color_mode",
+    "blend_mode", "opacity", "shadow", "no_shadow", "color_mode", "tint", "no_tint",
     # drawing
     "background", "clear",
     "rect_mode", "ellipse_mode", "image_mode",
@@ -224,9 +224,12 @@ class Picture:
 
     # ------------------------------------------------------------ image() (contract P3)
     def image(self, picture: "Picture", x: float, y: float,
-              width: float | None = None, height: float | None = None) -> None:
-        """Draw *picture* onto this one (never itself), the same as ``f.image()``."""
-        draw_image(self._sketch, picture, x, y, width, height)
+              width: float | None = None, height: float | None = None,
+              sx: float | None = None, sy: float | None = None,
+              sw: float | None = None, sh: float | None = None) -> None:
+        """Draw *picture* (or the part sx, sy, sw, sh of it) onto this one (never itself),
+        the same as ``f.image()``."""
+        draw_image(self._sketch, picture, x, y, width, height, sx, sy, sw, sh)
 
     # ------------------------------------------------------------ save() (contract P2)
     def save(self, path: str) -> None:
@@ -247,7 +250,9 @@ class Picture:
 
 
 def draw_image(target: Sketch, picture: Any, x: float, y: float,
-                width: float | None = None, height: float | None = None) -> None:
+                width: float | None = None, height: float | None = None,
+                sx: float | None = None, sy: float | None = None,
+                sw: float | None = None, sh: float | None = None) -> None:
     """The shared body of ``f.image()`` and ``Picture.image()`` (contract P3).
 
     *target* is whichever Sketch is issuing the call - the main sketch for ``f.image()``, or
@@ -261,9 +266,21 @@ def draw_image(target: Sketch, picture: Any, x: float, y: float,
         )
     if picture._sketch is target:
         raise ValueError("f.image(): a picture cannot be drawn onto itself")
+    given = [v is not None for v in (sx, sy, sw, sh)]
+    if any(given) and not all(given):
+        raise ValueError("f.image(): to draw part of a picture give all four of sx, sy, sw and sh")
+    part = all(given)
+    if part:
+        sx, sy, sw, sh = (_number(v, n) for v, n in zip((sx, sy, sw, sh), ("sx", "sy", "sw", "sh")))
+        if sw <= 0 or sh <= 0:
+            raise ValueError("f.image(): sw and sh must be above 0")
     snap = picture._snapshot()
-    w = picture.width if width is None else float(width)
-    h = picture.height if height is None else float(height)
+    if part:
+        w = sw if width is None else float(width)         # contract P6: the box is sw x sh by default
+        h = sh if height is None else float(height)
+    else:
+        w = picture.width if width is None else float(width)
+        h = picture.height if height is None else float(height)
     style = target.style
     if style.image_mode == "corners":           # contract F10: (x, y) and the opposite corner
         if width is None or height is None:
@@ -272,5 +289,23 @@ def draw_image(target: Sketch, picture: Any, x: float, y: float,
         x, y, w, h = target._box_from_corners(x, y, w, h)
     elif style.image_mode == "center":
         x, y = x - w / 2, y - h / 2
-    target._emit(ir.Image(picture.name, snap.version, float(x), float(y), w, h,
-                           style.blend_mode, style.opacity, snap))
+    if not part:
+        target._emit(ir.Image(picture.name, snap.version, float(x), float(y), w, h,
+                               style.blend_mode, style.opacity, style.tint, snapshot=snap))
+        return
+    # contract P6: clip the source rectangle to the picture; scale the destination so the visible
+    # part keeps its place. A part wholly outside the picture draws nothing.
+    x0, y0 = max(sx, 0.0), max(sy, 0.0)
+    x1, y1 = min(sx + sw, float(picture.width)), min(sy + sh, float(picture.height))
+    if x1 <= x0 or y1 <= y0:
+        return
+    kx, ky = w / sw, h / sh
+    target._emit(ir.Image(picture.name, snap.version, float(x) + (x0 - sx) * kx, float(y) + (y0 - sy) * ky,
+                           (x1 - x0) * kx, (y1 - y0) * ky, style.blend_mode, style.opacity, style.tint,
+                           x0, y0, x1 - x0, y1 - y0, snap))
+
+
+def _number(v: Any, name: str) -> float:
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        raise TypeError(f"f.image(): {name} must be a number, not {v!r}")
+    return float(v)

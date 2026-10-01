@@ -361,6 +361,14 @@ f.load_image() reads a picture file (PNG, JPEG, GIF, BMP, TGA) and gives you a p
 
 Source: [`examples/gallery/images/01_load_image.py`](../../examples/gallery/images/01_load_image.py)
 
+### Tinting a picture and drawing part of it
+
+![Tinting a picture and drawing part of it](images/images-02_tint_and_parts.png)
+
+f.tint() colours every picture drawn after it: the red, green and blue of each pixel are multiplied by the tint, and its alpha too. f.no_tint() stops it. To draw only part of a picture, give image() four more numbers: the left, top, width and height of the part.
+
+Source: [`examples/gallery/images/02_tint_and_parts.py`](../../examples/gallery/images/02_tint_and_parts.py)
+
 ## Compositing
 
 ### Blend modes, opacity and shadows

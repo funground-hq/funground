@@ -72,11 +72,12 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
   Quick Reference
 *Acceptance:* a Processing `loadImage`/`image` sketch ports by renaming only.
 
-### S-078 Tint and parts of images — E-14
-- [ ] S-078.1 `f.tint(colour)` / `f.no_tint()`: colour and transparency applied to images
-- [ ] S-078.2 Drawing part of a picture: a source rectangle, as p5's nine-argument `image()` and
+### S-078 Tint and parts of images — E-14 ✅
+*As built:* by a Sonnet sub-agent, reviewed here. The tint multiplies premultiplied pixels (pygame-ce, in `imaging.py`) rather than Cairo operators, which would mis-colour soft edges. Tinted pictures embed as pixels in PDF/SVG. Contract P5/P6 clarified accordingly.
+- [x] S-078.1 `f.tint(colour)` / `f.no_tint()`: colour and transparency applied to images
+- [x] S-078.2 Drawing part of a picture: a source rectangle, as p5's nine-argument `image()` and
   Processing's `copy()` do
-- [ ] S-078.3 Contract rows; tests; gallery; guide; Quick Reference
+- [x] S-078.3 Contract rows; tests; gallery; guide; Quick Reference
 
 ### S-079 Pixels — E-14
 - [ ] S-079.1 `pic.get(x, y)` returns a colour; `pic.set(x, y, colour)`; the same on the canvas

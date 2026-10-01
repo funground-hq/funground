@@ -652,10 +652,24 @@ def load_image(path: str) -> Picture:
     return active_sketch().load_image(path, base_dir=base_dir)
 
 
-def image(picture, x: float, y: float, width: float | None = None, height: float | None = None) -> None:
+def image(picture, x: float, y: float, width: float | None = None, height: float | None = None,
+          sx: float | None = None, sy: float | None = None,
+          sw: float | None = None, sh: float | None = None) -> None:
     """Draw *picture* at (x, y), stretched to width x height (default: its own size), as it
-    is at this moment - later drawing on it does not change what was placed."""
-    draw_image(active_sketch(), picture, x, y, width, height)
+    is at this moment - later drawing on it does not change what was placed.
+    Give sx, sy, sw and sh (all four) to draw only that part of the picture into the box."""
+    draw_image(active_sketch(), picture, x, y, width, height, sx, sy, sw, sh)
+
+
+def tint(color, *more: float) -> None:
+    """Colour every picture drawn with image() from now on: its red, green and blue are multiplied
+    by the tint's, its alpha too. tint(255, 128) draws pictures half see-through."""
+    active_sketch().tint(color, *more)
+
+
+def no_tint() -> None:
+    """Stop tinting pictures."""
+    active_sketch().no_tint()
 
 
 # ---- input
