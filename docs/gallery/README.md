@@ -443,6 +443,14 @@ picture.copy() makes a new picture that you can change without touching the firs
 
 Source: [`examples/gallery/images/04_filters.py`](../../examples/gallery/images/04_filters.py)
 
+### Loading an SVG drawing
+
+![Loading an SVG drawing](images/images-05_svg.png)
+
+f.load_svg() reads an SVG file and gives you a picture, like f.load_image(). The picture is made of the SVG's shapes, not of pixels, so you can draw it small or large and it stays sharp. f.svg_paths() gives the same shapes as paths, for booleans and clips.
+
+Source: [`examples/gallery/images/05_svg.py`](../../examples/gallery/images/05_svg.py)
+
 ## Compositing
 
 ### Blend modes, opacity and shadows

@@ -56,6 +56,7 @@ coming from p5.
 | `strokeWeight(n)` | `strokeWeight(n)` | `f.stroke_width(n)` |
 | `strokeCap(...)`, `strokeJoin(...)` | `strokeCap(...)`, `strokeJoin(...)` | `f.stroke_cap(...)`, `f.stroke_join(...)` |
 | `rectMode(...)`, `ellipseMode(...)`, `imageMode(...)` | same | `f.rect_mode(...)`, `f.ellipse_mode(...)`, `f.image_mode(...)`. Modes are lower-case words: `CORNER` is `"corner"`, `CORNERS` is `"corners"`, `CENTER` is `"center"`, `RADIUS` is `"radius"` |
+| `loadShape("x.svg")`, `shape(s, x, y, w, h)` | same | `s = f.load_svg("x.svg")`, `f.image(s, x, y, w, h)`. The picture is made of the SVG's shapes, so it stays sharp at any size. `f.svg_paths("x.svg")` gives the shapes as paths. Gradients paint with their first colour; text, images, filters and masks are ignored |
 | `tint(...)`, `noTint()` | same | `f.tint(...)`, `f.no_tint()`. Takes the same colour forms as `f.fill()`. Multiplies the colour and alpha of pictures drawn after it |
 | `image(img, x, y, w, h, sx, sy, sw, sh)` | same | `f.image(g, x, y, w, h, sx, sy, sw, sh)`: the nine-argument form draws only the part `sx, sy, sw, sh` of the picture. Give all four of them or none |
 | `get(x, y)`, `get(x, y, w, h)` | same | `f.get(x, y)` is a colour object, not a list. `f.get(x, y, w, h)` is a picture. Pixels are logical (pixel density 1): on a high-resolution screen `get` reads the top-left real pixel of one |

@@ -113,6 +113,16 @@ def remove_overlap(a: Path) -> Path:
     return from_skia(_sk.simplify(to_skia(a), fix_winding=True))
 
 
+def even_odd_to_nonzero(a: Path) -> Path:
+    """The same area as *a* read with the even-odd rule, as a path the non-zero rule fills (S-092).
+
+    Used for SVG's ``fill-rule="evenodd"``: funground fills with the non-zero rule only (F3).
+    Open sub-paths are dropped, as in every other operation here."""
+    sk = to_skia(a)
+    sk.fillType = _sk.FillType.EVEN_ODD
+    return from_skia(_sk.simplify(sk, fix_winding=True))
+
+
 # ---- stroke outlines and queries (story S-087, contract F12)
 
 _CAPS = {"round": _sk.LineCap.ROUND_CAP, "square": _sk.LineCap.SQUARE_CAP, "butt": _sk.LineCap.BUTT_CAP}

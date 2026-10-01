@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A small badge, written by hand for the funground gallery. CC0 (public domain). -->
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <title>Badge</title>
+  <!-- a round plate with an outline -->
+  <circle cx="80" cy="80" r="72" fill="#f4c542" stroke="#7a4b12" stroke-width="6"/>
+  <!-- a group with a transform: a turned square with a square hole (even-odd) -->
+  <g transform="translate(80 78) rotate(20)">
+    <rect x="-46" y="-46" width="92" height="92" rx="12" fill="#2f6f8f"/>
+    <path fill="#ffffff" fill-rule="evenodd"
+          d="M -30 -30 H 30 V 30 H -30 Z M -14 -14 H 14 V 14 H -14 Z"/>
+  </g>
+  <!-- a path with curves and an arc -->
+  <path d="M 24 120 C 40 96, 60 96, 76 120 S 112 144, 128 120 A 18 18 0 0 0 100 104"
+        fill="none" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/>
+  <!-- a stroked polyline -->
+  <polyline points="36,40 52,24 68,40 84,24 100,40" fill="none" stroke="#222222"
+            stroke-width="4" stroke-linejoin="bevel" stroke-linecap="butt"/>
+</svg>

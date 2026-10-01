@@ -295,12 +295,105 @@ f.run()
 
 PDF and SVG files keep a loaded picture as pixels, because that is all it has. If you
 paint an opaque `photo.background(...)` on it first, it becomes a normal drawing again.
-SVG files cannot be loaded as images yet; funground tells you so.
+SVG files are not images: `f.load_image()` tells you so, and `f.load_svg()` (next) reads them.
 
 | Call | What it does |
 |---|---|
 | `f.load_image(path)` | Read an image file and return a picture. |
 | `photo.width`, `photo.height` | The image's size in pixels. |
+
+### Loading SVG drawings
+
+An SVG file is a drawing made of shapes, not of pixels. `f.load_svg(path)` reads one and
+gives you a picture, like `f.load_image()`. The picture is made of the file's shapes, so it
+stays sharp when you draw it big, and a PDF or SVG file you save keeps true shapes.
+
+```py
+badge = f.load_svg("badge.svg")          # found next to this file, or in the current folder
+f.image(badge, 20, 20)                   # its own size
+f.image(badge, 200, 20, 320, 320)        # large, and still sharp
+```
+
+The picture is as big as the SVG says: its `width` and `height`, or its `viewBox` when
+those are missing. The SVG's units count 96 to the inch, so `"2in"` is 192 pixels. A new
+picture is see-through, so an SVG with no background stays see-through. You can draw on
+the picture like any other.
+
+`f.svg_paths(path)` gives you the shapes themselves: a list of paths, one for each shape,
+in the file's own coordinates. Use them for booleans, as clips, or to colour them
+yourself.
+
+```py
+shapes = f.svg_paths("badge.svg")
+plate = shapes[0]                        # the first shape in the file
+f.clip(plate)
+```
+
+This sketch writes a tiny SVG file into a temporary folder first, so that it runs anywhere:
+
+```python
+import os
+import tempfile
+
+import funground as f
+
+f.size(400, 200)
+
+# Make an SVG file to load. You would normally bring your own.
+svg = """<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+  <circle cx="50" cy="50" r="45" fill="gold" stroke="crimson" stroke-width="6"/>
+  <path d="M 25 60 Q 50 90 75 60" fill="none" stroke="black" stroke-width="5"
+        stroke-linecap="round"/>
+</svg>"""
+path = os.path.join(tempfile.mkdtemp(), "face.svg")
+with open(path, "w") as file:
+    file.write(svg)
+
+face = f.load_svg(path)
+rings = f.svg_paths(path)                # two shapes: the circle and the smile
+
+
+def draw():
+    f.background("white")
+    f.image(face, 20, 50)                     # its own size
+    f.image(face, 140, 10, 180, 180)          # large
+    f.fill("tomato")
+    f.no_stroke()
+    f.circle(360, 100, 40)
+    f.stroke("black")
+    f.no_fill()
+    f.draw_path(rings[1].translate(310, 50).scale(0.5))   # a shape from the file, moved and shrunk
+
+
+f.run()
+```
+
+![Loading an SVG drawing](../gallery/images/images-05_svg.png)
+
+**What is read.** Paths (lines, curves and arcs) and the basic shapes: `rect` (with round
+corners), `circle`, `ellipse`, `line`, `polyline` and `polygon`. Groups, `<use>` and
+transforms, such as `translate`, `rotate`, `scale` and `matrix`. Fill and stroke colours
+(names, hex, `rgb()` and so on) with `opacity`, `fill-opacity` and `stroke-opacity`. Stroke
+width, line caps, line joins, the miter limit and dashes. `fill-rule`, both `nonzero` and
+`evenodd`. Colours and styles may be written as attributes, in `style="..."` or in a
+`<style>` block.
+
+**What is not supported.** A gradient or pattern fill is painted with its first colour.
+`<text>`, embedded `<image>`, filters, masks, clip paths, markers and CSS animation are
+ignored, with no error. A group's `opacity` is applied to each shape in it, not to the group
+as a whole, so shapes that overlap inside a faded group can show through each other.
+
+**Even-odd.** funground fills with the non-zero rule only. A shape with
+`fill-rule="evenodd"` is changed into an outline that the non-zero rule fills the same way,
+so its holes stay holes. The shape's stroke is drawn from the original outline.
+
+**Mistakes.** A missing file raises `FileNotFoundError` and names both places it looked. A
+file that is not SVG raises `ValueError`.
+
+| Call | What it does |
+|---|---|
+| `f.load_svg(path)` | Read an SVG file and return a picture of its shapes. |
+| `f.svg_paths(path)` | Read an SVG file and return its shapes as a list of paths. |
 
 ### Tinting a picture
 
