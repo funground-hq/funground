@@ -460,9 +460,11 @@ class CairoRenderer:
             finally:
                 self._base_matrix = saved_base
             return
+        # contract P3: under no_smooth (anti-aliasing off) pictures scale without blurring
+        nearest = ctx.get_antialias() == cairo.ANTIALIAS_NONE
         if op.sw is None:
             paint_picture_pixels(ctx, pixels, snap.phys_width, snap.phys_height,
-                                  op.x, op.y, op.width, op.height, alpha)
+                                  op.x, op.y, op.width, op.height, alpha, nearest)
             return
         # S-078 (P6): the source rectangle (picture pixels) fills the destination box, clipped to it
         ctx.save()
@@ -470,7 +472,7 @@ class CairoRenderer:
         ctx.translate(op.x, op.y)
         ctx.scale(op.width / op.sw, op.height / op.sh)
         paint_picture_pixels(ctx, pixels, snap.phys_width, snap.phys_height,
-                              -op.sx, -op.sy, snap.logical_width, snap.logical_height, alpha)
+                              -op.sx, -op.sy, snap.logical_width, snap.logical_height, alpha, nearest)
         ctx.restore()
 
     def _replay_image_history(self, ctx: cairo.Context, op: "ir.Image", snap, alpha: float) -> None:
@@ -570,7 +572,8 @@ class CairoRenderer:
 
 
 def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: int,
-                          x: float, y: float, logical_w: float, logical_h: float, alpha: float = 1.0) -> None:
+                          x: float, y: float, logical_w: float, logical_h: float, alpha: float = 1.0,
+                          nearest: bool = False) -> None:
     """Paint a Picture's raw pixels (BGRA premultiplied, contract P3's raster path).
 
     *pixel_bytes* is exactly what ``CairoRenderer.pixels()`` returns copied to bytes: Cairo's
@@ -589,5 +592,7 @@ def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: i
     ctx.translate(x, y)
     ctx.scale(logical_w / phys_w, logical_h / phys_h)
     ctx.set_source_surface(img, 0, 0)
+    if nearest:                                  # crisp enlarged pixels (contract P3, no_smooth)
+        ctx.get_source().set_filter(cairo.FILTER_NEAREST)
     ctx.paint_with_alpha(alpha)
     ctx.restore()

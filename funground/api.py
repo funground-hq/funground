@@ -694,6 +694,12 @@ def update_pixels() -> None:
     active_sketch().update_pixels()
 
 
+def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's name)
+    """Change everything drawn so far: 'threshold', 'gray', 'opaque', 'invert', 'blur', 'posterize',
+    'erode' or 'dilate'. Some take a value, e.g. f.filter('blur', 3) or f.filter('posterize', 4)."""
+    active_sketch().filter(kind, value)
+
+
 # ---- input
 def key_down(key: str | int) -> bool:
     """Return whether a key is held, e.g. key_down('left') or key_down('a')."""

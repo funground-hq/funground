@@ -779,6 +779,10 @@ you can draw again and again.
 | `f.load_pixels()` | **New:** copy the canvas into `f.pixels`. | `f.load_pixels()` |
 | `f.pixels` | **New:** a `bytearray` with red, green, blue, alpha (0 to 255, not premultiplied) for every pixel, row by row from the top left. The pixel at (`x`, `y`) starts at index `(y * f.width + x) * 4`. `None` before `f.load_pixels()`. Change the numbers in place; a Python loop over a whole 640 x 400 canvas takes seconds. | `f.pixels[(y * f.width + x) * 4] = 255` |
 | `f.update_pixels()` | **New:** write `f.pixels` back onto the canvas, like a `f.set()` of every pixel. An error before `f.load_pixels()`. A picture has `g.load_pixels()`, `g.pixels` and `g.update_pixels()`. | `f.update_pixels()` |
+| `g.copy()` | **New:** a new picture with the same pixels and drawing history. Changing one never changes the other. | `small = photo.copy()` |
+| `g.resize(w, h)` | **New:** change the picture to `w` x `h` pixels, in place, scaled smoothly. A 0 for one side keeps the shape; both 0, or a negative number, is an error. The drawing history is dropped. | `small.resize(100, 0)` |
+| `g.mask(other)` | **New:** multiply the picture's alpha by the alpha of picture `other` (scaled to this size first). The history is dropped. | `photo.mask(hole)` |
+| `f.filter(kind, value=None)` | **New:** change everything drawn so far, in place. Kinds: `"threshold"` (0 to 1, default 0.5), `"gray"`, `"opaque"`, `"invert"`, `"blur"` (radius in pixels, default 1), `"posterize"` (2 to 255 levels, required), `"erode"`, `"dilate"`. Alpha is kept, except by `"opaque"`. An unknown kind or a value out of range is a `ValueError`. A picture has `g.filter(...)` too. `"posterize"`, `"erode"` and `"dilate"` are faster with `pip install funground[extras]`; the result is the same. | `f.filter("blur", 3)` |
 
 **Rules worth knowing**
 

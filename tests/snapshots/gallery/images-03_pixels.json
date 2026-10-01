@@ -9,6 +9,10 @@
   "op": "Clear"
  },
  {
+  "on": false,
+  "op": "SetAntialias"
+ },
+ {
   "height": 160.0,
   "op": "Image",
   "source": "graphics-1",
@@ -16,6 +20,10 @@
   "width": 160.0,
   "x": 20.0,
   "y": 20.0
+ },
+ {
+  "on": true,
+  "op": "SetAntialias"
  },
  {
   "color": [
@@ -176,7 +184,151 @@
   "y": 283
  },
  {
-  "checksum": 2558959945,
+  "height": 50,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 80,
+  "x": 0,
+  "y": 350
+ },
+ {
+  "height": 50,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 80,
+  "x": 80,
+  "y": 350
+ },
+ {
+  "height": 50,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 80,
+  "x": 160,
+  "y": 350
+ },
+ {
+  "height": 50,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    30,
+    144,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 80,
+  "x": 240,
+  "y": 350
+ },
+ {
+  "height": 50,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    218,
+    112,
+    214,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 80,
+  "x": 320,
+  "y": 350
+ },
+ {
+  "height": 50,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    165,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 80,
+  "x": 400,
+  "y": 350
+ },
+ {
+  "height": 50,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    128,
+    128,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 80,
+  "x": 480,
+  "y": 350
+ },
+ {
+  "height": 50,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    220,
+    20,
+    60,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14
+  },
+  "width": 80,
+  "x": 560,
+  "y": 350
+ },
+ {
+  "checksum": 186928011,
   "height": 400,
   "op": "Pixels",
   "width": 640,

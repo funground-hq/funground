@@ -377,6 +377,14 @@ f.set() makes one pixel a colour, and f.get() reads one back as a colour. f.load
 
 Source: [`examples/gallery/images/03_pixels.py`](../../examples/gallery/images/03_pixels.py)
 
+### Changing pictures: copy, resize, mask and filters
+
+![Changing pictures: copy, resize, mask and filters](images/images-04_filters.png)
+
+picture.copy() makes a new picture that you can change without touching the first. picture.resize(w, h) changes the size of a picture. picture.mask(other) lets the other picture decide what shows through. picture.filter(kind) changes every pixel: "threshold", "gray", "invert", "blur", "posterize", "erode", "dilate" or "opaque". Some take a value, like picture.filter("blur", 3). f.filter() does the same to the whole canvas: change what you have drawn so far.
+
+Source: [`examples/gallery/images/04_filters.py`](../../examples/gallery/images/04_filters.py)
+
 ## Compositing
 
 ### Blend modes, opacity and shadows

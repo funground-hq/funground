@@ -176,3 +176,189 @@ def rgba_to_bgra(rgba: bytes, width: int, height: int) -> bytes:
         out[j + 1] = (rgba[j + 1] * a + 127) // 255
         out[j + 2] = (rgba[j] * a + 127) // 255        # red
     return bytes(out)
+
+
+# ------------------------------------------------------------------ copy, resize, mask (S-080, P9)
+def resize_bgra(bgra: bytes, width: int, height: int, new_width: int, new_height: int) -> bytes:
+    """Premultiplied BGRA scaled smoothly to a new size (pygame-ce ``smoothscale``)."""
+    if (width, height) == (new_width, new_height):
+        return bytes(bgra)
+    surface = pygame.image.frombuffer(bytearray(bgra), (width, height), "BGRA")
+    return pygame.image.tobytes(pygame.transform.smoothscale(surface, (new_width, new_height)), "BGRA")
+
+
+_NOT_OPAQUE = re.compile(rb"[\x00-\xfe]")
+
+
+def mask_bgra(bgra: bytes, mask_alpha: bytes) -> bytes:
+    """Multiply the alpha of premultiplied BGRA by *mask_alpha* (one byte per pixel).
+
+    Premultiplied colour is multiplied too, which is the same as multiplying the alpha alone.
+    Only pixels where the mask is not fully opaque need any arithmetic.
+    """
+    out = bytearray(bgra)
+    for m in _NOT_OPAQUE.finditer(mask_alpha):
+        i = m.start()
+        a = mask_alpha[i]
+        j = i * 4
+        out[j] = (out[j] * a + 127) // 255
+        out[j + 1] = (out[j + 1] * a + 127) // 255
+        out[j + 2] = (out[j + 2] * a + 127) // 255
+        out[j + 3] = (out[j + 3] * a + 127) // 255
+    return bytes(out)
+
+
+# ------------------------------------------------------------------ filters (S-080, P10)
+FILTER_KINDS = ("threshold", "gray", "opaque", "invert", "blur", "posterize", "erode", "dilate")
+
+
+def check_filter(kind, value):
+    """Check a ``filter(kind, value)`` call (contract P10) and return the value to use.
+
+    Raises ``ValueError`` for an unknown kind or a value out of range, ``TypeError`` for a value
+    that is not a number. Kinds that take no value ignore it, as p5 does.
+    """
+    if kind not in FILTER_KINDS:
+        raise ValueError(f"f.filter(): unknown filter {kind!r}. Choose one of: " + ", ".join(FILTER_KINDS))
+
+    def number() -> float:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise TypeError(f"f.filter({kind!r}): the value must be a number, not {value!r}")
+        if value != value or value in (float("inf"), float("-inf")):
+            raise ValueError(f"f.filter({kind!r}): the value must be a finite number, not {value!r}")
+        return value
+
+    if kind == "threshold":
+        v = 0.5 if value is None else number()
+        if not 0 <= v <= 1:
+            raise ValueError("f.filter('threshold'): the value must be from 0 to 1 (default 0.5)")
+        return float(v)
+    if kind == "blur":
+        v = 1 if value is None else number()
+        if v < 0:
+            raise ValueError("f.filter('blur'): the radius must be 0 or more (default 1)")
+        return float(v)
+    if kind == "posterize":
+        if value is None:
+            raise ValueError("f.filter('posterize') needs a value: how many levels each colour gets, "
+                             "from 2 to 255, e.g. f.filter('posterize', 4)")
+        v = number()
+        if v != int(v) or not 2 <= v <= 255:
+            raise ValueError("f.filter('posterize'): the value must be a whole number from 2 to 255")
+        return int(v)
+    return None
+
+
+def luminance_plane(rgba: bytes) -> bytes:
+    """The luminance 0.299 R + 0.587 G + 0.114 B of each pixel, rounded to the nearest whole number."""
+    tr = [299 * v for v in range(256)]
+    tg = [587 * v for v in range(256)]
+    tb = [114 * v for v in range(256)]
+    return bytes((tr[r] + tg[g] + tb[b] + 500) // 1000
+                 for r, g, b in zip(rgba[0::4], rgba[1::4], rgba[2::4]))
+
+
+def _gray_like(rgba: bytes, plane: bytes) -> bytearray:
+    """*rgba* with red, green and blue all set from *plane*; alpha kept."""
+    out = bytearray(rgba)
+    out[0::4] = plane
+    out[1::4] = plane
+    out[2::4] = plane
+    return out
+
+
+def _map_channels(rgba: bytes, table: bytes) -> bytearray:
+    """Apply a 256-byte lookup table to red, green and blue; alpha kept."""
+    out = bytearray(rgba)
+    for c in (0, 1, 2):
+        out[c::4] = bytes(rgba[c::4]).translate(table)
+    return out
+
+
+def posterize_table(levels: int) -> bytes:
+    """Each value v becomes round(v (L-1) / 255) * 255 / (L-1), rounded half up, as whole numbers."""
+    n = levels - 1
+    return bytes(((2 * ((2 * v * n + 255) // 510) * 255 + n) // (2 * n)) for v in range(256))
+
+
+def _extreme_plane(plane: bytes, width: int, height: int, pick) -> bytes:
+    """The minimum or maximum (*pick* = min or max) over each 3 x 3 neighbourhood, edges repeating."""
+    rows = []
+    for y in range(height):
+        row = plane[y * width:(y + 1) * width]
+        rows.append(bytes(map(pick, row[:1] + row[:-1], row, row[1:] + row[-1:])))
+    out = bytearray()
+    for y in range(height):
+        out += bytes(map(pick, rows[max(y - 1, 0)], rows[y], rows[min(y + 1, height - 1)]))
+    return bytes(out)
+
+
+def _extreme_plain(rgba: bytes, width: int, height: int, pick) -> bytearray:
+    out = bytearray(rgba)
+    for c in (0, 1, 2):
+        out[c::4] = _extreme_plane(bytes(rgba[c::4]), width, height, pick)
+    return out
+
+
+def _pillow():
+    """The Pillow modules when the optional extra is installed, else None."""
+    try:
+        from PIL import Image, ImageFilter
+    except ImportError:
+        return None
+    return Image, ImageFilter
+
+
+def _posterize(rgba: bytes, width: int, height: int, levels: int) -> bytearray:
+    table = posterize_table(levels)
+    pil = _pillow()
+    if pil is None:
+        return _map_channels(rgba, table)
+    Image, _ = pil
+    image = Image.frombytes("RGBA", (width, height), bytes(rgba))
+    out = image.point(list(table) * 3 + list(range(256)))     # red, green, blue by table; alpha unchanged
+    return bytearray(out.tobytes())
+
+
+def _extreme(rgba: bytes, width: int, height: int, kind: str) -> bytearray:
+    pil = _pillow()
+    if pil is None:
+        return _extreme_plain(rgba, width, height, min if kind == "erode" else max)
+    Image, ImageFilter = pil
+    image = Image.frombytes("RGBA", (width, height), bytes(rgba))
+    red, green, blue, alpha = image.split()
+    rank = ImageFilter.MinFilter(3) if kind == "erode" else ImageFilter.MaxFilter(3)
+    merged = Image.merge("RGBA", (red.filter(rank), green.filter(rank), blue.filter(rank), alpha))
+    return bytearray(merged.tobytes())
+
+
+def filter_bgra(bgra: bytes, width: int, height: int, kind: str, value=None) -> bytes:
+    """Premultiplied BGRA with a filter applied (contract P10); *kind* and *value* as ``check_filter``.
+
+    Everything except blur works on plain RGBA (not premultiplied), as P10's formulas assume. Blur
+    works on the premultiplied pixels, so see-through edges blur without a coloured fringe.
+    """
+    value = check_filter(kind, value)
+    if kind == "blur":
+        radius = int(value + 0.5)
+        if radius == 0:
+            return bytes(bgra)
+        surface = pygame.image.frombuffer(bytearray(bgra), (width, height), "BGRA")
+        blurred = pygame.transform.gaussian_blur(surface, radius, True)
+        return pygame.image.tobytes(blurred, "BGRA")
+    rgba = bytes(bgra_to_rgba(bgra, width, height))
+    if kind == "gray":
+        out = _gray_like(rgba, luminance_plane(rgba))
+    elif kind == "threshold":
+        cut = bytes(255 if v / 255 > value else 0 for v in range(256))
+        out = _gray_like(rgba, luminance_plane(rgba).translate(cut))
+    elif kind == "opaque":
+        out = bytearray(rgba)
+        out[3::4] = b"\xff" * (width * height)
+    elif kind == "invert":
+        out = _map_channels(rgba, bytes(255 - v for v in range(256)))
+    elif kind == "posterize":
+        out = _posterize(rgba, width, height, value)
+    else:                                                  # erode or dilate
+        out = _extreme(rgba, width, height, kind)
+    return rgba_to_bgra(bytes(out), width, height)
