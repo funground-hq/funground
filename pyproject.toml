@@ -14,6 +14,7 @@ dependencies = ["pygame-ce>=2.5", "pycairo>=1.27", "fonttools>=4.55", "uharfbuzz
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+extras = ["pillow>=11"]
 
 [tool.setuptools]
 packages = ["funground", "funground.platform", "funground.renderers", "funground.export"]
