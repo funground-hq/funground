@@ -36,7 +36,7 @@ ALLOWED_METHODS = frozenset({
     "rect_mode", "ellipse_mode", "image_mode",
     "circle", "ellipse", "rect", "line", "point", "square", "triangle", "quad", "polygon", "arc",
     # text
-    "text", "text_align", "text_ascent", "text_descent", "text_leading", "text_box",
+    "text", "text_align", "text_ascent", "text_descent", "text_leading", "text_box", "text_path",
     "text_width", "text_size", "load_font", "text_font", "text_style",
     # transforms and the state stack
     "translate", "rotate", "scale", "shear_x", "shear_y", "apply_matrix", "reset_matrix",

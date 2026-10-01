@@ -300,6 +300,11 @@ def text(message: object, x: float, y: float, color: Color | None = None) -> Non
     active_sketch().text(message, x, y, color)
 
 
+def text_path(message: object, x: float, y: float) -> PathBuilder:
+    """The outlines of f.text(message, x, y) as a path: cut it, outline it, fill it, clip with it."""
+    return active_sketch().text_path(message, x, y)
+
+
 def text_align(horizontal: str, vertical: str | None = None) -> None:
     """Which point of the text (x, y) means: "left"/"center"/"right", then "top"/"center"/"baseline"/"bottom"."""
     active_sketch().text_align(horizontal, vertical)

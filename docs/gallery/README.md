@@ -161,6 +161,14 @@ f.text_style() switches between the four built-in styles: normal, bold, italic a
 
 Source: [`examples/gallery/text/04_fonts.py`](../../examples/gallery/text/04_fonts.py)
 
+### Letters as shapes
+
+![Letters as shapes](images/text-05_text_path.png)
+
+f.text_path() gives the outlines of a word as a path, set exactly as f.text() would set it. Cut the letters out of a panel with difference(), draw only their edge with expand_stroke(), or fill them with a gradient. The path has no colour, so you choose one when you draw it.
+
+Source: [`examples/gallery/text/05_text_path.py`](../../examples/gallery/text/05_text_path.py)
+
 ## Animation and time
 
 ### Bounce
