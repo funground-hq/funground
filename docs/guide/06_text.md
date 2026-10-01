@@ -152,6 +152,11 @@ call to `f.text_size()`.
 Both are part of the drawing state, so `with f.saved_state():` restores them, exactly like
 `f.fill()` or `f.text_size()`.
 
+When you save a PDF, its text is real text: you can select it, search it and copy it in a PDF
+viewer. The PDF carries the letters of each font it uses, so it looks the same on any computer.
+Some fonts say they must not be put inside a file. Text in such a font is saved as letter shapes,
+so it looks right but cannot be selected. SVG files always save text as letter shapes.
+
 ## Spacing, ligatures and variable fonts
 
 `f.text_tracking(pixels)` adds space after every letter. A negative number pulls the letters
