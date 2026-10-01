@@ -35,6 +35,7 @@ Their licences apply to them as installed.
 | [fontTools](https://github.com/fonttools/fonttools) | MIT | — |
 | [uharfbuzz](https://github.com/harfbuzz/uharfbuzz) | Apache-2.0 | [HarfBuzz](https://harfbuzz.github.io) (Old MIT licence) |
 | [skia-pathops](https://github.com/fonttools/skia-pathops) | BSD-3-Clause | a cut-down build of [Skia](https://skia.org)'s path code (BSD-3-Clause) |
+| [svgelements](https://github.com/meerk40t/svgelements) | MIT | — |
 
 The licence versions shown are those declared by the releases funground is tested with
 (pygame-ce 2.5.8, pycairo 1.29.1, fontTools 4.66, uharfbuzz 0.56). Always check the package you

@@ -11,7 +11,7 @@ tests, a gallery example (golden, snapshot, originality check), a guide section 
 Reference entry; CI green on 12 cells. Other tools' API names are cited with where they were checked.
 
 **Decisions:** D-040 rounded corners (maintainer); D-042 typography names (Claude, D-034);
-**D-041 SVG library: pending, the maintainer's call (a new dependency)**.
+D-041 SVG library: svgelements (maintainer).
 
 ## Story set
 
@@ -27,8 +27,9 @@ Reference entry; CI green on 12 cells. Other tools' API names are cited with whe
 ### S-091 Mixed styles in one text — E-15 *(contract row to pin after S-090)*
 - [x] S-091.1 A formatted-text object (DrawBot `FormattedString`): runs with their own font, size, colour, tracking and features, drawn with `text` and `text_box`
 
-### S-092 SVG import — E-16 *(needs D-041)*
-- [ ] S-092.1 `f.load_svg(path)` returns a picture drawn from the SVG's shapes (vector in PDF/SVG); paths available for booleans
+### S-092 SVG import — E-16 *(D-041 = A; contract P11)*
+- [ ] S-092.1 `funground/svg.py` (only importer of svgelements); `f.load_svg(path)` → vector picture; `f.svg_paths(path)` → path builders
+- [ ] S-092.2 Tests with SVG files written by the tests; gallery `images/` (an original SVG drawn for the example); guide chapter 9; chapters 14/15 (`loadShape`); Quick Reference; changelog; THIRD_PARTY_LICENSES
 
 ### S-093 Spike: searchable PDF text — E-15 ✅
 *Result:* `spikes/09_pdf_text/README.md`.

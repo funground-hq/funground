@@ -9,12 +9,13 @@ import ast
 from pathlib import Path
 
 PACKAGE = Path(__file__).resolve().parent.parent / "funground"
-BACKENDS = {"pygame", "cairo", "skia", "blend2d", "moderngl", "OpenGL", "pathops"}
+BACKENDS = {"pygame", "cairo", "skia", "blend2d", "moderngl", "OpenGL", "pathops", "svgelements"}
 # Which backend each provider directory may import (S-026: pygame is platform-only now).
 # imaging.py reads image files with pygame-ce (ADR-004, D-028).
 ALLOWED = {"platform/": {"pygame"}, "renderers/": {"cairo", "skia", "blend2d", "pygame"}, "export/": {"cairo"},
            "imaging.py": {"pygame"},
-           "pathops.py": {"pathops"}}   # path booleans (ADR-005, D-037)
+           "pathops.py": {"pathops"},
+           "svg.py": {"svgelements"}}       # SVG import (D-041)   # path booleans (ADR-005, D-037)
 
 
 def _imports(path: Path) -> set[str]:
