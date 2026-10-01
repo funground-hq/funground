@@ -9,7 +9,7 @@ never changes once built, which is what makes reuse safe.
 from __future__ import annotations
 
 from . import pathops
-from .geometry import Path, Transform
+from .geometry import Path, Transform, rect_radii
 
 
 class PathBuilder:
@@ -49,9 +49,18 @@ class PathBuilder:
         return self
 
     # ---- shapes (each adds a closed sub-path and returns self; contract F11)
-    def rect(self, x: float, y: float, w: float, h: float) -> "PathBuilder":
-        """Add a rectangle; (x, y) is its top-left corner."""
-        self._path = Path(self._path.segments + Path.rect(x, y, w, h).segments)
+    def rect(self, x: float, y: float, w: float, h: float, *radii: float) -> "PathBuilder":
+        """Add a rectangle; (x, y) is its top-left corner. Optional corner radii work as for f.rect()."""
+        r = rect_radii(radii, w, h, "rect")
+        if any(r):
+            if w < 0:
+                x, w = x + w, -w
+            if h < 0:
+                y, h = y + h, -h
+            shape = Path.rounded_rect(x, y, w, h, rect_radii(r, w, h, "rect"))
+        else:
+            shape = Path.rect(x, y, w, h)
+        self._path = Path(self._path.segments + shape.segments)
         return self
 
     def ellipse(self, x: float, y: float, w: float, h: float) -> "PathBuilder":

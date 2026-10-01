@@ -105,13 +105,13 @@ center_y = f.height / 2
 |---|---|---|
 | `f.circle(x, y, diameter)` | Circle centred at (x, y). The last argument is the **diameter**, not the radius. | `f.circle(100, 80, 40)` |
 | `f.ellipse(x, y, width, height)` | Ellipse centred at (x, y). | `f.ellipse(220, 80, 100, 50)` |
-| `f.rect(x, y, width, height)` | Rectangle whose (x, y) is the **top-left** corner. | `f.rect(40, 160, 120, 60)` |
+| `f.rect(x, y, width, height, *radii)` | Rectangle whose (x, y) is the **top-left** corner. Add one radius to round all corners, or four radii (top-left, top-right, bottom-right, bottom-left), as in p5. Radii cannot be negative; big ones are cut to half the shorter side. | `f.rect(40, 160, 120, 60, 12)` |
 | `f.rect_mode(mode)` | How `rect` and `square` read their numbers: `"corner"` (default), `"corners"` (two opposite corners), `"center"`, `"radius"` (centre, then half-sizes). Saved by `push`/`pop`. | `f.rect_mode("center")` |
 | `f.ellipse_mode(mode)` | How `ellipse`, `circle` and `arc` read their numbers: `"center"` (default), `"radius"`, `"corner"` (top-left of the box), `"corners"`. Saved by `push`/`pop`. | `f.ellipse_mode("corner")` |
 | `f.image_mode(mode)` | How `image` reads its numbers: `"corner"` (default), `"center"`, `"corners"` (needs a width and height: the opposite corner). Saved by `push`/`pop`. | `f.image_mode("center")` |
 | `f.line(x1, y1, x2, y2)` | Line from one point to another. | `f.line(220, 160, 340, 220)` |
 | `f.point(x, y)` | A dot in the stroke colour, about `stroke_width` across. | `f.point(400, 100)` |
-| `f.square(x, y, size)` | Square whose (x, y) is the **top-left** corner. | `f.square(40, 40, 60)` |
+| `f.square(x, y, size, *radii)` | Square whose (x, y) is the **top-left** corner. Takes corner radii like `rect`. | `f.square(40, 40, 60, 10)` |
 | `f.triangle(x1, y1, x2, y2, x3, y3)` | Filled triangle through three corners. | `f.triangle(10, 90, 90, 90, 50, 10)` |
 | `f.quad(x1, y1, … x4, y4)` | Four-sided shape through four corners in order. | `f.quad(20, 20, 80, 20, 80, 80, 20, 80)` |
 | `f.polygon(points)` | Closed shape through a list of `(x, y)` points. | `f.polygon([(0, 0), (50, 20), (20, 60)])` |
@@ -766,7 +766,7 @@ you can draw again and again.
 | `.curve_to(cx1, cy1, cx2, cy2, x, y)` | Cubic Bézier: two control points, then the end point. | |
 | `.quad_to(cx, cy, x, y)` | Quadratic Bézier: one control point, then the end point. | |
 | `.close()` | Join back to where the sub-path started. Only closed paths are filled. | |
-| `.rect(x, y, w, h)` | Add a closed rectangle; (x, y) is its top-left corner. Not changed by `rect_mode`. | `f.path().rect(10, 10, 80, 50)` |
+| `.rect(x, y, w, h, *radii)` | Add a closed rectangle; (x, y) is its top-left corner. Takes one or four corner radii like `f.rect`. Not changed by `rect_mode`. | `f.path().rect(10, 10, 80, 50, 8)` |
 | `.ellipse(x, y, w, h)` | Add a closed ellipse centred on (x, y), width `w`, height `h`. Not changed by `ellipse_mode`. | `f.path().ellipse(50, 50, 80, 40)` |
 | `.circle(x, y, d)` | Add a closed circle centred on (x, y), diameter `d`. | `f.path().circle(50, 50, 40)` |
 | `.polygon(points)` | Add a closed shape through a list of `(x, y)` corners (3 or more). | `f.path().polygon([(0, 0), (40, 0), (20, 30)])` |
@@ -904,7 +904,7 @@ The public v0.6 student-facing API. Everything is reached as `f.<name>`.
 | `f.background(color)` | Clear/fill the whole window. |
 | `f.circle(x, y, d)` | Centred circle (diameter). |
 | `f.ellipse(x, y, w, h)` | Centred ellipse. |
-| `f.rect(x, y, w, h)` | Top-left rectangle. |
+| `f.rect(x, y, w, h)` | Top-left rectangle. Add a radius (or four) to round the corners. |
 | `f.rect_mode(m)`, `f.ellipse_mode(m)`, `f.image_mode(m)` | Place by corner, corners, centre or radius. |
 | `f.line(x1, y1, x2, y2)` | Line. |
 | `f.point(x, y)` | Dot in the stroke colour. |

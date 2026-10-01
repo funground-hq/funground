@@ -238,9 +238,9 @@ def ellipse(x: float, y: float, width: float, height: float) -> None:
     active_sketch().ellipse(x, y, width, height)
 
 
-def rect(x: float, y: float, width: float, height: float) -> None:
-    """Draw a rectangle from its top-left corner."""
-    active_sketch().rect(x, y, width, height)
+def rect(x: float, y: float, width: float, height: float, *radii: float) -> None:
+    """Draw a rectangle from its top-left corner. Optional corner radii: one, or four (top-left, top-right, bottom-right, bottom-left)."""
+    active_sketch().rect(x, y, width, height, *radii)
 
 
 def rect_mode(mode: str) -> None:
@@ -266,9 +266,9 @@ def point(x: float, y: float) -> None:
     active_sketch().point(x, y)
 
 
-def square(x: float, y: float, size: float) -> None:
-    """A square placed by its top-left corner, like rect()."""
-    active_sketch().square(x, y, size)
+def square(x: float, y: float, size: float, *radii: float) -> None:
+    """A square placed by its top-left corner, like rect(). Optional corner radii work as for rect()."""
+    active_sketch().square(x, y, size, *radii)
 
 
 def triangle(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> None:

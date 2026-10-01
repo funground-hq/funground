@@ -22,7 +22,7 @@ V05_FUNCTIONS = {
     "no_stroke": "() -> 'None'",
     "point": "(x: 'float', y: 'float') -> 'None'",
     "random": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
-    "rect": "(x: 'float', y: 'float', width: 'float', height: 'float') -> 'None'",
+    "rect": "(x: 'float', y: 'float', width: 'float', height: 'float', *radii: 'float') -> 'None'",
     "size": "(width: 'int', height: 'int', *, title: 'str' = 'funground', fps: 'int' = 60) -> 'None'",
     "stop": "() -> 'None'",
     "stroke": "(color: 'Color', *more: 'float') -> 'None'",
@@ -56,7 +56,7 @@ ADDED_FUNCTIONS = {
     # Sprint 4, S-037: text measurement (contract T6).
     "text_width": "(message: 'object') -> 'float'",
     # Sprint 5, S-041: more shapes, clear, no_clip (contract F5-F7).
-    "square": "(x: 'float', y: 'float', size: 'float') -> 'None'",
+    "square": "(x: 'float', y: 'float', size: 'float', *radii: 'float') -> 'None'",
     "triangle": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float') -> 'None'",
     "quad": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float', x4: 'float', y4: 'float') -> 'None'",
     "polygon": "(points: 'list[tuple[float, float]]') -> 'None'",
