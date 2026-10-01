@@ -89,6 +89,13 @@ Outlines, queries and moves (contract F12):
 | `path.rotate(angle, center)` | `path.rotate(degrees, cx, cy)` (clockwise on screen) |
 | `path.copy()` | `path.copy()` |
 
+Letters as a path (contract F13):
+
+| DrawBot `BezierPath` | funground |
+|---|---|
+| `path.text(txt, offset, font, fontSize, align)` | `f.text_path(message, x, y)` (uses the current font, size, style and alignment; a `"
+"` starts a new line) |
+
 DrawBot's `translate`, `scale` and `rotate` change the path itself. funground's give back a new
 path. DrawBot turns anticlockwise because its y axis points up; funground's y axis points down,
 so a positive angle turns clockwise, as in `f.rotate`.

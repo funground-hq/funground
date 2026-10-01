@@ -152,4 +152,44 @@ call to `f.text_size()`.
 Both are part of the drawing state, so `with f.saved_state():` restores them, exactly like
 `f.fill()` or `f.text_size()`.
 
+## Letters as shapes
+
+`f.text_path(message, x, y)` gives you the outlines of the letters as a path. It sets the text
+exactly as `f.text()` would: the same font, style, size, alignment and lines. But it draws nothing.
+You get a shape, and you choose what to do with it.
+
+```py
+import funground as f
+
+
+def setup():
+    f.size(400, 200)
+
+
+def draw():
+    f.background("white")
+    f.text_style("bold")
+    f.text_size(100)
+    f.text_align("center", "center")
+    word = f.text_path("CUT", 200, 100)
+
+    panel = f.path().rect(20, 20, 360, 160)
+    f.fill("navy")
+    f.draw_path(panel.difference(word))      # the letters are holes in the panel
+
+
+f.run()
+```
+
+The path has no colour. You pick one when you draw it, and it can be a gradient. Because it is
+a path, everything from chapter 9 works on it: `difference()`, `expand_stroke()`, `f.clip()` and
+`translate()`. The path is not moved by `f.translate()` or `f.rotate()` until you draw it, like
+any other path.
+
+![Letters as shapes](../gallery/images/text-05_text_path.png)
+
+| Function | What it does |
+|---|---|
+| `f.text_path(message, x, y)` | The outlines of `f.text(message, x, y)` as a new path. An empty message gives an empty path. |
+
 **Next:** [7. Animation and time](07_animation_and_time.md)

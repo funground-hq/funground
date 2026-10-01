@@ -947,6 +947,12 @@ class Sketch:
     def _emit_lines(self, lines: list[str], x: float, y: float, color: Color, style, top: float | None = None) -> None:
         """Emit one Text op per line, top-left anchored, so that (x, y) is the block's alignment point
         (contract T7/T9). *top*, when given, is the block's top edge (text boxes place it themselves)."""
+        for line, left, line_top in self._line_layout(lines, x, y, style, top):
+            self._emit(ir.Text(line, left, line_top, color, style))
+
+    def _line_layout(self, lines: list[str], x: float, y: float, style, top: float | None = None):
+        """Yield (line, left, top) for each non-empty line: the one layout `text`, `text_box` and
+        `text_path` all share, so they cannot drift apart (contract T7/T9, F13)."""
         from .typography import effective_font, text_metrics, text_width
 
         font = effective_font(style)
@@ -962,7 +968,7 @@ class Sketch:
                 w = text_width(line, style.text_size, font)
                 left -= w / 2 if style.text_align == "center" else w
             if line:
-                self._emit(ir.Text(line, left, top + i * leading if i else top, color, style))
+                yield line, left, top + i * leading if i else top
 
     def _text_color(self, color: ColorLike | None, style) -> Color:
         if color is not None:
@@ -1131,6 +1137,18 @@ class Sketch:
     def text(self, message: object, x: float, y: float, color: ColorLike | None = None) -> None:
         style = self.style
         self._emit_lines(str(message).split("\n"), x, y, self._text_color(color, style), style)
+
+    def text_path(self, message: object, x: float, y: float) -> PathBuilder:
+        """The glyph outlines `text(message, x, y)` would draw now, as a new path (contract F13)."""
+        from .typography import effective_font
+
+        style = self.style
+        font = effective_font(style)
+        geometry = Path()
+        for line, left, top in self._line_layout(str(message).split("\n"), x, y, style):
+            for op in font.shape(line, style.text_size).outline_ops(left, top, WHITE):
+                geometry = Path(geometry.segments + op.path.segments)
+        return PathBuilder(geometry)
 
     def text_width(self, message: object) -> float:
         """Advance width of *message* in logical pixels at the current text_size (contract T6)."""

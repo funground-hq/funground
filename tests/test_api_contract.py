@@ -154,6 +154,8 @@ ADDED_FUNCTIONS = {
     "show": "() -> 'None'",
     # S-077 images
     "load_image": "(path: 'str') -> 'Picture'",
+    # S-088 text as a path
+    "text_path": "(message: 'object', x: 'float', y: 'float') -> 'PathBuilder'",
     # S-084 pages
     "new_page": "(width: 'int | str | None' = None, height: 'int | None' = None) -> 'None'",
     "page_count": "() -> 'int'",

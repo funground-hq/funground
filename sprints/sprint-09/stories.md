@@ -25,8 +25,8 @@ Quick Reference entry; CI green on 12 cells; the boundary test keeps `pathops` i
 - [x] S-087.2 Tests; gallery example; guide; Quick Reference; changelog
 
 ### S-088 Text as a path — E-15 *(contract F13)*
-- [ ] S-088.1 `f.text_path(message, x, y)` from the same layout as `f.text`
-- [ ] S-088.2 Tests; gallery example (letters cut out of a shape); guide chapter 6; Quick Reference; changelog
+- [x] S-088.1 `f.text_path(message, x, y)` from the same layout as `f.text`
+- [x] S-088.2 Tests; gallery example (letters cut out of a shape); guide chapter 6; Quick Reference; changelog
 
 ## Out of scope this sprint
 Rich typography and SVG import (Sprint 10); sound, video, controls and the release (Sprint 11).

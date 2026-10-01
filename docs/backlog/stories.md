@@ -159,4 +159,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-085 | E-18 | Script follow-ups: top-level `full_screen()`, memory note | 8 — done |
 | S-086 | E-11 | Path shapes and booleans (`union`, `intersection`, `difference`, `xor`, `remove_overlap`; skia-pathops, D-037) | 9 — done |
 | S-087 | E-11 | Path `expand_stroke`, `bounds`, `contains`, `translate`/`scale`/`rotate`, `copy` | 9 — done |
-| S-088 | E-15 | `f.text_path()`: letters as a path | 9 |
+| S-088 | E-15 | `f.text_path()`: letters as a path | 9 — done |
