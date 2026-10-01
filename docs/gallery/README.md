@@ -333,6 +333,16 @@ f.save_frames("frames/####.png", 30) saves this frame and the next 29 as numbere
 
 Source: [`examples/gallery/saving/03_save_frames.py`](../../examples/gallery/saving/03_save_frames.py)
 
+## Pictures and images
+
+### Loading and drawing an image
+
+![Loading and drawing an image](images/images-01_load_image.png)
+
+f.load_image() reads a picture file (PNG, JPEG, GIF, BMP, TGA) and gives you a picture. f.image() draws it, at its own size or stretched. It follows f.translate(), f.rotate() and f.opacity() like any other drawing.
+
+Source: [`examples/gallery/images/01_load_image.py`](../../examples/gallery/images/01_load_image.py)
+
 ## Compositing
 
 ### Blend modes, opacity and shadows

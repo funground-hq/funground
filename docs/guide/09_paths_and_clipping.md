@@ -178,4 +178,69 @@ A picture can hold another picture too, but never itself: `f.image(g, ...)` wher
 drawing onto itself raises `ValueError`. Save a picture on its own with `g.save(path)`,
 exactly like `f.save(path)` for the window.
 
+## Pictures and images
+
+A picture does not have to be drawn by you. `f.load_image(path)` reads an image file and
+gives you a picture. It reads PNG, JPEG, GIF, BMP and TGA files. Transparency is kept. A GIF
+gives you its first frame.
+
+```py
+photo = f.load_image("holiday.jpg")
+f.image(photo, 0, 0)
+```
+
+**Where files are looked for.** A path like `"holiday.jpg"` is looked for in the folder of
+your sketch file first. Then it is looked for in the folder you ran Python from. If it is in
+neither place, funground tells you both places it looked.
+
+**Phone photos.** Phones often save a photo sideways and add a note saying "turn this".
+funground reads that note for JPEG files and turns the photo the right way up for you.
+
+**Size.** `photo.width` and `photo.height` are the size of the file in pixels. Drawn with
+`f.image(photo, x, y)`, the photo covers that many pixels of your canvas. Give a width and a
+height to stretch it: `f.image(photo, x, y, 200, 150)`. It follows `f.translate()`,
+`f.rotate()`, `f.clip()` and `f.opacity()` like everything else.
+
+**Drawing on it.** A loaded picture is a picture like any other, so `photo.fill("red")` and
+`photo.circle(50, 50, 20)` draw on it. The file on your disk never changes.
+
+This sketch makes a small image file first, so that it runs anywhere, and then loads it:
+
+```python
+import funground as f
+
+f.size(400, 200)
+
+# Make an image file to load. You would normally bring your own.
+stamp = f.create_graphics(60, 60)
+stamp.background("gold")
+stamp.fill("crimson")
+stamp.circle(30, 30, 40)
+stamp.save("stamp.png")
+
+loaded = f.load_image("stamp.png")      # found next to this file, or in the current folder
+
+
+def draw():
+    f.background("white")
+    f.image(loaded, 20, 20)                     # its own size
+    f.image(loaded, 120, 20, 160, 160)          # stretched
+    f.opacity(128)
+    f.image(loaded, 300, 60)                    # half see-through
+
+
+f.run()
+```
+
+![Loading an image](../gallery/images/images-01_load_image.png)
+
+PDF and SVG files keep a loaded picture as pixels, because that is all it has. If you
+paint an opaque `photo.background(...)` on it first, it becomes a normal drawing again.
+SVG files cannot be loaded as images yet; funground tells you so.
+
+| Call | What it does |
+|---|---|
+| `f.load_image(path)` | Read an image file and return a picture. |
+| `photo.width`, `photo.height` | The image's size in pixels. |
+
 **Next:** [10. Interaction](10_interaction.md)

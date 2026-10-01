@@ -225,12 +225,12 @@ def default_font() -> FontResource:
     return _builtin(STYLE_FILES["normal"])
 
 
-def _resolve_font_path(path: str, base_dir: str | None) -> str:
-    """Contract T11: a relative path is found next to the sketch file first, then the cwd."""
+def _resolve_path(path: str, base_dir: str | None, who: str, what: str) -> str:
+    """Contract T11/P4: a relative path is found next to the sketch file first, then the cwd."""
     if os.path.isabs(path):
         if os.path.exists(path):
             return os.path.normpath(path)
-        raise FileNotFoundError(f"f.load_font(): no font file found at {path!r}")
+        raise FileNotFoundError(f"{who}: no {what} file found at {path!r}")
     tried = []
     if base_dir is not None:
         candidate = os.path.join(base_dir, path)
@@ -242,9 +242,13 @@ def _resolve_font_path(path: str, base_dir: str | None) -> str:
     if os.path.exists(candidate):
         return os.path.normpath(candidate)
     raise FileNotFoundError(
-        f"f.load_font(): no font file found at '{tried[0]}'" +
+        f"{who}: no {what} file found at '{tried[0]}'" +
         (f" or '{tried[1]}'" if len(tried) > 1 else "")
     )
+
+
+def _resolve_font_path(path: str, base_dir: str | None) -> str:
+    return _resolve_path(path, base_dir, "f.load_font()", "font")
 
 
 def load_font(path: str, base_dir: str | None = None) -> Font:

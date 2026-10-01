@@ -616,6 +616,21 @@ def create_graphics(width: int, height: int) -> Picture:
     return active_sketch().create_graphics(width, height)
 
 
+def load_image(path: str) -> Picture:
+    """Read an image file (PNG, JPEG, GIF, BMP, TGA...) and return a picture; draw it with f.image().
+    A relative path is looked for next to the sketch file first, then in the current folder.
+    Phone photos are turned the right way up."""
+    caller = inspect.currentframe()
+    base_dir = None
+    if caller is not None and caller.f_back is not None:
+        sketch_file = caller.f_back.f_globals.get("__file__")
+        if sketch_file:
+            import os
+
+            base_dir = os.path.dirname(os.path.abspath(sketch_file))
+    return active_sketch().load_image(path, base_dir=base_dir)
+
+
 def image(picture, x: float, y: float, width: float | None = None, height: float | None = None) -> None:
     """Draw *picture* at (x, y), stretched to width x height (default: its own size), as it
     is at this moment - later drawing on it does not change what was placed."""

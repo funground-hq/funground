@@ -234,7 +234,7 @@ def test_pictures_inside_pictures_and_self_draw_is_an_error():
 
 def test_a_non_picture_raises_type_error():
     fresh(20, 20)
-    with pytest.raises(TypeError, match="later release"):
+    with pytest.raises(TypeError, match="load_image"):
         p.image("not a picture", 0, 0)
 
 

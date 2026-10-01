@@ -365,6 +365,17 @@ class Sketch:
         return Picture(int(width), int(height), scale,
                        f"graphics-{self._graphics_counter}")
 
+    def load_image(self, path: str, base_dir: str | None = None):
+        """A picture made from an image file (contract P4). Needs no window, so it may come first."""
+        from . import imaging
+        from .picture import Picture
+        from .typography import _resolve_path
+
+        resolved = _resolve_path(path, base_dir, "f.load_image()", "image")
+        width, height, bgra = imaging.decode(resolved)
+        self._graphics_counter += 1
+        return Picture.from_pixels(width, height, bgra, f"graphics-{self._graphics_counter}")
+
     def _check_capabilities(self) -> None:
         """Refuse up front (contract R9) rather than failing on frame 200."""
         for cap, feature in REQUIRED_CAPABILITIES.items():

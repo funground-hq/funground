@@ -148,6 +148,24 @@ class Picture:
         self._history: list[ir.Op] | None = []     # [] to start: a fresh, transparent picture
         self._snapshot_cache: dict[int, Snapshot] = {}
 
+    @classmethod
+    def from_pixels(cls, width: int, height: int, bgra: bytes, name: str) -> "Picture":
+        """A picture holding decoded image pixels (contract P4, ``f.load_image``).
+
+        Its scale is 1, so its physical size is the image's own size in pixels. *bgra* is
+        Cairo's ARGB32 layout (premultiplied, see ``funground.imaging``). The history is
+        ``None`` ("pixels only", P3) until an opaque background/clear on it starts one.
+        """
+        pic = cls(width, height, 1.0, name)
+        surface = pic._sketch._renderer.surface
+        if surface.get_stride() != width * 4 or len(bgra) != width * height * 4:
+            raise RuntimeError("image pixels do not fit the picture's surface")
+        surface.flush()
+        surface.get_data()[:] = bgra
+        surface.mark_dirty()
+        pic._history = None
+        return pic
+
     def __repr__(self) -> str:
         return f"<Picture {self.width} x {self.height}>"
 
@@ -238,7 +256,7 @@ def draw_image(target: Sketch, picture: Any, x: float, y: float,
     if not isinstance(picture, Picture):
         raise TypeError(
             f"f.image() needs a picture made with f.create_graphics(), not {type(picture).__name__} "
-            "(loading images from files comes in a later release)"
+            "(or an image file loaded with f.load_image())"
         )
     if picture._sketch is target:
         raise ValueError("f.image(): a picture cannot be drawn onto itself")
