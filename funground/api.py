@@ -695,6 +695,36 @@ def load_image(path: str) -> Picture:
     return active_sketch().load_image(path, base_dir=base_dir)
 
 
+def _sketch_folder() -> str | None:
+    """The folder of the script that called the public function two frames up, or None."""
+    import os
+
+    caller = inspect.currentframe()
+    for _ in range(2):
+        caller = caller.f_back if caller is not None else None
+    if caller is not None:
+        sketch_file = caller.f_globals.get("__file__")
+        if sketch_file:
+            return os.path.dirname(os.path.abspath(sketch_file))
+    return None
+
+
+def load_svg(path: str) -> Picture:
+    """Read an SVG file and return a picture of its shapes, still vector; draw it with f.image().
+    A relative path is looked for next to the sketch file first, then in the current folder."""
+    return active_sketch().load_svg(path, base_dir=_sketch_folder())
+
+
+def svg_paths(path: str) -> list[PathBuilder]:
+    """Read an SVG file and return its shapes as a list of f.path() builders, one per shape,
+    in the file's own coordinates: for booleans, clips or your own colours."""
+    from . import svg
+    from .typography import _resolve_path
+
+    resolved = _resolve_path(path, _sketch_folder(), "f.svg_paths()", "SVG")
+    return [PathBuilder(geometry) for geometry in svg.shapes_as_paths(svg.read(resolved, "f.svg_paths()"))]
+
+
 def image(picture, x: float, y: float, width: float | None = None, height: float | None = None,
           sx: float | None = None, sy: float | None = None,
           sw: float | None = None, sh: float | None = None) -> None:

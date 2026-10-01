@@ -19,8 +19,7 @@ import struct
 
 import pygame
 
-_SVG_MESSAGE = ("SVG files cannot be loaded as images; SVG import comes with a later release "
-                "(f.load_svg). Save the drawing as a PNG for now")
+_SVG_MESSAGE = "SVG files cannot be loaded as images; use f.load_svg() to read them as drawings"
 
 
 def decode(path: str) -> tuple[int, int, bytes]:

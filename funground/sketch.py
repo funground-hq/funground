@@ -507,6 +507,23 @@ class Sketch:
         picture._sketch._name_root = self._name_root or self
         return picture
 
+    def load_svg(self, path: str, base_dir: str | None = None):
+        """A picture drawn from an SVG file's shapes (contract P11). Needs no window, so it may come first."""
+        from . import svg
+        from .picture import Picture
+        from .typography import _resolve_path
+
+        resolved = _resolve_path(path, base_dir, "f.load_svg()", "SVG")
+        doc = svg.read(resolved, "f.load_svg()")
+        # The picture is drawn at a finer scale than the window needs, so the raster copy that a
+        # window shows stays reasonably sharp when the picture is drawn larger. PDF/SVG replay vectors.
+        window = (self._script_scale if self._script else self._platform.backing_scale) if self._has_window else 1.0
+        scale = max(float(window), 2.0 if max(doc.width, doc.height) <= 2048 else 1.0)
+        picture = Picture(doc.width, doc.height, scale, self._next_graphics_name())
+        picture._sketch._name_root = self._name_root or self
+        svg.draw(doc, picture)
+        return picture
+
     def _next_graphics_name(self) -> str:
         """The next picture name, numbered in creation order within a run (a picture's get() uses its window's count)."""
         root = self._name_root or self
