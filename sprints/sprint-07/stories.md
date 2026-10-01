@@ -56,7 +56,7 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
 - [x] S-076.2 Contract row; tests; gallery example; guide chapter 2; Quick Reference
 *Acceptance:* a DrawBot-style static page runs and saves with no `draw()` function.
 
-### S-077 Load and draw images — E-14 *(needs D-028)*
+### S-077 Load and draw images — E-14 *(D-028 = E; contract P4)*
 - [ ] S-077.1 `f.load_image(path)` returns a picture (the same type as `create_graphics`,
   D-021): found next to the sketch file first, like `load_font`; clear errors for a missing file
   and for a file that is not an image
@@ -79,7 +79,7 @@ First run, 26 Sept 2026: the four Windows cells pass; Linux and macOS fail.
 - [ ] S-079.3 Contract rows; tests; gallery (a picture made pixel by pixel); guide; Quick Reference
 *Acceptance:* reading a pixel returns what was drawn there, on HiDPI screens too.
 
-### S-080 Resize, copy, mask and a few filters — E-14 *(scope depends on D-028)*
+### S-080 Resize, copy, mask and a few filters — E-14 *(D-028 = E: pygame-ce; rarer filters with the Pillow extra)*
 - [ ] S-080.1 `pic.copy()`, `pic.resize(w, h)`, `pic.mask(other)`
 - [ ] S-080.2 `pic.filter(kind)`: blur, grey, invert, threshold. ADR-003 limits this to a handful
 - [ ] S-080.3 Contract rows; tests; gallery; guide; Quick Reference

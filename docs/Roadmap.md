@@ -44,7 +44,7 @@ CI green on the 12-cell matrix (S-039). The package is published as **funground*
 
 | Area | Content | Parity with |
 |---|---|---|
-| Images (E-14) | `load_image`, `image()` with transform, tint/alpha, `image_mode`; pixel access (`get/set`, `pixels`), `copy`, `resize`, `mask`; a handful of filters via Pillow (blur, invert, threshold, grey) | Processing `PImage`, DrawBot `image` |
+| Images (E-14) | `load_image`, `image()` with transform, tint/alpha, `image_mode`; pixel access (`get/set`, `pixels`), `copy`, `resize`, `mask`; a handful of filters (blur, invert, threshold, grey) through pygame-ce, rarer ones with the optional Pillow extra (ADR-004) | Processing `PImage`, DrawBot `image` |
 | Documents (E-18) | pages and page sizes (A4, Letter…), `new_page`, multi-page PDF; a first-class script mode (no `draw()` needed: draw once, save) | DrawBot's core model |
 | Path depth (E-11) | boolean operations (union, intersect, difference, xor), `point_inside`, bounds, `expand_stroke`, text to path, reusable shapes (Processing `PShape`) | DrawBot `BezierPath`, Processing `PShape` |
 | Rich typography (E-15) | mixed-style text runs (DrawBot `FormattedString`), tracking, OpenType features, variable fonts, per-script font fallback; **searchable PDF text with embedded fonts** (S-032, lifts D-006's limitation) | DrawBot text |
@@ -107,6 +107,7 @@ Sprint 5 ── Sprint 6 ── Sprints 7–11 (Phase 3) ── 0.1 on PyPI ─�
 | Before 0.1 | Release cadence; git remote and CI host (the name is decided: funground, D-020) |
 | Sprint 5 | `rect_mode`-style switches (postponed so far); D-016, D-017, D-018 decided 25 Sept 2026 |
 | Sprint 6 | Whether off-screen canvases and images share one type |
+| Sprint 11 | How learners get ffmpeg for MP4 export (Pillow covers GIF only) |
 | Phase 3 | Page/document model shape (DrawBot-like vs Processing-like); sound backend scope |
 | v1.0 | What "1.0 stable" guarantees: API freeze scope, supported Python versions |
 
