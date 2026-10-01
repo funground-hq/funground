@@ -1,6 +1,6 @@
 # Sprint 7 review — Phase 3a: CI, scripts, images, p5 modes
 
-**Dates:** 30 September – 1 October 2026 (draft for the maintainer — not yet signed off)
+**Dates:** 30 September – 1 October 2026; closed by the maintainer 1 October 2026
 **Goal:** CI green on all three systems; sketches that need no `draw()`; pictures loaded from files,
 drawn, tinted, measured and changed pixel by pixel.
 
@@ -111,8 +111,8 @@ CI: 12/12 green
 
 ## Sign-off
 
-Sprint 7 closes when the maintainer has read this review and the reviewer's guide. Nothing is
-carried over.
+**Closed 1 October 2026** by the maintainer ("Done and go ahead"). D-035 and the review calls taken
+under D-034 stand as recorded. Nothing is carried over.
 
 ## Retrospective
 

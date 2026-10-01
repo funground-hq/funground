@@ -1,6 +1,6 @@
 # Sprint 7 — Phase 3a: CI, script mode, images
 
-**Dates:** opened 30 Sept 2026 on the maintainer's word ("Begin phase 3").
+**Dates:** opened 30 Sept 2026 on the maintainer's word ("Begin phase 3"); **closed by the maintainer 1 Oct 2026** (`review.md`).
 **Release context (D-027):** release 0.1 now includes Phase 3. It is published on PyPI when
 Phase 3 is complete, after Sprint 11. Nothing is published before then.
 
