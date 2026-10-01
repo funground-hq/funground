@@ -263,6 +263,14 @@ Two shapes can be joined, overlapped, cut and mixed with union, intersection, di
 
 Source: [`examples/gallery/paths/05_booleans.py`](../../examples/gallery/paths/05_booleans.py)
 
+### Outlines, tests and moving paths
+
+![Outlines, tests and moving paths](images/paths-06_outlines.png)
+
+expand_stroke turns a thick line into a shape you can fill with a gradient. contains tells you whether a point is inside a shape. bounds gives the box around it. rotate and scale make copies.
+
+Source: [`examples/gallery/paths/06_outlines.py`](../../examples/gallery/paths/06_outlines.py)
+
 ## Randomness and noise
 
 ### Confetti

@@ -158,5 +158,5 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-084 | E-18 | Pages and page sizes: `new_page`, `page_count`, `page_size`; multi-page PDF; `show()` flips pages | 8 — done |
 | S-085 | E-18 | Script follow-ups: top-level `full_screen()`, memory note | 8 — done |
 | S-086 | E-11 | Path shapes and booleans (`union`, `intersection`, `difference`, `xor`, `remove_overlap`; skia-pathops, D-037) | 9 — done |
-| S-087 | E-11 | Path `expand_stroke`, `bounds`, `contains`, `translate`/`scale`/`rotate`, `copy` | 9 |
+| S-087 | E-11 | Path `expand_stroke`, `bounds`, `contains`, `translate`/`scale`/`rotate`, `copy` | 9 — done |
 | S-088 | E-15 | `f.text_path()`: letters as a path | 9 |

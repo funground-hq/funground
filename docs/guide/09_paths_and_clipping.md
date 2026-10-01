@@ -79,6 +79,34 @@ crossing lines inside. Draw it with a stroke to see the difference.
 
 ![Union, intersection, difference, xor and remove_overlap](../gallery/images/paths-05_booleans.png)
 
+## Outlines, tests and moving paths
+
+A path can also give you an outline, answer questions and move. Each of these gives back a **new**
+path or a plain value. The path you started with does not change.
+
+```py
+line = f.path().move_to(20, 60).curve_to(60, 0, 100, 120, 180, 50)
+
+band = line.expand_stroke(16, cap="butt", dash=[20, 8])   # the shape a thick dashed line would paint
+f.draw_path(band)
+
+print(band.bounds())             # (x, y, width, height) of the exact extent, or None if empty
+print(band.contains(100, 60))    # True when the point is inside the filled shape
+
+f.draw_path(band.translate(0, 80))               # moved down by 80
+f.draw_path(band.scale(0.5))                     # scaled about the origin (0, 0)
+f.draw_path(band.rotate(30, 100, 60))            # turned clockwise by 30 degrees about (100, 60)
+twin = band.copy()                               # an independent copy
+```
+
+`expand_stroke(width, cap="round", join="round", miter_limit=10, dash=None)` uses the same names
+as `stroke_cap` and `stroke_join`. It works on open lines too. The result is a closed shape, so
+you can fill it with a gradient, cut it with a boolean, or test it with `contains`. `bounds()`
+measures the curves themselves, not their control points. `contains` follows the non-zero rule,
+so the middle of a pentagram counts as inside.
+
+![Outlines, tests and moving paths](../gallery/images/paths-06_outlines.png)
+
 ## Clipping
 
 `f.clip(path)` keeps everything drawn afterwards **inside** the path. It lasts until the end of

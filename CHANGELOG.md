@@ -28,6 +28,7 @@ pygame-ce that was never published.
 
 ### Added
 - **Path shapes and booleans:** a path from `f.path()` gets `rect`, `ellipse`, `circle` and `polygon`, and `union`, `intersection`, `difference`, `xor` (also `|`, `&`, `-`, `^`) and `remove_overlap`, each giving a new path (S-086). **New dependency:** `skia-pathops`, a small Skia library, now installs with funground (D-037, ADR-005).
+- **Path outlines, queries and moves:** a path gets `expand_stroke` (cap, join, miter limit and dash, open lines too), `bounds`, `contains`, `translate`, `scale`, `rotate` and `copy` (S-087).
 - **Full screen in scripts:** `f.full_screen()` at the top of a script makes the canvas the screen's size, and `f.show()` shows it full screen (S-085).
 - **Pages:** in a script, `f.new_page()` starts a new page (a size, or a name such as `"A5"`);
   `f.page_count()` counts them and `f.page_size("A4")` gives a name's size. `f.save("x.pdf")` writes

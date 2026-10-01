@@ -21,8 +21,8 @@ Quick Reference entry; CI green on 12 cells; the boundary test keeps `pathops` i
 - [x] S-086.3 Tests; gallery `paths/` (shapes cut and joined); guide chapter 9; chapter 15 (DrawBot `BezierPath` table); Quick Reference; changelog
 
 ### S-087 Stroke outlines, queries, transforms — E-11 *(contract F12)*
-- [ ] S-087.1 `expand_stroke`, `bounds`, `contains`, `translate`, `scale`, `rotate`, `copy`
-- [ ] S-087.2 Tests; gallery example; guide; Quick Reference; changelog
+- [x] S-087.1 `expand_stroke`, `bounds`, `contains`, `translate`, `scale`, `rotate`, `copy`
+- [x] S-087.2 Tests; gallery example; guide; Quick Reference; changelog
 
 ### S-088 Text as a path — E-15 *(contract F13)*
 - [ ] S-088.1 `f.text_path(message, x, y)` from the same layout as `f.text`
