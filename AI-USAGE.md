@@ -147,3 +147,22 @@ sprint review adds its entry here.
 - D-026: example code is CC0, so learners can reuse it freely. The maintainer made it a condition
   that examples are checked to be original, now and in future. That became a process rule and
   an originality check ([docs/qa/Example_Provenance.md](docs/qa/Example_Provenance.md)).
+
+### Sprint 7: CI, scripts, images, p5 modes (30 Sept – 1 Oct 2026)
+- The maintainer widened release 0.1 to include Phase 3 (D-027) and closed Sprints 5 and 6.
+- The maintainer took a run of decisions:
+  - D-028: pygame-ce reads images, Pillow optional;
+  - D-029: animated sketches or DrawBot-style scripts;
+  - D-030: p5's drawing modes;
+  - D-031: revisit colour mode, which the maintainer raised;
+  - D-032: p5-style colour numbers;
+  - D-033: funground is final.
+- The maintainer asked for a gallery browser; it was built in funground itself.
+- The maintainer reported two gallery problems (a dot that ran off-screen, an example in the wrong
+  area); both were fixed.
+- The maintainer asked for minimal intervention for the rest of Phase 3 (D-034). Claude then took
+  routine design calls itself (D-035 and smaller review calls) and logged them for sign-off.
+- All nine stories were built by Claude Sonnet 5 sub-agents from pinned contract rows. The Opus main
+  session reviewed each one, and changed or added something in most of them.
+- One sub-agent stopped every `python.exe` on the maintainer's machine. A rule now forbids it.
+
