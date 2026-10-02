@@ -27,24 +27,37 @@ LIVE_NAMES = frozenset(
 )
 
 
-def active_sketch() -> Sketch:
+def canvas_sketch() -> Sketch:
+    """The sketch that owns the window or script canvas, even inside ``with f.layer(...)``."""
     global _active
     if _active is None:
         _active = Sketch()
     return _active
 
 
+def active_sketch() -> Sketch:
+    """The sketch the drawing functions talk to: the canvas's, or - inside ``with f.layer(...)`` (S-095,
+    contract F16) - the open layer's own sketch. Everything that is not drawing (width, mouse_x, random,
+    save, size, ...) uses canvas_sketch(), so it keeps its canvas meaning inside the block."""
+    canvas = canvas_sketch()
+    layer = canvas._layer_open
+    return canvas if layer is None else layer._sketch
+
+
 def use_sketch(sketch: Sketch | None) -> Sketch:
     """Make *sketch* the one the public functions talk to (tests, multi-sketch)."""
     global _active
     _active = sketch
-    return active_sketch()
+    return canvas_sketch()
 
 
 def live_value(name: str) -> object:
     if name not in LIVE_NAMES:
         raise AttributeError(name)
-    return getattr(active_sketch(), name)
+    sketch = canvas_sketch()
+    if name == "pixels" and sketch._layer_open is not None:
+        return sketch._layer_open._sketch.pixels         # f.load_pixels() inside a layer block loaded the layer
+    return getattr(sketch, name)
 
 
 HINT = "Your sketch has a draw() function but never started. Add f.run() as the last line."
@@ -86,7 +99,7 @@ atexit.register(exit_hint)
 # ---- window / lifecycle
 def size(width: int, height: int, *, title: str = "funground", fps: int = 60) -> None:
     """Create or resize the sketch window."""
-    active_sketch().size(width, height, title=title, fps=fps)
+    canvas_sketch().size(width, height, title=title, fps=fps)
 
 
 def run(*, fps: int | None = None, max_frames: int | None = None) -> None:
@@ -99,23 +112,23 @@ def run(*, fps: int | None = None, max_frames: int | None = None) -> None:
     caller = inspect.currentframe()
     if caller is None or caller.f_back is None:
         raise RuntimeError("Could not find the sketch that called f.run().")
-    active_sketch().run_namespace(caller.f_back.f_globals, fps=fps, max_frames=max_frames)
+    canvas_sketch().run_namespace(caller.f_back.f_globals, fps=fps, max_frames=max_frames)
 
 
 def show() -> None:
     """Script style: open a window on what has been drawn and wait until it is closed (or Escape)."""
-    active_sketch().show()
+    canvas_sketch().show()
 
 
 def new_page(width: int | str | None = None, height: int | None = None) -> None:
     """Script style: end this page and start a blank one. Give a size, a name such as "A4", or nothing
     to keep the size. Colours, text and other settings carry over; the transform starts afresh."""
-    active_sketch().new_page(width, height)
+    canvas_sketch().new_page(width, height)
 
 
 def page_count() -> int:
     """How many pages the document has so far."""
-    return active_sketch().page_count()
+    return canvas_sketch().page_count()
 
 
 def page_size(name: str, landscape: bool = False) -> tuple[int, int]:
@@ -127,42 +140,42 @@ def page_size(name: str, landscape: bool = False) -> tuple[int, int]:
 
 
 def stop() -> None:
-    active_sketch().stop()
+    canvas_sketch().stop()
 
 
 def exit() -> None:  # noqa: A001 - p5/Processing name; shadows the REPL helper only inside funground
     """End the sketch after this frame (the same as f.stop())."""
-    active_sketch().exit()
+    canvas_sketch().exit()
 
 
 def no_loop() -> None:
     """Stop calling draw() every frame; the window stays open. loop() or redraw() bring it back."""
-    active_sketch().no_loop()
+    canvas_sketch().no_loop()
 
 
 def loop() -> None:
     """Call draw() every frame again after no_loop()."""
-    active_sketch().loop()
+    canvas_sketch().loop()
 
 
 def redraw() -> None:
     """Call draw() once more, e.g. after a key press while not looping."""
-    active_sketch().redraw()
+    canvas_sketch().redraw()
 
 
 def is_looping() -> bool:
     """True while draw() is called every frame."""
-    return active_sketch().is_looping()
+    return canvas_sketch().is_looping()
 
 
 def millis() -> int:
     """Milliseconds since the sketch started running."""
-    return active_sketch().millis()
+    return canvas_sketch().millis()
 
 
 def frame_rate() -> float:
     """Frames per second actually achieved (smoothed); 0.0 until the second frame."""
-    return active_sketch().frame_rate()
+    return canvas_sketch().frame_rate()
 
 
 def second() -> int:
@@ -197,49 +210,49 @@ def year() -> int:
 
 def save(path: str) -> None:
     """Save this frame to a .png, .pdf or .svg file (written when the frame is complete)."""
-    active_sketch().save(path)
+    canvas_sketch().save(path)
 
 
 def resize_canvas(width: int, height: int) -> None:
     """Change the canvas size while the sketch runs; f.width and f.height follow."""
-    active_sketch().resize_canvas(width, height)
+    canvas_sketch().resize_canvas(width, height)
 
 
 def full_screen() -> None:
     """Fill the whole screen (use it instead of f.size in setup); Escape still ends the sketch.
 
     In a script it makes the canvas the screen's size; f.show() then shows it full screen."""
-    active_sketch().full_screen()
+    canvas_sketch().full_screen()
 
 
 def cursor(kind: str = "arrow") -> None:
     """The mouse pointer over the canvas: "arrow", "cross", "hand", "move", "text" or "wait"."""
-    active_sketch().cursor(kind)
+    canvas_sketch().cursor(kind)
 
 
 def no_cursor() -> None:
     """Hide the mouse pointer over the canvas."""
-    active_sketch().no_cursor()
+    canvas_sketch().no_cursor()
 
 
 def save_frames(pattern: str, count: int) -> None:
     """Save this frame and the next ones, *count* in all: "frames/####.png" gives frames/0001.png, 0002.png, ..."""
-    active_sketch().save_frames(pattern, count)
+    canvas_sketch().save_frames(pattern, count)
 
 
 def save_gif(path: str, seconds: float) -> None:
     """Animated sketch: record the next *seconds* into a GIF that loops forever (needs Pillow or ffmpeg)."""
-    active_sketch().save_gif(path, seconds)
+    canvas_sketch().save_gif(path, seconds)
 
 
 def save_movie(path: str, seconds: float) -> None:
     """Animated sketch: record the next *seconds* into an MP4 (needs ffmpeg)."""
-    active_sketch().save_movie(path, seconds)
+    canvas_sketch().save_movie(path, seconds)
 
 
 def frame_duration(seconds: float) -> None:
     """Script style: show this page, and the pages after it, for *seconds* in a saved GIF or MP4."""
-    active_sketch().frame_duration(seconds)
+    canvas_sketch().frame_duration(seconds)
 
 
 # ---- drawing
@@ -325,12 +338,12 @@ def text_path(message: object, x: float, y: float) -> PathBuilder:
 
 def text_to_points(message: object, x: float, y: float, spacing: float = 5) -> list[tuple[float, float]]:
     """Points along the outlines of f.text_path(message, x, y), one every spacing pixels, as (x, y) tuples."""
-    return active_sketch().text_to_points(message, x, y, spacing)
+    return canvas_sketch().text_to_points(message, x, y, spacing)
 
 
 def current_font() -> Font:
     """The font text is set in now. Ask it font.family(), .style(), .variations(), .features() or .contains(text)."""
-    return active_sketch().current_font()
+    return canvas_sketch().current_font()
 
 
 def text_align(horizontal: str, vertical: str | None = None) -> None:
@@ -374,9 +387,9 @@ def color(*values):
     from .color import Color as _Color
 
     if len(values) == 1:
-        return active_sketch().read_color(values[0])         # numbers follow color_mode (S15, S16)
+        return canvas_sketch().read_color(values[0])         # numbers follow color_mode (S15, S16)
     if len(values) in (2, 3, 4):
-        return active_sketch().read_color(*values)           # follows color_mode (S15, S16)
+        return canvas_sketch().read_color(*values)           # follows color_mode (S15, S16)
     raise ValueError("f.color() takes one colour, a grey and alpha, or 3 or 4 numbers (red, green, blue[, alpha])")
 
 
@@ -398,14 +411,14 @@ def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors, stops=No
     """Colours blended along the line from (x1, y1) to (x2, y2); use it like a colour in fill/stroke/background."""
     from .paint import linear_gradient as make
 
-    return make(x1, y1, x2, y2, colors, stops, active_sketch().read_color)
+    return make(x1, y1, x2, y2, colors, stops, canvas_sketch().read_color)
 
 
 def radial_gradient(x: float, y: float, radius: float, colors, stops=None):
     """Colours blended outward from (x, y) to *radius*; the first colour is at the centre."""
     from .paint import radial_gradient as make
 
-    return make(x, y, radius, colors, stops, active_sketch().read_color)
+    return make(x, y, radius, colors, stops, canvas_sketch().read_color)
 
 
 def color_mode(mode: str, max1: float | None = None, max2: float | None = None,
@@ -704,7 +717,26 @@ def clip(path: PathBuilder) -> None:
 def create_graphics(width: int, height: int) -> Picture:
     """A picture: an off-screen canvas width x height, transparent to start, with its own
     drawing commands (fill, circle, push/pop, ...) and its own state and transform."""
-    return active_sketch().create_graphics(width, height)
+    return canvas_sketch().create_graphics(width, height)
+
+
+# ---- layers (S-095, contract F16, D-053)
+def layer(name: str) -> Picture:
+    """The layer called *name*: a see-through picture the size of the canvas, made the first time you
+    ask for it. Use it with `with`: everything drawn inside the block goes to the layer, and the layers
+    are put over the canvas, in the order they were first made. A layer keeps its drawing from frame
+    to frame until you call background() or clear() inside it."""
+    return canvas_sketch().layer(name)
+
+
+def hide_layer(name: str) -> None:
+    """Stop showing a layer. It keeps its drawing, and show_layer() brings it back."""
+    canvas_sketch().hide_layer(name)
+
+
+def show_layer(name: str) -> None:
+    """Show a layer that hide_layer() hid."""
+    canvas_sketch().show_layer(name)
 
 
 # ---- controls (S-101, contract U1)
@@ -712,17 +744,17 @@ def create_slider(low: float, high: float, value: float | None = None, step: flo
                   label: str | None = None) -> Slider:
     """A slider in a panel below the canvas. Make it in setup(); read it in draw() with slider.value().
     It starts at *value* (default: low). *step*, when given, is the size of each move."""
-    return active_sketch().create_slider(low, high, value, step, label)
+    return canvas_sketch().create_slider(low, high, value, step, label)
 
 
 def create_checkbox(label: str, checked: bool = False) -> Checkbox:
     """A tick box in the panel below the canvas. Read it with box.checked()."""
-    return active_sketch().create_checkbox(label, checked)
+    return canvas_sketch().create_checkbox(label, checked)
 
 
 def create_button(label: str) -> Button:
     """A button in the panel below the canvas. button.clicked() is true once for each click."""
-    return active_sketch().create_button(label)
+    return canvas_sketch().create_button(label)
 
 
 def load_image(path: str) -> Picture:
@@ -737,7 +769,7 @@ def load_image(path: str) -> Picture:
             import os
 
             base_dir = os.path.dirname(os.path.abspath(sketch_file))
-    return active_sketch().load_image(path, base_dir=base_dir)
+    return canvas_sketch().load_image(path, base_dir=base_dir)
 
 
 def _sketch_folder() -> str | None:
@@ -757,7 +789,7 @@ def _sketch_folder() -> str | None:
 def load_svg(path: str) -> Picture:
     """Read an SVG file and return a picture of its shapes, still vector; draw it with f.image().
     A relative path is looked for next to the sketch file first, then in the current folder."""
-    return active_sketch().load_svg(path, base_dir=_sketch_folder())
+    return canvas_sketch().load_svg(path, base_dir=_sketch_folder())
 
 
 def load_sound(path: str):
@@ -767,7 +799,7 @@ def load_sound(path: str):
     With no sound device (or FUNGROUND_HEADLESS=1) it plays silently and keeps time."""
     from . import sound
 
-    return sound.load(path, _sketch_folder(), lambda: active_sketch().frame_count)
+    return sound.load(path, _sketch_folder(), lambda: canvas_sketch().frame_count)
 
 
 def svg_paths(path: str) -> list[PathBuilder]:
@@ -842,43 +874,43 @@ def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's 
 # ---- input
 def key_down(key: str | int) -> bool:
     """Return whether a key is held, e.g. key_down('left') or key_down('a')."""
-    return active_sketch().key_down(key)
+    return canvas_sketch().key_down(key)
 
 
 # ---- helpers
 def random(low: float = 1.0, high: float | None = None) -> float:
     """random(10) -> 0..10; random(5, 10) -> 5..10."""
-    return active_sketch().random(low, high)
+    return canvas_sketch().random(low, high)
 
 
 def random_seed(seed: int | None = None) -> None:
     """Make f.random() repeatable: the same seed gives the same sequence."""
-    active_sketch().random_seed(seed)
+    canvas_sketch().random_seed(seed)
 
 
 def noise(x: float, y: float = 0.0, z: float = 0.0) -> float:
     """Smooth random values from 0 to 1: nearby inputs give nearby outputs (p5's noise)."""
-    return active_sketch().noise(x, y, z)
+    return canvas_sketch().noise(x, y, z)
 
 
 def noise_seed(seed: int) -> None:
     """Make noise() repeatable; the same seed gives the same values as p5's noiseSeed."""
-    active_sketch().noise_seed(seed)
+    canvas_sketch().noise_seed(seed)
 
 
 def noise_detail(octaves: int, falloff: float | None = None) -> None:
     """How many layers of detail noise() adds (default 4) and how much each fades (default 0.5)."""
-    active_sketch().noise_detail(octaves, falloff)
+    canvas_sketch().noise_detail(octaves, falloff)
 
 
 def random_gaussian(mean: float = 0.0, sd: float = 1.0) -> float:
     """A random number from a bell curve: most near *mean*, about 2/3 within *sd* of it."""
-    return active_sketch().random_gaussian(mean, sd)
+    return canvas_sketch().random_gaussian(mean, sd)
 
 
 def random_choice(items):
     """One item picked at random from a list, tuple or string (repeatable with random_seed)."""
-    return active_sketch().random_choice(items)
+    return canvas_sketch().random_choice(items)
 
 
 def map_range(value: float, start1: float, stop1: float, start2: float, stop2: float, clamp: bool = False) -> float:
@@ -917,3 +949,4 @@ def degrees(radians: float) -> float:
 
 def distance(x1: float, y1: float, x2: float, y2: float) -> float:
     return Sketch.distance(x1, y1, x2, y2)
+

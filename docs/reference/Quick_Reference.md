@@ -814,6 +814,9 @@ you can draw again and again.
 | Call | What it does | Example |
 |---|---|---|
 | `f.create_graphics(w, h)` | an off-screen picture, `w` x `h`, transparent to start. It has the same drawing commands as `f.` (fill, circle, text, transforms, clip, ...), but its own state, transform and pixels; nothing about it resets between frames. | `trail = f.create_graphics(200, 100)` |
+| `with f.layer(name):` | draw everything in the block on the layer called `name`, a see-through picture the size of the canvas, made the first time. Layers are put over the canvas in the order they were first made, and keep their drawing from frame to frame until `f.background()` or `f.clear()` is called inside them. Inside the block `f.width`, `f.mouse_x`, `f.random()` and the like keep their canvas meaning. Layers do not nest (`RuntimeError`) |
+| `f.layer(name)` | the layer's picture, so `with f.layer("sky") as sky:` gives you `sky` for `sky.get()`, filters or `sky.save()` |
+| `f.hide_layer(name)` / `f.show_layer(name)` | stop or start showing a layer; it keeps its drawing. An unknown name is a `ValueError` |
 | `f.image(picture, x, y, w=None, h=None, sx=None, sy=None, sw=None, sh=None)` | draw *picture* at (x, y), stretched to `w` x `h` (default: its own size), as it is at this moment. Give `sx, sy, sw, sh` (all four) to draw only that part of the picture, in its own pixels, into the box; a part reaching outside the picture is clipped and keeps its place. `sw` and `sh` must be above 0. | `f.image(trail, 0, 0)`, `f.image(photo, 0, 0, 200, 150, 40, 30, 100, 75)` |
 | `f.tint(color)` / `f.no_tint()` | colour every picture drawn after it. Takes any colour form `f.fill()` takes (not a gradient). Red, green and blue of each pixel are multiplied by the tint's, and its alpha is multiplied in: `f.tint(255, 128)` draws pictures half see-through. Shapes and text are not tinted. Saved by `push`/`pop`. | `f.tint("gold")` |
 | `f.load_image(path)` | read an image file (PNG, JPEG, GIF, BMP, TGA) and return a picture; draw it with `f.image()`. A relative path is looked for next to the sketch file first, then in the current folder. Phone photos are turned the right way up; transparency is kept. `pic.width` and `pic.height` are the image's size in pixels. You can draw on it like any picture. | `photo = f.load_image("photo.jpg")` |
@@ -1085,7 +1088,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Saving | — | `f.save()` to PNG, PDF or SVG |
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
-| Off-screen graphics | — | `create_graphics`, `image`, `load_image`, `load_svg`, `svg_paths` |
+| Off-screen graphics | — | `create_graphics`, `layer`, `hide_layer`, `show_layer`, `image`, `load_image`, `load_svg`, `svg_paths` |
 | Sound | — | `load_sound`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum` on the sound |
 | Controls | — | `create_slider`, `create_checkbox`, `create_button`, in a panel below the canvas |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |

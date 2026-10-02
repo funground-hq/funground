@@ -175,6 +175,7 @@ class Image(Op):
     sh: float | None = None
     snapshot: Any = field(default=None, compare=False, repr=False)
     erase: int | None = None         # S-107 (F15): the fill strength; the picture's alpha is removed, not painted
+    layer: str | None = None         # S-095 (F16): the layer's name, when this Image is a layer put over the canvas
 
 
 @dataclass(frozen=True, slots=True)
@@ -263,7 +264,7 @@ OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash
                                "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges",
                                "tint", "sx", "sy", "sw", "sh", "radii",
                                "text_tracking", "text_features", "font_variations",
-                               "erasing", "erase"})
+                               "erasing", "erase", "layer"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).

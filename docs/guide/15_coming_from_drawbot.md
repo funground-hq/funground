@@ -242,7 +242,9 @@ any open `f.push()` start afresh. `f.save("x.png")` writes one picture per page:
 `x_2.png`, and so on. `f.show()` shows the current page, and the left and right arrow keys turn the
 pages. funground does not have DrawBot's `pages()` list or `with page:` blocks: drawing always goes on
 the current page. Chapter 13 has a runnable example. Separately, `create_graphics` pictures
-(chapter 9) give you more drawing surfaces within a single page.
+(chapter 9) give you more drawing surfaces within a single page. DrawBot has no layers.
+funground's `with f.layer("name"):` (chapter 9) draws on a see-through layer over the canvas, which
+is not a DrawBot idea. Each page has its own layers.
 
 ## Controls: `Variable`
 

@@ -239,6 +239,69 @@ A picture can hold another picture too, but never itself: `f.image(g, ...)` wher
 drawing onto itself raises `ValueError`. Save a picture on its own with `g.save(path)`,
 exactly like `f.save(path)` for the window.
 
+## Layers
+
+A picture on its own can be a lot of work: you make it, draw on it, then draw it with
+`f.image()`. A **layer** does the same job in one line. This is the friendly version of what
+p5 users do with `createGraphics`.
+
+`with f.layer("name"):` sends everything you draw inside the block to a layer. The layer is a
+see-through picture the same size as the canvas. It is made the first time you use its name.
+After each frame, the layers are put over the canvas, in the order you first made them.
+
+A layer **keeps its drawing**. The canvas is wiped by `f.background()` every frame, but a layer
+is not. This sketch leaves a trail of dots, while the stars in the sky layer are drawn once:
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 400)
+
+
+def draw():
+    f.background("midnightblue")        # the canvas starts afresh each frame
+
+    if f.frame_count == 0:
+        with f.layer("sky"):            # drawn once, and it stays
+            f.no_stroke()
+            f.fill("white")
+            f.circle(100, 60, 6)
+            f.circle(300, 40, 4)
+
+    with f.layer("trail"):              # one dot a frame, and each one stays
+        f.no_stroke()
+        f.fill("orange")
+        f.circle(40 + f.frame_count * 4, 250, 10)
+
+
+f.run()
+```
+
+![Layers](../gallery/images/compositing-04_layers.png)
+
+| Call | What it does |
+|---|---|
+| `with f.layer(name):` | Draw inside the block on the layer called `name`. The canvas is drawn under all layers |
+| `f.layer(name)` | The layer's picture. `with f.layer("sky") as sky:` gives it to you, for `sky.get()`, filters or `sky.save()` |
+| `f.hide_layer(name)` / `f.show_layer(name)` | Stop showing a layer, or show it again. It keeps its drawing while it is hidden |
+
+Some things to know:
+
+- To wipe a layer, call `f.background()` or `f.clear()` inside its block. `f.clear()` makes it
+  see-through again.
+- Each block starts fresh: colours, transforms and other settings you change inside it are put
+  back when the block ends, as if it began with `f.push()` and ended with `f.pop()`. So an
+  `f.translate()` in a layer every frame does not add up. What you drew stays.
+- Things that are not drawing keep their usual meaning inside the block: `f.width`,
+  `f.mouse_x`, `f.frame_count` and `f.random()` all belong to the canvas.
+- Layers do not nest. Using `f.layer()` inside another layer block is an error. An unknown name
+  in `f.hide_layer()` or `f.show_layer()` is a `ValueError`.
+- Each page of a script has its own layers. `f.size()` and `f.new_page()` start with none.
+- `f.save("x.png")`, `f.get()` and the picture on screen all include the layers. A PDF or SVG
+  draws each layer as shapes, not as a picture.
+
 ## Pictures and images
 
 A picture does not have to be drawn by you. `f.load_image(path)` reads an image file and
