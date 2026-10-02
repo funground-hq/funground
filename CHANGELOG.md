@@ -59,6 +59,9 @@ pygame-ce that was never published.
   a picture. `pip install funground[extras]` makes `"posterize"`, `"erode"` and `"dilate"` faster;
   the results are the same without it.
 - **Crisp pixel art:** under `f.no_smooth()`, `f.image()` scales pictures with the nearest pixel.
+- **Erasing:** `f.erase(fill_strength, stroke_strength)` makes everything drawn after it remove what
+  is under it, instead of painting; `f.no_erase()` stops it. Cut holes in a picture (also on `g.erase`).
+  A PDF cannot show a hole cut straight in the canvas; a hole in a picture works (D-051).
 - **Tint and parts of a picture:** `f.tint(color)` / `f.no_tint()` multiply the colour and alpha of
   pictures drawn with `f.image()`, and `f.image(picture, x, y, w, h, sx, sy, sw, sh)` draws only a
   part of a picture, as in p5 (also on `g.image`).

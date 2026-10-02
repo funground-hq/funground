@@ -1,0 +1,95 @@
+[
+ {
+  "color": [
+   250,
+   235,
+   200,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 260,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    200,
+    40,
+    70,
+    255
+   ],
+   "stroke": [
+    90,
+    60,
+    20,
+    255
+   ],
+   "stroke_width": 4,
+   "text_align": "center",
+   "text_size": 64,
+   "text_valign": "center"
+  },
+  "width": 520,
+  "x": 60,
+  "y": 70
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": [
+    90,
+    60,
+    20,
+    255
+   ],
+   "stroke_width": 4,
+   "text_align": "center",
+   "text_size": 64,
+   "text_valign": "center"
+  },
+  "text": "YOU WIN",
+  "x": 178.40625,
+  "y": 162.75
+ },
+ {
+  "height": 260,
+  "op": "Image",
+  "source": "graphics-1",
+  "version": 1,
+  "width": 520,
+  "x": 60.0,
+  "y": 70.0
+ },
+ {
+  "height": 260,
+  "op": "Rect",
+  "style": {
+   "fill": null,
+   "stroke": [
+    90,
+    60,
+    20,
+    255
+   ],
+   "stroke_width": 4,
+   "text_align": "center",
+   "text_size": 64,
+   "text_valign": "center"
+  },
+  "width": 520,
+  "x": 60,
+  "y": 70
+ }
+]
