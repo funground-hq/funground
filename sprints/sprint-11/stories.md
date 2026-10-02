@@ -24,7 +24,7 @@ pending, the maintainer's call**.
 - [x] S-099.1 `sound.level()`, `sound.spectrum(bands)`: pure-Python FFT, cached per frame
 - [x] S-099.2 Tests with generated tones (a 440 Hz tone peaks in the right band); a visualiser gallery example
 
-### S-100 GIF and MP4 export — E-19 *(contract row to pin; MP4 needs D-045)*
+### S-100 GIF and MP4 export — E-19 *(D-048; contract M1; the ffmpeg extra waits for D-045)*
 - [ ] S-100.1 Scripts: pages become frames (DrawBot's model); animated sketches: record a number of seconds (p5 `saveGif`)
 - [ ] S-100.2 GIF through Pillow (`funground[extras]`) or ffmpeg; MP4 through ffmpeg as D-045 decides
 
