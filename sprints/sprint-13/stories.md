@@ -24,10 +24,10 @@
   - CI has no input device.
 
 ### S-110 Making sound — E-17 *(D-055, D-056, ADR-006; contract A3)*
-- [ ] S-110.1 `create_sound`, `samples()`, `tone`, `note`, `pluck`, `sequence`, `mix`, `pan`, `save`
-- [ ] S-110.2 `melody` with note names, rests, chords, beats; sargam with `sa` and just tuning
-- [ ] S-110.3 `note_to_frequency`, `frequency_to_note` (Western and swara), `sound.pitch()`
-- [ ] S-110.2 Tests on generated samples (pitch by FFT, length, pan by channel levels); a gallery example that composes a short tune; guide chapter 16
+- [x] S-110.1 `create_sound`, `samples()`, `tone`, `note`, `pluck`, `sequence`, `mix`, `pan`, `save`
+- [x] S-110.2 `melody` with note names, rests, chords, beats; sargam with `sa` and just tuning
+- [x] S-110.3 `note_to_frequency`, `frequency_to_note` (Western and swara), `sound.pitch()`
+- [x] S-110.2 Tests on generated samples (pitch by FFT, length, pan by channel levels); a gallery example that composes a short tune; guide chapter 16
 
 ### S-097 Real text in SVG output — E-15 *(from the backlog)*
 - [ ] S-097.1 SVG files carry `<text>`/`<tspan>` with the font embedded (or referenced), placed where the outlines were; same fallbacks as T15

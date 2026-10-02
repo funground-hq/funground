@@ -812,6 +812,94 @@ def load_sound(path: str):
     return sound.load(path, _sketch_folder(), lambda: canvas_sketch().frame_count)
 
 
+def _sound_frame() -> int:
+    return canvas_sketch().frame_count
+
+
+def create_sound(samples, rate: int = 44100):
+    """Make a sound from a list of numbers from -1 to 1 (one channel, *rate* numbers a second;
+    numbers outside -1 to 1 are clipped). It is an ordinary sound; sound.samples() gives the
+    numbers back."""
+    from . import sound
+
+    return sound.create(samples, rate, _sound_frame)
+
+
+def tone(frequency: float, seconds: float, wave: str = "sine", volume: float = 1,
+         attack: float = 0.01, release: float = 0.05):
+    """Make a sound that is one steady tone. *wave* is 'sine', 'square', 'saw', 'triangle' or
+    'noise'. *attack* and *release* are fades in and out, in seconds. Noise is repeatable with
+    random_seed()."""
+    from . import sound, synth
+
+    rng = canvas_sketch()._rng
+    return sound.make(synth.tone(frequency, seconds, wave, volume, attack, release, rng, "f.tone()"),
+                      _sound_frame, "f.tone()")
+
+
+def note(name: str, seconds: float, wave: str = "sine", volume: float = 1,
+         attack: float = 0.01, release: float = 0.05):
+    """Make a sound that is one named note, such as 'A4' (440 Hz), 'C#5' or 'Bb3'. The other
+    arguments are the same as for tone()."""
+    from . import sound, synth
+
+    rng = canvas_sketch()._rng
+    hz = synth.note_to_frequency(name, who="f.note()")
+    return sound.make(synth.tone(hz, seconds, wave, volume, attack, release, rng, "f.note()"),
+                      _sound_frame, "f.note()")
+
+
+def pluck(name_or_frequency, seconds: float, volume: float = 1):
+    """Make a sound like a plucked string, from a note name such as 'E3' or a frequency in hertz.
+    It dies away by itself. Repeatable with random_seed()."""
+    from . import sound, synth
+
+    values = synth.pluck(name_or_frequency, seconds, volume, canvas_sketch()._rng, "f.pluck()")
+    return sound.make(values, _sound_frame, "f.pluck()")
+
+
+def melody(text: str, tempo: float = 120, wave: str = "sine", sa: str | None = None,
+           tuning: str = "equal"):
+    """Make a sound from a string of notes, like 'C4 E4 G4:2 - [C4 E4 G4]:4'. A note is a name
+    (a rest is -, a chord is [ notes ]), and :beats after it says how long (1 beat if left off).
+    With sa='C4' the notes are sargam (S r R g G m M P d D n N, ' for the octave above, a comma
+    for the octave below); tuning='just' then uses just-intonation ratios from Sa."""
+    from . import sound, synth
+
+    values = synth.melody_samples(text, tempo, wave, sa, tuning, canvas_sketch()._rng, "f.melody()")
+    return sound.make(values, _sound_frame, "f.melody()")
+
+
+def sequence(*sounds):
+    """Make a new sound that plays the given sounds one after another."""
+    from . import sound
+
+    return sound.sequence(sounds, _sound_frame)
+
+
+def mix(*sounds):
+    """Make a new sound that plays the given sounds together (turned down only if they would clip)."""
+    from . import sound
+
+    return sound.mix(sounds, _sound_frame)
+
+
+def note_to_frequency(name: str, sa: str | None = None) -> float:
+    """The frequency in hertz of a note name: note_to_frequency('A4') is 440. With sa='C4', the
+    name is a swara such as 'G' or 'N,' above that Sa."""
+    from . import synth
+
+    return synth.note_to_frequency(name, sa)
+
+
+def frequency_to_note(hz: float, sa: str | None = None) -> str:
+    """The name of the nearest note, such as 'A4' (with sharps, like 'C#5'). With sa='C4' it is the
+    nearest swara, such as "G'"."""
+    from . import synth
+
+    return synth.frequency_to_note(hz, sa)
+
+
 def svg_paths(path: str) -> list[PathBuilder]:
     """Read an SVG file and return its shapes as a list of f.path() builders, one per shape,
     in the file's own coordinates: for booleans, clips or your own colours."""

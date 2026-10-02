@@ -16,6 +16,7 @@ import os
 import time
 from array import array
 
+from . import synth
 from .typography import _resolve_path
 
 # The time source, in seconds. It is the same clock the sketch's millis() uses
@@ -35,7 +36,7 @@ def _is_headless() -> bool:
     return os.environ.get("FUNGROUND_HEADLESS", "").lower() in ("1", "true", "yes")
 
 
-def _open_mixer(headless: bool):
+def _open_mixer(headless: bool, who: str = "f.load_sound()"):
     """Start pygame's mixer once. Returns the module. Falls back to SDL's silent 'dummy'
     driver (which still decodes files) when there is no device, or when headless."""
     global _audible, _mixer_ready
@@ -70,7 +71,7 @@ def _open_mixer(headless: bool):
             else:
                 os.environ["SDL_AUDIODRIVER"] = old
         if not ok:
-            raise ValueError("f.load_sound(): sound support is not available on this computer")
+            raise ValueError(f"{who}: sound support is not available on this computer")
         if headless:
             _audible = False
     _mixer_ready = True
@@ -88,6 +89,49 @@ def load(path: str, base_dir: str | None, frame_source=None) -> "Sound":
     except Exception as exc:
         raise ValueError(f"f.load_sound(): {path!r} is not a sound funground can read ({exc})") from exc
     return Sound(device_sound, mixer, silent=headless or not _audible, frame_source=frame_source)
+
+
+def create(samples, rate: int = 44100, frame_source=None, who: str = "f.create_sound()") -> "Sound":
+    """A sound from a list of numbers from -1 to 1 (contract A3). Numbers outside are clipped."""
+    if isinstance(rate, bool) or not isinstance(rate, int) or not 8000 <= rate <= 192000:
+        raise ValueError(f"{who}: rate must be a whole number from 8000 to 192000, not {rate!r}")
+    try:
+        values = [float(v) for v in samples]
+    except (TypeError, ValueError):
+        raise ValueError(f"{who}: the samples must be a list of numbers from -1 to 1") from None
+    if not values:
+        raise ValueError(f"{who}: the samples list is empty, so there is no sound")
+    if not all(math.isfinite(v) for v in values):
+        raise ValueError(f"{who}: the samples must be numbers, not nan or infinity")
+    if max(values) > 1.0 or min(values) < -1.0:
+        values = [-1.0 if v < -1.0 else 1.0 if v > 1.0 else v for v in values]
+    return _from_samples(values, rate, frame_source, who)
+
+
+def _from_samples(values: list[float], rate: int, frame_source, who: str) -> "Sound":
+    """Build a playable sound from clipped mono samples at *rate*."""
+    if max(values) > 1.0 or min(values) < -1.0:         # a filter can overshoot a little
+        values = [-1.0 if v < -1.0 else 1.0 if v > 1.0 else v for v in values]
+    headless = _is_headless()
+    mixer = _open_mixer(headless, who)
+    mixer_rate, _, channels = mixer.get_init()
+    data = synth.resample(values, rate, mixer_rate) if mixer_rate != rate else values
+    mono = array("h", [int(round(v * 32767)) for v in data])
+    if channels == 1:
+        pcm = mono
+    else:                                               # the same sound in every channel
+        pcm = array("h", bytes(2 * len(mono) * channels))
+        for c in range(channels):
+            pcm[c::channels] = mono
+    device_sound = mixer.Sound(buffer=pcm.tobytes())
+    return Sound(device_sound, mixer, silent=headless or not _audible, frame_source=frame_source,
+                 made=(values, rate, pcm))
+
+
+def _pan_gains(pan: float) -> tuple[float, float]:
+    """The pan law: a balance control. The side you move away from fades to nothing in a straight
+    line, and the other side stays at full volume, so 0 (the middle) is the sound unchanged."""
+    return min(1.0, 1.0 - pan), min(1.0, 1.0 + pan)
 
 
 def _fft(values: list[complex]) -> list[complex]:
@@ -115,7 +159,7 @@ _HANN = [0.5 - 0.5 * math.cos(2 * math.pi * i / (FFT_SIZE - 1)) for i in range(F
 class Sound:
     """A sound from f.load_sound(). See contract A1 (playback) and A2 (analysis)."""
 
-    def __init__(self, device_sound, mixer, silent: bool, frame_source=None):
+    def __init__(self, device_sound, mixer, silent: bool, frame_source=None, made=None):
         self._snd = device_sound
         self._mixer = mixer
         self._silent = silent
@@ -132,6 +176,13 @@ class Sound:
         self._channels = 1
         self._rate = 44100
         self._cache: dict = {}
+        self._pan = 0.0
+        self._made = None                # (mono samples, their rate) for a sound made from numbers
+        if made is not None:             # keep the samples, as a loaded sound does after first use
+            values, rate, pcm = made
+            self._made = (values, rate)
+            self._samples = pcm
+            self._rate, _, self._channels = mixer.get_init()
 
     # ---- playback (A1)
     def _device_play(self, loops: int, resume: bool) -> None:
@@ -141,7 +192,24 @@ class Sound:
             self._channel.unpause()
             return
         self._channel = self._snd.play(loops=loops)
+        if self._pan != 0.0:                           # a new play starts at full volume, the middle
+            self._apply_pan()
 
+    def _apply_pan(self) -> None:
+        """Pan is the channel's left and right volume. It needs no change to the sound itself, so it
+        works on any sound, and level() and spectrum() (which read the sound) ignore it."""
+        channel = self._channel
+        if self._silent or channel is None or channel.get_sound() is not self._snd:
+            return
+        left, right = _pan_gains(self._pan)
+        channel.set_volume(left, right)
+
+    def pan(self, position: float) -> None:
+        """Move the sound between the speakers, from -1 (all left) to 1 (all right). 0 is the middle."""
+        if isinstance(position, bool) or not isinstance(position, (int, float)) or not -1 <= position <= 1:
+            raise ValueError(f"sound.pan(): pan must be from -1 (left) to 1 (right), not {position!r}")
+        self._pan = float(position)
+        self._apply_pan()
     def _start(self, loop: bool) -> None:
         self._update()
         resume = self._state == "paused"
@@ -338,3 +406,91 @@ class Sound:
                     value = mags[lo] * (1 - frac) + mags[min(lo + 1, len(mags) - 1)] * frac
             out.append(max(0.0, min(1.0, value)))
         return out
+
+    # ---- the numbers, saving and pitch (A3)
+    def samples(self) -> list[float]:
+        """The sound as one list of numbers from -1 to 1 (one channel, however many it has).
+        Draw it to see the wave. Pan and volume are not in it."""
+        if self._made is not None:
+            return list(self._made[0])
+        self._load_samples()
+        return _to_mono(self._samples, self._channels)
+
+    def _samples_at(self, rate: int) -> list[float]:
+        """The same numbers at *rate* samples a second."""
+        if self._made is not None:
+            return synth.resample(self._made[0], self._made[1], rate)
+        return synth.resample(self.samples(), self._rate, rate)
+
+    def save(self, path: str) -> None:
+        """Write the sound to a 16-bit WAV file. The pan is kept; the volume is not."""
+        import wave
+
+        if not isinstance(path, str) or not path:
+            raise ValueError(f"sound.save(): give a file name like 'tune.wav', not {path!r}")
+        self._load_samples()
+        pcm = self._samples
+        if self._channels == 2 and self._pan != 0.0:
+            left, right = _pan_gains(self._pan)
+            pcm = array("h", pcm)
+            pcm[0::2] = array("h", [int(round(v * left)) for v in pcm[0::2]])
+            pcm[1::2] = array("h", [int(round(v * right)) for v in pcm[1::2]])
+        try:
+            with wave.open(path, "wb") as out:
+                out.setnchannels(self._channels)
+                out.setsampwidth(2)
+                out.setframerate(self._rate)
+                out.writeframes(pcm.tobytes())
+        except OSError as exc:
+            raise ValueError(f"sound.save(): could not write {path!r} ({exc})") from exc
+
+    def pitch(self) -> float | None:
+        """The frequency, in hertz, of the one voice playing now, or None when it is quiet or has no
+        clear pitch (or is not playing). It looks at the last 2 048 samples. It is for one voice or
+        instrument at a time, not chords."""
+        self._update()
+        if self._state != "playing":
+            return None
+        return self._cached("pitch", self._compute_pitch)
+
+    def _compute_pitch(self) -> float | None:
+        self._load_samples()
+        return synth.find_pitch(self._window(synth.PITCH_WINDOW), self._rate)
+
+
+def _to_mono(samples: array, channels: int) -> list[float]:
+    if channels == 1:
+        return [v / 32768.0 for v in samples]
+    scale = 1.0 / (32768.0 * channels)
+    return [sum(samples[i:i + channels]) * scale for i in range(0, len(samples), channels)]
+
+
+def sequence(sounds, frame_source=None) -> "Sound":
+    """Sounds one after another, as a new sound (contract A3)."""
+    parts = _check_sounds(sounds, "f.sequence()")
+    out: list[float] = []
+    for s in parts:
+        out.extend(s._samples_at(synth.RATE))
+    return _from_samples(out, synth.RATE, frame_source, "f.sequence()")
+
+
+def mix(sounds, frame_source=None) -> "Sound":
+    """Sounds together, as a new sound. Scaled down only if the sum would clip."""
+    parts = _check_sounds(sounds, "f.mix()")
+    return _from_samples(synth.mix_samples([s._samples_at(synth.RATE) for s in parts]),
+                         synth.RATE, frame_source, "f.mix()")
+
+
+def _check_sounds(sounds, who: str) -> list:
+    sounds = list(sounds)
+    if not sounds:
+        raise ValueError(f"{who}: give it at least one sound")
+    for s in sounds:
+        if not isinstance(s, Sound):
+            raise ValueError(f"{who}: every argument must be a sound, not {s!r}")
+    return sounds
+
+
+def make(values: list[float], frame_source=None, who: str = "f.tone()") -> "Sound":
+    """A sound from samples that synth.py computed (already from -1 to 1, at 44 100)."""
+    return _from_samples(values, synth.RATE, frame_source, who)
