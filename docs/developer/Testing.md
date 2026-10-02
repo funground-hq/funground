@@ -26,7 +26,8 @@ video and audio drivers before pygame is imported.
 | Quick Reference | Every public name appears in the reference; each reference sketch is embedded verbatim | `tests/test_reference.py` | all |
 | Coverage of public names | `__all__` equals the contract; every name has a gallery example and a reference entry | `test_api_contract.py`, `test_gallery.py`, `test_reference.py` | all |
 | Boundaries | Backend libraries are imported only by their provider | `tests/test_boundaries.py` | all |
-| Tools | The originality checker and the gallery browser | `test_check_originality.py`, `test_gallery_browser.py` | all |
+| Tools | The originality checker and the gallery browser (`funground/gallery.py`) | `test_check_originality.py`, `test_gallery_browser.py` | all |
+| Gallery in the package | The examples, data, pictures and CC0 licence are in the wheel; the locator works from a checkout and an installed layout; Copy never overwrites | `test_gallery_package.py` (builds a wheel, about 10 s, needs the build tools) | all |
 
 Notes on three of them:
 

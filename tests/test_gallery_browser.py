@@ -34,7 +34,7 @@ class ScriptedPlatform(HeadlessPlatform):
 
 @pytest.fixture
 def browser(monkeypatch):
-    spec = importlib.util.spec_from_file_location("gallery_browser_under_test", ROOT / "tools" / "gallery_browser.py")
+    spec = importlib.util.spec_from_file_location("gallery_browser_under_test", ROOT / "funground" / "gallery.py")
     module = importlib.util.module_from_spec(spec)
     monkeypatch.setitem(sys.modules, spec.name, module)      # dataclasses look their module up here
     spec.loader.exec_module(module)
@@ -79,17 +79,17 @@ def run(browser, script, after=None):
 
 def test_it_lists_every_gallery_example_grouped_by_area(browser):
     run(browser, {})
-    gallery = browser.gallery
+    examples = browser.list_examples(browser.LOCATIONS.examples)
     app = browser.app
-    assert len(app.entries) == len(gallery.examples())
-    assert [e.path for e in app.entries] == gallery.examples()
+    assert len(app.entries) == len(examples)
+    assert [e.path for e in app.entries] == examples
     assert app.areas[0] == (None, "All", len(app.entries))
     real = app.areas[1:]
     assert sum(count for _, _, count in real) == len(app.entries)
     assert [key for key, _, _ in real] == sorted({e.area for e in app.entries},
-                                                  key=lambda a: (gallery.area_rank(a), a))
+                                                  key=lambda a: (browser.area_rank(a), a))
     for key, title, _ in real:
-        assert title == gallery.AREAS.get(key, key.title())
+        assert title == browser.AREAS.get(key, key.title())
     assert app.view == "grid" and app.area is None
 
 
@@ -121,8 +121,9 @@ def test_clicks_and_keys_move_between_views(browser):
 def test_previous_stops_at_the_first_example_and_next_at_the_last(browser):
     script = {1: click(*centre(browser.area_rect(1))), 2: click(*centre(browser.card_rect(0))),
               3: press("left")}
-    first_area = browser.gallery.examples()[0].parent.name
-    count = sum(1 for p in browser.gallery.examples() if p.parent.name == first_area)
+    examples = browser.list_examples(browser.LOCATIONS.examples)
+    first_area = examples[0].parent.name
+    count = sum(1 for p in examples if p.parent.name == first_area)
     for n in range(4, 5 + count):
         script[n] = press("right")
     states = run(browser, script)
@@ -173,7 +174,7 @@ def test_a_finished_example_can_be_run_again(browser, monkeypatch):
 
 
 def test_a_missing_picture_shows_a_placeholder(browser, tmp_path):
-    browser.IMAGES_DIR = tmp_path / "no_images_here"
+    browser.LOCATIONS = browser.Locations(browser.LOCATIONS.examples, tmp_path / "no_images_here")
     shot = tmp_path / "missing.png"
 
     def after(n, app):
@@ -231,3 +232,25 @@ def test_screenshots_of_the_grid_and_a_detail_view(browser, tmp_path):
     run(browser, script, after)
     assert grid.exists() and grid.stat().st_size > 1000
     assert detail.exists() and detail.stat().st_size > 1000
+
+
+def test_c_and_the_copy_button_copy_the_example_and_never_overwrite(browser, tmp_path):
+    keys = sorted({p.parent.name for p in browser.list_examples(browser.LOCATIONS.examples)},
+                  key=lambda a: (browser.area_rank(a), a))
+    images_area = 1 + keys.index("images")
+    script = {1: click(*centre(browser.area_rect(images_area))), 2: click(*centre(browser.card_rect(0))),
+              3: press("c"), 4: click(*centre(browser.BUTTONS["copy"]))}
+    seen = {}
+
+    def after(n, app):
+        if n == 0:
+            app.copy_dir = tmp_path
+        seen[n] = app.status[0]
+
+    run(browser, script, after)
+    names = sorted(p.name for p in tmp_path.iterdir())
+    assert names == ["01_load_image.py", "01_load_image_2.py", "data"]
+    assert (tmp_path / "data" / "photo.jpg").is_file()
+    assert seen[3].startswith("Copied to") and "01_load_image.py" in seen[3]
+    assert str(tmp_path) in seen[3]
+    assert "C: copy to folder" in (ROOT / "funground" / "gallery.py").read_text(encoding="utf-8")
