@@ -138,7 +138,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-069 | E-22 | User Guide skeleton and first chapters (`docs/guide/`), runnable-snippet test | 5 — done |
 | S-070 | E-02 | Version `0.7.0.dev0` | 5 — done |
 | S-071 | E-22 | User Guide completed for every 0.1 feature; "Coming from p5/Processing" and "Coming from DrawBot" chapters | 6 — done |
-| S-072 | E-22 | Examples Gallery completed: coverage test green for all of `__all__`; curated showcase page | carried to Sprint 11 (release sprint, D-027) |
+| S-072 | E-22 | Examples Gallery completed: coverage test green for all of `__all__`; curated showcase page | 11 |
 | S-073 | E-02 | Release 0.1 on PyPI (D-019, moved to Sprint 11 by D-027): distribution name (D-020), packaging metadata and wheel, changelog, Quick Reference for 0.1, version `0.1.0`, tagged, CI green (needs S-039) | 6 |
 | S-074 | E-11 | Curve vocabulary aligned with Processing/p5 (D-018): Bézier / quadratic / Catmull-Rom vertices, contours, `bezier()`/`curve()` shapes, `bezier_point`/`tangent` | 5 — done |
 | S-075 | E-02 | Rename to `funground` (D-020): package, `pyproject`, examples, guide, reference, tests; `import funground as f`; history not rewritten | 6 — done |
@@ -169,3 +169,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-095 | E-18 | Named layers: `with f.layer("sky"):` built on pictures, stacked in order; shown/hidden by name | later (after 0.1) |
 | S-096 | E-18 | PDF layers (optional content groups) that can be switched on and off in Acrobat/Illustrator; builds on S-094's PDF rewrite and on S-095 | later (after 0.1) |
 | S-097 | E-15 | Real text in SVG output (`<text>` with the font embedded), as T15 does for PDF | later (after 0.1) |
+| S-098 | E-17 | Sound playback: `load_sound`, play/loop/stop/pause/volume (D-046) | 11 |
+| S-099 | E-17 | Sound analysis: `level()`, `spectrum()` (D-046) | 11 |
+| S-100 | E-19 | GIF and MP4 export (D-045 for MP4) | 11 |
+| S-101 | E-30 | Controls: slider, checkbox, button (D-047) | 11 |
