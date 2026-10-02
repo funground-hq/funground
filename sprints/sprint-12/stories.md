@@ -41,7 +41,7 @@ unreachable are pushed and CI is green on all 12 cells (Sprint 11 retro rule).
 - [x] S-106.1 Ask a font for its axes, its family and style names, and whether it has given characters
 
 ### S-107 Erase — E-25 *(D-051; contract F15)*
-- [ ] S-107.1 Drawing that makes pixels transparent (Cairo `CLEAR`/`DEST_OUT`), in the window, pictures and PNG; vector files as far as they can
+- [x] S-107.1 Drawing that makes pixels transparent (Cairo `CLEAR`/`DEST_OUT`), in the window, pictures and PNG; vector files as far as they can
 
 ## Out of scope this sprint
 Sprint 13: microphone input, real text in SVG, the PDF-text polish, layers (if kept).
