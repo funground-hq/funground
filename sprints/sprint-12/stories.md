@@ -18,7 +18,7 @@ unreachable are pushed and CI is green on all 12 cells (Sprint 11 retro rule).
 
 ## Story set
 
-### S-102 Font fallback — E-15 *(in the Phase 3 roadmap, never built)*
+### S-102 Font fallback — E-15 *(D-052 = C; contract T18)*
 - [x] S-102.0 Design spike:
   - a run whose characters the current font lacks takes them from a fallback chain;
   - decide the default chain (bundled vs system fonts, licence and size);
@@ -42,6 +42,11 @@ unreachable are pushed and CI is green on all 12 cells (Sprint 11 retro rule).
 
 ### S-107 Erase — E-25 *(D-051; contract F15)*
 - [x] S-107.1 Drawing that makes pixels transparent (Cairo `CLEAR`/`DEST_OUT`), in the window, pictures and PNG; vector files as far as they can
+### S-095 Layers — E-18 *(D-053; contract F16)*
+- [ ] S-095.1 `f.layer(name)` (pictures underneath), `hide_layer`/`show_layer`, composited in order; pages; window and PNG
+
+### S-096 Layers in PDF and SVG — E-18 *(D-053; contract F16; after S-095)*
+- [ ] S-096.1 PDF optional content groups named after the layers (pypdf post-step, like T15); SVG Inkscape layer groups
 
 ## Out of scope this sprint
-Sprint 13: microphone input, real text in SVG, the PDF-text polish, layers (if kept).
+Sprint 13: microphone input, real text in SVG, the PDF-text polish.

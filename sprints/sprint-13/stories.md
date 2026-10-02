@@ -6,7 +6,6 @@
 - microphone input;
 - real text in SVG output;
 - the PDF-text polish;
-- layers, if the maintainer keeps them;
 - then the release checklist (`sprints/sprint-11/release_checklist.md`).
 
 ## Story set
@@ -29,9 +28,6 @@
 
 ### S-109 PDF text polish — E-15 *(Sprint 10 known limit)*
 - [ ] S-109.1 Solid-colour text written with fill mode (`0 Tr`) instead of clip mode, so pdfium no longer widens rectangular glyphs
-
-### S-095 / S-096 Layers — E-18 *(pending the maintainer's answer)*
-- [ ] Keep, change or drop
 
 ### S-073 Release 0.1 — E-02 *(carried from Sprint 11)*
 - [ ] The release checklist

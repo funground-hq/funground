@@ -166,8 +166,8 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-092 | E-16 | `load_svg` (D-041) | 10 — done |
 | S-093 | E-15 | Spike: searchable PDF text | 10 — done (D-043 raised) |
 | S-094 | E-15 | Real text in PDFs (D-043) | 10 — done |
-| S-095 | E-18 | Named layers: `with f.layer("sky"):` built on pictures, stacked in order; shown/hidden by name | 0.1? pending maintainer (D-049) |
-| S-096 | E-18 | PDF layers (optional content groups) that can be switched on and off in Acrobat/Illustrator; builds on S-094's PDF rewrite and on S-095 | 0.1? pending maintainer (D-049) |
+| S-095 | E-18 | Named layers: `with f.layer("sky"):` built on pictures, stacked in order; shown/hidden by name | 12 (D-053) |
+| S-096 | E-18 | PDF layers (optional content groups) that can be switched on and off in Acrobat/Illustrator; builds on S-094's PDF rewrite and on S-095 | 12 (D-053) |
 | S-097 | E-15 | Real text in SVG output (`<text>` with the font embedded), as T15 does for PDF | 13 (D-049) |
 | S-098 | E-17 | Sound playback: `load_sound`, play/loop/stop/pause/volume (D-046) | 11 | done
 | S-099 | E-17 | Sound analysis: `level()`, `spectrum()` (D-046) | 11 | done
