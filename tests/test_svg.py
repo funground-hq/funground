@@ -407,7 +407,9 @@ def test_it_stays_vector_in_a_pdf(tmp_path):
     s.run_namespace({"draw": draw}, max_frames=1)
     data = out.read_bytes()
     assert b"/Subtype /Image" not in data
-    streams = [zlib.decompress(m) for m in re.findall(rb"stream\r?\n(.*?)\r?\nendstream", data, re.S)
+    # Keep the line end before "endstream": compressed data may itself end in a CR or LF byte, and
+    # cutting it off made this test fail at random. decompressobj ignores what follows the stream.
+    streams = [zlib.decompressobj().decompress(m) for m in re.findall(rb"stream\r?\n(.*?)endstream", data, re.S)
                if m[:1] == b"x"]
     content = b"\n".join(streams) if streams else data
     for operator in (rb"m", rb"l", rb"c"):                              # move, line and curve operators

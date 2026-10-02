@@ -34,9 +34,9 @@ def pdf_text(path) -> bytes:
     """A PDF's bytes with its compressed streams opened, so its page objects can be read."""
     data = path.read_bytes()
     parts = [data]
-    for m in re.finditer(rb"stream\r?\n(.*?)\r?\nendstream", data, re.S):
+    for m in re.finditer(rb"stream\r?\n(.*?)endstream", data, re.S):
         try:
-            parts.append(zlib.decompress(m.group(1)))
+            parts.append(zlib.decompressobj().decompress(m.group(1)))   # keeps a final CR/LF data byte
         except zlib.error:
             pass
     return b"\n".join(parts)
