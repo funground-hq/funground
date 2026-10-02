@@ -65,4 +65,4 @@ the first applied to your shape.
 
 ![Rotating squares](../gallery/images/transforms-01_rotating_squares.png)
 
-**Next:** [9. Paths and clipping](09_paths_and_clipping.md)
+**Next:** [9. Paths, clipping and pictures](09_paths_and_clipping.md)

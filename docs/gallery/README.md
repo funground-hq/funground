@@ -5,6 +5,8 @@ regenerates them. Each example is a complete sketch: copy it into a file and run
 
 Browse these examples interactively: `python tools/gallery_browser.py`
 
+Short on time? See the [showcase](SHOWCASE.md): a dozen of the best pictures on one page.
+
 ## Basics
 
 ### Your first sketch
@@ -98,6 +100,24 @@ Source: [`examples/gallery/colour/03_gradients.py`](../../examples/gallery/colou
 f.color_mode() changes how a tuple of numbers is read as a colour. In "hsb" mode the three numbers are hue, saturation and brightness. In "rgb" mode with a range of 1, red, green and blue run from 0 to 1 instead of 0 to 255. Names like "tomato" and hex strings like "#FF6347" are not changed. Each mode remembers its own ranges.
 
 Source: [`examples/gallery/colour/04_color_mode.py`](../../examples/gallery/colour/04_color_mode.py)
+
+## Blending, opacity and shadows
+
+### Blend modes, opacity and shadows
+
+![Blend modes, opacity and shadows](images/compositing-01_blend_opacity_shadow.png)
+
+f.blend_mode() changes how new drawing mixes with what is already on the canvas: "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights. f.opacity() makes everything after it see-through, and f.shadow() gives it a soft shadow.
+
+Source: [`examples/gallery/compositing/01_blend_opacity_shadow.py`](../../examples/gallery/compositing/01_blend_opacity_shadow.py)
+
+### Off-screen graphics: a trail
+
+![Off-screen graphics: a trail](images/compositing-02_graphics.png)
+
+f.create_graphics() makes a picture: an off-screen canvas with the same drawing commands as the window. Painting a translucent rectangle over it every frame, instead of clearing it, makes older drawing fade instead of vanish - a comet trail, the same trick Processing's PGraphics is used for. f.image() then places the picture wherever you like, at any size.
+
+Source: [`examples/gallery/compositing/02_graphics.py`](../../examples/gallery/compositing/02_graphics.py)
 
 ## Fill, stroke and lines
 
@@ -193,6 +213,14 @@ A FormattedString holds runs of text. Each run can have its own size, style and 
 
 Source: [`examples/gallery/text/07_formatted.py`](../../examples/gallery/text/07_formatted.py)
 
+### Variable font axes
+
+![Variable font axes](images/text-08_variations.png)
+
+f.font_variations(wght=700) sets the axes of a variable font, like its weight or width. The built-in font is not variable, so here the three lines look the same: an axis the font does not have is ignored, which makes the call safe to leave in. Load a variable font with f.load_font() and the weight really changes. f.font_variations() with nothing in the brackets goes back to the font's own defaults.
+
+Source: [`examples/gallery/text/08_variations.py`](../../examples/gallery/text/08_variations.py)
+
 ## Animation and time
 
 ### Bounce
@@ -234,6 +262,16 @@ Source: [`examples/gallery/animation/04_pause.py`](../../examples/gallery/animat
 f.save_gif("spinner.gif", 2) records the next 2 seconds of the sketch and writes them as a GIF that loops for ever. Each frame is shown for 1 divided by the frame rate. f.save_movie("spinner.mp4", 2) does the same for an MP4, which needs the free program ffmpeg. Call either one once; here it is on the first frame. The animation turns once in 60 frames, so the GIF loops without a jump.
 
 Source: [`examples/gallery/animation/05_record_a_gif.py`](../../examples/gallery/animation/05_record_a_gif.py)
+
+## Motion
+
+### Movers with vectors
+
+![Movers with vectors](images/motion-01_movers.png)
+
+A Vector holds an x and a y together: a position, a velocity, a force. Each frame the forces add to the velocity and the velocity adds to the position, just as in p5.js - methods like add() and limit() change the vector itself. heading() gives the direction, for the arrows.
+
+Source: [`examples/gallery/motion/01_movers.py`](../../examples/gallery/motion/01_movers.py)
 
 ## Transforms
 
@@ -484,31 +522,3 @@ Source: [`examples/gallery/images/05_svg.py`](../../examples/gallery/images/05_s
 f.load_sound() reads a sound file. sound.loop() plays it over and over. While it plays, sound.level() tells you how loud it is now, and sound.spectrum() tells you how strong each range of pitch is: low notes on the left, high notes on the right. Both are numbers from 0 to 1. With no sound device, the sketch still runs, in silence. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/01_visualiser.py`](../../examples/gallery/sound/01_visualiser.py)
-
-## Compositing
-
-### Blend modes, opacity and shadows
-
-![Blend modes, opacity and shadows](images/compositing-01_blend_opacity_shadow.png)
-
-f.blend_mode() changes how new drawing mixes with what is already on the canvas: "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights. f.opacity() makes everything after it see-through, and f.shadow() gives it a soft shadow.
-
-Source: [`examples/gallery/compositing/01_blend_opacity_shadow.py`](../../examples/gallery/compositing/01_blend_opacity_shadow.py)
-
-### Off-screen graphics: a trail
-
-![Off-screen graphics: a trail](images/compositing-02_graphics.png)
-
-f.create_graphics() makes a picture: an off-screen canvas with the same drawing commands as the window. Painting a translucent rectangle over it every frame, instead of clearing it, makes older drawing fade instead of vanish - a comet trail, the same trick Processing's PGraphics is used for. f.image() then places the picture wherever you like, at any size.
-
-Source: [`examples/gallery/compositing/02_graphics.py`](../../examples/gallery/compositing/02_graphics.py)
-
-## Motion
-
-### Movers with vectors
-
-![Movers with vectors](images/motion-01_movers.png)
-
-A Vector holds an x and a y together: a position, a velocity, a force. Each frame the forces add to the velocity and the velocity adds to the position, just as in p5.js - methods like add() and limit() change the vector itself. heading() gives the direction, for the arrows.
-
-Source: [`examples/gallery/motion/01_movers.py`](../../examples/gallery/motion/01_movers.py)

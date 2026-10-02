@@ -13,7 +13,7 @@ your picture in it.
 > **Built with AI.** funground is developed by Samir Joshi with substantial help from Anthropic's
 > Claude, used through Claude Code: most of the code, tests and documentation were written by
 > Claude under the maintainer's direction. The maintainer sets the direction, takes every design
-> decision, and reviews and signs off each sprint. The full test suite of more than 650 tests,
+> decision, and reviews and signs off each sprint. The full test suite of more than 1,600 tests,
 > including pixel-exact images, checks every change. Commits Claude helped write say so in a
 > `Co-Authored-By: Claude …` line. See [AI disclosure](#ai-disclosure) below and
 > [AI-USAGE.md](AI-USAGE.md) for the full account.
@@ -54,14 +54,18 @@ python -m pip install git+https://github.com/funground-hq/funground
 - [User Guide](docs/guide/README.md): chapters from your first sketch to animation, interaction,
   text, pictures and saving your work.
 - [Examples Gallery](docs/gallery/README.md): every feature shown in a small sketch, with its picture.
+- [Showcase](docs/gallery/SHOWCASE.md): a dozen of the best pictures on one page.
 - [Quick Reference](docs/reference/Quick_Reference.md): every function on one page.
 
 ## What it can do
 
-Shapes, curves and paths; colour, gradients, blend modes and shadows; transforms; text with
-alignment, text boxes and fonts; animation and loop control; mouse and keyboard events; noise and
-randomness; vectors; off-screen pictures; saving as PNG, PDF, SVG or numbered frames. Text is drawn
-the same way on every computer. PDF and SVG output stays sharp at any size.
+Shapes, rounded corners, curves and paths, with path booleans (union, difference and more); colour,
+gradients, blend modes and shadows; transforms; text with alignment, text boxes, ligatures, mixed
+styles and fonts; animation and loop control; mouse and keyboard events; sliders, checkboxes and
+buttons; noise and randomness; vectors; pictures, SVG drawings, pixels and filters; off-screen
+graphics; sound (play a tune, read its volume); and saving as PNG, PDF (with real text and several
+pages), SVG, numbered frames, or an animated GIF or MP4. Text is drawn the same way on every
+computer. PDF and SVG output stays sharp at any size.
 
 ## How it is built
 

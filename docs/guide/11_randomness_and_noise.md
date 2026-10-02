@@ -52,3 +52,5 @@ f.run()
 
 **Speed.** Each `noise()` call takes a few microseconds, so about 1,500 calls per frame keep a
 sketch at 60 frames per second. For big textures, use fewer octaves or bigger tiles.
+
+**Next:** [12. Useful maths](12_useful_maths.md)

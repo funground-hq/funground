@@ -33,7 +33,7 @@ pending, the maintainer's call**.
 - [x] S-101.2 Tests headless; gallery example; guide; Quick Reference; changelog
 
 ### S-072 Gallery and guide completed — E-22 *(carried from Sprint 5)*
-- [ ] S-072.1 Coverage of every public name; a curated showcase page; guide chapters read through end to end
+- [x] S-072.1 Coverage of every public name; a curated showcase page; guide chapters read through end to end
 
 ### S-073 Release 0.1 prepared — E-02
 - [ ] S-073.1 Version `0.1.0`, metadata, wheel and sdist built and installed in a clean venv on three systems (CI); changelog and Quick Reference for 0.1

@@ -149,8 +149,8 @@ call to `f.text_size()`.
 | `f.load_font(path)` | Load a font file; pass the result to `f.text_font()`. |
 | `f.text_font(font, size=None)` | Use a loaded font (or a path, or `None` for the built-in family) for later text. |
 
-Both are part of the drawing state, so `with f.saved_state():` restores them, exactly like
-`f.fill()` or `f.text_size()`.
+The font and the style are part of the drawing state, so `with f.saved_state():` restores them,
+exactly like `f.fill()` or `f.text_size()`.
 
 When you save a PDF, its text is real text: you can select it, search it and copy it in a PDF
 viewer. The PDF carries the letters of each font it uses, so it looks the same on any computer.
@@ -260,8 +260,7 @@ at the moment of `append()`.
 `f.text(fs, x, y)` and `f.text_box(fs, x, y, w, h)` work like they do for a string, with the
 current `f.text_align()` and `f.text_leading()`. The runs on a line sit on one baseline. A line is
 as tall as its tallest run: with the automatic leading, that is 1.25 times the largest size on the
-line. A `"
-"` in any run starts a new line, and `f.text_box()` breaks lines at spaces, even from
+line. A `"\n"` in any run starts a new line, and `f.text_box()` breaks lines at spaces, even from
 one run to the next, measuring each run with its own settings.
 
 `f.text_box()` returns what did not fit as a FormattedString, and its runs keep their settings,

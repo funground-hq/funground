@@ -120,6 +120,14 @@ def test_index_is_up_to_date():
     assert index.read_text(encoding="utf-8") == gallery.build_index(), "run: python tools/make_gallery.py --index"
 
 
+def test_showcase_is_up_to_date():
+    showcase = gallery.SHOWCASE
+    assert showcase.exists(), "run: python tools/make_gallery.py --index"
+    assert showcase.read_text(encoding="utf-8") == gallery.build_showcase(), "run: python tools/make_gallery.py --index"
+    assert 10 <= len(gallery.SHOWCASE_PICKS) <= 12
+    assert all((gallery.IMAGES / f"{ident}.png").exists() for ident, _ in gallery.SHOWCASE_PICKS)
+
+
 def test_every_example_has_a_gallery_image():
     missing = [gallery.example_id(p) for p in EXAMPLES if not (gallery.IMAGES / f"{gallery.example_id(p)}.png").exists()]
     assert not missing, f"run: python tools/make_gallery.py  (missing images: {missing})"

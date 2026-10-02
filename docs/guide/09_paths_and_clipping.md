@@ -1,4 +1,6 @@
-# 9. Paths and clipping
+# 9. Paths, clipping and pictures
+
+This chapter has two halves. The first is about shapes: paths, clipping, curves and holes. The second is about pictures: loading images and SVG drawings, tinting, pixels and filters.
 
 ## Shapes from points
 
@@ -676,4 +678,4 @@ f.run()
 | `g.filter(kind, value)` | Change every pixel of the picture. |
 | `f.filter(kind, value)` | Change everything drawn on the canvas so far. |
 
-**Next:** [10. Interaction](10_interaction.md)
+**Next:** [10. Interaction: mouse, keyboard and controls](10_interaction.md)

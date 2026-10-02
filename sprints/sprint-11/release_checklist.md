@@ -21,6 +21,7 @@ irreversible actions).
   - Make them absolute (`https://raw.githubusercontent.com/funground-hq/funground/main/...`).
   - Or keep the PyPI description text-only.
 - [ ] `CHANGELOG.md`: turn "Unreleased" into "0.1.0 — <date>".
+- [ ] Root `README.md` install line: switch from the git URL to `pip install funground`. Guide chapter 1 already says that.
 - [ ] Version `0.1.0.dev0` → `0.1.0` in `pyproject.toml`, in a commit of its own.
 - [ ] Build again from a clean checkout of the tagged commit, then run `twine check`.
 - [ ] Install from TestPyPI in clean venvs on Windows, macOS and Linux, and run the smoke test. CI can do Linux and macOS headless.

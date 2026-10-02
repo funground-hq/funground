@@ -23,7 +23,7 @@ When you want movement, write an animated sketch instead, with `setup()`, `draw(
 
 **DrawBot's origin is the bottom-left corner, with y pointing up** — "the origin of the drawing
 board is at the bottom left," in DrawBot's own words. funground's origin is the **top-left
-corner, with y pointing down** (contract C1), the p5/Processing/screen convention. A shape near
+corner, with y pointing down**, the p5/Processing/screen convention. A shape near
 the bottom of a DrawBot page is drawn with a **large** y; the same shape near the bottom of a
 funground canvas is drawn with y close to `f.height`.
 
@@ -33,8 +33,8 @@ DrawBot's `fill()` and `stroke()` take floats from **0.0 to 1.0** per channel, w
 same: `fill(1, 0, 0, .5)` is half-transparent red, `fill(0)` is black, `fill(0, .5)` is grey at
 half opacity. There are no colour names.
 
-funground's colours are **0–255** integers, or a name, or a hex string (contract S1), with alpha
-also 0–255 (contract S2): `f.fill((255, 0, 0, 128))`, `f.fill("red")`, or `f.fill("#FF000080")`.
+funground's colours are **0–255** integers, or a name, or a hex string, with alpha
+also 0–255: `f.fill((255, 0, 0, 128))`, `f.fill("red")`, or `f.fill("#FF000080")`.
 
 To use DrawBot's 0–1 numbers as they are, call `f.color_mode("rgb", 1)` once. Then
 `f.fill((1, 0, 0, 0.5))` is half-transparent red. One number is a grey and two are a grey and an
@@ -44,8 +44,8 @@ opacity, as in DrawBot: `f.fill(0)` is black and `f.fill(0, 0.5)` is grey at hal
 
 DrawBot's `rect(x, y, w, h)` and `oval(x, y, w, h)` take the **same four numbers**: `x, y` is the
 corner of the shape's bounding box, for both of them. funground's `f.rect(x, y, w, h)` also uses
-the top-left corner (contract C4), but `f.ellipse(x, y, w, h)` and `f.circle(x, y, d)` are placed
-by their **centre** (contract C5) — the p5/Processing convention, not DrawBot's. To place ellipses
+the top-left corner, but `f.ellipse(x, y, w, h)` and `f.circle(x, y, d)` are placed
+by their **centre** — the p5/Processing convention, not DrawBot's. To place ellipses
 the DrawBot way, call `f.ellipse_mode("corner")` once.
 
 ```py
@@ -61,10 +61,10 @@ f.ellipse(140, 140, 80, 80)     # centre at (140, 140) — same circle, shifted 
 DrawBot builds a path with a `BezierPath` object (`path.moveTo(...)`, `path.lineTo(...)`,
 `path.curveTo(...)`, `path.closePath()`) and draws it with `drawPath(path)`. funground's
 `f.path()` returns a similar builder (`move_to`, `line_to`, `curve_to`, `close`), drawn with
-`f.draw_path(path)` (contract F3). The main difference is points: DrawBot takes an `(x, y)` pair
+`f.draw_path(path)`. The main difference is points: DrawBot takes an `(x, y)` pair
 for each point; funground's builder takes plain `x, y` numbers.
 
-Shapes and booleans (contract F11). DrawBot's names, in funground's style:
+Shapes and booleans. DrawBot's names, in funground's style:
 
 | DrawBot `BezierPath` | funground `f.path()` |
 |---|---|
@@ -77,7 +77,7 @@ Shapes and booleans (contract F11). DrawBot's names, in funground's style:
 | `a.xor(b)` / `a ^ b` | `a.xor(b)` / `a ^ b` |
 | `path.removeOverlap()` | `path.remove_overlap()` |
 
-Outlines, queries and moves (contract F12):
+Outlines, queries and moves:
 
 | DrawBot `BezierPath` | funground `f.path()` |
 |---|---|
@@ -89,7 +89,7 @@ Outlines, queries and moves (contract F12):
 | `path.rotate(angle, center)` | `path.rotate(degrees, cx, cy)` (clockwise on screen) |
 | `path.copy()` | `path.copy()` |
 
-Letters as a path (contract F13):
+Letters as a path:
 
 | DrawBot `BezierPath` | funground |
 |---|---|
@@ -109,8 +109,7 @@ uses a different library underneath.
 
 DrawBot recommends `with savedState():` over the older `save()`/`restore()`, to save and restore
 the graphics state — transform, colours and more — for one block. funground's `with
-f.saved_state():` does exactly the same job (contract F2), alongside `f.push()`/`f.pop()`
-(D-013).
+f.saved_state():` does exactly the same job, alongside `f.push()`/`f.pop()`.
 
 ![saved_state](../gallery/images/transforms-02_saved_state.png)
 
@@ -123,7 +122,7 @@ f.saved_state():` does exactly the same job (contract F2), alongside `f.push()`/
 | `text(str, (x, y))` | `f.text(message, x, y)` |
 | `textBox(str, (x, y, w, h))` | `f.text_box(message, x, y, w, h)` |
 
-Spacing, features and variable fonts (contract T13). Checked in DrawBot's source:
+Spacing, features and variable fonts. Checked in DrawBot's source:
 `drawBot/drawBotDrawingTools.py` (`tracking`, `openTypeFeatures`, `fontVariations`) and
 `drawBot/context/baseContext.py`.
 
@@ -136,7 +135,7 @@ Spacing, features and variable fonts (contract T13). Checked in DrawBot's source
 | `fontVariations(wght=700)` | `f.font_variations(wght=700)` |
 | `fontVariations(resetVariations=True)` | `f.font_variations()` with no arguments |
 
-Mixed styles in one text (contract T14). Checked in DrawBot's source: `drawBot/context/baseContext.py`,
+Mixed styles in one text. Checked in DrawBot's source: `drawBot/context/baseContext.py`,
 class `FormattedString` (line 1154), `append` (1353), `__add__` (1552), `__len__` (1610), `__repr__` (1613);
 and `drawBot/drawBotDrawingTools.py`, `text` (1833) and `textBox` (1902).
 
@@ -161,8 +160,8 @@ lacks is ignored. DrawBot picks the font by its installed name, funground by a f
 
 Both `textBox` and `f.text_box` wrap text inside a box and **return the text that did not fit**,
 so the rest can flow into a second box (DrawBot: "if the text overflows the rectangle, the
-overflowed text is returned"; funground's contract T10 says the same). funground's text anchor
-defaults to the top-left of the message (contract T1); DrawBot's `(x, y)` is the box's corner in
+overflowed text is returned"; funground does the same). funground's text anchor
+defaults to the top-left of the message; DrawBot's `(x, y)` is the box's corner in
 its own bottom-left, y-up space, so the two need opposite y arithmetic — see the walk-through
 below.
 
@@ -175,7 +174,7 @@ DrawBot's `linearGradient(startPoint, endPoint, colors, locations=None)` and
 between **two circles**, one at each point, each with its own radius — useful for a gradient that
 also drifts sideways. funground's `f.linear_gradient(x1, y1, x2, y2, colors, stops=None)` works
 the same way as DrawBot's linear one; `f.radial_gradient(x, y, radius, colors, stops=None)` is
-simpler — **one** centre, growing out to `radius` (contract S13) — rather than DrawBot's two
+simpler — **one** centre, growing out to `radius` — rather than DrawBot's two
 circles.
 
 ![Gradients](../gallery/images/colour-03_gradients.png)
@@ -187,7 +186,7 @@ what's underneath — though the two libraries don't spell every mode name the s
 `colorDodge`/`colorBurn` are funground's `dodge`/`burn`).
 
 DrawBot's `opacity(value)` (0.0–1.0) is a single, global setting. funground's `f.opacity(0–255)`
-(contract S14) multiplies the alpha of fill and stroke **separately**, so a stroke drawn over its
+multiplies the alpha of fill and stroke **separately**, so a stroke drawn over its
 own fill still shows both, rather than the pair being faded as one flattened group.
 
 DrawBot's `shadow(offset, blur=None, color=None)` and funground's
@@ -293,11 +292,10 @@ f.save("circles.pdf")                           # written at once, like saveImag
 f.show()                                        # look at it; close the window to finish
 ```
 
-## What is not here yet
+## What is not here
 
-DrawBot features funground doesn't have yet include video export. It is planned for Phase 3,
-before funground reaches 1.0, without a firm date yet. CMYK colour is out of scope for good — see the next line for why.
+Some DrawBot features are not in funground. CMYK colour is left out for good. The list linked below says why.
 
-Some features are left out on purpose. [ADR-003](../design/ADR-003-out-of-scope.md) lists them, with what to use instead.
+Some features are left out on purpose. [The list of what is left out](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
 
 **Next:** [16. Sound](16_sound.md)

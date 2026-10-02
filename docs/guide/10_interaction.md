@@ -161,7 +161,6 @@ A few things to know:
 - **No window?** With `FUNGROUND_HEADLESS=1` the controls keep their values, and setting them still
   works, so you can test a sketch.
 
-*Coming from Playground 0.5?* `f.mouse_pressed` is now `f.is_mouse_pressed`, because
-`mouse_pressed()` is the name of the callback — as in p5.js.
+`f.is_mouse_pressed` is the live value and `mouse_pressed()` is the callback, as in p5.js.
 
 **Next:** [11. Randomness and noise](11_randomness_and_noise.md)
