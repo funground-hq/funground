@@ -1,7 +1,6 @@
 # Sprint 11 review — Phase 3e: sound, motion, controls, release prep
 
-**Dates:** 2 October 2026, planned and built under D-034 while Sprint 10 awaited sign-off.
-**Draft for the maintainer's sign-off.**
+**Dates:** 2 October 2026, planned and built under D-034; closed by the maintainer 3 October 2026
 
 **Goal:**
 - sound playback and analysis;
@@ -86,7 +85,7 @@ CI: not run - GitHub unreachable from this machine all of 2 Oct; 13 commits wait
 
 ## Sign-off
 
-*Awaiting the maintainer, after Sprint 10.* Push and check CI first.
+**Closed 3 October 2026** by the maintainer ("signed off"). D-045 was answered B (the `funground[video]` extra, with a real MP4 test now running); D-046, D-047 and D-048 stand. CI green on 12 cells. S-073 (publishing) is carried to Sprint 13, after the scope widening of D-049.
 
 ## Retrospective
 

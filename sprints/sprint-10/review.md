@@ -1,6 +1,6 @@
 # Sprint 10 review — Phase 3d: typography, SVG and real PDF text
 
-**Dates:** 1–2 October 2026. **Draft for the maintainer's sign-off.**
+**Dates:** 1–2 October 2026; closed by the maintainer 3 October 2026
 
 **Goal:**
 - richer text: tracking, OpenType features, variable fonts, mixed styles in one text;
@@ -133,8 +133,7 @@ Review fixes were made under D-034. Each restores the pinned contract and needs 
 
 ## Sign-off
 
-*Awaiting the maintainer.* Before closing, CI must be checked on the commits from `ced4386` to
-`eaa4574`. They were made while GitHub was unreachable, and some may still need pushing.
+**Closed 3 October 2026** by the maintainer ("signed off"). D-042 and D-044 stand; the review fixes stand as bug fixes. CI was green on all 12 cells once the commits were pushed (a flaky PDF-stream test found on the way was fixed in `86ea1ca`).
 
 ## Retrospective
 
