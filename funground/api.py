@@ -11,6 +11,7 @@ import sys
 from contextlib import AbstractContextManager
 
 from .color import ColorLike as Color
+from .controls import Button, Checkbox, Slider  # noqa: F401  (public through f.create_slider and friends, S-101)
 from .paths import PathBuilder
 from .picture import Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
 from .sketch import DEFAULT_SHADOW_COLOR, Sketch
@@ -678,6 +679,24 @@ def create_graphics(width: int, height: int) -> Picture:
     """A picture: an off-screen canvas width x height, transparent to start, with its own
     drawing commands (fill, circle, push/pop, ...) and its own state and transform."""
     return active_sketch().create_graphics(width, height)
+
+
+# ---- controls (S-101, contract U1)
+def create_slider(low: float, high: float, value: float | None = None, step: float | None = None,
+                  label: str | None = None) -> Slider:
+    """A slider in a panel below the canvas. Make it in setup(); read it in draw() with slider.value().
+    It starts at *value* (default: low). *step*, when given, is the size of each move."""
+    return active_sketch().create_slider(low, high, value, step, label)
+
+
+def create_checkbox(label: str, checked: bool = False) -> Checkbox:
+    """A tick box in the panel below the canvas. Read it with box.checked()."""
+    return active_sketch().create_checkbox(label, checked)
+
+
+def create_button(label: str) -> Button:
+    """A button in the panel below the canvas. button.clicked() is true once for each click."""
+    return active_sketch().create_button(label)
 
 
 def load_image(path: str) -> Picture:

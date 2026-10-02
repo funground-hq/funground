@@ -132,37 +132,114 @@ class PygamePlatform:
         self._input_scale = 1.0   # divisor for mouse coordinates (see input_state)
         self._events: list[InputEvent] = []
         self._held_keys: set[int] = set()     # key codes currently down (for f.is_key_pressed)
+        # S-101 controls. The panel is chrome below the canvas: the window is taller by its height,
+        # the sketch draws it (as pixels) and this class only blits it and routes the mouse to it.
+        self._panel = None                    # the sketch's ControlPanel, or None
+        self._panel_image: pygame.Surface | None = None
+        self._canvas = (0, 0)                 # the canvas's logical size (what open_window was given)
+        self._title = "funground"
+        self._window_panel = 0                # the panel height (logical) the open window was made for
+        self._full = False
+        self._capturing = False               # a left press that began in the panel is still held
+        self._canvas_down = False             # a press that began on the canvas is still held
 
     @property
     def backing_scale(self) -> float:
         return self._scale
 
+    # ---- controls panel (S-101)
+    def _panel_logical(self) -> int:
+        return self._panel.height if self._panel else 0
+
+    def _canvas_physical(self) -> tuple[int, int]:
+        """The window's size without the panel strip: what the renderer's surface should be."""
+        sw, sh = self._screen.get_size()
+        return sw, sh - round(self._window_panel * self._scale)
+
+    def set_controls(self, panel) -> bool:
+        panel = panel if panel else None
+        # The sketch's panel object grows in place, so compare with the height the window was made for.
+        changed = (self._window_panel != (panel.height if panel else 0))
+        self._panel = panel
+        self._panel_image = None
+        self._capturing = False
+        if changed and self._screen is not None and not self._full:
+            self.open_window(*self._canvas, self._title)    # same canvas, a window taller or shorter by the panel
+        return True
+
+    def present_panel(self, pixels: Pixels) -> None:
+        if self._screen is None:
+            return
+        # copy(): the pixels are the sketch's panel surface, which it reuses for the next draw
+        self._panel_image = pygame.image.frombuffer(pixels.data, (pixels.width, pixels.height), pixels.format).copy()
+        self._blit_panel()
+        self._flip()
+
+    def _blit_panel(self) -> None:
+        if self._panel_image is not None and self._screen is not None:
+            self._screen.blit(self._panel_image, (0, self._canvas_physical()[1]))
+
+    def _flip(self) -> None:
+        if self._window is not None:
+            self._window.flip()
+        else:
+            pygame.display.flip()
+
+    def _route_to_panel(self, ev: InputEvent) -> bool:
+        """True when the mouse event belongs to the panel, so the sketch must not see it."""
+        panel = self._panel
+        if panel is None or not ev.kind.startswith("mouse"):
+            return False
+        width, top = self._canvas[0], self._canvas[1]
+        py = ev.y - top
+        if self._capturing:
+            if ev.kind in ("mouse_dragged", "mouse_moved"):
+                panel.drag(ev.x, py, width)
+            elif ev.kind == "mouse_released" and ev.button == "left":
+                panel.release(ev.x, py, width)
+                self._capturing = False
+            return True
+        if ev.y >= top and not self._canvas_down:
+            if ev.kind == "mouse_pressed" and ev.button == "left":
+                panel.press(ev.x, py, width)
+                self._capturing = True
+            return True
+        if ev.kind == "mouse_pressed":
+            self._canvas_down = True
+        elif ev.kind == "mouse_released":
+            self._canvas_down = False
+        return False
+
     # ---- window
     def open_window(self, width: int, height: int, title: str) -> tuple[int, int]:
         pygame.display.init()
+        self._canvas, self._title, self._full = (width, height), title, False
+        self._window_panel = self._panel_logical()
+        total = height + self._window_panel
         if self._window is not None:
             # resize_canvas() on the SDL high-DPI route: resize this window, never open a second one
             self._window.set_windowed()
-            self._window.size = (width, height)
+            self._window.size = (width, total)
             self._window.title = title
             self._screen = self._window.get_surface()
             self._scale = detect_backing_scale(self._window)
-            return self._screen.get_size()
+            return self._canvas_physical()
         if _uses_sdl_highdpi_window():
             # macOS / Linux: ask SDL for a high-DPI window at the *logical* size;
             # the window surface comes back at drawable (physical) size and the
             # scale is whatever ratio SDL actually gave us. Mouse coordinates on
             # this route are already in screen units, so they are not divided.
-            self._window = pygame.Window(title, (width, height), allow_high_dpi=True)
+            self._window = pygame.Window(title, (width, total), allow_high_dpi=True)
             self._screen = self._window.get_surface()
             self._scale = detect_backing_scale(self._window)
             self._input_scale = 1.0
-            return self._screen.get_size()
+            return self._canvas_physical()
         self._window = None
         self._scale = detect_backing_scale()
         self._input_scale = self._scale
         physical = (round(width * self._scale), round(height * self._scale))
-        self._screen = pygame.display.set_mode(physical)
+        panel = round(self._panel_logical() * self._scale)
+        self._screen = pygame.display.set_mode((physical[0], physical[1] + panel))
         pygame.display.set_caption(title)
         return physical
 
@@ -186,13 +263,17 @@ class PygamePlatform:
             self._window.set_fullscreen(desktop=True)
             self._screen = self._window.get_surface()
             self._scale = detect_backing_scale(self._window)
-            return self._screen.get_size()
-        self._scale = detect_backing_scale()
-        self._input_scale = self._scale
-        physical = pygame.display.get_desktop_sizes()[0]          # physical pixels of the main display
-        self._screen = pygame.display.set_mode(physical, pygame.FULLSCREEN)
-        pygame.display.set_caption(title)
-        return self._screen.get_size()
+        else:
+            self._scale = detect_backing_scale()
+            self._input_scale = self._scale
+            physical = pygame.display.get_desktop_sizes()[0]          # physical pixels of the main display
+            self._screen = pygame.display.set_mode(physical, pygame.FULLSCREEN)
+            pygame.display.set_caption(title)
+        # With controls the panel takes its strip of the screen; the canvas is what is left above it.
+        self._title, self._full, self._window_panel = title, True, self._panel_logical()
+        cw, ch = self._canvas_physical()
+        self._canvas = (round(cw / self._scale), round(ch / self._scale))
+        return cw, ch
 
     _CURSORS = {"arrow": "SYSTEM_CURSOR_ARROW", "cross": "SYSTEM_CURSOR_CROSSHAIR", "hand": "SYSTEM_CURSOR_HAND",
                 "move": "SYSTEM_CURSOR_SIZEALL", "text": "SYSTEM_CURSOR_IBEAM", "wait": "SYSTEM_CURSOR_WAIT"}
@@ -232,7 +313,7 @@ class PygamePlatform:
             elif event.type == pygame.WINDOWFOCUSLOST:
                 self._held_keys.clear()           # key-ups are not delivered while unfocused
             translated = self._translate(event)
-            if translated is not None:
+            if translated is not None and not self._route_to_panel(translated):
                 self._events.append(translated)
         return keep_running
 
@@ -271,8 +352,8 @@ class PygamePlatform:
     def input_state(self) -> InputState:
         x, y = pygame.mouse.get_pos()
         s = self._input_scale
-        return InputState(round(x / s), round(y / s), any(pygame.mouse.get_pressed(3)),
-                          bool(self._held_keys))
+        pressed = any(pygame.mouse.get_pressed(3)) and not self._capturing    # a panel click is not the sketch's
+        return InputState(round(x / s), round(y / s), pressed, bool(self._held_keys))
 
     def key_down(self, key: str | int) -> bool:
         return bool(pygame.key.get_pressed()[key_code(key)])
@@ -282,10 +363,8 @@ class PygamePlatform:
             raise RuntimeError("no window to present to")
         image = pygame.image.frombuffer(pixels.data, (pixels.width, pixels.height), pixels.format)
         self._screen.blit(image, (0, 0))
-        if self._window is not None:
-            self._window.flip()
-        else:
-            pygame.display.flip()
+        self._blit_panel()
+        self._flip()
 
     def tick(self, fps: int) -> float:
         if self._clock is None:
@@ -295,7 +374,9 @@ class PygamePlatform:
     def capture(self) -> tuple[tuple[int, int], bytes]:
         if self._screen is None:
             raise RuntimeError("no window to capture")
-        return (self._screen.get_size(), pygame.image.tobytes(self._screen, "RGB"))
+        size = self._canvas_physical()          # the canvas only: the controls panel is not part of the picture
+        canvas = self._screen if size == self._screen.get_size() else self._screen.subsurface((0, 0, *size))
+        return (size, pygame.image.tobytes(canvas, "RGB"))
 
     def close(self) -> None:
         # The display surface dies with pygame.quit(); forget it so a later
@@ -309,3 +390,5 @@ class PygamePlatform:
         self._window = None
         self._screen = None
         self._clock = None
+        self._panel_image = None
+        self._capturing = self._canvas_down = False
