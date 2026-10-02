@@ -174,6 +174,10 @@ ADDED_FUNCTIONS = {
     "save_gif": "(path: 'str', seconds: 'float') -> 'None'",
     "save_movie": "(path: 'str', seconds: 'float') -> 'None'",
     "frame_duration": "(seconds: 'float') -> 'None'",
+    # S-095 layers
+    "layer": "(name: 'str') -> 'Picture'",
+    "hide_layer": "(name: 'str') -> 'None'",
+    "show_layer": "(name: 'str') -> 'None'",
     # S-101 controls
     "create_slider": "(low: 'float', high: 'float', value: 'float | None' = None, step: 'float | None' = None, label: 'str | None' = None) -> 'Slider'",
     "create_checkbox": "(label: 'str', checked: 'bool' = False) -> 'Checkbox'",

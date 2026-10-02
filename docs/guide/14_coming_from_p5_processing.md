@@ -158,6 +158,7 @@ matches p5's exactly.
 | `createGraphics(w, h)` | `createGraphics(w, h)` | `f.create_graphics(w, h)` |
 | draw on it directly | `pg.beginDraw()` … `pg.endDraw()` around every use | draw on it directly, no begin/end |
 | `image(pg, x, y)` | `image(pg, x, y)` | `f.image(g, x, y)` |
+| `pg = createGraphics(w, h)`, draw on `pg`, then `image(pg, 0, 0)` every frame | the same, with `beginDraw()`/`endDraw()` | `with f.layer("name"):` - the friendly version. The layer is the size of the canvas, keeps its drawing, and is put over the canvas for you |
 
 ![Drawing off-screen](../gallery/images/compositing-02_graphics.png)
 

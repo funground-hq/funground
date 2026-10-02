@@ -127,6 +127,14 @@ After f.erase(), everything you draw removes what is under it instead of paintin
 
 Source: [`examples/gallery/compositing/03_scratch_card.py`](../../examples/gallery/compositing/03_scratch_card.py)
 
+### Layers: a sky that stays and a trail that builds up
+
+![Layers: a sky that stays and a trail that builds up](images/compositing-04_layers.png)
+
+`with f.layer("name"):` sends everything drawn inside the block to a see-through layer that sits over the canvas. A layer keeps its drawing from one frame to the next. Here the canvas is wiped and redrawn every frame, yet the "trail" layer keeps every dot the ball leaves behind. The "sky" layer is drawn once, in the first frame, and never again. hide_layer() and show_layer() switch it off and on; it keeps its stars while it is hidden.
+
+Source: [`examples/gallery/compositing/04_layers.py`](../../examples/gallery/compositing/04_layers.py)
+
 ## Fill, stroke and lines
 
 ### Fill and stroke

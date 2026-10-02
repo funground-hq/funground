@@ -161,6 +161,11 @@ class Sketch:
         self._panel_renderer: Renderer | None = None
         self._panel_drawn: tuple | None = None     # (version, width, scale) of the panel pixels it has
         self._in_draw = False
+        # S-095, contract F16: the named layers of this canvas, in the order they were first made;
+        # each is a canvas-sized Picture. _layer_open is the one a "with f.layer():" block draws on.
+        self._layers: dict[str, Picture] = {}
+        self._layers_hidden: set[str] = set()
+        self._layer_open: Picture | None = None
 
     # ------------------------------------------------------------ state
     @property
@@ -318,6 +323,7 @@ class Sketch:
         self._script_depth = 0
         self._page_full = False
         self._reset_pixel_state()
+        self._drop_layers()
 
     # ---- pages (S-084, contract R16, R17, D1)
     def new_page(self, width: Any = None, height: int | None = None) -> None:
@@ -348,7 +354,8 @@ class Sketch:
             self.size(w, h)
             return
         self._sync_canvas()
-        self._pages.append((self.width, self.height, list(self.frame.ops), bytes(self._renderer.pixels().data)))
+        self._pages.append((self.width, self.height, list(self._with_layers(self.frame)),
+                            bytes(self._view_pixels().data)))
         self._pages_full.append(self._page_full)
         self._page_durations.append(self._frame_duration)
         self.width, self.height = int(w), int(h)
@@ -363,7 +370,7 @@ class Sketch:
     def _document_pages(self) -> list[tuple[int, int, list, bytes | None]]:
         """Every page, the current one last: (width, height, ops, pixels). The current page's pixels are None."""
         self._flush_pixel_patch()
-        return [*self._pages, (self.width, self.height, list(self.frame.ops), None)]
+        return [*self._pages, (self.width, self.height, list(self._with_layers(self.frame)), None)]
 
     def _script_flush(self) -> None:
         """Draw the ops added since the last flush onto the script canvas's surface."""
@@ -411,7 +418,7 @@ class Sketch:
                 pw, ph = platform.open_window(self.width, self.height, self.title)
             renderer.attach(pw, ph, platform.backing_scale)
             renderer._base_matrix = renderer._ctx.get_matrix()
-            renderer.draw_batch(renderer._ctx, self.frame, 0)      # the kept drawing, at the window's scale
+            renderer.draw_batch(renderer._ctx, self._with_layers(self.frame), 0)   # the kept drawing, at the window's scale
             platform.start()
             platform.set_cursor(self._cursor)
             pixels = renderer.pixels()
@@ -463,6 +470,7 @@ class Sketch:
     def _attach(self, pw: int, ph: int) -> None:
         self._renderer.attach(pw, ph, self._platform.backing_scale)
         self._reset_pixel_state()
+        self._drop_layers()
         self._has_window = True
         self._platform.set_cursor(self._cursor)
 
@@ -562,6 +570,105 @@ class Sketch:
         if self._has_window and not self._script:
             self._platform.set_cursor(None)
 
+    # ---- layers (S-095, contract F16, D-053)
+    def layer(self, name: str):
+        """The layer called *name*, made on first use (a canvas-sized picture); use it in "with"."""
+        self._require_window()
+        if not isinstance(name, str):
+            raise TypeError(f"f.layer() needs a name in quotes, e.g. f.layer(\"sky\"), not {name!r}")
+        if not name:
+            raise ValueError("f.layer() needs a name that is not empty")
+        if self._layer_open is not None:
+            raise RuntimeError("f.layer() cannot be used inside another layer block: layers do not nest. "
+                               "Finish the first `with f.layer(...)` block, then start the next one.")
+        picture = self._layers.get(name)
+        if picture is None:
+            picture = self.create_graphics(self.width, self.height)
+            picture._layer_owner = self
+            picture._layer_name = name
+            self._layers[name] = picture
+        return picture
+
+    def _enter_layer(self, picture) -> None:
+        if self._layers.get(picture._layer_name) is not picture:
+            raise RuntimeError("this layer belongs to an earlier canvas (f.size() or a new page dropped it). "
+                               "Call f.layer(name) again to get the current one.")
+        if self._layer_open is not None:
+            raise RuntimeError("layers do not nest: a `with f.layer(...)` block cannot start inside another one.")
+        self._layer_open = picture
+
+    def _known_layer(self, name: str, call: str) -> None:
+        if name not in self._layers:
+            known = ", ".join(repr(n) for n in self._layers) or "none yet"
+            raise ValueError(f"f.{call}(): there is no layer called {name!r}. Layers so far: {known}")
+
+    def hide_layer(self, name: str) -> None:
+        """Stop showing a layer (it keeps its drawing)."""
+        self._known_layer(name, "hide_layer")
+        self._layers_hidden.add(name)
+
+    def show_layer(self, name: str) -> None:
+        """Show a hidden layer again."""
+        self._known_layer(name, "show_layer")
+        self._layers_hidden.discard(name)
+
+    def _drop_layers(self) -> None:
+        """A new canvas (size, page, run): its layers go with the old one."""
+        self._layers = {}
+        self._layers_hidden = set()
+        self._layer_open = None
+
+    def _layer_ops(self) -> list[ir.Image]:
+        """One ir.Image (tagged layer=name) for each visible layer, in first-use order.
+
+        These are never stored in self.frame: they are added on top of a copy of it whenever the
+        canvas is drawn for a window, a PNG, a PDF or an SVG, so the canvas's own ops (and IR
+        snapshots) stay exactly what the sketch drew. Every layer is flushed, hidden or not."""
+        ops: list[ir.Image] = []
+        for name, picture in self._layers.items():
+            snap = picture._snapshot()                 # draws what the layer has recorded so far
+            if name in self._layers_hidden:
+                continue
+            ops.append(ir.Image(picture.name, snap.version, 0.0, 0.0, float(picture.width),
+                                float(picture.height), snapshot=snap, layer=name))
+        return ops
+
+    def _with_layers(self, frame: ir.Frame) -> ir.Frame:
+        """*frame* with the visible layers' ops after it (the same frame when there are none)."""
+        if not self._layers:
+            return frame
+        layers = self._layer_ops()
+        return ir.Frame([*frame, *layers]) if layers else frame
+
+    def _view(self):
+        """A renderer whose surface is the canvas with the visible layers over it (the canvas's own
+        renderer when there are none). Call after the canvas has been drawn up to date."""
+        if not self._layers:
+            return self._renderer
+        layers = self._layer_ops()
+        if not layers:
+            return self._renderer
+        src = self._renderer.pixels()
+        view = default_renderer()
+        view.attach(src.width, src.height, self._renderer._scale)
+        surface = view.surface
+        surface.flush()
+        surface.get_data()[:] = bytes(src.data)
+        surface.mark_dirty()
+        view._base_matrix = view._ctx.get_matrix()
+        view.draw_batch(view._ctx, ir.Frame(layers), 0)
+        return view
+
+    def _view_pixels(self):
+        """The pixels of _view(), as a copy when they are not the canvas's own surface."""
+        from .platform.base import Pixels
+
+        view = self._view()
+        pixels = view.pixels()
+        if view is self._renderer:
+            return pixels
+        return Pixels(bytes(pixels.data), pixels.width, pixels.height, pixels.format)
+
     # ---- pictures (S-052, contract P1)
     def create_graphics(self, width: int, height: int):
         """An off-screen picture width x height, transparent to start; needs the window first."""
@@ -647,7 +754,7 @@ class Sketch:
         else:
             self._renderer.render(self.frame)
         self._refresh_panel()
-        self._platform.present(self._renderer.pixels())
+        self._platform.present(self._view_pixels())          # the canvas with its visible layers over it (F16)
         self._queue_sequence_frame()
         self._record_motion_frame()
         self._flush_saves()
@@ -717,9 +824,9 @@ class Sketch:
         from . import imaging
 
         if w is None:
-            r, g, b, a = imaging.bgra_to_rgba(self._renderer.read_logical(x, y, 1, 1, self.width, self.height), 1, 1)
+            r, g, b, a = imaging.bgra_to_rgba(self._view().read_logical(x, y, 1, 1, self.width, self.height), 1, 1)
             return Color(r, g, b, a)
-        bgra = self._renderer.read_logical(x, y, w, h, self.width, self.height)
+        bgra = self._view().read_logical(x, y, w, h, self.width, self.height)
         picture = Picture.from_pixels(w, h, bgra, self._next_graphics_name())
         picture._sketch._name_root = self._name_root or self
         return picture
@@ -798,9 +905,9 @@ class Sketch:
             return
         if fmt == "png":
             self._script_flush()
-            save_pixels(self._renderer.pixels(), path)
+            save_pixels(self._view_pixels(), path)
         else:
-            save_frame(self.frame, path, self.width, self.height, self._script_scale)
+            save_frame(self._with_layers(self.frame), path, self.width, self.height, self._script_scale)
 
     def _save_pages(self, path: str, fmt: str) -> None:
         import os
@@ -818,7 +925,7 @@ class Sketch:
         for number, (w, h, ops, pixels) in enumerate(pages, 1):
             numbered = f"{stem}_{number}{ext}"
             if fmt == "png":
-                shown = self._renderer.pixels() if pixels is None else Pixels(
+                shown = self._view_pixels() if pixels is None else Pixels(
                     pixels, round(w * scale), round(h * scale), "BGRA")
                 save_pixels(shown, numbered)
             else:
@@ -865,7 +972,7 @@ class Sketch:
         scale = self._script_scale
         for w, h, _, pixels in pages:
             if pixels is None:
-                bgra = self._renderer.read_logical(0, 0, w, h, w, h)
+                bgra = self._view().read_logical(0, 0, w, h, w, h)
             else:
                 bgra = motion.resample_bgra(pixels, round(w * scale), round(h * scale), w, h)
             frames.append(motion.bgra_to_rgb(bgra, w, h))
@@ -915,7 +1022,7 @@ class Sketch:
             raise ValueError(f"the canvas changed size from {size[0]} x {size[1]} to {w} x {h} while "
                              f"{path!r} was being recorded; a GIF or MP4 keeps one size")
         recording[4] = (w, h)
-        frames.append(motion.bgra_to_rgb(self._renderer.read_logical(0, 0, w, h, w, h), w, h))
+        frames.append(motion.bgra_to_rgb(self._view().read_logical(0, 0, w, h, w, h), w, h))
         recording[2] = left - 1
         if recording[2] > 0:
             return
@@ -965,9 +1072,10 @@ class Sketch:
         paths, self._pending_saves = self._pending_saves, []
         for path in paths:
             if format_of(path) == "png":
-                save_pixels(self._renderer.pixels(), path)      # what is on screen
+                save_pixels(self._view_pixels(), path)      # what is on screen
             else:
-                save_frame(self.frame, path, self.width, self.height, self._platform.backing_scale)
+                save_frame(self._with_layers(self.frame), path, self.width, self.height,
+                           self._platform.backing_scale)
 
     # ------------------------------------------------------------ style
     def read_color(self, value: ColorLike, *more: float) -> Color:
@@ -1875,6 +1983,7 @@ class Sketch:
         self.last_ops: tuple[ir.Op, ...] | None = None
         self.frame.clear()
         self._reset_pixel_state()
+        self._drop_layers()
         self._states.unwind()
         self._shape = None
         if not was_script:
@@ -1939,6 +2048,7 @@ class Sketch:
             self.running = False
             self.frame.clear()
             self._reset_pixel_state()
+            self._drop_layers()
             self._pending_saves.clear()
             self._frame_sequence = None
             self._motion = None                      # a recording the sketch did not live to finish is dropped

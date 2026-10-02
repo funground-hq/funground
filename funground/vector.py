@@ -50,7 +50,7 @@ class Vector:
         """A vector of length 1 in a random direction. ``f.random_seed()`` makes it repeatable."""
         from . import api
 
-        return cls.from_angle(api.active_sketch()._rng.uniform(0.0, 360.0))
+        return cls.from_angle(api.canvas_sketch()._rng.uniform(0.0, 360.0))
 
     def copy(self) -> Vector:
         return Vector(self.x, self.y)

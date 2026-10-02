@@ -1,0 +1,28 @@
+[
+ {
+  "color": [
+   25,
+   25,
+   112,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "diameter": 30,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 330,
+  "y": 313.03753840657464
+ }
+]
