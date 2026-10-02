@@ -196,3 +196,11 @@ sprint review adds its entry here.
 - Review (Claude) fixed four bugs where the code broke the contract. One IR snapshot that had
   recorded a bug was regenerated, and this is stated in the sprint review.
 
+### Sprint 11: sound, motion, controls, release prep (2 Oct 2026)
+- On the maintainer's request to "continue in autonomous mode", Claude planned the sprint under D-034.
+  Claude decided the sound, controls and motion-export APIs (D-046 to D-048), and raised the ffmpeg
+  question (D-045) for the maintainer.
+- Five stories were built by Claude Sonnet 5 sub-agents, controls in its own git worktree. Claude
+  reviewed and merged them, pinned each builder's own choices in the contract, and prepared the
+  release package. Nothing was published.
+
