@@ -3,7 +3,7 @@
 Every picture below is made by running the example beside it — `python tools/make_gallery.py`
 regenerates them. Each example is a complete sketch: copy it into a file and run it.
 
-Browse these examples interactively: `python tools/gallery_browser.py`
+Browse these examples interactively: `python -m funground.gallery`
 
 Short on time? See the [showcase](SHOWCASE.md): a dozen of the best pictures on one page.
 

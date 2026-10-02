@@ -8,7 +8,7 @@ version = "0.1.0.dev0"
 description = "Creative coding for learners: p5.js/Processing and DrawBot-style 2D drawing in Python."
 readme = "README.md"
 license = "LGPL-2.1-or-later"
-license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md", "funground/fonts/DejaVu-LICENSE.txt", "funground/fonts/Noto-OFL.txt"]
+license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md", "funground/fonts/DejaVu-LICENSE.txt", "funground/fonts/Noto-OFL.txt", "examples/LICENSE"]
 requires-python = ">=3.11"
 authors = [{ name = "Samir Joshi" }]
 keywords = ["creative coding", "education", "drawing", "p5", "processing", "drawbot", "generative art", "graphics"]
@@ -42,10 +42,23 @@ extras = ["pillow>=11"]
 video = ["imageio-ffmpeg>=0.5"]        # an ffmpeg for MP4 export (D-045 = B)
 
 [tool.setuptools]
-packages = ["funground", "funground.platform", "funground.renderers", "funground.export"]
+packages = ["funground", "funground.platform", "funground.renderers", "funground.export",
+            "funground.examples", "funground.gallery_images"]
+
+# The gallery examples ship without moving (S-103, D-049): the build maps the repository's
+# own folders into the package. `funground/examples/` holds <area>/NN_name.py with its data/
+# and fonts/ folders; `funground/gallery_images/` holds the pictures the browser shows. The
+# examples' CC0 licence (examples/LICENSE) travels with the other licences (license-files above).
+# setuptools prints a "package would be ignored" warning for each area folder: they are data
+# folders, not packages, and the globs below put their files in the wheel.
+[tool.setuptools.package-dir]
+"funground.examples" = "examples/gallery"
+"funground.gallery_images" = "docs/gallery/images"
 
 [tool.setuptools.package-data]
 funground = ["fonts/*.ttf", "fonts/*.txt"]
+"funground.examples" = ["*/*.py", "*/data/*", "*/fonts/*"]
+"funground.gallery_images" = ["*.png"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

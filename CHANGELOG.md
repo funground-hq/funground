@@ -70,8 +70,12 @@ pygame-ce that was never published.
 - **Tint and parts of a picture:** `f.tint(color)` / `f.no_tint()` multiply the colour and alpha of
   pictures drawn with `f.image()`, and `f.image(picture, x, y, w, h, sx, sy, sw, sh)` draws only a
   part of a picture, as in p5 (also on `g.image`).
-- **Gallery browser:** `python tools/gallery_browser.py` browses every example by topic, with its
+- **Gallery browser:** `python -m funground.gallery` browses every example by topic, with its
   picture, description and code, and runs it in its own window. It is itself a funground app.
+  The examples, their data files and pictures now ship inside the package (D-049), so it works after
+  a plain install. Press **C** (or the Copy button) to copy an example and its data into the current
+  folder; it never overwrites (a taken name becomes `_2`). `--list` prints the examples with no
+  window. In a checkout `python tools/gallery_browser.py` still works (S-103).
 - **Scripts:** a file can be a script instead of an animated sketch: no `draw()`, no `f.run()`.
   `f.size()` makes a canvas with no window, `f.save()` writes at once, and the new `f.show()` opens a
   window to look at it. A file that mixes the two styles gets a clear error, and a program that has

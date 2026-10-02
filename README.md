@@ -55,6 +55,7 @@ python -m pip install git+https://github.com/funground-hq/funground
   text, pictures and saving your work.
 - [Examples Gallery](docs/gallery/README.md): every feature shown in a small sketch, with its picture.
 - [Showcase](docs/gallery/SHOWCASE.md): a dozen of the best pictures on one page.
+- See every example in a window: `python -m funground.gallery`
 - [Quick Reference](docs/reference/Quick_Reference.md): every function on one page.
 
 ## What it can do
