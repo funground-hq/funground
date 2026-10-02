@@ -493,6 +493,22 @@ Mouse values are updated automatically before each call to `draw()`.
 |---|---|---|
 | `f.key_down(key)` | Is this key held right now? | `if f.key_down("left"): x -= 3` |
 
+**Controls.** Sliders, checkboxes and buttons sit in a panel *below* the canvas, one row each, in the
+order you made them. Make them in `setup()` (or at the top of the file), keep them in variables, and read
+them in `draw()`. The panel is not part of the picture: it is not in `f.width` / `f.height`, `f.mouse_y`,
+saves or `f.get()`, and clicks on it do not reach `mouse_pressed()` and friends. Making a control inside
+`draw()`, or in a script (a file that ends with `f.show()`), is a `RuntimeError`. Without a window the
+controls keep their values, and setting them still works.
+
+| Call | What it does | Example |
+|---|---|---|
+| `f.create_slider(low, high, value=None, step=None, label=None)` | **New:** a slider from `low` to `high`; it starts at `value` (default `low`). With `step`, it moves in whole steps from `low`. `low >= high` or `step <= 0` is a `ValueError`. | `size = f.create_slider(10, 100, 40, step=5, label="size")` |
+| `slider.value()` / `slider.value(v)` | Read the value / set it (kept between `low` and `high`, rounded to `step`). | `f.circle(200, 150, size.value())` |
+| `f.create_checkbox(label, checked=False)` | **New:** a tick box. | `grid = f.create_checkbox("grid")` |
+| `box.checked()` / `box.checked(True)` | Read / set. | `if grid.checked(): draw_grid()` |
+| `f.create_button(label)` | **New:** a button. | `reset = f.create_button("reset")` |
+| `button.clicked()` | `True` once for each click since it was last asked. | `if reset.clicked(): points.clear()` |
+
 ![Mouse and keyboard](images/07_input.png)
 
 *(The picture was made headless, so the mouse sits at (0, 0) and no key is down.)*
@@ -1051,6 +1067,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
 | Off-screen graphics | — | `create_graphics`, `image`, `load_image`, `load_svg`, `svg_paths` |
+| Controls | — | `create_slider`, `create_checkbox`, `create_button`, in a panel below the canvas |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 
 Everything a v0.5 sketch called still exists with the same arguments; the only visible differences are

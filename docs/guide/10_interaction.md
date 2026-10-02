@@ -1,6 +1,6 @@
-# 10. Interaction: mouse and keyboard
+# 10. Interaction: mouse, keyboard and controls
 
-There are two ways to react to the mouse and keyboard.
+There are two ways to react to the mouse and keyboard. Section 3 adds sliders, checkboxes and buttons.
 
 ## 1. Look, every frame
 
@@ -97,6 +97,69 @@ call `f.redraw()` or `f.loop()`. See [7. Animation and time](07_animation_and_ti
 ![Pause and step](../gallery/images/animation-04_pause.png)
 
 **Escape** always ends a sketch.
+
+## 3. Controls: sliders, checkboxes and buttons
+
+Sometimes the easiest way to try a number is to move it. funground gives you three controls.
+They sit in a panel **below** the canvas, one row each, in the order you made them.
+
+| Make it with | Read it with |
+|---|---|
+| `f.create_slider(low, high, value, step, label)` | `slider.value()` |
+| `f.create_checkbox(label, checked)` | `box.checked()` |
+| `f.create_button(label)` | `button.clicked()` |
+
+Make each control **once**, in `setup()`, and keep it in a variable. Then ask it for its value in
+`draw()`. If you make one inside `draw()`, you get an error that tells you to move it, because
+`draw()` runs every frame and would make a new control each time.
+
+```python
+import funground as f
+
+
+def setup():
+    global size, filled, more
+    f.size(400, 300)
+    size = f.create_slider(10, 120, 60, step=10, label="size")
+    filled = f.create_checkbox("filled", True)
+    more = f.create_button("add a dot")
+
+
+dots = []
+
+
+def draw():
+    f.background("white")
+    if more.clicked():                 # true once for each click
+        dots.append((f.random(0, f.width), f.random(0, f.height)))
+    if filled.checked():
+        f.fill("tomato")
+    else:
+        f.no_fill()
+    for x, y in dots:
+        f.circle(x, y, size.value())
+
+
+f.run()
+```
+
+![Sliders, a checkbox and a button](../gallery/images/interaction-05_controls.png)
+
+A few things to know:
+
+- **`value` and `step`.** A slider starts at `value`, or at `low` if you leave it out. With a `step`,
+  it moves in whole steps from `low`. `slider.value(30)` sets it from your code; the number is kept
+  between `low` and `high`. A `low` that is not below `high`, or a `step` of 0 or less, is a
+  `ValueError`.
+- **`clicked()`** is `True` once for each click. Ask again straight away and the answer is `False`.
+- **The panel is not the canvas.** `f.width` and `f.height` do not count it, `f.mouse_y` never reaches into
+  it, and `f.save()` and `f.get()` do not see it. Clicks on a control do not call `mouse_pressed()`.
+- **Make controls before `f.full_screen()`.** In full screen the panel takes its strip of the screen
+  when the window opens.
+- **Controls need an animated sketch.** A script (a file that ends with `f.show()`) has no loop to
+  read them, so making a control there is an error.
+- **No window?** With `FUNGROUND_HEADLESS=1` the controls keep their values, and setting them still
+  works, so you can test a sketch.
 
 *Coming from Playground 0.5?* `f.mouse_pressed` is now `f.is_mouse_pressed`, because
 `mouse_pressed()` is the name of the callback — as in p5.js.

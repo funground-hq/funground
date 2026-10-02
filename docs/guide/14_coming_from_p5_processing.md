@@ -108,6 +108,13 @@ coming from p5.
 | `mousePressed()` (callback) | `mousePressed()` (a method, not the field of the same name) | `f.mouse_pressed()` (callback) |
 | `keyIsPressed` | `keyPressed` (field) | `f.is_key_pressed` |
 | `key`, `keyCode` | `key`, `keyCode` | `f.key`, `f.key_code` |
+| `createSlider(min, max, value, step)` | — (a library such as ControlP5) | `f.create_slider(low, high, value, step, label)`; read it with `slider.value()` |
+| `createCheckbox(label, checked)` | — | `f.create_checkbox(label, checked)`; read it with `box.checked()` |
+| `createButton(label)` then `button.mousePressed(fn)` | — | `f.create_button(label)`; ask `button.clicked()` in `draw()` |
+
+p5 puts these controls on the web page. funground puts them in a panel below the canvas, in the order
+you made them, with the label and value shown. Make them in `setup()`, as in p5. You choose the
+label when you make them, so there is no `position()`. Chapter 10 has an example.
 
 ### Maths
 
