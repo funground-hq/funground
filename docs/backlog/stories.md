@@ -176,7 +176,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-102 | E-15 | Font fallback (missing characters from a fallback chain) | 12 |
 | S-103 | E-22 | Examples and gallery browser in the package (`python -m funground.gallery`) | 12 |
 | S-104 | E-15 | `text_to_points` (p5 `textToPoints`) | 12 |
-| S-105 | E-15 | `text_box` returns its overflow (DrawBot) | 12 |
+| S-105 | E-15 | `text_box` returns its overflow (DrawBot) | 12 — already done (S-053, T10) |
 | S-106 | E-15 | Font information (axes, names, has characters) | 12 |
 | S-107 | E-25 | `erase()` / `no_erase()` (p5) | 12 |
 | S-108 | E-17 | Microphone input (pygame-ce capture) | 13 |
