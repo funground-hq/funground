@@ -789,6 +789,17 @@ def no_tint() -> None:
     active_sketch().no_tint()
 
 
+def erase(fill_strength: float = 255, stroke_strength: float = 255) -> None:
+    """Make everything drawn after this remove what is under it instead of painting.
+    255 removes it completely (see-through); 128 removes about half. Colours are ignored."""
+    active_sketch().erase(fill_strength, stroke_strength)
+
+
+def no_erase() -> None:
+    """Go back to painting."""
+    active_sketch().no_erase()
+
+
 # ---- pixels (S-079, contract P7, P8)
 def get(x: float, y: float, w: float | None = None, h: float | None = None):
     """The colour of the pixel at (x, y) as a colour object, as drawn so far. With w and h: a new

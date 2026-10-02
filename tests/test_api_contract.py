@@ -188,6 +188,9 @@ ADDED_FUNCTIONS = {
     # S-078 tint and image parts (image's signature is under S-052)
     "tint": "(color, *more: 'float') -> 'None'",
     "no_tint": "() -> 'None'",
+    # S-107 erase
+    "erase": "(fill_strength: 'float' = 255, stroke_strength: 'float' = 255) -> 'None'",
+    "no_erase": "() -> 'None'",
     # S-079 pixels
     "get": "(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None)",
     "set": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",

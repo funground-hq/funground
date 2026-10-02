@@ -49,6 +49,7 @@ class CairoRenderer:
 
     def __init__(self) -> None:
         self._alpha = 1.0      # S-051 opacity of the op being drawn
+        self._erase: tuple | None = None   # S-107: (fill, stroke) strengths of the op being erased, else None
         self._surface: cairo.ImageSurface | None = None
         self._ctx: cairo.Context | None = None
         self._scale = 1.0
@@ -161,7 +162,7 @@ class CairoRenderer:
             elif t is ir.FillPath:
                 self._path(ctx, op.path); self._source(ctx, op.color); ctx.fill()
             elif t is ir.StrokePath:
-                self._path(ctx, op.path); self._source(ctx, op.color); ctx.set_line_width(op.width)
+                self._path(ctx, op.path); self._source(ctx, op.color, True); ctx.set_line_width(op.width)
                 self._stroke_style(ctx, op.cap, op.join, op.miter_limit, op.dash, op.dash_offset)
                 ctx.stroke()
             elif t is ir.SetAntialias:
@@ -176,14 +177,14 @@ class CairoRenderer:
             elif t is ir.Line:
                 if op.style.stroke is not None:
                     ctx.new_path(); ctx.move_to(op.x1, op.y1); ctx.line_to(op.x2, op.y2)
-                    self._source(ctx, op.style.stroke); ctx.set_line_width(op.style.stroke_width)
+                    self._source(ctx, op.style.stroke, True); ctx.set_line_width(op.style.stroke_width)
                     self._state_stroke_style(ctx, op.style); ctx.stroke()
             elif t is ir.Point:
                 if op.style.stroke is not None:
                     ctx.new_path(); ctx.arc(op.x, op.y, max(0.5, op.style.stroke_width / 2), 0, 2 * math.pi)
-                    self._source(ctx, op.style.stroke); ctx.fill()
+                    self._source(ctx, op.style.stroke, True); ctx.fill()
             elif t is ir.Text:
-                if self.pdf_text is None or not self._pdf_text_marker(ctx, op):
+                if self.pdf_text is None or self._erase is not None or not self._pdf_text_marker(ctx, op):
                     for sub in self._text_ops(op):
                         self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
             elif t is ir.Image:
@@ -193,7 +194,7 @@ class CairoRenderer:
             else:
                 raise NotImplementedError(f"{self.name} renderer cannot draw {t.__name__}")
             if composite is not None:
-                ctx.restore(); self._alpha = 1.0
+                ctx.restore(); self._alpha = 1.0; self._erase = None
         return depth
 
     # ---- compositing: blend mode, opacity, shadow (S-051, contract S14)
@@ -212,6 +213,11 @@ class CairoRenderer:
 
     @staticmethod
     def _composite_of(op):
+        # S-107 (F15): an erasing op is drawn with DEST_OUT; its blend mode, opacity and shadow are ignored.
+        erase = op.erase if type(op) in (ir.Image, ir.FillPath, ir.StrokePath) else getattr(
+            getattr(op, "style", None), "erasing", None)
+        if erase is not None:
+            return "erase", erase, None
         if type(op) is ir.Image:                       # no shadow field: shadow never applies (P3)
             blend, opacity = op.blend_mode, op.opacity
             if blend == "normal" and opacity == 255:
@@ -226,10 +232,25 @@ class CairoRenderer:
     def _begin_composite(self, ctx, op, composite) -> None:
         blend, opacity, shadow = composite
         ctx.save()
+        if blend == "erase":                           # S-107: opacity here is the op's erase strengths
+            ctx.set_operator(cairo.OPERATOR_DEST_OUT)
+            self._erase = self._erase_of(op)
+            self._alpha = 1.0
+            return
         ctx.set_operator(self._BLENDS[blend])
         self._alpha = opacity / 255
         if shadow is not None:
             self._draw_shadow(ctx, op, shadow)
+
+    @staticmethod
+    def _erase_of(op) -> tuple:
+        """(fill strength, stroke strength) of an erasing op: styled ops carry both, path ops one."""
+        t = type(op)
+        if t is ir.StrokePath:
+            return (0, op.erase)
+        if t in (ir.FillPath, ir.Image):
+            return (op.erase, 0)
+        return op.style.erasing
 
     def _geometry(self, ctx, op):
         """The op's shape as (make_path, filled, stroke_width) parts, for drawing its shadow."""
@@ -449,7 +470,9 @@ class CairoRenderer:
                 "saved IR snapshot cannot be rendered - snapshots never carry pixels, S-052)"
             )
         pixels = snap.pixels
-        if op.tint is not None:                 # S-078 (P5): RGB multiplied, alpha multiplied (below)
+        if self._erase is not None:             # S-107: the picture's own alpha x the fill strength is removed
+            alpha = self._erase[0] / 255
+        elif op.tint is not None:                 # S-078 (P5): RGB multiplied, alpha multiplied (below)
             from ..imaging import tint_pixels
             t = op.tint
             pixels = tint_pixels(pixels, snap.phys_width, snap.phys_height, t.r, t.g, t.b)
@@ -458,7 +481,7 @@ class CairoRenderer:
         # A tinted picture is embedded as (tinted) pixels in PDF/SVG: its colours changed, and
         # the pixels are exactly what was tinted (a vector replay could only approximate partly
         # transparent edges).
-        if not isinstance(target, cairo.ImageSurface) and snap.history is not None and op.tint is None:
+        if not isinstance(target, cairo.ImageSurface) and snap.history is not None and (op.tint is None or self._erase is not None):
             saved_base = self._base_matrix          # a nested picture's ResetMatrix must not
             try:                                      # disturb the frame around this Image op
                 self._replay_image_history(ctx, op, snap, alpha)
@@ -496,15 +519,24 @@ class CairoRenderer:
         ctx.clip()
         self._base_matrix = ctx.get_matrix()
         ctx.push_group()
-        depth = self._draw_ops(ctx, ir.Frame(list(snap.history)), 0)
-        while depth:
-            ctx.restore(); depth -= 1
+        erase, self._erase = self._erase, None      # the picture's own ops paint normally into the group
+        if erase is not None:
+            ctx.set_operator(cairo.OPERATOR_OVER)
+        try:
+            depth = self._draw_ops(ctx, ir.Frame(list(snap.history)), 0)
+            while depth:
+                ctx.restore(); depth -= 1
+        finally:
+            self._erase = erase
         ctx.pop_group_to_source()
         ctx.paint_with_alpha(alpha)
         ctx.restore()
 
     # ---- helpers
-    def _source(self, ctx, c) -> None:
+    def _source(self, ctx, c, stroke: bool = False) -> None:
+        if self._erase is not None:                     # S-107: opaque black; DEST_OUT removes alpha = strength
+            ctx.set_source_rgba(0, 0, 0, self._erase[1 if stroke else 0] / 255)
+            return
         k = self._alpha                                 # S-051 opacity multiplies every alpha
         if isinstance(c, Gradient):                     # S-050: in user space, so it follows the transform
             if c.kind == "linear":
@@ -546,7 +578,7 @@ class CairoRenderer:
         if st.fill is not None:
             self._source(ctx, st.fill); ctx.fill_preserve()
         if st.stroke is not None:
-            self._source(ctx, st.stroke); ctx.set_line_width(st.stroke_width)
+            self._source(ctx, st.stroke, True); ctx.set_line_width(st.stroke_width)
             self._state_stroke_style(ctx, st); ctx.stroke_preserve()
         ctx.new_path()
 
