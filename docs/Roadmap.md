@@ -59,7 +59,9 @@ CI green on the 12-cell matrix (S-039). The package is published as **funground*
 | 8 — documents | pages and page sizes, `new_page`, multi-page PDF |
 | 9 — path depth | boolean operations, `point_inside`, bounds, `expand_stroke`, text to path, reusable shapes |
 | 10 — typography and SVG | formatted text runs, tracking, OpenType features, variable fonts, fallback, searchable PDF text; `load_svg` |
-| 11 — media, controls, release | sound playback and analysis; GIF and MP4 export; controls; guide and gallery completed; release 0.1 |
+| 11 — media, controls | sound playback and analysis; GIF and MP4 export; controls; guide and gallery completed; release prepared |
+| 12 — text depth, examples in the package (D-049) | font fallback; `python -m funground.gallery`; text to points; text-box overflow; font information; erase |
+| 13 — microphone, SVG text, release (D-049) | microphone input; real text in SVG; PDF-text polish; layers if kept; release 0.1 |
 
 Sprint contents are the starting plan; each sprint's planning confirms or moves them.
 
