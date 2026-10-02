@@ -37,7 +37,7 @@ Issues = "https://github.com/funground-hq/funground/issues"
 Changelog = "https://github.com/funground-hq/funground/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pillow>=11", "pypdfium2>=4", "imageio-ffmpeg>=0.5"]   # CI tests both filter paths (P10)
+dev = ["pytest>=8", "pillow>=11", "pypdfium2>=4", "imageio-ffmpeg>=0.5", "build>=1"]   # CI tests both filter paths (P10)
 extras = ["pillow>=11"]
 video = ["imageio-ffmpeg>=0.5"]        # an ffmpeg for MP4 export (D-045 = B)
 
