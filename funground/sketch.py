@@ -354,7 +354,7 @@ class Sketch:
             self.size(w, h)
             return
         self._sync_canvas()
-        self._pages.append((self.width, self.height, list(self._with_layers(self.frame)),
+        self._pages.append((self.width, self.height, list(self._with_layers(self.frame, files=True)),
                             bytes(self._view_pixels().data)))
         self._pages_full.append(self._page_full)
         self._page_durations.append(self._frame_duration)
@@ -370,7 +370,7 @@ class Sketch:
     def _document_pages(self) -> list[tuple[int, int, list, bytes | None]]:
         """Every page, the current one last: (width, height, ops, pixels). The current page's pixels are None."""
         self._flush_pixel_patch()
-        return [*self._pages, (self.width, self.height, list(self._with_layers(self.frame)), None)]
+        return [*self._pages, (self.width, self.height, list(self._with_layers(self.frame, files=True)), None)]
 
     def _script_flush(self) -> None:
         """Draw the ops added since the last flush onto the script canvas's surface."""
@@ -618,27 +618,42 @@ class Sketch:
         self._layers_hidden = set()
         self._layer_open = None
 
-    def _layer_ops(self) -> list[ir.Image]:
+    def _layer_ops(self, files: bool = False) -> list[ir.Image]:
         """One ir.Image (tagged layer=name) for each visible layer, in first-use order.
 
         These are never stored in self.frame: they are added on top of a copy of it whenever the
         canvas is drawn for a window, a PNG, a PDF or an SVG, so the canvas's own ops (and IR
-        snapshots) stay exactly what the sketch drew. Every layer is flushed, hidden or not."""
+        snapshots) stay exactly what the sketch drew. Every layer is flushed, hidden or not.
+        With *files* (S-096), hidden layers are included too, tagged layer_hidden: PDF and SVG keep
+        them switched off, and every other renderer leaves them out."""
         ops: list[ir.Image] = []
         for name, picture in self._layers.items():
             snap = picture._snapshot()                 # draws what the layer has recorded so far
-            if name in self._layers_hidden:
+            hidden = name in self._layers_hidden
+            if hidden and not files:
                 continue
             ops.append(ir.Image(picture.name, snap.version, 0.0, 0.0, float(picture.width),
-                                float(picture.height), snapshot=snap, layer=name))
+                                float(picture.height), snapshot=snap, layer=name, layer_hidden=hidden))
         return ops
 
-    def _with_layers(self, frame: ir.Frame) -> ir.Frame:
-        """*frame* with the visible layers' ops after it (the same frame when there are none)."""
+    def _with_layers(self, frame: ir.Frame, files: bool = False) -> ir.Frame:
+        """*frame* with the layers' ops after it (the same frame when there are none): the visible
+        ones, plus the hidden ones with *files* (for PDF and SVG, and for pages kept for them)."""
         if not self._layers:
             return frame
-        layers = self._layer_ops()
-        return ir.Frame([*frame, *layers]) if layers else frame
+        layers = self._layer_ops(files)
+        if not layers:
+            return frame
+        # Layers sit over the canvas exactly as on screen: close any push() the canvas left open and drop its
+        # transform and clip first, or a file would move or clip the layers where the window does not.
+        depth = 0
+        for op in frame:
+            if isinstance(op, ir.Save):
+                depth += 1
+            elif isinstance(op, ir.Restore) and depth:
+                depth -= 1
+        top = [ir.Restore()] * depth + [ir.Save(), ir.ResetMatrix(), ir.ResetClip()]
+        return ir.Frame([*frame, *top, *layers, ir.Restore()])
 
     def _view(self):
         """A renderer whose surface is the canvas with the visible layers over it (the canvas's own
@@ -907,7 +922,7 @@ class Sketch:
             self._script_flush()
             save_pixels(self._view_pixels(), path)
         else:
-            save_frame(self._with_layers(self.frame), path, self.width, self.height, self._script_scale)
+            save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, self._script_scale)
 
     def _save_pages(self, path: str, fmt: str) -> None:
         import os
@@ -1074,7 +1089,7 @@ class Sketch:
             if format_of(path) == "png":
                 save_pixels(self._view_pixels(), path)      # what is on screen
             else:
-                save_frame(self._with_layers(self.frame), path, self.width, self.height,
+                save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height,
                            self._platform.backing_scale)
 
     # ------------------------------------------------------------ style

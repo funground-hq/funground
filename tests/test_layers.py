@@ -389,7 +389,8 @@ def test_pdf_and_svg_show_the_layer_as_vectors(tmp_path):
     assert re.search(r"<path[^>]*fill=\"rgb\(100%, 0%, 0%\)\"", svg) or "rgb(100%, 0%, 0%)" in svg
 
 
-def test_a_hidden_layer_is_not_in_the_files(tmp_path):
+def test_a_hidden_layer_is_in_the_files_switched_off(tmp_path):
+    """S-096 (F16): a hidden layer is kept in PDF and SVG files, switched off (tests/test_layer_files.py)."""
     script(60, 40)
     with f.layer("shapes"):
         f.no_stroke()
@@ -397,7 +398,9 @@ def test_a_hidden_layer_is_not_in_the_files(tmp_path):
         f.circle(30, 20, 20)
     f.hide_layer("shapes")
     f.save(str(tmp_path / "h.svg"))
-    assert "rgb(100%, 0%, 0%)" not in (tmp_path / "h.svg").read_text()
+    svg = (tmp_path / "h.svg").read_text()
+    assert "rgb(100%, 0%, 0%)" in svg
+    assert re.search(r'<g id="shapes" inkscape:groupmode="layer" inkscape:label="shapes" style="display:none">', svg)
 
 
 def test_animated_pdf_save_includes_layers(tmp_path):

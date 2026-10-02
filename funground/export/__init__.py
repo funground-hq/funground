@@ -5,7 +5,9 @@
 - **PDF / SVG** (`save_frame`): a *replay* of the frame's ops onto a document surface,
   so the output is true vector. A vector file therefore contains what *this* frame drew,
   not earlier frames. SVG draws text as glyph outlines; every PDF carries real text with an
-  embedded font subset (S-094, contract T15: see `pdf_text`).
+  embedded font subset (S-094, contract T15: see `pdf_text`). Layers (S-095) become real file
+  layers: optional content groups in PDF, Inkscape layer groups in SVG (S-096, contract F16: see
+  `layers`).
 - **`save_picture`** (S-052): the same idea for a Picture's own `g.save(path)` - PNG is its
   pixels, PDF/SVG replay its history when one is available, or embed its pixels when it is
   not (contract P2/P3). Cairo stays behind this provider, per funground's boundary rule: a
@@ -20,6 +22,7 @@ import cairo
 from ..ir import Frame
 from ..platform.base import Pixels
 from ..renderers.cairo2d import CairoRenderer, paint_picture_pixels
+from .layers import LayerMarkers
 from .pdf_text import PdfTextCollector
 
 FORMATS = ("png", "pdf", "svg")
@@ -33,18 +36,50 @@ def format_of(path: str) -> str:
 
 
 def _write_pdf(path: str, draw) -> None:
-    """Write a PDF with real text (S-094, contract T15).
+    """Write a PDF with real text (S-094, contract T15) and real layers (S-096, contract F16).
 
     ``draw(renderer)`` writes the whole document to *path* with *renderer* and finishes the
-    surface. It is called once with a renderer that collects text runs as markers, which are then
-    swapped for real text. Should that step fail, the document is drawn again with text as glyph
-    outlines (exactly what funground wrote before T15), so a save never fails because of it.
+    surface. It is called once with a renderer that collects text runs and layers as markers. Then
+    two steps rewrite the file, one after the other: the text step swaps text markers for real text,
+    and the layer step makes each layer an optional content group. Each step leaves the other's
+    markers alone (they use different marker grids). Should a step fail, the document is drawn again
+    without it: text as glyph outlines (exactly what funground wrote before T15), layers as plain
+    drawing with hidden layers left out (exactly what S-095 wrote). A save never fails because of them.
     """
+    text = layers = True
+    while True:
+        renderer = CairoRenderer()
+        if text:
+            renderer.pdf_text = PdfTextCollector()
+        if layers:
+            renderer.file_layers = LayerMarkers()
+        draw(renderer)
+        if not (text or layers):
+            return
+        try:
+            if text:
+                renderer.pdf_text.finish(path)
+        except Exception:
+            text = False
+            continue
+        try:
+            if layers:
+                renderer.file_layers.finish_pdf(path)
+        except Exception:
+            layers = False
+            continue
+        return
+
+
+def _write_svg(path: str, draw) -> None:
+    """Write an SVG with real layers (S-096, contract F16): Inkscape layer groups.
+
+    As `_write_pdf`: should the layer step fail, the file is drawn again without it."""
     renderer = CairoRenderer()
-    renderer.pdf_text = PdfTextCollector()
+    renderer.file_layers = LayerMarkers()
     draw(renderer)
     try:
-        renderer.pdf_text.finish(path)
+        renderer.file_layers.finish_svg(path)
     except Exception:
         draw(CairoRenderer())
 
@@ -86,7 +121,7 @@ def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 
         if fmt == "pdf":
             _write_pdf(path, draw)
         else:
-            draw(renderer)
+            _write_svg(path, draw)
     return fmt
 
 
