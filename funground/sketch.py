@@ -352,7 +352,7 @@ class Sketch:
 
     def _script_flush(self) -> None:
         """Draw the ops added since the last flush onto the script canvas's surface."""
-        new = self.frame.ops[self._script_drawn:]
+        new = self.frame.ops_since(self._script_drawn)
         if new:
             self._script_depth = self._renderer.draw_batch(self._renderer._ctx, ir.Frame(list(new)),
                                                            self._script_depth)
@@ -582,7 +582,7 @@ class Sketch:
         if not self._frame_open:
             renderer.begin_frame(renderer._ctx)
             self._frame_open, self._frame_drawn, self._frame_depth = True, 0, 0
-        new = self.frame.ops[self._frame_drawn:]
+        new = self.frame.ops_since(self._frame_drawn)
         if new:
             self._frame_depth = renderer.draw_batch(renderer._ctx, ir.Frame(list(new)), self._frame_depth)
             self._frame_drawn += len(new)

@@ -230,6 +230,10 @@ class Frame:
     def ops(self) -> tuple[Op, ...]:
         return tuple(self._ops)
 
+    def ops_since(self, start: int) -> tuple[Op, ...]:
+        """The ops from index *start* on, without copying the earlier ones (scripts call this often)."""
+        return tuple(self._ops[start:])
+
     def __iter__(self) -> Iterator[Op]:
         return iter(self._ops)
 
