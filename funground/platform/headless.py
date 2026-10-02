@@ -48,6 +48,12 @@ class HeadlessPlatform:
     def set_cursor(self, kind: str | None) -> None:
         self.cursor = kind
 
+    def set_controls(self, panel) -> bool:
+        return False                           # no window, so no panel (S-101)
+
+    def present_panel(self, pixels: Pixels) -> None:
+        pass
+
     def start(self) -> None:
         self._t = time.perf_counter()
 

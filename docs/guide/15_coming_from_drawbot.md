@@ -228,6 +228,23 @@ pages. funground does not have DrawBot's `pages()` list or `with page:` blocks: 
 the current page. Chapter 13 has a runnable example. Separately, `create_graphics` pictures
 (chapter 9) give you more drawing surfaces within a single page.
 
+## Controls: `Variable`
+
+DrawBot's `Variable([...], globals())` puts sliders, checkboxes and fields in a panel and runs the
+whole script again each time one changes. funground does not run a script again. To steer a
+drawing with controls, make it an animated sketch: make the controls in `setup()`, and read them
+in `draw()`, which runs every frame.
+
+| DrawBot | funground |
+|---|---|
+| `{"name": "size", "ui": "Slider", "args": {"minValue": 10, "maxValue": 100, "value": 40}}` | `size = f.create_slider(10, 100, 40, label="size")` |
+| `{"name": "grid", "ui": "CheckBox"}` | `grid = f.create_checkbox("grid")` |
+| (a button needs a callback) | `reset = f.create_button("reset")` |
+| `size` is a global the script reads | `size.value()` |
+
+The controls sit in a panel below the canvas. They are not part of the page you save. Chapter 10
+shows a complete sketch.
+
 ## A porting walk-through
 
 An original DrawBot script: a page with a row of translucent circles over a background, each one
