@@ -45,6 +45,9 @@ class GraphicsState:
     text_tracking: float = 0.0
     text_features: tuple = ()
     font_variations: tuple = ()
+    # S-102 (contract T18): the learner's fallback fonts as registry keys; () = only the bundled
+    # fallbacks, None = fallback off. The default is left out of the IR.
+    text_fallback: tuple | None = ()
     # S-081 drawing modes (contract F10): how rect/square, ellipse/circle/arc and image read their
     # numbers. Resolved before an op is recorded; kept here so push/pop saves them.
     rect_mode: str = "corner"

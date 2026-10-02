@@ -170,6 +170,9 @@ ADDED_FUNCTIONS = {
     # S-104/S-106 text to points, font information
     "text_to_points": "(message: 'object', x: 'float', y: 'float', spacing: 'float' = 5) -> 'list[tuple[float, float]]'",
     "current_font": "() -> 'Font'",
+    # S-102 fallback
+    "text_fallback": "(*fonts) -> 'None'",
+    "system_font": "(name: 'str')",
     # S-100 motion
     "save_gif": "(path: 'str', seconds: 'float') -> 'None'",
     "save_movie": "(path: 'str', seconds: 'float') -> 'None'",

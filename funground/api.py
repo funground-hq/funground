@@ -534,6 +534,16 @@ def text_style(style: str) -> None:
 
 
 # ---- tracking, OpenType features, font variations (S-090)
+def text_fallback(*fonts) -> None:
+    """Fonts to use for letters the current font does not have, like f.text_fallback(f.system_font("Arial")). No arguments: only the built-in fallbacks. None: no fallback."""
+    active_sketch().text_fallback(*fonts)
+
+
+def system_font(name: str):
+    """A font installed on this computer, found by its family name, like f.system_font("Arial"). Raises FileNotFoundError when there is none."""
+    return active_sketch().system_font(name)
+
+
 def text_tracking(pixels: float) -> None:
     """Add this many pixels of space after every letter. Negative numbers tighten the text."""
     active_sketch().text_tracking(pixels)
