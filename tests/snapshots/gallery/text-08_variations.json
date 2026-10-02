@@ -1,0 +1,148 @@
+[
+ {
+  "color": [
+   246,
+   243,
+   236,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "font_variations": [
+    [
+     "wght",
+     300.0
+    ]
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 36
+  },
+  "text": "Light request: wght 300",
+  "x": 40,
+  "y": 50
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "font_variations": [
+    [
+     "wght",
+     700.0
+    ]
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 36
+  },
+  "text": "Heavy request: wght 700",
+  "x": 40,
+  "y": 130
+ },
+ {
+  "color": [
+   30,
+   40,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    30,
+    40,
+    90,
+    255
+   ],
+   "font_variations": [
+    [
+     "wdth",
+     75.0
+    ],
+    [
+     "wght",
+     700.0
+    ]
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 36
+  },
+  "text": "Two axes: wght and wdth",
+  "x": 40,
+  "y": 210
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 18
+  },
+  "text": "This font has no axes, so nothing changes.",
+  "x": 40,
+  "y": 300
+ },
+ {
+  "color": [
+   110,
+   110,
+   110,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    110,
+    110,
+    110,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 18
+  },
+  "text": "A variable font would follow each request.",
+  "x": 40,
+  "y": 330
+ }
+]

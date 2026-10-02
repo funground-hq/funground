@@ -95,7 +95,7 @@ change it again, and `f.push()` and `f.pop()` save and restore it.
 
 `f.image_mode(mode)` does this for pictures: `"corner"` (the usual way), `"center"`, or
 `"corners"`, where you give both corners and so must give a width and height. Pictures are
-covered in [9. Paths and clipping](09_paths_and_clipping.md#pictures-and-images).
+covered in [9. Paths, clipping and pictures](09_paths_and_clipping.md#pictures-and-images).
 
 ```python
 import funground as f
@@ -169,6 +169,6 @@ The picture below shows more: buttons, a speech bubble, a shadow and radii that 
 
 ![Rounded corners](../gallery/images/shapes-04_rounded.png)
 
-For any other outline, build it from points: see [9. Paths and clipping](09_paths_and_clipping.md).
+For any other outline, build it from points: see [9. Paths, clipping and pictures](09_paths_and_clipping.md).
 
 **Next:** [4. Colour](04_colour.md)

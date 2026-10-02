@@ -174,27 +174,25 @@ Chapter 16 has the details.
 
 ## Deliberate differences
 
-These are not gaps — they are choices, and each matches a row in the [Semantic
-Contract](../design/Semantic_Contract.md). Where a maintainer decision made the call, it is
-named too.
+These are not gaps. They are choices, and each one has a reason.
 
 | p5 does | funground does | Why |
 |---|---|---|
-| `camelCase`, top-level global functions | `snake_case`, called through the module: `f.circle(...)` | Python style; the import is `import funground as f` (D-020) |
-| `createCanvas(w, h)` opens the window | `f.size(w, h)` | Same idea, funground's name (contract R1) |
-| `map(v, a1, b1, a2, b2)` | `f.map_range(v, a1, b1, a2, b2)` | `map` is a Python built-in; a helper called `map` would hide it (contract H3) |
-| `mouseIsPressed` is the live value; `mousePressed()` is the callback (p5 has to use two different names because JavaScript cannot tell a field from a method with the same name) | `f.is_mouse_pressed` is the live value; `f.mouse_pressed()` is the callback | Same split, `is_` prefix for the boolean (contract I1, I3; D-016) |
-| `rotate()` takes radians by default (`angleMode(DEGREES)` switches it) | `f.rotate()` always takes degrees | Degrees read better for most sketches; `f.radians()`/`f.degrees()` convert for `math.sin` and friends (contract F1; D-002) |
-| The default text baseline is `BASELINE`: `(x, y)` sits text on that line | The default vertical anchor is the **top**: `(x, y)` is the top-left of the text. `f.text_align(h, v)` changes it | Matches funground's top-left convention for every other shape (contract T1, T7) |
-| `text(str, x, y, w, h)` wraps text in a box, as part of `text()` | `f.text_box(message, x, y, w, h)` is its own function, and **returns the text that did not fit** | `text()`'s existing signature is frozen; the returned overflow lets text flow into a second box, as in DrawBot (contract T10) |
-| `push()` / `pop()` | `f.push()` / `f.pop()`, and `with f.saved_state():` | The `with` form can never leave a `pop()` unbalanced (contract F2; D-013) |
-| Colours are numbers per component, or a CSS string | funground takes the same: `f.fill(255, 0, 0)`, `f.fill(128)` (a grey), a name, a tuple, or a hex string, so the same colour goes into `fill`, `stroke`, `background` and `text(..., color=...)`, alpha is 0–255 unless you change `f.color_mode()`. A name or hex string is always one argument: `f.fill("red", 100)` is an error | One consistent way to pass any colour anywhere (contract S1, S2, S16) |
-| No global opacity — you set alpha on each colour yourself | `f.opacity(0–255)` multiplies the alpha of every fill and stroke drawn after it | Borrowed from DrawBot; useful for fading a whole group of shapes (contract S14) |
-| `v.cross(w)` returns a 3D `p5.Vector` | `v.cross(w)` returns a **number** | funground's `Vector` is 2D only; a 2D cross product is a scalar (contract H5) |
-| A graphics buffer keeps its pixels between frames (Processing also needs `beginDraw()`/`endDraw()` around every use) | `f.create_graphics()` pictures keep their pixels between frames too, with no begin/end needed | Simpler than Processing's `PGraphics`; matches p5's `createGraphics()` (contract P1, P2; D-021) |
-| A p5 sketch runs in a browser tab; nothing closes it from the keyboard. A Processing sketch quits on Escape by default | **Escape** always ends a funground sketch | A teaching convenience carried over from Processing (contract R6) |
-| `setup()`/`draw()` start running as soon as the script loads — no explicit call needed | The sketch runs only once you call `f.run()`, at the end of the file | Makes the starting point explicit, and lets a test harness or a script run several sketches in one process (contract R2, R3) |
-| `frameRate(fps)` both sets and reads the target rate | `f.run(fps=...)` sets it once, when the sketch starts; `f.frame_rate()` only reads the *measured* rate | funground's rate is fixed for the run rather than changeable mid-sketch (contract R3, R10) |
+| `camelCase`, top-level global functions | `snake_case`, called through the module: `f.circle(...)` | Python style; the import is `import funground as f` |
+| `createCanvas(w, h)` opens the window | `f.size(w, h)` | Same idea, funground's name |
+| `map(v, a1, b1, a2, b2)` | `f.map_range(v, a1, b1, a2, b2)` | `map` is a Python built-in; a helper called `map` would hide it |
+| `mouseIsPressed` is the live value; `mousePressed()` is the callback (p5 has to use two different names because JavaScript cannot tell a field from a method with the same name) | `f.is_mouse_pressed` is the live value; `f.mouse_pressed()` is the callback | Same split, `is_` prefix for the boolean |
+| `rotate()` takes radians by default (`angleMode(DEGREES)` switches it) | `f.rotate()` always takes degrees | Degrees read better for most sketches; `f.radians()`/`f.degrees()` convert for `math.sin` and friends |
+| The default text baseline is `BASELINE`: `(x, y)` sits text on that line | The default vertical anchor is the **top**: `(x, y)` is the top-left of the text. `f.text_align(h, v)` changes it | Matches funground's top-left convention for every other shape |
+| `text(str, x, y, w, h)` wraps text in a box, as part of `text()` | `f.text_box(message, x, y, w, h)` is its own function, and **returns the text that did not fit** | `text()`'s existing signature is frozen; the returned overflow lets text flow into a second box, as in DrawBot |
+| `push()` / `pop()` | `f.push()` / `f.pop()`, and `with f.saved_state():` | The `with` form can never leave a `pop()` unbalanced |
+| Colours are numbers per component, or a CSS string | funground takes the same: `f.fill(255, 0, 0)`, `f.fill(128)` (a grey), a name, a tuple, or a hex string, so the same colour goes into `fill`, `stroke`, `background` and `text(..., color=...)`, alpha is 0–255 unless you change `f.color_mode()`. A name or hex string is always one argument: `f.fill("red", 100)` is an error | One consistent way to pass any colour anywhere |
+| No global opacity — you set alpha on each colour yourself | `f.opacity(0–255)` multiplies the alpha of every fill and stroke drawn after it | Borrowed from DrawBot; useful for fading a whole group of shapes |
+| `v.cross(w)` returns a 3D `p5.Vector` | `v.cross(w)` returns a **number** | funground's `Vector` is 2D only; a 2D cross product is a scalar |
+| A graphics buffer keeps its pixels between frames (Processing also needs `beginDraw()`/`endDraw()` around every use) | `f.create_graphics()` pictures keep their pixels between frames too, with no begin/end needed | Simpler than Processing's `PGraphics`; matches p5's `createGraphics()` |
+| A p5 sketch runs in a browser tab; nothing closes it from the keyboard. A Processing sketch quits on Escape by default | **Escape** always ends a funground sketch | A teaching convenience carried over from Processing |
+| `setup()`/`draw()` start running as soon as the script loads — no explicit call needed | The sketch runs only once you call `f.run()`, at the end of the file | Makes the starting point explicit, and lets a test harness or a script run several sketches in one process |
+| `frameRate(fps)` both sets and reads the target rate | `f.run(fps=...)` sets it once, when the sketch starts; `f.frame_rate()` only reads the *measured* rate | funground's rate is fixed for the run rather than changeable mid-sketch |
 
 ## A porting walk-through
 
@@ -257,11 +255,11 @@ Every rename above is a one-for-one swap: `createCanvas` to `size`, `ellipse` to
 `colorMode(HSB, ...)` to `f.color_mode("hsb", ...)` (or `f.fill(f.hsb(h, s, b))`), `frameCount` to
 `f.frame_count`, and the trailing `f.run()` that starts the sketch.
 
-## What is not here yet
+## What is not here
 
-Some things a p5 or Processing sketch might use are not in funground yet. Video export is being added now, before the first release. 3D and running in a
-browser are planned for after 1.0.
+Some things a p5 or Processing sketch might use are not in funground. 3D and running in a
+browser are not part of the first release.
+
+Some features are left out on purpose. [This list](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
 
 **Next:** [15. Coming from DrawBot](15_coming_from_drawbot.md)
-
-Some features are left out on purpose. [ADR-003](../design/ADR-003-out-of-scope.md) lists them, with what to use instead.

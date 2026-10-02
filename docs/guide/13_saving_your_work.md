@@ -72,7 +72,7 @@ f.run()
 
 ![Saving an animation as frames](../gallery/images/saving-03_save_frames.png)
 
-To turn the pictures into a video or a GIF, use a program such as [ffmpeg](https://ffmpeg.org):
+funground can also make a GIF or an MP4 for you: see "GIF and MP4" below. To turn numbered pictures into a video or a GIF yourself, use a program such as [ffmpeg](https://ffmpeg.org):
 
 ```
 ffmpeg -framerate 30 -i frames/%04d.png my_animation.mp4
