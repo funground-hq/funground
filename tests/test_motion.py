@@ -30,6 +30,7 @@ def _no_ffmpeg(monkeypatch, tmp_path):
     empty = tmp_path / "empty_path"
     empty.mkdir(exist_ok=True)
     monkeypatch.setenv("PATH", str(empty))
+    monkeypatch.setitem(sys.modules, "imageio_ffmpeg", None)   # and no funground[video] either
 
 
 def _no_pillow(monkeypatch):
@@ -401,13 +402,37 @@ def test_find_ffmpeg_looks_on_the_path(fake_ffmpeg, tmp_path, monkeypatch):
     assert motion.find_ffmpeg() is None
 
 
-@pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="no real ffmpeg on the PATH")
+def test_the_video_extra_is_used_when_no_ffmpeg_is_on_the_path(monkeypatch, tmp_path):
+    """D-045 = B: imageio-ffmpeg (funground[video]) supplies ffmpeg when the PATH has none."""
+    import types
+    _no_ffmpeg(monkeypatch, tmp_path)
+    fake = types.ModuleType("imageio_ffmpeg")
+    fake.get_ffmpeg_exe = lambda: "C:/bundled/ffmpeg.exe"
+    monkeypatch.setitem(sys.modules, "imageio_ffmpeg", fake)
+    assert motion.find_ffmpeg() == "C:/bundled/ffmpeg.exe"
+
+
+def test_the_path_comes_before_the_video_extra(fake_ffmpeg, monkeypatch):
+    import types
+    fake = types.ModuleType("imageio_ffmpeg")
+    fake.get_ffmpeg_exe = lambda: "C:/bundled/ffmpeg.exe"
+    monkeypatch.setitem(sys.modules, "imageio_ffmpeg", fake)
+    assert motion.find_ffmpeg() != "C:/bundled/ffmpeg.exe"
+
+
+def test_no_ffmpeg_message_names_the_video_extra(monkeypatch, tmp_path):
+    _no_ffmpeg(monkeypatch, tmp_path)
+    with pytest.raises(RuntimeError, match=r"funground\[video\]"):
+        motion.require_encoder("mp4")
+
+
+@pytest.mark.skipif(motion.find_ffmpeg() is None, reason="no real ffmpeg (PATH or funground[video])")
 def test_real_ffmpeg_writes_a_playable_mp4(tmp_path):
     out = tmp_path / "real.mp4"
     _pages(COLOURS, size=(25, 15))
     p.save(str(out))
     assert out.stat().st_size > 0
-    probe = subprocess.run([shutil.which("ffmpeg"), "-v", "error", "-i", str(out), "-f", "null", "-"],
+    probe = subprocess.run([motion.find_ffmpeg(), "-v", "error", "-i", str(out), "-f", "null", "-"],
                            capture_output=True)
     assert probe.returncode == 0
 

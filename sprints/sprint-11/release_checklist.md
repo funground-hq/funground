@@ -29,7 +29,7 @@ irreversible actions).
 ## Maintainer decisions and checks
 
 - [ ] **Sprint 10 and Sprint 11 signed off.**
-- [ ] **D-045:** how learners get ffmpeg for MP4. MP4 already works when ffmpeg is on the PATH; the decision only adds or skips the `funground[video]` extra.
+- [x] **D-045 = B:** ffmpeg on the PATH, else the optional `funground[video]` extra.
 - [ ] **Ship the examples and the gallery browser in the package?** Today they are in the repository only.
   - Option: a `funground.examples` sub-package.
   - Option: `python -m funground.gallery`.
