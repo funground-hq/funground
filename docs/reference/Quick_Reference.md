@@ -203,6 +203,7 @@ longer a colour: a single number is a grey (see below).
 | `f.blend_mode(mode)` | how new drawing mixes with the canvas: `"normal"`, `"multiply"`, `"screen"`, `"add"`, `"difference"`, … | `f.blend_mode("multiply")` |
 | `f.opacity(amount)` | everything drawn after is see-through; 0 invisible, 255 solid. | `f.opacity(128)` |
 | `f.shadow(x, y, blur=5, color=...)` / `f.no_shadow()` | a soft shadow under everything drawn after. | `f.shadow(4, 6, blur=8)` |
+| `f.erase(fill_strength=255, stroke_strength=255)` / `f.no_erase()` | everything drawn after removes what is under it (255 all, 128 about half) instead of painting; colours, gradients, tint, blend mode, opacity and shadow are ignored. Cut holes in a picture from `f.create_graphics()`. | `f.erase(); f.circle(50, 50, 40)` |
 | `f.fill(color)` / `f.fill(r, g, b)` | Set the inside colour of later shapes. Numbers may be separate arguments or one tuple. | `f.fill("gold")` |
 | `f.no_fill()` | Do not fill later shapes. | `f.no_fill()` |
 | `f.stroke(color)` / `f.stroke(grey)` | Set the outline / line colour. Numbers may be separate arguments or one tuple. | `f.stroke("black")` |

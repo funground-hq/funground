@@ -125,6 +125,7 @@ class FillPath(Op):
     blend_mode: str = "normal"       # S-051: recorded only when not default
     opacity: int = 255
     shadow: tuple | None = None
+    erase: int | None = None         # S-107 (F15): remove this much alpha instead of painting; recorded only when set
 
 
 @dataclass(frozen=True, slots=True)
@@ -140,6 +141,7 @@ class StrokePath(Op):
     blend_mode: str = "normal"       # S-051
     opacity: int = 255
     shadow: tuple | None = None
+    erase: int | None = None         # S-107 (F15)
 
 
 @dataclass(frozen=True, slots=True)
@@ -172,6 +174,7 @@ class Image(Op):
     sw: float | None = None
     sh: float | None = None
     snapshot: Any = field(default=None, compare=False, repr=False)
+    erase: int | None = None         # S-107 (F15): the fill strength; the picture's alpha is removed, not painted
 
 
 @dataclass(frozen=True, slots=True)
@@ -259,7 +262,8 @@ OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash
                                "blend_mode", "opacity", "shadow", "font", "text_style",
                                "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges",
                                "tint", "sx", "sy", "sw", "sh", "radii",
-                               "text_tracking", "text_features", "font_variations"})
+                               "text_tracking", "text_features", "font_variations",
+                               "erasing", "erase"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).
@@ -323,6 +327,8 @@ def _extra_from_jsonable(name: str, v: Any) -> Any:
         return None if v is None else (v[0], v[1], v[2], Color(*v[3]))
     if name == "tint":
         return None if v is None else Color(*v)
+    if name == "erasing":
+        return None if v is None else tuple(v)
     if name in ("text_features", "font_variations"):
         return tuple((tag, value) for tag, value in v)
     return v

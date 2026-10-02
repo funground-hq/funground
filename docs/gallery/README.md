@@ -119,6 +119,14 @@ f.create_graphics() makes a picture: an off-screen canvas with the same drawing 
 
 Source: [`examples/gallery/compositing/02_graphics.py`](../../examples/gallery/compositing/02_graphics.py)
 
+### Scratch card: erasing
+
+![Scratch card: erasing](images/compositing-03_scratch_card.png)
+
+After f.erase(), everything you draw removes what is under it instead of painting. Here a grey "foil" picture covers a prize. Wavy scratch marks erase the foil, so the prize shows through the holes. Strength 255 removes the foil completely. A smaller number, like 90, only thins it. f.no_erase() goes back to normal painting.
+
+Source: [`examples/gallery/compositing/03_scratch_card.py`](../../examples/gallery/compositing/03_scratch_card.py)
+
 ## Fill, stroke and lines
 
 ### Fill and stroke
