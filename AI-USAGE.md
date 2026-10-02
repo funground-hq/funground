@@ -184,3 +184,15 @@ sprint review adds its entry here.
   DrawBot writes difference as `%`; review added it.
 - Rounded corners for `rect` (a v0.5 signature change) were left for the maintainer.
 
+### Sprint 10: typography, SVG and real PDF text (1–2 Oct 2026)
+- The maintainer chose `svgelements` for SVG import (D-041). After a Claude spike, they asked what
+  real PDF text would involve and chose it (D-043 = D) over the spike's recommendation.
+- Claude decided the typography names (D-042) and the `FormattedString` API (D-044) under D-034.
+- Five stories and the spike were built by Claude Sonnet 5 sub-agents. Real PDF text was built by a
+  Claude Opus 5.5 sub-agent in its own git worktree, from a design Claude checked with a one-minute
+  Cairo experiment first.
+- Sonnet sub-agents wrote the developer guide and six design notes from the code. Claude reviewed
+  them and wrote the PDF text note.
+- Review (Claude) fixed four bugs where the code broke the contract. One IR snapshot that had
+  recorded a bug was regenerated, and this is stated in the sprint review.
+
