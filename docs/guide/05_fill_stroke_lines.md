@@ -122,4 +122,57 @@ f.run()
 
 `f.background()` ignores all three, so each frame still starts clean.
 
+## Erasing
+
+`f.erase()` turns drawing upside down. Everything you draw after it **removes** what is under
+it, instead of painting. The removed part becomes see-through.
+
+| Function | What it does |
+|---|---|
+| `f.erase(fill_strength=255, stroke_strength=255)` | Start erasing. 255 removes everything under the shape. 128 removes about half. 0 removes nothing. The first number is for the inside of shapes and text, the second for outlines and lines. |
+| `f.no_erase()` | Go back to painting. |
+
+Colours do not matter while you erase: a red circle and a blue circle erase the same. Gradients and
+`f.tint()` are ignored too. `f.blend_mode()`, `f.opacity()` and `f.shadow()` are ignored as well.
+Use the two strengths to control how much is erased. `f.no_fill()` and `f.no_stroke()` still work.
+
+Erasing is part of the saved state, so `f.push()` and `f.pop()` bring it back. A picture made
+with `f.create_graphics()` has its own erasing too. The best way to use it is to cut holes in a
+picture and then draw that picture over something else:
+
+```python
+import funground as f
+
+cover = None
+
+
+def setup():
+    global cover
+    f.size(400, 300)
+    cover = f.create_graphics(400, 300)
+    cover.background("navy")
+    cover.no_stroke()
+    cover.erase()                  # from here, drawing on the cover removes it
+    cover.circle(200, 150, 160)
+    cover.no_erase()
+
+
+def draw():
+    f.background("gold")
+    f.image(cover, 0, 0)           # the gold shows through the hole
+
+
+f.run()
+```
+
+![A scratch card](../gallery/images/compositing-03_scratch_card.png)
+
+If you erase straight on the window canvas, the erased pixels are see-through, exactly like after
+`f.clear()`. The window shows black behind them, and a saved PNG keeps the see-through pixels.
+
+**Saving as PDF or SVG.** A PDF has no way to take paint away. Erasing a picture works: the picture
+is replayed as shapes and the hole shows what is behind it. Erasing straight on the canvas does not:
+in a PDF the earlier drawing stays and the hole is not visible. SVG files use a filter for it, so
+the result depends on the program that opens the file. If it matters, erase on a picture, or save a PNG.
+
 **Next:** [6. Text](06_text.md)

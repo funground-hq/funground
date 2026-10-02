@@ -30,7 +30,7 @@ ALLOWED_METHODS = frozenset({
     "fill", "no_fill", "stroke", "no_stroke", "stroke_width",
     "stroke_cap", "stroke_join", "miter_limit", "stroke_dash", "no_dash",
     "no_smooth", "smooth",
-    "blend_mode", "opacity", "shadow", "no_shadow", "color_mode", "tint", "no_tint",
+    "blend_mode", "opacity", "shadow", "no_shadow", "color_mode", "tint", "no_tint", "erase", "no_erase",
     # drawing
     "background", "clear",
     "rect_mode", "ellipse_mode", "image_mode",
@@ -375,7 +375,8 @@ def draw_image(target: Sketch, picture: Any, x: float, y: float,
         x, y = x - w / 2, y - h / 2
     if not part:
         target._emit(ir.Image(picture.name, snap.version, float(x), float(y), w, h,
-                               style.blend_mode, style.opacity, style.tint, snapshot=snap))
+                               style.blend_mode, style.opacity, style.tint, snapshot=snap,
+                               erase=None if style.erasing is None else style.erasing[0]))
         return
     # contract P6: clip the source rectangle to the picture; scale the destination so the visible
     # part keeps its place. A part wholly outside the picture draws nothing.
@@ -386,7 +387,8 @@ def draw_image(target: Sketch, picture: Any, x: float, y: float,
     kx, ky = w / sw, h / sh
     target._emit(ir.Image(picture.name, snap.version, float(x) + (x0 - sx) * kx, float(y) + (y0 - sy) * ky,
                            (x1 - x0) * kx, (y1 - y0) * ky, style.blend_mode, style.opacity, style.tint,
-                           x0, y0, x1 - x0, y1 - y0, snap))
+                           x0, y0, x1 - x0, y1 - y0, snap,
+                           None if style.erasing is None else style.erasing[0]))
 
 
 def _number(v: Any, name: str) -> float:

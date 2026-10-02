@@ -1646,14 +1646,16 @@ class Sketch:
 
     @staticmethod
     def _fill_op(geometry: Path, style: GraphicsState) -> ir.FillPath:
-        return ir.FillPath(geometry, style.fill, style.blend_mode, style.opacity, style.shadow)
+        return ir.FillPath(geometry, style.fill, style.blend_mode, style.opacity, style.shadow,
+                           None if style.erasing is None else style.erasing[0])
 
     @staticmethod
     def _stroke_op(geometry: Path, style: GraphicsState) -> ir.StrokePath:
         return ir.StrokePath(geometry, style.stroke, float(style.stroke_width),
                              style.stroke_cap, style.stroke_join, style.miter_limit,
                              style.dash, style.dash_offset,
-                             style.blend_mode, style.opacity, style.shadow)
+                             style.blend_mode, style.opacity, style.shadow,
+                             None if style.erasing is None else style.erasing[1])
 
     # ---- compositing (S-051, contract S14)
     BLEND_MODES = ("normal", "multiply", "screen", "overlay", "darken", "lighten", "add", "difference",
@@ -1679,6 +1681,16 @@ class Sketch:
 
     def no_shadow(self) -> None:
         self._states.update(shadow=None)
+
+    # ---- erasing (S-107, contract F15)
+    def erase(self, fill_strength: float = 255, stroke_strength: float = 255) -> None:
+        for name, v in (("fill_strength", fill_strength), ("stroke_strength", stroke_strength)):
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or not 0 <= v <= 255:
+                raise ValueError(f"f.erase() takes {name} from 0 (nothing erased) to 255 (fully erased), not {v!r}")
+        self._states.update(erasing=(int(fill_strength), int(stroke_strength)))
+
+    def no_erase(self) -> None:
+        self._states.update(erasing=None)
 
     # ------------------------------------------------------------ helpers
     def random(self, low: float = 1.0, high: float | None = None) -> float:

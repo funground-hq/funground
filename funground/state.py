@@ -56,6 +56,8 @@ class GraphicsState:
     color_ranges: tuple = DEFAULT_COLOR_RANGES
     # S-078 tint (contract P5): a colour multiplied into every picture drawn with image(); None = no tint.
     tint: Color | None = None
+    # S-107 erasing (contract F15): (fill_strength, stroke_strength), 0-255, or None when painting.
+    erasing: tuple | None = None
 
     def with_(self, **changes) -> "GraphicsState":
         return replace(self, **changes)
