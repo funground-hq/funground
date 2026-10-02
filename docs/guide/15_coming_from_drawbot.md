@@ -96,6 +96,19 @@ Letters as a path:
 | `path.text(txt, offset, font, fontSize, align)` | `f.text_path(message, x, y)` (uses the current font, size, style and alignment; a `"
 "` starts a new line) |
 
+Asking about a font:
+
+| DrawBot | funground |
+|---|---|
+| `listFontVariations(fontName)` gives `{"wght": {"minValue": ..., "defaultValue": ..., "maxValue": ...}}` | `f.current_font().variations()` gives `{"wght": (min, default, max)}`; `{}` for a static font |
+| `listOpenTypeFeatures(fontName)` gives a list of tags | `f.current_font().features()` gives a sorted list of tags |
+| `fontContainsCharacters(characters)` asks the current font | `f.current_font().contains(text)` |
+
+DrawBot names the font by its installed name and asks about it. funground asks the font object,
+which you get from `f.current_font()` (the font text is set in now) or `f.load_font()`.
+DrawBot's `fontContainsCharacters` takes a string of characters like funground's `contains`.
+In funground a new line in `text` is skipped, and a space needs a glyph.
+
 DrawBot's `translate`, `scale` and `rotate` change the path itself. funground's give back a new
 path. DrawBot turns anticlockwise because its y axis points up; funground's y axis points down,
 so a positive angle turns clockwise, as in `f.rotate`.
@@ -154,8 +167,8 @@ DrawBot's FormattedString also has methods that change its current settings (`fs
 `copy()` and indexing. funground does not have them yet. It takes its settings only in `append()`.
 `fill` is `color` here, and a run has no stroke of its own.
 
-DrawBot's two functions also return the current settings and have `listOpenTypeFeatures()` and
-`listFontVariations()`. funground's do not return anything yet. As in DrawBot, an axis the font
+DrawBot's two functions also return the current settings. funground's do not return anything yet.
+For the axes and features a font has, see `font.variations()` and `font.features()` above. As in DrawBot, an axis the font
 lacks is ignored. DrawBot picks the font by its installed name, funground by a font file.
 
 Both `textBox` and `f.text_box` wrap text inside a box and **return the text that did not fit**,

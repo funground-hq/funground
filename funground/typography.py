@@ -84,6 +84,34 @@ class FontResource:
     def family(self) -> str:
         return self._tt["name"].getDebugName(1) or os.path.basename(self.path)
 
+    @property
+    def style_name(self) -> str:
+        """The style name from the `name` table ("Regular", "Bold", "Oblique", ...)."""
+        return self._tt["name"].getDebugName(2) or ""
+
+    def axis_ranges(self) -> dict[str, tuple[float, float, float]]:
+        """Variable axes as tag -> (minimum, default, maximum); {} for a static font (T17)."""
+        if "fvar" not in self._tt:
+            return {}
+        return {a.axisTag: (a.minValue, a.defaultValue, a.maxValue) for a in self._tt["fvar"].axes}
+
+    def feature_tags(self) -> list[str]:
+        """Sorted, de-duplicated OpenType feature tags from GSUB and GPOS (T17)."""
+        tags: set[str] = set()
+        for name in ("GSUB", "GPOS"):
+            if name in self._tt:
+                feature_list = self._tt[name].table.FeatureList
+                if feature_list is not None:
+                    tags.update(r.FeatureTag for r in feature_list.FeatureRecord)
+        return sorted(tags)
+
+    def has_text(self, text: str) -> bool:
+        """True when the cmap has a glyph for every character of *text* (T17). A space is checked
+        like any letter. A new line is skipped: `f.text` turns it into a new line and never draws it.
+        Other control characters (tab, ...) are checked, and most fonts have no glyph for them."""
+        cmap = self._tt.getBestCmap()
+        return all(ch == chr(10) or ord(ch) in cmap for ch in text)
+
     def location(self, variations: tuple = ()) -> tuple:
         """The variation settings this font can use: only its own axes, sorted (S-090, T13).
         An axis the font lacks is ignored, so a static font always gives ()."""
@@ -263,6 +291,34 @@ class Font:
 
     def __hash__(self) -> int:
         return hash(self.name)
+
+    def _resource(self) -> FontResource:
+        resource = _registry.get(self.name)
+        if resource is None and self.name in STYLE_FILES.values():
+            resource = _builtin(self.name)                    # a built-in style not used yet
+        if resource is None:
+            raise RuntimeError(f"no font loaded for key {self.name!r} (was it loaded in this process?)")
+        return resource
+
+    def family(self) -> str:
+        """The family name from the font's `name` table, like "DejaVu Sans" (contract T17)."""
+        return self._resource().family
+
+    def style(self) -> str:
+        """The style name from the font's `name` table, like "Bold" (contract T17)."""
+        return self._resource().style_name
+
+    def variations(self) -> dict[str, tuple[float, float, float]]:
+        """Variable axes: tag -> (minimum, default, maximum). {} for a font that is not variable."""
+        return self._resource().axis_ranges()
+
+    def features(self) -> list[str]:
+        """The OpenType feature tags the font has, sorted, like ["kern", "liga"]."""
+        return self._resource().feature_tags()
+
+    def contains(self, text: str) -> bool:
+        """True when the font has a glyph for every character of *text* (spaces count; a new line is ignored)."""
+        return self._resource().has_text(text)
 
 
 def _builtin(filename: str) -> FontResource:

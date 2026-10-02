@@ -316,4 +316,75 @@ any other path.
 |---|---|
 | `f.text_path(message, x, y)` | The outlines of `f.text(message, x, y)` as a new path. An empty message gives an empty path. |
 
+## Text as points
+
+`f.text_to_points(message, x, y, spacing=5)` walks along the outlines of the letters and gives you
+a list of `(x, y)` points, one every `spacing` pixels. It follows `f.text_path()`, so the points
+sit exactly on the letters you would see: the same font, style, size, alignment and lines. It draws
+nothing. You decide what to draw at each point.
+
+```py
+import funground as f
+
+
+def setup():
+    f.size(400, 200)
+
+
+def draw():
+    f.background(20, 24, 40)
+    f.text_style("bold")
+    f.text_size(110)
+    f.text_align("center", "center")
+    f.no_stroke()
+    f.fill("gold")
+    for x, y in f.text_to_points("beads", 200, 100, 8):
+        f.circle(x, y, 5)
+
+
+f.run()
+```
+
+A smaller `spacing` gives more points. Each outline starts at its own first point, and the
+distance is measured along curves too. The `spacing` must be above 0. An empty message gives `[]`.
+
+![Words made of dots](../gallery/images/text-09_text_dots.png)
+
+## Asking the font
+
+`f.current_font()` gives you the font your text is set in now. It works for the built-in font and
+for a font you loaded with `f.load_font()`. You can ask it questions. Asking never changes anything.
+
+```py
+import funground as f
+
+
+def setup():
+    f.size(400, 120)
+
+
+def draw():
+    f.background("white")
+    font = f.current_font()
+    f.fill("black")
+    f.text_size(16)
+    f.text(font.family() + ", " + font.style(), 20, 20)
+    f.text("liga: " + str("liga" in font.features()), 20, 50)
+    f.text("has an 'x': " + str(font.contains("x")), 20, 80)
+
+
+f.run()
+```
+
+| Function | What it does |
+|---|---|
+| `f.text_to_points(message, x, y, spacing=5)` | A list of `(x, y)` points along the outlines of `f.text_path(message, x, y)`, one every `spacing` pixels. `spacing` must be above 0. An empty message gives `[]`. |
+| `f.current_font()` | The font text is set in now, as a font object. |
+| `font.family()` | The family name, like `"DejaVu Sans"`. |
+| `font.style()` | The style name, like `"Bold"`. The built-in normal style is called `"Book"`. |
+| `font.variations()` | The axes of a variable font: a dict of tag to `(minimum, default, maximum)`, like `{"wght": (100, 400, 900)}`. `{}` for a font that is not variable. |
+| `font.features()` | The OpenType features the font has, as a sorted list of tags like `["kern", "liga"]`. |
+| `font.contains(text)` | `True` when the font has a letter for every character of `text`. A space needs a glyph like any letter. A new line `"
+"` is ignored, because text turns it into a new line. Other control characters, like a tab, are checked. |
+
 **Next:** [7. Animation and time](07_animation_and_time.md)

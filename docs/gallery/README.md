@@ -221,6 +221,14 @@ f.font_variations(wght=700) sets the axes of a variable font, like its weight or
 
 Source: [`examples/gallery/text/08_variations.py`](../../examples/gallery/text/08_variations.py)
 
+### Words made of dots
+
+![Words made of dots](images/text-09_text_dots.png)
+
+f.text_to_points() walks along the outline of a word and gives back a point every few pixels. Draw a small circle at each point and the word is made of beads. A smaller spacing gives more dots. The same call works with any font, size and alignment, because it follows f.text_path(). f.current_font() tells you which font is in use: its family, its style, and whether it has the characters you want.
+
+Source: [`examples/gallery/text/09_text_dots.py`](../../examples/gallery/text/09_text_dots.py)
+
 ## Animation and time
 
 ### Bounce

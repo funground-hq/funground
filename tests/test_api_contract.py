@@ -167,6 +167,9 @@ ADDED_FUNCTIONS = {
     "FormattedString": "() -> 'None'",
     # S-088 text as a path
     "text_path": "(message: 'object', x: 'float', y: 'float') -> 'PathBuilder'",
+    # S-104/S-106 text to points, font information
+    "text_to_points": "(message: 'object', x: 'float', y: 'float', spacing: 'float' = 5) -> 'list[tuple[float, float]]'",
+    "current_font": "() -> 'Font'",
     # S-100 motion
     "save_gif": "(path: 'str', seconds: 'float') -> 'None'",
     "save_movie": "(path: 'str', seconds: 'float') -> 'None'",

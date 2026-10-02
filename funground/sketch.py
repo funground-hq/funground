@@ -1522,6 +1522,23 @@ class Sketch:
                 geometry = Path(geometry.segments + op.path.segments)
         return PathBuilder(geometry)
 
+    def text_to_points(self, message: object, x: float, y: float, spacing: float = 5) -> list[tuple[float, float]]:
+        """Points along the outlines of `text_path(message, x, y)`, one every *spacing* pixels (contract T16)."""
+        from .geometry import sample_path
+
+        if isinstance(spacing, bool) or not isinstance(spacing, (int, float)):
+            raise TypeError(f"f.text_to_points() takes spacing as a number of pixels, not {type(spacing).__name__}")
+        if not spacing > 0:
+            raise ValueError(f"f.text_to_points() needs a spacing above 0 pixels, not {spacing!r}")
+        return [(float(px), float(py)) for px, py in sample_path(self.text_path(message, x, y).geometry, float(spacing))]
+
+    def current_font(self):
+        """The font text is set in now, as a font object, the built-in font too (contract T17)."""
+        from .typography import STYLE_FILES, Font
+
+        style = self.style
+        return Font(STYLE_FILES[style.text_style] if style.font is None else style.font)
+
     def text_width(self, message: object) -> float:
         """Advance width of *message* in logical pixels at the current text_size (contract T6)."""
         from .typography import effective_font, text_settings, text_width
