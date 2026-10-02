@@ -186,3 +186,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-112 | E-17 | Onsets and tempo (D-056) | 14 |
 | S-113 | E-17 | Chroma, key and chords (D-056) | 14 |
 | S-114 | E-22 | Music teaching scenarios and ragas (D-056) | 14 |
+| S-115 | E-17 | Ragas for learners: synthesis and analysis, basic to intermediate (D-057) | 14 |

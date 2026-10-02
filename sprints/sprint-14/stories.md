@@ -25,5 +25,21 @@ ragas, and build the teaching scenarios of `docs/design/Music_Research_Note.md` 
 - [ ] Gallery `music/` and guide chapter: draw a wave and hear it; compose and save; tuner (microphone + `pitch`); ear training; see a chord; tap along; piano roll of a composed tune
 - [ ] Ragas: sing with a drone (tanpura made with `tone`/`pluck`, a pitch line against Sa and Pa); a swara histogram; compose in a raga from its aroha and avaroha (a small raga table)
 
+### S-115 Ragas for learners — E-17 *(D-057; basic to intermediate; contract rows to pin)*
+- [ ] Synthesis:
+  - a tanpura drone;
+  - meend (glides between swaras) and a simple gamaka in `melody`;
+  - a tala sequencer (teentaal, rupak, …) with simple synthesised percussion and bol names;
+  - a small raga table (thaat, aroha/avaroha, vadi/samvadi, pakad) that drives examples.
+- [ ] Analysis:
+  - a pitch contour against Sa;
+  - a tonic (Sa) estimate;
+  - a swara histogram;
+  - a basic raga match of a recording or the learner's singing against the table, histogram-based, with its limits stated.
+- [ ] Teaching:
+  - a gallery `music/` raga set;
+  - a guide chapter section written for learners of Indian music;
+  - sources checked as in `Music_Research_Note.md`.
+
 ## Not in 0.1
 Piano roll or transcription from a recording (needs machine learning); real-time synthesis (ADR-003/006).
