@@ -245,6 +245,14 @@ f.text_to_points() walks along the outline of a word and gives back a point ever
 
 Source: [`examples/gallery/text/09_text_dots.py`](../../examples/gallery/text/09_text_dots.py)
 
+### Letters from other fonts
+
+![Letters from other fonts](images/text-10_fallback.png)
+
+No font has every letter. When the font you are using lacks one, funground draws it from another font and keeps the line together: same size, same baseline. Here one greeting mixes English, Hindi and emoji, with no extra code. The emoji have one colour, the colour of the fill. The grey line turns the help off with f.text_fallback(None), so the missing letters show as empty boxes.
+
+Source: [`examples/gallery/text/10_fallback.py`](../../examples/gallery/text/10_fallback.py)
+
 ## Animation and time
 
 ### Bounce

@@ -102,6 +102,58 @@ f.text(fs, x, y)
 - Kerning is not applied across run boundaries: each run is shaped alone. A run's features and
   variations replace the state's rather than merge.
 
+## Font fallback (T18, D-052, S-102)
+
+**Status:** decided D-052 = C (2 Oct 2026); built in S-102. Evidence: `spikes/10_font_fallback/README.md`.
+Code: `funground/typography.py` (`clusters`, `has_emoji`, `_itemise`, `ShapedLine`, `system_font`),
+`_pdf_text_marker` in `funground/renderers/cairo2d.py`.
+
+**The problem.** A font has only some of the world's letters. Before this, a missing letter drew the font's
+empty box. Learners want emoji and a few scripts to just work, and the output must stay the same on every
+computer.
+
+**The rule.** `FontResource.shape(text, size, ..., fallback=)` takes the chain. `fallback=None` is today's
+single shaping call. A tuple (the learner's font keys, `()` for none) turns fallback on. The drawing state
+holds `text_fallback`, `()` by default (bundled fonts only), `None` for off. It is left out of the IR when
+`()`, so no old snapshot changes.
+
+1. **Fast path.** If the primary font has every character and the text holds no emoji cluster, the result
+   is exactly today's `TextRun`: same IR, same pixels. The check is one cmap lookup per character, plus a
+   single `max(text)` comparison, because no emoji is below U+231A. Measured: a 5-letter line costs about 2
+   microseconds more than before.
+2. **Itemise by cluster.** The text is split into grapheme clusters with the standard library only (about 40
+   lines; it matched the `regex` module's `\X` on 16 hard strings). Each cluster goes to the first font in the
+   chain that has every character of it, ignoring joiners and variation selectors. Neighbouring clusters in
+   one font make one run. Each run is shaped with its own font at the same size.
+3. **The chain.** The learner's fonts, then Noto Emoji, Noto Sans Symbols 2, Noto Sans Devanagari, then DejaVu
+   Sans when the primary is not a built-in style. An emoji cluster (Emoji_Presentation, or any character
+   plus U+FE0F) tries the learner's fonts, then Noto Emoji, *before* the primary, so emoji look alike. The
+   Emoji_Presentation table is 80 ranges, written into the code from the Unicode 16 data.
+4. **Spaces and punctuation** stay with the run before them when its font is a text font and has them. A
+   font with no letters (Noto Emoji, Symbols 2, or a learner's emoji font) is "symbolic": it never supplies a
+   space, punctuation or an ASCII character, because its space is 1.27 em wide.
+5. **One baseline.** `ShapedLine` keeps one `TextRun` per run. `parts(x, y)` gives each run the top-left that puts
+   its own baseline on the primary font's baseline. Line height, `text_ascent`, `text_descent` and
+   wrapping use the primary font. `advance` is the sum of the runs, so `text_width` and `wrap_lines` needed no
+   change except passing the setting through `text_settings`.
+6. **PDF text.** Each run is its own marker and so its own font subset (the collector already keys fonts by
+   file). A run whose font cannot be embedded is drawn as outlines, the others as text.
+7. **Memoising.** The itemisation is remembered per `(text, primary, chain)` (2048 entries). Shaped runs use the
+   renderer's existing run cache, whose key gains the chain only when it is not the default. Bundled fonts
+   load on first need.
+8. **`system_font(name)`.** Searches the Windows, macOS and Linux font folders for `.ttf` and `.otf` files, reads
+   family names (name IDs 1 and 16) with fontTools, once per file, and prefers the Regular face. Missing is a
+   `FileNotFoundError`. It is never in the default chain, so output depends on the computer only when a
+   sketch asks. Files are only read, never opened with another program.
+
+**Limits.** Emoji are one colour. A right-to-left phrase that needs two fonts comes out with its runs in
+left-to-right order (funground does no bidi). Han unification: one CJK font draws all Han characters in its
+own forms. Characters no font has stay as the empty box. Grapheme rules follow Python's Unicode tables.
+Bundled: Noto Emoji (static instance at weight 400 of the variable font, 0.89 MB), Noto Sans Symbols 2
+(0.67 MB) and Noto Sans Devanagari (0.24 MB), all SIL OFL 1.1 with no Reserved Font Name.
+
+**Tests.** `tests/test_fallback.py`.
+
 ## Alternatives rejected
 
 - **A markup string** for mixed text (D-044): DrawBot's `FormattedString` was chosen instead.

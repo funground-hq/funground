@@ -387,4 +387,77 @@ f.run()
 | `font.contains(text)` | `True` when the font has a letter for every character of `text`. A space needs a glyph like any letter. A new line `"
 "` is ignored, because text turns it into a new line. Other control characters, like a tab, are checked. |
 
+## Letters your font does not have
+
+No font has every letter in the world. The built-in font has no emoji (some it has look thin), no
+Hindi and no Chinese. When a letter is missing, a font usually draws an empty box.
+
+funground does better. It looks for the missing letter in other fonts, and draws it from the first
+font that has it. It does this by itself. You do not have to ask.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(420, 150)
+
+
+def draw():
+    f.background("white")
+    f.fill("black")
+    f.text_size(32)
+    f.text("Hello \U0001F680", 20, 20)
+    f.text("नमस्ते दुनिया", 20, 80)
+
+
+f.run()
+```
+
+The words "Hello" and the spaces come from your font. The rocket comes from Noto Emoji. The
+Hindi words come from Noto Sans Devanagari. Both fonts are part of funground. They sit on the same
+line, at the same size, and stand on the same baseline. `f.text_width()`, `f.text_box()` and
+`f.text_path()` all work with them.
+
+Two things to know:
+
+- **Emoji have one colour.** An emoji is drawn as a plain outline in the colour of your fill, like
+  any other letter. Colour emoji are not drawn.
+- **Emoji always come from the emoji font**, even when your font has the same emoji. So a line of
+  emoji looks the same whatever font you use.
+
+### Your own fallback fonts
+
+Some letters are in no bundled font: Chinese, Japanese, Korean, Arabic with its many marks, and more.
+Load a font that has them and give it to `f.text_fallback()`:
+
+```py
+japanese = f.load_font("NotoSansJP-Regular.otf")
+f.text_fallback(japanese)
+f.text("Hello, 日本語", 20, 20)
+```
+
+Your fonts are tried first, in the order you give them, then the built-in ones. A letter that no font has
+is still drawn as an empty box. `f.text_fallback()` with no arguments forgets your fonts.
+`f.text_fallback(None)` turns fallback off, so a missing letter is an empty box again. The setting is
+part of the drawing state, so `f.push()` and `f.pop()` save and restore it.
+
+### Fonts already on your computer
+
+`f.system_font(name)` finds a font that is installed on your computer, by its family name. Capital
+letters do not matter. If the family has several styles, it uses the Regular one.
+
+```py
+f.text_fallback(f.system_font("Microsoft YaHei"))
+```
+
+If there is no such font, it raises `FileNotFoundError` and says the name. Look in your Fonts folder
+to see what you have. funground looks only when you ask. A sketch that uses `f.system_font()` can look
+different on another computer, because the other computer may have different fonts.
+
+| Function | What it does |
+|---|---|
+| `f.text_fallback(*fonts)` | Fonts to try for letters the current font lacks, before the built-in ones. No arguments: only the built-in ones. `None`: no fallback. |
+| `f.system_font(name)` | A font installed on this computer, found by family name. `FileNotFoundError` if there is none. |
+
 **Next:** [7. Animation and time](07_animation_and_time.md)
