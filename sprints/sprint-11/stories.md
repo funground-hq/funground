@@ -17,12 +17,12 @@ pending, the maintainer's call**.
 ## Story set
 
 ### S-098 Sound playback — E-17 *(D-046; contract A1)*
-- [ ] S-098.1 `funground/sound.py` (only pygame-ce's mixer; a silent clock-driven player without a device); `f.load_sound`; the sound object
-- [ ] S-098.2 Tests with WAV files written by the tests; gallery `sound/` area; guide chapter (new); Quick Reference; changelog
+- [x] S-098.1 `funground/sound.py` (only pygame-ce's mixer; a silent clock-driven player without a device); `f.load_sound`; the sound object
+- [x] S-098.2 Tests with WAV files written by the tests; gallery `sound/` area; guide chapter (new); Quick Reference; changelog
 
 ### S-099 Sound analysis — E-17 *(D-046; contract A2)*
-- [ ] S-099.1 `sound.level()`, `sound.spectrum(bands)`: pure-Python FFT, cached per frame
-- [ ] S-099.2 Tests with generated tones (a 440 Hz tone peaks in the right band); a visualiser gallery example
+- [x] S-099.1 `sound.level()`, `sound.spectrum(bands)`: pure-Python FFT, cached per frame
+- [x] S-099.2 Tests with generated tones (a 440 Hz tone peaks in the right band); a visualiser gallery example
 
 ### S-100 GIF and MP4 export — E-19 *(contract row to pin; MP4 needs D-045)*
 - [ ] S-100.1 Scripts: pages become frames (DrawBot's model); animated sketches: record a number of seconds (p5 `saveGif`)

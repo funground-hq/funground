@@ -451,6 +451,16 @@ f.load_svg() reads an SVG file and gives you a picture, like f.load_image(). The
 
 Source: [`examples/gallery/images/05_svg.py`](../../examples/gallery/images/05_svg.py)
 
+## Sound
+
+### Sound: play a tune and watch it
+
+![Sound: play a tune and watch it](images/sound-01_visualiser.png)
+
+f.load_sound() reads a sound file. sound.loop() plays it over and over. While it plays, sound.level() tells you how loud it is now, and sound.spectrum() tells you how strong each range of pitch is: low notes on the left, high notes on the right. Both are numbers from 0 to 1. With no sound device, the sketch still runs, in silence. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/sound/01_visualiser.py`](../../examples/gallery/sound/01_visualiser.py)
+
 ## Compositing
 
 ### Blend modes, opacity and shadows

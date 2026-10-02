@@ -154,6 +154,16 @@ matches p5's exactly.
 | `save(filename)` | `save(filename)` | `f.save(path)` |
 | `saveFrame("line-####.png")` | `saveFrame("line-####.png")` | `f.save_frames(pattern, count)` |
 
+### Sound
+
+| p5.js | Processing | funground |
+|---|---|---|
+| `loadSound("x.mp3")`, `s.play()`, `s.loop()`, `s.stop()`, `s.pause()`, `s.setVolume(v)`, `s.isPlaying()`, `s.duration()` (the p5.sound add-on) | the Sound library | `s = f.load_sound("x.mp3")`, then `s.play()`, `s.loop()`, `s.stop()`, `s.pause()`, `s.set_volume(v)`, `s.is_playing()`, `s.duration()`. They are methods of the sound, in snake_case. WAV, OGG or MP3. With no sound device it plays silently and keeps time |
+| `new p5.Amplitude()`, `amp.getLevel()` | `Amplitude`, `analyze()` | `s.level()`: 0 to 1, how loud the sound is right now. There is no separate object: ask the sound |
+| `new p5.FFT()`, `fft.analyze()` | `FFT`, `analyze()` | `s.spectrum(bands)`: a list of `bands` numbers from 0 to 1, low pitch to high, spaced evenly in pitch from 40 Hz to 16 kHz. p5 gives 1024 numbers from 0 to 255, spaced evenly in frequency |
+
+Chapter 16 has the details.
+
 ## Deliberate differences
 
 These are not gaps — they are choices, and each matches a row in the [Semantic
@@ -241,8 +251,7 @@ Every rename above is a one-for-one swap: `createCanvas` to `size`, `ellipse` to
 
 ## What is not here yet
 
-Some things a p5 or Processing sketch might use are not in funground yet. Image filters, pixel
-access, sound and video export are being added now, before the first release. 3D and running in a
+Some things a p5 or Processing sketch might use are not in funground yet. Video export is being added now, before the first release. 3D and running in a
 browser are planned for after 1.0.
 
 **Next:** [15. Coming from DrawBot](15_coming_from_drawbot.md)

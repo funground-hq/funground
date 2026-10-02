@@ -21,6 +21,7 @@ Every complete example in this guide is tested: it runs exactly as printed.
 | 13 | [Saving your work](13_saving_your_work.md) | ready |
 | 14 | [Coming from p5.js and Processing](14_coming_from_p5_processing.md) | ready |
 | 15 | [Coming from DrawBot](15_coming_from_drawbot.md) | ready |
+| 16 | [Sound](16_sound.md) | ready |
 
 **Using the code.** Every code example in this guide is free to copy, change and use in any way,
 with no conditions ([CC0](../../examples/LICENSE)).
