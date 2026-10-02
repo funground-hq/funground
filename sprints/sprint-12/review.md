@@ -1,6 +1,6 @@
 # Sprint 12 review — release 0.1, widened: text depth, layers, the gallery in the package
 
-**Dates:** 2–3 October 2026, under D-034 and D-049. **Draft for the maintainer's sign-off.**
+**Dates:** 2–3 October 2026, under D-034 and D-049; closed by the maintainer 3 October 2026
 
 **Goal:**
 - missing letters come from fallback fonts;
@@ -78,7 +78,7 @@ CI: green on 12 cells up to 86ea1ca; the Sprint 12 pushes are running at the tim
 
 ## Sign-off
 
-*Awaiting the maintainer.*
+**Closed 3 October 2026** by the maintainer ("Signed off sprint 12"). D-050 and D-051 stand, the erase difference from p5 included.
 
 ## Retrospective
 

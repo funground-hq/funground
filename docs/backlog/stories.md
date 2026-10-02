@@ -182,3 +182,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-108 | E-17 | Microphone input (pygame-ce capture) | 13 |
 | S-109 | E-15 | PDF text: fill mode for solid colours | 13 |
 | S-110 | E-17 | Tones, notes, pan, create_sound, save WAV (D-055, ADR-006) | 13 |
+| S-111 | E-17 | Seeing sound: wave, spectrum, pitch line, spectrogram (D-056) | 14 |
+| S-112 | E-17 | Onsets and tempo (D-056) | 14 |
+| S-113 | E-17 | Chroma, key and chords (D-056) | 14 |
+| S-114 | E-22 | Music teaching scenarios and ragas (D-056) | 14 |
