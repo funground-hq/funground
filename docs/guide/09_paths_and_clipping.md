@@ -302,6 +302,12 @@ Some things to know:
 - `f.save("x.png")`, `f.get()` and the picture on screen all include the layers. A PDF or SVG
   draws each layer as shapes, not as a picture.
 
+Layers are also **real layers in a PDF or SVG**. Open the PDF in Acrobat or Illustrator, or the
+SVG in Inkscape or Illustrator, and each layer is listed by its name. You can switch it off and
+on there, or edit it on its own. A hidden layer is in the file too, but switched off, so the file
+looks like the window. A layer that has drawn a very large number of shapes is saved as a picture
+inside its layer.
+
 ## Pictures and images
 
 A picture does not have to be drawn by you. `f.load_image(path)` reads an image file and

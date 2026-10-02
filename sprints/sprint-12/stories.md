@@ -46,7 +46,7 @@ unreachable are pushed and CI is green on all 12 cells (Sprint 11 retro rule).
 - [x] S-095.1 `f.layer(name)` (pictures underneath), `hide_layer`/`show_layer`, composited in order; pages; window and PNG
 
 ### S-096 Layers in PDF and SVG — E-18 *(D-053; contract F16; after S-095)*
-- [ ] S-096.1 PDF optional content groups named after the layers (pypdf post-step, like T15); SVG Inkscape layer groups
+- [x] S-096.1 PDF optional content groups named after the layers (pypdf post-step, like T15); SVG Inkscape layer groups
 
 ## Out of scope this sprint
 Sprint 13: microphone input, real text in SVG, the PDF-text polish.

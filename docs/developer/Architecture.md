@@ -236,6 +236,12 @@ orientation itself, and holds the pixel helpers behind `tint`, `resize`, `mask` 
 Contract rows P1 to P11. Note: [Pictures_and_Images_Note.md](../design/Pictures_and_Images_Note.md).
 Decision: [ADR-004](../design/ADR-004-image-provider.md).
 
+Layers (F16, D-053, S-095 and S-096): `f.layer(name)` is a canvas-sized picture, put over the
+canvas as an `ir.Image` tagged with its name, never stored in the frame. In a PDF or SVG the
+renderer draws each layer as a marker group; `export/layers.py` turns it into an optional content
+group (PDF) or an Inkscape layer group (SVG) after Cairo has written the file. Note:
+[Layers_Note.md](../design/Layers_Note.md).
+
 ### Pages: `pages.py`
 
 `pages.py` is only the table of named page sizes (`A4`, `Letter` and so on) in points, and

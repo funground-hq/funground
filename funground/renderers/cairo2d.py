@@ -58,6 +58,10 @@ class CairoRenderer:
         # is drawn as marker groups that the exporter swaps for real PDF text after the file is
         # written. Never set for the window, PNG or SVG.
         self.pdf_text = None
+        # S-096 (F16): set only by the PDF and SVG exporters (funground.export.layers). When set, each
+        # layer is drawn inside a marker group that the exporter turns into a real file layer, and
+        # hidden layers are drawn too (switched off in the file). Never set for the window or PNG.
+        self.file_layers = None
 
     # ---- lifecycle
     def attach(self, width: int, height: int, scale: float = 1.0) -> None:
@@ -188,7 +192,10 @@ class CairoRenderer:
                     for sub in self._text_ops(op):
                         self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
             elif t is ir.Image:
-                self._draw_image(ctx, op, self._alpha)
+                if op.layer is not None and (self.file_layers is not None or op.layer_hidden):
+                    self._draw_layer(ctx, op)
+                else:
+                    self._draw_image(ctx, op, self._alpha)
             elif t is ir.Pixels:
                 self._draw_pixels(ctx, op)
             else:
@@ -627,6 +634,33 @@ class CairoRenderer:
             ctx.pop_group_to_source()
             ctx.paint()
         return True
+
+    def _draw_layer(self, ctx, op: ir.Image) -> None:
+        """S-096 (F16): a layer in a PDF or SVG file, drawn as a marker group (see export.layers).
+
+        The marker holds the whole layer, so clipping to it changes nothing; Cairo keeps the group as
+        one Form XObject or one SVG group, which the exporter makes a named layer. A hidden layer is
+        never drawn without the exporter (not on screen, in a PNG or by get())."""
+        layers = self.file_layers
+        if layers is None:
+            return
+        marker = layers.add(op.layer, op.layer_hidden, (op.x, op.y, op.width, op.height), tuple(ctx.get_matrix()))
+        if marker is None:                           # cannot be a file layer: drawn as before, hidden left out
+            if not op.layer_hidden:
+                self._draw_image(ctx, op, self._alpha)
+            return
+        ctx.push_group()
+        ctx.set_operator(cairo.OPERATOR_OVER)
+        ctx.set_fill_rule(cairo.FILL_RULE_WINDING)
+        ctx.new_path()
+        ctx.move_to(*marker[0])
+        for point in marker[1:]:
+            ctx.line_to(*point)
+        ctx.close_path()
+        ctx.clip()
+        self._draw_image(ctx, op, self._alpha)
+        ctx.pop_group_to_source()
+        ctx.paint()
 
     def _text_ops(self, op: ir.Text):
         return self._text_run(op).outline_ops(op.x, op.y, op.color)
