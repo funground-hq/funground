@@ -292,7 +292,7 @@ def test_save_checks_the_extension_at_the_call(tmp_path):
     script_sketch()
     p.size(10, 10)
     with pytest.raises(ValueError, match=r"\.png"):
-        p.save(str(tmp_path / "a.gif"))
+        p.save(str(tmp_path / "a.bmp"))
 
 
 def test_save_before_size_is_an_error():

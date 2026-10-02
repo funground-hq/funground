@@ -160,6 +160,7 @@ matches p5's exactly.
 |---|---|---|
 | `save(filename)` | `save(filename)` | `f.save(path)` |
 | `saveFrame("line-####.png")` | `saveFrame("line-####.png")` | `f.save_frames(pattern, count)` |
+| `saveGif("name", seconds)` | (none) | `f.save_gif("name.gif", seconds)`. The name must end in `.gif`. Frames are shown for 1 / frame rate; the GIF loops. Needs Pillow (`pip install funground[extras]`) or ffmpeg. For a video, `f.save_movie("name.mp4", seconds)` (needs ffmpeg) |
 
 ### Sound
 

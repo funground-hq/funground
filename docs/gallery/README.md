@@ -227,6 +227,14 @@ no_loop() stops draw() being called every frame (it still runs once); a key call
 
 Source: [`examples/gallery/animation/04_pause.py`](../../examples/gallery/animation/04_pause.py)
 
+### Record an animation as a GIF
+
+![Record an animation as a GIF](images/animation-05_record_a_gif.png)
+
+f.save_gif("spinner.gif", 2) records the next 2 seconds of the sketch and writes them as a GIF that loops for ever. Each frame is shown for 1 divided by the frame rate. f.save_movie("spinner.mp4", 2) does the same for an MP4, which needs the free program ffmpeg. Call either one once; here it is on the first frame. The animation turns once in 60 frames, so the GIF loops without a jump.
+
+Source: [`examples/gallery/animation/05_record_a_gif.py`](../../examples/gallery/animation/05_record_a_gif.py)
+
 ## Transforms
 
 ### Rotating squares
@@ -416,6 +424,14 @@ Source: [`examples/gallery/saving/03_save_frames.py`](../../examples/gallery/sav
 A script can make a document. f.new_page() ends one page and starts the next. A size name such as "A5" sets the page size, and f.page_size() gives the numbers for a name. f.save("booklet.pdf") writes every page into one PDF. The gallery picture shows the last page, which is on its side.
 
 Source: [`examples/gallery/documents/01_booklet.py`](../../examples/gallery/documents/01_booklet.py)
+
+### A flip book saved as a GIF
+
+![A flip book saved as a GIF](images/documents-02_flip_book.png)
+
+Every page of a script is one frame of a GIF. f.frame_duration(0.15) says how long each page is shown, in seconds. f.save("flip_book.gif") writes all the pages, in order, and the GIF loops for ever. All the pages must be the same size. An MP4 works the same way, f.save("flip_book.mp4"), but it needs the free program ffmpeg. The gallery picture shows the last page.
+
+Source: [`examples/gallery/documents/02_flip_book.py`](../../examples/gallery/documents/02_flip_book.py)
 
 ## Pictures and images
 

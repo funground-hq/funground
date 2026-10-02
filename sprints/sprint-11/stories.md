@@ -25,8 +25,8 @@ pending, the maintainer's call**.
 - [x] S-099.2 Tests with generated tones (a 440 Hz tone peaks in the right band); a visualiser gallery example
 
 ### S-100 GIF and MP4 export — E-19 *(D-048; contract M1; the ffmpeg extra waits for D-045)*
-- [ ] S-100.1 Scripts: pages become frames (DrawBot's model); animated sketches: record a number of seconds (p5 `saveGif`)
-- [ ] S-100.2 GIF through Pillow (`funground[extras]`) or ffmpeg; MP4 through ffmpeg as D-045 decides
+- [x] S-100.1 Scripts: pages become frames (DrawBot's model); animated sketches: record a number of seconds (p5 `saveGif`)
+- [x] S-100.2 GIF through Pillow (`funground[extras]`) or ffmpeg; MP4 through ffmpeg as D-045 decides
 
 ### S-101 Controls — E-30 *(D-047; contract U1)*
 - [x] S-101.1 `create_slider`, `create_checkbox`, `create_button`; the panel below the canvas (platform draws it; never in the canvas or the IR)
