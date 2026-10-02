@@ -303,9 +303,9 @@ def test_ir_omits_radii_for_sharp_rects_and_round_trips_rounded_ones(canvas, ske
 def _pdf_text(path) -> bytes:
     data = path.read_bytes()
     parts = [data]
-    for m in re.finditer(rb"stream\r?\n(.*?)\r?\nendstream", data, re.S):
+    for m in re.finditer(rb"stream\r?\n(.*?)endstream", data, re.S):
         try:
-            parts.append(zlib.decompress(m.group(1)))
+            parts.append(zlib.decompressobj().decompress(m.group(1)))   # keeps a final CR/LF data byte
         except zlib.error:
             pass
     return b"\n".join(parts)
