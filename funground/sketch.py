@@ -1117,6 +1117,34 @@ class Sketch:
             changes["text_size"] = int(size)
         self._states.update(**changes)
 
+    def text_fallback(self, *fonts) -> None:
+        """Fonts to draw letters the current font lacks (contract T18). No arguments: only the bundled
+        fallbacks. None: no fallback at all."""
+        from .typography import Font
+
+        if fonts == (None,):
+            self._states.update(text_fallback=None)
+            return
+        keys = []
+        for font in fonts:
+            if isinstance(font, Font):
+                key = font.name
+            elif isinstance(font, str):
+                key = self.load_font(font).name
+            else:
+                raise TypeError(
+                    f"f.text_fallback() needs fonts from f.load_font() or f.system_font(), not {type(font).__name__}"
+                )
+            if key not in keys:
+                keys.append(key)
+        self._states.update(text_fallback=tuple(keys))
+
+    def system_font(self, name: str):
+        """A font installed on this computer, found by its family name (contract T18)."""
+        from .typography import system_font as _system_font
+
+        return _system_font(name)
+
     def text_style(self, style: str) -> None:
         """Use one of the four built-in styles for later text (ignored once a font is loaded)."""
         if style not in self.TEXT_STYLES:

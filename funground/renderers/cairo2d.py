@@ -27,7 +27,7 @@ from ..platform.base import Pixels
 from ..state import GraphicsState
 
 if TYPE_CHECKING:
-    from ..typography import TextRun
+    from ..typography import ShapedLine, TextRun
 
 # S-037: shaped text runs are cached per (text, size); an LRU cap keeps
 # `f.text(f.frame_count, ...)` from growing the cache without bound.
@@ -602,28 +602,36 @@ class CairoRenderer:
         mode, so the paint fills exactly the glyphs. Painting the group back respects the clip,
         transform, opacity (already in the source) and blend mode, as the outline fill would."""
         run = self._text_run(op)
-        marker = self.pdf_text.add(run, op.x, op.y, tuple(ctx.get_matrix()))
-        if marker is None:
+        # S-102 (T18): a line in several fonts is several runs, each its own marker and its own font subset.
+        parts = run.parts(op.x, op.y) if hasattr(run, "parts") else [(run, op.x, op.y)]
+        matrix = tuple(ctx.get_matrix())
+        markers = [self.pdf_text.add(part, px, py, matrix) for part, px, py in parts]
+        if all(marker is None for marker in markers):
             return False
-        ctx.push_group()
-        ctx.set_operator(cairo.OPERATOR_OVER)
-        ctx.set_fill_rule(cairo.FILL_RULE_WINDING)
-        ctx.new_path()
-        ctx.move_to(*marker[0])
-        for point in marker[1:]:
-            ctx.line_to(*point)
-        ctx.close_path()
-        ctx.clip()
-        self._source(ctx, op.color)
-        ctx.paint()
-        ctx.pop_group_to_source()
-        ctx.paint()
+        for (part, px, py), marker in zip(parts, markers):
+            if marker is None:                       # this run cannot be text: draw its outlines
+                for sub in part.outline_ops(px, py, op.color):
+                    self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
+                continue
+            ctx.push_group()
+            ctx.set_operator(cairo.OPERATOR_OVER)
+            ctx.set_fill_rule(cairo.FILL_RULE_WINDING)
+            ctx.new_path()
+            ctx.move_to(*marker[0])
+            for point in marker[1:]:
+                ctx.line_to(*point)
+            ctx.close_path()
+            ctx.clip()
+            self._source(ctx, op.color)
+            ctx.paint()
+            ctx.pop_group_to_source()
+            ctx.paint()
         return True
 
     def _text_ops(self, op: ir.Text):
         return self._text_run(op).outline_ops(op.x, op.y, op.color)
 
-    def _text_run(self, op: ir.Text) -> "TextRun":
+    def _text_run(self, op: ir.Text) -> "TextRun | ShapedLine":
         from ..typography import effective_font, text_settings
 
         style = op.style
@@ -636,6 +644,8 @@ class CairoRenderer:
         settings = text_settings(style)
         if style.text_tracking or style.text_features or style.font_variations:
             key += (style.text_tracking, style.text_features, style.font_variations)    # S-090 (T13)
+        if style.text_fallback != ():
+            key += ("fallback", style.text_fallback)           # S-102 (T18): the chain changes the runs
         run = self._text_runs.get(key)
         if run is None:
             run = effective_font(op.style).shape(op.text, op.style.text_size, **settings)

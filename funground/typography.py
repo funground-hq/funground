@@ -11,8 +11,10 @@ baseline = y + ascent * scale.
 """
 from __future__ import annotations
 
+import bisect
 import os
 import re
+import unicodedata
 from dataclasses import dataclass
 
 import uharfbuzz as hb
@@ -79,6 +81,10 @@ class FontResource:
         )
         self._outlines: dict[tuple, Path] = {}
         self._located: dict[tuple, tuple] = {}      # location -> (hb font, glyph set), built once each
+        self._cmap = self._tt.getBestCmap()
+        # T18: a symbol or emoji font never supplies spaces, punctuation or plain letters; set for the
+        # bundled ones, worked out from the cmap for any other (see `symbolic`).
+        self._symbolic: bool | None = None
 
     @property
     def family(self) -> str:
@@ -109,8 +115,15 @@ class FontResource:
         """True when the cmap has a glyph for every character of *text* (T17). A space is checked
         like any letter. A new line is skipped: `f.text` turns it into a new line and never draws it.
         Other control characters (tab, ...) are checked, and most fonts have no glyph for them."""
-        cmap = self._tt.getBestCmap()
+        cmap = self._cmap
         return all(ch == chr(10) or ord(ch) in cmap for ch in text)
+
+    @property
+    def symbolic(self) -> bool:
+        """True for a font of symbols or emoji: it has no letters, so it never supplies spaces or punctuation (T18)."""
+        if self._symbolic is None:
+            self._symbolic = not any(unicodedata.category(chr(cp))[0] == "L" for cp in self._cmap)
+        return self._symbolic
 
     def location(self, variations: tuple = ()) -> tuple:
         """The variation settings this font can use: only its own axes, sorted (S-090, T13).
@@ -142,9 +155,25 @@ class FontResource:
         return p
 
     def shape(self, text: str, size: float, tracking: float = 0.0, features: tuple = (),
-              variations: tuple = ()) -> "TextRun":
+              variations: tuple = (), fallback: tuple | None = None) -> "TextRun | ShapedLine":
         """Shape *text*. *tracking* (pixels, after every glyph), *features* ((tag, bool) pairs) and
-        *variations* ((tag, number) pairs) are the T13 settings."""
+        *variations* ((tag, number) pairs) are the T13 settings.
+
+        *fallback* is the T18 setting: None (the default here) shapes with this font alone. A tuple
+        (the keys of the learner's fallback fonts, () for none) lets other fonts supply the characters
+        this font lacks. When this font has every character and the text has no emoji, the result is
+        the plain `TextRun`, exactly as without fallback; otherwise a `ShapedLine` of several runs."""
+        if fallback is None or (self.has_text(text) and not has_emoji(text)):
+            return self._shape_one(text, size, tracking, features, variations)
+        items = _itemise(text, self, fallback)
+        if len(items) == 1 and items[0][0] is self:
+            return self._shape_one(text, size, tracking, features, variations)
+        runs = tuple(font._shape_one(text[a:b], size, tracking, features, variations) for font, a, b in items)
+        return ShapedLine(self, text, size, runs, tuple(a for _, a, _ in items))
+
+    def _shape_one(self, text: str, size: float, tracking: float = 0.0, features: tuple = (),
+                   variations: tuple = ()) -> "TextRun":
+        """Shape *text* with this font alone."""
         location = self.location(variations)
         buf = hb.Buffer()
         buf.add_str(text)
@@ -203,6 +232,196 @@ class TextRun:
         return ops
 
 
+@dataclass(frozen=True, slots=True)
+class ShapedLine:
+    """A line shaped with more than one font (T18): one `TextRun` per stretch of text, each in the font
+    that has its characters. Every run sits on the baseline of `font`, the primary (current) font, so
+    the line is as tall as the primary font says. It offers what `TextRun` offers to its callers."""
+
+    font: FontResource                    # the primary font: its ascent sets the baseline
+    text: str
+    size: float
+    runs: tuple[TextRun, ...]
+    spans: tuple[int, ...]                # where each run's text starts in `text`
+
+    @property
+    def scale(self) -> float:
+        return self.size / self.font.units_per_em
+
+    @property
+    def advance(self) -> float:
+        return sum(r.advance for r in self.runs)
+
+    @property
+    def glyphs(self) -> tuple[Glyph, ...]:
+        return tuple(g for r in self.runs for g in r.glyphs)
+
+    def parts(self, x: float, y: float) -> list[tuple[TextRun, float, float]]:
+        """Each run with the top-left (x, y) at which to draw it so that all share one baseline."""
+        baseline = y + self.font.ascent * self.scale
+        out = []
+        pen_x = x
+        for run in self.runs:
+            top = y if run.font is self.font else baseline - run.font.ascent * run.scale
+            out.append((run, pen_x, top))
+            pen_x += run.advance
+        return out
+
+    def placements(self, x: float, y: float) -> list[tuple[Glyph, float, float]]:
+        """Every glyph of every run with its origin on the shared baseline (as `TextRun.placements`)."""
+        return [item for run, rx, ry in self.parts(x, y) for item in run.placements(rx, ry)]
+
+    def outline_ops(self, x: float, y: float, color: Color) -> list[ir.FillPath]:
+        """Materialise as FillPath ops anchored top-left at (x, y)."""
+        return [op for run, rx, ry in self.parts(x, y) for op in run.outline_ops(rx, ry, color)]
+
+
+# ---- font fallback (S-102, contract T18)
+BUNDLED_FALLBACKS = ("NotoEmoji-Regular.ttf", "NotoSansSymbols2-Regular.ttf", "NotoSansDevanagari-Regular.ttf")
+_EMOJI_FONT = BUNDLED_FALLBACKS[0]
+_SYMBOL_FONTS = frozenset(BUNDLED_FALLBACKS[:2])
+_bundled_cache: dict[str, FontResource] = {}
+
+# Characters with the Emoji_Presentation property (Unicode 16): drawn as emoji unless a text
+# variation selector asks otherwise. 80 ranges, from the Unicode data files.
+_EMOJI_RANGES = (
+    (8986, 8987), (9193, 9196), (9200, 9200), (9203, 9203), (9725, 9726), (9748, 9749), (9800, 9811),
+    (9855, 9855), (9875, 9875), (9889, 9889), (9898, 9899), (9917, 9918), (9924, 9925), (9934, 9934),
+    (9940, 9940), (9962, 9962), (9970, 9971), (9973, 9973), (9978, 9978), (9981, 9981), (9989, 9989),
+    (9994, 9995), (10024, 10024), (10060, 10060), (10062, 10062), (10067, 10069), (10071, 10071),
+    (10133, 10135), (10160, 10160), (10175, 10175), (11035, 11036), (11088, 11088), (11093, 11093),
+    (126980, 126980), (127183, 127183), (127374, 127374), (127377, 127386), (127462, 127487),
+    (127489, 127489), (127514, 127514), (127535, 127535), (127538, 127542), (127544, 127546),
+    (127568, 127569), (127744, 127776), (127789, 127797), (127799, 127868), (127870, 127891),
+    (127904, 127946), (127951, 127955), (127968, 127984), (127988, 127988), (127992, 128062),
+    (128064, 128064), (128066, 128252), (128255, 128317), (128331, 128334), (128336, 128359),
+    (128378, 128378), (128405, 128406), (128420, 128420), (128507, 128591), (128640, 128709),
+    (128716, 128716), (128720, 128722), (128725, 128729), (128732, 128735), (128747, 128748),
+    (128756, 128764), (128992, 129003), (129008, 129008), (129292, 129338), (129340, 129349),
+    (129351, 129535), (129648, 129660), (129664, 129734), (129736, 129736), (129740, 129757),
+    (129759, 129771), (129775, 129786),
+)
+_EMOJI_STARTS = tuple(a for a, _ in _EMOJI_RANGES)
+_FIRST_EMOJI = chr(_EMOJI_RANGES[0][0])         # nothing below this is an emoji, so Latin text skips the check
+_VS16 = "\ufe0f"
+
+# Characters that join a cluster but are never drawn alone: they must not decide the font.
+_NEUTRAL = frozenset({0x200C, 0x200D, 0x200E, 0x200F, 0x2060, *range(0xFE00, 0xFE10),
+                      *range(0xE0100, 0xE01F0), *range(0xE0020, 0xE0080)})
+_REGIONAL = range(0x1F1E6, 0x1F200)
+_SKIN_TONES = range(0x1F3FB, 0x1F400)
+
+
+def _emoji_presentation(cp: int) -> bool:
+    i = bisect.bisect_right(_EMOJI_STARTS, cp) - 1
+    return i >= 0 and cp <= _EMOJI_RANGES[i][1]
+
+
+def has_emoji(text: str) -> bool:
+    """True when *text* has an emoji cluster: a character with Emoji_Presentation, or any character
+    followed by U+FE0F (T18)."""
+    if max(text, default="") < _FIRST_EMOJI:
+        return False
+    return _VS16 in text or any(_emoji_presentation(ord(c)) for c in text)
+
+
+def clusters(text: str) -> list[tuple[int, int]]:
+    """Grapheme clusters of *text* as (start, end) pairs, with the standard library only: a base with its
+    marks, joiners, variation selectors, tag characters and skin tones; a joiner binds the next character;
+    a virama binds a following letter (a Devanagari conjunct); two regional indicators make a flag."""
+    out, i, n = [], 0, len(text)
+    while i < n:
+        j = i + 1
+        if text[i] == "\r" and j < n and text[j] == "\n":
+            j += 1
+        else:
+            flag = ord(text[i]) in _REGIONAL
+            while j < n:
+                c, cp, prev = text[j], ord(text[j]), text[j - 1]
+                if (unicodedata.category(c) in ("Mn", "Mc", "Me") or cp in _NEUTRAL or cp in _SKIN_TONES
+                        or prev == "\u200d"
+                        or unicodedata.combining(prev) == 9 and unicodedata.category(c) == "Lo"
+                        or flag and cp in _REGIONAL and j == i + 1):
+                    j += 1
+                else:
+                    break
+        out.append((i, j))
+        i = j
+    return out
+
+
+def _bundled(name: str) -> FontResource:
+    """A bundled fallback font, loaded the first time it is needed."""
+    resource = _bundled_cache.get(name)
+    if resource is None:
+        resource = _bundled_cache[name] = FontResource(os.path.join(FONT_DIR, name))
+        resource._symbolic = name in _SYMBOL_FONTS or None
+    return resource
+
+
+def _has_all(font: FontResource, cluster: str) -> bool:
+    cmap = font._cmap
+    return all(ord(c) in cmap for c in cluster if ord(c) not in _NEUTRAL and c != "\n")
+
+
+def _order(primary: FontResource, learner: tuple, emoji: bool):
+    """The fonts to try for one cluster, in order, loading a font only when the ones before it fail.
+    An emoji cluster tries the learner's fonts, then Noto Emoji, before the current font."""
+    if emoji:
+        for key in learner:
+            yield Font(key)._resource()
+        yield _bundled(_EMOJI_FONT)
+        yield primary
+    else:
+        yield primary
+        for key in learner:
+            yield Font(key)._resource()
+    for name in BUNDLED_FALLBACKS:
+        yield _bundled(name)
+    if os.path.basename(primary.path) not in STYLE_FILES.values():
+        yield default_font()
+
+
+_ITEMISE_CACHE: dict[tuple, tuple] = {}
+_ITEMISE_CACHE_SIZE = 2048
+
+
+def _itemise(text: str, primary: FontResource, learner: tuple) -> tuple:
+    """Split *text* into runs (font, start, end), each cluster given to the first font that has all of it (T18).
+    Spaces and punctuation stay with the run before them when its font is a text font and has them.
+    Memoised: the answer depends only on the text, the primary font and the chain."""
+    key = (text, primary.path, learner)
+    hit = _ITEMISE_CACHE.get(key)
+    if hit is not None:
+        return hit
+    runs: list[list] = []
+    for a, b in clusters(text):
+        cluster = text[a:b]
+        emoji = _VS16 in cluster or any(_emoji_presentation(ord(c)) for c in cluster)
+        plain = all(unicodedata.category(c)[0] in "ZP" for c in cluster)
+        font = None
+        if plain and runs and not runs[-1][0].symbolic and _has_all(runs[-1][0], cluster):
+            font = runs[-1][0]
+        else:
+            for candidate in _order(primary, learner, emoji):
+                if candidate.symbolic and not emoji and (ord(cluster[0]) < 0x80 or unicodedata.category(cluster[0])[0] in "ZPC"):
+                    continue                       # never a space, punctuation or plain letter from a symbol font
+                if _has_all(candidate, cluster):
+                    font = candidate
+                    break
+        if font is None:
+            font = primary                         # nobody has it: the primary draws its own .notdef
+        if runs and runs[-1][0] is font:
+            runs[-1][2] = b
+        else:
+            runs.append([font, a, b])
+    result = tuple((f, a, b) for f, a, b in runs)
+    if len(_ITEMISE_CACHE) >= _ITEMISE_CACHE_SIZE:
+        _ITEMISE_CACHE.clear()
+    _ITEMISE_CACHE[key] = result
+    return result
+
+
 def text_metrics(size: float, font: FontResource | None = None) -> tuple[float, float]:
     """(ascent, descent) of *font* (the default font if not given) at *size*, both positive,
     in logical pixels (T8)."""
@@ -214,7 +433,7 @@ def text_metrics(size: float, font: FontResource | None = None) -> tuple[float, 
 def text_settings(state) -> dict:
     """The T13 settings of a GraphicsState as keyword arguments for `shape`, `text_width`, `wrap_lines`."""
     return {"tracking": state.text_tracking, "features": state.text_features,
-            "variations": state.font_variations}
+            "variations": state.font_variations, "fallback": state.text_fallback}
 
 
 def wrap_lines(text: str, width: float, size: float, font: FontResource | None = None,
@@ -395,3 +614,63 @@ def effective_font(state) -> FontResource:
     if resource is None:
         raise RuntimeError(f"no font loaded for key {state.font!r} (was it loaded in this process?)")
     return resource
+
+
+# ---- fonts installed on this computer (S-102, contract T18)
+_system_names: dict[tuple, tuple | None] = {}       # (path, mtime) -> (family names, style) or None; read once each
+
+
+def _system_font_dirs() -> list[str]:
+    """The folders where this computer keeps its fonts (Windows, macOS and Linux), those that exist."""
+    home = os.path.expanduser("~")
+    candidates = [
+        os.path.join(os.environ.get("WINDIR", ""), "Fonts") if os.environ.get("WINDIR") else "",
+        os.path.join(os.environ.get("LOCALAPPDATA", ""), "Microsoft", "Windows", "Fonts") if os.environ.get("LOCALAPPDATA") else "",
+        "/System/Library/Fonts", "/Library/Fonts", os.path.join(home, "Library", "Fonts"),
+        "/usr/share/fonts", os.path.join(home, ".local", "share", "fonts"), os.path.join(home, ".fonts"),
+    ]
+    return [d for d in candidates if d and os.path.isdir(d)]
+
+
+def _font_names(path: str):
+    """(lower-case family names, style name) read from a font file's `name` table, cached; None if unreadable."""
+    try:
+        key = (path, os.path.getmtime(path))
+    except OSError:
+        return None
+    if key not in _system_names:
+        try:
+            tt = TTFont(path, lazy=True)
+            try:
+                table = tt["name"]
+                families = {table.getDebugName(i).lower() for i in (1, 16) if table.getDebugName(i)}
+                style = table.getDebugName(17) or table.getDebugName(2) or ""
+            finally:
+                tt.close()
+            _system_names[key] = (families, style) if families else None
+        except Exception:
+            _system_names[key] = None
+    return _system_names[key]
+
+
+def system_font(name: str) -> Font:
+    """The font installed on this computer whose family name is *name*, ignoring capitals (contract T18).
+    When several faces share the family, the Regular one is used. Raises `FileNotFoundError` naming *name*
+    when there is none. Only .ttf and .otf files are read; the font is loaded like `load_font`."""
+    if not isinstance(name, str):
+        raise TypeError(f"f.system_font() takes a family name, not {type(name).__name__}")
+    wanted = name.strip().lower()
+    found = []
+    for folder in _system_font_dirs():
+        for root, dirs, files in os.walk(folder):
+            dirs.sort()
+            for file in sorted(files):
+                if not file.lower().endswith((".ttf", ".otf")):
+                    continue
+                path = os.path.join(root, file)
+                names = _font_names(path)
+                if names is not None and wanted in names[0]:
+                    found.append((names[1].lower() not in ("regular", "book", "roman", "normal"), path))
+    if not found:
+        raise FileNotFoundError(f"f.system_font(): no installed font with the family name {name!r}")
+    return load_font(min(found)[1])
