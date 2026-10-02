@@ -37,6 +37,7 @@ Their licences apply to them as installed.
 | [skia-pathops](https://github.com/fonttools/skia-pathops) | BSD-3-Clause | a cut-down build of [Skia](https://skia.org)'s path code (BSD-3-Clause) |
 | [svgelements](https://github.com/meerk40t/svgelements) | MIT | — |
 | [pypdf](https://github.com/py-pdf/pypdf) | BSD-3-Clause | — |
+| [imageio-ffmpeg](https://github.com/imageio/imageio-ffmpeg) (optional, `funground[video]`) | BSD-2-Clause; the ffmpeg program it bundles is a GPLv3 build, run as a separate program and never linked | — |
 
 The licence versions shown are those declared by the releases funground is tested with
 (pygame-ce 2.5.8, pycairo 1.29.1, fontTools 4.66, uharfbuzz 0.56). Always check the package you

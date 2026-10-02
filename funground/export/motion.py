@@ -25,14 +25,26 @@ _NO_ENCODER_GIF = (
 _NO_FFMPEG = (
     "Saving an .mp4 needs ffmpeg, a free program, and funground cannot find it. "
     "Install it, then close and reopen your terminal. "
+    "The easy way:  pip install funground[video]  (it brings its own ffmpeg). Or install ffmpeg itself: "
     "Windows: winget install ffmpeg. Mac: brew install ffmpeg. Linux: sudo apt install ffmpeg. "
     "To make a .gif instead, install Pillow with:  pip install funground[extras]"
 )
 
 
 def find_ffmpeg() -> str | None:
-    """The ffmpeg program to use, or None. Today: the first one on the PATH (D-045 may add more)."""
-    return shutil.which("ffmpeg")
+    """The ffmpeg program to use, or None (D-045 = B): the first one on the PATH, else the one the
+    optional ``funground[video]`` extra installs (imageio-ffmpeg, run as a separate program)."""
+    found = shutil.which("ffmpeg")
+    if found:
+        return found
+    try:
+        import imageio_ffmpeg
+    except ImportError:
+        return None
+    try:
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except Exception:                       # installed, but its program is missing for this system
+        return None
 
 
 def _pillow():

@@ -138,9 +138,10 @@ What you need:
 
 - **A GIF** needs Pillow, a free Python package: `pip install funground[extras]`. If you have
   the program ffmpeg instead, funground uses that.
-- **An MP4** needs ffmpeg, a free program that is not part of Python. On Windows, type
-  `winget install ffmpeg`. On a Mac, `brew install ffmpeg`. On Linux, `sudo apt install ffmpeg`.
-  Then close and reopen your terminal, so that it can be found.
+- **An MP4** needs ffmpeg, a free program. The easy way is `pip install funground[video]`,
+  which brings its own copy. If you already have ffmpeg, funground uses it. To install it yourself:
+  on Windows, type `winget install ffmpeg`; on a Mac, `brew install ffmpeg`; on Linux,
+  `sudo apt install ffmpeg`. Then close and reopen your terminal, so that it can be found.
 
 With neither, funground stops with a message that says what to install. A GIF keeps times of one
 hundredth of a second, at least 0.02 seconds, and has at most 256 colours in each frame.
