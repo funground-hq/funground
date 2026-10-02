@@ -465,6 +465,14 @@ def test_svg_paths_keeps_the_hole_of_an_evenodd_shape_out_of_the_geometry_but_in
     assert len([seg for seg in shape.geometry.segments if seg[0] == "move"]) == 2
 
 
+def test_svg_paths_gives_an_evenodd_shape_with_its_hole_open(tmp_path):
+    """P11: the returned path fills like the SVG, so the hole stays empty with draw_path and contains."""
+    (shape,) = p.svg_paths(write(tmp_path, f'<path {HOLE} fill-rule="evenodd"/>'))
+    x, y, w, h = shape.bounds()
+    assert not shape.contains(x + w / 2, y + h / 2)
+    assert shape.contains(x + 1, y + 1)
+
+
 def test_svg_paths_returns_a_list_of_independent_builders(tmp_path):
     path = write(tmp_path, '<rect width="10" height="10"/>')
     first, second = p.svg_paths(path), p.svg_paths(path)
