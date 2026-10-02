@@ -264,3 +264,86 @@ def rect_radii(radii: tuple, w: float, h: float, name: str = "rect") -> tuple[fl
         raise ValueError(f"{name}() corner radii cannot be negative")
     limit = min(abs(w), abs(h)) / 2
     return tuple(float(min(r, limit)) for r in four)
+
+
+# ----------------------------------------------------------------- sampling (S-104, contract T16)
+FLATNESS = 0.01      # pixels: a curve is cut into straight pieces that stay this close to it
+
+
+def _flatten_cubic(p0, c1, c2, p3, tolerance: float) -> list[Point]:
+    """Points along a cubic after its start, in equal steps of t. The step count keeps every
+    straight piece within *tolerance* of the curve (standard bound for a uniform split)."""
+    ddx = max(abs(p0[0] - 2 * c1[0] + c2[0]), abs(c1[0] - 2 * c2[0] + p3[0]))
+    ddy = max(abs(p0[1] - 2 * c1[1] + c2[1]), abs(c1[1] - 2 * c2[1] + p3[1]))
+    dd = math.hypot(ddx, ddy)
+    n = max(1, math.ceil(math.sqrt(0.75 * dd / tolerance)))
+    out = []
+    for i in range(1, n + 1):
+        t = i / n
+        u = 1 - t
+        out.append((
+            u * u * u * p0[0] + 3 * u * u * t * c1[0] + 3 * u * t * t * c2[0] + t * t * t * p3[0],
+            u * u * u * p0[1] + 3 * u * u * t * c1[1] + 3 * u * t * t * c2[1] + t * t * t * p3[1],
+        ))
+    out[-1] = p3
+    return out
+
+
+def contours(path: Path, tolerance: float = FLATNESS) -> list[tuple[list[Point], bool]]:
+    """The sub-paths of *path* as polylines (curves flattened to *tolerance*), each with a flag
+    for whether it was closed. A closing segment is added as a straight piece back to the start."""
+    result: list[tuple[list[Point], bool]] = []
+    pts: list[Point] = []
+    closed = False
+
+    def finish() -> None:
+        if len(pts) > 0:
+            result.append((list(pts), closed))
+
+    for seg in path.segments:
+        kind = seg[0]
+        if kind == "move":
+            finish()
+            pts, closed = [seg[1]], False
+        elif kind == "line":
+            if not pts:
+                pts = [seg[1]]
+            else:
+                pts.append(seg[1])
+        elif kind == "cubic":
+            if not pts:
+                pts = [seg[1]]
+            pts.extend(_flatten_cubic(pts[-1], seg[1], seg[2], seg[3], tolerance))
+        elif kind == "close":
+            if pts:
+                if pts[-1] != pts[0]:
+                    pts.append(pts[0])
+                closed = True
+                finish()
+                pts, closed = [], False
+    finish()
+    return result
+
+
+def sample_path(path: Path, spacing: float, tolerance: float = FLATNESS) -> list[Point]:
+    """Points every *spacing* pixels along each sub-path of *path*, starting at its start point.
+    The leftover distance carries across the pieces of a sub-path; each sub-path starts afresh."""
+    out: list[Point] = []
+    for pts, closed in contours(path, tolerance):
+        first = len(out)
+        out.append(pts[0])
+        need = spacing                      # distance still to walk before the next point
+        for a, b in zip(pts, pts[1:]):
+            length = math.hypot(b[0] - a[0], b[1] - a[1])
+            if length == 0:
+                continue
+            walked = 0.0
+            while length - walked >= need:
+                walked += need
+                t = walked / length
+                out.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
+                need = spacing
+            need -= length - walked
+        if closed and len(out) - first > 1 and math.hypot(out[-1][0] - pts[0][0], out[-1][1] - pts[0][1]) < 1e-6 * spacing:
+            out.pop()                       # the walk ended exactly on the start: do not repeat it
+    return out

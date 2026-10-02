@@ -87,6 +87,12 @@ coming from p5.
 | `textAlign(h, v)` | `textAlign(h, v)` | `f.text_align(h, v)` |
 | `textWidth(str)` | `textWidth(str)` | `f.text_width(message)` |
 | `textFont(font)` | `textFont(font)` | `f.text_font(font)` |
+| `font.textToPoints(str, x, y, ...)` | (none) | `f.text_to_points(message, x, y, spacing=5)` |
+
+`textToPoints` belongs to the font object in p5, takes the text size and a sampling option, and
+spaces its points by how finely it samples the curves. funground's is a function that uses your
+current font, size, style and alignment, like `f.text()`, and you give the distance between points
+in pixels. The points come back as a list of `(x, y)` tuples. `f.text_path()` gives the shape itself.
 
 ![Text in boxes and columns](../gallery/images/text-03_text_box.png)
 

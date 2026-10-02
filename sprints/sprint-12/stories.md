@@ -32,13 +32,13 @@ unreachable are pushed and CI is green on all 12 cells (Sprint 11 retro rule).
 - [ ] S-103.2 Wheel size checked; examples stay CC0 (licence file shipped); the browser works headless in CI as a smoke test
 
 ### S-104 Text to points — E-15 *(D-050; contract T16)*
-- [ ] S-104.1 `f.text_to_points(message, x, y, spacing=...)`: points along the outlines of `text_path`, at an even spacing
+- [x] S-104.1 `f.text_to_points(message, x, y, spacing=...)`: points along the outlines of `text_path`, at an even spacing
 
 ### S-105 Text-box overflow — E-15 *(already done)*
 - [x] Found in planning: `text_box` has returned the text that did not fit since S-053 (contract T10), plain strings and FormattedStrings alike. Nothing to build; the guide is checked under S-072
 
 ### S-106 Font information — E-15 *(D-050; contract T17)*
-- [ ] S-106.1 Ask a font for its axes, its family and style names, and whether it has given characters
+- [x] S-106.1 Ask a font for its axes, its family and style names, and whether it has given characters
 
 ### S-107 Erase — E-25 *(D-051; contract F15)*
 - [ ] S-107.1 Drawing that makes pixels transparent (Cairo `CLEAR`/`DEST_OUT`), in the window, pictures and PNG; vector files as far as they can

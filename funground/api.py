@@ -13,6 +13,7 @@ from contextlib import AbstractContextManager
 from .color import ColorLike as Color
 from .controls import Button, Checkbox, Slider  # noqa: F401  (public through f.create_slider and friends, S-101)
 from .paths import PathBuilder
+from .typography import Font
 from .picture import Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
 from .sketch import DEFAULT_SHADOW_COLOR, Sketch
 from .formatted import FormattedString  # noqa: F401  (public: f.FormattedString, S-091)
@@ -320,6 +321,16 @@ def text(message: object, x: float, y: float, color: Color | None = None) -> Non
 def text_path(message: object, x: float, y: float) -> PathBuilder:
     """The outlines of f.text(message, x, y) as a path: cut it, outline it, fill it, clip with it."""
     return active_sketch().text_path(message, x, y)
+
+
+def text_to_points(message: object, x: float, y: float, spacing: float = 5) -> list[tuple[float, float]]:
+    """Points along the outlines of f.text_path(message, x, y), one every spacing pixels, as (x, y) tuples."""
+    return active_sketch().text_to_points(message, x, y, spacing)
+
+
+def current_font() -> Font:
+    """The font text is set in now. Ask it font.family(), .style(), .variations(), .features() or .contains(text)."""
+    return active_sketch().current_font()
 
 
 def text_align(horizontal: str, vertical: str | None = None) -> None:
