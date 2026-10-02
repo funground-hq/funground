@@ -51,7 +51,7 @@ All tools are in `tools/`. Run them from the repository root.
 
 | Tool | What it does |
 |---|---|
-| `python tools/gallery_browser.py` | A browser for the Examples Gallery, written in funground. Needs a window. Left and Right move between examples, Enter runs one. |
+| `python -m funground.gallery` | A browser for the Examples Gallery, written in funground; it ships in the package (S-103). Needs a window. Left and Right move between examples, Enter runs one, C copies one into the current folder. `--list` prints the examples with no window. `python tools/gallery_browser.py` still works in a checkout. |
 | `python tools/make_gallery.py` | Renders every gallery example headless into `docs/gallery/images/` and rewrites the gallery index. `--index` rewrites the index only. |
 | `python tools/make_reference_images.py` | Renders the Quick Reference pictures from `examples/reference/`. |
 | `python tools/check_originality.py --corpus <path> [files]` | Checks that example code is original, by comparing it with corpora of well-known sketches. `--fetch <dir>` clones the corpora. Exit code 1 means something was flagged. |
