@@ -134,3 +134,13 @@ def test_no_smooth_is_a_sketch_setting_that_survives_frames_and_pop():
     pygame.init()
     api.active_sketch().run_namespace({"setup": setup, "draw": draw}, max_frames=3)
     assert all(ops and ops[0] == ir.SetAntialias(False) for ops in seen[1:])
+
+
+def test_stroke_width_keeps_fractions_and_whole_numbers_stay_ints(sketch):
+    """S6: floats of 1 or more are accepted as given, not truncated."""
+    p.stroke_width(2.5)
+    assert sketch._states.current.stroke_width == 2.5
+    p.stroke_width(3.0)
+    assert sketch._states.current.stroke_width == 3 and isinstance(sketch._states.current.stroke_width, int)
+    with pytest.raises(ValueError):
+        p.stroke_width(0.5)

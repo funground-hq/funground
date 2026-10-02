@@ -394,3 +394,18 @@ def test_save_writes_png_and_pdf_immediately(tmp_path):
     data = pdf_path.read_bytes()
     assert data.startswith(b"%PDF")
     assert b"/Subtype /Image" not in data       # a history is available here: stays vector
+
+
+def test_a_picture_made_before_the_run_keeps_its_number_in_that_run():
+    """P3/P4: names follow creation order within a run, so one made before f.run() never shares a name."""
+    s = fresh(30, 30)
+    early = p.create_graphics(10, 10)
+    names = []
+
+    def draw():
+        names.append(p.create_graphics(10, 10).name)
+
+    run(s, draw)
+    assert early.name == "graphics-1" and names == ["graphics-2"]
+    run(s, draw)                                       # a later run starts counting again
+    assert names[-1] == "graphics-1"

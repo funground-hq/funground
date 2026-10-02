@@ -125,6 +125,7 @@ class Sketch:
         self.last_frame: tuple[tuple[int, int], bytes] | None = None
         # S-052: create_graphics() names pictures "graphics-N" in creation order per run.
         self._graphics_counter = 0
+        self._graphics_before_run = 0     # pictures made while no run was active: they belong to the next run
         # S-076, contract R13-R15: a script is a top-level f.size() with no sketch running. Its
         # canvas has no window; every op it draws stays in self.frame (show() and PDF/SVG saves
         # replay them) and is drawn onto self._renderer's persistent surface on demand.
@@ -282,7 +283,7 @@ class Sketch:
     def _begin_script(self) -> None:
         """A top-level f.size(): a blank canvas with no window (contract R14)."""
         self._start_page()
-        self._graphics_counter = 0
+        self._graphics_counter, self._graphics_before_run = self._graphics_before_run, 0
         self._start_time = time.perf_counter()
 
     def _start_page(self) -> None:
@@ -528,6 +529,8 @@ class Sketch:
         """The next picture name, numbered in creation order within a run (a picture's get() uses its window's count)."""
         root = self._name_root or self
         root._graphics_counter += 1
+        if not (root.running or root._script):       # made before f.size()/f.run(): keep its number in that run
+            root._graphics_before_run += 1
         return f"graphics-{root._graphics_counter}"
 
     def _check_capabilities(self) -> None:
@@ -847,10 +850,11 @@ class Sketch:
     def no_stroke(self) -> None:
         self._states.update(stroke=None)
 
-    def stroke_width(self, pixels: int) -> None:
+    def stroke_width(self, pixels: float) -> None:
         if pixels < 1:
             raise ValueError("stroke width must be at least 1")
-        self._states.update(stroke_width=int(pixels))
+        # S6: whole numbers stay ints (so IR snapshots are unchanged); other floats are kept, not truncated.
+        self._states.update(stroke_width=int(pixels) if pixels == int(pixels) else float(pixels))
 
     # ---- stroke styles and smoothing (S-042, contract S11/C6)
     STROKE_CAPS = ("round", "square", "butt")
@@ -1633,6 +1637,7 @@ class Sketch:
     ) -> None:
         """Run the setup()/draw() found in *namespace* (the sketch's globals)."""
         global _run_started
+        was_script = self._script                 # only f.size() so far: its pictures belong to this run
         if self._script:
             if self.frame:
                 raise RuntimeError(
@@ -1656,7 +1661,9 @@ class Sketch:
         self._reset_pixel_state()
         self._states.unwind()
         self._shape = None
-        self._graphics_counter = 0
+        if not was_script:
+            self._graphics_counter = self._graphics_before_run
+        self._graphics_before_run = 0
 
         self._platform.start()
         self.running = True
