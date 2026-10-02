@@ -99,6 +99,11 @@ Rules:
 - **Anything irreversible or public stays in the main session, even when the steps are mechanical:**
   history rewrites, pushes, publishing a package, creating or changing remote repositories, and
   deleting data. A mistake there cannot be taken back after review (maintainer, 26 Sept 2026).
+- **No agent, the main session included, installs anything or opens a pop-up on the maintainer's machine:**
+  - no plain `python`/`py` (on this machine they start the Windows Python Install Manager), so always use a venv's full path;
+  - no opening files with their default app;
+  - no installers;
+  - no system or user font installs (maintainer, 2 Oct 2026, after unexplained install windows).
 - **Edits of one or two commands stay in the main session.** Delegating them costs more than it
   saves.
 - **Each sprint review names the stories built by subagents,** so their track record can be judged.

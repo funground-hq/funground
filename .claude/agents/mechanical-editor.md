@@ -25,3 +25,5 @@ You make exactly the edits in your brief, nothing more.
 - Files changed, with a count of replacements in each.
 - Matches you deliberately left alone, and why.
 - The check command's output.
+
+- **Never trigger an install or a pop-up on the maintainer's machine.** Never run plain `python`, `python3` or `py` (on this machine they start the Windows Python Install Manager); use the full venv path. Never open files with their default app, and never run installers.

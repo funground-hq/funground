@@ -21,3 +21,5 @@ You run tests and report. You never change a file.
   Do not propose fixes unless the brief asks for them.
 - **Do not write `tests/golden/_actual/` or `tests/snapshots/_actual/` into your report as
   results.** Mention only that they were created.
+
+- **Never trigger an install or a pop-up on the maintainer's machine.** Never run plain `python`, `python3` or `py` (on this machine they start the Windows Python Install Manager); use the full venv path. Never open files with their default app, and never run installers.

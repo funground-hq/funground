@@ -31,6 +31,11 @@ already made the design decisions. Your job is to carry them out exactly and rep
 - **Only stop processes you started yourself.** Never kill processes by name (`taskkill /IM python.exe`,
   `pkill python`): that also stops the maintainer's own programs. Keep the process ID of anything you
   start in the background and stop that one.
+- **Never trigger an install or a pop-up on the maintainer's machine.**
+  - Never run plain `python`, `python3` or `py`. On this machine they start the Windows Python Install Manager, which can open install windows. Always use the full venv path.
+  - Never open or install a font or any other file with its default app: no `os.startfile`, `start` or `explorer`, and nothing copied into the Windows font folders.
+  - Never run installers (winget, msiexec, setup programs).
+  - Never `pip install` into the project venv unless the brief says so.
 - **Do not widen the scope.** If the brief is ambiguous, a test fails and you cannot explain why,
   or the work needs a decision, stop and report. Do not guess.
 
