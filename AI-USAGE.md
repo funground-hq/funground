@@ -204,3 +204,10 @@ sprint review adds its entry here.
   reviewed and merged them, pinned each builder's own choices in the contract, and prepared the
   release package. Nothing was published.
 
+### Sprint 12: text depth, layers, the gallery in the package (2–3 Oct 2026)
+- The maintainer widened 0.1 (D-049) and chose the fallback fonts (D-052 = C) and layers in pictures and files
+  (D-053). Claude decided the text-points, font-information and erase APIs (D-050, D-051) under D-034.
+- A Sonnet spike measured font fallback before the decision. Sonnet sub-agents built six stories, three of them in
+  their own git worktrees. An Opus sub-agent built the PDF/SVG layers on the PDF-text post-processing. Claude reviewed,
+  fixed four bugs, merged, and checked the reviewer's-guide script end to end.
+
