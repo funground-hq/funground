@@ -33,7 +33,7 @@
 - [ ] S-097.1 SVG files carry `<text>`/`<tspan>` with the font embedded (or referenced), placed where the outlines were; same fallbacks as T15
 
 ### S-109 PDF text polish — E-15 *(Sprint 10 known limit)*
-- [ ] S-109.1 Solid-colour text written with fill mode (`0 Tr`) instead of clip mode, so pdfium no longer widens rectangular glyphs
+- [ ] S-109.1 (on hold: measurement shows clip mode is already right; see Sprint 13 review) Solid-colour text written with fill mode (`0 Tr`) instead of clip mode, so pdfium no longer widens rectangular glyphs
 
 ### S-073 Release 0.1 — E-02 *(carried from Sprint 11)*
 - [ ] The release checklist
