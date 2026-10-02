@@ -925,6 +925,17 @@ f.run()
 | `sound.current_time()` / `sound.get_volume()` | how many seconds into the sound it is now, and its volume from 0 to 1. | `f.text(round(tune.current_time(), 1), 20, 20)` |
 | `sound.level()` | how loud the sound is now, 0 to 1 (the root mean square of the last 1/30 second). 0 when not playing. | `f.circle(x, y, 20 + 80 * beep.level())` |
 | `sound.spectrum(bands=32)` | a list of `bands` numbers from 0 to 1, low pitch to high, spaced evenly in pitch from 40 Hz to 16 kHz. A full-strength tone gives about 1 in its band. All zeros when not playing. `bands` must be 1 to 256. | `for i, v in enumerate(beep.spectrum(16)): ...` |
+| `f.create_sound(samples, rate=44100)` | make a sound from a list of numbers from -1 to 1 (one channel). Numbers outside are clipped. A list that is empty or not numbers is a `ValueError`. | `s = f.create_sound([math.sin(i / 9) for i in range(44100)])` |
+| `sound.samples()` | the sound as a list of numbers from -1 to 1, mixed to one channel. Pan and volume are not in it. | `wave = s.samples()` |
+| `f.tone(frequency, seconds, wave="sine", volume=1, attack=0.01, release=0.05)` | make a steady tone. `wave` is `"sine"`, `"square"`, `"saw"`, `"triangle"` or `"noise"`. `attack` and `release` fade in and out, in seconds (made shorter if they do not fit). Noise repeats after `f.random_seed()`. | `f.tone(440, 1, "square").play()` |
+| `f.note(name, seconds, ...)` | the same options, with a note name such as `"A4"` (440 Hz), `"C#5"` or `"Bb3"`. | `f.note("C4", 0.5, "triangle").play()` |
+| `f.pluck(name_or_frequency, seconds, volume=1)` | a plucked string that dies away. | `f.pluck("E3", 2).play()` |
+| `f.melody(text, tempo=120, wave="sine", sa=None, tuning="equal")` | a tune from text. Tokens are separated by spaces: a note name, `-` for a rest, `[C4 E4 G4]` for a chord, each with an optional `:beats` (1 if left off). `tempo` is beats a minute. With `sa="D4"` the notes are sargam: `S r R g G m M P d D n N`, with `'` for the octave above and `,` for the octave below. `tuning="just"` (needs `sa`) uses just-intonation ratios from Sa. A token it cannot read is a `ValueError` that names it. | `f.melody("C4 E4 G4:2 -", tempo=100).play()` |
+| `f.sequence(*sounds)` / `f.mix(*sounds)` | a new sound: the sounds one after another, or all together (turned down only if they would clip). | `f.mix(chord_a, chord_b)` |
+| `sound.pan(p)` | move the sound between the speakers, from -1 (left) to 1 (right). 0 is the middle. Works on loaded sounds too. `level()` and `spectrum()` ignore it. | `s.pan(-0.5)` |
+| `sound.save(path)` | write the sound to a 16-bit WAV file, with the pan but not the volume. | `s.save("tune.wav")` |
+| `sound.pitch()` | the frequency, in hertz, of the one voice playing now, or `None` when it is quiet, has no clear pitch, or is not playing. It looks at the last 2 048 samples, for 50 to 2000 Hz. For one voice or instrument, not chords. | `hz = s.pitch()` |
+| `f.note_to_frequency(name, sa=None)` / `f.frequency_to_note(hz, sa=None)` | note name to hertz and back (the nearest note, with sharps: `"A#4"`). With `sa`, the name is a swara such as `"G"` or `"N,"`. | `f.frequency_to_note(f.note_to_frequency("A4"))` |
 
 The place in the sound follows the sketch's clock, not the speakers, so these give the same answers
 with or without a sound device. Sounds add nothing to the picture, to saved files or to the IR.
@@ -1091,7 +1102,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
 | Off-screen graphics | — | `create_graphics`, `layer`, `hide_layer`, `show_layer`, `image`, `load_image`, `load_svg`, `svg_paths` |
-| Sound | — | `load_sound`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum` on the sound |
+| Sound | — | `load_sound`, `create_sound`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `note_to_frequency`, `frequency_to_note`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum`, `samples`, `pan`, `save`, `pitch` on the sound |
 | Controls | — | `create_slider`, `create_checkbox`, `create_button`, in a panel below the canvas |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 

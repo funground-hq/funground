@@ -159,6 +159,16 @@ ADDED_FUNCTIONS = {
     "svg_paths": "(path: 'str') -> 'list[PathBuilder]'",
     # S-098 sound
     "load_sound": "(path: 'str')",
+    # S-110 making sound
+    "create_sound": "(samples, rate: 'int' = 44100)",
+    "tone": "(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 1, attack: 'float' = 0.01, release: 'float' = 0.05)",
+    "note": "(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 1, attack: 'float' = 0.01, release: 'float' = 0.05)",
+    "pluck": "(name_or_frequency, seconds: 'float', volume: 'float' = 1)",
+    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'str' = 'sine', sa: 'str | None' = None, tuning: 'str' = 'equal')",
+    "sequence": "(*sounds)",
+    "mix": "(*sounds)",
+    "note_to_frequency": "(name: 'str', sa: 'str | None' = None) -> 'float'",
+    "frequency_to_note": "(hz: 'float', sa: 'str | None' = None) -> 'str'",
     # S-090 tracking, features, variations
     "text_tracking": "(pixels: 'float') -> 'None'",
     "text_features": "(**features: 'bool') -> 'None'",

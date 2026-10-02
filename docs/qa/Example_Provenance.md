@@ -125,6 +125,13 @@ None of these are the same written expression; they are independent descriptions
 the same small, standard vocabulary that every creative-coding tutorial uses for these
 ideas (top-left anchors, translated origins, slow change).
 
+### Later additions
+
+- **S-110, 3 October 2026.** `examples/gallery/sound/02_write_a_tune.py` and
+  `03_sargam_over_a_drone.py` were checked on their own against the same 2,974 corpus files.
+  Nothing was flagged (combined score 0.16 each, no shared calls or numbers). Both were
+  written from the sound features they show (`melody`, `mix`, `pluck`, `pitch`).
+
 ## Limits, stated honestly
 
 - This check only ever compares against the nine collections listed above. It cannot

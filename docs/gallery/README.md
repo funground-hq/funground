@@ -554,3 +554,19 @@ Source: [`examples/gallery/images/05_svg.py`](../../examples/gallery/images/05_s
 f.load_sound() reads a sound file. sound.loop() plays it over and over. While it plays, sound.level() tells you how loud it is now, and sound.spectrum() tells you how strong each range of pitch is: low notes on the left, high notes on the right. Both are numbers from 0 to 1. With no sound device, the sketch still runs, in silence. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/01_visualiser.py`](../../examples/gallery/sound/01_visualiser.py)
+
+### Making sound: write a tune, then watch it play
+
+![Making sound: write a tune, then watch it play](images/sound-02_write_a_tune.png)
+
+f.melody() turns text into a sound. A note is a name like "E4", a dash is a rest, and :2 after a note makes it last two beats. Here the tune is a short list, so the same list builds the sound and draws the bars. The top shows the wave itself. A soft chord from f.mix() plays underneath. sound.pitch() reads the note that is sounding now. With no sound device the sketch still runs, in silence. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/sound/02_write_a_tune.py`](../../examples/gallery/sound/02_write_a_tune.py)
+
+### Making sound: a sargam phrase over a drone
+
+![Making sound: a sargam phrase over a drone](images/sound-03_sargam_over_a_drone.png)
+
+With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D n N. A ' after a swara is the octave above and a comma is the octave below. Here the notes use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings plays Pa, Sa, Sa, Sa over and over. The ladder shows the swara that sound.pitch() hears. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/sound/03_sargam_over_a_drone.py`](../../examples/gallery/sound/03_sargam_over_a_drone.py)

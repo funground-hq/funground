@@ -177,6 +177,10 @@ matches p5's exactly.
 | `loadSound("x.mp3")`, `s.play()`, `s.loop()`, `s.stop()`, `s.pause()`, `s.setVolume(v)`, `s.isPlaying()`, `s.duration()` (the p5.sound add-on) | the Sound library | `s = f.load_sound("x.mp3")`, then `s.play()`, `s.loop()`, `s.stop()`, `s.pause()`, `s.set_volume(v)`, `s.is_playing()`, `s.duration()`. They are methods of the sound, in snake_case. WAV, OGG or MP3. With no sound device it plays silently and keeps time |
 | `new p5.Amplitude()`, `amp.getLevel()` | `Amplitude`, `analyze()` | `s.level()`: 0 to 1, how loud the sound is right now. There is no separate object: ask the sound |
 | `new p5.FFT()`, `fft.analyze()` | `FFT`, `analyze()` | `s.spectrum(bands)`: a list of `bands` numbers from 0 to 1, low pitch to high, spaced evenly in pitch from 40 Hz to 16 kHz. p5 gives 1024 numbers from 0 to 255, spaced evenly in frequency |
+| `new p5.Oscillator("sine")`, `osc.freq(440)`, `osc.start()` | (the Sound library's `SinOsc`) | `f.tone(440, 2, "sine").play()`. There is no live oscillator: you make a sound of a set length first, then play it. The waves are `"sine"`, `"square"`, `"saw"`, `"triangle"` and `"noise"` (p5's `"sawtooth"` is `"saw"`) |
+| `new p5.Envelope()`, `env.setADSR(...)`, `env.play(osc)` | (none) | `f.tone(440, 1, attack=0.05, release=0.3)`. A fade in and a fade out, in seconds, built into the tone. There is no decay or sustain level |
+| `midiToFreq(69)` | (none) | `f.note_to_frequency("A4")`. You give a note name, not a MIDI number. `f.frequency_to_note(440)` goes back |
+| (none) | (none) | `f.melody("C4 E4 G4:2")` plays a tune written as text. `f.pluck("E3", 2)` is a plucked string. `sound.pitch()` tells you the note you hear |
 
 Chapter 16 has the details.
 
