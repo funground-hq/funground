@@ -715,6 +715,16 @@ def load_svg(path: str) -> Picture:
     return active_sketch().load_svg(path, base_dir=_sketch_folder())
 
 
+def load_sound(path: str):
+    """Read a sound file (WAV, OGG or MP3) and return a sound with play(), loop(), stop(), pause(),
+    set_volume(), is_playing(), duration(), level() and spectrum(bands).
+    A relative path is looked for next to the sketch file first, then in the current folder.
+    With no sound device (or FUNGROUND_HEADLESS=1) it plays silently and keeps time."""
+    from . import sound
+
+    return sound.load(path, _sketch_folder(), lambda: active_sketch().frame_count)
+
+
 def svg_paths(path: str) -> list[PathBuilder]:
     """Read an SVG file and return its shapes as a list of f.path() builders, one per shape,
     in the file's own coordinates: for booleans, clips or your own colours."""

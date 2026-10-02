@@ -14,6 +14,7 @@ BACKENDS = {"pygame", "cairo", "skia", "blend2d", "moderngl", "OpenGL", "pathops
 # imaging.py reads image files with pygame-ce (ADR-004, D-028).
 ALLOWED = {"platform/": {"pygame"}, "renderers/": {"cairo", "skia", "blend2d", "pygame"}, "export/": {"cairo", "pypdf"},             # pypdf: real PDF text (D-043)
            "imaging.py": {"pygame"},
+           "sound.py": {"pygame"},                           # sound playback (D-046)
            "pathops.py": {"pathops"},                        # path booleans (ADR-005, D-037)
            "svg.py": {"svgelements"}}                       # SVG import (D-041)
 

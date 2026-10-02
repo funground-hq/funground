@@ -889,6 +889,21 @@ def draw():
 f.run()
 ```
 
+### Sound
+
+| Call | What it does | Example |
+|---|---|---|
+| `f.load_sound(path)` | **New:** read a WAV, OGG or MP3 file and return a sound. A relative path is looked for next to the sketch file first, then in the current folder. With no sound device (or `FUNGROUND_HEADLESS=1`) it plays silently and keeps time. A missing file is a `FileNotFoundError` naming both places; a file that is not sound is a `ValueError`. | `beep = f.load_sound("beep.wav")` |
+| `sound.play()` / `sound.loop()` | **New:** play from the start (or from where `pause()` left it); `loop()` plays over and over. Playing a sound that is already playing starts it again. | `beep.play()` |
+| `sound.pause()` / `sound.stop()` | **New:** `pause()` stops and keeps the place; `stop()` stops and goes back to the start. | `beep.stop()` |
+| `sound.set_volume(v)` | **New:** the loudness, 0 (silent) to 1 (full). Outside that is a `ValueError`. | `beep.set_volume(0.5)` |
+| `sound.is_playing()` / `sound.duration()` | **New:** whether it is playing (false once a sound that is not looping reaches its end), and its length in seconds. | `if beep.is_playing(): ...` |
+| `sound.level()` | **New:** how loud the sound is now, 0 to 1 (the root mean square of the last 1/30 second). 0 when not playing. | `f.circle(x, y, 20 + 80 * beep.level())` |
+| `sound.spectrum(bands=32)` | **New:** a list of `bands` numbers from 0 to 1, low pitch to high, spaced evenly in pitch from 40 Hz to 16 kHz. A full-strength tone gives about 1 in its band. All zeros when not playing. `bands` must be 1 to 256. | `for i, v in enumerate(beep.spectrum(16)): ...` |
+
+The place in the sound follows the sketch's clock, not the speakers, so these give the same answers
+with or without a sound device. Sounds add nothing to the picture, to saved files or to the IR.
+
 ---
 
 ## 9. One-page cheat sheet
@@ -1051,6 +1066,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
 | Off-screen graphics | — | `create_graphics`, `image`, `load_image`, `load_svg`, `svg_paths` |
+| Sound | — | `load_sound`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `level`, `spectrum` on the sound |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 
 Everything a v0.5 sketch called still exists with the same arguments; the only visible differences are

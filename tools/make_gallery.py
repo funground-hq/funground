@@ -43,6 +43,7 @@ AREAS = {
     "saving": "Saving your work",
     "documents": "Documents and pages",
     "images": "Pictures and images",
+    "sound": "Sound",
 }
 
 

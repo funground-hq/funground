@@ -157,6 +157,8 @@ ADDED_FUNCTIONS = {
     # S-092 SVG import
     "load_svg": "(path: 'str') -> 'Picture'",
     "svg_paths": "(path: 'str') -> 'list[PathBuilder]'",
+    # S-098 sound
+    "load_sound": "(path: 'str')",
     # S-090 tracking, features, variations
     "text_tracking": "(pixels: 'float') -> 'None'",
     "text_features": "(**features: 'bool') -> 'None'",
