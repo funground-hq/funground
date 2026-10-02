@@ -203,8 +203,12 @@ its own already draws something.
 DrawBot's `saveImage(path, **options)` writes the current page (or every page, as a multi-page
 PDF or an animation) to a file whose extension picks the format — `pdf`, `png`, `svg`, `gif`,
 `mp4`, and several more. funground's `f.save(path)` writes the picture, as `.png`, `.pdf` or
-`.svg` (chapter 13). In a script it writes at once, like `saveImage`; `f.save_frames(pattern, count)` writes a numbered sequence of frames, which
-you then turn into a video or GIF with a tool such as ffmpeg.
+`.svg` (chapter 13), and as `.gif` or `.mp4`. In a script it writes at once, like `saveImage`; every
+page is one frame, and `f.frame_duration(seconds)` is DrawBot's `frameDuration(seconds)`: it sets how
+long the current page, and the pages after it, are shown (0.1 seconds to begin with). All the pages of a GIF or MP4 must be the
+same size. A GIF needs Pillow (`pip install funground[extras]`); an MP4 needs the program ffmpeg.
+`f.save_frames(pattern, count)` writes a numbered sequence of frames instead. In an animated sketch
+(DrawBot has none), `f.save_gif(path, seconds)` and `f.save_movie(path, seconds)` record it.
 
 ## Pages
 

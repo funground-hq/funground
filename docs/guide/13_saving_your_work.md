@@ -81,6 +81,71 @@ ffmpeg -framerate 30 -i frames/%04d.png my_animation.gif
 
 `%04d` is ffmpeg's way of writing `####`.
 
+## GIF and MP4
+
+A GIF is a short picture that moves and loops for ever. An MP4 is a video. funground makes both,
+in two styles.
+
+**An animated sketch** records itself. `f.save_gif("spinner.gif", 2)` records the next 2 seconds
+and writes the file when they are done. Each frame is shown for 1 divided by the frame rate.
+`f.save_movie("spinner.mp4", 2)` does the same for an MP4. Call one of them once, for example on
+the first frame. The recording starts with the next frame. Only the canvas is recorded, not the
+controls below it.
+
+```py
+def draw():
+    ...
+    if f.frame_count == 0:
+        f.save_gif("spinner.gif", 2)      # 2 seconds at 30 frames a second: 60 frames
+```
+
+![Record an animation as a GIF](../gallery/images/animation-05_record_a_gif.png)
+
+**A script** makes a flip book. Every page is one frame. `f.frame_duration(0.2)` says how many
+seconds the current page, and the pages after it, are shown. The usual time is 0.1 seconds.
+`f.save("flip_book.gif")` writes every page in order. All the pages must be the same size.
+
+```python
+import os
+import tempfile
+
+import funground as f
+
+f.size(200, 120)
+f.frame_duration(0.2)
+for step in range(6):
+    if step:
+        f.new_page()
+    f.background("midnightblue")
+    f.fill("gold")
+    f.circle(30 + step * 28, 60, 30)
+
+folder = tempfile.mkdtemp()
+f.save(os.path.join(folder, "flip_book.gif"))
+f.show()
+```
+
+![A flip book](../gallery/images/documents-02_flip_book.png)
+
+For an MP4, save to a name that ends in `.mp4`:
+
+```py
+f.save("flip_book.mp4")            # a script: every page is a frame
+f.save_movie("spinner.mp4", 2)     # an animated sketch: record 2 seconds
+```
+
+What you need:
+
+- **A GIF** needs Pillow, a free Python package: `pip install funground[extras]`. If you have
+  the program ffmpeg instead, funground uses that.
+- **An MP4** needs ffmpeg, a free program that is not part of Python. On Windows, type
+  `winget install ffmpeg`. On a Mac, `brew install ffmpeg`. On Linux, `sudo apt install ffmpeg`.
+  Then close and reopen your terminal, so that it can be found.
+
+With neither, funground stops with a message that says what to install. A GIF keeps times of one
+hundredth of a second, at least 0.02 seconds, and has at most 256 colours in each frame.
+In an animated sketch, `f.save("x.gif")` is an error that points you to `f.save_gif()`.
+
 ## Documents and pages
 
 A script (a file with no `draw()`, see chapter 2) can make a document with several pages.

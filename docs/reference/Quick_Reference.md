@@ -622,6 +622,9 @@ f.run()
 | Call | What it does | Example |
 |---|---|---|
 | `f.save(path)` | Write the current frame to a file when the frame is complete. `.png` saves pixels; `.pdf` and `.svg` save a true vector drawing of the same frame. | `f.save("my_sketch.png")` |
+| `f.save_gif(path, seconds)` | **New:** animated sketch: record the next `seconds` (from the next frame) into a GIF that loops; each frame lasts 1 / frame rate. `path` must end in `.gif`. Needs Pillow (`funground[extras]`) or ffmpeg. Called while recording, or in a script: an error | `f.save_gif("spin.gif", 2)` |
+| `f.save_movie(path, seconds)` | **New:** the same, into an H.264 MP4 (`.mp4`). Needs ffmpeg on the PATH; odd sizes are padded by one pixel | `f.save_movie("spin.mp4", 2)` |
+| `f.frame_duration(seconds)` | **New:** script: how long this page and the pages after it are shown in a GIF or MP4; the start is 0.1; 0 or less is an error. `f.save("x.gif")` / `f.save("x.mp4")` then writes every page as a frame (all the same size) | `f.frame_duration(0.2)` |
 | `f.save_frames(pattern, count)` | **New:** save this frame and the next ones, `count` in all; `####` in the name becomes 0001, 0002, … | `f.save_frames("frames/####.png", 60)` |
 | `f.resize_canvas(w, h)` | **New:** change the canvas size while running. | `f.resize_canvas(800, 600)` |
 | `f.full_screen()` | **New:** fill the screen (instead of `f.size`); `f.width`/`f.height` become the screen size. In a script: the screen size, shown full screen by `f.show()`. | `f.full_screen()` |

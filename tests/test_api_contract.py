@@ -167,6 +167,10 @@ ADDED_FUNCTIONS = {
     "FormattedString": "() -> 'None'",
     # S-088 text as a path
     "text_path": "(message: 'object', x: 'float', y: 'float') -> 'PathBuilder'",
+    # S-100 motion
+    "save_gif": "(path: 'str', seconds: 'float') -> 'None'",
+    "save_movie": "(path: 'str', seconds: 'float') -> 'None'",
+    "frame_duration": "(seconds: 'float') -> 'None'",
     # S-101 controls
     "create_slider": "(low: 'float', high: 'float', value: 'float | None' = None, step: 'float | None' = None, label: 'str | None' = None) -> 'Slider'",
     "create_checkbox": "(label: 'str', checked: 'bool' = False) -> 'Checkbox'",

@@ -226,6 +226,21 @@ def save_frames(pattern: str, count: int) -> None:
     active_sketch().save_frames(pattern, count)
 
 
+def save_gif(path: str, seconds: float) -> None:
+    """Animated sketch: record the next *seconds* into a GIF that loops forever (needs Pillow or ffmpeg)."""
+    active_sketch().save_gif(path, seconds)
+
+
+def save_movie(path: str, seconds: float) -> None:
+    """Animated sketch: record the next *seconds* into an MP4 (needs ffmpeg)."""
+    active_sketch().save_movie(path, seconds)
+
+
+def frame_duration(seconds: float) -> None:
+    """Script style: show this page, and the pages after it, for *seconds* in a saved GIF or MP4."""
+    active_sketch().frame_duration(seconds)
+
+
 # ---- drawing
 def background(color: Color, *more: float) -> None:
     active_sketch().background(color, *more)

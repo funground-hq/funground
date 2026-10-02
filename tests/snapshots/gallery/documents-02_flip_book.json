@@ -1,0 +1,46 @@
+[
+ {
+  "color": [
+   25,
+   25,
+   112,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 8,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "width": 40.0,
+  "x": 280.0,
+  "y": 225
+ },
+ {
+  "diameter": 40,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 280.0,
+  "y": 200.0
+ }
+]

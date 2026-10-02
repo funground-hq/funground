@@ -138,6 +138,9 @@ class Sketch:
         # The current page is the live canvas (self.frame, self._renderer).
         self._pages: list[tuple[int, int, list, bytes]] = []
         self._pages_full: list[bool] = []      # for each earlier page: made by full_screen() (S-085)
+        self._page_durations: list[float] = []  # S-100, contract M1: how long each earlier page is shown, in seconds
+        self._frame_duration = 0.1             # the same, for the current page (it carries on to later pages)
+        self._motion: list | None = None       # S-100: a recording [path, kind, frames left, frames, size, skip]
         self._page_full = False                # the same, for the current page
         # S-079, contract P7: reading the canvas mid-frame draws the ops recorded so far onto the
         # surface at once. The window frame is then drawn in steps: _frame_open says its Save is
@@ -280,6 +283,8 @@ class Sketch:
         self._check_capabilities()
         self._pages = []
         self._pages_full = []
+        self._page_durations = []
+        self._frame_duration = 0.1
         if not self.running:
             self._begin_script()
             return
@@ -345,6 +350,7 @@ class Sketch:
         self._sync_canvas()
         self._pages.append((self.width, self.height, list(self.frame.ops), bytes(self._renderer.pixels().data)))
         self._pages_full.append(self._page_full)
+        self._page_durations.append(self._frame_duration)
         self.width, self.height = int(w), int(h)
         self._start_page()
 
@@ -472,6 +478,8 @@ class Sketch:
             self.width, self.height = self._platform.display_size()
             self._pages = []
             self._pages_full = []
+            self._page_durations = []
+            self._frame_duration = 0.1
             self._begin_script()
             self._page_full = True
             return
@@ -641,6 +649,7 @@ class Sketch:
         self._refresh_panel()
         self._platform.present(self._renderer.pixels())
         self._queue_sequence_frame()
+        self._record_motion_frame()
         self._flush_saves()
         self.frame.clear()
 
@@ -767,7 +776,11 @@ class Sketch:
     def save(self, path: str) -> None:
         """Write this frame to a .png, .pdf or .svg file when the frame is complete."""
         from .export import format_of
+        from .export.motion import MOTION_FORMATS
 
+        if isinstance(path, str) and "." in path and path.lower().rsplit(".", 1)[-1] in MOTION_FORMATS:
+            self._save_motion(path)          # S-100, contract M1
+            return
         format_of(path)  # validate early so the learner sees the error at the call site
         self._require_window()
         if self._script:                     # contract R14: a script's save writes at once
@@ -810,6 +823,105 @@ class Sketch:
                 save_pixels(shown, numbered)
             else:
                 save_frame(ir.Frame(list(ops)), numbered, w, h, scale)
+
+    # ---- GIF and MP4 (S-100, contract M1)
+    def frame_duration(self, seconds: float) -> None:
+        """Script style: how long this page, and the pages after it, are shown in a GIF or MP4."""
+        if self.running:
+            raise RuntimeError(
+                "f.frame_duration() is for scripts (a file with no draw()). In an animated sketch every frame "
+                "lasts 1 / frame rate: use f.save_gif(path, seconds) or f.save_movie(path, seconds)."
+            )
+        self._require_window()
+        if isinstance(seconds, bool) or not isinstance(seconds, (int, float)):
+            raise TypeError(f"f.frame_duration() needs a number of seconds, not {seconds!r}")
+        if not 0 < seconds < float("inf"):
+            raise ValueError(f"f.frame_duration() needs a time above 0 seconds, not {seconds!r}")
+        self._frame_duration = float(seconds)
+
+    def _save_motion(self, path: str) -> None:
+        """f.save("x.gif") / f.save("x.mp4") in a script: every page is a frame."""
+        from .export import motion
+
+        kind = path.lower().rsplit(".", 1)[-1]
+        if not self._script:
+            self._require_window()
+            use = "f.save_gif(path, seconds)" if kind == "gif" else "f.save_movie(path, seconds)"
+            raise ValueError(
+                f"f.save({path!r}) makes a {kind.upper()} from the pages of a script. This is an animated "
+                f"sketch: use {use} to record it."
+            )
+        pages = self._document_pages()
+        first = pages[0][:2]
+        for number, (w, h, _, _) in enumerate(pages, 1):
+            if (w, h) != first:
+                raise ValueError(
+                    f"f.save({path!r}): every page of a {kind.upper()} must be the same size. "
+                    f"Page 1 is {first[0]} x {first[1]} but page {number} is {w} x {h}."
+                )
+        motion.require_encoder(kind)
+        self._script_flush()
+        frames = []
+        scale = self._script_scale
+        for w, h, _, pixels in pages:
+            if pixels is None:
+                bgra = self._renderer.read_logical(0, 0, w, h, w, h)
+            else:
+                bgra = motion.resample_bgra(pixels, round(w * scale), round(h * scale), w, h)
+            frames.append(motion.bgra_to_rgb(bgra, w, h))
+        durations = [*self._page_durations, self._frame_duration]
+        (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, first, durations)
+
+    def save_gif(self, path: str, seconds: float) -> None:
+        """Record the next *seconds* of an animated sketch into a GIF."""
+        self._start_motion("save_gif", path, "gif", seconds)
+
+    def save_movie(self, path: str, seconds: float) -> None:
+        """Record the next *seconds* of an animated sketch into an MP4."""
+        self._start_motion("save_movie", path, "mp4", seconds)
+
+    def _start_motion(self, name: str, path: str, kind: str, seconds: float) -> None:
+        from .export import motion
+
+        self._only_in_animated(name)
+        if not isinstance(path, str) or not path.lower().endswith("." + kind):
+            raise ValueError(f"f.{name}() needs a path ending in .{kind}, not {path!r}")
+        if isinstance(seconds, bool) or not isinstance(seconds, (int, float)):
+            raise TypeError(f"f.{name}() needs a number of seconds, not {seconds!r}")
+        if not 0 < seconds < float("inf"):
+            raise ValueError(f"f.{name}() needs a time above 0 seconds, not {seconds!r}")
+        self._require_window()
+        if self._motion is not None:
+            raise RuntimeError(f"f.{name}() was called while another recording is still running. "
+                               "Wait until it has finished.")
+        motion.require_encoder(kind)
+        frames = max(1, round(seconds * self.fps))
+        # Called from draw(), this frame is already being drawn: the recording starts with the next one.
+        self._motion = [path, kind, frames, [], None, bool(self._in_draw)]
+
+    def _record_motion_frame(self) -> None:
+        recording = self._motion
+        if recording is None:
+            return
+        if recording[5]:                       # the frame that called save_gif() is not recorded
+            recording[5] = False
+            return
+        from .export import motion
+
+        path, kind, left, frames, size, _ = recording
+        w, h = self.width, self.height
+        if size is not None and size != (w, h):
+            self._motion = None
+            raise ValueError(f"the canvas changed size from {size[0]} x {size[1]} to {w} x {h} while "
+                             f"{path!r} was being recorded; a GIF or MP4 keeps one size")
+        recording[4] = (w, h)
+        frames.append(motion.bgra_to_rgb(self._renderer.read_logical(0, 0, w, h, w, h), w, h))
+        recording[2] = left - 1
+        if recording[2] > 0:
+            return
+        self._motion = None
+        durations = [1.0 / self.fps] * len(frames)
+        (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, (w, h), durations)
 
     def save_frames(self, pattern: str, count: int) -> None:
         """Save this frame and the ones after it, *count* in all, numbered into *pattern* (S-056)."""
@@ -1800,6 +1912,7 @@ class Sketch:
             self._reset_pixel_state()
             self._pending_saves.clear()
             self._frame_sequence = None
+            self._motion = None                      # a recording the sketch did not live to finish is dropped
             self._renderer.attach(0, 0)
             self._platform.close()
             self._end_panel()
