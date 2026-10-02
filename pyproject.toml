@@ -10,7 +10,31 @@ readme = "README.md"
 license = "LGPL-2.1-or-later"
 license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md", "funground/fonts/DejaVu-LICENSE.txt"]
 requires-python = ">=3.11"
+authors = [{ name = "Samir Joshi" }]
+keywords = ["creative coding", "education", "drawing", "p5", "processing", "drawbot", "generative art", "graphics"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "Topic :: Education",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Artistic Software",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+]
+
 dependencies = ["pygame-ce>=2.5", "pycairo>=1.27", "fonttools>=4.55", "uharfbuzz>=0.45", "skia-pathops>=0.9", "svgelements>=1.9", "pypdf>=5"]
+
+[project.urls]
+Homepage = "https://github.com/funground-hq/funground"
+Source = "https://github.com/funground-hq/funground"
+Issues = "https://github.com/funground-hq/funground/issues"
+Changelog = "https://github.com/funground-hq/funground/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "pillow>=11", "pypdfium2>=4"]   # CI tests both filter paths (P10)
