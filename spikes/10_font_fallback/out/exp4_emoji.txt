@@ -1,0 +1,31 @@
+(1) glyphs per sequence (1 = the font composes the sequence into one picture; >1 = parts drawn side by side)
+sequence               Noto Emoji mono  Twemoji COLRv0  Noto Color COLRv1
+grinning                             1               1                  1
+rocket                               1               1                  1
+thumbs+tone                          1               1                  1
+flag IN                              1               1                  1
+family ZWJ                           1               1                  1
+rainbow flag                         2               1                  1
+keycap 1                             2               1                  1
+woman technologist                   1               1                  1
+England flag (tags)                  1               1                  1
+heart                                2               1                  1
+
+(2) Twemoji COLR version 0 | base glyphs with layers: 3689 | palette entries: 1063 | layers per glyph: min/median/max = 1 8 44
+   drew 8 emoji in mono (top row) and as COLRv0 layers (bottom row), 39 layer fills in total -> out/exp4_emoji.png
+
+(3) Noto Color Emoji COLR version 1 | BaseGlyphList records: 4012 | LayerList paints: 73892 | ClipBoxes: True
+   paint nodes used by the first 400 emoji (count each):
+     PaintGlyph                    11144
+     PaintSolid                     8545
+     PaintTransform                 3850
+     PaintColrLayers                1704
+     PaintLinearGradient            1690
+     PaintRadialGradient             909
+     PaintScale                      247
+     PaintTranslate                   15
+     PaintScaleAroundCenter           15
+
+(4) Noto Color Emoji: COLR v1: v0 base-glyph records = 0, v1 paint records = 4012
+
+(4) Segoe UI Emoji (this machine): COLR v1: v0 base-glyph records = 3487, v1 paint records = 3487

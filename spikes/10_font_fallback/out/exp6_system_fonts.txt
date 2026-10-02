@@ -1,0 +1,83 @@
+Windows: 351 font files found in 0.01 s (directory walk)
+opened 374 faces and read their cmaps in 5.14 s  (this is the one-off cost of building a coverage index; about 13.7 ms per face)
+fsType values (0 installable, 4 print/preview OK, 8 editable OK, 2 restricted = must not embed): {8: 348, 0: 25, 14: 1}
+faces with the restricted bit (2): 1
+
+faces on this machine covering each group fully (family | file | fsType | outlines | colour tables)
+
+  Devanagari: 19 faces
+     Aparajita                           aparaj.ttf         fsType=8    glyf  
+     Aparajita Bold                      aparajb.ttf        fsType=8    glyf  
+     Aparajita Bold Italic               aparajbi.ttf       fsType=8    glyf  
+     Aparajita Italic                    aparaji.ttf        fsType=8    glyf  
+     Kokila                              kokila.ttf         fsType=8    glyf  
+
+  Arabic: 17 faces
+     Arial                               arial.ttf          fsType=8    glyf  
+     Arial Bold                          arialbd.ttf        fsType=8    glyf  
+     Calibri                             calibri.ttf        fsType=8    glyf  
+     Calibri Bold                        calibrib.ttf       fsType=8    glyf  
+     Calibri Light                       calibril.ttf       fsType=8    glyf  
+
+  Hebrew: 27 faces
+     Arial                               arial.ttf          fsType=8    glyf  
+     Arial Bold                          arialbd.ttf        fsType=8    glyf  
+     Arial Bold Italic                   arialbi.ttf        fsType=8    glyf  
+     Arial Italic                        ariali.ttf         fsType=8    glyf  
+     Calibri                             calibri.ttf        fsType=8    glyf  
+
+  Hiragana/Katakana: 29 faces
+     MS Gothic                           msgothic.ttc       fsType=8    glyf  
+     MS PGothic                          msgothic.ttc       fsType=8    glyf  
+     MS UI Gothic                        msgothic.ttc       fsType=8    glyf  
+     Malgun Gothic                       malgun.ttf         fsType=8    glyf  
+     Malgun Gothic Bold                  malgunbd.ttf       fsType=8    glyf  
+
+  JIS kanji sample (日本語中文漢字): 26 faces
+     MS Gothic                           msgothic.ttc       fsType=8    glyf  
+     MS PGothic                          msgothic.ttc       fsType=8    glyf  
+     MS UI Gothic                        msgothic.ttc       fsType=8    glyf  
+     Microsoft JhengHei                  msjh.ttc           fsType=8    glyf  
+     Microsoft JhengHei Bold             msjhbd.ttc         fsType=8    glyf  
+
+  Simplified hanzi sample (你好汉字学习): 14 faces
+     Microsoft JhengHei                  msjh.ttc           fsType=8    glyf  
+     Microsoft JhengHei Bold             msjhbd.ttc         fsType=8    glyf  
+     Microsoft JhengHei Light            msjhl.ttc          fsType=8    glyf  
+     Microsoft JhengHei UI               msjh.ttc           fsType=8    glyf  
+     Microsoft JhengHei UI Bold          msjhbd.ttc         fsType=8    glyf  
+
+  Hangul sample (한국어): 3 faces
+     Malgun Gothic                       malgun.ttf         fsType=8    glyf  
+     Malgun Gothic Bold                  malgunbd.ttf       fsType=8    glyf  
+     Malgun Gothic Semilight             malgunsl.ttf       fsType=8    glyf  
+
+  Emoji sample (😀🚀🐶🍎🎉🍕): 2 faces
+     Segoe UI Emoji                      seguiemj.ttf       fsType=8    glyf  COLR
+     Segoe UI Symbol                     seguisym.ttf       fsType=8    glyf  
+
+  Thai: 6 faces
+     Leelawadee UI                       LeelawUI.ttf       fsType=8    glyf  
+     Leelawadee UI Bold                  LeelaUIb.ttf       fsType=8    glyf  
+     Leelawadee UI Semilight             LeelUIsl.ttf       fsType=8    glyf  
+     Microsoft Sans Serif                micross.ttf        fsType=8    glyf  
+     Tahoma                              tahoma.ttf         fsType=8    glyf  
+
+  Bengali: 6 faces
+     Nirmala Text                        Nirmala.ttc        fsType=8    glyf  
+     Nirmala Text Bold                   Nirmala.ttc        fsType=8    glyf  
+     Nirmala Text Semilight              Nirmala.ttc        fsType=8    glyf  
+     Nirmala UI                          Nirmala.ttc        fsType=8    glyf  
+     Nirmala UI Bold                     Nirmala.ttc        fsType=8    glyf  
+
+  Tamil: 6 faces
+     Nirmala Text                        Nirmala.ttc        fsType=8    glyf  
+     Nirmala Text Bold                   Nirmala.ttc        fsType=8    glyf  
+     Nirmala Text Semilight              Nirmala.ttc        fsType=8    glyf  
+     Nirmala UI                          Nirmala.ttc        fsType=8    glyf  
+     Nirmala UI Bold                     Nirmala.ttc        fsType=8    glyf  
+
+  Symbols sample (★✓→∑♠⭐⮩🎲): 1 faces
+     Segoe UI Symbol                     seguisym.ttf       fsType=8    glyf  
+
+seguiemj.ttf: COLR version 1; tables: ['COLR', 'CPAL', 'GDEF', 'GPOS', 'GSUB', 'GlyphOrder', 'OS/2', 'cmap', 'cvt ', 'fpgm', 'gasp', 'glyf', 'head', 'hhea', 'hmtx', 'kern', 'loca', 'maxp', 'meta', 'name', 'post', 'prep']

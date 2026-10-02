@@ -1,0 +1,4 @@
+fonts/*
+!fonts/README.txt
+!fonts/download.sh
+!fonts/OFL-*.txt

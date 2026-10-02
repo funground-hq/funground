@@ -1,0 +1,6 @@
+Twemoji.Mozilla.ttf           whole cmap                                     1.47 MB raw    0.75 MB zlib
+Twemoji.Mozilla.ttf           Emoji_Presentation chars only                  0.82 MB raw    0.50 MB zlib
+Twemoji.Mozilla.ttf           ~100 common emoji (U+1F600-1F64F + few)        0.03 MB raw    0.02 MB zlib
+NotoColorEmoji-Regular.ttf    whole cmap                                    25.33 MB raw    8.30 MB zlib
+NotoColorEmoji-Regular.ttf    Emoji_Presentation chars only                 18.74 MB raw    6.74 MB zlib
+NotoColorEmoji-Regular.ttf    ~100 common emoji (U+1F600-1F64F + few)        0.37 MB raw    0.15 MB zlib

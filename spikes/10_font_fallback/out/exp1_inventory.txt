@@ -1,0 +1,14 @@
+file                                     MB  glyphs    cmap fsType  outline   colour tables   licence
+NotoColorEmoji-Regular.ttf            25.33   42352    1508 0       glyf    COLR,CPAL,SVG  COLRv1  This Font Software is licensed under the SIL
+NotoEmoji-VF.ttf                       1.98    1891    1489 0       glyf       This Font Software is licensed under the SIL
+   variable axes: [('wght', 300.0, 400.0, 700.0)]
+NotoSansArabic-Regular.ttf             0.23    1399    1250 0       glyf       This Font Software is licensed under the SIL
+NotoSansCJK-Regular.ttc               19.48   65535   44810 0       CFF        This Font Software is licensed under the SIL
+NotoSansDevanagari-Regular.ttf         0.24     845     281 0       glyf       This Font Software is licensed under the SIL
+NotoSansHebrew-Regular.ttf             0.03     151     147 0       glyf       This Font Software is licensed under the SIL
+NotoSansJP-Subset.otf                  4.53   17936   16732 0       CFF        This Font Software is licensed under the SIL
+NotoSansMath-Regular.ttf               0.99    5014    2919 0       glyf       This Font Software is licensed under the SIL
+NotoSansSymbols-Regular.ttf            0.23     846     840 0       glyf       This Font Software is licensed under the SIL
+NotoSansSymbols2-Regular.ttf           0.67    2660    2641 0       glyf       This Font Software is licensed under the SIL
+Twemoji.Mozilla.ttf                    1.47   13723    1418 0       glyf    COLR,CPAL COLRv0  
+DejaVuSans.ttf                         0.76    6253    5918 0       glyf       Fonts are (c) Bitstream (see below). DejaVu 

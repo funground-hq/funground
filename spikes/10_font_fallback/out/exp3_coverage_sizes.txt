@@ -1,0 +1,57 @@
+coverage: fraction of each group the font has (percent)
+
+group                                                  DejaVu Sans Noto Emoji (m Noto Sans Sym Noto Sans Sym Noto Sans Mat Noto Sans Dev Noto Sans Ara Noto Sans Heb Noto Sans JP  Noto Sans CJK Noto Sans CJK Noto Sans CJK Twemoji Mozil Noto Color Em
+Emoji_Presentation (1228)                                       8%           98%           16%            2%            1%            0%            0%            0%            2%            2%            2%            2%           96%          100%
+Emoji incl. text-style (1433, no ASCII/©®)                     13%           98%           24%            5%            2%            0%            0%            0%            5%            5%            5%            5%           97%          100%
+Extended_Pictographic (2830)                                    6%           49%           12%            2%            1%            0%            0%            0%            3%            3%            3%            3%           48%           50%
+Misc Symbols 2600-26FF                                         74%           32%           47%           53%           16%            0%            0%            0%           20%           20%           20%           20%           32%           32%
+Dingbats 2700-27BF                                             91%           17%           76%           18%            5%            0%            0%            0%           20%           20%           20%           20%           17%           17%
+Arrows 2190-21FF + Sup 2900-297F + 2B00-2BFF                   31%            3%           47%            2%           63%            0%            0%            0%            6%            6%            6%            6%            3%            3%
+Math operators 2200-22FF                                      100%            0%            2%            0%          100%            0%            0%            0%           29%           29%           29%           29%            0%            0%
+Geometric/box/block 2500-25FF                                 100%            3%           38%            0%           45%            0%            0%            0%           78%           78%           78%           78%            3%            3%
+Games: cards, mahjong, domino 1F000-1F0FF                      62%            1%           88%            0%            0%            0%            0%            0%            0%            0%            0%            0%            1%            1%
+Chess/symbols ext 1FA00-1FAFF                                   0%           42%           61%            0%            0%            0%            0%            0%            0%            0%            0%            0%           34%           50%
+Devanagari 0900-097F                                            0%            0%            0%            0%            0%          100%            0%            0%            0%            0%            0%            0%            0%            0%
+Arabic 0600-06FF                                               64%            0%            0%            0%           24%            0%          100%            0%            0%            0%            0%            0%            0%            0%
+Hebrew 0590-05FF                                               48%            0%            0%            0%            0%            0%            0%           79%            0%            0%            0%            0%            0%            0%
+Hiragana+Katakana 3040-30FF                                     0%            0%            0%            0%            0%            0%            0%            0%           98%           98%           98%           98%            0%            0%
+JIS X 0208 kanji level 1 (2965)                                 0%            0%            0%            0%            0%            0%            0%            0%          100%          100%          100%          100%            0%            0%
+JIS X 0208 kanji level 2 (3390)                                 0%            0%            0%            0%            0%            0%            0%            0%          100%          100%          100%          100%            0%            0%
+GB 2312 hanzi level 1 (3755)                                    0%            0%            0%            0%            0%            0%            0%            0%           73%          100%          100%          100%            0%            0%
+KS X 1001 hangul (2350)                                         0%            0%            0%            0%            0%            0%            0%            0%           99%          100%          100%          100%            0%            0%
+
+Emoji_Presentation chars DejaVu already has: 98 of 1228 | union of DejaVu+Noto Emoji: 1205 | union adding Symbols2: 1205
+
+subset sizes (hinting dropped; all layout features kept)
+
+Noto Emoji VF, whole cmap, still variable                         1.96 MB raw    1.22 MB zlib   (1887 of 1891 glyphs)
+Noto Emoji static wght=400, whole cmap                            0.86 MB raw    0.57 MB zlib   (1887 of 1891 glyphs)
+Noto Emoji static 400, Emoji_Presentation + text emoji only       0.79 MB raw    0.53 MB zlib   (1724 of 1891 glyphs)
+Noto Sans Symbols 2 whole                                         0.65 MB raw    0.29 MB zlib   (2660 of 2660 glyphs)
+Noto Sans Symbols whole                                           0.14 MB raw    0.07 MB zlib   (841 of 846 glyphs)
+Noto Sans Math whole                                              0.57 MB raw    0.31 MB zlib   (4870 of 5014 glyphs)
+Noto Sans Devanagari whole                                        0.17 MB raw    0.07 MB zlib   (817 of 845 glyphs)
+Noto Sans Arabic whole                                            0.13 MB raw    0.06 MB zlib   (1396 of 1399 glyphs)
+Noto Sans Hebrew whole                                            0.02 MB raw    0.01 MB zlib   (151 of 151 glyphs)
+CJK JP: kana + CJK punctuation only                               0.18 MB raw    0.14 MB zlib   (1291 of 65535 glyphs)
+CJK JP: kana + JIS level 1 kanji (2965)                           1.69 MB raw    1.40 MB zlib   (8093 of 65535 glyphs)
+CJK JP: kana + JIS L1 + L2 (6355 kanji)                           3.57 MB raw    2.93 MB zlib   (15727 of 65535 glyphs)
+CJK SC: GB2312 level 1 (3755 hanzi) + punct                       1.57 MB raw    1.30 MB zlib   (7727 of 65535 glyphs)
+CJK KR: KS X 1001 hangul (2350) + punct                           1.27 MB raw    1.05 MB zlib   (5606 of 65535 glyphs)
+CJK JP+SC+KR in ONE font? no: three files above; whole TTC file    0.00 MB raw    0.00 MB zlib   (1 of 65535 glyphs)
+
+file sizes on disk (MB):
+  DejaVu Sans                       0.76
+  Noto Emoji (mono)                 1.98
+  Noto Sans Symbols 2               0.67
+  Noto Sans Symbols                 0.23
+  Noto Sans Math                    0.99
+  Noto Sans Devanagari              0.24
+  Noto Sans Arabic                  0.23
+  Noto Sans Hebrew                  0.03
+  Noto Sans JP (subset OTF)         4.53
+  Noto Sans CJK JP (TTC #0)        19.48
+  Noto Sans CJK KR (#1)            19.48
+  Noto Sans CJK SC (#2)            19.48
+  Twemoji Mozilla (COLRv0)          1.47
+  Noto Color Emoji (COLRv1)        25.33

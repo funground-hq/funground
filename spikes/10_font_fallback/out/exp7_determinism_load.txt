@@ -1,0 +1,23 @@
+load cost (TTFont + HarfBuzz face), ms, first load in this process:
+  NotoSansDevanagari-Regular.ttf         7.0 ms
+  NotoSansArabic-Regular.ttf             2.7 ms
+  NotoSansSymbols2-Regular.ttf           4.2 ms
+  NotoEmoji-VF.ttf                       3.4 ms
+  NotoSansJP-Subset.otf                 61.2 ms
+  NotoSansCJK-Regular.ttc              224.3 ms
+  DejaVuSans.ttf (today)                 9.6 ms
+
+'नमस्ते दुनिया'
+   bundled Noto subsets    5e71523d2c45  [('नमस्ते दुनिया', 'NotoSansDevanaga')]
+   system fonts (this PC)  db98c7f39992  [('नमस्ते दुनिया', 'Nirmala.ttc')]
+   no fallback (today)     7bb90d0a412a  [('नमस्ते दुनिया', 'DejaVuSans.ttf')]
+
+'日本語のテキスト'
+   bundled Noto subsets    cb9bfeed223a  [('日本語のテキスト', 'NotoSansJP-Subse')]
+   system fonts (this PC)  6c2eac2f6e1e  [('日本語のテキスト', 'msgothic.ttc')]
+   no fallback (today)     376cb1c67255  [('日本語のテキスト', 'DejaVuSans.ttf')]
+
+'go 🚀 now'
+   bundled Noto subsets    83af296dcef6  [('go ', 'DejaVuSans.ttf'), ('🚀', 'NotoEmoji-VF.ttf'), (' now', 'DejaVuSans.ttf')]
+   system fonts (this PC)  40944f86e634  [('go ', 'DejaVuSans.ttf'), ('🚀 ', 'seguiemj.ttf'), ('now', 'DejaVuSans.ttf')]
+   no fallback (today)     acaa19ab07ce  [('go 🚀 now', 'DejaVuSans.ttf')]

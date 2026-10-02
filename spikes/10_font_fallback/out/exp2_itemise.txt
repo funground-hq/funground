@@ -1,0 +1,88 @@
+
+[latin only] 'The quick brown fox, café, naïve — 100%'
+  A cluster-first: [('The quick brown fox, café, naïve — 100%', 'DejaVuSans.ttf')]
+  B notdef-retry : [('The quick brown fox, café, naïve — 100%', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[emoji mid-sentence] 'Hello 🚀 world 😀!'
+  A cluster-first: [('Hello ', 'DejaVuSans.ttf'), ('🚀', 'NotoEmoji-VF.t'), (' world 😀!', 'DejaVuSans.ttf')]
+  B notdef-retry : [('Hello ', 'DejaVuSans.ttf'), ('🚀', 'NotoEmoji-VF.t'), (' world 😀!', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[emoji ZWJ family] 'family: 👨\u200d👩\u200d👧 end'
+  A cluster-first: [('family: ', 'DejaVuSans.ttf'), ('👨\u200d👩\u200d👧', 'NotoEmoji-VF.t'), (' end', 'DejaVuSans.ttf')]
+  B notdef-retry : [('family: ', 'DejaVuSans.ttf'), ('👨\u200d👩\u200d👧', 'NotoEmoji-VF.t'), (' end', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[skin tone] 'ok 👍🏽 fine'
+  A cluster-first: [('ok ', 'DejaVuSans.ttf'), ('👍🏽', 'NotoEmoji-VF.t'), (' fine', 'DejaVuSans.ttf')]
+  B notdef-retry : [('ok ', 'DejaVuSans.ttf'), ('👍🏽', 'NotoEmoji-VF.t'), (' fine', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[flag] 'india 🇮🇳 flag'
+  A cluster-first: [('india ', 'DejaVuSans.ttf'), ('🇮🇳', 'NotoEmoji-VF.t'), (' flag', 'DejaVuSans.ttf')]
+  B notdef-retry : [('india ', 'DejaVuSans.ttf'), ('🇮🇳', 'NotoEmoji-VF.t'), (' flag', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[keycap] 'press 1️⃣ now'
+  A cluster-first: [('press ', 'DejaVuSans.ttf'), ('1️⃣', 'NotoSansSymbol'), (' now', 'DejaVuSans.ttf')]
+  B notdef-retry : [('press ', 'DejaVuSans.ttf'), ('1️⃣', 'NotoSansSymbol'), (' now', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[heart VS16] 'love ❤️ and ❤'
+  A cluster-first: [('love ❤️ and ❤', 'DejaVuSans.ttf')]
+  B notdef-retry : [('love ❤️ and ❤', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[rainbow flag ZWJ] 'pride 🏳️\u200d🌈 end'
+  A cluster-first: [('pride ', 'DejaVuSans.ttf'), ('🏳️\u200d🌈', 'NotoEmoji-VF.t'), (' end', 'DejaVuSans.ttf')]
+  B notdef-retry : [('pride ', 'DejaVuSans.ttf'), ('🏳️\u200d🌈', 'NotoEmoji-VF.t'), (' end', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[devanagari conjunct] 'Hindi: क्षत्रिय and क्षमा'
+  A cluster-first: [('Hindi: ', 'DejaVuSans.ttf'), ('क्षत्रिय ', 'NotoSansDevana'), ('and ', 'DejaVuSans.ttf'), ('क्षमा', 'NotoSansDevana')]
+  B notdef-retry : [('Hindi: ', 'DejaVuSans.ttf'), ('क्षत्रिय', 'NotoSansDevana'), (' and ', 'DejaVuSans.ttf'), ('क्षमा', 'NotoSansDevana')]
+  A vs B: DIFF; tofu glyphs in A: 0
+
+[devanagari sentence] 'नमस्ते दुनिया, hello'
+  A cluster-first: [('नमस्ते दुनिया, ', 'NotoSansDevana'), ('hello', 'DejaVuSans.ttf')]
+  B notdef-retry : [('नमस्ते', 'NotoSansDevana'), (' ', 'DejaVuSans.ttf'), ('दुनिया', 'NotoSansDevana'), (', hello', 'DejaVuSans.ttf')]
+  A vs B: DIFF; tofu glyphs in A: 0
+
+[arabic in latin] 'say مرحبا now'
+  A cluster-first: [('say مرحبا now', 'DejaVuSans.ttf')]
+  B notdef-retry : [('say مرحبا now', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[hebrew] 'shalom שלום ok'
+  A cluster-first: [('shalom שלום ok', 'DejaVuSans.ttf')]
+  B notdef-retry : [('shalom שלום ok', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[CJK] '日本語 and 中文 or 한국어'
+  A cluster-first: [('日本語 ', 'NotoSansJP-Sub'), ('and ', 'DejaVuSans.ttf'), ('中文 ', 'NotoSansJP-Sub'), ('or 한국어', 'DejaVuSans.ttf')]
+  B notdef-retry : [('日本語', 'NotoSansJP-Sub'), (' and ', 'DejaVuSans.ttf'), ('中文', 'NotoSansJP-Sub'), (' or ', 'DejaVuSans.ttf'), ('한국어', 'NotoSansJP-Sub')]
+  A vs B: DIFF; tofu glyphs in A: 3
+
+[latin + combining] 'é ä q̣́ ok'
+  A cluster-first: [('é ä q̣́ ok', 'DejaVuSans.ttf')]
+  B notdef-retry : [('é ä q̣́ ok', 'DejaVuSans.ttf')]
+  A vs B: same; tofu glyphs in A: 0
+
+[symbols] '★ ✓ → ∑ ♠ ⭐ 🎲 ⮩'
+  A cluster-first: [('★ ✓ → ∑ ♠ ', 'DejaVuSans.ttf'), ('⭐', 'NotoSansSymbol'), (' ', 'DejaVuSans.ttf'), ('🎲', 'NotoEmoji-VF.t'), (' ', 'DejaVuSans.ttf'), ('⮩', 'NotoSansSymbol')]
+  B notdef-retry : [('★ ✓ → ∑ ♠ ', 'DejaVuSans.ttf'), ('⭐', 'NotoSansSymbol'), (' ', 'DejaVuSans.ttf'), ('🎲', 'NotoEmoji-VF.t'), (' ', 'DejaVuSans.ttf'), ('⮩', 'NotoSansSymbol')]
+  A vs B: same; tofu glyphs in A: 0
+
+[unsupported] 'ancient 𐎀 🧐 ꯍ'
+  A cluster-first: [('ancient 𐎀 ', 'DejaVuSans.ttf'), ('🧐', 'NotoEmoji-VF.t'), (' ꯍ', 'DejaVuSans.ttf')]
+  B notdef-retry : [('ancient ', 'DejaVuSans.ttf'), ('𐎀', 'NotoSansJP-Sub'), (' ', 'DejaVuSans.ttf'), ('🧐', 'NotoEmoji-VF.t'), (' ', 'DejaVuSans.ttf'), ('ꯍ', 'NotoSansJP-Sub')]
+  A vs B: DIFF; tofu glyphs in A: 2
+
+case                                today: 1 shape  fast path check  A itemise+shape  B notdef-retry  (microseconds, median)
+latin 60 chars                                15.9              7.1             23.3            18.8
+latin 60 + 1 emoji                            14.0              4.7            109.5            56.3
+mixed latin/emoji/hindi/CJK                    8.6              2.3             80.5            78.8
+CJK 30 chars                                   8.8              0.6            151.3           135.9
+itemise() alone on the mixed line: 61.7 us;  regex-X alone: 8.9 us;  clusters() alone: 15.6 us
+clusters() vs regex-X on 16 test strings: 0 mismatches

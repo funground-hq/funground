@@ -19,7 +19,7 @@ unreachable are pushed and CI is green on all 12 cells (Sprint 11 retro rule).
 ## Story set
 
 ### S-102 Font fallback — E-15 *(in the Phase 3 roadmap, never built)*
-- [ ] S-102.0 Design spike:
+- [x] S-102.0 Design spike:
   - a run whose characters the current font lacks takes them from a fallback chain;
   - decide the default chain (bundled vs system fonts, licence and size);
   - shape per font run with HarfBuzz;
