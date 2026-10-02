@@ -181,3 +181,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-107 | E-25 | `erase()` / `no_erase()` (p5) | 12 |
 | S-108 | E-17 | Microphone input (pygame-ce capture) | 13 |
 | S-109 | E-15 | PDF text: fill mode for solid colours | 13 |
+| S-110 | E-17 | Tones, notes, pan, create_sound, save WAV (D-055, ADR-006) | 13 |
