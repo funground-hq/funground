@@ -24,7 +24,7 @@ class Capability(Enum):
 
 
 # Which pip extra provides a capability the base install lacks. Filled in as
-# extras appear (Sprint 3+); the base install covers RASTER_2D only today.
+# extras appear. Today the base install covers every capability the Cairo renderer has, so it is empty.
 EXTRA_FOR: dict[Capability, str] = {}
 
 

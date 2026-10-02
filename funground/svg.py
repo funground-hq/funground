@@ -46,6 +46,7 @@ class SvgShape:
     miter_limit: float
     dash: tuple
     dash_offset: float
+    even_odd: bool = False                  # filled with fill-rule="evenodd" (fill_geometry is converted)
 
 
 @dataclass(frozen=True, slots=True)
@@ -83,8 +84,10 @@ def read(path: str, who: str) -> SvgDocument:
 
 
 def shapes_as_paths(doc: SvgDocument) -> list:
-    """The outline of every shape in document order (geometry only), for ``f.svg_paths``."""
-    return [shape.geometry for shape in doc.shapes if not shape.geometry.is_empty]
+    """The outline of every shape in document order (geometry only), for ``f.svg_paths``. An even-odd
+    filled shape gives its converted fill outline, so ``draw_path`` shows the same holes (P11)."""
+    return [shape.fill_geometry if shape.even_odd else shape.geometry
+            for shape in doc.shapes if not shape.geometry.is_empty]
 
 
 def _local(tag) -> str:
@@ -161,10 +164,12 @@ def _shape(element, servers) -> SvgShape | None:
     if isinstance(element, se.SimpleLine):          # a line has no inside
         fill = None
     fill_geometry = Path()
+    even_odd = False
     if fill is not None and fill[3] > 0:
         fill_geometry = _closed(geometry)
         if str(values.get("fill-rule", "nonzero")).strip() == "evenodd":
             fill_geometry = pathops.even_odd_to_nonzero(fill_geometry)
+            even_odd = True
     else:
         fill = None
 
@@ -184,7 +189,7 @@ def _shape(element, servers) -> SvgShape | None:
     offset = (_length(values.get("stroke-dashoffset"), 0.0) or 0.0) * scale if dash else 0.0
     if fill is None and stroke is None:
         return None
-    return SvgShape(geometry, fill, fill_geometry, stroke, float(width), cap, join, miter, dash, offset)
+    return SvgShape(geometry, fill, fill_geometry, stroke, float(width), cap, join, miter, dash, offset, even_odd)
 
 
 def _geometry(element) -> Path | None:
