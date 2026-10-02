@@ -75,6 +75,17 @@ class Platform(Protocol):
     def set_cursor(self, kind: str | None) -> None:
         """Show a CURSOR_KINDS pointer over the window, or hide it for None (S-057)."""
 
+    def set_controls(self, panel) -> bool:
+        """Give the platform the sketch's control panel (S-101, contract U1), or None for no controls.
+
+        A platform with a window makes the window taller by `panel.height` logical pixels, shows the
+        panel below the canvas and updates the controls from the mouse; it returns True. open_window()
+        and open_full_screen() then return the *canvas's* physical size, without the panel. A
+        platform with no window returns False and leaves the controls alone."""
+
+    def present_panel(self, pixels: Pixels) -> None:
+        """Show the finished panel (physical pixels, as wide as the canvas) below the canvas."""
+
     def start(self) -> None:
         """Called once by the sketch loop before setup()."""
 

@@ -20,6 +20,7 @@ from typing import Any
 
 from . import ir
 from .capabilities import Capability, FungroundWarning, missing_capability
+from .controls import Button, Checkbox, ControlPanel, Slider, panel_ops
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
 from .paint import Gradient, parse_paint
 from .formatted import FormattedString
@@ -150,6 +151,13 @@ class Sketch:
         self.pixels: bytearray | None = None       # contract P8: None until load_pixels()
         self._render_hook: Callable[[], None] | None = None    # a picture's own flush
         self._name_root: Sketch | None = None      # who numbers the pictures that get() makes
+        # S-101, contract U1: the controls, in the order made. The platform shows them in a panel
+        # below the canvas; their draw ops go to a renderer of their own, never into self.frame.
+        self._panel = ControlPanel()
+        self._panel_shown = False                  # the platform has taken the panel
+        self._panel_renderer: Renderer | None = None
+        self._panel_drawn: tuple | None = None     # (version, width, scale) of the panel pixels it has
+        self._in_draw = False
 
     # ------------------------------------------------------------ state
     @property
@@ -276,6 +284,7 @@ class Sketch:
             self._begin_script()
             return
         self._script = False
+        self._give_panel()
         pw, ph = self._platform.open_window(self.width, self.height, self.title)
         self._attach(pw, ph)
 
@@ -374,6 +383,11 @@ class Sketch:
                 "f.show() is for scripts. An animated sketch already has its window: "
                 "remove f.show() and end the file with f.run()."
             )
+        if self._panel:
+            raise RuntimeError(
+                "Controls need an animated sketch, and this file is a script (it ends with f.show()). "
+                "To use controls, write a draw() function and end the file with f.run()."
+            )
         if not self._script:
             raise RuntimeError("No drawing window yet. Call f.size(...) first.")
         self._flush_pixel_patch()
@@ -461,10 +475,70 @@ class Sketch:
             self._begin_script()
             self._page_full = True
             return
+        self._give_panel()
         pw, ph = self._platform.open_full_screen(self.title)
         scale = self._platform.backing_scale
         self.width, self.height = round(pw / scale), round(ph / scale)
         self._attach(pw, ph)
+
+    # ---- controls (S-101, contract U1, D-047)
+    def _new_control(self, control):
+        if self._in_draw:
+            raise RuntimeError(
+                "Controls are made once, in setup() (or at the top of the file), not in draw(): "
+                "draw() runs every frame, so it would make a new one each time. "
+                "Make the control in setup(), keep it in a variable, and read it in draw()."
+            )
+        if self._script and (self.frame or self._pages):
+            raise RuntimeError(
+                "Controls need an animated sketch, and this file is a script (it draws at the top level). "
+                "To use controls, write a draw() function and end the file with f.run()."
+            )
+        self._panel.add(control)
+        if self.running and self._has_window:      # the window is open: it grows to hold the panel
+            self._give_panel()
+        return control
+
+    def create_slider(self, low, high, value=None, step=None, label=None) -> Slider:
+        return self._new_control(Slider(low, high, value, step, label))
+
+    def create_checkbox(self, label, checked=False) -> Checkbox:
+        return self._new_control(Checkbox(label, checked))
+
+    def create_button(self, label) -> Button:
+        return self._new_control(Button(label))
+
+    def _give_panel(self) -> None:
+        """Hand the panel to the platform before a window opens (or while it is open)."""
+        if self._panel:
+            self._panel_shown = self._platform.set_controls(self._panel)
+            self._panel_drawn = None
+
+    def _refresh_panel(self) -> None:
+        """Draw the panel again when a control changed, and give the platform the pixels."""
+        if not (self._panel_shown and self._panel):
+            return
+        scale = self._platform.backing_scale
+        key = (self._panel.version, self.width, scale)
+        if key == self._panel_drawn:
+            return
+        if self._panel_renderer is None:
+            self._panel_renderer = default_renderer()
+        renderer = self._panel_renderer
+        renderer.attach(round(self.width * scale), round(self._panel.height * scale), scale)
+        renderer.render(ir.Frame(panel_ops(self._panel, self.width)))
+        self._platform.present_panel(renderer.pixels())
+        self._panel_drawn = key
+
+    def _end_panel(self) -> None:
+        """A run ended: its controls go with it."""
+        if self._panel_shown:
+            self._platform.set_controls(None)
+        self._panel_shown = False
+        self._panel.clear()
+        self._panel_drawn = None
+        if self._panel_renderer is not None:
+            self._panel_renderer.attach(0, 0)
 
     CURSOR_KINDS = CURSOR_KINDS          # the names every platform understands (platform.base)
 
@@ -564,6 +638,7 @@ class Sketch:
             self._frame_open, self._frame_drawn, self._frame_depth = False, 0, 0
         else:
             self._renderer.render(self.frame)
+        self._refresh_panel()
         self._platform.present(self._renderer.pixels())
         self._queue_sequence_frame()
         self._flush_saves()
@@ -1693,6 +1768,7 @@ class Sketch:
                 self.mouse_x, self.mouse_y = inp.mouse_x, inp.mouse_y
                 self.is_mouse_pressed, self.is_key_pressed = inp.mouse_pressed, inp.key_pressed
                 self._dispatch_events()
+                self._refresh_panel()                  # a click on a control shows even when draw() does not run
 
                 # draw() runs every frame while looping, once after redraw(), and always on
                 # the first frame - even after no_loop() in setup(), as in p5.
@@ -1700,7 +1776,11 @@ class Sketch:
                     self._redraw_pending = False
                     if not self._smooth:
                         self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
-                    draw()
+                    self._in_draw = True
+                    try:
+                        draw()
+                    finally:
+                        self._in_draw = False
                     self._end_draw()  # unbalanced push()es never leak into the next frame
                     self.last_ops = self.frame.ops  # what the latest drawn frame asked for (IR snapshot)
                     self._render()   # draws, presents, flushes f.save()
@@ -1722,6 +1802,7 @@ class Sketch:
             self._frame_sequence = None
             self._renderer.attach(0, 0)
             self._platform.close()
+            self._end_panel()
             self._has_window = False
 
 

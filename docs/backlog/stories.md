@@ -172,4 +172,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-098 | E-17 | Sound playback: `load_sound`, play/loop/stop/pause/volume (D-046) | 11 | done
 | S-099 | E-17 | Sound analysis: `level()`, `spectrum()` (D-046) | 11 | done
 | S-100 | E-19 | GIF and MP4 export (D-045 for MP4) | 11 |
-| S-101 | E-30 | Controls: slider, checkbox, button (D-047) | 11 |
+| S-101 | E-30 | Controls: slider, checkbox, button (D-047) | 11 | done

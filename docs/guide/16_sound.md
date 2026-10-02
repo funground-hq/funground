@@ -18,6 +18,7 @@ beep.stop()             # stop and go back to the start
 beep.set_volume(0.5)    # from 0 (silent) to 1 (full)
 beep.is_playing()       # True or False
 beep.duration()         # the length, in seconds
+beep.current_time()     # how far into the sound it is now, in seconds
 ```
 
 `play()` after `pause()` carries on from where it stopped. `play()` on a sound that is already

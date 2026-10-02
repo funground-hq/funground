@@ -493,6 +493,22 @@ Mouse values are updated automatically before each call to `draw()`.
 |---|---|---|
 | `f.key_down(key)` | Is this key held right now? | `if f.key_down("left"): x -= 3` |
 
+**Controls.** Sliders, checkboxes and buttons sit in a panel *below* the canvas, one row each, in the
+order you made them. Make them in `setup()` (or at the top of the file), keep them in variables, and read
+them in `draw()`. The panel is not part of the picture: it is not in `f.width` / `f.height`, `f.mouse_y`,
+saves or `f.get()`, and clicks on it do not reach `mouse_pressed()` and friends. Making a control inside
+`draw()`, or in a script (a file that ends with `f.show()`), is a `RuntimeError`. Without a window the
+controls keep their values, and setting them still works.
+
+| Call | What it does | Example |
+|---|---|---|
+| `f.create_slider(low, high, value=None, step=None, label=None)` | **New:** a slider from `low` to `high`; it starts at `value` (default `low`). With `step`, it moves in whole steps from `low`. `low >= high` or `step <= 0` is a `ValueError`. | `size = f.create_slider(10, 100, 40, step=5, label="size")` |
+| `slider.value()` / `slider.value(v)` | Read the value / set it (kept between `low` and `high`, rounded to `step`). | `f.circle(200, 150, size.value())` |
+| `f.create_checkbox(label, checked=False)` | **New:** a tick box. | `grid = f.create_checkbox("grid")` |
+| `box.checked()` / `box.checked(True)` | Read / set. | `if grid.checked(): draw_grid()` |
+| `f.create_button(label)` | **New:** a button. | `reset = f.create_button("reset")` |
+| `button.clicked()` | `True` once for each click since it was last asked. | `if reset.clicked(): points.clear()` |
+
 ![Mouse and keyboard](images/07_input.png)
 
 *(The picture was made headless, so the mouse sits at (0, 0) and no key is down.)*
@@ -898,6 +914,7 @@ f.run()
 | `sound.pause()` / `sound.stop()` | **New:** `pause()` stops and keeps the place; `stop()` stops and goes back to the start. | `beep.stop()` |
 | `sound.set_volume(v)` | **New:** the loudness, 0 (silent) to 1 (full). Outside that is a `ValueError`. | `beep.set_volume(0.5)` |
 | `sound.is_playing()` / `sound.duration()` | **New:** whether it is playing (false once a sound that is not looping reaches its end), and its length in seconds. | `if beep.is_playing(): ...` |
+| `sound.current_time()` / `sound.get_volume()` | **New:** how many seconds into the sound it is now, and its volume from 0 to 1. | `f.text(round(tune.current_time(), 1), 20, 20)` |
 | `sound.level()` | **New:** how loud the sound is now, 0 to 1 (the root mean square of the last 1/30 second). 0 when not playing. | `f.circle(x, y, 20 + 80 * beep.level())` |
 | `sound.spectrum(bands=32)` | **New:** a list of `bands` numbers from 0 to 1, low pitch to high, spaced evenly in pitch from 40 Hz to 16 kHz. A full-strength tone gives about 1 in its band. All zeros when not playing. `bands` must be 1 to 256. | `for i, v in enumerate(beep.spectrum(16)): ...` |
 
@@ -1066,7 +1083,8 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
 | Off-screen graphics | — | `create_graphics`, `image`, `load_image`, `load_svg`, `svg_paths` |
-| Sound | — | `load_sound`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `level`, `spectrum` on the sound |
+| Sound | — | `load_sound`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum` on the sound |
+| Controls | — | `create_slider`, `create_checkbox`, `create_button`, in a panel below the canvas |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 
 Everything a v0.5 sketch called still exists with the same arguments; the only visible differences are

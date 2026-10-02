@@ -29,8 +29,8 @@ pending, the maintainer's call**.
 - [ ] S-100.2 GIF through Pillow (`funground[extras]`) or ffmpeg; MP4 through ffmpeg as D-045 decides
 
 ### S-101 Controls — E-30 *(D-047; contract U1)*
-- [ ] S-101.1 `create_slider`, `create_checkbox`, `create_button`; the panel below the canvas (platform draws it; never in the canvas or the IR)
-- [ ] S-101.2 Tests headless; gallery example; guide; Quick Reference; changelog
+- [x] S-101.1 `create_slider`, `create_checkbox`, `create_button`; the panel below the canvas (platform draws it; never in the canvas or the IR)
+- [x] S-101.2 Tests headless; gallery example; guide; Quick Reference; changelog
 
 ### S-072 Gallery and guide completed — E-22 *(carried from Sprint 5)*
 - [ ] S-072.1 Coverage of every public name; a curated showcase page; guide chapters read through end to end

@@ -373,6 +373,14 @@ f.cursor() picks the mouse pointer - here a hand over the button, crosshairs els
 
 Source: [`examples/gallery/interaction/04_window.py`](../../examples/gallery/interaction/04_window.py)
 
+### Sliders, a checkbox and a button
+
+![Sliders, a checkbox and a button](images/interaction-05_controls.png)
+
+A slider, a checkbox and a button sit in a panel below the canvas. Make each one once in setup(), keep it in a variable, and ask it for its value in draw(). Here the sliders set the number and the length of the petals, the checkbox makes the flower spin, and the button picks the next colour.
+
+Source: [`examples/gallery/interaction/05_controls.py`](../../examples/gallery/interaction/05_controls.py)
+
 ## Saving your work
 
 ### Saving your work
