@@ -30,10 +30,7 @@ irreversible actions).
 
 - [ ] **Sprint 10 and Sprint 11 signed off.**
 - [x] **D-045 = B:** ffmpeg on the PATH, else the optional `funground[video]` extra.
-- [ ] **Ship the examples and the gallery browser in the package?** Today they are in the repository only.
-  - Option: a `funground.examples` sub-package.
-  - Option: `python -m funground.gallery`.
-  - Option: leave them on GitHub.
+- [x] **Ship the examples and the gallery browser in the package?** Yes (D-049, built in S-103): `python -m funground.gallery`; the examples, their data, the pictures and the CC0 licence are in the wheel.
 - [ ] **Manual run on a real macOS and a real Linux desktop** (Roadmap prerequisite): the gallery browser, a window with HiDPI, full screen, keyboard and mouse, the controls panel, and sound.
 - [ ] **PyPI account and trusted publishing** set up for `funground` under the `funground-hq` organisation. The name was checked as free under D-020; check again just before publishing.
 - [ ] **Go-ahead to publish.** Then Claude tags `v0.1.0`, pushes the tag, and publishes. Trusted publishing from CI is preferred over a local upload.

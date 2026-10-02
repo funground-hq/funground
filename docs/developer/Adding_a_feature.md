@@ -110,7 +110,7 @@ index `docs/gallery/README.md` from the examples' docstrings. `--index` rewrites
 `test_every_example_has_a_gallery_image` fail until you have run it. The tool never draws by hand,
 so a picture cannot drift from its code.
 
-You can look at the result with the browser: `python tools/gallery_browser.py`.
+You can look at the result with the browser: `python -m funground.gallery`.
 
 ## 7. A guide section
 

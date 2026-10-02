@@ -19,36 +19,15 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))      # the example list and parsing live in the package: one source of truth
+from funground.gallery import (AREAS, TIME_DEPENDENT_MARK, area_rank, example_id, is_time_dependent,  # noqa: E402,F401
+                               list_examples, title_and_description)
 GALLERY = ROOT / "examples" / "gallery"
 OUT = ROOT / "docs" / "gallery"
 IMAGES = OUT / "images"
 INDEX = OUT / "README.md"
 SHOWCASE = OUT / "SHOWCASE.md"
 FRAMES = 30
-TIME_DEPENDENT_MARK = "# gallery: time-dependent"
-
-# Display order and titles for the areas; an area missing here is listed last, by name.
-AREAS = {
-    "basics": "Basics",
-    "shapes": "Shapes",
-    "colour": "Colour",
-    "compositing": "Blending, opacity and shadows",
-    "lines": "Fill, stroke and lines",
-    "curves": "Curves",
-    "text": "Text",
-    "animation": "Animation and time",
-    "motion": "Motion",
-    "transforms": "Transforms",
-    "paths": "Paths and clipping",
-    "randomness": "Randomness and noise",
-    "maths": "Useful maths",
-    "interaction": "Interaction",
-    "saving": "Saving your work",
-    "documents": "Documents and pages",
-    "images": "Pictures and images",
-    "sound": "Sound",
-}
-
 
 # The curated showcase: (example id, one line on what it shows). Order is the page order.
 SHOWCASE_PICKS = [
@@ -68,30 +47,7 @@ SHOWCASE_PICKS = [
 
 
 def examples() -> list[Path]:
-    return sorted(GALLERY.glob("*/*.py"), key=lambda p: (area_rank(p.parent.name), p.parent.name, p.name))
-
-
-def area_rank(area: str) -> int:
-    return list(AREAS).index(area) if area in AREAS else len(AREAS)
-
-
-def example_id(path: Path) -> str:
-    """Stable id used for images, goldens and snapshots: '<area>-<stem>'."""
-    return f"{path.parent.name}-{path.stem}"
-
-
-def is_time_dependent(path: Path) -> bool:
-    return TIME_DEPENDENT_MARK in path.read_text(encoding="utf-8")
-
-
-def title_and_description(path: Path) -> tuple[str, str]:
-    """First docstring line is the title; the rest (joined) is the description."""
-    source = path.read_text(encoding="utf-8")
-    doc = source.split('"""')[1] if source.lstrip().startswith('"""') else ""
-    lines = [line.strip() for line in doc.strip().splitlines()]
-    title = lines[0] if lines else path.stem
-    description = " ".join(line for line in lines[1:] if line)
-    return title, description
+    return list_examples(GALLERY)
 
 
 def build_index() -> str:
@@ -101,7 +57,7 @@ def build_index() -> str:
         "Every picture below is made by running the example beside it — `python tools/make_gallery.py`",
         "regenerates them. Each example is a complete sketch: copy it into a file and run it.",
         "",
-        "Browse these examples interactively: `python tools/gallery_browser.py`",
+        "Browse these examples interactively: `python -m funground.gallery`",
         "",
         "Short on time? See the [showcase](SHOWCASE.md): a dozen of the best pictures on one page.",
         "",
