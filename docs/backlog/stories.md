@@ -188,3 +188,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-114 | E-22 | Music teaching scenarios and ragas (D-056) | 14 |
 | S-115 | E-17 | Ragas for learners: synthesis and analysis, basic to intermediate (D-057) | 14 |
 | S-116 | E-15 | `save(..., text="shapes")` for handoff files (D-060) | 13 |
+| S-117 | E-22 | Project capstones: raga explorer, poster series, voice game, rangoli (D-063) | 14 |
