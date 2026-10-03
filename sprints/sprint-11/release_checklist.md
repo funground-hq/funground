@@ -32,5 +32,7 @@ irreversible actions).
 - [x] **D-045 = B:** ffmpeg on the PATH, else the optional `funground[video]` extra.
 - [x] **Ship the examples and the gallery browser in the package?** Yes (D-049, built in S-103): `python -m funground.gallery`; the examples, their data, the pictures and the CC0 licence are in the wheel.
 - [ ] **Manual run on a real macOS and a real Linux desktop** (Roadmap prerequisite): the gallery browser, a window with HiDPI, full screen, keyboard and mouse, the controls panel, and sound.
+- [ ] **Microphone, once per system (Windows, macOS, Linux)** — with the gallery's tuner (`python -m funground.gallery`, Sound → Tuner): sing or play a note and check the name and needle; on macOS also check the permission prompt and the message after "Don't allow". Not needed per learner or per microphone.
+- [ ] **Live SVG text in Illustrator and Inkscape** (T19, D-059): open a saved SVG with Hindi and Latin text, check it is editable and shaped correctly (Illustrator: World-Ready Paragraph Composer).
 - [ ] **PyPI account and trusted publishing** set up for `funground` under the `funground-hq` organisation. The name was checked as free under D-020; check again just before publishing.
 - [ ] **Go-ahead to publish.** Then Claude tags `v0.1.0`, pushes the tag, and publishes. Trusted publishing from CI is preferred over a local upload.
