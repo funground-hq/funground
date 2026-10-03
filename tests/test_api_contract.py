@@ -161,10 +161,10 @@ ADDED_FUNCTIONS = {
     "load_sound": "(path: 'str')",
     # S-110 making sound
     "create_sound": "(samples, rate: 'int' = 44100)",
-    "tone": "(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 1, attack: 'float' = 0.01, release: 'float' = 0.05)",
-    "note": "(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 1, attack: 'float' = 0.01, release: 'float' = 0.05)",
-    "pluck": "(name_or_frequency, seconds: 'float', volume: 'float' = 1)",
-    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'str' = 'sine', sa: 'str | None' = None, tuning: 'str' = 'equal')",
+    "tone": "(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7)",
+    "note": "(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7)",
+    "pluck": "(name_or_frequency, seconds: 'float', volume: 'float' = 0.5)",
+    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'str' = 'soft', sa: 'str | None' = None, tuning: 'str' = 'equal', volume: 'float' = 0.5)",
     "sequence": "(*sounds)",
     "mix": "(*sounds)",
     "note_to_frequency": "(name: 'str', sa: 'str | None' = None) -> 'float'",
@@ -180,7 +180,7 @@ ADDED_FUNCTIONS = {
     "talas": "() -> 'list[str]'",
     "tala_info": "(name: 'str')",
     "tala": "(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1)",
-    "drone": "(sa, seconds: 'float', pattern: 'str' = \"P S' S' S\")",
+    "drone": "(sa, seconds: 'float', pattern: 'str' = \"P S' S' S\", volume: 'float' = 0.5)",
     "match_ragas": "(histogram) -> 'list[tuple[str, float]]'",
     # S-111 drawing sound
     "draw_wave": "(source, x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'",

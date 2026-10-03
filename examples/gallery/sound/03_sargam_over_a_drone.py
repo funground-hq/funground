@@ -3,7 +3,8 @@
 With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D n N.
 A ' after a swara is the octave above and a comma is the octave below. Here the notes
 use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings
-plays Pa, Sa, Sa, Sa over and over. The ladder shows the swara that sound.pitch() hears.
+plays Pa, Sa, Sa, Sa over and over. sound.reverb() gives the phrase and the strings a
+room to ring in. The ladder shows the swara that sound.pitch() hears.
 """
 # gallery: time-dependent
 import math
@@ -15,15 +16,19 @@ TEMPO = 80
 PHRASE = "S R G:2 R S,:2 N,:1 D,:1 P,:2 - S:1 R:1 G:1 P:2 G:1 R:1 S:3"
 SWARAS = "SrRgGmMPdDnN"
 
-phrase = f.melody(PHRASE, tempo=TEMPO, wave="saw", sa=SA, tuning="just")
-phrase.set_volume(0.35)
+# The soft voice (melody's own) suits a sung line; reverb adds a room around it.
+phrase = f.melody(PHRASE, tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
+phrase.set_volume(0.7)
 
 # The drone: the four strings of a tanpura, plucked in turn, to last as long as the phrase.
+# Each pluck gets its own reverb, which adds 0.45 s of ringing, so the pluck is made that much
+# shorter to keep the drone the same length as the phrase.
 strings = ["P,", "S", "S", "S,"]
 string_seconds = phrase.duration() / (2 * len(strings))
-cycle = f.sequence(*[f.pluck(f.note_to_frequency(s, sa=SA), string_seconds) for s in strings])
+plucks = [f.pluck(f.note_to_frequency(s, sa=SA), string_seconds - 0.45).reverb(0.3) for s in strings]
+cycle = f.sequence(*plucks)
 drone = f.sequence(cycle, cycle)
-drone.set_volume(0.5)
+drone.set_volume(0.6)
 
 # A quiet hum under it, made from numbers: three sine waves added up.
 sa_hz = f.note_to_frequency("S,", sa=SA)
@@ -31,7 +36,7 @@ hum = f.create_sound([0.2 * (math.sin(2 * math.pi * sa_hz * t / 44100)
                              + 0.5 * math.sin(4 * math.pi * sa_hz * t / 44100)
                              + 0.25 * math.sin(6 * math.pi * sa_hz * t / 44100))
                       for t in range(int(phrase.duration() * 44100))])
-hum.set_volume(0.3)
+hum.set_volume(0.4)
 trail = []
 
 

@@ -23,7 +23,7 @@ ragas, and build the teaching scenarios of `docs/design/Music_Research_Note.md` 
 - [x] `sound.chroma()` (12 pitch classes), chord name for a moment (major, minor, seventh templates), key of a whole sound; "see a chord" example
 
 ### S-118 Sound quality — E-17 *(D-064; contract A9)*
-- [ ] Headroom, band-limited waves, ADSR and legato melodies, softer pluck, `soft` voice, `reverb`; every sound example tuned by ear; maintainer listening check
+- [x] Headroom, band-limited waves, ADSR and legato melodies, softer pluck, `soft` voice, `reverb`; every sound example tuned by ear; maintainer listening check
 
 ### S-114 Teaching scenarios — E-22
 - [ ] Gallery `music/` and guide chapter: draw a wave and hear it; compose and save; tuner (microphone + `pitch`); ear training; see a chord; tap along; piano roll of a composed tune

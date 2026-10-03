@@ -9,8 +9,9 @@ early, or a little late. With no sound device the tune stays silent but still ke
 import funground as f
 
 TEMPO = 104
-tune = f.melody("C4 E4 G4 E4  A3 C4 E4 C4  F3 A3 C4 A3  G3 B3 D4:2",
-                tempo=TEMPO, wave="triangle")
+# The last note is followed by a short rest. A note rings on for a moment after it ends, and
+# the rest gives it room, so the tune stays exactly 16 beats long and the loop keeps the beat.
+tune = f.melody("C4 E4 G4 E4  A3 C4 E4 C4  F3 A3 C4 A3  G3 B3 D4:1.5 -:0.5", tempo=TEMPO)
 beats = tune.beats()              # beat times in seconds, found from the sound
 length = tune.duration()
 speed = tune.tempo()              # beats a minute, as heard (close to TEMPO)
@@ -31,7 +32,7 @@ def distance_to_beat(now):
 def setup():
     f.size(560, 360)
     f.text_align("center")
-    tune.set_volume(0.6)
+    tune.set_volume(0.9)          # melodies are made at half volume, so this is still comfortable
     tune.loop()
 
 

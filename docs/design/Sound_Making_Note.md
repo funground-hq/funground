@@ -31,7 +31,7 @@ original list of floats, so `samples()` gives back exactly what `create_sound()`
   analysis (which reads the buffer) never sees it. Law: a balance control, `left = min(1, 1 - p)`,
   `right = min(1, 1 + p)`. Pan 0 is the sound unchanged. A constant-power law would make the centre quieter than
   a sound that was never panned. `save()` bakes the pan into the stereo file.
-- **Waves** are the naive formulas. Square, saw and triangle alias at high notes. That is fine for teaching.
+- **Waves** were the naive formulas in S-110. S-118 replaced them with band-limited waves: see "Sound quality" below.
 - **Noise and the pluck's first burst** come from `canvas_sketch()._rng`, the generator `random_seed()` seeds, so
   they repeat after `random_seed()` (the same route as `Vector.random()`).
 - **Pluck** is Karplus-Strong with a decay of 0.996 each trip round the loop. A loop of whole samples would tune
@@ -49,6 +49,55 @@ original list of floats, so `samples()` gives back exactly what `create_sound()`
   per frame like `level()` and `spectrum()`.
 - **Names** are rounded to the nearest semitone and use sharps (`"A#4"`). With `sa`, the nearest swara by
   equal-tempered distance, with `'` or `,` for octaves.
+
+## Sound quality (S-118, D-064, contract A9)
+
+The maintainer found the made sounds unpleasant "across the board". The causes were full-scale defaults that
+clipped when layered, aliasing naive waves, a boxy linear envelope, a bare sine melody voice, a harsh pluck, no
+room sound and an 11 025 Hz visualiser tune. Everything stays plain Python with no new dependency.
+
+- **Headroom.** `tone`, `note`, `pluck`, `melody` and `drone` default to `volume=0.5`. The tala's loudest stroke is
+  0.5 (`TALA_PEAK`; it has no `volume` argument). `mix` adds the parts and passes the sum through a soft limiter
+  (`synth._limit`): samples up to 0.7 are untouched, louder ones bend on a tanh curve towards 0.9, and a sum whose
+  peak passes 1.2 is first scaled down to 1.2 so the bend stays gentle. The peak is at most 0.897.
+- **Band-limited waves.** Square (odd k, 1/k), saw (all k, 1/k), triangle (odd k, ±1/k²) and the new `soft`
+  (harmonics 1 to 4 at 1, 0.35, 0.15, 0.06) are built from their harmonics up to 20 kHz (and below half the rate).
+  One period goes in a 4 096-point table, made by an inverse FFT and scaled to peak 1, and the note reads it with
+  linear interpolation. The number of harmonics is rounded down to one of a few dozen sizes (every count to 16,
+  then steps of an eighth of an octave), so tables are shared and cached. Measured: a 3 s note takes 0.04 to 0.08 s;
+  at 3 kHz the energy away from the harmonics is about 1e-13 of the total (the naive square had 5 %, the saw 8 %).
+  The soft wave's spectral centroid at 440 Hz is 670 Hz (triangle 910 Hz), a gentle, recorder-like voice.
+  Glides (meend, kan) use the table for the highest pitch they reach. Sine and noise are unchanged.
+- **Envelope.** `synth.envelope(n, attack, decay, sustain, release)`: rise `(1 - e^(-4u)) / (1 - e^-4)`, decay from 1
+  to `sustain` and release to 0 on `(e^(-4u) - e^-4) / (1 - e^-4)`, so each segment is fast at first and then
+  levels off, and ends exactly on its target. A release that starts during the attack or decay starts from the level
+  there. Defaults: attack 0.01 s, decay 0.15 s, sustain 0.7, release 0.15 s. Curves are cached per length.
+- **Legato melody timing.** Each note starts on its beat (cumulative rounding, so no drift) and holds until its last
+  beat ends. Then its release (0.15 s, or the note's length if shorter) rings on over the next note. The melody lasts
+  its beats plus the last note's release where that passes the end; a final rest of at least 0.15 s holds it, so a
+  looping tune can keep exact beats. A chord is `mix` of its notes; if overlapping notes would pass 1 the melody
+  goes through the same limiter. Overlap raises a melody's peak to about 0.76 at the default volume.
+- **Legato against analysis.** Overlapping notes make some pitch-track frames hear two notes at once. Measured on
+  the test phrases (tempo 150): Yaman's share of time on its own swaras falls from 0.96 to 0.92, and the
+  Bhupali-Yaman score gap from 0.20 to 0.14; rankings are unchanged. `synth.LEGATO_LEAD` (0 now) moves part of
+  each release before the note's end. Swept: lead 0.2 gives 0.95 and 0.15 with a 4 ms dip below half level at each
+  join; lead 0.5 gives 0.97 and 0.25 but a 67 ms dip, longer than the old envelope's 30 ms, so not legato.
+  Lead 0 (no dip) was chosen; the main session may prefer another value.
+- **Pluck.** The burst is smoothed four times round the loop by (1, 2, 1)/4 (`synth.soft_burst`, about a 4 kHz
+  low-pass). The spectral centroid of the first 50 ms drops from 7.6/6.0/4.6/3.3 kHz to 3.7/3.1/2.6/2.1 kHz at
+  110/220/440/880 Hz. Pitch accuracy is unchanged (the loop sets the pitch). The drone uses the same function with
+  32 passes, so its sound is unchanged apart from its level.
+- **Reverb.** `sound.reverb(amount)` (`synth.reverb_samples`): four feedback combs (1 229, 1 373, 1 499, 1 621
+  samples) with a two-tap damping in the loop, summed (echoes only), then two all-pass filters (373 and 131
+  samples, gain 0.6). The decay time is `0.3 + 1.7 × amount` seconds to −60 dB; `1.5 × amount` seconds of tail
+  are added, the last 0.3 s faded out. The wet level grows with √amount. The result is scaled down if its peak
+  would pass the input's. Both filters run a block of one delay at a time with list comprehensions, as each block
+  needs only earlier ones: 5 s of sound takes about 0.3 s. Amount 0 returns the samples unchanged. At 0.3 the
+  ring just after a note ends is about 13 dB below the note, at 1 about 6 dB. A looped sound with reverb gets a
+  short pause at the loop point; the gallery drone examples fold the tail back onto the start with a small helper.
+- **Gallery.** Every example that plays sound was retuned, and a simulation of the mixer sum (each sound's samples
+  times its `set_volume`, loops wrapped) checked the peaks: all between 0.5 and 0.77, none clipping (before, "Hear
+  a raga" peaked at 1.37). `tune.wav` is 44 100 Hz, mono, 16-bit, 3 s, made by `make_tune.py` with a soft voice.
 
 ## The microphone (S-108, D-058, contract A4)
 
@@ -100,7 +149,7 @@ sketch to draw on, so the code is plain and easy to test.
 
 ## Not here
 
-- Live synthesis, filters, effects, ADSR with a sustain level, sampled instruments (ADR-006).
+- Live synthesis, filters and effects other than `reverb`, sampled instruments (ADR-006). ADSR came in S-118.
 - Polyphonic pitch (several notes at once, each with its own octave). Onsets, beats, chroma, chords and key are in [Music_Analysis_Note.md](Music_Analysis_Note.md) (S-112, S-113).
 - A pluck inside `melody()` (A3 gives `melody()` the five waves only).
 

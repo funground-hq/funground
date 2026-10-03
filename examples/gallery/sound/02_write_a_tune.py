@@ -3,8 +3,9 @@
 f.melody() turns text into a sound. A note is a name like "E4", a dash is a rest, and
 :2 after a note makes it last two beats. Here the tune is a short list, so the same
 list builds the sound and draws the bars. The top shows the wave itself. A soft chord
-from f.mix() plays underneath. sound.pitch() reads the note that is sounding now.
-With no sound device the sketch still runs, in silence.
+from f.mix() plays underneath, and sound.reverb() puts the tune in a small room.
+sound.pitch() reads the note that is sounding now. With no sound device the sketch
+still runs, in silence.
 """
 # gallery: time-dependent
 import math
@@ -16,15 +17,18 @@ TUNE = [("E4", 1), ("G4", 1), ("A4", 2), ("-", 1), ("B4", 1), ("A4", 1), ("G4", 
         ("E4", 2), ("-", 1), ("D4", 0.5), ("E4", 0.5), ("G4", 1), ("E4", 3)]
 
 text = " ".join(f"{name}:{beats}" for name, beats in TUNE)
-tune = f.melody(text, tempo=TEMPO, wave="triangle")
+# melody() plays a gentle "soft" voice unless you ask for another wave. A little reverb makes
+# it sound as if it is played in a room rather than inside the computer.
+tune = f.melody(text, tempo=TEMPO).reverb(0.2)
 numbers = tune.samples()                          # the wave, as a list of numbers
 
-# A soft chord underneath, added together from three long, slow notes.
+# A soft chord underneath, added together from three long, slow notes. Each note is quiet, so
+# the three added together stay well below the loudest a sound can be.
 length = tune.duration()
-pad = f.mix(f.note("E3", length, volume=0.4, attack=1, release=1),
-            f.note("G3", length, volume=0.4, attack=1, release=1),
-            f.tone(f.note_to_frequency("B3"), length, "sine", 0.4, attack=1, release=1))
-pad.set_volume(0.3)
+pad = f.mix(f.note("E3", length, volume=0.25, attack=1, release=1),
+            f.note("G3", length, volume=0.25, attack=1, release=1),
+            f.tone(f.note_to_frequency("B3"), length, "sine", 0.25, attack=1, release=1))
+pad.set_volume(0.5)
 total_beats = sum(beats for _, beats in TUNE)
 low = f.note_to_frequency("C4")
 
@@ -36,7 +40,7 @@ def semitones(name):
 
 def setup():
     f.size(640, 400)
-    tune.set_volume(0.5)
+    tune.set_volume(0.8)          # tune and pad together stay below full volume, so nothing clips
     tune.loop()
     pad.loop()
 

@@ -14,7 +14,7 @@ BANDS = 24
 
 def setup():
     f.size(640, 400)
-    tune.set_volume(0.5)
+    tune.set_volume(0.8)                  # the file peaks at 0.8: this leaves room to spare
     tune.loop()
 
 

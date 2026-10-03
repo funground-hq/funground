@@ -567,7 +567,7 @@ Source: [`examples/gallery/sound/01_visualiser.py`](../../examples/gallery/sound
 
 ![Making sound: write a tune, then watch it play](images/sound-02_write_a_tune.png)
 
-f.melody() turns text into a sound. A note is a name like "E4", a dash is a rest, and :2 after a note makes it last two beats. Here the tune is a short list, so the same list builds the sound and draws the bars. The top shows the wave itself. A soft chord from f.mix() plays underneath. sound.pitch() reads the note that is sounding now. With no sound device the sketch still runs, in silence. *(Uses real time, so the picture varies from run to run.)*
+f.melody() turns text into a sound. A note is a name like "E4", a dash is a rest, and :2 after a note makes it last two beats. Here the tune is a short list, so the same list builds the sound and draws the bars. The top shows the wave itself. A soft chord from f.mix() plays underneath, and sound.reverb() puts the tune in a small room. sound.pitch() reads the note that is sounding now. With no sound device the sketch still runs, in silence. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/02_write_a_tune.py`](../../examples/gallery/sound/02_write_a_tune.py)
 
@@ -575,7 +575,7 @@ Source: [`examples/gallery/sound/02_write_a_tune.py`](../../examples/gallery/sou
 
 ![Making sound: a sargam phrase over a drone](images/sound-03_sargam_over_a_drone.png)
 
-With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D n N. A ' after a swara is the octave above and a comma is the octave below. Here the notes use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings plays Pa, Sa, Sa, Sa over and over. The ladder shows the swara that sound.pitch() hears. *(Uses real time, so the picture varies from run to run.)*
+With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D n N. A ' after a swara is the octave above and a comma is the octave below. Here the notes use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings plays Pa, Sa, Sa, Sa over and over. sound.reverb() gives the phrase and the strings a room to ring in. The ladder shows the swara that sound.pitch() hears. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/03_sargam_over_a_drone.py`](../../examples/gallery/sound/03_sargam_over_a_drone.py)
 
@@ -609,7 +609,7 @@ Source: [`examples/gallery/music/02_see_a_chord.py`](../../examples/gallery/musi
 
 ![Music: sing with the drone](images/music-03_sing_with_the_drone.png)
 
-f.drone() makes a sound like a tanpura: plucked strings on Pa and Sa that ring on and on. Sing along with it. The microphone hears you, and your pitch is drawn as a line that moves to the left. The bright lines are Sa and Pa. Try to hold your voice on them, and watch the line go flat when you are in tune. f.frequency_to_note(hz, sa=SA) names the swara you sing. Change SA to suit your voice. With no microphone the drone still plays and the line waits. *(Uses real time, so the picture varies from run to run.)*
+f.drone() makes a sound like a tanpura: plucked strings on Pa and Sa that ring on and on. Sing along with it. The microphone hears you, and your pitch is drawn as a line that moves to the left. The bright lines are Sa and Pa. Try to hold your voice on them, and watch the line go flat when you are in tune. f.frequency_to_note(hz, sa=SA) names the swara you sing. sound.reverb() lets the strings ring in a room. Change SA to suit your voice. With no microphone the drone still plays and the line waits. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/music/03_sing_with_the_drone.py`](../../examples/gallery/music/03_sing_with_the_drone.py)
 
@@ -617,7 +617,7 @@ Source: [`examples/gallery/music/03_sing_with_the_drone.py`](../../examples/gall
 
 ![Music: hear a raga](images/music-04_hear_a_raga.png)
 
-f.ragas() lists the ragas funground knows, and f.raga(name) tells you about one: its thaat (parent scale), the swaras it uses, its aroha (the way up) and avaroha (the way down), its vadi and samvadi (the two most important notes) and the time of day it belongs to. Pick a raga with the slider or the left and right keys. Its aroha and avaroha play over a drone, and each swara lights up as it sounds. Swaras the raga leaves out are dark. f.match_ragas() then says which ragas use the most similar swaras: ragas that share the same swaras come out almost level, as only the notes are compared. *(Uses real time, so the picture varies from run to run.)*
+f.ragas() lists the ragas funground knows, and f.raga(name) tells you about one: its thaat (parent scale), the swaras it uses, its aroha (the way up) and avaroha (the way down), its vadi and samvadi (the two most important notes) and the time of day it belongs to. Pick a raga with the slider or the left and right keys. Its aroha and avaroha play over a drone, both with a little reverb, and each swara lights up as it sounds. Swaras the raga leaves out are dark. f.match_ragas() then says which ragas use the most similar swaras: ragas that share the same swaras come out almost level, as only the notes are compared. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/music/04_hear_a_raga.py`](../../examples/gallery/music/04_hear_a_raga.py)
 

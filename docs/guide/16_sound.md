@@ -90,12 +90,71 @@ f.tone(220, 2, "square", volume=0.3).play()    # a buzzier wave, and quieter
 f.tone(440, 1, attack=0.2, release=0.5).play() # fades in, then fades out
 ```
 
-The wave can be `"sine"` (smooth), `"square"`, `"saw"`, `"triangle"` or `"noise"` (a hiss). `attack`
-and `release` are how long the fade in and the fade out take, in seconds. They stop the click that
-a sound makes when it starts or ends in the middle of a wave. If the sound is too short for both
-fades, they are made shorter. Noise is random, so `f.random_seed()` makes it the same every time.
+The wave can be `"sine"` (pure and smooth), `"soft"` (gentle, like a recorder), `"triangle"`
+(a little brighter), `"square"` (hollow, like a clarinet), `"saw"` (bright and buzzy) or `"noise"`
+(a hiss). Noise is random, so `f.random_seed()` makes it the same every time.
 
-`f.pluck("E3", 2)` is a plucked string. It starts bright and dies away by itself.
+`f.pluck("E3", 2)` is a plucked string. It starts with a soft pluck and dies away by itself.
+
+### Volume and headroom
+
+Sounds are made at half volume (`volume=0.5`) unless you ask for more. That leaves room
+(headroom) for a few sounds to play at the same time. When sounds add up to more than full
+volume, the speakers clip: the tops of the waves are cut off, and that sounds harsh. If you play
+one sound alone, you can turn it up with `volume=1` or `sound.set_volume()`.
+
+### The shape of a note
+
+A real note does not switch on and off. It rises, settles, and fades. Four numbers shape it, and
+together they are called the envelope:
+
+- `attack`: how long the note takes to rise to full volume, in seconds (0.01 at first).
+- `decay`: how long it then takes to settle down (0.15).
+- `sustain`: the level it settles at, from 0 to 1 (0.7). It stays there until the end.
+- `release`: how long the fade out at the end takes (0.15).
+
+```py
+f.note("C4", 2, attack=0.5, sustain=1)                 # swells in slowly, then holds
+f.note("C4", 1, attack=0.005, decay=0.3, sustain=0)    # a short, struck sound
+f.note("C4", 2, "saw", attack=0.1, release=1)          # a long fade at the end
+```
+
+Each part follows a smooth curve, fast at first and then slower, as real instruments do. The fades
+also stop the click a sound makes when it starts or ends in the middle of a wave. If the sound is
+too short for the attack and the release, they are made shorter.
+
+### A room for the sound
+
+A sound made from numbers is completely dry: it stops the moment it ends. In a real room, the
+sound bounces off the walls and rings on for a moment. `sound.reverb(amount)` gives you a new sound
+in a room. `amount` goes from 0 (no room) to 1 (a large hall). The new sound is a little longer,
+because the room rings on after the end: up to 1.5 seconds at 1.
+
+```python
+import funground as f
+
+dry = f.pluck("G3", 1.5)
+wet = dry.reverb(0.5)                     # the same pluck, in a room
+both = f.sequence(dry, wet)
+
+
+def setup():
+    f.size(400, 200)
+    both.play()
+
+
+def draw():
+    f.background("black")
+    f.fill("deepskyblue")
+    f.no_stroke()
+    f.draw_wave(both, 10, 50, 380, 100)   # the second half rings on for longer
+
+
+f.run()
+```
+
+`reverb()` takes a moment to work out: about a twentieth of a second for each second of sound.
+Make the sound once, at the start, not in `draw()`.
 
 ### The numbers inside a sound
 
@@ -138,8 +197,10 @@ f.run()
 ### Putting sounds together
 
 - `f.sequence(a, b, c)` makes a new sound that plays them one after another.
-- `f.mix(a, b, c)` makes a new sound that plays them all at once. If the sum would be too loud, it is
-  turned down just enough. Otherwise it is left alone.
+- `f.mix(a, b, c)` makes a new sound that plays them all at once. A quiet sum is left alone. If the
+  sum gets loud, its loudest moments are gently squashed (a soft limiter), so it never goes above 0.9
+  and never clips. For the cleanest sound, give each part a lower `volume` so the limiter has little
+  to do.
 - `sound.pan(-1)` moves a sound to the left speaker, `sound.pan(1)` to the right, and 0 is the
   middle. It works on sounds from files too. `level()` and `spectrum()` do not change with pan.
 - `sound.save("name.wav")` writes the sound to a WAV file. The pan is kept. The volume is not.
@@ -163,14 +224,20 @@ gives the nearest note, `"D4"`.
 - `[C4 E4 G4]` is a chord: all its notes together.
 - `:2` after any of these makes it last 2 beats. With nothing, it lasts 1 beat.
 
-`tempo` is beats a minute (120 if you do not say). The sound is exactly as long as the beats add
-up to.
+`tempo` is beats a minute (120 if you do not say). `wave` is `"soft"` unless you choose another,
+and `volume` is 0.5.
+
+The notes are smooth (legato): each note keeps sounding until its beats are over, and then it fades
+out over 0.15 seconds while the next note begins. So there is no gap between the notes. The sound is
+as long as the beats add up to, plus that last fade of 0.15 seconds if the tune ends on a note. End
+with a rest, like `-:0.5`, and the fade fits inside it: then the sound is exactly as long as the
+beats, which is handy for a tune that loops in time.
 
 ```python
 import funground as f
 
 tune = f.melody("C4 C4 G4 G4 A4 A4 G4:2 - F4 F4 E4 E4 [D4 G4]:2 [C4 E4 G4]:3",
-                tempo=110, wave="triangle")
+                tempo=110).reverb(0.2)
 
 
 def setup():
@@ -525,8 +592,8 @@ is fine for the chord finder, which ignores the octave.)
 - **Stereo** is mixed down to one channel before it is measured.
 - **Made sounds are made first.** A tone or a tune is worked out before it plays: about a hundredth of a
   second for each second of sound. Nothing about it can change while it plays, except the volume and
-  the pan. `square`, `saw` and `triangle` are the simple versions of those waves, and their high notes
-  have a slight buzz.
+  the pan. `square`, `saw`, `triangle` and `soft` are built from a pitch and its overtones, and the
+  overtones too high to play are left out, so even high notes sound clean.
 - **Speed.** `spectrum()` is worked out only when you ask, and at most once for each frame. It takes
   about a millisecond or two, so it is fine to call every frame.
 - **Not drawing.** Sounds add nothing to the picture, to a saved file or to the list of drawing

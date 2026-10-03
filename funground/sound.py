@@ -569,6 +569,15 @@ class Sound(_Analysis):
             return synth.resample(self._made[0], self._made[1], rate)
         return synth.resample(self.samples(), self._rate, rate)
 
+    def reverb(self, amount: float = 0.3) -> "Sound":
+        """A new sound: this one played in a room (contract A9). *amount* 0 is dry (the sound
+        unchanged), 1 is a large hall. The room's echoes ring on after the end, so the new sound is
+        longer (up to 1.5 s at 1). It is one channel; the volume and pan are not carried over."""
+        if isinstance(amount, bool) or not isinstance(amount, (int, float)) or not 0 <= amount <= 1:
+            raise ValueError(f"sound.reverb(): amount must be from 0 (dry) to 1 (a large hall), not {amount!r}")
+        values = synth.reverb_samples(self._samples_at(synth.RATE), float(amount))
+        return _from_samples(values, synth.RATE, self._frame_source, "sound.reverb()")
+
     def save(self, path: str) -> None:
         """Write the sound to a 16-bit WAV file. The pan is kept; the volume is not."""
         import wave
@@ -609,7 +618,7 @@ def sequence(sounds, frame_source=None) -> "Sound":
 
 
 def mix(sounds, frame_source=None) -> "Sound":
-    """Sounds together, as a new sound. Scaled down only if the sum would clip."""
+    """Sounds together, as a new sound. A soft limiter keeps the peak at or below 0.9 (A9)."""
     parts = _check_sounds(sounds, "f.mix()")
     return _from_samples(synth.mix_samples([s._samples_at(synth.RATE) for s in parts]),
                          synth.RATE, frame_source, "f.mix()")

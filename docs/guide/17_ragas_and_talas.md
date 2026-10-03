@@ -71,6 +71,9 @@ often Ma or Ni, and you can do the same: `f.drone("D3", 8, pattern="m S' S' S")`
 `pattern="N S' S' S"`. Ask your teacher which suits the raga. The strings are tuned in just
 intonation, so Pa is exactly 3/2 of Sa, as a tanpura is tuned by ear.
 
+Like the other sounds, a drone is made at half volume. `volume=` sets its loudest point. A tanpura
+sits under the singer, so a drone a little quieter than the melody sounds natural.
+
 Here is Yaman's aroha and avaroha over a drone, with each swara lit as it plays.
 
 ```python
@@ -78,8 +81,8 @@ import funground as f
 
 SA = "D4"
 tokens = (f.raga("Yaman").aroha + " - " + f.raga("Yaman").avaroha + " -").split()
-tune = f.melody(" ".join(tokens), tempo=90, wave="triangle", sa=SA, tuning="just")
-drone = f.drone("D3", tune.duration())
+tune = f.melody(" ".join(tokens), tempo=90, sa=SA, tuning="just")
+drone = f.drone("D3", tune.duration(), volume=0.4)
 
 
 def setup():
@@ -102,6 +105,18 @@ f.run()
 
 It is an approximation. A real tanpura's buzzing richness comes from its curved bridge (jawari), and
 that is very hard to copy.
+
+**Reverb helps a drone.** A tanpura is heard in a room, and its strings ring on into each other.
+`sound.reverb(amount)` (chapter 16) gives the drone that room, and it sounds warmer and fuller:
+
+```py
+drone = f.drone("D3", 7).reverb(0.4)
+```
+
+The room rings on after the end, so the new sound is longer, and a loop of it has a short pause
+where it starts again. The gallery example "Sing with the drone" shows how to add that ringing back
+onto the start, so the loop stays smooth. The melody can have a little reverb too: `0.2` to `0.3`
+is plenty.
 
 ## Meend and kan
 
@@ -186,7 +201,9 @@ These work on any sound, and on a microphone too (what it heard in the last 10 s
   the pitch through the sound, counts how long each pitch was heard (folded into one octave), and
   picks the pitch that best explains a strong Sa and Pa: Sa and Pa are what a drone plays and where
   a melody rests most. It is a guess. It goes wrong when the music has no Pa, when the drone is tuned
-  to Ma, or when the melody sits on another note far more than on Sa. If you know your Sa, use it.
+  to Ma, or when the melody sits on another note far more than on Sa. A drone as loud as the melody
+  can also fool it: Sa and Pa sounding together are heard as a low Sa, so the answer is the right
+  swara but an octave or two low. Keep the drone under the melody. If you know your Sa, use it.
 - **`x.swara_histogram(sa)`** gives 12 numbers, one for each swara `S r R g G m M P d D n N` above
   `sa` (a note name, or the hertz from `tonic()`): the share of the time each one sounded, in any
   octave, within half a semitone of it. They add up to 1.

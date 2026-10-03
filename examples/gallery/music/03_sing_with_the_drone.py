@@ -4,7 +4,8 @@ f.drone() makes a sound like a tanpura: plucked strings on Pa and Sa that ring o
 Sing along with it. The microphone hears you, and your pitch is drawn as a line that moves
 to the left. The bright lines are Sa and Pa. Try to hold your voice on them, and watch the
 line go flat when you are in tune. f.frequency_to_note(hz, sa=SA) names the swara you sing.
-Change SA to suit your voice. With no microphone the drone still plays and the line waits.
+sound.reverb() lets the strings ring in a room. Change SA to suit your voice. With no
+microphone the drone still plays and the line waits.
 """
 # gallery: time-dependent
 import math
@@ -14,8 +15,21 @@ import funground as f
 SA = "D3"                                  # a comfortable Sa for many voices; try "C3" or "A3"
 SA_HZ = f.note_to_frequency(SA)
 
-drone = f.drone(SA, 7)                     # two rounds of the strings; it loops without a gap
-drone.set_volume(0.6)
+
+def room(sound, amount):
+    """sound.reverb(amount), with the echo that runs past the end added back onto the start,
+    so the sound still loops with no gap."""
+    length = len(sound.samples())
+    wet = sound.reverb(amount).samples()
+    looped = wet[:length]
+    for i, value in enumerate(wet[length:]):
+        looped[i % length] += value
+    return f.create_sound(looped)
+
+
+# Two rounds of the strings. A drone loops without a gap; room() keeps it that way with reverb,
+# which makes the strings sound warmer and fuller.
+drone = room(f.drone(SA, 7), 0.4)
 mic = f.microphone()
 line = []                                  # cents above Sa for each frame, or None when quiet
 

@@ -4,7 +4,7 @@ f.ragas() lists the ragas funground knows, and f.raga(name) tells you about one:
 (parent scale), the swaras it uses, its aroha (the way up) and avaroha (the way down), its
 vadi and samvadi (the two most important notes) and the time of day it belongs to. Pick a
 raga with the slider or the left and right keys. Its aroha and avaroha play over a drone,
-and each swara lights up as it sounds. Swaras the raga leaves out are dark.
+both with a little reverb, and each swara lights up as it sounds. Swaras the raga leaves out are dark.
 f.match_ragas() then says which ragas use the most similar swaras: ragas that share
 the same swaras come out almost level, as only the notes are compared.
 """
@@ -17,8 +17,20 @@ BEAT = 60 / TEMPO
 SWARAS = "S r R g G m M P d D n N".split()
 NAMES = f.ragas()
 
-drone = f.drone("C#3", 7)
-drone.set_volume(0.5)
+
+def room(sound, amount):
+    """sound.reverb(amount), with the echo that runs past the end added back onto the start,
+    so the sound still loops with no gap."""
+    length = len(sound.samples())
+    wet = sound.reverb(amount).samples()
+    looped = wet[:length]
+    for i, value in enumerate(wet[length:]):
+        looped[i % length] += value
+    return f.create_sound(looped)
+
+
+drone = room(f.drone("C#3", 7), 0.4)      # reverb on the drone, and it still loops with no gap
+drone.set_volume(0.6)                     # under the tune, as a tanpura sits under a singer
 raga = None
 tune = None
 tokens = []
@@ -32,7 +44,8 @@ def choose(index):
         tune.stop()
     raga = f.raga(NAMES[index])
     tokens = raga.aroha.split() + ["-"] + raga.avaroha.split() + ["-", "-"]
-    tune = f.melody(" ".join(tokens), tempo=TEMPO, wave="triangle", sa=SA, tuning="just")
+    tune = f.melody(" ".join(tokens), tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
+    tune.set_volume(0.8)
     tune.loop()
     # how often each of the 12 swaras is in the tune, to compare with every raga
     counts = [0] * 12
