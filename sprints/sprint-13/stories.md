@@ -11,8 +11,8 @@
 ## Story set
 
 ### S-108 Microphone input — E-17 *(D-058; contract A4; explored 2 Oct, see below)*
-- [ ] S-108.1 `f.microphone()` (name to pin) with `level()` and `spectrum()` as sounds have (A2); start/stop; a clear error with no device or no permission
-- [ ] S-108.2 Headless and CI: a fake input, like the silent sound player
+- [x] S-108.1 `f.microphone()` (name to pin) with `level()` and `spectrum()` as sounds have (A2); start/stop; a clear error with no device or no permission
+- [x] S-108.2 Headless and CI: a fake input, like the silent sound player
 
 **Exploration (2 Oct 2026, Windows 11, pygame-ce 2.5.8 / SDL 2.32.10):**
 - `pygame._sdl2.audio.AudioDevice(iscapture=True, callback=...)` opened the laptop microphone.

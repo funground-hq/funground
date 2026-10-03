@@ -220,6 +220,97 @@ if hz:
     f.text(f.frequency_to_note(hz), 20, 40)
 ```
 
+## Listening with the microphone
+
+A sound does not have to come from a file. `f.microphone()` listens to your computer's microphone.
+Call `mic.start()` to begin and `mic.stop()` to end. While it listens, `mic.level()`,
+`mic.spectrum()` and `mic.pitch()` work just as they do on a sound. They tell you about the last
+fraction of a second that it heard. When it is not listening they give `0`, a list of zeros, and
+`None`.
+
+Here is a tuner. Sing or hum a note, or play one on an instrument.
+
+```python
+import funground as f
+
+mic = f.microphone()
+
+
+def setup():
+    f.size(300, 200)
+    mic.start()
+    f.text_align("center")
+
+
+def draw():
+    f.background("black")
+    hz = mic.pitch()
+    f.fill("white")
+    f.text_size(64)
+    f.text(f.frequency_to_note(hz) if hz else "-", 150, 90)
+    f.fill("deepskyblue")
+    f.rect(20, 160, 260 * min(1, mic.level() * 4), 16)
+
+
+f.run()
+```
+
+`mic.pitch()` is `None` when it is quiet or when there is no clear note, so the sketch above shows a
+dash. `f.microphones()` lists the names of the microphones on your computer. Give part of a name to
+`f.microphone("USB")` to choose one.
+
+### Record, then draw
+
+`mic.capture(seconds)` gives you a new sound made of the last few seconds the microphone heard, up
+to 10. It is an ordinary sound, so you can play it, save it, or draw its wave with `samples()`.
+
+```python
+import funground as f
+
+mic = f.microphone()
+recording = None
+
+
+def setup():
+    global recording
+    f.size(400, 160)
+    mic.start()
+
+
+def draw():
+    global recording
+    f.background("white")
+    if f.frame_count == 60:                 # after about a second, keep what it heard
+        recording = mic.capture(1)
+        mic.stop()
+    if recording:
+        numbers = recording.samples()
+        f.stroke("crimson")
+        f.no_fill()
+        f.begin_shape()
+        for x in range(400):
+            f.vertex(x, 80 - 70 * numbers[x * len(numbers) // 400])
+        f.end_shape()
+    else:
+        f.fill("gray")
+        f.text("listening...", 20, 30)
+
+
+f.run()
+```
+
+A few things to know:
+
+- The microphone is never played back, so there is no squeal from the speakers.
+- Nothing is recorded to a file unless you call `save()` on a capture.
+- With no microphone, or if the computer will not let funground use it, `f.microphone()` or
+  `mic.start()` gives a `RuntimeError` that says so. On a Mac, allow microphone access in System
+  Settings, Privacy and Security, Microphone.
+- With `FUNGROUND_HEADLESS=1` the microphone is silent and hears nothing, so a sketch still runs. A
+  capture is then a second of silence.
+- `mic.start()` forgets what was heard before. `mic.stop()` keeps it, so you can stop, then capture.
+- This needs pygame-ce 2.5 or newer.
+
 ## Good to know
 
 - **No sound device?** The sketch still works. With no speakers, or with `FUNGROUND_HEADLESS=1`,

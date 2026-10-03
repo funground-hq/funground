@@ -180,6 +180,7 @@ matches p5's exactly.
 | `new p5.Oscillator("sine")`, `osc.freq(440)`, `osc.start()` | (the Sound library's `SinOsc`) | `f.tone(440, 2, "sine").play()`. There is no live oscillator: you make a sound of a set length first, then play it. The waves are `"sine"`, `"square"`, `"saw"`, `"triangle"` and `"noise"` (p5's `"sawtooth"` is `"saw"`) |
 | `new p5.Envelope()`, `env.setADSR(...)`, `env.play(osc)` | (none) | `f.tone(440, 1, attack=0.05, release=0.3)`. A fade in and a fade out, in seconds, built into the tone. There is no decay or sustain level |
 | `midiToFreq(69)` | (none) | `f.note_to_frequency("A4")`. You give a note name, not a MIDI number. `f.frequency_to_note(440)` goes back |
+| `new p5.AudioIn()`, `mic.start()`, `mic.getLevel()` | `AudioIn`, `Amplitude` | `mic = f.microphone()`, `mic.start()`, `mic.level()`. The microphone also has `spectrum()` and `pitch()`, and `mic.capture(seconds)` gives the last few seconds as a sound. It is never played back. `f.microphones()` lists the inputs |
 | (none) | (none) | `f.melody("C4 E4 G4:2")` plays a tune written as text. `f.pluck("E3", 2)` is a plucked string. `sound.pitch()` tells you the note you hear |
 
 Chapter 16 has the details.

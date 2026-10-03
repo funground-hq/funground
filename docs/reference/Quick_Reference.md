@@ -935,6 +935,10 @@ f.run()
 | `sound.pan(p)` | move the sound between the speakers, from -1 (left) to 1 (right). 0 is the middle. Works on loaded sounds too. `level()` and `spectrum()` ignore it. | `s.pan(-0.5)` |
 | `sound.save(path)` | write the sound to a 16-bit WAV file, with the pan but not the volume. | `s.save("tune.wav")` |
 | `sound.pitch()` | the frequency, in hertz, of the one voice playing now, or `None` when it is quiet, has no clear pitch, or is not playing. It looks at the last 2 048 samples, for 50 to 2000 Hz. For one voice or instrument, not chords. | `hz = s.pitch()` |
+| `f.microphone(name=None)` / `f.microphones()` | a microphone for the default input, or the one with `name` in its name; `f.microphones()` lists the names. No input, or access refused, is a `RuntimeError` (on a Mac: allow microphone access in System Settings). With `FUNGROUND_HEADLESS=1` it is silent. Never played back. | `mic = f.microphone()` |
+| `mic.start()` / `mic.stop()` / `mic.is_listening()` | start and stop listening, and ask. `start()` forgets earlier sound; `stop()` keeps it. | `mic.start()` |
+| `mic.level()` / `mic.spectrum(bands=32)` / `mic.pitch()` | the same as on a sound, for the sound heard most recently. `0`, zeros and `None` when not listening. | `hz = mic.pitch()` |
+| `mic.capture(seconds)` | a new sound of the last `seconds` heard (more than 0, at most 10; else `ValueError`). Its start is silence if less was heard. | `take = mic.capture(2)` |
 | `f.note_to_frequency(name, sa=None)` / `f.frequency_to_note(hz, sa=None)` | note name to hertz and back (the nearest note, with sharps: `"A#4"`). With `sa`, the name is a swara such as `"G"` or `"N,"`. | `f.frequency_to_note(f.note_to_frequency("A4"))` |
 
 The place in the sound follows the sketch's clock, not the speakers, so these give the same answers
@@ -1102,7 +1106,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
 | Off-screen graphics | — | `create_graphics`, `layer`, `hide_layer`, `show_layer`, `image`, `load_image`, `load_svg`, `svg_paths` |
-| Sound | — | `load_sound`, `create_sound`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `note_to_frequency`, `frequency_to_note`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum`, `samples`, `pan`, `save`, `pitch` on the sound |
+| Sound | — | `load_sound`, `create_sound`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `note_to_frequency`, `frequency_to_note`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum`, `samples`, `pan`, `save`, `pitch` on the sound; `microphone`, `microphones`; `start`, `stop`, `is_listening`, `capture`, `level`, `spectrum`, `pitch` on a microphone |
 | Controls | — | `create_slider`, `create_checkbox`, `create_button`, in a panel below the canvas |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 

@@ -156,7 +156,97 @@ _STAGES = [(half, _TWIDDLES[::FFT_SIZE // (half * 2)][:half]) for half in (1 << 
 _HANN = [0.5 - 0.5 * math.cos(2 * math.pi * i / (FFT_SIZE - 1)) for i in range(FFT_SIZE)]
 
 
-class Sound:
+class _Analysis:
+    """level(), spectrum() and pitch(), shared by sounds (A2, A3) and microphones (A4).
+
+    A class using it provides ``_window(count)`` (the latest *count* mono samples), ``_rate``,
+    ``_version``, ``_cache``, ``_frame_source``, ``_name``, ``_analysing()`` (is there anything to
+    measure now?) and ``_ready()`` (make the samples available)."""
+
+    def _cached(self, key, compute):
+        frame = self._frame_source() if self._frame_source else 0
+        if frame > 0:                                   # frame 0 (setup, scripts) is not cached
+            full = (frame, self._version, key)
+            hit = self._cache.get("entry")
+            if hit and hit[0] == full:
+                return hit[1]
+        value = compute()
+        if frame > 0:
+            self._cache["entry"] = (full, value)
+        return value
+
+    def level(self) -> float:
+        """How loud it is now, from 0 to 1 (root mean square of the last 1/30 second).
+        0 when nothing is playing or listening."""
+        if not self._analysing():
+            return 0.0
+        return self._cached("level", self._compute_level)
+
+    def _compute_level(self) -> float:
+        self._ready()
+        window = self._window(max(1, round(self._rate * LEVEL_WINDOW)))
+        return min(1.0, math.sqrt(sum(v * v for v in window) / len(window)))
+
+    def spectrum(self, bands: int = 32) -> list[float]:
+        """How strong the sound is now in each of *bands* ranges of pitch, from 0 to 1, low to
+        high, evenly spaced in pitch from 40 Hz to 16 kHz. All zeros when not playing."""
+        if isinstance(bands, bool) or not isinstance(bands, int) or not 1 <= bands <= MAX_BANDS:
+            raise ValueError(f"{self._name}.spectrum(): bands must be a whole number from 1 to {MAX_BANDS}, not {bands!r}")
+        if not self._analysing():
+            return [0.0] * bands
+        return list(self._cached(("spectrum", bands), lambda: self._compute_spectrum(bands)))
+
+    def _compute_spectrum(self, bands: int) -> list[float]:
+        self._ready()
+        window = self._window(FFT_SIZE)
+        if not any(window):
+            return [0.0] * bands
+        result = _fft([v * w + 0j for v, w in zip(window, _HANN)])
+        # A full-scale sine at a bin's centre gives |X| = FFT_SIZE / 4 with a Hann window,
+        # so dividing by that gives 1 for it. A band's strength is its strongest bin.
+        norm = 4.0 / FFT_SIZE
+        mags = [abs(result[k]) * norm for k in range(FFT_SIZE // 2 + 1)]
+        bin_hz = self._rate / FFT_SIZE
+        top = min(HIGH_HZ, self._rate / 2)
+        ratio = (HIGH_HZ / LOW_HZ) ** (1.0 / bands)
+        edges = [LOW_HZ * ratio ** i for i in range(bands + 1)]
+        strongest = [None] * bands
+        for k in range(1, FFT_SIZE // 2 + 1):
+            hz = k * bin_hz
+            if hz < LOW_HZ or hz >= HIGH_HZ:
+                continue
+            band = min(bands - 1, int(math.log(hz / LOW_HZ) / math.log(ratio)))
+            if strongest[band] is None or mags[k] > strongest[band]:
+                strongest[band] = mags[k]
+        out = []
+        for b in range(bands):
+            if strongest[b] is not None:
+                value = strongest[b]
+            else:                                       # a band narrower than one bin:
+                centre = math.sqrt(edges[b] * edges[b + 1]) / bin_hz   # read between bins
+                if edges[b] >= top:
+                    value = 0.0
+                else:
+                    lo = int(centre)
+                    frac = centre - lo
+                    value = mags[lo] * (1 - frac) + mags[min(lo + 1, len(mags) - 1)] * frac
+            out.append(max(0.0, min(1.0, value)))
+        return out
+
+    def pitch(self) -> float | None:
+        """The frequency, in hertz, of the one voice heard now, or None when it is quiet or has no
+        clear pitch (or nothing is playing or listening). It looks at the last 2 048 samples. It is
+        for one voice or instrument at a time, not chords."""
+        if not self._analysing():
+            return None
+        return self._cached("pitch", self._compute_pitch)
+
+    def _compute_pitch(self) -> float | None:
+        self._ready()
+        return synth.find_pitch(self._window(synth.PITCH_WINDOW), self._rate)
+
+
+class Sound(_Analysis):
     """A sound from f.load_sound(). See contract A1 (playback) and A2 (analysis)."""
 
     def __init__(self, device_sound, mixer, silent: bool, frame_source=None, made=None):
@@ -177,6 +267,7 @@ class Sound:
         self._rate = 44100
         self._cache: dict = {}
         self._pan = 0.0
+        self._name = "sound"
         self._made = None                # (mono samples, their rate) for a sound made from numbers
         if made is not None:             # keep the samples, as a loaded sound does after first use
             values, rate, pcm = made
@@ -294,7 +385,14 @@ class Sound:
             self._held = 0.0
             self._version += 1
 
-    # ---- analysis (A2)
+    # ---- analysis (A2): level, spectrum and pitch come from _Analysis
+    def _analysing(self) -> bool:
+        self._update()
+        return self._state == "playing"
+
+    def _ready(self) -> None:
+        self._load_samples()
+
     def _load_samples(self) -> None:
         if self._samples is None:
             info = self._mixer.get_init()
@@ -335,78 +433,6 @@ class Sound:
                 out.extend(sum(chunk[i:i + channels]) * scale for i in range(0, len(chunk), channels))
         return out
 
-    def _cached(self, key, compute):
-        frame = self._frame_source() if self._frame_source else 0
-        if frame > 0:                                   # frame 0 (setup, scripts) is not cached
-            full = (frame, self._version, key)
-            hit = self._cache.get("entry")
-            if hit and hit[0] == full:
-                return hit[1]
-        value = compute()
-        if frame > 0:
-            self._cache["entry"] = (full, value)
-        return value
-
-    def level(self) -> float:
-        """How loud the sound is now, from 0 to 1 (root mean square of the last 1/30 second).
-        0 when the sound is not playing."""
-        self._update()
-        if self._state != "playing":
-            return 0.0
-        return self._cached("level", self._compute_level)
-
-    def _compute_level(self) -> float:
-        self._load_samples()
-        window = self._window(max(1, round(self._rate * LEVEL_WINDOW)))
-        return min(1.0, math.sqrt(sum(v * v for v in window) / len(window)))
-
-    def spectrum(self, bands: int = 32) -> list[float]:
-        """How strong the sound is now in each of *bands* ranges of pitch, from 0 to 1, low to
-        high, evenly spaced in pitch from 40 Hz to 16 kHz. All zeros when not playing."""
-        if isinstance(bands, bool) or not isinstance(bands, int) or not 1 <= bands <= MAX_BANDS:
-            raise ValueError(f"sound.spectrum(): bands must be a whole number from 1 to {MAX_BANDS}, not {bands!r}")
-        self._update()
-        if self._state != "playing":
-            return [0.0] * bands
-        return list(self._cached(("spectrum", bands), lambda: self._compute_spectrum(bands)))
-
-    def _compute_spectrum(self, bands: int) -> list[float]:
-        self._load_samples()
-        window = self._window(FFT_SIZE)
-        if not any(window):
-            return [0.0] * bands
-        result = _fft([v * w + 0j for v, w in zip(window, _HANN)])
-        # A full-scale sine at a bin's centre gives |X| = FFT_SIZE / 4 with a Hann window,
-        # so dividing by that gives 1 for it. A band's strength is its strongest bin.
-        norm = 4.0 / FFT_SIZE
-        mags = [abs(result[k]) * norm for k in range(FFT_SIZE // 2 + 1)]
-        bin_hz = self._rate / FFT_SIZE
-        top = min(HIGH_HZ, self._rate / 2)
-        ratio = (HIGH_HZ / LOW_HZ) ** (1.0 / bands)
-        edges = [LOW_HZ * ratio ** i for i in range(bands + 1)]
-        strongest = [None] * bands
-        for k in range(1, FFT_SIZE // 2 + 1):
-            hz = k * bin_hz
-            if hz < LOW_HZ or hz >= HIGH_HZ:
-                continue
-            band = min(bands - 1, int(math.log(hz / LOW_HZ) / math.log(ratio)))
-            if strongest[band] is None or mags[k] > strongest[band]:
-                strongest[band] = mags[k]
-        out = []
-        for b in range(bands):
-            if strongest[b] is not None:
-                value = strongest[b]
-            else:                                       # a band narrower than one bin:
-                centre = math.sqrt(edges[b] * edges[b + 1]) / bin_hz   # read between bins
-                if edges[b] >= top:
-                    value = 0.0
-                else:
-                    lo = int(centre)
-                    frac = centre - lo
-                    value = mags[lo] * (1 - frac) + mags[min(lo + 1, len(mags) - 1)] * frac
-            out.append(max(0.0, min(1.0, value)))
-        return out
-
     # ---- the numbers, saving and pitch (A3)
     def samples(self) -> list[float]:
         """The sound as one list of numbers from -1 to 1 (one channel, however many it has).
@@ -443,19 +469,6 @@ class Sound:
                 out.writeframes(pcm.tobytes())
         except OSError as exc:
             raise ValueError(f"sound.save(): could not write {path!r} ({exc})") from exc
-
-    def pitch(self) -> float | None:
-        """The frequency, in hertz, of the one voice playing now, or None when it is quiet or has no
-        clear pitch (or is not playing). It looks at the last 2 048 samples. It is for one voice or
-        instrument at a time, not chords."""
-        self._update()
-        if self._state != "playing":
-            return None
-        return self._cached("pitch", self._compute_pitch)
-
-    def _compute_pitch(self) -> float | None:
-        self._load_samples()
-        return synth.find_pitch(self._window(synth.PITCH_WINDOW), self._rate)
 
 
 def _to_mono(samples: array, channels: int) -> list[float]:
