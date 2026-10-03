@@ -27,12 +27,12 @@ ragas, and build the teaching scenarios of `docs/design/Music_Research_Note.md` 
 - [ ] Ragas: sing with a drone (tanpura made with `tone`/`pluck`, a pitch line against Sa and Pa); a swara histogram; compose in a raga from its aroha and avaroha (a small raga table)
 
 ### S-115 Ragas for learners — E-17 *(D-057, D-062; contract A8)*
-- [ ] Synthesis:
+- [x] Synthesis:
   - a tanpura drone;
   - meend (glides between swaras) and a simple gamaka in `melody`;
   - a tala sequencer (teentaal, rupak, …) with simple synthesised percussion and bol names;
   - a small raga table (thaat, aroha/avaroha, vadi/samvadi, pakad) that drives examples.
-- [ ] Analysis:
+- [x] Analysis:
   - a pitch contour against Sa;
   - a tonic (Sa) estimate;
   - a swara histogram;

@@ -1,0 +1,973 @@
+{
+ "about": "funground's small table of Hindustani ragas and talas for learners (S-115, contract A8, D-062). Each fact was checked against the published sources cited with it, in October 2026. Where sources disagree, the most common form is given and the notes say so. Sargam: S r R g G m M P d D n N (lower-case r g d n are komal, M is tivra Ma), ' for the octave above, a comma for the octave below. Tala beats count from 1; the sam is beat 1.",
+ "sources": {
+  "tanarang": {
+   "title": "Tanarang: raga pages by Acharya Vishwanath Rao Ringe 'Tanarang'",
+   "where": "https://tanarang.com/"
+  },
+  "swarganga": {
+   "title": "SwarGanga Music Foundation: raag and taal pages",
+   "where": "https://www.swarganga.org/"
+  },
+  "wikipedia": {
+   "title": "Wikipedia raga and tala articles, which cite J. Bor et al., The Raga Guide (Nimbus, 1999), W. Kaufmann, The Ragas of North India (1968) and V. N. Bhatkhande",
+   "where": "https://en.wikipedia.org/"
+  },
+  "parrikar": {
+   "title": "Rajan Parrikar, essays on Hindustani ragas",
+   "where": "https://www.parrikar.org/hindustani/"
+  },
+  "icm": {
+   "title": "IndianClassicalMusic.com: Bhoop, Deshkar and Shuddh Kalyan",
+   "where": "https://www.indianclassicalmusic.com/bhoop-deshkar-shuddhkalyan"
+  },
+  "nios": {
+   "title": "National Institute of Open Schooling (India), Hindustani Music (242), Practical Book 2, chapter 4, Description of Talas",
+   "where": "https://www.nios.ac.in/media/documents/Hindustani_Music_242/hindustanimusicpracticalbook2/ch_HMB2-4.pdf"
+  },
+  "chandrakantha": {
+   "title": "David Courtney, Chandrakantha.com: index of tals",
+   "where": "https://chandrakantha.com/music-and-dance/i-class-music/index-of-tals/"
+  },
+  "uw": {
+   "title": "University of Washington, Music 428: thekas",
+   "where": "https://sites.math.washington.edu/~gangolli/Music428Thekas.html"
+  },
+  "ncert": {
+   "title": "NCERT, Kriti (class 8), chapter 7, Indian Classical Music",
+   "where": "https://ncert.nic.in/textbook/pdf/hekr107.pdf"
+  },
+  "darbar": {
+   "title": "Darbar: raga guide pages",
+   "where": "https://darbar.org/raga/"
+  },
+  "itcsra": {
+   "title": "ITC Sangeet Research Academy: Samay Raga",
+   "where": "https://www.itcsra.org/samay-raga"
+  },
+  "sadhana": {
+   "title": "Raag Hindustani (Sadhana): raga pages, with Shankar Rao Vyas's lakshan geet for Durga",
+   "where": "https://raag-hindustani.com/"
+  },
+  "ragajunglism": {
+   "title": "Ragajunglism: raga pages",
+   "where": "https://ragajunglism.org/ragas/"
+  }
+ },
+ "ragas": [
+  {
+   "name": "Yaman",
+   "aliases": [
+    "Kalyan",
+    "Iman"
+   ],
+   "thaat": "Kalyan",
+   "swaras": [
+    "S",
+    "R",
+    "G",
+    "M",
+    "P",
+    "D",
+    "N"
+   ],
+   "aroha": "N, R G M P D N S'",
+   "avaroha": "S' N D P M G R S",
+   "pakad": "N, R G R S P M G R S",
+   "vadi": "G",
+   "samvadi": "N",
+   "time": "evening: the first prahar of the night, about 6 to 9 pm",
+   "notes": "Uses tivra Ma only (with shuddha Ma as well it is Yaman Kalyan). The aroha often skips Sa and Pa (SwarGanga gives N, R G M D N S'). Wikipedia's text puts it at 9 pm to midnight; Tanarang and SwarGanga give the first prahar of the night. The pakad is the one Wikipedia gives; Tanarang's main phrases differ, as pakads do between teachers.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-yaman/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, main phrases"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/raags/97/Kalyan%2C%20Yaman",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Yaman_(raga)",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, pakad"
+    }
+   ]
+  },
+  {
+   "name": "Bhupali",
+   "aliases": [
+    "Bhoopali",
+    "Bhoop",
+    "Bhup"
+   ],
+   "thaat": "Kalyan",
+   "swaras": [
+    "S",
+    "R",
+    "G",
+    "P",
+    "D"
+   ],
+   "aroha": "S R G P D S'",
+   "avaroha": "S' D P G R S",
+   "pakad": "G R S D, S R G P G D P G R S",
+   "vadi": "G",
+   "samvadi": "D",
+   "time": "evening: the first prahar of the night, about 6 to 9 pm",
+   "notes": "Pentatonic: no Ma and no Ni. Deshkar uses the same five swaras; Bhupali rests on Ga and the lower part of the scale, Deshkar on Dha and the upper part. Wikipedia gives 7 to 9 pm.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-bhoopali/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/raags/38/Bhoop",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Bhupali",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, pakad"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/bhoopali",
+     "supports": "vadi, samvadi, how it differs from Deshkar"
+    }
+   ]
+  },
+  {
+   "name": "Bilawal",
+   "aliases": [
+    "Alhaiya Bilawal",
+    "Bilaval",
+    "Alhaiya Bilaval"
+   ],
+   "thaat": "Bilawal",
+   "swaras": [
+    "S",
+    "R",
+    "G",
+    "m",
+    "P",
+    "D",
+    "n",
+    "N"
+   ],
+   "aroha": "S R G P D N S'",
+   "avaroha": "S' N D P D n D P m G R S",
+   "pakad": "G R G P D n D P m G R G P D N S'",
+   "vadi": "D",
+   "samvadi": "G",
+   "time": "morning: the first prahar of the day, about 6 to 9 am",
+   "notes": "This is Bilawal as usually taught, Alhaiya Bilawal (Parrikar treats the two names as one raga): Ma is left out going up, and komal Ni is touched only coming down (D n D P). Shuddha Bilawal, a separate raga, uses all seven shuddha swaras and no komal Ni. SwarGanga gives a twisting aroha, S G R G P D N S'. Its swaras are the same set as Khamaj and Desh.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-alhaiya-bilawal/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, main phrases (pakad)"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/raags/44/Bilawal%2C%20Alhaiya",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/bilawal/",
+     "supports": "Alhaiya and Bilawal are one raga, komal Ni in descent, vadi Dha, morning"
+    }
+   ]
+  },
+  {
+   "name": "Khamaj",
+   "aliases": [],
+   "thaat": "Khamaj",
+   "swaras": [
+    "S",
+    "R",
+    "G",
+    "m",
+    "P",
+    "D",
+    "n",
+    "N"
+   ],
+   "aroha": "S G m P D N S'",
+   "avaroha": "S' n D P m G R S",
+   "pakad": "n D m P D m G",
+   "vadi": "G",
+   "samvadi": "N",
+   "time": "night: the second prahar, about 9 pm to midnight",
+   "notes": "Shuddha Ni going up and komal Ni coming down; Re is left out going up. SwarGanga gives 6 to 9 pm. Desh and Bilawal use the same set of swaras.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-khamaj/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/raags/116/Khamaj",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Khamaj",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, pakad (citing Bor)"
+    }
+   ]
+  },
+  {
+   "name": "Kafi",
+   "aliases": [
+    "Kaafi"
+   ],
+   "thaat": "Kafi",
+   "swaras": [
+    "S",
+    "R",
+    "g",
+    "m",
+    "P",
+    "D",
+    "n"
+   ],
+   "aroha": "S R g m P D n S'",
+   "avaroha": "S' n D P m g R S",
+   "pakad": "m P D P m g R g R S n, D, S",
+   "vadi": "P",
+   "samvadi": "S",
+   "time": "night: the second prahar, about 9 pm to midnight",
+   "notes": "Sources disagree on the samvadi: Tanarang gives Pa and Sa; SwarGanga and Wikipedia give Pa and Re. SwarGanga gives 6 to 9 pm for the time. There is no single agreed pakad; this one is Wikipedia's.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-kafi/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/raags/86/Kafi",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time (samvadi Re)"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Kafi_(raga)",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, pakad (samvadi Re)"
+    }
+   ]
+  },
+  {
+   "name": "Bhairav",
+   "aliases": [],
+   "thaat": "Bhairav",
+   "swaras": [
+    "S",
+    "r",
+    "G",
+    "m",
+    "P",
+    "d",
+    "N"
+   ],
+   "aroha": "S r G m P d N S'",
+   "avaroha": "S' N d P m G r S",
+   "pakad": "G m d d P G m r r S",
+   "vadi": "d",
+   "samvadi": "r",
+   "time": "dawn: the first prahar of the day, about 6 to 9 am",
+   "notes": "Komal Re and komal Dha, often sung with a slow oscillation (andolan).",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-bhairav/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, main phrases"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/raaga_details.php?raagid=23",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Bhairav_(raga)",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, pakad (citing Bor)"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/bhairav/",
+     "supports": "the andolan on komal Re and Dha"
+    }
+   ]
+  },
+  {
+   "name": "Asavari",
+   "aliases": [
+    "Asawari",
+    "Shuddha Rishabh Asavari"
+   ],
+   "thaat": "Asavari",
+   "swaras": [
+    "S",
+    "R",
+    "g",
+    "m",
+    "P",
+    "d",
+    "n"
+   ],
+   "aroha": "S R m P d S'",
+   "avaroha": "S' n d P m g R S",
+   "pakad": "R m P n d P",
+   "vadi": "d",
+   "samvadi": "g",
+   "time": "late morning: the second prahar of the day, about 9 am to noon",
+   "notes": "This is the shuddha Re form taught in Bhatkhande's system; Ga and Ni are left out going up. An older form with komal Re (Komal Rishabh Asavari, in Bhairavi thaat) is also sung, and some use both. A more typical descent is S' R' n d P d m P g R S. Wikipedia's pakad is m P d m P g R S. NCERT gives 11 am to 1 pm.",
+   "sources": [
+    {
+     "source": "ncert",
+     "url": "https://ncert.nic.in/textbook/pdf/hekr107.pdf",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, pakad"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Asavari",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/asavari/",
+     "supports": "thaat, swaras, aroha, avaroha, the shuddha and komal Re forms"
+    },
+    {
+     "source": "ragajunglism",
+     "url": "https://ragajunglism.org/ragas/asavari",
+     "supports": "the forms of Re"
+    }
+   ]
+  },
+  {
+   "name": "Bhairavi",
+   "aliases": [],
+   "thaat": "Bhairavi",
+   "swaras": [
+    "S",
+    "r",
+    "g",
+    "m",
+    "P",
+    "d",
+    "n"
+   ],
+   "aroha": "S r g m P d n S'",
+   "avaroha": "S' n d P m g r S",
+   "pakad": "S n, S r g m g r S",
+   "vadi": "m",
+   "samvadi": "S",
+   "time": "morning: the first prahar of the day, about 6 to 9 am; by custom it ends a concert, at any hour",
+   "notes": "In practice singers often add other swaras (Mishra Bhairavi). The vadi is disputed: Ma and Sa (Tanarang, Darbar, and Parrikar, who calls it traditional); Wikipedia gives Ma or Pa with Sa; R. Jha gives komal Dha and komal Ga (quoted by Parrikar). The pakad is Parrikar's.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-bhairavi/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "darbar",
+     "url": "https://darbar.org/raga/bhairavi/",
+     "supports": "aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/bhairavi/",
+     "supports": "swaras, pakad, the vadi dispute"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Bhairavi_(Hindustani)",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    }
+   ]
+  },
+  {
+   "name": "Todi",
+   "aliases": [
+    "Miyan ki Todi",
+    "Miyan Ki Todi",
+    "Shuddha Todi"
+   ],
+   "thaat": "Todi",
+   "swaras": [
+    "S",
+    "r",
+    "g",
+    "M",
+    "P",
+    "d",
+    "N"
+   ],
+   "aroha": "S r g M d N S'",
+   "avaroha": "S' N d P M g r S",
+   "pakad": "g M d N d M g r g r S",
+   "vadi": "d",
+   "samvadi": "g",
+   "time": "late morning: the second prahar of the day, about 9 am to noon",
+   "notes": "Miyan ki Todi. Pa is usually left out going up (Bor, via Wikipedia; ITC SRA) and used sparingly coming down; Tanarang and Darbar print Pa in the aroha but say it is generally skipped. Without Pa at all it is Gurjari Todi. The pakad is Parrikar's core phrase. ITC SRA gives 10 am to 1 pm.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-todi/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/todi/",
+     "supports": "swaras, pakad, the use of Pa"
+    },
+    {
+     "source": "darbar",
+     "url": "https://darbar.org/raga/miyan-ki-todi/",
+     "supports": "aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Todi_(raga)",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time (Pa left out going up)"
+    },
+    {
+     "source": "itcsra",
+     "url": "https://www.itcsra.org/samay-raga",
+     "supports": "time, aroha without Pa"
+    }
+   ]
+  },
+  {
+   "name": "Marwa",
+   "aliases": [
+    "Marva"
+   ],
+   "thaat": "Marwa",
+   "swaras": [
+    "S",
+    "r",
+    "G",
+    "M",
+    "D",
+    "N"
+   ],
+   "aroha": "D, N, r G M D N S'",
+   "avaroha": "S' N D M G r S",
+   "pakad": "D M G r G M G r S",
+   "vadi": "r",
+   "samvadi": "D",
+   "time": "sunset: the end of the fourth prahar of the day, about 4 to 7 pm",
+   "notes": "No Pa. Tanarang gives 3 to 6 pm and ITC SRA 4 to 7 pm. Wikipedia's aroha is N, r G M D N r' S'. V. N. Patwardhan argued for Dha and Ga as vadi and samvadi (quoted by Wikipedia). The pakad is Bhatkhande's, as Wikipedia quotes it.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-marwa/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/marwa/",
+     "supports": "swaras, vadi, samvadi, phrases"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Marva_(raga)",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, pakad"
+    },
+    {
+     "source": "itcsra",
+     "url": "https://www.itcsra.org/samay-raga",
+     "supports": "avaroha, time"
+    }
+   ]
+  },
+  {
+   "name": "Durga",
+   "aliases": [],
+   "thaat": "Bilawal",
+   "swaras": [
+    "S",
+    "R",
+    "m",
+    "P",
+    "D"
+   ],
+   "aroha": "S R m P D S'",
+   "avaroha": "S' D P m R S",
+   "pakad": "m P D m R D, S",
+   "vadi": "m",
+   "samvadi": "S",
+   "time": "night: the second prahar, about 9 pm to midnight",
+   "notes": "Pentatonic: no Ga and no Ni. Darbar alone gives Pa as the vadi. Tanarang's avaroha is S' D P D m R S D, S, and it says Pa is not a resting note coming down. A different Durga in Khamaj thaat is almost never heard now. The pakad is Tanarang's.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-durga/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, pakad"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Durga_(raga)",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time (time citing Bor)"
+    },
+    {
+     "source": "darbar",
+     "url": "https://darbar.org/raga/durga/",
+     "supports": "aroha, avaroha (vadi Pa)"
+    },
+    {
+     "source": "sadhana",
+     "url": "https://raag-hindustani.com/Durga.html",
+     "supports": "thaat, vadi, samvadi, time"
+    }
+   ]
+  },
+  {
+   "name": "Desh",
+   "aliases": [
+    "Des"
+   ],
+   "thaat": "Khamaj",
+   "swaras": [
+    "S",
+    "R",
+    "G",
+    "m",
+    "P",
+    "D",
+    "n",
+    "N"
+   ],
+   "aroha": "S R m P N S'",
+   "avaroha": "S' n D P m G R S",
+   "pakad": "R m P D m G R P m G R",
+   "vadi": "R",
+   "samvadi": "P",
+   "time": "night: the second prahar, about 9 pm to midnight",
+   "notes": "Shuddha Ni going up, komal Ni coming down; Ga and Dha are left out going up. The descent is often sung S' n D P D m G R G N, S. Wikipedia's infobox says late night; its text, Tanarang and Darbar say 9 pm to midnight. The same swaras as Khamaj and Bilawal. The pakad is Parrikar's.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-des/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/des/",
+     "supports": "aroha, avaroha, pakad"
+    },
+    {
+     "source": "darbar",
+     "url": "https://darbar.org/raga/desh/",
+     "supports": "aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Desh_(raga)",
+     "supports": "thaat, vadi, samvadi, time"
+    }
+   ]
+  },
+  {
+   "name": "Deshkar",
+   "aliases": [
+    "Deskar"
+   ],
+   "thaat": "Bilawal",
+   "swaras": [
+    "S",
+    "R",
+    "G",
+    "P",
+    "D"
+   ],
+   "aroha": "S R G P D S'",
+   "avaroha": "S' D P D G P G R S",
+   "pakad": "P D G P S' D D P P D G P G R S",
+   "vadi": "D",
+   "samvadi": "G",
+   "time": "morning: the first prahar of the day, about 6 to 9 am",
+   "notes": "The same five swaras as Bhupali, with the vadi and samvadi the other way round. It lives in the upper half (P D S') and comes down to Dha. SwarGanga's avaroha is S' D P D P G R D, S; IndianClassicalMusic.com gives 7 to 10 am. The pakad is from Tanarang's main phrases.",
+   "sources": [
+    {
+     "source": "tanarang",
+     "url": "https://tanarang.com/raag-deshkar/",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time, main phrases (pakad)"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/raags/58/Deskar",
+     "supports": "thaat, swaras, aroha, avaroha, vadi, samvadi, time"
+    },
+    {
+     "source": "parrikar",
+     "url": "https://www.parrikar.org/hindustani/bhoopali",
+     "supports": "vadi Dha and samvadi Ga, same swaras as Bhupali, Bilawal character"
+    },
+    {
+     "source": "icm",
+     "url": "https://www.indianclassicalmusic.com/bhoop-deshkar-shuddhkalyan",
+     "supports": "thaat, vadi, samvadi, time"
+    }
+   ]
+  }
+ ],
+ "talas": [
+  {
+   "name": "Teentaal",
+   "aliases": [
+    "Tintal",
+    "Teental",
+    "Tin taal",
+    "Teen taal",
+    "Trital",
+    "Tritaal"
+   ],
+   "beats": 16,
+   "vibhag": [
+    4,
+    4,
+    4,
+    4
+   ],
+   "tali": [
+    1,
+    5,
+    13
+   ],
+   "khali": [
+    9
+   ],
+   "sam": 1,
+   "bols": [
+    "Dha",
+    "Dhin",
+    "Dhin",
+    "Dha",
+    "Dha",
+    "Dhin",
+    "Dhin",
+    "Dha",
+    "Dha",
+    "Tin",
+    "Tin",
+    "Ta",
+    "Ta",
+    "Dhin",
+    "Dhin",
+    "Dha"
+   ],
+   "notes": "Beat 13 is Ta in SwarGanga and NIOS; the UW page writes Na, and says the last vibhag is often spoken Na Dhin Dhin Na.",
+   "sources": [
+    {
+     "source": "chandrakantha",
+     "url": "https://chandrakantha.com/music-and-dance/i-class-music/index-of-tals/tintal/",
+     "supports": "beats, vibhag, tali, khali"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/taals/1/Teentaal",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "nios",
+     "url": "https://www.nios.ac.in/media/documents/Hindustani_Music_242/hindustanimusicpracticalbook2/ch_HMB2-4.pdf",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "uw",
+     "url": "https://sites.math.washington.edu/~gangolli/Music428Thekas.html",
+     "supports": "beats, vibhag, tali, khali, theka (Na at beat 13)"
+    }
+   ]
+  },
+  {
+   "name": "Ektaal",
+   "aliases": [
+    "Ektal",
+    "Ek taal"
+   ],
+   "beats": 12,
+   "vibhag": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "tali": [
+    1,
+    5,
+    9,
+    11
+   ],
+   "khali": [
+    3,
+    7
+   ],
+   "sam": 1,
+   "bols": [
+    "Dhin",
+    "Dhin",
+    "DhaGe",
+    "TiRaKiTa",
+    "Tu",
+    "Na",
+    "Kat",
+    "Ta",
+    "DhaGe",
+    "TiRaKiTa",
+    "Dhin",
+    "Na"
+   ],
+   "notes": "Spellings vary: Tu or Tun at beat 5; Ta (NIOS, UW) or Tin (SwarGanga) at beat 8; TiRaKiTa is also written TirKit or Terekite. 'Tun Na Kat Tin' is also common.",
+   "sources": [
+    {
+     "source": "chandrakantha",
+     "url": "https://chandrakantha.com/music-and-dance/i-class-music/index-of-tals/ektal/",
+     "supports": "beats, vibhag, tali, khali"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/taals/2/Ek%20Taal",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "nios",
+     "url": "https://www.nios.ac.in/media/documents/Hindustani_Music_242/hindustanimusicpracticalbook2/ch_HMB2-4.pdf",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "uw",
+     "url": "https://sites.math.washington.edu/~gangolli/Music428Thekas.html",
+     "supports": "beats, vibhag, tali, khali, theka"
+    }
+   ]
+  },
+  {
+   "name": "Jhaptaal",
+   "aliases": [
+    "Jhaptal",
+    "Jhap taal"
+   ],
+   "beats": 10,
+   "vibhag": [
+    2,
+    3,
+    2,
+    3
+   ],
+   "tali": [
+    1,
+    3,
+    8
+   ],
+   "khali": [
+    6
+   ],
+   "sam": 1,
+   "bols": [
+    "Dhi",
+    "Na",
+    "Dhi",
+    "Dhi",
+    "Na",
+    "Ti",
+    "Na",
+    "Dhi",
+    "Dhi",
+    "Na"
+   ],
+   "notes": "NIOS spells the bols Dhi and Ti; SwarGanga and UW write Dhin and Tin.",
+   "sources": [
+    {
+     "source": "chandrakantha",
+     "url": "https://chandrakantha.com/music-and-dance/i-class-music/index-of-tals/jhaptal/",
+     "supports": "beats, vibhag, tali, khali"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/taals/3/Jhaptaal",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "nios",
+     "url": "https://www.nios.ac.in/media/documents/Hindustani_Music_242/hindustanimusicpracticalbook2/ch_HMB2-4.pdf",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "uw",
+     "url": "https://sites.math.washington.edu/~gangolli/Music428Thekas.html",
+     "supports": "beats, vibhag, tali, khali, theka"
+    }
+   ]
+  },
+  {
+   "name": "Rupak",
+   "aliases": [
+    "Roopak",
+    "Rupak taal",
+    "Rupaktal"
+   ],
+   "beats": 7,
+   "vibhag": [
+    3,
+    2,
+    2
+   ],
+   "tali": [
+    4,
+    6
+   ],
+   "khali": [
+    1
+   ],
+   "sam": 1,
+   "bols": [
+    "Tin",
+    "Tin",
+    "Na",
+    "Dhin",
+    "Na",
+    "Dhin",
+    "Na"
+   ],
+   "notes": "Unusually, the sam is a wave (khali), not a clap. Books number the claps differently: here beat 4 is the second sign and beat 6 the third; the UW page numbers them 1 and 2.",
+   "sources": [
+    {
+     "source": "chandrakantha",
+     "url": "https://chandrakantha.com/music-and-dance/i-class-music/index-of-tals/rupak/",
+     "supports": "beats, vibhag, tali, khali, the sam is khali"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/taals/6/Dadra",
+     "supports": "beats, vibhag, tali, khali, theka (this page id is Roopak)"
+    },
+    {
+     "source": "uw",
+     "url": "https://sites.math.washington.edu/~gangolli/Music428Thekas.html",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Rupak_Tala",
+     "supports": "theka, the sam is khali"
+    }
+   ]
+  },
+  {
+   "name": "Dadra",
+   "aliases": [
+    "Dadra taal"
+   ],
+   "beats": 6,
+   "vibhag": [
+    3,
+    3
+   ],
+   "tali": [
+    1
+   ],
+   "khali": [
+    4
+   ],
+   "sam": 1,
+   "bols": [
+    "Dha",
+    "Dhin",
+    "Na",
+    "Dha",
+    "Tin",
+    "Na"
+   ],
+   "notes": "NIOS spells it Dha Dhi Na Dha Ti Na. Wikipedia's Dadra article gives a different theka with a weak citation; it is not used here.",
+   "sources": [
+    {
+     "source": "chandrakantha",
+     "url": "https://chandrakantha.com/music-and-dance/i-class-music/index-of-tals/dadra-tal/",
+     "supports": "beats, vibhag, tali, khali"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/taals/9/Dadra",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "nios",
+     "url": "https://www.nios.ac.in/media/documents/Hindustani_Music_242/hindustanimusicpracticalbook2/ch_HMB2-4.pdf",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "uw",
+     "url": "https://sites.math.washington.edu/~gangolli/Music428Thekas.html",
+     "supports": "beats, vibhag, tali, khali, theka"
+    }
+   ]
+  },
+  {
+   "name": "Keherwa",
+   "aliases": [
+    "Kaharwa",
+    "Kaherava",
+    "Keharwa"
+   ],
+   "beats": 8,
+   "vibhag": [
+    4,
+    4
+   ],
+   "tali": [
+    1
+   ],
+   "khali": [
+    5
+   ],
+   "sam": 1,
+   "bols": [
+    "Dha",
+    "Ge",
+    "Na",
+    "Ti",
+    "Na",
+    "Ka",
+    "Dhi",
+    "Na"
+   ],
+   "notes": "Beat 2 is Ge or Gi and beat 6 Ka or Ke, by source. Many lighter thekas are also called keherwa (Chandrakantha), such as the bhajani keherwa on the UW page.",
+   "sources": [
+    {
+     "source": "chandrakantha",
+     "url": "https://chandrakantha.com/music-and-dance/i-class-music/index-of-tals/kaherava/",
+     "supports": "beats, vibhag, tali, khali"
+    },
+    {
+     "source": "swarganga",
+     "url": "https://www.swarganga.org/taals/7/Keherwa",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "nios",
+     "url": "https://www.nios.ac.in/media/documents/Hindustani_Music_242/hindustanimusicpracticalbook2/ch_HMB2-4.pdf",
+     "supports": "beats, vibhag, tali, khali, theka"
+    },
+    {
+     "source": "wikipedia",
+     "url": "https://en.wikipedia.org/wiki/Keherwa",
+     "supports": "theka, tali and khali"
+    }
+   ]
+  }
+ ]
+}

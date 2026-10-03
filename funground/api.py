@@ -911,6 +911,64 @@ def chord_notes(name: str) -> list[str]:
     return analysis.chord_notes(name)
 
 
+# ---- ragas and talas (S-115, contract A8)
+def ragas() -> list[str]:
+    """The names of the ragas in funground's small built-in table, such as 'Yaman' and 'Bhupali'."""
+    from . import hindustani as _ragas
+
+    return _ragas.raga_names()
+
+
+def raga(name: str):
+    """One raga from the table (any capitals): its name, thaat, swaras, aroha, avaroha and pakad
+    (sargam strings for melody(sa=...)), vadi, samvadi, the traditional time, notes and sources."""
+    from . import hindustani as _ragas
+
+    return _ragas.find_raga(name, "f.raga()")
+
+
+def talas() -> list[str]:
+    """The names of the talas in the table: Teentaal, Ektaal, Jhaptaal, Rupak, Dadra, Keherwa."""
+    from . import hindustani as _ragas
+
+    return _ragas.tala_names()
+
+
+def tala_info(name: str):
+    """One tala from the table: its beats, vibhag (the divisions), tali (claps) and khali (waves)
+    as beat numbers, sam (beat 1) and bols (the theka, one bol a beat), notes and sources."""
+    from . import hindustani as _ragas
+
+    return _ragas.find_tala(name, "f.tala_info()")
+
+
+def tala(name: str, tempo: float = 80, cycles: int = 1):
+    """Make a sound of a tala's theka played with simple drum sounds, *cycles* times round at
+    *tempo* beats a minute. The sam is accented and the khali part is softer."""
+    from . import hindustani as _ragas, sound
+
+    return sound.make(_ragas.tala(name, tempo, cycles, None, "f.tala()"), _sound_frame, "f.tala()")
+
+
+def drone(sa, seconds: float, pattern: str = "P S' S' S"):
+    """Make a tanpura-like drone: plucked strings that ring on, played in turn over and over.
+    *sa* is a note name like 'D3' (or a frequency); *pattern* gives the strings as swaras. It
+    loops smoothly with sound.loop(). Repeatable with random_seed()."""
+    from . import hindustani as _ragas, sound
+
+    values = _ragas.drone(sa, seconds, pattern, canvas_sketch()._rng, "f.drone()")
+    return sound.make(values, _sound_frame, "f.drone()")
+
+
+def match_ragas(histogram) -> list[tuple[str, float]]:
+    """Rank the table's ragas by how well their swaras fit a swara histogram (12 numbers, from
+    sound.swara_histogram(sa)). Gives (name, score) pairs, best first, scores from 0 to 1. A
+    learning aid that compares note sets: ragas with the same swaras score almost the same."""
+    from . import hindustani as _ragas
+
+    return _ragas.match(histogram, "f.match_ragas()")
+
+
 def microphone(name: str | None = None):
     """A microphone for the computer's default input (or the one with *name* in its name; see
     microphones()). Call mic.start() to listen. While it listens, mic.level(), mic.spectrum(bands)

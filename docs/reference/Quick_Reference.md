@@ -956,6 +956,21 @@ f.run()
 The place in the sound follows the sketch's clock, not the speakers, so these give the same answers
 with or without a sound device. Sounds add nothing to the picture, to saved files or to the IR.
 
+### Ragas and talas
+
+See [guide chapter 17](../guide/17_ragas_and_talas.md). The table's facts are checked against published sources, cited in each entry's `sources`.
+
+| Call | What it does | Example |
+|---|---|---|
+| `f.ragas()` / `f.raga(name)` | the names in the built-in raga table (13 Hindustani ragas), and one raga, any capitals. It has `name`, `thaat`, `swaras`, `aroha`, `avaroha` and `pakad` (sargam strings for `melody(sa=...)`), `vadi`, `samvadi`, `time`, `notes` and `sources`; read-only. An unknown name is a `ValueError` listing the table. | `f.melody(f.raga("Yaman").aroha, sa="D4")` |
+| `f.talas()` / `f.tala_info(name)` | the six talas (Teentaal, Ektaal, Jhaptaal, Rupak, Dadra, Keherwa), and one of them: `beats`, `vibhag` (group sizes), `tali` and `khali` (beat numbers from 1), `sam` (1), `bols` (the theka, one bol a beat), `notes`, `sources`. | `f.tala_info("Rupak").khali` |
+| `f.tala(name, tempo=80, cycles=1)` | the theka played with simple drum sounds, the sam louder and the khali vibhag softer; exactly `beats * 60 / tempo * cycles` seconds long. | `f.tala("Teentaal", tempo=100).loop()` |
+| `f.drone(sa, seconds, pattern="P S' S' S")` | a tanpura-like drone: plucked strings, tuned just from `sa` (a note name or hertz), played in turn and ringing on. `pattern` may start with `m` or `N` instead. Loops without a gap. | `f.drone("D3", 8).loop()` |
+| meend `S~G`, kan `(R)G` in `f.melody` | `S~G` glides from S to G over the token's beats; `(R)G` touches R for about 60 ms, then plays G. Both work with note names too. | `f.melody("S (R)G:2 G~S:2", sa="D4")` |
+| `x.tonic()` | on a sound (all of it) or a microphone (its last 10 seconds): a guess at Sa in hertz, or `None`. A heuristic: the pitch class that best explains a strong Sa and Pa. | `sa = song.tonic()` |
+| `x.swara_histogram(sa)` | 12 numbers for `S r R g G m M P d D n N` above `sa`: the share of the pitched time on each, any octave, within 50 cents. They add up to 1. | `h = song.swara_histogram("C#4")` |
+| `f.match_ragas(histogram)` | the table's ragas ranked by how well their swaras fit, as `(name, score)` pairs, best first, scores 0 to 1. Compares note sets only: ragas with the same swaras (Bhupali and Deshkar) score almost the same. | `f.match_ragas(h)[0]` |
+
 ---
 
 ## 9. One-page cheat sheet
@@ -1118,7 +1133,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
 | Off-screen graphics | — | `create_graphics`, `layer`, `hide_layer`, `show_layer`, `image`, `load_image`, `load_svg`, `svg_paths` |
-| Sound | — | `load_sound`, `create_sound`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `note_to_frequency`, `frequency_to_note`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum`, `samples`, `pan`, `save`, `pitch` on the sound; `microphone`, `microphones`; `start`, `stop`, `is_listening`, `capture`, `level`, `spectrum`, `pitch` on a microphone |
+| Sound | — | `load_sound`, `create_sound`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `note_to_frequency`, `frequency_to_note`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum`, `samples`, `pan`, `save`, `pitch` on the sound; `microphone`, `microphones`; `start`, `stop`, `is_listening`, `capture`, `level`, `spectrum`, `pitch` on a microphone; `ragas`, `raga`, `talas`, `tala_info`, `tala`, `drone`, `match_ragas`; meend and kan in `melody`; `tonic`, `swara_histogram` on a sound or microphone |
 | Controls | — | `create_slider`, `create_checkbox`, `create_button`, in a panel below the canvas |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 

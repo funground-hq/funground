@@ -174,6 +174,14 @@ ADDED_FUNCTIONS = {
     # S-108 microphone
     "microphone": "(name: 'str | None' = None)",
     "microphones": "() -> 'list[str]'",
+    # S-115 ragas
+    "ragas": "() -> 'list[str]'",
+    "raga": "(name: 'str')",
+    "talas": "() -> 'list[str]'",
+    "tala_info": "(name: 'str')",
+    "tala": "(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1)",
+    "drone": "(sa, seconds: 'float', pattern: 'str' = \"P S' S' S\")",
+    "match_ragas": "(histogram) -> 'list[tuple[str, float]]'",
     # S-090 tracking, features, variations
     "text_tracking": "(pixels: 'float') -> 'None'",
     "text_features": "(**features: 'bool') -> 'None'",

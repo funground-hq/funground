@@ -431,4 +431,4 @@ is fine for the chord finder, which ignores the octave.)
   that is not a sound gives `ValueError`. So do a volume outside 0 to 1 and `bands` outside 1 to
   256. The functions that make sound say which argument was wrong.
 
-**Previous:** [15. Coming from DrawBot](15_coming_from_drawbot.md)
+**Previous:** [15. Coming from DrawBot](15_coming_from_drawbot.md) · **Next:** [17. Ragas and talas](17_ragas_and_talas.md)
