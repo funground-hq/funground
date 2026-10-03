@@ -23,6 +23,7 @@ import funground as f  # noqa: E402
 from funground import api, export, ir  # noqa: E402
 from funground.export import layers as file_layers  # noqa: E402
 from funground.export.pdf_text import PdfTextCollector  # noqa: E402
+from funground.export.svg_text import SvgTextCollector  # noqa: E402
 from funground.platform.headless import HeadlessPlatform  # noqa: E402
 from funground.renderers.cairo2d import CairoRenderer  # noqa: E402
 from funground.sketch import Sketch  # noqa: E402
@@ -487,16 +488,21 @@ def fixed_pdf_date(monkeypatch):
 
 
 def before_s096(frame, path, w, h) -> None:
-    """How funground wrote a one-page PDF or SVG before S-096."""
+    """How funground wrote a one-page PDF or SVG before S-096 (with the SVG text step of S-097,
+    which came later and runs whether or not there are layers)."""
     renderer = CairoRenderer()
     pdf = path.suffix == ".pdf"
     if pdf:
         renderer.pdf_text = PdfTextCollector()
+    else:
+        renderer.svg_text = SvgTextCollector()
     surface = (cairo.PDFSurface if pdf else cairo.SVGSurface)(str(path), w, h)
     renderer.draw(renderer.context_for(surface, 1.0), frame)
     surface.finish()
     if pdf:
         renderer.pdf_text.finish(str(path))
+    else:
+        renderer.svg_text.finish(str(path))
 
 
 def same_bytes(a, b) -> bool:

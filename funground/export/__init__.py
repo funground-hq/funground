@@ -4,9 +4,10 @@
   everything earlier frames left on the canvas.
 - **PDF / SVG** (`save_frame`): a *replay* of the frame's ops onto a document surface,
   so the output is true vector. A vector file therefore contains what *this* frame drew,
-  not earlier frames. SVG draws text as glyph outlines; every PDF carries real text with an
-  embedded font subset (S-094, contract T15: see `pdf_text`). Layers (S-095) become real file
-  layers: optional content groups in PDF, Inkscape layer groups in SVG (S-096, contract F16: see
+  not earlier frames. Every PDF carries real text with an embedded font subset (S-094, contract
+  T15: see `pdf_text`). Every SVG holds its text as live, editable `<text>` naming the font by
+  family, with a subset of each font embedded for browsers (S-097, contract T19: see `svg_text`).
+  Layers (S-095) become real file layers: optional content groups in PDF, Inkscape layer groups in SVG (S-096, contract F16: see
   `layers`).
 - **`save_picture`** (S-052): the same idea for a Picture's own `g.save(path)` - PNG is its
   pixels, PDF/SVG replay its history when one is available, or embed its pixels when it is
@@ -24,6 +25,7 @@ from ..platform.base import Pixels
 from ..renderers.cairo2d import CairoRenderer, paint_picture_pixels
 from .layers import LayerMarkers
 from .pdf_text import PdfTextCollector
+from .svg_text import SvgTextCollector
 
 FORMATS = ("png", "pdf", "svg")
 
@@ -72,16 +74,35 @@ def _write_pdf(path: str, draw) -> None:
 
 
 def _write_svg(path: str, draw) -> None:
-    """Write an SVG with real layers (S-096, contract F16): Inkscape layer groups.
+    """Write an SVG with real layers (S-096, contract F16): Inkscape layer groups, and with each
+    line of text as live, editable `<text>` (S-097, contract T19).
 
-    As `_write_pdf`: should the layer step fail, the file is drawn again without it."""
-    renderer = CairoRenderer()
-    renderer.file_layers = LayerMarkers()
-    draw(renderer)
-    try:
-        renderer.file_layers.finish_svg(path)
-    except Exception:
-        draw(CairoRenderer())
+    As `_write_pdf`: the layer step runs first, then the text step, and should a step fail, the
+    file is drawn again without it (text as outlines, exactly what funground wrote before S-097;
+    layers as S-095 wrote them)."""
+    text = layers = True
+    while True:
+        renderer = CairoRenderer()
+        if text:
+            renderer.svg_text = SvgTextCollector()
+        if layers:
+            renderer.file_layers = LayerMarkers()
+        draw(renderer)
+        if not (text or layers):
+            return
+        try:
+            if layers:
+                renderer.file_layers.finish_svg(path)
+        except Exception:
+            layers = False
+            continue
+        try:
+            if text:
+                renderer.svg_text.finish(path)
+        except Exception:
+            text = False
+            continue
+        return
 
 
 def save_pixels(pixels: Pixels, path: str) -> None:
@@ -175,6 +196,8 @@ def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logi
 
     if fmt == "pdf" and history is not None:
         _write_pdf(path, draw)
+    elif history is not None:
+        _write_svg(path, draw)                        # S-097: its text, live
     else:
         draw(CairoRenderer())
     return fmt
