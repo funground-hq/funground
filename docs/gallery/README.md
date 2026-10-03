@@ -586,3 +586,21 @@ Source: [`examples/gallery/sound/03_sargam_over_a_drone.py`](../../examples/gall
 f.microphone() listens to your computer's microphone. mic.start() begins, and then mic.pitch() gives the pitch of the one note you sing or play, or None when it is quiet. f.frequency_to_note() turns that pitch into a name like "A4". The needle shows whether you are a little flat (left) or sharp (right). The bar at the bottom is mic.level(). Nothing is recorded or played back. With no microphone to hear, the sketch still runs, and just waits. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/04_tuner.py`](../../examples/gallery/sound/04_tuner.py)
+
+## Music
+
+### Music: see your voice
+
+![Music: see your voice](images/music-01_see_your_voice.png)
+
+Sing, hum or talk to your microphone and watch three views of the same sound. The top one is the wave: how the air moves, over the last half second. The middle one is the spectrum: how strong each pitch is right now, low on the left and high on the right. The bottom one is the pitch line: the note you sing, scrolling across, with faint guide lines for the notes. It leaves a gap when you are quiet. Nothing is recorded or played back. With no microphone to hear, the sketch still runs, and just shows quiet. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/01_see_your_voice.py`](../../examples/gallery/music/01_see_your_voice.py)
+
+### Music: a song's fingerprint
+
+![Music: a song's fingerprint](images/music-02_a_songs_fingerprint.png)
+
+A short song is built from two parts with f.melody() and put together with f.mix(). Then f.spectrogram() turns the whole sound into a picture: time goes across, pitch goes up, and the louder a pitch is, the brighter it is. You can see each note as a bright dash, and the low bass notes along the bottom. Click to play the song, and a line shows where it is. The picture is also saved as fingerprint.png. With no sound device the song plays silently and keeps time.
+
+Source: [`examples/gallery/music/02_a_songs_fingerprint.py`](../../examples/gallery/music/02_a_songs_fingerprint.py)

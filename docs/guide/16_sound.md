@@ -311,6 +311,110 @@ A few things to know:
 - `mic.start()` forgets what was heard before. `mic.stop()` keeps it, so you can stop, then capture.
 - This needs pygame-ce 2.5 or newer.
 
+## Drawing sound
+
+Four ready-made functions draw sound for you. You could draw all of them yourself from `samples()`,
+`spectrum()` and `pitch()`. These just save you the work. Each one fills a box: you give its left,
+top, width and height.
+
+`f.draw_wave(source, x, y, w, h)` draws the wave. The source can be a sound (you see all of it, and
+a line shows where it is while it plays), a microphone (you see the last half second) or a list of
+numbers. `f.draw_spectrum(source, x, y, w, h)` draws bars for the spectrum, as it is right now. They
+use your current fill, stroke and transform, like `f.rect()` does, so `f.fill("orange")` first
+changes the colour.
+
+```python
+import funground as f
+
+song = f.melody("C4 E4 G4 C5:2 - G4 E4 C4:2", tempo=150, wave="triangle")
+
+
+def setup():
+    f.size(420, 240)
+    song.loop()
+
+
+def draw():
+    f.background("black")
+    f.fill("deepskyblue")
+    f.stroke("white")
+    f.draw_wave(song, 10, 10, 400, 100)       # the whole song, and a line where it is now
+    f.no_stroke()
+    f.fill("orange")
+    f.draw_spectrum(song, 10, 130, 400, 100, bands=32)
+
+
+f.run()
+```
+
+`f.draw_pitch_line(source, x, y, w, h)` draws the pitch heard over the last few seconds, as a line
+that scrolls. Low notes are at the bottom and high notes at the top. Faint lines are labelled with
+note names. Give `sa="C4"` and they are labelled with swaras instead. Where there is no clear pitch,
+the line has a gap. Call it once in every frame, because it looks at the pitch each time. Use
+`seconds=`, `low=` and `high=` to change how far back it shows and which notes it covers.
+
+```python
+import funground as f
+
+mic = f.microphone()
+
+
+def setup():
+    f.size(420, 240)
+    mic.start()
+
+
+def draw():
+    f.background(20)
+    f.no_fill()
+    f.stroke("limegreen")
+    f.stroke_width(3)
+    f.draw_pitch_line(mic, 10, 10, 400, 220, seconds=8, low="C3", high="C6")
+
+
+f.run()
+```
+
+`f.spectrogram(sound, width, height)` gives you a picture of a whole sound. Time goes across, pitch
+goes up, and the louder it is, the brighter it is. The brightest colour is your current fill, so
+set the fill first. It takes about a second for a ten second sound, so make it once, in `setup()`,
+not in `draw()`. Then draw it with `f.image()`, or save it.
+
+```python
+import funground as f
+
+song = f.mix(f.melody("A3 C4 E4 A4:2 G4 E4 C4:2", tempo=130),
+             f.melody("A2:4 E2:4", tempo=130, wave="triangle"))
+picture = None
+
+
+def setup():
+    global picture
+    f.size(420, 200)
+    f.fill("gold")
+    picture = f.spectrogram(song, 400, 180)
+
+
+def draw():
+    f.background("black")
+    f.image(picture, 10, 10)
+    if song.is_playing():                    # a line shows where the song is
+        x = 10 + 400 * song.current_time() / song.duration()
+        f.stroke("white")
+        f.line(x, 10, x, 190)
+
+
+def mouse_pressed():
+    song.play()
+
+
+f.run()
+```
+
+Because these draw with ordinary shapes, they also work inside `with f.layer(...)`, and a saved PDF
+or SVG keeps them as sharp shapes. The spectrogram is a picture made of pixels, so a saved file
+holds it as an image.
+
 ## Good to know
 
 - **No sound device?** The sketch still works. With no speakers, or with `FUNGROUND_HEADLESS=1`,

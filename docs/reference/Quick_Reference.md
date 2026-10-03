@@ -944,6 +944,10 @@ f.run()
 | `mic.start()` / `mic.stop()` / `mic.is_listening()` | start and stop listening, and ask. `start()` forgets earlier sound; `stop()` keeps it. | `mic.start()` |
 | `mic.level()` / `mic.spectrum(bands=32)` / `mic.pitch()` | the same as on a sound, for the sound heard most recently. `0`, zeros and `None` when not listening. | `hz = mic.pitch()` |
 | `mic.capture(seconds)` | a new sound of the last `seconds` heard (more than 0, at most 10; else `ValueError`). Its start is silence if less was heard. | `take = mic.capture(2)` |
+| `f.draw_wave(source, x, y, w, h)` | draw a wave in the box `x, y, w, h`, with the current fill, stroke and transform. `source` is a sound (the whole sound, with a line showing where it is while it plays), a microphone (the last half second) or a list of numbers. A sound's shape is worked out once for each width, so it is quick. | `f.draw_wave(song, 20, 20, 400, 80)` |
+| `f.draw_spectrum(source, x, y, w, h, bands=32)` | bars for `source.spectrum(bands)` as it is now, standing on the bottom of the box, in the current style. | `f.draw_spectrum(mic, 20, 120, 400, 80)` |
+| `f.spectrogram(sound, width, height)` | a picture of the whole sound: time across, pitch up (40 Hz to 16 kHz, spaced like notes), louder is brighter. The brightest colour is the current fill. Make it once (about a second for 10 seconds at 400 by 200), then draw it with `f.image()` or save it. | `pic = f.spectrogram(song, 400, 200)` |
+| `f.draw_pitch_line(source, x, y, w, h, seconds=5, low="C3", high="C6", sa=None)` | the pitch of `source` over the last `seconds` as a line that scrolls left, from `low` (bottom) to `high` (top), with faint labelled guide lines for the notes, or for the swaras when `sa` is given. It gaps where `pitch()` is `None`. Call it once in every frame. | `f.draw_pitch_line(mic, 20, 20, 400, 150)` |
 | `f.note_to_frequency(name, sa=None)` / `f.frequency_to_note(hz, sa=None)` | note name to hertz and back (the nearest note, with sharps: `"A#4"`). With `sa`, the name is a swara such as `"G"` or `"N,"`. | `f.frequency_to_note(f.note_to_frequency("A4"))` |
 
 The place in the sound follows the sketch's clock, not the speakers, so these give the same answers
@@ -1111,7 +1115,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 | Transforms | — | `translate`, `rotate` (degrees), `scale`, `push`/`pop`, `with f.saved_state():`, `radians`/`degrees` |
 | Shapes | — | `square`, `triangle`, `quad`, `polygon`, `arc`, `clear`; `begin_shape`/`vertex`/`bezier_vertex`/`quadratic_vertex`/`curve_vertex`/contours/`end_shape`, `bezier`, `curve`, `f.path()`, `draw_path`, `clip`, `no_clip` |
 | Off-screen graphics | — | `create_graphics`, `layer`, `hide_layer`, `show_layer`, `image`, `load_image`, `load_svg`, `svg_paths` |
-| Sound | — | `load_sound`, `create_sound`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `note_to_frequency`, `frequency_to_note`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum`, `samples`, `pan`, `save`, `pitch` on the sound; `microphone`, `microphones`; `start`, `stop`, `is_listening`, `capture`, `level`, `spectrum`, `pitch` on a microphone |
+| Sound | — | `load_sound`, `create_sound`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `note_to_frequency`, `frequency_to_note`; `play`, `loop`, `stop`, `pause`, `set_volume`, `is_playing`, `duration`, `current_time`, `get_volume`, `level`, `spectrum`, `samples`, `pan`, `save`, `pitch` on the sound; `microphone`, `microphones`; `start`, `stop`, `is_listening`, `capture`, `level`, `spectrum`, `pitch` on a microphone; `draw_wave`, `draw_spectrum`, `spectrogram`, `draw_pitch_line` |
 | Controls | — | `create_slider`, `create_checkbox`, `create_button`, in a panel below the canvas |
 | High-DPI | Window bitmap-stretched (blurry) | Drawn crisply at the screen's resolution; coordinates unchanged |
 
