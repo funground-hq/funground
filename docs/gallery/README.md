@@ -604,3 +604,27 @@ Source: [`examples/gallery/music/01_tap_along.py`](../../examples/gallery/music/
 Chords play one after another. sound.chroma() gives twelve numbers: how strong each note name (C, C#, D ... B) is right now, whatever the octave. They are the twelve bars. sound.chord() names the chord that fits, and f.chord_notes() lists its notes, which are lit on the small keyboard. With no sound device the chords stay silent and the bars stay flat. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/music/02_see_a_chord.py`](../../examples/gallery/music/02_see_a_chord.py)
+
+### Music: sing with the drone
+
+![Music: sing with the drone](images/music-03_sing_with_the_drone.png)
+
+f.drone() makes a sound like a tanpura: plucked strings on Pa and Sa that ring on and on. Sing along with it. The microphone hears you, and your pitch is drawn as a line that moves to the left. The bright lines are Sa and Pa. Try to hold your voice on them, and watch the line go flat when you are in tune. f.frequency_to_note(hz, sa=SA) names the swara you sing. Change SA to suit your voice. With no microphone the drone still plays and the line waits. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/03_sing_with_the_drone.py`](../../examples/gallery/music/03_sing_with_the_drone.py)
+
+### Music: hear a raga
+
+![Music: hear a raga](images/music-04_hear_a_raga.png)
+
+f.ragas() lists the ragas funground knows, and f.raga(name) tells you about one: its thaat (parent scale), the swaras it uses, its aroha (the way up) and avaroha (the way down), its vadi and samvadi (the two most important notes) and the time of day it belongs to. Pick a raga with the slider or the left and right keys. Its aroha and avaroha play over a drone, and each swara lights up as it sounds. Swaras the raga leaves out are dark. f.match_ragas() then says which ragas use the most similar swaras: ragas that share the same swaras come out almost level, as only the notes are compared. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/04_hear_a_raga.py`](../../examples/gallery/music/04_hear_a_raga.py)
+
+### Music: a tala goes round
+
+![Music: a tala goes round](images/music-05_tala.png)
+
+A tala is a cycle of beats that comes round again and again. f.tala_info(name) gives its beats, its vibhags (the groups the beats fall in), the beats you clap (tali) and wave (khali), and the bols: the syllables a tabla player says for each stroke. f.tala(name) plays one cycle with simple drum sounds. Here the bols sit round a circle and the beat playing now glows. The sam, beat 1, is marked X; a wave is marked 0. Keys 1 to 6 pick a tala. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/05_tala.py`](../../examples/gallery/music/05_tala.py)

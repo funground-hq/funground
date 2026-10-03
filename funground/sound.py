@@ -291,6 +291,35 @@ class _Analysis:
             return None
         return self._cached("chord", lambda: analysis.chord_of(self._compute_chroma()))
 
+    # ---- ragas (S-115, contract A8)
+    def _pitch_track(self) -> list:
+        """The pitch through the whole sound, or through the last 10 seconds a microphone heard
+        (hindustani.pitch_track). A sound's track is kept, as its samples do not change."""
+        from . import hindustani as ragas
+
+        if isinstance(self, Sound):
+            if "track" not in self._cache:
+                self._cache["track"] = ragas.pitch_track(self._samples_at(synth.RATE), synth.RATE)[0]
+            return self._cache["track"]
+        return ragas.pitch_track(self._window(10 * self._rate), self._rate)[0]
+
+    def tonic(self) -> float | None:
+        """A guess at Sa, in hertz, or None when too little had a clear pitch. It is a heuristic:
+        it counts how long each pitch was heard, folded into one octave, and picks the pitch that
+        best explains a strong Sa and Pa (see funground.hindustani.tonic for the method and its limits)."""
+        from . import hindustani as ragas
+
+        return ragas.tonic(self._pitch_track())
+
+    def swara_histogram(self, sa) -> list[float]:
+        """12 numbers, one for each swara S r R g G m M P d D n N above *sa* (a note name like 'D4'
+        or hertz): the share of the time with a clear pitch spent within 50 cents of that swara, in
+        any octave. They add up to 1 (all 0 if nothing had a pitch)."""
+        from . import hindustani as ragas
+
+        sa_hz = ragas._sa_hz(sa, f"{self._name}.swara_histogram()")
+        return ragas.swara_histogram(self._pitch_track(), sa_hz)
+
 
 class Sound(_Analysis):
     """A sound from f.load_sound(). See contract A1 (playback) and A2 (analysis)."""
