@@ -17,6 +17,7 @@ Keys
     Left / Right    previous / next example (in the current area)
     Enter           run the example in its own window
     C               copy the example (and its data files) into the current folder
+    O               open the folder where the example saved its files (after you ask, never before)
     Backspace       back to the grid
     / or f          filter the grid by part of a title (Enter keeps it, Backspace clears it)
     Up / Down       scroll
@@ -24,7 +25,8 @@ Keys
 
 Run starts the example as its own program, in a temporary folder, so any file it saves
 stays out of the installed package. Those windows keep running if you close the browser.
-Copy never overwrites: a name that is taken gets _2, _3 and so on.
+Each run gets its own folder. When an example saves a file, the browser says where, and
+prints the folder to the terminal too. Copy never overwrites: a name that is taken gets _2, _3.
 
 This module is loaded only by ``python -m funground.gallery`` (and the tools that share its
 example list); ``import funground`` never imports it.
@@ -32,6 +34,7 @@ example list); ``import funground`` never imports it.
 from __future__ import annotations
 
 import math
+import os
 import re
 import shutil
 import subprocess
@@ -144,6 +147,28 @@ def free_name(folder: Path, name: str) -> Path:
     return target
 
 
+def open_in_file_browser(folder: Path) -> None:
+    """Show ``folder`` in the system file browser. Called only when the learner asks."""
+    if sys.platform == "win32":
+        os.startfile(str(folder))                       # noqa: S606
+    elif sys.platform == "darwin":
+        subprocess.Popen(["open", str(folder)])
+    else:
+        subprocess.Popen(["xdg-open", str(folder)])
+
+
+def saved_files(folder: Path) -> list[str]:
+    """The names of the files under ``folder`` (folders inside it are shown as sub/name), sorted."""
+    if not folder.is_dir():
+        return []
+    return sorted(p.relative_to(folder).as_posix() for p in folder.rglob("*") if p.is_file())
+
+
+def saved_message(names: list[str], folder: Path, shown: int = 3) -> str:
+    more = f" + {len(names) - shown} more" if len(names) > shown else ""
+    return f"Saved: {', '.join(names[:shown])}{more}  →  {folder}"
+
+
 def copy_example(path: Path, folder: Path) -> tuple[Path, list[Path], list[Path]]:
     """Copy an example and the data files it names into ``folder``.
 
@@ -200,6 +225,7 @@ BUTTONS = {                       # detail-view buttons: x, y, width, height
     "back": (264, 24, 90, 36),
     "previous": (366, 24, 110, 36),
     "next": (488, 24, 90, 36),
+    "folder": (730, 24, 106, 36),
     "copy": (848, 24, 106, 36),
     "run": (966, 24, 110, 36),
 }
@@ -253,6 +279,9 @@ class Browser:
     status: tuple[str, int] = ("", 0)
     running: dict = field(default_factory=dict)
     scratch: Path | None = None
+    run_dirs: dict = field(default_factory=dict)       # example path -> the folder of its latest run
+    seen_files: dict = field(default_factory=dict)     # example path -> file names already reported
+    finished: set = field(default_factory=set)         # example paths whose last run has had its final look
     copy_dir: Path | None = None                       # where Copy writes; None = the current folder
 
     # ---- queries
@@ -318,12 +347,51 @@ class Browser:
             return
         if self.scratch is None:
             self.scratch = Path(tempfile.mkdtemp(prefix="funground-gallery-"))
+        run_dir = free_name(self.scratch, entry.path.stem)      # a fresh folder for every run
         try:
-            self.running[entry.path] = subprocess.Popen([sys.executable, str(entry.path)], cwd=str(self.scratch))
+            run_dir.mkdir(parents=True)
+            self.running[entry.path] = subprocess.Popen([sys.executable, str(entry.path)], cwd=str(run_dir))
         except OSError as problem:
             self.status = (f"Could not start it: {problem}", frame + 240)
             return
+        self.run_dirs[entry.path] = run_dir
+        self.seen_files[entry.path] = []
+        self.finished.discard(entry.path)
         self.status = (f"Started: {entry.title}", frame + 150)
+
+    def watch(self, frame: int) -> None:
+        """Look for new files in the run folders. Called every frame; cheap, no extra thread."""
+        for path, folder in self.run_dirs.items():
+            if path in self.finished:
+                continue
+            names = saved_files(folder)
+            if names and names != self.seen_files.get(path):
+                self.status = (saved_message(names, folder), frame + 600)
+                print(f"Saved in {folder}: {', '.join(names)}", flush=True)
+            self.seen_files[path] = names
+            proc = self.running.get(path)
+            if proc is None or proc.poll() is not None:
+                self.finished.add(path)
+
+    def folder_of(self, entry: Entry | None) -> Path | None:
+        """The folder of this example's latest run, if it saved anything there."""
+        if entry is None:
+            return None
+        folder = self.run_dirs.get(entry.path)
+        return folder if folder is not None and saved_files(folder) else None
+
+    def open_folder(self, frame: int) -> None:
+        """Open the saved-files folder of the current example, only when asked."""
+        folder = self.folder_of(self.entry)
+        if folder is None:
+            self.status = ("Nothing saved yet. Run the example first.", frame + 150)
+            return
+        try:
+            open_in_file_browser(folder)
+        except OSError as problem:
+            self.status = (f"Could not open the folder: {problem}", frame + 300)
+            return
+        self.status = (f"Opened {folder}", frame + 150)
 
     def copy_entry(self, frame: int) -> None:
         """Copy the example, and the data files it names, into the current folder. Never overwrites."""
@@ -355,7 +423,7 @@ class Browser:
         for name, rect in BUTTONS.items():
             if inside(x, y, rect) and self.button_enabled(name):
                 {"back": self.back, "previous": lambda: self.step(-1), "next": lambda: self.step(1),
-                 "copy": lambda: self.copy_entry(frame), "run": lambda: self.run_entry(frame)}[name]()
+                 "folder": lambda: self.open_folder(frame), "copy": lambda: self.copy_entry(frame), "run": lambda: self.run_entry(frame)}[name]()
                 return
 
     def button_enabled(self, name: str) -> bool:
@@ -363,6 +431,8 @@ class Browser:
             return self.position() > 0
         if name == "next":
             return self.position() < len(self.visible()) - 1
+        if name == "folder":
+            return self.folder_of(self.entry) is not None
         return True
 
     def wheel(self, delta: float) -> None:
@@ -401,11 +471,14 @@ class Browser:
             self.run_entry(frame)
         elif name == "c" and self.view == "detail":
             self.copy_entry(frame)
+        elif name == "o" and self.view == "detail":
+            self.open_folder(frame)
         elif name in ("up", "down"):
             self.wheel(-1 if name == "up" else 1)
 
     # ---- drawing
     def draw(self) -> None:
+        self.watch(f.frame_count)
         f.background(BG)
         (self.draw_grid if self.view == "grid" else self.draw_detail)()
         self.draw_sidebar()
@@ -452,7 +525,7 @@ class Browser:
         if self.typing:
             tip = "Type part of a title     Enter: keep the filter     Backspace: delete     Esc: quit"
         elif self.view == "detail":
-            tip = "Left / Right: previous, next     Enter: run     C: copy to folder     Backspace: back     Wheel: scroll     Esc: quit"
+            tip = "Left / Right: previous, next     Enter: run     C: copy     O: open saved-files folder     Backspace: back     Esc: quit"
         else:
             tip = "Click a picture to open it     Wheel: scroll     / or f: filter     Backspace: clear filter     Esc: quit"
         label(tip, GX, H - 25, 13, MUTED)
