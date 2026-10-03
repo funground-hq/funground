@@ -570,3 +570,11 @@ Source: [`examples/gallery/sound/02_write_a_tune.py`](../../examples/gallery/sou
 With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D n N. A ' after a swara is the octave above and a comma is the octave below. Here the notes use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings plays Pa, Sa, Sa, Sa over and over. The ladder shows the swara that sound.pitch() hears. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/03_sargam_over_a_drone.py`](../../examples/gallery/sound/03_sargam_over_a_drone.py)
+
+### Sound: a tuner that listens
+
+![Sound: a tuner that listens](images/sound-04_tuner.png)
+
+f.microphone() listens to your computer's microphone. mic.start() begins, and then mic.pitch() gives the pitch of the one note you sing or play, or None when it is quiet. f.frequency_to_note() turns that pitch into a name like "A4". The needle shows whether you are a little flat (left) or sharp (right). The bar at the bottom is mic.level(). Nothing is recorded or played back. With no microphone to hear, the sketch still runs, and just waits. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/sound/04_tuner.py`](../../examples/gallery/sound/04_tuner.py)

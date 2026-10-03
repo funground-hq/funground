@@ -900,6 +900,24 @@ def frequency_to_note(hz: float, sa: str | None = None) -> str:
     return synth.frequency_to_note(hz, sa)
 
 
+def microphone(name: str | None = None):
+    """A microphone for the computer's default input (or the one with *name* in its name; see
+    microphones()). Call mic.start() to listen. While it listens, mic.level(), mic.spectrum(bands)
+    and mic.pitch() work as they do on a sound; mic.capture(seconds) returns the last few seconds
+    as a sound. It is never played back. With no microphone it raises RuntimeError; with
+    FUNGROUND_HEADLESS=1 it is silent and hears nothing."""
+    from . import microphone_input as mic
+
+    return mic.make(name, _sound_frame)
+
+
+def microphones() -> list[str]:
+    """The names of the computer's microphones (inputs)."""
+    from . import microphone_input as mic
+
+    return mic.microphones()
+
+
 def svg_paths(path: str) -> list[PathBuilder]:
     """Read an SVG file and return its shapes as a list of f.path() builders, one per shape,
     in the file's own coordinates: for booleans, clips or your own colours."""

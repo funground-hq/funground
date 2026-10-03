@@ -169,6 +169,9 @@ ADDED_FUNCTIONS = {
     "mix": "(*sounds)",
     "note_to_frequency": "(name: 'str', sa: 'str | None' = None) -> 'float'",
     "frequency_to_note": "(hz: 'float', sa: 'str | None' = None) -> 'str'",
+    # S-108 microphone
+    "microphone": "(name: 'str | None' = None)",
+    "microphones": "() -> 'list[str]'",
     # S-090 tracking, features, variations
     "text_tracking": "(pixels: 'float') -> 'None'",
     "text_features": "(**features: 'bool') -> 'None'",
