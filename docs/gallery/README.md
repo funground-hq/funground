@@ -586,3 +586,29 @@ Source: [`examples/gallery/sound/03_sargam_over_a_drone.py`](../../examples/gall
 f.microphone() listens to your computer's microphone. mic.start() begins, and then mic.pitch() gives the pitch of the one note you sing or play, or None when it is quiet. f.frequency_to_note() turns that pitch into a name like "A4". The needle shows whether you are a little flat (left) or sharp (right). The bar at the bottom is mic.level(). Nothing is recorded or played back. With no microphone to hear, the sketch still runs, and just waits. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/04_tuner.py`](../../examples/gallery/sound/04_tuner.py)
+
+## Music
+
+### Music: sing with the drone
+
+![Music: sing with the drone](images/music-01_sing_with_the_drone.png)
+
+f.drone() makes a sound like a tanpura: plucked strings on Pa and Sa that ring on and on. Sing along with it. The microphone hears you, and your pitch is drawn as a line that moves to the left. The bright lines are Sa and Pa. Try to hold your voice on them, and watch the line go flat when you are in tune. f.frequency_to_note(hz, sa=SA) names the swara you sing. Change SA to suit your voice. With no microphone the drone still plays and the line waits. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/01_sing_with_the_drone.py`](../../examples/gallery/music/01_sing_with_the_drone.py)
+
+### Music: hear a raga
+
+![Music: hear a raga](images/music-02_hear_a_raga.png)
+
+f.ragas() lists the ragas funground knows, and f.raga(name) tells you about one: its thaat (parent scale), the swaras it uses, its aroha (the way up) and avaroha (the way down), its vadi and samvadi (the two most important notes) and the time of day it belongs to. Pick a raga with the slider or the left and right keys. Its aroha and avaroha play over a drone, and each swara lights up as it sounds. Swaras the raga leaves out are dark. f.match_ragas() then says which ragas use the most similar swaras: ragas that share the same swaras come out almost level, as only the notes are compared. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/02_hear_a_raga.py`](../../examples/gallery/music/02_hear_a_raga.py)
+
+### Music: a tala goes round
+
+![Music: a tala goes round](images/music-03_tala.png)
+
+A tala is a cycle of beats that comes round again and again. f.tala_info(name) gives its beats, its vibhags (the groups the beats fall in), the beats you clap (tali) and wave (khali), and the bols: the syllables a tabla player says for each stroke. f.tala(name) plays one cycle with simple drum sounds. Here the bols sit round a circle and the beat playing now glows. The sam, beat 1, is marked X; a wave is marked 0. Keys 1 to 6 pick a tala. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/03_tala.py`](../../examples/gallery/music/03_tala.py)

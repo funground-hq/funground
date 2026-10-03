@@ -56,7 +56,7 @@ packages = ["funground", "funground.platform", "funground.renderers", "funground
 "funground.gallery_images" = "docs/gallery/images"
 
 [tool.setuptools.package-data]
-funground = ["fonts/*.ttf", "fonts/*.txt"]
+funground = ["fonts/*.ttf", "fonts/*.txt", "data/*.json"]
 "funground.examples" = ["*/*.py", "*/data/*", "*/fonts/*"]
 "funground.gallery_images" = ["*.png"]
 

@@ -251,25 +251,33 @@ def melody_samples(text, tempo=120, wave="sine", sa=None, tuning="equal", rng=No
             raise ValueError(f"{who}: bad token {token!r}: {hz:.0f} Hz is too low or too high to play")
         return hz
 
-    parsed = []                                    # (frequencies, beats); frequencies [] is a rest
+    # (frequencies, beats, ornament); frequencies [] is a rest. The ornament (S-115, contract A8)
+    # is None, or (grace frequency or None, glide-to frequency or None) for kan and meend.
+    parsed = []
     for token in _split(text, who):
         m = re.match(r"^\[([^\[\]]*)\](?::(.*))?$", token)
         if m:
             names = m.group(1).split()
             if not names:
                 raise ValueError(f"{who}: bad token {token!r}: the chord is empty")
-            parsed.append(([hz_of(name, token) for name in names], _beats(m.group(2), token, who)))
+            parsed.append(([hz_of(name, token) for name in names], _beats(m.group(2), token, who), None))
             continue
         name, colon, beats_text = token.partition(":")
         beats = _beats(beats_text if colon else None, token, who)
-        parsed.append(([] if name == "-" else [hz_of(name, token)], beats))
+        ornament = _ornament(name, token, who)
+        if ornament is None:
+            parsed.append(([] if name == "-" else [hz_of(name, token)], beats, None))
+            continue
+        grace, start, end = ornament
+        parsed.append(([hz_of(start, token)], beats,
+                       (hz_of(grace, token) if grace else None, hz_of(end, token) if end else None)))
     if not parsed:
         raise ValueError(f"{who}: the melody has no notes in it")
 
     seconds_per_beat = 60.0 / tempo
     out: list[float] = []
     elapsed = 0.0
-    for freqs, beats in parsed:
+    for freqs, beats, ornament in parsed:
         elapsed += beats
         n = round(elapsed * seconds_per_beat * RATE) - len(out)     # no drift over a long tune
         if n <= 0:
@@ -277,9 +285,79 @@ def melody_samples(text, tempo=120, wave="sine", sa=None, tuning="equal", rng=No
         length = n / RATE
         if not freqs:
             out.extend([0.0] * n)
+        elif ornament is not None:
+            grace, end = ornament
+            out.extend(ornament_samples(freqs[0], end or freqs[0], length, wave, grace, rng))
         else:
             notes = [tone_samples(hz, length, wave, 1.0, DEFAULT_ATTACK, DEFAULT_RELEASE, rng) for hz in freqs]
             out.extend(notes[0] if len(notes) == 1 else mix_samples(notes))
+    return out
+
+
+# ---- meend and kan (S-115, contract A8)
+KAN_SECONDS = 0.06             # how long the grace note of a kan, (R)G, lasts
+_KAN = re.compile(r"^\(([^()]+)\)(.+)$")
+
+
+def _ornament(name: str, token: str, who: str):
+    """(grace, start, end) for a token with a kan "(R)G" or a meend "S~G", each part a note name or
+    swara (grace and end may be None). None for a plain note or rest."""
+    if "(" not in name and ")" not in name and "~" not in name:
+        return None
+    grace = None
+    m = _KAN.match(name)
+    if m:
+        grace, name = m.groups()
+    if "(" in name or ")" in name or name == "-":
+        raise ValueError(f"{who}: bad token {token!r}: a kan is the grace note in brackets and then the "
+                         "note, like (R)G")
+    parts = name.split("~")
+    if len(parts) > 2 or "" in parts or "-" in parts:
+        raise ValueError(f"{who}: bad token {token!r}: a meend is two notes joined by ~, like S~G")
+    return grace, parts[0], parts[1] if len(parts) == 2 else None
+
+
+def ornament_samples(start_hz: float, end_hz: float, seconds: float, wave: str = "sine",
+                     grace_hz: float | None = None, rng: random.Random | None = None,
+                     rate: int = RATE) -> list[float]:
+    """One note whose pitch moves. With *grace_hz* it first touches that note for KAN_SECONDS (a
+    kan). Then it glides from *start_hz* to *end_hz* over the rest of the time (a meend), on a
+    smooth S-shaped curve in pitch. The wave keeps its phase as the pitch changes, so there is no
+    click, and it has the same fades as a plain note."""
+    n = max(1, round(seconds * rate))
+    g = min(round(KAN_SECONDS * rate), n // 2) if grace_hz else 0
+    span = math.log(end_hz / start_hz)
+    rest = max(1, n - g - 1)
+    uniform = (rng or random).random
+    out = [0.0] * n
+    phase = 0.0
+    tau = 2.0 * math.pi
+    for i in range(n):
+        if i < g:
+            hz = grace_hz
+        else:
+            t = (i - g) / rest
+            hz = start_hz * math.exp(span * t * t * (3.0 - 2.0 * t))
+        p = phase % 1.0
+        if wave == "sine":
+            v = math.sin(tau * p)
+        elif wave == "square":
+            v = 1.0 if p < 0.5 else -1.0
+        elif wave == "saw":
+            v = 2.0 * ((p + 0.5) % 1.0) - 1.0
+        elif wave == "triangle":
+            v = 1.0 - 4.0 * abs(((p + 0.25) % 1.0) - 0.5)
+        else:
+            v = 2.0 * uniform() - 1.0
+        out[i] = v
+        phase += hz / rate
+    attack, release = _fade_times(seconds, DEFAULT_ATTACK, DEFAULT_RELEASE)
+    a = min(n, round(attack * rate))
+    for i in range(a):
+        out[i] *= i / a
+    r = min(n, round(release * rate))
+    for j in range(r):
+        out[n - 1 - j] *= j / r
     return out
 
 
