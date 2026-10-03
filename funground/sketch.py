@@ -83,7 +83,7 @@ class Sketch:
         self._states = StateStack()
         # Ops recorded since the last render; consumed once per loop iteration.
         self.frame = ir.Frame()
-        self._pending_saves: list[str] = []
+        self._pending_saves: list[tuple[str, str]] = []     # (path, text mode)
         self._frame_sequence: list | None = None      # S-056: [pattern, next number, last number]
         self._cursor: str | None = "arrow"              # S-057: applied whenever a window opens
         # no_smooth() is a sketch setting, re-applied at the start of every frame (S-042).
@@ -895,9 +895,12 @@ class Sketch:
         self._append(self._renderer.pixels_op(out, 0, 0, w, h))
 
     # ------------------------------------------------------------ export
-    def save(self, path: str) -> None:
-        """Write this frame to a .png, .pdf or .svg file when the frame is complete."""
-        from .export import format_of
+    def save(self, path: str, *, text: str = "live") -> None:
+        """Write this frame to a .png, .pdf or .svg file when the frame is complete.
+
+        *text* is "live" or "shapes" (contract T20): how a PDF or SVG holds its letters."""
+        from .export import check_text_mode, format_of
+        check_text_mode(text)
         from .export.motion import MOTION_FORMATS
 
         if isinstance(path, str) and "." in path and path.lower().rsplit(".", 1)[-1] in MOTION_FORMATS:
@@ -906,25 +909,26 @@ class Sketch:
         format_of(path)  # validate early so the learner sees the error at the call site
         self._require_window()
         if self._script:                     # contract R14: a script's save writes at once
-            self._save_script(path)
+            self._save_script(path, text)
             return
-        self._pending_saves.append(path)
+        self._pending_saves.append((path, text))
 
-    def _save_script(self, path: str) -> None:
+    def _save_script(self, path: str, text: str = "live") -> None:
         from .export import format_of, save_frame, save_pixels
 
         self._flush_pixel_patch()
         fmt = format_of(path)
         if self._pages:                                  # contract R17: several pages
-            self._save_pages(path, fmt)
+            self._save_pages(path, fmt, text)
             return
         if fmt == "png":
             self._script_flush()
             save_pixels(self._view_pixels(), path)
         else:
-            save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, self._script_scale)
+            save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, self._script_scale,
+                       text)
 
-    def _save_pages(self, path: str, fmt: str) -> None:
+    def _save_pages(self, path: str, fmt: str, text: str = "live") -> None:
         import os
 
         from .export import save_document, save_frame, save_pixels
@@ -932,7 +936,7 @@ class Sketch:
 
         pages = self._document_pages()
         if fmt == "pdf":
-            save_document([(w, h, ir.Frame(list(ops))) for w, h, ops, _ in pages], path)
+            save_document([(w, h, ir.Frame(list(ops))) for w, h, ops, _ in pages], path, text)
             return
         self._script_flush()
         stem, ext = os.path.splitext(path)
@@ -944,7 +948,7 @@ class Sketch:
                     pixels, round(w * scale), round(h * scale), "BGRA")
                 save_pixels(shown, numbered)
             else:
-                save_frame(ir.Frame(list(ops)), numbered, w, h, scale)
+                save_frame(ir.Frame(list(ops)), numbered, w, h, scale, text)
 
     # ---- GIF and MP4 (S-100, contract M1)
     def frame_duration(self, seconds: float) -> None:
@@ -1074,7 +1078,7 @@ class Sketch:
         folder = os.path.dirname(path)
         if folder:
             os.makedirs(folder, exist_ok=True)
-        self._pending_saves.append(path)
+        self._pending_saves.append((path, "live"))
         seq[1] += 1
         if seq[1] > last:
             self._frame_sequence = None
@@ -1085,12 +1089,12 @@ class Sketch:
         from .export import format_of, save_frame, save_pixels
 
         paths, self._pending_saves = self._pending_saves, []
-        for path in paths:
+        for path, text in paths:
             if format_of(path) == "png":
                 save_pixels(self._view_pixels(), path)      # what is on screen
             else:
                 save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height,
-                           self._platform.backing_scale)
+                           self._platform.backing_scale, text)
 
     # ------------------------------------------------------------ style
     def read_color(self, value: ColorLike, *more: float) -> Color:

@@ -28,6 +28,14 @@ from .pdf_text import PdfTextCollector
 from .svg_text import SvgTextCollector
 
 FORMATS = ("png", "pdf", "svg")
+TEXT_MODES = ("live", "shapes")
+
+
+def check_text_mode(text) -> str:
+    """Validate a ``text=`` choice for saving (contract T20): "live" or "shapes"."""
+    if not isinstance(text, str) or text not in TEXT_MODES:
+        raise ValueError(f'save(text=...) must be "live" or "shapes", not {text!r}')
+    return text
 
 
 def format_of(path: str) -> str:
@@ -37,7 +45,7 @@ def format_of(path: str) -> str:
     return ext
 
 
-def _write_pdf(path: str, draw) -> None:
+def _write_pdf(path: str, draw, text_mode: str = "live") -> None:
     """Write a PDF with real text (S-094, contract T15) and real layers (S-096, contract F16).
 
     ``draw(renderer)`` writes the whole document to *path* with *renderer* and finishes the
@@ -48,7 +56,7 @@ def _write_pdf(path: str, draw) -> None:
     without it: text as glyph outlines (exactly what funground wrote before T15), layers as plain
     drawing with hidden layers left out (exactly what S-095 wrote). A save never fails because of them.
     """
-    text = layers = True
+    text, layers = text_mode == "live", True        # T20: "shapes" = never set up the text collector
     while True:
         renderer = CairoRenderer()
         if text:
@@ -73,14 +81,14 @@ def _write_pdf(path: str, draw) -> None:
         return
 
 
-def _write_svg(path: str, draw) -> None:
+def _write_svg(path: str, draw, text_mode: str = "live") -> None:
     """Write an SVG with real layers (S-096, contract F16): Inkscape layer groups, and with each
     line of text as live, editable `<text>` (S-097, contract T19).
 
     As `_write_pdf`: the layer step runs first, then the text step, and should a step fail, the
     file is drawn again without it (text as outlines, exactly what funground wrote before S-097;
     layers as S-095 wrote them)."""
-    text = layers = True
+    text, layers = text_mode == "live", True        # T20: "shapes" = never set up the text collector
     while True:
         renderer = CairoRenderer()
         if text:
@@ -118,9 +126,12 @@ def save_pixels(pixels: Pixels, path: str) -> None:
     surface.finish()
 
 
-def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 1.0) -> str:
-    """Replay *frame* (logical width x height) to *path*; return the format used."""
+def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 1.0, text: str = "live") -> str:
+    """Replay *frame* (logical width x height) to *path*; return the format used.
+
+    *text* is "live" or "shapes" (contract T20); it only matters for PDF and SVG."""
     fmt = format_of(path)
+    check_text_mode(text)
     renderer = CairoRenderer()
     if fmt == "png":
         pw, ph = round(width * scale), round(height * scale)
@@ -140,18 +151,19 @@ def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 
             surface.finish()
 
         if fmt == "pdf":
-            _write_pdf(path, draw)
+            _write_pdf(path, draw, text)
         else:
-            _write_svg(path, draw)
+            _write_svg(path, draw, text)
     return fmt
 
 
-def save_document(pages: list, path: str) -> None:
+def save_document(pages: list, path: str, text: str = "live") -> None:
     """Write several pages, each ``(width, height, Frame)``, into one multi-page PDF (contract R17).
 
     Each page is replayed as vectors at its own size (points = logical pixels); rasters embed as
     they do on any PDF surface (contract P3, P7).
     """
+    check_text_mode(text)
     if format_of(path) != "pdf":
         raise ValueError(f"a multi-page document is a .pdf, not {path!r}")
     first_width, first_height, _ = pages[0]
@@ -165,10 +177,11 @@ def save_document(pages: list, path: str) -> None:
             surface.show_page()
         surface.finish()
 
-    _write_pdf(path, draw)                            # one font subset per document, shared by pages
+    _write_pdf(path, draw, text)                      # one font subset per document, shared by pages
 
 
-def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logical_height: int, path: str) -> str:
+def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logical_height: int, path: str,
+                 text: str = "live") -> str:
     """Write a Picture to *path* immediately (contract P2): PNG = its pixels; PDF/SVG replay
 
     its drawing history as vectors when one is available, or embed its pixels when it is not
@@ -177,6 +190,7 @@ def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logi
     save never fails just because a picture drew a lot; it only stops staying vector.
     """
     fmt = format_of(path)
+    check_text_mode(text)
     if fmt == "png":
         save_pixels(pixels, path)
         return fmt
@@ -195,9 +209,9 @@ def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logi
         surface.finish()
 
     if fmt == "pdf" and history is not None:
-        _write_pdf(path, draw)
+        _write_pdf(path, draw, text)
     elif history is not None:
-        _write_svg(path, draw)                        # S-097: its text, live
+        _write_svg(path, draw, text)                        # S-097: its text, live
     else:
         draw(CairoRenderer())
     return fmt

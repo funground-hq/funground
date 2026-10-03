@@ -344,21 +344,22 @@ class Picture:
         draw_image(self._sketch, picture, x, y, width, height, sx, sy, sw, sh)
 
     # ------------------------------------------------------------ save() (contract P2)
-    def save(self, path: str) -> None:
+    def save(self, path: str, *, text: str = "live") -> None:
         """Write this picture to *path* immediately: PNG = its pixels; PDF/SVG replay its
 
         drawing history as vectors when one is available. When it is not (past 10 000 ops
         since the last opaque background/clear, or none collected yet), the picture's pixels
         are embedded as a raster image instead - the same fallback ``f.image()`` uses for a
         historyless picture on a PDF/SVG target (contract P3) - so a save never fails just
-        because a picture drew a lot; it only stops staying vector. The actual Cairo work
+        because a picture drew a lot; it only stops staying vector. In a PDF or SVG,
+        ``text="shapes"`` draws every letter as a shape instead of live text (contract T20). The actual Cairo work
         lives in ``funground.export`` (Cairo stays behind that provider, S-052).
         """
         from .export import save_picture
 
         snap = self._snapshot()
         pixels = self._sketch._renderer.pixels()
-        save_picture(pixels, snap.history, self.width, self.height, path)
+        save_picture(pixels, snap.history, self.width, self.height, path, text)
 
 
 def draw_image(target: Sketch, picture: Any, x: float, y: float,

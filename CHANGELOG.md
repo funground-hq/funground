@@ -65,6 +65,13 @@ pygame-ce that was never published.
   that opens the file spaces the text itself, so spacing can differ slightly. Erased text and text
   shadows stay shapes. A text-heavy SVG is about fifty times smaller; SVGs without text are
   unchanged (S-097, contract T19, D-059).
+- **Text as shapes in a PDF or SVG:** `f.save("poster_final.svg", text="shapes")` and
+  `picture.save(path, text="shapes")` draw every letter as a vector shape, so the file looks the
+  same on every computer and needs no font. The default, `text="live"`, is real text in a PDF and
+  live, editable text in an SVG. It applies to every page, picture and layer in the file; layers
+  stay layers. PNG, GIF and MP4 ignore it; any other value is a `ValueError`. The guide gives the
+  rule for handoffs: save one copy live to edit and one as shapes to share (S-116, contract T20,
+  D-060).
 - **Mixed styles in one text:** `f.FormattedString()` holds runs of text, and `append(text, size=, style=, color=, font=, tracking=, features=, variations=)` gives a run its own look; settings left out follow the drawing state. `f.text`, `f.text_box`, `f.text_width` and `f.text_path` take one, a line is as tall as its tallest run, and `f.text_box` returns the overflow as a FormattedString (S-091).
 - **Full screen in scripts:** `f.full_screen()` at the top of a script makes the canvas the screen's size, and `f.show()` shows it full screen (S-085).
 - **Pages:** in a script, `f.new_page()` starts a new page (a size, or a name such as `"A5"`);
@@ -93,6 +100,7 @@ pygame-ce that was never published.
   a plain install. Press **C** (or the Copy button) to copy an example and its data into the current
   folder; it never overwrites (a taken name becomes `_2`). `--list` prints the examples with no
   window. In a checkout `python tools/gallery_browser.py` still works (S-103).
+  Each run has its own temporary folder; when an example saves a file, the browser says where (and prints it), and **O** (or the Folder button) opens it.
 - **Scripts:** a file can be a script instead of an animated sketch: no `draw()`, no `f.run()`.
   `f.size()` makes a canvas with no window, `f.save()` writes at once, and the new `f.show()` opens a
   window to look at it. A file that mixes the two styles gets a clear error, and a program that has

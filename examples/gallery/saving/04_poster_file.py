@@ -1,7 +1,7 @@
 """A poster file
 
-This script draws a poster and saves it twice, as poster.pdf and poster.svg. The files carry more
-than a picture.
+This script draws a poster and saves it as poster.pdf and poster.svg, and again as poster_final.pdf
+and poster_final.svg. The files carry more than a picture.
 
 The poster has four layers: "background", "artwork", "words" and "notes". The "notes" layer is
 hidden with f.hide_layer(), so it is in the files but switched off.
@@ -18,6 +18,11 @@ What opens where:
   another font. Guide chapter 13 ("Saving your work") has the section on fonts.
 - For Hindi in Illustrator, switch on the World-Ready Composer in its Type settings. Without it
   the letters can come out joined up wrongly.
+
+The golden rule of handoffs: save two copies. poster.pdf and poster.svg have live text, for you to
+edit. poster_final.pdf and poster_final.svg are saved with text="shapes", for a client, a developer
+or a print shop. Every letter in them is a shape, so they look right without the font. The layers
+are still layers. The letters can no longer be edited.
 
 The gallery picture shows the poster. The hidden notes are not in it.
 """
@@ -75,6 +80,9 @@ def draw():
 
     f.save("poster.pdf")
     f.save("poster.svg")
+    # The same poster again, for handing over: every letter is a shape.
+    f.save("poster_final.pdf", text="shapes")
+    f.save("poster_final.svg", text="shapes")
 
 
 f.run()

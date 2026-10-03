@@ -624,6 +624,8 @@ f.run()
 | Call | What it does | Example |
 |---|---|---|
 | `f.save(path)` | Write the current frame to a file when the frame is complete. `.png` saves pixels; `.pdf` and `.svg` save a true vector drawing of the same frame. | `f.save("my_sketch.png")` |
+| `f.save(path, text="shapes")` | For a `.pdf` or `.svg`: `text="live"` (the start) keeps text real and editable; `"shapes"` draws every letter as a shape, so the file needs no font and cannot be edited. Applies to every page and layer. Anything else is a `ValueError`. PNG, GIF and MP4 ignore it. Save one copy of each: live to edit, shapes to hand over. | `f.save("poster_final.svg", text="shapes")` |
+| `picture.save(path, text="live")` | Write a picture (`f.create_graphics()` or a layer) to a file at once. The same `text=` choice as `f.save`. | `g.save("badge.svg", text="shapes")` |
 | `f.save_gif(path, seconds)` | animated sketch: record the next `seconds` (from the next frame) into a GIF that loops; each frame lasts 1 / frame rate. `path` must end in `.gif`. Needs Pillow (`funground[extras]`) or ffmpeg. Called while recording, or in a script: an error | `f.save_gif("spin.gif", 2)` |
 | `f.save_movie(path, seconds)` | the same, into an H.264 MP4 (`.mp4`). Needs ffmpeg on the PATH; odd sizes are padded by one pixel | `f.save_movie("spin.mp4", 2)` |
 | `f.frame_duration(seconds)` | script: how long this page and the pages after it are shown in a GIF or MP4; the start is 0.1; 0 or less is an error. `f.save("x.gif")` / `f.save("x.mp4")` then writes every page as a frame (all the same size) | `f.frame_duration(0.2)` |

@@ -36,7 +36,7 @@ V05_FUNCTIONS = {
 ADDED_FUNCTIONS = {
     "random_seed": "(seed: 'int | None' = None) -> 'None'",
     "run": "(*, fps: 'int | None' = None, max_frames: 'int | None' = None) -> 'None'",
-    "save": "(path: 'str') -> 'None'",
+    "save": "(path: 'str', *, text: 'str' = 'live') -> 'None'",
     # Sprint 4, S-027: transforms and the state stack (contract F1/F2).
     "translate": "(dx: 'float', dy: 'float') -> 'None'",
     "rotate": "(degrees: 'float') -> 'None'",
