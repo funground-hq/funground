@@ -41,5 +41,12 @@ ragas, and build the teaching scenarios of `docs/design/Music_Research_Note.md` 
   - a guide chapter section written for learners of Indian music;
   - sources checked as in `Music_Research_Note.md`.
 
+### Candidates, not yet confirmed: one project per category (`docs/backlog/Project_Ideas.md`)
+The maintainer suggested ("may be") one project from each category for this sprint. Claude's suggestions, to confirm when the sprint is planned in detail:
+- **Music and sound:** 1 Raga explorer. It uses S-115 and is the most distinctive.
+- **Design and print:** 10 Event poster series.
+- **Games and interactive:** 16 Voice-controlled game.
+- **Generative art:** 19 Rangoli and mandala generator.
+
 ## Not in 0.1
 Piano roll or transcription from a recording (needs machine learning); real-time synthesis (ADR-003/006).
