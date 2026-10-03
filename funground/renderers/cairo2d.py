@@ -58,6 +58,10 @@ class CairoRenderer:
         # is drawn as marker groups that the exporter swaps for real PDF text after the file is
         # written. Never set for the window, PNG or SVG.
         self.pdf_text = None
+        # S-097 (T19): set only by the SVG exporters (funground.export.svg_text). When set, each line of
+        # text is drawn as a marker group that the exporter swaps for a live <text> element after the
+        # file is written. Never set for the window, PNG or PDF.
+        self.svg_text = None
         # S-096 (F16): set only by the PDF and SVG exporters (funground.export.layers). When set, each
         # layer is drawn inside a marker group that the exporter turns into a real file layer, and
         # hidden layers are drawn too (switched off in the file). Never set for the window or PNG.
@@ -188,7 +192,9 @@ class CairoRenderer:
                     ctx.new_path(); ctx.arc(op.x, op.y, max(0.5, op.style.stroke_width / 2), 0, 2 * math.pi)
                     self._source(ctx, op.style.stroke, True); ctx.fill()
             elif t is ir.Text:
-                if self.pdf_text is None or self._erase is not None or not self._pdf_text_marker(ctx, op):
+                if self._erase is not None or not (
+                        (self.pdf_text is not None and self._pdf_text_marker(ctx, op))
+                        or (self.svg_text is not None and self._svg_text_marker(ctx, op))):
                     for sub in self._text_ops(op):
                         self._path(ctx, sub.path); self._source(ctx, sub.color); ctx.fill()
             elif t is ir.Image:
@@ -633,6 +639,34 @@ class CairoRenderer:
             ctx.paint()
             ctx.pop_group_to_source()
             ctx.paint()
+        return True
+
+    def _svg_text_marker(self, ctx, op: ir.Text) -> bool:
+        """S-097 (T19): draw *op* as a marker group for live SVG text; False to draw outlines.
+
+        As `_pdf_text_marker`, but one marker for the whole line, fallback runs (T18) included: the
+        group holds the line's colour or gradient clipped to the marker. The SVG exporter finds the
+        marker after ``surface.finish()`` and replaces the painted marker with a ``<text>`` element
+        that takes over its fill, so the clip, transform, opacity and layer stay as Cairo wrote them."""
+        run = self._text_run(op)
+        marker = self.svg_text.add(run, op.x, op.y, tuple(ctx.get_matrix()), op.style)
+        if marker is None:
+            return False
+        ctx.push_group()
+        ctx.set_operator(cairo.OPERATOR_OVER)
+        rule = ctx.get_fill_rule()
+        ctx.set_fill_rule(cairo.FILL_RULE_WINDING)
+        ctx.new_path()
+        ctx.move_to(*marker[0])
+        for point in marker[1:]:
+            ctx.line_to(*point)
+        ctx.close_path()
+        ctx.clip()
+        ctx.set_fill_rule(rule)
+        self._source(ctx, op.color)
+        ctx.paint()
+        ctx.pop_group_to_source()
+        ctx.paint()
         return True
 
     def _draw_layer(self, ctx, op: ir.Image) -> None:

@@ -121,7 +121,8 @@ opacity and blend mode.
   Acrobat, macOS Preview and pdf.js (Firefox) have not been tested.
 - **pypdf rewrites the whole file,** and we use one private call, `PdfWriter._add_object`. Pin the
   pypdf version range if that call changes.
-- **SVG output still draws text as shapes.** Real `<text>` in SVG would be its own story.
+- **SVG text is its own story.** Since S-097 an SVG holds live, editable `<text>` naming the
+  installed font (T19, D-059): see [Text_In_Files_Note.md](Text_In_Files_Note.md).
 - **Silent fallback could hide a regression.** The tests assert that fonts are present.
 
 ## Tests

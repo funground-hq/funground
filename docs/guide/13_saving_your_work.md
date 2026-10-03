@@ -27,7 +27,7 @@ f.run(max_frames=1)
 |---|---|
 | `.png` | A picture, at your screen's full resolution |
 | `.pdf` | A document made of shapes and text: sharp at any size, good for printing |
-| `.svg` | Shapes for the web or for editing in a drawing program |
+| `.svg` | Shapes and text for the web or for editing in a drawing program |
 
 A **PNG** holds exactly what is in the window — including everything earlier frames left there.
 A **PDF or SVG** holds the shapes drawn in *that one frame*, so for those, draw the whole picture
@@ -36,7 +36,36 @@ in the frame you save (start `draw()` with `f.background(...)`).
 In a PDF, text is real text: you can select it, search it and copy it, and it looks the same as
 in the window. The PDF carries the letters of each font it uses. A font that says it must not be
 put inside a file is saved as letter *shapes* instead, so it looks right but cannot be selected.
-SVG files always save text as letter shapes.
+
+### Text in an SVG file
+
+In an SVG, text is *live*: Illustrator, Inkscape and web browsers show it as text you can click
+and edit. The file names each font by its family, such as "DejaVu Sans", with bold and italic
+noted. The program that opens the file draws the text in that font, if the font is installed on
+your computer. If it is not, the program picks another font, and the text looks different.
+
+A web browser needs nothing installed: the SVG also carries the letters it uses from each font.
+(A font that says it must not be put inside a file is left out. Its text still names the font.)
+
+The program spaces the letters itself, so the spacing can differ a little from funground's window.
+Text drawn while erasing, and text shadows, are saved as shapes.
+
+**To edit with the same look, install funground's fonts.** They are DejaVu Sans (in four styles)
+and three Noto fonts, in the `fonts` folder inside funground. This prints where that folder is:
+
+```py
+import os
+import funground
+
+print(os.path.join(os.path.dirname(funground.__file__), "fonts"))
+```
+
+Open that folder and install the `.ttf` files the way your computer installs any font. funground
+never installs fonts for you. A font you loaded with `f.load_font` needs installing too.
+
+Illustrator shapes Indian scripts, such as Hindi, correctly only with the *World-Ready Paragraph
+Composer*. Choose it from the Paragraph panel's menu. Its usual composer breaks joined letters.
+Inkscape and browsers need nothing extra.
 
 Each [layer](09_paths_and_clipping.md#layers) is a named layer in a PDF or SVG, which you can
 switch on and off in Acrobat, Illustrator or Inkscape. Hidden layers are in the file, switched off.

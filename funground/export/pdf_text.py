@@ -29,8 +29,8 @@ such as a letter and a combining accent (see `_glyph_ops`).
 A run falls back to outlines (exactly today's drawing) when its font forbids embedding (OS/2
 ``fsType`` restricted-licence bit), cannot be embedded (not TrueType or CFF outlines, or a variable
 font that cannot be instanced), or the transform is too degenerate to read back. Shadows stay
-shapes (the renderer draws them from outlines before the run), SVG keeps outlines, and the window
-and PNG never see any of this.
+shapes (the renderer draws them from outlines before the run), SVG has its own text step
+(`svg_text`, T19), and the window and PNG never see any of this.
 """
 from __future__ import annotations
 
@@ -94,6 +94,74 @@ class PdfTextRun:
     corners: tuple                   # P0, P1, P2 in user space
     linear: tuple                    # the device matrix's (xx, yx, xy, yy) when it was drawn
     font: _Font
+
+
+def marker_corners(run, x: float, y: float, matrix: tuple, number: int) -> tuple | None:
+    """The marker for text run *number*, drawn at (x, y) under the device *matrix* (Cairo's xx, yx,
+    xy, yy, x0, y0): ``((P0, P1, P2), [P0, P1, Q, P2])`` in user space, or None when the transform
+    is too degenerate (or too large) to read back. Shared by the PDF and SVG text steps."""
+    xx, yx, xy, yy = matrix[:4]
+    if not all(math.isfinite(v) for v in matrix):
+        return None
+    det = xx * yy - xy * yx
+    norm2 = xx * xx + xy * xy + yx * yx + yy * yy
+    if abs(det) < 1e-12 or norm2 <= 0:
+        return None
+    s_max = math.sqrt((norm2 + math.sqrt(max(norm2 * norm2 - 4 * det * det, 0.0))) / 2)
+    s_min = abs(det) / s_max
+    # Big enough to hold every glyph with room to spare, and big in device space for precision.
+    extent = abs(run.advance) + run.size * (1 + (run.font.ascent - run.font.descent) / run.font.units_per_em)
+    half = max(4 * extent, min(_MIN_DEVICE / s_min, _MAX_DEVICE / (4 * s_max)))
+    if half * 4 * s_max > _MAX_DEVICE or half * s_min < 200:
+        return None
+    a = _LOW + (number % _GRID) * _STEP
+    b = _LOW + (number // _GRID) * _STEP
+    cx = x + run.advance / 2
+    cy = y + run.size / 2
+    p0 = (cx - half, cy - half)
+    p1 = (cx + 3 * half, cy - half)
+    p2 = (cx - half, cy + 3 * half)
+    q = (p0[0] + 4 * half * a, p0[1] + 4 * half * b)
+    return (p0, p1, p2), [p0, p1, q, p2]
+
+
+def marker_number(e0: tuple, e1: tuple, eq: tuple, e2: tuple) -> int | None:
+    """The run number a marker's emitted corners P0, P1, Q, P2 encode, or None if they are not a
+    text marker."""
+    v1 = (e1[0] - e0[0], e1[1] - e0[1])
+    v2 = (e2[0] - e0[0], e2[1] - e0[1])
+    dq = (eq[0] - e0[0], eq[1] - e0[1])
+    det = v1[0] * v2[1] - v1[1] * v2[0]
+    if abs(det) < 1e-9:
+        return None
+    a = (dq[0] * v2[1] - dq[1] * v2[0]) / det
+    b = (v1[0] * dq[1] - v1[1] * dq[0]) / det
+    ia, ib = round((a - _LOW) / _STEP), round((b - _LOW) / _STEP)
+    if not (0 <= ia < _GRID and 0 <= ib < _GRID):
+        return None
+    if abs(a - (_LOW + ia * _STEP)) > _TOLERANCE or abs(b - (_LOW + ib * _STEP)) > _TOLERANCE:
+        return None
+    return ia + ib * _GRID
+
+
+def marker_map(corners: tuple, linear: tuple, e0: tuple, e1: tuple, e2: tuple) -> tuple:
+    """The affine map (a, b, c, d, e, f) from user space to the space the marker was emitted in:
+    X = a u + c v + e, Y = b u + d v + f. *corners* are the user-space P0, P1, P2 and *linear* the
+    device matrix's (xx, yx, xy, yy) recorded when the run was drawn. Raises RuntimeError when the
+    emitted corners disagree with that matrix: not one of ours, or written in a way this code does
+    not understand. Refuse rather than guess."""
+    p0, p1, p2 = corners
+    v1 = (e1[0] - e0[0], e1[1] - e0[1])
+    v2 = (e2[0] - e0[0], e2[1] - e0[1])
+    side = p1[0] - p0[0]
+    ma, mb = v1[0] / side, v1[1] / side
+    mc, md = v2[0] / (p2[1] - p0[1]), v2[1] / (p2[1] - p0[1])
+    scale = max(math.hypot(*linear[:2]), math.hypot(*linear[2:]))
+    if any(abs(u - w) > 1e-3 * scale for u, w in zip((ma, mb, mc, md), linear)):
+        raise RuntimeError("text marker found under an unexpected transform")
+    me = e0[0] - (ma * p0[0] + mc * p0[1])
+    mf = e0[1] - (mb * p0[0] + md * p0[1])
+    return ma, mb, mc, md, me, mf
 
 
 def _fmt(v: float) -> str:
@@ -164,31 +232,13 @@ class PdfTextCollector:
         font = self._font(run.font.path, run.location)
         if font is None:
             return None
-        xx, yx, xy, yy = matrix[:4]
-        if not all(math.isfinite(v) for v in matrix):
-            return None
-        det = xx * yy - xy * yx
-        norm2 = xx * xx + xy * xy + yx * yx + yy * yy
-        if abs(det) < 1e-12 or norm2 <= 0:
-            return None
-        s_max = math.sqrt((norm2 + math.sqrt(max(norm2 * norm2 - 4 * det * det, 0.0))) / 2)
-        s_min = abs(det) / s_max
-        # Big enough to hold every glyph with room to spare, and big in device space for precision.
-        extent = abs(run.advance) + run.size * (1 + (run.font.ascent - run.font.descent) / run.font.units_per_em)
-        half = max(4 * extent, min(_MIN_DEVICE / s_min, _MAX_DEVICE / (4 * s_max)))
-        if half * 4 * s_max > _MAX_DEVICE or half * s_min < 200:
-            return None
         number = len(self.runs)
-        a = _LOW + (number % _GRID) * _STEP
-        b = _LOW + (number // _GRID) * _STEP
-        cx = x + run.advance / 2
-        cy = y + run.size / 2
-        p0 = (cx - half, cy - half)
-        p1 = (cx + 3 * half, cy - half)
-        p2 = (cx - half, cy + 3 * half)
-        q = (p0[0] + 4 * half * a, p0[1] + 4 * half * b)
-        self.runs[number] = PdfTextRun(number, run, x, y, (p0, p1, p2), (xx, yx, xy, yy), font)
-        return [p0, p1, q, p2]
+        marker = marker_corners(run, x, y, matrix, number)
+        if marker is None:
+            return None
+        corners, shape = marker
+        self.runs[number] = PdfTextRun(number, run, x, y, corners, tuple(matrix[:4]), font)
+        return shape
 
     def _font(self, path: str, location: tuple) -> _Font | None:
         key = (os.path.normcase(os.path.abspath(path)), location)
@@ -286,34 +336,12 @@ class PdfTextCollector:
     def _text_for(self, m: re.Match, fonts: list) -> bytes:
         """The text replacing one marker match, or the match unchanged when it is not a marker."""
         e0, e1, eq, e2 = ((float(m.group(i)), float(m.group(i + 1))) for i in (1, 3, 5, 7))
-        v1 = (e1[0] - e0[0], e1[1] - e0[1])
-        v2 = (e2[0] - e0[0], e2[1] - e0[1])
-        dq = (eq[0] - e0[0], eq[1] - e0[1])
-        det = v1[0] * v2[1] - v1[1] * v2[0]
-        if abs(det) < 1e-9:
-            return m.group(0)
-        a = (dq[0] * v2[1] - dq[1] * v2[0]) / det
-        b = (v1[0] * dq[1] - v1[1] * dq[0]) / det
-        ia, ib = round((a - _LOW) / _STEP), round((b - _LOW) / _STEP)
-        if not (0 <= ia < _GRID and 0 <= ib < _GRID):
-            return m.group(0)
-        if abs(a - (_LOW + ia * _STEP)) > _TOLERANCE or abs(b - (_LOW + ib * _STEP)) > _TOLERANCE:
-            return m.group(0)
-        entry = self.runs.get(ia + ib * _GRID)
+        number = marker_number(e0, e1, eq, e2)
+        entry = self.runs.get(number) if number is not None else None
         if entry is None:
             return m.group(0)
-        p0, p1, p2 = entry.corners
-        side = p1[0] - p0[0]
         # user space -> this stream's space: X = ma u + mc v + me, Y = mb u + md v + mf
-        ma, mb = v1[0] / side, v1[1] / side
-        mc, md = v2[0] / (p2[1] - p0[1]), v2[1] / (p2[1] - p0[1])
-        scale = max(math.hypot(*entry.linear[:2]), math.hypot(*entry.linear[2:]))
-        if any(abs(u - w) > 1e-3 * scale for u, w in zip((ma, mb, mc, md), entry.linear)):
-            # A marker drawn under a different transform than Cairo's own: not one of ours after all,
-            # or Cairo wrote it in a way this code does not understand. Refuse rather than guess.
-            raise RuntimeError("PDF text marker found under an unexpected transform")
-        me = e0[0] - (ma * p0[0] + mc * p0[1])
-        mf = e0[1] - (mb * p0[0] + md * p0[1])
+        ma, mb, mc, md, me, mf = marker_map(entry.corners, entry.linear, e0, e1, e2)
         font = entry.font
         if font.ref is None:
             font.resource = f"/FunText{len(self._used)}"

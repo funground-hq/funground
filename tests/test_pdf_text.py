@@ -469,10 +469,12 @@ def test_text_path_stays_a_path(tmp_path):
     assert fonts(tmp_path / "a.pdf") == []
 
 
-def test_svg_and_png_keep_outlines(tmp_path):
+def test_svg_has_its_own_text_and_png_none(tmp_path):
     script()
     f.text("Shapes", 10, 10)
     f.save(str(tmp_path / "a.svg"))
     svg = (tmp_path / "a.svg").read_text(encoding="utf-8")
-    assert "<text" not in svg and "<path" in svg
+    assert "/FontFile" not in svg                     # S-097 (T19): live SVG text, not PDF text
+    assert re.search(r'<text [^>]*>Shapes</text>', svg)
     assert CairoRenderer().pdf_text is None           # the window and PNG never collect text
+    assert CairoRenderer().svg_text is None
