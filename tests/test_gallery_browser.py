@@ -253,4 +253,90 @@ def test_c_and_the_copy_button_copy_the_example_and_never_overwrite(browser, tmp
     assert (tmp_path / "data" / "photo.jpg").is_file()
     assert seen[3].startswith("Copied to") and "01_load_image.py" in seen[3]
     assert str(tmp_path) in seen[3]
-    assert "C: copy to folder" in (ROOT / "funground" / "gallery.py").read_text(encoding="utf-8")
+    assert "C: copy" in (ROOT / "funground" / "gallery.py").read_text(encoding="utf-8")
+
+
+# ---- saved files: where did my file go?
+def fake_saver(files):
+    """A Popen stand-in that 'runs' an example by writing ``files`` into its folder."""
+    class Saver(FakePopen):
+        def __init__(self, args, **kwargs):
+            super().__init__(args, **kwargs)
+            for name in files:
+                (Path(kwargs["cwd"]) / name).write_bytes(b"x")
+
+        def poll(self):
+            return 0
+    return Saver
+
+
+def detail_script(browser, extra):
+    script = {1: click(*centre(browser.area_rect(1))), 2: click(*centre(browser.card_rect(0)))}
+    script.update(extra)
+    return script
+
+
+def test_a_saved_file_is_named_in_the_status_with_its_folder(browser, monkeypatch, capsys):
+    FakePopen.calls = []
+    monkeypatch.setattr(browser.subprocess, "Popen", fake_saver(["poster.pdf", "poster.svg"]))
+    seen = {}
+    run(browser, detail_script(browser, {3: press("enter")}), lambda n, app: seen.__setitem__(n, app.status[0]))
+    folder = Path(FakePopen.calls[0].kwargs["cwd"])
+    message = seen[max(seen)]
+    assert message.startswith("Saved: poster.pdf, poster.svg")
+    assert str(folder) in message
+    out = capsys.readouterr().out
+    assert str(folder) in out and "poster.pdf" in out and "poster.svg" in out
+    assert out.count("Saved in") == 1                    # printed once, not every frame
+
+
+def test_a_long_list_of_saved_files_is_shortened(browser, tmp_path):
+    names = [f"frame_{i}.png" for i in range(6)]
+    message = browser.saved_message(names, tmp_path)
+    assert "frame_0.png, frame_1.png, frame_2.png + 3 more" in message
+    assert str(tmp_path) in message
+
+
+def test_o_and_the_folder_button_open_the_folder_when_asked(browser, monkeypatch):
+    FakePopen.calls = []
+    monkeypatch.setattr(browser.subprocess, "Popen", fake_saver(["a.png"]))
+    opened = []
+    monkeypatch.setattr(browser, "open_in_file_browser", opened.append)
+    script = detail_script(browser, {3: press("enter"), 4: press("o"), 5: click(*centre(browser.BUTTONS["folder"]))})
+    run(browser, script)
+    folder = Path(FakePopen.calls[0].kwargs["cwd"])
+    assert opened == [folder, folder]
+    assert "O: open" in (ROOT / "funground" / "gallery.py").read_text(encoding="utf-8")
+
+
+def test_nothing_is_opened_until_the_learner_asks(browser, monkeypatch):
+    FakePopen.calls = []
+    monkeypatch.setattr(browser.subprocess, "Popen", fake_saver(["a.png"]))
+    opened = []
+    monkeypatch.setattr(browser, "open_in_file_browser", opened.append)
+    run(browser, detail_script(browser, {3: press("enter")}))
+    assert opened == []
+
+
+def test_an_example_that_saves_nothing_gives_no_message_and_o_does_nothing(browser, monkeypatch, capsys):
+    FakePopen.calls = []
+    monkeypatch.setattr(browser.subprocess, "Popen", fake_saver([]))
+    opened = []
+    monkeypatch.setattr(browser, "open_in_file_browser", opened.append)
+    seen = {}
+    run(browser, detail_script(browser, {3: press("enter"), 6: press("o")}),
+        lambda n, app: seen.__setitem__(n, app.status[0]))
+    assert not any(m.startswith("Saved") for m in seen.values())
+    assert seen[4].startswith("Started")
+    assert opened == []
+    assert "Saved in" not in capsys.readouterr().out
+
+
+def test_each_run_gets_its_own_folder(browser, monkeypatch):
+    FakePopen.calls = []
+    monkeypatch.setattr(browser.subprocess, "Popen", fake_saver(["a.png"]))
+    run(browser, detail_script(browser, {3: press("enter"), 4: press("enter")}))
+    first, second = (Path(c.kwargs["cwd"]) for c in FakePopen.calls)
+    assert first != second and first.parent == second.parent
+    assert first.name == browser.app.entry.path.stem
+    assert (first / "a.png").is_file() and (second / "a.png").is_file()

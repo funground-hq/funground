@@ -61,5 +61,6 @@ The origin `(0, 0)` is the **top-left** corner. `x` grows to the right and `y` g
 The [Examples Gallery](../gallery/README.md) shows every part of funground with a picture and
 the code that makes it. To browse it in a window, run `python -m funground.gallery`. Click
 a picture to read its code, press **Enter** to run it, and press **C** to copy it into your folder.
+Files an example saves go to a temporary folder. The browser tells you where, and the **O** key opens that folder.
 
 **Next:** [2. The sketch: setup, draw and run](02_the_sketch.md)
