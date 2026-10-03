@@ -10,7 +10,7 @@
 
 ## Story set
 
-### S-108 Microphone input — E-17 *(p5 `AudioIn`; explored 2 Oct, see below)*
+### S-108 Microphone input — E-17 *(D-058; contract A4; explored 2 Oct, see below)*
 - [ ] S-108.1 `f.microphone()` (name to pin) with `level()` and `spectrum()` as sounds have (A2); start/stop; a clear error with no device or no permission
 - [ ] S-108.2 Headless and CI: a fake input, like the silent sound player
 
@@ -33,7 +33,7 @@
 - [ ] S-097.1 SVG files carry `<text>`/`<tspan>` with the font embedded (or referenced), placed where the outlines were; same fallbacks as T15
 
 ### S-109 PDF text polish — E-15 *(Sprint 10 known limit)*
-- [x] S-109.1 Closed without code: measured, clip-mode text already matches Cairo; the outline PDF is what pdfium draws heavy. Note and test comment corrected Solid-colour text written with fill mode (`0 Tr`) instead of clip mode, so pdfium no longer widens rectangular glyphs
+- [x] S-109.1 Closed without code: measured, clip-mode text already matches Cairo; the outline PDF is what pdfium draws heavy. Note and test comment corrected
 
 ### S-073 Release 0.1 — E-02 *(carried from Sprint 11)*
 - [ ] The release checklist
