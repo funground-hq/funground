@@ -636,7 +636,10 @@ f.run()
   after the call. Any other extension is a `ValueError` naming the three choices.
 - A `.png` is written at the screen's real resolution (on a 2× display, a 640×400 window gives a
   1280×800 file). `.pdf` and `.svg` use logical pixels as points.
-- Text in a PDF is real text: you can select, search and copy it. In an SVG it is drawn as shapes.
+- Text in a PDF is real text: you can select, search and copy it. In an SVG it is live text you can
+  edit in Illustrator, Inkscape or a browser. It names its font, so install the font to see the same
+  look (funground's own fonts are in the `fonts` folder inside the package). The file also carries
+  the letters it uses, for browsers. Erased text and text shadows are saved as shapes.
 - To save just one frame from a script: `if f.frame_count == 0: f.save("first.pdf")`, or run with
   `f.run(max_frames=1)` and `FUNGROUND_HEADLESS=1` for no window at all.
 
