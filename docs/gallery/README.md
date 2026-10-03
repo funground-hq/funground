@@ -628,3 +628,19 @@ Source: [`examples/gallery/music/04_hear_a_raga.py`](../../examples/gallery/musi
 A tala is a cycle of beats that comes round again and again. f.tala_info(name) gives its beats, its vibhags (the groups the beats fall in), the beats you clap (tali) and wave (khali), and the bols: the syllables a tabla player says for each stroke. f.tala(name) plays one cycle with simple drum sounds. Here the bols sit round a circle and the beat playing now glows. The sam, beat 1, is marked X; a wave is marked 0. Keys 1 to 6 pick a tala. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/music/05_tala.py`](../../examples/gallery/music/05_tala.py)
+
+### Music: see your voice
+
+![Music: see your voice](images/music-06_see_your_voice.png)
+
+Sing, hum or talk to your microphone and watch three views of the same sound. The top one is the wave: how the air moves, over the last half second. The middle one is the spectrum: how strong each pitch is right now, low on the left and high on the right. The bottom one is the pitch line: the note you sing, scrolling across, with faint guide lines for the notes. It leaves a gap when you are quiet. Nothing is recorded or played back. With no microphone to hear, the sketch still runs, and just shows quiet. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/06_see_your_voice.py`](../../examples/gallery/music/06_see_your_voice.py)
+
+### Music: a song's fingerprint
+
+![Music: a song's fingerprint](images/music-07_a_songs_fingerprint.png)
+
+A short song is built from two parts with f.melody() and put together with f.mix(). Then f.spectrogram() turns the whole sound into a picture: time goes across, pitch goes up, and the louder a pitch is, the brighter it is. You can see each note as a bright dash, and the low bass notes along the bottom. Click to play the song, and a line shows where it is. The picture is also saved as fingerprint.png. With no sound device the song plays silently and keeps time.
+
+Source: [`examples/gallery/music/07_a_songs_fingerprint.py`](../../examples/gallery/music/07_a_songs_fingerprint.py)

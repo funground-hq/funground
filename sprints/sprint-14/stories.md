@@ -14,7 +14,7 @@ ragas, and build the teaching scenarios of `docs/design/Music_Research_Note.md` 
 ## Story set
 
 ### S-111 Seeing sound — E-17 *(D-061; contract A7)*
-- [ ] Drawing helpers for analysis results: wave view (`samples`), spectrum bars, a scrolling pitch line, a spectrogram picture. Decide which are library functions and which are just examples
+- [x] Drawing helpers for analysis results: wave view (`samples`), spectrum bars, a scrolling pitch line, a spectrogram picture. Decide which are library functions and which are just examples
 
 ### S-112 Onsets and tempo — E-17 *(D-061; contract A5)*
 - [x] `sound.onsets()` (spectral flux), `sound.tempo()` (beats a minute), the beat times; "tap along" example

@@ -70,6 +70,34 @@ original list of floats, so `samples()` gives back exactly what `create_sound()`
   the device functions and call `mic._feed(samples)`; they never open a real microphone.
 - **Not here:** playing the microphone back, echo and noise handling, choosing the sample rate.
 
+## Drawing sound (S-111, D-061, contract A7)
+
+The four views live in `funground/sound_views.py`. The public functions in `api.py` only pass in the
+sketch to draw on, so the code is plain and easy to test.
+
+- **Ordinary drawing.** `draw_wave`, `draw_spectrum` and `draw_pitch_line` call `begin_shape`/`vertex`,
+  `line`, `rect` and `text` on `active_sketch()`. They record normal ops, so layers, pictures, PDF and SVG
+  work with no extra code. `draw_spectrum` and the guides run inside `saved_state()` so they do not leave a
+  changed style (or `rect_mode`) behind.
+- **Wave.** The wave is one closed shape: the highest sample in each pixel column along the top, the lowest
+  back along the bottom. It is filled and stroked in the current style. A sound's columns are kept on the
+  sound (`_views`, one pair of lists for each width), so drawing it every frame costs one pass over `w`
+  points. A 12-second sound at 400 columns takes about 35 ms the first time and 2 to 4 ms after. A
+  microphone is read afresh each frame (the last 0.5 s). The playhead is a `line()` in the current stroke, drawn
+  only while the sound plays.
+- **Spectrogram.** One 1 024-point FFT (the same code as `spectrum()`) for each pixel column, at the
+  column's centre. Rows are log frequency from 40 Hz to 16 kHz (or the sound's top frequency). A row that
+  covers whole bins takes the loudest one, a narrower row reads between bins, as `spectrum()` does.
+  Loudness is decibels from -60 up to 0 (a full-strength tone), mapped to 0 to 1 and squared, so a clear note
+  stands out from its spread. The brightness scales
+  the **current fill**, so the default is grey and `f.fill("orange")` gives orange on black. This was
+  simpler than a built-in colour ramp, and the learner already knows how to change it. A 12-second sound at
+  400 by 200 takes about 0.7 s in plain Python. Low rows are blurry because one bin is 43 Hz wide.
+- **Pitch line.** The history is a list of `(clock time, hertz or None)` kept on the source as
+  `_pitch_history`. One reading is added for each frame (every call in a script, where the frame number is 0),
+  readings older than 30 s are dropped, and the line shows the last `seconds`. `None` and a wait of more than
+  0.3 s break the line. The time is `sound.clock`, the same injectable clock the sound uses.
+
 ## Not here
 
 - Live synthesis, filters, effects, ADSR with a sustain level, sampled instruments (ADR-006).
