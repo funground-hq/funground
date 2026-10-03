@@ -153,7 +153,7 @@ def script_frame(sketch: Sketch):
     sketch._script_flush()
     sketch.last_ops = sketch.frame.ops
     platform = HeadlessPlatform()
-    platform.present(sketch._renderer.pixels())
+    platform.present(sketch._view_pixels())       # with its layers composited, as f.show() and saves see it
     return platform.capture()
 
 
