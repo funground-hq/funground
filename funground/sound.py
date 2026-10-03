@@ -556,6 +556,13 @@ class Sound(_Analysis):
         self._load_samples()
         return _to_mono(self._samples, self._channels)
 
+    def _sample_rate(self) -> int:
+        """How many numbers a second samples() has."""
+        if self._made is not None:
+            return self._made[1]
+        self._load_samples()
+        return self._rate
+
     def _samples_at(self, rate: int) -> list[float]:
         """The same numbers at *rate* samples a second."""
         if self._made is not None:

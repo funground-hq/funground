@@ -40,8 +40,11 @@ NOT_YET_IN_GALLERY: set[str] = set()
 
 @pytest.fixture(autouse=True)
 def _scratch_cwd(tmp_path, monkeypatch):
-    """Examples that f.save() write into a throwaway directory, never the repo."""
+    """Examples that f.save() write into a throwaway directory, never the repo. They also run with no
+    sound device and a silent microphone: a test must not open the real microphone (two examples that
+    do, in one process, made the suite hang at the second one)."""
     monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
 
 
 def test_gallery_exists_and_every_example_has_a_docstring():
