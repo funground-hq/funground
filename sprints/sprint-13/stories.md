@@ -10,6 +10,9 @@
 
 ## Story set
 
+### S-116 Text as shapes for handoff files — E-15 *(D-060; contract T20)*
+- [ ] S-116.1 `save(path, text="live"|"shapes")` for PDF and SVG, sketches, scripts, pages and pictures; guide "golden rule of SVG handoffs"; the poster example saves both
+
 ### S-108 Microphone input — E-17 *(D-058; contract A4; explored 2 Oct, see below)*
 - [x] S-108.1 `f.microphone()` (name to pin) with `level()` and `spectrum()` as sounds have (A2); start/stop; a clear error with no device or no permission
 - [x] S-108.2 Headless and CI: a fake input, like the silent sound player
