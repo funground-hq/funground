@@ -22,6 +22,7 @@ Every complete example in this guide is tested: it runs exactly as printed.
 | 14 | [Coming from p5.js and Processing](14_coming_from_p5_processing.md) |
 | 15 | [Coming from DrawBot](15_coming_from_drawbot.md) |
 | 16 | [Sound](16_sound.md) |
+| 17 | [Ragas and talas](17_ragas_and_talas.md) |
 
 **Using the code.** Every code example in this guide is free to copy, change and use in any way,
 with no conditions ([CC0](../../examples/LICENSE)).
