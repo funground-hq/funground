@@ -921,6 +921,43 @@ def microphones() -> list[str]:
     return mic.microphones()
 
 
+# ---- drawing sound (S-111, contract A7, D-061)
+def draw_wave(source, x: float, y: float, w: float, h: float) -> None:
+    """Draw the wave of a sound (all of it, with a line at the place it is playing), of a microphone
+    (the last half second) or of a list of numbers, inside the box x, y, w, h. It uses the current
+    fill, stroke and transform."""
+    from . import sound_views
+
+    sound_views.draw_wave(active_sketch(), source, x, y, w, h)
+
+
+def draw_spectrum(source, x: float, y: float, w: float, h: float, bands: int = 32) -> None:
+    """Draw bars for source.spectrum(bands) now, inside the box x, y, w, h, in the current style."""
+    from . import sound_views
+
+    sound_views.draw_spectrum(active_sketch(), source, x, y, w, h, bands)
+
+
+def spectrogram(sound, width: int, height: int) -> Picture:
+    """A picture of the whole sound: time goes across, pitch goes up (about 40 Hz to 16 kHz, spaced
+    like notes), and louder is brighter. The brightest colour is the current fill. Draw it with image()
+    or save it. It takes a moment, so make it once, in setup."""
+    from . import sound_views
+
+    return sound_views.spectrogram(canvas_sketch(), active_sketch(), sound, width, height)
+
+
+def draw_pitch_line(source, x: float, y: float, w: float, h: float, seconds: float = 5,
+                    low: str = "C3", high: str = "C6", sa: str | None = None) -> None:
+    """Draw the pitch of a sound or microphone over the last *seconds* as a line that scrolls, from the
+    note *low* (bottom) to *high* (top), with faint guide lines labelled with note names (or swaras
+    when sa='C4' is given). Call it once in every frame: it reads source.pitch() each time."""
+    from . import sound_views
+
+    sound_views.draw_pitch_line(active_sketch(), canvas_sketch().frame_count, source,
+                                x, y, w, h, seconds, low, high, sa)
+
+
 def svg_paths(path: str) -> list[PathBuilder]:
     """Read an SVG file and return its shapes as a list of f.path() builders, one per shape,
     in the file's own coordinates: for booleans, clips or your own colours."""

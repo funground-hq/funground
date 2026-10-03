@@ -172,6 +172,11 @@ ADDED_FUNCTIONS = {
     # S-108 microphone
     "microphone": "(name: 'str | None' = None)",
     "microphones": "() -> 'list[str]'",
+    # S-111 drawing sound
+    "draw_wave": "(source, x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'",
+    "draw_spectrum": "(source, x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'",
+    "spectrogram": "(sound, width: 'int', height: 'int') -> 'Picture'",
+    "draw_pitch_line": "(source, x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'",
     # S-090 tracking, features, variations
     "text_tracking": "(pixels: 'float') -> 'None'",
     "text_features": "(**features: 'bool') -> 'None'",
