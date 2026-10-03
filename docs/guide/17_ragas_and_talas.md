@@ -240,4 +240,4 @@ sang, and listen for the rest.
 - **Mistakes.** A raga or tala that is not in the table, a pattern that is not swaras, a tempo of 0 or
   a histogram that is not 12 numbers of 0 or more give a `ValueError` that says what was wrong.
 
-**Previous:** [16. Sound](16_sound.md)
+**Previous:** [16. Sound](16_sound.md) · **Next:** [18. Projects](18_projects.md)

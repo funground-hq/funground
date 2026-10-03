@@ -91,10 +91,10 @@ A poster saved as PDF and SVG, with layers, real text, Hindi and an emoji.
 
 Source: [`examples/gallery/saving/04_poster_file.py`](../../examples/gallery/saving/04_poster_file.py)
 
-## A booklet with three pages
+## Rangoli and mandala generator
 
-![A booklet with three pages](images/documents-01_booklet.png)
+![Rangoli and mandala generator](images/projects-02_rangoli.png)
 
-Three pages saved to one PDF file.
+A rangoli that turns, made from one petal, path booleans and festival colours: this one is animated.
 
-Source: [`examples/gallery/documents/01_booklet.py`](../../examples/gallery/documents/01_booklet.py)
+Source: [`examples/gallery/projects/02_rangoli.py`](../../examples/gallery/projects/02_rangoli.py)

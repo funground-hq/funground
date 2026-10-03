@@ -42,7 +42,7 @@ SHOWCASE_PICKS = [
     ("motion-01_movers", "Little movers pushed about by vectors: this one is animated."),
     ("images-04_filters", "One picture changed by resize, blur, threshold, posterize, masks and more."),
     ("saving-04_poster_file", "A poster saved as PDF and SVG, with layers, real text, Hindi and an emoji."),
-    ("documents-01_booklet", "Three pages saved to one PDF file."),
+    ("projects-02_rangoli", "A rangoli that turns, made from one petal, path booleans and festival colours: this one is animated."),
 ]
 
 
