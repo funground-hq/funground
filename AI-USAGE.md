@@ -211,3 +211,13 @@ sprint review adds its entry here.
   their own git worktrees. An Opus sub-agent built the PDF/SVG layers on the PDF-text post-processing. Claude reviewed,
   fixed four bugs, merged, and checked the reviewer's-guide script end to end.
 
+### Sprint 13: making sound, the microphone, text in files (3–4 Oct 2026)
+- The maintainer shaped the sprint with domain knowledge: music for teaching and Indian ragas (D-056, D-057), live SVG
+  text for Illustrator and Inkscape editing (D-059), and the designers' handoff rule of text as shapes (D-060). Claude
+  decided the microphone API (D-058) under D-034.
+- Claude Sonnet 5 sub-agents built sound making, the microphone, text as shapes, the poster example and the gallery
+  browser change. A Sonnet agent researched ragas and checked every outside library and dataset on the web. Claude
+  Opus 5.5 sub-agents built live SVG text and measured the PDF polish, which was then closed without code.
+- Claude reviewed and merged, pinned each builder's choices in the contract, fixed a test-harness gap, and recorded
+  three process slips and their fixes in the sprint review.
+

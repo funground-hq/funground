@@ -39,4 +39,4 @@
 - [x] S-109.1 Closed without code: measured, clip-mode text already matches Cairo; the outline PDF is what pdfium draws heavy. Note and test comment corrected
 
 ### S-073 Release 0.1 — E-02 *(carried from Sprint 11)*
-- [ ] The release checklist
+- [ ] The release checklist — moved after Sprint 14 (D-056/D-057 widened 0.1 again)
