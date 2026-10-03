@@ -73,7 +73,7 @@ original list of floats, so `samples()` gives back exactly what `create_sound()`
 ## Not here
 
 - Live synthesis, filters, effects, ADSR with a sustain level, sampled instruments (ADR-006).
-- Chord or polyphonic pitch, beat and onset detection, chroma and chords: Sprint 14.
+- Polyphonic pitch (several notes at once, each with its own octave). Onsets, beats, chroma, chords and key are in [Music_Analysis_Note.md](Music_Analysis_Note.md) (S-112, S-113).
 - A pluck inside `melody()` (A3 gives `melody()` the five waves only).
 
 ## Open points

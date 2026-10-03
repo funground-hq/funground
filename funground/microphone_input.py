@@ -198,6 +198,30 @@ class Microphone(_Analysis):
     def _window(self, count: int) -> list[float]:
         return self._latest(count)
 
+    def _stream_time(self) -> float:
+        return self._total / self._rate
+
+    # ---- not for a microphone: these look at a whole sound, so use capture() first (A5, A6)
+    def _whole_sound_only(self, what: str):
+        raise ValueError(f"microphone.{what}() looks at a whole sound. Use "
+                         f"microphone.capture(seconds).{what}() to look at what was heard")
+
+    def onsets(self):
+        """Not for a microphone. Use ``microphone.capture(seconds).onsets()``."""
+        self._whole_sound_only("onsets")
+
+    def tempo(self):
+        """Not for a microphone. Use ``microphone.capture(seconds).tempo()``."""
+        self._whole_sound_only("tempo")
+
+    def beats(self):
+        """Not for a microphone. Use ``microphone.capture(seconds).beats()``."""
+        self._whole_sound_only("beats")
+
+    def key(self):
+        """Not for a microphone. Use ``microphone.capture(seconds).key()``."""
+        self._whole_sound_only("key")
+
     # ---- capture
     def capture(self, seconds: float):
         """A new sound made of the last *seconds* the microphone heard (up to 10). If it has heard

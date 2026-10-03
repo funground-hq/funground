@@ -586,3 +586,21 @@ Source: [`examples/gallery/sound/03_sargam_over_a_drone.py`](../../examples/gall
 f.microphone() listens to your computer's microphone. mic.start() begins, and then mic.pitch() gives the pitch of the one note you sing or play, or None when it is quiet. f.frequency_to_note() turns that pitch into a name like "A4". The needle shows whether you are a little flat (left) or sharp (right). The bar at the bottom is mic.level(). Nothing is recorded or played back. With no microphone to hear, the sketch still runs, and just waits. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/04_tuner.py`](../../examples/gallery/sound/04_tuner.py)
+
+## Music
+
+### Music: tap along to the beat
+
+![Music: tap along to the beat](images/music-01_tap_along.png)
+
+A tune plays over and over. tune.tempo() finds its speed, and tune.beats() lists the moment of every beat, found by listening to the sound itself. The circle lights up on each beat. Press the space bar in time with it. Each press is scored: on time, a little early, or a little late. With no sound device the tune stays silent but still keeps time. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/01_tap_along.py`](../../examples/gallery/music/01_tap_along.py)
+
+### Music: see a chord
+
+![Music: see a chord](images/music-02_see_a_chord.png)
+
+Chords play one after another. sound.chroma() gives twelve numbers: how strong each note name (C, C#, D ... B) is right now, whatever the octave. They are the twelve bars. sound.chord() names the chord that fits, and f.chord_notes() lists its notes, which are lit on the small keyboard. With no sound device the chords stay silent and the bars stay flat. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/02_see_a_chord.py`](../../examples/gallery/music/02_see_a_chord.py)

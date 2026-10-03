@@ -903,6 +903,14 @@ def frequency_to_note(hz: float, sa: str | None = None) -> str:
     return synth.frequency_to_note(hz, sa)
 
 
+def chord_notes(name: str) -> list[str]:
+    """The note names in a chord: chord_notes('C') is ['C', 'E', 'G'] and chord_notes('Am') is
+    ['A', 'C', 'E']. The name is a note (with # or b) and nothing, m, dim, aug, 7, maj7 or m7."""
+    from . import analysis
+
+    return analysis.chord_notes(name)
+
+
 def microphone(name: str | None = None):
     """A microphone for the computer's default input (or the one with *name* in its name; see
     microphones()). Call mic.start() to listen. While it listens, mic.level(), mic.spectrum(bands)

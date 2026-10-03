@@ -17,10 +17,10 @@ ragas, and build the teaching scenarios of `docs/design/Music_Research_Note.md` 
 - [ ] Drawing helpers for analysis results: wave view (`samples`), spectrum bars, a scrolling pitch line, a spectrogram picture. Decide which are library functions and which are just examples
 
 ### S-112 Onsets and tempo — E-17 *(D-061; contract A5)*
-- [ ] `sound.onsets()` (spectral flux), `sound.tempo()` (beats a minute), the beat times; "tap along" example
+- [x] `sound.onsets()` (spectral flux), `sound.tempo()` (beats a minute), the beat times; "tap along" example
 
 ### S-113 Chroma, key and chords — E-17 *(D-061; contract A6)*
-- [ ] `sound.chroma()` (12 pitch classes), chord name for a moment (major, minor, seventh templates), key of a whole sound; "see a chord" example
+- [x] `sound.chroma()` (12 pitch classes), chord name for a moment (major, minor, seventh templates), key of a whole sound; "see a chord" example
 
 ### S-114 Teaching scenarios — E-22
 - [ ] Gallery `music/` and guide chapter: draw a wave and hear it; compose and save; tuner (microphone + `pitch`); ear training; see a chord; tap along; piano roll of a composed tune

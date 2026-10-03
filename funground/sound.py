@@ -16,7 +16,7 @@ import os
 import time
 from array import array
 
-from . import synth
+from . import analysis, synth
 from .typography import _resolve_path
 
 # The time source, in seconds. It is the same clock the sketch's millis() uses
@@ -157,7 +157,8 @@ _HANN = [0.5 - 0.5 * math.cos(2 * math.pi * i / (FFT_SIZE - 1)) for i in range(F
 
 
 class _Analysis:
-    """level(), spectrum() and pitch(), shared by sounds (A2, A3) and microphones (A4).
+    """level(), spectrum(), pitch(), is_onset(), chroma() and chord(), shared by sounds (A2, A3, A5, A6)
+    and microphones (A4). The numbers are worked out in analysis.py.
 
     A class using it provides ``_window(count)`` (the latest *count* mono samples), ``_rate``,
     ``_version``, ``_cache``, ``_frame_source``, ``_name``, ``_analysing()`` (is there anything to
@@ -245,6 +246,51 @@ class _Analysis:
         self._ready()
         return synth.find_pitch(self._window(synth.PITCH_WINDOW), self._rate)
 
+    def is_onset(self) -> bool:
+        """True in the frame where a new note or hit is heard, for flashing a light on each one. It looks
+        at the last third of a second. False when nothing is playing or listening."""
+        if not self._analysing():
+            self._onset_last = -1.0
+            return False
+        return self._cached("onset", self._compute_onset)
+
+    def _compute_onset(self) -> bool:
+        self._ready()
+        now = self._stream_time()
+        last = getattr(self, "_onset_last", -1.0)
+        if now < last:                                  # the sound started again or looped
+            last = -1.0
+        count = max(1, round(self._rate * analysis.LIVE_SECONDS))
+        window = self._window(count)
+        times = analysis.live_onsets(window, self._rate)
+        found = False
+        for t in times:
+            when = now - count / self._rate + t
+            if when > last + analysis.LIVE_GAP:
+                last = when
+                found = True
+        self._onset_last = last
+        return found
+
+    def chroma(self) -> list[float]:
+        """Twelve numbers from 0 to 1: how strong each note name (C, C#, D ... B) is now, whatever the
+        octave. The strongest is 1. All zeros when nothing is playing or listening, or it is quiet."""
+        if not self._analysing():
+            return [0.0] * 12
+        return list(self._cached("chroma", self._compute_chroma))
+
+    def _compute_chroma(self) -> list[float]:
+        self._ready()
+        count = analysis.CHROMA_FRAME * max(1, round(self._rate / analysis.ANALYSIS_RATE))
+        return analysis.chroma_of(self._window(count), self._rate)
+
+    def chord(self) -> str | None:
+        """The chord sounding now, as a name like "C", "Am", "G7", "Fmaj7" or "Bdim", or None when no
+        chord stands out (one voice is not a chord). It is for clear piano, guitar or synth chords."""
+        if not self._analysing():
+            return None
+        return self._cached("chord", lambda: analysis.chord_of(self._compute_chroma()))
+
 
 class Sound(_Analysis):
     """A sound from f.load_sound(). See contract A1 (playback) and A2 (analysis)."""
@@ -269,6 +315,8 @@ class Sound(_Analysis):
         self._pan = 0.0
         self._name = "sound"
         self._made = None                # (mono samples, their rate) for a sound made from numbers
+        self._rhythm_result = None       # onsets, tempo and beats, worked out on first use (A5)
+        self._key_result = None          # (key,) once worked out (A6)
         if made is not None:             # keep the samples, as a loaded sound does after first use
             values, rate, pcm = made
             self._made = (values, rate)
@@ -389,6 +437,43 @@ class Sound(_Analysis):
     def _analysing(self) -> bool:
         self._update()
         return self._state == "playing"
+
+    def _stream_time(self) -> float:
+        return self._position_now()
+
+    # ---- rhythm and key of the whole sound (A5, A6)
+    def _whole(self):
+        """(all the samples as mono floats, their rate)."""
+        if self._made is not None:
+            return self._made
+        return self.samples(), self._rate
+
+    def _rhythm(self) -> "analysis.Rhythm":
+        if self._rhythm_result is None:
+            values, rate = self._whole()
+            self._rhythm_result = analysis.Rhythm(values, rate)
+        return self._rhythm_result
+
+    def onsets(self) -> list[float]:
+        """The times, in seconds from the start, where a note or hit begins. Worked out once for the
+        whole sound, then remembered (a three-minute song takes a few seconds the first time)."""
+        return list(self._rhythm().onsets)
+
+    def tempo(self) -> float | None:
+        """The speed in beats a minute (from 60 to 200), or None when there is no clear pulse."""
+        return self._rhythm().tempo
+
+    def beats(self) -> list[float]:
+        """The times, in seconds, of the beats at the sound's tempo, lined up with its onsets.
+        Empty when there is no clear pulse."""
+        return list(self._rhythm().beats)
+
+    def key(self) -> str | None:
+        """The key of the whole sound, like "G major" or "E minor", or None when no key stands out."""
+        if self._key_result is None:
+            values, rate = self._whole()
+            self._key_result = (analysis.key_of(values, rate),)
+        return self._key_result[0]
 
     def _ready(self) -> None:
         self._load_samples()

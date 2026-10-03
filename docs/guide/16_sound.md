@@ -311,6 +311,102 @@ A few things to know:
 - `mic.start()` forgets what was heard before. `mic.stop()` keeps it, so you can stop, then capture.
 - This needs pygame-ce 2.5 or newer.
 
+## Beats and tempo
+
+A sound can tell you where its beats are. Every method here listens to the whole sound, and
+works it all out the first time you ask. After that the answers are remembered. A three-minute
+song takes a few seconds the first time.
+
+- `sound.onsets()` is a list of times, in seconds, where a note or a hit begins.
+- `sound.tempo()` is the speed in beats a minute, from 60 to 200. It is `None` when the sound has
+  no steady pulse, as with silence, hiss or one long note.
+- `sound.beats()` is a list of the times of the beats at that tempo. They line up with the onsets.
+
+The next sketch plays a tune and flashes a circle on every beat.
+
+```python
+import funground as f
+
+tune = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
+beats = tune.beats()            # for example [0.0, 0.6, 1.2, ...]
+print(round(tune.tempo()), "beats a minute")
+
+
+def setup():
+    f.size(300, 200)
+    tune.loop()
+
+
+def draw():
+    now = tune.current_time()
+    since = min([now - b for b in beats if b <= now] or [9.0])
+    f.background("black")
+    f.fill("gold" if since < 0.15 else "gray")
+    f.circle(150, 100, 100)
+
+
+f.run()
+```
+
+`sound.is_onset()` is for the moment. It is `True` in the frame where a new note or hit is
+heard, so you can flash a light on each one. It works on a playing sound, and on a microphone, for
+what it heard most recently. It is `False` when nothing is playing or listening.
+
+Rhythm is easy to hear in drums and plucked or struck notes. It is harder in smooth singing
+or bowed strings, where notes begin softly. A song with no clear beat gives `None` for the tempo.
+
+A microphone has no "whole sound". To find the beats of what it heard, take a piece of it first:
+`mic.capture(8).tempo()`.
+
+## Chords and keys
+
+`sound.chroma()` is twelve numbers from 0 to 1. They say how strong each note name is right now:
+C, C#, D, D#, E, F, F#, G, G#, A, A#, B. Every octave counts as the same note name, so a low C and a
+high C add up. The strongest is 1. It works on a playing sound and on a microphone, and gives
+twelve zeros when nothing is playing or listening.
+
+`sound.chord()` names the chord that fits the chroma best. The name is a note and then nothing
+(major), `m` (minor), `dim`, `aug`, `7`, `maj7` or `m7`: "C", "Am", "Bdim", "G7", "Fmaj7". If no chord
+fits well it is `None`. One note on its own is not a chord, so it is `None` too. It is meant for
+clear chords on a piano, a guitar or a synth, not for a busy band.
+
+`f.chord_notes(name)` goes the other way. It gives the notes in a chord: `f.chord_notes("C")` is
+`["C", "E", "G"]`, and `f.chord_notes("Am")` is `["A", "C", "E"]`.
+
+`sound.key()` is for a whole sound. It adds up the chroma over the sound and says which key fits:
+`"G major"` or `"E minor"`, or `None`. It is a good guess for a tune with a clear home note. It
+cannot see a key change in the middle.
+
+```python
+import funground as f
+
+names = ["C", "Am", "F", "G7"]
+song = f.sequence(*[f.mix(*[f.note(n + "4", 1.0, "triangle") for n in f.chord_notes(c)])
+                    for c in names])
+print(song.key())
+
+
+def setup():
+    f.size(300, 200)
+    f.text_align("center")
+    song.loop()
+
+
+def draw():
+    f.background("black")
+    f.fill("white")
+    f.text_size(64)
+    f.text(song.chord() or "-", 150, 100)
+    for i, v in enumerate(song.chroma()):
+        f.rect(20 + i * 22, 190 - 60 * v, 18, 60 * v)
+
+
+f.run()
+```
+
+(The notes in that sketch are all in one octave, so a chord such as "Am" comes out as A4, C4, E4. That
+is fine for the chord finder, which ignores the octave.)
+
 ## Good to know
 
 - **No sound device?** The sketch still works. With no speakers, or with `FUNGROUND_HEADLESS=1`,
@@ -319,6 +415,9 @@ A few things to know:
 - **Time, not speakers.** The place in the sound comes from the sketch's clock, not from the
   speakers. If the computer is slow to start the sound, the numbers can be a little ahead of what you
   hear.
+- **Slow the first time.** `onsets()`, `tempo()`, `beats()` and `key()` read the whole sound, so the
+  first call takes about a second for each minute of sound (a few seconds for a song). After that they
+  answer at once. `is_onset()`, `chroma()` and `chord()` take only a few milliseconds.
 - **Stereo** is mixed down to one channel before it is measured.
 - **Made sounds are made first.** A tone or a tune is worked out before it plays: about a hundredth of a
   second for each second of sound. Nothing about it can change while it plays, except the volume and

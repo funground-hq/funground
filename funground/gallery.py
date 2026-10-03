@@ -66,6 +66,7 @@ AREAS = {
     "documents": "Documents and pages",
     "images": "Pictures and images",
     "sound": "Sound",
+    "music": "Music",
 }
 TIME_DEPENDENT_MARK = "# gallery: time-dependent"
 
