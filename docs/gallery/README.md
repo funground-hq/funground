@@ -644,3 +644,21 @@ Source: [`examples/gallery/music/06_see_your_voice.py`](../../examples/gallery/m
 A short song is built from two parts with f.melody() and put together with f.mix(). Then f.spectrogram() turns the whole sound into a picture: time goes across, pitch goes up, and the louder a pitch is, the brighter it is. You can see each note as a bright dash, and the low bass notes along the bottom. Click to play the song, and a line shows where it is. The picture is also saved as fingerprint.png. With no sound device the song plays silently and keeps time.
 
 Source: [`examples/gallery/music/07_a_songs_fingerprint.py`](../../examples/gallery/music/07_a_songs_fingerprint.py)
+
+## Projects
+
+### Event poster series
+
+![Event poster series](images/projects-01_event_posters.png)
+
+One list of events becomes a whole series of posters. Each event gets its own page, with a gradient background, a burst of shapes joined and cut with path booleans, a rounded panel, a bold headline, the details, a line in Hindi and an emoji. The three layers are called "background", "art" and "words". The script saves events.pdf (every page, real text), events_1.svg, events_2.svg and so on (live text, for editing) and events_final_1.svg and so on (text="shapes", for handing over). The gallery picture shows the last page. Add an event to EVENTS and run the script again to make another poster.
+
+Source: [`examples/gallery/projects/01_event_posters.py`](../../examples/gallery/projects/01_event_posters.py)
+
+### Rangoli and mandala generator
+
+![Rangoli and mandala generator](images/projects-02_rangoli.png)
+
+A pattern that is the same all the way round, made from one petal that is turned again and again. Each petal is a lens shape (two circles overlapped) with a smaller lens cut out of it, using path booleans. The centre is a rosette of joined circles. The colours are festival palettes, picked in "hsb" colour mode. The rings turn slowly, one way and then the other. The words at the bottom are made of dots, one for each point that text_to_points finds along the letters. Use the controls under the canvas: the sliders set the petals, the rings and the palette, the checkbox switches the dots on and off, and "new design" picks a fresh set of shapes. "save" (or the S key) writes rangoli.svg and rangoli.pdf. They hold plain shapes, ready for printing or for a laser cutter.
+
+Source: [`examples/gallery/projects/02_rangoli.py`](../../examples/gallery/projects/02_rangoli.py)
