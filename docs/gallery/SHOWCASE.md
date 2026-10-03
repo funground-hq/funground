@@ -83,13 +83,13 @@ One picture changed by resize, blur, threshold, posterize, masks and more.
 
 Source: [`examples/gallery/images/04_filters.py`](../../examples/gallery/images/04_filters.py)
 
-## Loading an SVG drawing
+## A poster file
 
-![Loading an SVG drawing](images/images-05_svg.png)
+![A poster file](images/saving-04_poster_file.png)
 
-An SVG drawing loaded and drawn at different sizes and angles.
+A poster saved as PDF and SVG, with layers, real text, Hindi and an emoji.
 
-Source: [`examples/gallery/images/05_svg.py`](../../examples/gallery/images/05_svg.py)
+Source: [`examples/gallery/saving/04_poster_file.py`](../../examples/gallery/saving/04_poster_file.py)
 
 ## A booklet with three pages
 

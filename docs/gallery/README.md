@@ -485,6 +485,14 @@ f.save_frames("frames/####.png", 30) saves this frame and the next 29 as numbere
 
 Source: [`examples/gallery/saving/03_save_frames.py`](../../examples/gallery/saving/03_save_frames.py)
 
+### A poster file
+
+![A poster file](images/saving-04_poster_file.png)
+
+This script draws a poster and saves it twice, as poster.pdf and poster.svg. The files carry more than a picture. The poster has four layers: "background", "artwork", "words" and "notes". The "notes" layer is hidden with f.hide_layer(), so it is in the files but switched off. The words are real text. There is an English headline, a Hindi line and an emoji. funground's built-in fallback fonts draw the Hindi and the emoji. What opens where: - The PDF opens in Acrobat or Illustrator. The layers show in the layers panel, and you can switch each one on and off. The text can be selected and searched. - The SVG opens in Inkscape or Illustrator. The layers are Inkscape layers. The text is live, so you can click it and change it. - To edit the text, the font must be installed on your computer. Without it, the program swaps in another font. Guide chapter 13 ("Saving your work") has the section on fonts. - For Hindi in Illustrator, switch on the World-Ready Composer in its Type settings. Without it the letters can come out joined up wrongly. The gallery picture shows the poster. The hidden notes are not in it.
+
+Source: [`examples/gallery/saving/04_poster_file.py`](../../examples/gallery/saving/04_poster_file.py)
+
 ## Documents and pages
 
 ### A booklet with three pages
