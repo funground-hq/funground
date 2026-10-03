@@ -29,7 +29,7 @@
 - [x] S-110.3 `note_to_frequency`, `frequency_to_note` (Western and swara), `sound.pitch()`
 - [x] S-110.2 Tests on generated samples (pitch by FFT, length, pan by channel levels); a gallery example that composes a short tune; guide chapter 16
 
-### S-097 Real text in SVG output — E-15 *(from the backlog)*
+### S-097 Live text in SVG output *(D-059 = A; contract T19)* — E-15 *(from the backlog)*
 - [ ] S-097.1 SVG files carry `<text>`/`<tspan>` with the font embedded (or referenced), placed where the outlines were; same fallbacks as T15
 
 ### S-109 PDF text polish — E-15 *(Sprint 10 known limit)*

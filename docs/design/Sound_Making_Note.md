@@ -50,6 +50,26 @@ original list of floats, so `samples()` gives back exactly what `create_sound()`
 - **Names** are rounded to the nearest semitone and use sharps (`"A#4"`). With `sa`, the nearest swara by
   equal-tempered distance, with `'` or `,` for octaves.
 
+## The microphone (S-108, D-058, contract A4)
+
+- **Capture:** `funground/microphone_input.py` opens an input with pygame-ce's `pygame._sdl2.audio` (an
+  experimental module, pygame-ce 2.5 or newer). All access is in three small functions, so a change in pygame
+  touches one place. A missing module gives a `RuntimeError` that names the pygame version.
+- **Format:** the device is asked for 44 100 Hz, 32-bit float, one channel, 512-sample chunks, and only the
+  sample format may change. On Windows (pygame-ce 2.5.8, SDL 2.32.10) SDL granted float, 44 100 Hz, one channel. The
+  callback also handles 16-bit and several channels.
+- **Threads:** SDL calls the callback on its own thread. It does the least it can: copy the bytes, convert, and
+  append to a ring buffer of the last 10 seconds. A lock guards the buffer, held for one slice copy by the
+  writer and by each reader, so a reader never sees a half-written chunk.
+- **Analysis:** `level`, `spectrum` and `pitch` are in `sound._Analysis`, which `Sound` and `Microphone` share. A
+  microphone supplies only "the newest N samples" and whether it is listening. The window sizes and the
+  once-a-frame cache are the same as for sounds.
+- **Capture:** `capture(seconds)` goes through the same path as `create_sound`. If less than `seconds` was heard,
+  the start is silence, so the length is always as asked (this also makes a headless capture work).
+- **Headless and tests:** `FUNGROUND_HEADLESS=1` gives a silent microphone with an empty buffer. Tests replace
+  the device functions and call `mic._feed(samples)`; they never open a real microphone.
+- **Not here:** playing the microphone back, echo and noise handling, choosing the sample rate.
+
 ## Not here
 
 - Live synthesis, filters, effects, ADSR with a sustain level, sampled instruments (ADR-006).
