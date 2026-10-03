@@ -1,6 +1,6 @@
 # Sprint 13 review — release 0.1, widened: making sound, the microphone, text in files
 
-**Dates:** 3–4 October 2026, under D-034, D-049, D-055 to D-060. **Draft for the maintainer's sign-off.**
+**Dates:** 3–4 October 2026, under D-034, D-049, D-055 to D-060; closed by the maintainer 4 October 2026
 
 **Goal:**
 - tones, notes, melodies (sargam too) and pitch;
@@ -80,7 +80,7 @@ CI: green up to 8398dd4; the latest pushes are running at the time of writing
 
 ## Sign-off
 
-*Awaiting the maintainer.*
+**Closed 4 October 2026** by the maintainer ("Signed off"). D-058 stands; the layer default style and the `tuning="just"`-needs-`sa` error stay as built.
 
 ## Retrospective
 
