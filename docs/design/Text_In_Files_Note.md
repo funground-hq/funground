@@ -143,6 +143,20 @@ machinery.
   a right-to-left line with an emoji keeps that order.
 - **`f.load_svg` ignores `<text>`,** so loading a funground SVG back gives no text.
 
+## Text as shapes, per file (S-116, T20, D-060)
+
+Live text needs the font on the viewer's computer. The maintainer's "golden rule of SVG handoffs"
+is to save one copy live for editing and one with letters as shapes for people who lack the font.
+`f.save(path, text="shapes")` and `picture.save(path, text="shapes")` do the second.
+
+The switch is one line in each of `_write_pdf` and `_write_svg` (`funground/export/__init__.py`):
+with `text="shapes"` the text step starts switched off, so the text collector is never set up and
+the renderer draws outlines exactly as it did before T15 and T19. The layer step still runs, so
+layers stay layers. The mode is passed from `save` through `save_frame`, `save_document` and
+`save_picture`; an animated sketch's queued save stores it with the path. The value is checked at
+the call (`"live"` or `"shapes"`, else `ValueError`), also for PNG, GIF and MP4, which then ignore it.
+`tests/test_text_shapes.py` covers it.
+
 ## Tests
 
 `tests/test_svg_text.py`: the string, family, weight, style, size, fill, position and plain content;

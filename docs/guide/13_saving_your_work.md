@@ -70,6 +70,40 @@ Inkscape and browsers need nothing extra.
 Each [layer](09_paths_and_clipping.md#layers) is a named layer in a PDF or SVG, which you can
 switch on and off in Acrobat, Illustrator or Inkscape. Hidden layers are in the file, switched off.
 
+### The golden rule of SVG handoffs
+
+> **Save two copies. One for you to edit, one to hand over.**
+>
+> Live text is best for editing, but it needs the font. A client or a developer who does not
+> have your font will see a different one. So save a second copy where every letter is a shape.
+> It looks the same on every computer. The letters cannot be edited, selected or searched.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(480, 240)
+
+
+def draw():
+    f.background("ivory")
+    f.fill("midnightblue")
+    f.text_size(60)
+    f.text("Open Day", 40, 90)
+    if f.frame_count == 0:
+        f.save("poster.svg")                       # live text, for editing
+        f.save("poster_final.svg", text="shapes")  # letters as shapes, for sharing
+
+
+f.run(max_frames=1)
+```
+
+> The same works for a PDF. Some print shops ask for outlines: use
+> `f.save("poster_final.pdf", text="shapes")`. A picture from `f.create_graphics()` takes the same
+> option: `g.save("badge.svg", text="shapes")`. Layers stay layers in both copies. A PNG ignores
+> `text=`, because it is already pixels. Any value other than `"live"` or `"shapes"` is an error.
+
 ## A transparent background
 
 `f.clear()` makes every pixel transparent instead of painting a colour. A PNG saved afterwards

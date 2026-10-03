@@ -208,9 +208,12 @@ def year() -> int:
     return Sketch.year()
 
 
-def save(path: str) -> None:
-    """Save this frame to a .png, .pdf or .svg file (written when the frame is complete)."""
-    canvas_sketch().save(path)
+def save(path: str, *, text: str = "live") -> None:
+    """Save this frame to a .png, .pdf or .svg file (written when the frame is complete).
+
+    In a PDF or SVG, text="live" (the default) keeps the text real and editable. text="shapes"
+    draws every letter as a shape, so the file looks right without the font. PNG ignores it."""
+    canvas_sketch().save(path, text=text)
 
 
 def resize_canvas(width: int, height: int) -> None:
