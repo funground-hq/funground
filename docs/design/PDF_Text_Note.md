@@ -108,10 +108,13 @@ opacity and blend mode.
 
 ## Limits and follow-ups
 
-- **Rectangular glyphs look slightly heavier in pdfium (Chrome, Edge).** pdfium snaps a rectangular
-  clip outward to whole device pixels, so "l", "I" and "-" can draw up to one device pixel wider.
-  Writing solid-colour text with `0 Tr` (fill) instead of clipping would avoid it, at the cost of a
-  second code path. Follow-up if anyone notices.
+- **Rectangular glyphs ("l", "I", "-") differ by up to one device pixel between real-text and outline
+  PDFs in pdfium (Chrome, Edge), and it is the *outline* PDF that is off.** Measured in Sprint 13
+  (S-109), against Cairo's own drawing of the same frame: clip-mode text matches it (ink ratio 1.00,
+  mean difference ≤ 0.17), while pdfium draws the outline PDF heavier (ink ratio up to 1.80 at 1×),
+  because it snaps rectangular fill paths outward. Fill mode (`0 Tr`) was built, measured and dropped:
+  it came out heavier than clip mode. Nothing to fix; the tests compare against the outline PDF, so
+  their worst cells show pdfium's error, not ours.
 - **Viewers draw the glyphs themselves,** with their own hinting: the look matches within
   anti-aliasing, not pixel for pixel.
 - **pypdf's own `extract_text` reverses Hebrew and Arabic.** pdfium and MuPDF read them correctly.

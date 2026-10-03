@@ -36,9 +36,10 @@ ARABIC = "مرحبا"                            # "welcome"
 # the worst difference after shrinking both pictures back to 1x (each 4x4 block averaged), so
 # anti-aliasing noise averages out but a missing, extra or shifted glyph does not.
 # Measured (Windows 11, pypdfium2 5.x): text in the right place gives a mean of at most 0.11 and a
-# worst cell of at most 2, except where a glyph is a plain rectangle ("l", "I"): pdfium snaps a
-# rectangular clip path outward to whole device pixels, which moves a stem edge by up to one 4x
-# pixel and gives cells up to 70 ("lll" at size 30). Text moved by half a pixel gives a mean of at
+# worst cell of at most 2, except where a glyph is a plain rectangle ("l", "I"): pdfium snaps the
+# *outline* PDF's rectangular fill paths outward to whole device pixels (the reference here), which
+# moves a stem edge by up to one 4x pixel and gives cells up to 70 ("lll" at size 30). Against
+# Cairo's own drawing the real-text PDF matches (S-109, PDF_Text_Note.md). Text moved by half a pixel gives a mean of at
 # least 0.66 and a worst cell of at least 128; a missing glyph gives a worst cell of 255.
 SCALE = 4
 MEAN_LIMIT = 0.3
