@@ -52,9 +52,19 @@ pygame-ce that was never published.
   a picture's `g.save("x.pdf")`, and pictures drawn into any of these) holds its text as real text
   that can be selected, searched and copied. Each font used is put into the file once, as a subset
   of the letters used, and the page looks the same as before. A font that forbids being put in a
-  file is still saved as letter shapes, and so is all text in SVG files. Text-heavy PDFs are about
+  file is still saved as letter shapes. Text-heavy PDFs are about
   ten times smaller (S-094). **New dependency:** `pypdf`, a small pure-Python PDF library, now
   installs with funground (D-043).
+- **Live text in SVG files:** every SVG funground saves holds its text as live text, one `<text>`
+  per line, that Illustrator, Inkscape and browsers can edit. It names each font by family, with
+  bold and italic, so those programs draw it in the installed font: install funground's fonts (the
+  `fonts` folder in the package) to edit with the same look. Letters from fallback fonts are
+  `<tspan>`s with their own font. Colour, gradient, opacity, tracking, OpenType features and
+  variations carry over, and text in a layer stays in its layer. For browsers, a subset of each
+  font is embedded as an `@font-face` (left out for a font that forbids embedding). The program
+  that opens the file spaces the text itself, so spacing can differ slightly. Erased text and text
+  shadows stay shapes. A text-heavy SVG is about fifty times smaller; SVGs without text are
+  unchanged (S-097, contract T19, D-059).
 - **Mixed styles in one text:** `f.FormattedString()` holds runs of text, and `append(text, size=, style=, color=, font=, tracking=, features=, variations=)` gives a run its own look; settings left out follow the drawing state. `f.text`, `f.text_box`, `f.text_width` and `f.text_path` take one, a line is as tall as its tallest run, and `f.text_box` returns the overflow as a FormattedString (S-091).
 - **Full screen in scripts:** `f.full_screen()` at the top of a script makes the canvas the screen's size, and `f.show()` shows it full screen (S-085).
 - **Pages:** in a script, `f.new_page()` starts a new page (a size, or a name such as `"A5"`);
