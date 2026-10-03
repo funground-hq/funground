@@ -140,18 +140,14 @@ def _string(frequency: float, seconds: float, rng: random.Random) -> list[float]
     """A plucked string with a long ring (Karplus-Strong, like synth.pluck, with two changes for a
     drone). The pluck is soft: the burst of noise is smoothed first, as a fingertip pluck has
     fewer sharp edges than a pick, so there are no jumps in the wave. And each trip round the loop
-    loses only enough to fade by 60 dB in DRONE_T60 seconds."""
+    loses only enough to fade by 60 dB in DRONE_T60 seconds. The burst is synth.soft_burst, the
+    pluck's low-pass filtered burst, smoothed more."""
     n = max(1, round(seconds * RATE))
     delay = RATE / frequency - 0.5
     ring = int(delay - 0.5)
     frac = delay - ring
     a = (1.0 - frac) / (1.0 + frac)
-    burst = [2.0 * rng.random() - 1.0 for _ in range(ring)]
-    for _ in range(DRONE_SOFTNESS):                      # passes of a gentle smoothing
-        burst = [(burst[i - 1] + 2.0 * burst[i] + burst[(i + 1) % ring]) / 4.0 for i in range(ring)]
-    mean = sum(burst) / ring
-    peak = max(abs(v - mean) for v in burst) or 1.0
-    buf = [(v - mean) / peak for v in burst]
+    buf = synth.soft_burst(ring, rng, DRONE_SOFTNESS)
     keep = 0.5 * 10.0 ** (-3.0 / (DRONE_T60 * frequency))
     out = [0.0] * n
     idx = 0
@@ -179,14 +175,15 @@ def _string(frequency: float, seconds: float, rng: random.Random) -> list[float]
 
 
 def drone(sa, seconds, pattern: str = "P S' S' S", rng: random.Random | None = None,
-          who: str = "f.drone()") -> list[float]:
+          who: str = "f.drone()", volume: float = synth.DEFAULT_VOLUME) -> list[float]:
     """The samples of a tanpura-like drone (contract A8). The strings in *pattern* are swaras above
     *sa*, tuned in just intonation (Pa is exactly 3/2 of Sa, as tanpuras are tuned by ear). They
     are plucked in turn, DRONE_GAP seconds apart, with one gap of rest after the last, and each
     rings on under the next. The tails that pass the end are added back at the start, so the
-    sound loops without a gap."""
+    sound loops without a gap. Its loudest point is *volume*."""
     sa_hz = _sa_hz(sa, who)
     seconds = synth._number(seconds, who, "the length in seconds", 0, 600, low_open=True)
+    volume = synth._number(volume, who, "volume", 0, 1)
     if not isinstance(pattern, str) or not pattern.split():
         raise ValueError(f"{who}: pattern must be swaras separated by spaces, like \"P S' S' S\", not {pattern!r}")
     strings = []
@@ -223,7 +220,7 @@ def drone(sa, seconds, pattern: str = "P S' S' S", rng: random.Random | None = N
         k += 1
         t = (k // len(strings)) * cycle + (k % len(strings)) * DRONE_GAP
     peak = max(max(out), -min(out)) or 1.0
-    return [0.8 * v / peak for v in out]
+    return [volume * v / peak for v in out]
 
 
 # ---- the tala (simple synthesised tabla strokes)
@@ -237,6 +234,7 @@ _STROKES = {
     "ka": ("click",), "ke": ("click",), "ki": ("click",), "kat": ("click",), "kath": ("click",),
 }
 TABLA_HZ = 280.0               # the pitch of the right-hand drum (the dayan)
+TALA_PEAK = 0.5                # the loudest stroke, the same headroom as the other sounds (A9)
 
 
 def strokes_of(bol: str, who: str = "f.tala()") -> list[tuple[str, ...]]:
@@ -328,7 +326,7 @@ def tala(name, tempo=80, cycles=1, rng: random.Random | None = None, who: str = 
     for j in range(fade):
         out[n - 1 - j] *= j / fade
     peak = max(max(out), -min(out)) or 1.0
-    return [0.9 * v / peak for v in out]
+    return [TALA_PEAK * v / peak for v in out]
 
 
 # ---- listening: a pitch track, the tonic, the swara histogram

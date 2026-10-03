@@ -13,8 +13,10 @@ TEMPO = 140
 LEAD = "C5 E5 G5 E5 C5:2  D5 F5 A5 F5 D5:2  E5 G5 B5 G5 E5:2  C5:4"
 BASS = "C3:6 D3:6 E3:6 C3:4"
 
-song = f.mix(f.melody(LEAD, tempo=TEMPO, wave="triangle"),
-             f.melody(BASS, tempo=TEMPO, wave="sine"))
+# The tune in melody's soft voice, and a quieter sine bass, so the two together do not need
+# mix() to squash them.
+song = f.mix(f.melody(LEAD, tempo=TEMPO),
+             f.melody(BASS, tempo=TEMPO, wave="sine", volume=0.35))
 LEFT, TOP, WIDTH, HEIGHT = 50, 50, 440, 220
 fingerprint = None
 

@@ -29,11 +29,13 @@ def voicing(chord):
 
 
 def make_chord(chord):
-    notes = [f.note(n, SECONDS, "triangle", 0.5) for n in voicing(chord)]
+    # Three or four notes are added together, so each one is quiet (0.2): the sum stays below
+    # the loudest a sound can be, and mix() does not have to squash it.
+    notes = [f.note(n, SECONDS, "triangle", 0.2) for n in voicing(chord)]
     return f.mix(*notes)
 
 
-song = f.sequence(*[make_chord(c) for c in PROGRESSION])
+song = f.sequence(*[make_chord(c) for c in PROGRESSION]).reverb(0.2)    # a little room
 shown = [0.0] * 12            # the bars, smoothed so they glide
 heard = None                  # the chord name now
 
@@ -41,7 +43,7 @@ heard = None                  # the chord name now
 def setup():
     f.size(600, 400)
     f.text_align("center")
-    song.set_volume(0.5)
+    song.set_volume(0.9)
     song.loop()
 
 
