@@ -21,6 +21,7 @@ each area is done (S-120.2); the last step replaces it with every example (see `
 """
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 
@@ -49,6 +50,10 @@ EXPLAINED = [
 # The one switch: when every example is done, make ENFORCED = ALL and delete EXPLAINED.
 ALL = gallery.list_examples(GALLERY)
 ENFORCED = [GALLERY / name for name in EXPLAINED]
+# While the roll-out is under way, FUNGROUND_DOCS_AREAS=basics,shapes checks every example in those areas too.
+_AREAS = [a for a in os.environ.get("FUNGROUND_DOCS_AREAS", "").split(",") if a]
+if _AREAS:
+    ENFORCED = sorted(set(ENFORCED) | {p for p in ALL if p.parent.name in _AREAS})
 
 HOW_RANGE = range(3, 7)       # 3 to 6 bullets
 MAKE_RANGE = range(3, 6)      # 3 to 5 bullets
