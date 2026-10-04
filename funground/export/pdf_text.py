@@ -189,9 +189,10 @@ def _ps_name(tt: TTFont, path: str) -> str:
     return re.sub(r"[^A-Za-z0-9_-]", "", name) or "Font"
 
 
-def _prepare(path: str, location: tuple) -> _Font | None:
-    """The font at *path*, instanced at *location* if variable, or None when it cannot be embedded."""
-    tt = TTFont(path)
+def _prepare(path: str, location: tuple, face: int = 0) -> _Font | None:
+    """The font at *path* (face number *face* of a collection), instanced at *location* if variable, or
+    None when it cannot be embedded. What is written later is that one font, never the collection."""
+    tt = TTFont(path, fontNumber=face)
     if "OS/2" in tt and tt["OS/2"].fsType & RESTRICTED_LICENCE:
         return None
     name = _ps_name(tt, path)
@@ -229,7 +230,7 @@ class PdfTextCollector:
         Return the marker's corners in user space, or None to draw outlines instead."""
         if not run.glyphs or len(self.runs) >= MAX_RUNS:
             return None
-        font = self._font(run.font.path, run.location)
+        font = self._font(run.font.path, run.location, run.font.face)
         if font is None:
             return None
         number = len(self.runs)
@@ -240,12 +241,12 @@ class PdfTextCollector:
         self.runs[number] = PdfTextRun(number, run, x, y, corners, tuple(matrix[:4]), font)
         return shape
 
-    def _font(self, path: str, location: tuple) -> _Font | None:
-        key = (os.path.normcase(os.path.abspath(path)), location)
+    def _font(self, path: str, location: tuple, face: int = 0) -> _Font | None:
+        key = (os.path.normcase(os.path.abspath(path)), face, location)
         if key not in self._fonts:
             try:
                 with _quiet_fonttools():
-                    self._fonts[key] = _prepare(path, location)
+                    self._fonts[key] = _prepare(path, location, face)
             except Exception:         # a font fontTools cannot instance or read: outlines it is
                 self._fonts[key] = None
         return self._fonts[key]

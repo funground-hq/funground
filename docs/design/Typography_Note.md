@@ -141,7 +141,7 @@ holds `text_fallback`, `()` by default (bundled fonts only), `None` for off. It 
 7. **Memoising.** The itemisation is remembered per `(text, primary, chain)` (2048 entries). Shaped runs use the
    renderer's existing run cache, whose key gains the chain only when it is not the default. Bundled fonts
    load on first need.
-8. **`system_font(name)`.** Searches the Windows, macOS and Linux font folders for `.ttf` and `.otf` files, reads
+8. **`system_font(name)`.** Searches the Windows, macOS and Linux font folders for `.ttf` and `.otf` files and for every face inside `.ttc`/`.otc` collections (S-119), reads
    family names (name IDs 1 and 16) with fontTools, once per file, and prefers the Regular face. Missing is a
    `FileNotFoundError`. It is never in the default chain, so output depends on the computer only when a
    sketch asks. Files are only read, never opened with another program.

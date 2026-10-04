@@ -575,7 +575,7 @@ Source: [`examples/gallery/sound/02_write_a_tune.py`](../../examples/gallery/sou
 
 ![Making sound: a sargam phrase over a drone](images/sound-03_sargam_over_a_drone.png)
 
-With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D n N. A ' after a swara is the octave above and a comma is the octave below. Here the notes use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings plays Pa, Sa, Sa, Sa over and over. sound.reverb() gives the phrase and the strings a room to ring in. The ladder shows the swara that sound.pitch() hears. *(Uses real time, so the picture varies from run to run.)*
+With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D n N. A ' after a swara is the octave above and a comma is the octave below. Here the notes use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings plays Pa, Sa, Sa, Sa over and over. sound.reverb() gives the phrase and the strings a room to ring in. The ladder shows the swara that sound.pitch() hears. The pink line follows the phrase only: it folds each reading into one octave, takes the middle of the last five, and breaks at rests. *(Uses real time, so the picture varies from run to run.)*
 
 Source: [`examples/gallery/sound/03_sargam_over_a_drone.py`](../../examples/gallery/sound/03_sargam_over_a_drone.py)
 

@@ -4,7 +4,8 @@ With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D
 A ' after a swara is the octave above and a comma is the octave below. Here the notes
 use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings
 plays Pa, Sa, Sa, Sa over and over. sound.reverb() gives the phrase and the strings a
-room to ring in. The ladder shows the swara that sound.pitch() hears.
+room to ring in. The ladder shows the swara that sound.pitch() hears. The pink line follows the phrase only: it
+folds each reading into one octave, takes the middle of the last five, and breaks at rests.
 """
 # gallery: time-dependent
 import math
@@ -31,13 +32,55 @@ drone = f.sequence(cycle, cycle)
 drone.set_volume(0.6)
 
 # A quiet hum under it, made from numbers: three sine waves added up.
-sa_hz = f.note_to_frequency("S,", sa=SA)
-hum = f.create_sound([0.2 * (math.sin(2 * math.pi * sa_hz * t / 44100)
-                             + 0.5 * math.sin(4 * math.pi * sa_hz * t / 44100)
-                             + 0.25 * math.sin(6 * math.pi * sa_hz * t / 44100))
+hum_hz = f.note_to_frequency("S,", sa=SA)
+sa_hz = f.note_to_frequency("S", sa=SA)
+hum = f.create_sound([0.2 * (math.sin(2 * math.pi * hum_hz * t / 44100)
+                             + 0.5 * math.sin(4 * math.pi * hum_hz * t / 44100)
+                             + 0.25 * math.sin(6 * math.pi * hum_hz * t / 44100))
                       for t in range(int(phrase.duration() * 44100))])
 hum.set_volume(0.4)
 trail = []
+recent = []
+
+# When each note of the phrase sounds, in seconds: (start, end) for notes, not rests.
+beat = 60 / TEMPO
+notes = []
+clock = 0.0
+for token in PHRASE.split():
+    name, _, beats = token.partition(":")
+    length = float(beats or 1) * beat
+    if name != "-":
+        notes.append((clock + 0.1, clock + length - 0.02))    # skip the soft start, where notes overlap
+    clock += length
+
+STEP = 25                                  # height of one row
+BASE = 335                                 # text baseline of the bottom row, S
+
+
+def in_a_note():
+    t = phrase.current_time()
+    return phrase.is_playing() and any(a <= t <= b for a, b in notes)
+
+
+def swara_height(hz):
+    """Where the voice is on the ladder, in rows above S, in one octave: 0 is S and 11 is N."""
+    steps = 12 * math.log2(hz / sa_hz)
+    return (steps + 0.5) % 12 - 0.5        # an octave slip lands on the right row, not off the ladder
+
+
+def trace():
+    """The next point of the line: a height in rows, or None for a gap."""
+    hz = phrase.pitch() if in_a_note() else None
+    if hz is None:
+        del recent[:]
+        return None
+    here = swara_height(hz)
+    if recent and abs(here - sorted(recent)[len(recent) // 2]) > 2:
+        recent[:] = [here]                 # a jump: break the line and start again
+        return None
+    recent.append(here)
+    del recent[:-5]
+    return sorted(recent)[len(recent) // 2]
 
 
 def setup():
@@ -49,25 +92,24 @@ def setup():
 def draw():
     f.background("#1d0f24")
     f.text_size(16)
-    hz = phrase.pitch()
-    heard = None
-    if hz:
-        heard = f.frequency_to_note(hz, sa=SA).rstrip("',")
-        trail.append(12 * math.log2(hz / f.note_to_frequency("S", sa=SA)) % 12)
-    else:
-        trail.append(None)
+    f.text_align("left", "center")
+    height = trace()
+    trail.append(height)
     del trail[:-120]
+    heard = None
+    if height is not None:
+        heard = SWARAS[round(height) % 12]
 
-    # the ladder: one row for each swara
+    # the ladder: one row for each swara, S at the bottom
     f.no_stroke()
     for i, swara in enumerate(SWARAS):
-        y = 350 - i * 26
+        y = BASE - i * STEP
         f.fill("orange" if swara == heard else "#3a2147")
         f.rect(20, y - 18, 600, 22, 6)
         f.fill("white" if swara == heard else "#c9a7d9")
-        f.text(swara, 30, y)
+        f.text(swara, 30, y - 7)
 
-    # the path of the voice, newest on the right
+    # the path of the voice, newest on the right; a gap wherever the line breaks
     f.stroke("hotpink")
     f.stroke_width(3)
     f.no_fill()
@@ -76,14 +118,14 @@ def draw():
         if step is None:
             last = None
             continue
-        point = (60 + k * 4.5, 340 - step * 26)
+        point = (60 + k * 4.5, BASE - 7 - step * STEP)
         if last:
             f.line(*last, *point)
         last = point
 
     f.no_stroke()
     f.fill("white")
-    f.text(f"Sa is {SA}   (now: {f.frequency_to_note(hz, sa=SA) if hz else 'rest'})", 20, 385)
+    f.text(f"Sa is {SA}   (now: {heard if heard else 'rest'})", 20, 380)
 
 
 f.run()

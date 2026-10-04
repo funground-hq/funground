@@ -86,8 +86,8 @@ def _css_string(name: str) -> str:
     return "'" + name.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
 
-def _face(path: str) -> _Face:
-    tt = TTFont(path, lazy=True)
+def _face(path: str, number: int = 0) -> _Face:
+    tt = TTFont(path, lazy=True, fontNumber=number)
     try:
         family = ""
         if "name" in tt:
@@ -169,7 +169,7 @@ class SvgTextCollector:
 
     def __init__(self) -> None:
         self.runs: dict[int, _Line] = {}
-        self._faces: dict[str, _Face] = {}
+        self._faces: dict[tuple, _Face] = {}
         self.embedded: dict[str, int] = {}          # font path -> bytes of its embedded subset (after finish)
 
     # ---- while drawing (called by the Cairo renderer)
@@ -228,7 +228,7 @@ class SvgTextCollector:
 
         # 2. Each marker's group: the painted element becomes the line's text; the marker clip goes.
         texts: set[ET.Element] = set()
-        used: dict[str, set[str]] = {}                # font path -> characters drawn in it
+        used: dict[tuple, set[str]] = {}                # (font path, face) -> characters drawn in it
         for clip_id, (clip, number, (e0, e1, _, e2)) in markers.items():
             found = users.get(clip_id, [])
             if len(found) > 1:
@@ -278,11 +278,11 @@ class SvgTextCollector:
             tree.write(path, encoding="UTF-8", xml_declaration=True)
 
     # ---- the text element
-    def _face_of(self, path: str) -> _Face:
-        key = os.path.normcase(os.path.abspath(path))
+    def _face_of(self, path: str, number: int = 0) -> _Face:
+        key = (os.path.normcase(os.path.abspath(path)), number)
         if key not in self._faces:
             try:
-                self._faces[key] = _face(path)
+                self._faces[key] = _face(path, number)
             except Exception:
                 self._faces[key] = _Face("", "normal", "normal", "sans-serif", False, False)
         return self._faces[key]
@@ -303,7 +303,7 @@ class SvgTextCollector:
 
     def _text_element(self, line: _Line, transform: tuple, used: dict) -> ET.Element:
         run = line.run
-        base = self._face_of(run.font.path)
+        base = self._face_of(run.font.path, run.font.face)
         text = ET.Element(f"{{{SVG_NS}}}text")
         if transform != (1.0, 0.0, 0.0, 1.0, 0.0, 0.0):
             text.set("transform", _matrix_text(transform))
@@ -329,7 +329,7 @@ class SvgTextCollector:
         text.set(f"{{{XML_NS}}}space", "preserve")
         last: ET.Element | None = None
         for part in parts:
-            used.setdefault(part.font.path, set()).update(part.text)
+            used.setdefault((part.font.path, part.font.face), set()).update(part.text)
             if part.font is run.font:
                 if last is None:
                     text.text = (text.text or "") + part.text
@@ -337,7 +337,7 @@ class SvgTextCollector:
                     last.tail = (last.tail or "") + part.text
                 continue
             span = ET.SubElement(text, f"{{{SVG_NS}}}tspan")
-            self._font_attrs(span, self._face_of(part.font.path), base)
+            self._font_attrs(span, self._face_of(part.font.path, part.font.face), base)
             if part.location != primary_location:
                 span.set("font-variation-settings", self._variations(part.location) or "normal")
             span.text = part.text
@@ -383,20 +383,20 @@ class SvgTextCollector:
         return new_id
 
     # ---- embedded fonts, for browsers
-    def _embed(self, root: ET.Element, used: dict[str, set[str]]) -> None:
+    def _embed(self, root: ET.Element, used: dict[tuple, set[str]]) -> None:
         """A ``<style>`` with one ``@font-face`` per font used: a subset holding the characters drawn
         in it, as a data URI. A font whose fsType forbids embedding is left out; its text still names
         its family."""
         rules = []
-        for path, chars in sorted(used.items()):
-            face = self._face_of(path)
+        for (path, number), chars in sorted(used.items()):
+            face = self._face_of(path, number)
             if not face.embeddable or not face.family:
                 continue
             try:
-                data = self._subset(path, chars)
+                data = self._subset(path, chars, number)
             except Exception:
                 continue                               # the text still names the font; only browsers lose
-            self.embedded[path] = len(data)
+            self.embedded[path if not number else f"{path}#{number}"] = len(data)
             kind, mime = ("opentype", "font/otf") if face.cff else ("truetype", "font/ttf")
             rules.append(
                 f"@font-face {{ font-family: {_css_string(face.family)}; font-weight: {face.weight}; "
@@ -411,10 +411,10 @@ class SvgTextCollector:
         root.insert(0, style)
 
     @staticmethod
-    def _subset(path: str, chars: set[str]) -> bytes:
+    def _subset(path: str, chars: set[str], number: int = 0) -> bytes:
         text = "".join(sorted(chars - {"\n"}))
         with _quiet_fonttools():
-            tt = TTFont(path)
+            tt = TTFont(path, fontNumber=number)
             opts = subset.Options()
             opts.layout_features = ["*"]               # the browser shapes the text: keep every feature
             opts.notdef_outline = True
