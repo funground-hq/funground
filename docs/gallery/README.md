@@ -21,7 +21,29 @@ Source: [`examples/gallery/basics/01_first_sketch.py`](../../examples/gallery/ba
 
 ![setup() once, draw() every frame](images/basics-02_setup_and_draw.png)
 
-setup() runs once; draw() runs again and again. f.frame_count counts the frames, f.width and f.height are the window size, and f.stop() ends the sketch.
+setup() runs once; draw() runs again and again. A gold dot walks across the window, one step every frame, and the frame number is written in the corner.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- setup() runs once, before anything is drawn. Here it calls f.size() to make the window.
+- draw() runs again and again, many times a second. Each run is one frame.
+- f.frame_count counts the frames, so it is a clock. The dot's x is (40 + f.frame_count * 8) % f.width, and the % brings it back to the left edge.
+- f.background() paints the whole window at the start of every frame. That wipes the last dot, so it looks as if one dot moves.
+- f.fill(), f.no_stroke() and f.circle() set the style and draw the dot. A style stays until you change it.
+- f.run() at the bottom starts the sketch, and f.stop() ends it after 600 frames.
+
+**Make it yours**
+
+- Change the 8 in the x line: a smaller number is slower, a bigger one is faster.
+- Change the colours. Try f.background("tomato") and f.fill("white"), or any other colour name.
+- Swap f.circle() for f.rect() or f.ellipse() and see how the dot changes.
+- Draw a second dot that walks the other way: use f.width - x for its x.
+- Move the dot up and down as well. Use math.sin(f.frame_count * 0.1) in the y value, with import math at the top.
+
+</details>
 
 Source: [`examples/gallery/basics/02_setup_and_draw.py`](../../examples/gallery/basics/02_setup_and_draw.py)
 
@@ -371,6 +393,28 @@ Source: [`examples/gallery/paths/04_holes.py`](../../examples/gallery/paths/04_h
 
 Two shapes can be joined, overlapped, cut and mixed with union, intersection, difference and xor. Each one gives back a new path. The bottom panel shows remove_overlap, which turns a crossing outline into one clean edge.
 
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.path() starts an empty path. Its methods .circle() and .polygon() add a ring and a star outline to it.
+- Four path methods combine two paths: union, intersection, difference and xor. Each gives back a new path and leaves the old ones alone.
+- The example writes them as the operators | & - and ^. They mean the same as the four methods, in that order.
+- f.draw_path() draws a path with the current fill and stroke. Combined paths are real shapes, so they can have holes.
+- star_points() takes every second corner of a pentagon. The outline crosses itself, and path.remove_overlap() turns it into one clean edge.
+- f.push(), f.translate() and f.pop() slide the clean copy to the right. The path itself does not change.
+
+**Make it yours**
+
+- Move the star: change cx + 14 in two_shapes() to cx + 40 and watch each result change.
+- Swap the two paths in the difference: star - ring is not the same as ring - star.
+- Replace the ring with f.path().rect(...) or f.path().ellipse(...).
+- Cut a hole in a result with a third shape: (ring | star) - f.path().circle(x, y, 15).
+- Fill a result with f.linear_gradient() instead of a flat colour.
+
+</details>
+
 Source: [`examples/gallery/paths/05_booleans.py`](../../examples/gallery/paths/05_booleans.py)
 
 ### Outlines, tests and moving paths
@@ -617,7 +661,29 @@ Source: [`examples/gallery/music/03_sing_with_the_drone.py`](../../examples/gall
 
 ![Music: hear a raga](images/music-04_hear_a_raga.png)
 
-f.ragas() lists the ragas funground knows, and f.raga(name) tells you about one: its thaat (parent scale), the swaras it uses, its aroha (the way up) and avaroha (the way down), its vadi and samvadi (the two most important notes) and the time of day it belongs to. Pick a raga with the slider or the left and right keys. Its aroha and avaroha play over a drone, both with a little reverb, and each swara lights up as it sounds. Swaras the raga leaves out are dark. f.match_ragas() then says which ragas use the most similar swaras: ragas that share the same swaras come out almost level, as only the notes are compared. *(Uses real time, so the picture varies from run to run.)*
+Pick a raga with the slider or the left and right keys. Its aroha (the way up) and avaroha (the way down) play over a drone, and each swara lights up as it sounds. The text gives its thaat, vadi, samvadi, pakad and time of day, and the three ragas with the most similar swaras. *(Uses real time, so the picture varies from run to run.)*
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.ragas() lists the names funground knows. f.raga(name) gives one raga, with .thaat, .swaras, .aroha, .avaroha, .vadi, .samvadi, .time and .pakad.
+- f.drone() makes a steady background note, and f.melody() turns a string of swara names into a tune. Sa is the home note and "-" is a rest.
+- The tune and the drone each use .reverb() and .loop(). The room() helper adds the echo's tail back onto the start, so the loop has no gap.
+- Every frame, tune.current_time() divided by the length of a beat says which swara is sounding. That one is drawn in gold.
+- f.create_slider() picks the raga, and choose() builds a new tune when the slider moves.
+- f.match_ragas() takes how often each of the 12 swaras is used. It gives back the ragas whose swaras are most alike, best first.
+
+**Make it yours**
+
+- Change SA from "C#4" to another note, such as "D4". The whole tune and its lights move to that key.
+- Change TEMPO to make the tune slower or faster.
+- Change tuning="just" to tuning="equal" in f.melody() and listen for the small differences.
+- Play the pakad instead: build the tune from raga.pakad.split() instead of the aroha and avaroha.
+- Change the background colour to fit raga.time, for example a dark blue for night ragas and a warm one for morning.
+
+</details>
 
 Source: [`examples/gallery/music/04_hear_a_raga.py`](../../examples/gallery/music/04_hear_a_raga.py)
 
@@ -691,7 +757,29 @@ Source: [`examples/gallery/projects/01_event_posters.py`](../../examples/gallery
 
 ![Rangoli and mandala generator](images/projects-02_rangoli.png)
 
-A pattern that is the same all the way round, made from one petal that is turned again and again. Each petal is a lens shape (two circles overlapped) with a smaller lens cut out of it, using path booleans. The centre is a rosette of joined circles. The colours are festival palettes, picked in "hsb" colour mode. The rings turn slowly, one way and then the other. The words at the bottom are made of dots, one for each point that text_to_points finds along the letters. Use the controls under the canvas: the sliders set the petals, the rings and the palette, the checkbox switches the dots on and off, and "new design" picks a fresh set of shapes. "save" (or the S key) writes rangoli.svg and rangoli.pdf. They hold plain shapes, ready for printing or for a laser cutter.
+A pattern that is the same all the way round, made from one petal that is turned again and again. The rings turn slowly. Use the controls under the canvas to change the petals, rings and palette, or press "new design". "save" (or the S key) writes rangoli.svg and rangoli.pdf for printing.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- A petal is a lens: two overlapped f.path().circle() shapes joined with & (intersection). Only the part inside both circles is left.
+- A smaller lens is cut out of the petal with - (difference), so each petal has a hole. The centre rosette is circles turned with .rotate() and joined with | (union).
+- Each ring is a loop. f.push(), f.rotate(), f.translate() and f.pop() put the same petal at each angle around the middle.
+- The spin comes from f.frame_count. Rings next to each other turn in opposite directions, and outer rings turn at a different speed.
+- f.color_mode("hsb", 360, 100, 100) lets each palette hold simple hue, saturation and brightness numbers.
+- f.random_seed(), f.random() and f.random_choice() pick the shapes, so one seed always gives the same design. f.text_to_points() finds dots along the words at the bottom.
+
+**Make it yours**
+
+- Change the 0.25 in draw_pattern(f.frame_count * 0.25): a bigger number spins faster, and 0 holds it still.
+- Add your own palette to PALETTES, and raise the palette slider's top value from 4 to 5.
+- Put your name in f.text_to_points(), in place of "Shubh Rangoli".
+- Change the hole: use a different size in lens(length * 0.6, width * 0.5), or cut out f.path().circle() instead of a lens.
+- Draw only outlines: use f.no_fill() and f.stroke() in draw_petal_ring(), press save, and look at rangoli.svg.
+
+</details>
 
 Source: [`examples/gallery/projects/02_rangoli.py`](../../examples/gallery/projects/02_rangoli.py)
 

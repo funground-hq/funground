@@ -1,15 +1,32 @@
 """Rangoli and mandala generator
 
 A pattern that is the same all the way round, made from one petal that is turned again and again.
-Each petal is a lens shape (two circles overlapped) with a smaller lens cut out of it, using path
-booleans. The centre is a rosette of joined circles. The colours are festival palettes, picked in
-"hsb" colour mode. The rings turn slowly, one way and then the other. The words at the bottom are
-made of dots, one for each point that text_to_points finds along the letters.
+The rings turn slowly. Use the controls under the canvas to change the petals, rings and palette,
+or press "new design". "save" (or the S key) writes rangoli.svg and rangoli.pdf for printing.
 
-Use the controls under the canvas: the sliders set the petals, the rings and the palette, the
-checkbox switches the dots on and off, and "new design" picks a fresh set of shapes. "save" (or
-the S key) writes rangoli.svg and rangoli.pdf. They hold plain shapes, ready for printing or for
-a laser cutter.
+How it works:
+- A petal is a lens: two overlapped f.path().circle() shapes joined with & (intersection). Only the
+  part inside both circles is left.
+- A smaller lens is cut out of the petal with - (difference), so each petal has a hole. The centre
+  rosette is circles turned with .rotate() and joined with | (union).
+- Each ring is a loop. f.push(), f.rotate(), f.translate() and f.pop() put the same petal at each
+  angle around the middle.
+- The spin comes from f.frame_count. Rings next to each other turn in opposite directions, and
+  outer rings turn at a different speed.
+- f.color_mode("hsb", 360, 100, 100) lets each palette hold simple hue, saturation and brightness
+  numbers.
+- f.random_seed(), f.random() and f.random_choice() pick the shapes, so one seed always gives the
+  same design. f.text_to_points() finds dots along the words at the bottom.
+
+Make it yours:
+- Change the 0.25 in draw_pattern(f.frame_count * 0.25): a bigger number spins faster, and 0 holds
+  it still.
+- Add your own palette to PALETTES, and raise the palette slider's top value from 4 to 5.
+- Put your name in f.text_to_points(), in place of "Shubh Rangoli".
+- Change the hole: use a different size in lens(length * 0.6, width * 0.5), or cut out
+  f.path().circle() instead of a lens.
+- Draw only outlines: use f.no_fill() and f.stroke() in draw_petal_ring(), press save, and look at
+  rangoli.svg.
 """
 import math
 

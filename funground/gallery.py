@@ -8,7 +8,8 @@ checkout it shows the same examples from the repository's own folders.
 
 Views
     Grid     every example as a small picture with its title; pick an area on the left.
-    Detail   the picture large, the title, the description and the source code.
+    Detail   the picture large, the title, the description, then a panel that shows either
+             the explanation (How it works, Make it yours) or the source code.
 
 Mouse
     Click an area, a picture or a button. The wheel scrolls the grid or the code.
@@ -16,6 +17,7 @@ Mouse
 Keys
     Left / Right    previous / next example (in the current area)
     Enter           run the example in its own window
+    E / S           show the explanation / the source code in the lower panel
     C               copy the example (and its data files) into the current folder
     O               open the folder where the example saved its files (after you ask, never before)
     Backspace       back to the grid
@@ -116,14 +118,50 @@ def is_time_dependent(path: Path) -> bool:
     return TIME_DEPENDENT_MARK in path.read_text(encoding="utf-8")
 
 
-def title_and_description(path: Path) -> tuple[str, str]:
-    """First docstring line is the title; the rest (joined) is the description."""
+HOW_HEADING = "How it works:"
+MAKE_HEADING = "Make it yours:"
+
+
+@dataclass(frozen=True)
+class Explanation:
+    """An example's docstring, split into its parts (S-120)."""
+    title: str
+    description: str
+    how: tuple[str, ...] = ()
+    make: tuple[str, ...] = ()
+
+
+def explanation(path: Path) -> Explanation:
+    """Split an example's docstring: title line, description, then the two bulleted lists.
+
+    The standard is a title, a short paragraph, ``How it works:`` with ``- `` bullets and
+    ``Make it yours:`` with ``- `` bullets. A bullet may continue on the next lines.
+    Older examples have only the title and the paragraph.
+    """
     source = path.read_text(encoding="utf-8")
     doc = source.split('"""')[1] if source.lstrip().startswith('"""') else ""
     lines = [line.strip() for line in doc.strip().splitlines()]
     title = lines[0] if lines else path.stem
-    description = " ".join(line for line in lines[1:] if line)
-    return title, description
+    description: list[str] = []
+    lists: dict[str, list[str]] = {HOW_HEADING: [], MAKE_HEADING: []}
+    section = None
+    for line in lines[1:]:
+        if line in lists:
+            section = line
+        elif section is None:
+            if line:
+                description.append(line)
+        elif line.startswith("- "):
+            lists[section].append(line[2:].strip())
+        elif line and lists[section]:
+            lists[section][-1] += " " + line
+    return Explanation(title, " ".join(description), tuple(lists[HOW_HEADING]), tuple(lists[MAKE_HEADING]))
+
+
+def title_and_description(path: Path) -> tuple[str, str]:
+    """First docstring line is the title; the paragraph after it (joined) is the description."""
+    parts = explanation(path)
+    return parts.title, parts.description
 
 
 def data_files(path: Path) -> list[Path]:
@@ -222,6 +260,16 @@ THUMB_W, THUMB_H = 236, 148
 PIC_W, PIC_H = 384, 240           # the large picture in the detail view
 CODE_BOX = (264, 360, 812, 326)   # x, y, width, height of the code panel
 CODE_PAD = 14
+TABS = {                          # the lower panel's two tabs: x, y, width, height
+    "explain": (882, 322, 104, 30),
+    "code": (996, 322, 80, 30),
+}
+TAB_TITLES = {"explain": "Explain", "code": "Code"}
+EXPLAIN_SIZE, EXPLAIN_LEADING = 14, 18
+EXPLAIN_INDENT = 16
+EXPLAIN_COL_W = (CODE_BOX[2] - 4 * CODE_PAD) // 2
+EXPLAIN_GAP = 7                   # between bullets
+EXPLAIN_NONE = "This example has no explanation yet. Press Code (or S) to read it."
 CODE_SIZE, CODE_LEADING = 14, 19
 BUTTONS = {                       # detail-view buttons: x, y, width, height
     "back": (264, 24, 90, 36),
@@ -264,6 +312,8 @@ class Entry:
     source: str
     image: object = None            # a picture from f.load_image, or None when it is missing
     thumb: object = None            # the small copy made once in setup
+    how: tuple = ()                 # the "How it works" bullets
+    make: tuple = ()                # the "Make it yours" bullets
 
 
 @dataclass
@@ -278,6 +328,7 @@ class Browser:
     typing: bool = False
     grid_scroll: float = 0.0
     code_scroll: float = 0.0
+    panel: str = "code"                                # the lower panel: "explain" or "code"
     status: tuple[str, int] = ("", 0)
     running: dict = field(default_factory=dict)
     scratch: Path | None = None
@@ -315,8 +366,17 @@ class Browser:
         return sum(max(1, math.ceil(len(line) / chars)) for line in entry.source.splitlines())
 
     def max_code_scroll(self) -> float:
-        need = self.code_lines(self.entry) * CODE_LEADING
+        """How far the lower panel (code or explanation) can scroll."""
+        if self.panel == "explain" and self.entry is not None and self.entry.how:
+            need = max(self.explain_height(self.entry.how), self.explain_height(self.entry.make))
+        else:
+            need = self.code_lines(self.entry) * CODE_LEADING
         return max(0.0, need - (CODE_BOX[3] - 2 * CODE_PAD))
+
+    def explain_height(self, bullets) -> float:
+        """The height of one explanation column: its heading, then every bullet."""
+        return 30 + sum(wrap_count(b, EXPLAIN_COL_W - EXPLAIN_INDENT, EXPLAIN_SIZE) * EXPLAIN_LEADING + EXPLAIN_GAP
+                        for b in bullets)
 
     def _char_width(self) -> float:
         return CODE_SIZE * 0.602              # DejaVu Sans Mono: every letter is 0.602 em wide
@@ -328,6 +388,7 @@ class Browser:
 
     def open(self, entry: Entry) -> None:
         self.view, self.entry, self.code_scroll = "detail", entry, 0.0
+        self.panel = "explain" if entry.how else "code"
 
     def back(self) -> None:
         self.view, self.entry = "grid", None
@@ -422,11 +483,19 @@ class Browser:
                         self.open(entry)
                         return
             return
+        for name, rect in TABS.items():
+            if inside(x, y, rect):
+                self.show_panel(name)
+                return
         for name, rect in BUTTONS.items():
             if inside(x, y, rect) and self.button_enabled(name):
                 {"back": self.back, "previous": lambda: self.step(-1), "next": lambda: self.step(1),
                  "folder": lambda: self.open_folder(frame), "copy": lambda: self.copy_entry(frame), "run": lambda: self.run_entry(frame)}[name]()
                 return
+
+    def show_panel(self, name: str) -> None:
+        if name != self.panel:
+            self.panel, self.code_scroll = name, 0.0
 
     def button_enabled(self, name: str) -> bool:
         if name == "previous":
@@ -471,6 +540,10 @@ class Browser:
             self.step(1)
         elif name == "enter":
             self.run_entry(frame)
+        elif name == "e" and self.view == "detail":
+            self.show_panel("explain")
+        elif name == "s" and self.view == "detail":
+            self.show_panel("code")
         elif name == "c" and self.view == "detail":
             self.copy_entry(frame)
         elif name == "o" and self.view == "detail":
@@ -493,7 +566,8 @@ class Browser:
             return True
         if self.view == "grid":
             return inside(x, y, grid_viewport()) and self.card_at(x, y) is not None
-        return any(inside(x, y, r) and self.button_enabled(n) for n, r in BUTTONS.items())
+        return any(inside(x, y, r) and self.button_enabled(n) for n, r in BUTTONS.items()) \
+            or any(inside(x, y, r) for r in TABS.values())
 
     def card_at(self, x: float, y: float) -> int | None:
         for i in range(len(self.visible())):
@@ -527,7 +601,7 @@ class Browser:
         if self.typing:
             tip = "Type part of a title     Enter: keep the filter     Backspace: delete     Esc: quit"
         elif self.view == "detail":
-            tip = "Left / Right: previous, next     Enter: run     C: copy     O: open saved-files folder     Backspace: back     Esc: quit"
+            tip = "Left / Right: previous, next   Enter: run   E: explain   S: code   C: copy   O: open saved files   Backspace: back"
         else:
             tip = "Click a picture to open it     Wheel: scroll     / or f: filter     Backspace: clear filter     Esc: quit"
         label(tip, GX, H - 25, 13, MUTED)
@@ -595,9 +669,68 @@ class Browser:
         tx = px + PIC_W + 28
         tw = W - 24 - tx
         text_in_box(entry.title, tx, GY - 2, tw, 64, 24, INK, "bold", leading=29)
-        text_in_box(entry.description, tx, GY + 68, tw, 150, 15, INK)
-        label(f"{entry.area}/{entry.path.name}", tx, GY + PIC_H - 18, 13, MUTED)
-        self.draw_code(entry)
+        text_in_box(entry.description, tx, GY + 68, tw, 128, 15, INK)
+        label(f"{entry.area}/{entry.path.name}", tx, GY + PIC_H - 34, 13, MUTED)
+        for name, rect in TABS.items():
+            self.draw_tab(name, rect)
+        if self.panel == "explain":
+            self.draw_explain(entry)
+        else:
+            self.draw_code(entry)
+
+    def draw_tab(self, name: str, rect) -> None:
+        x, y, w, h = rect
+        chosen = name == self.panel
+        hover = inside(f.mouse_x, f.mouse_y, rect)
+        f.no_stroke()
+        f.fill(ACCENT if chosen else (ACCENT_SOFT if hover else CARD))
+        f.draw_path(rounded(x, y, w, h + 8, 8))          # the lower corners hide behind the panel
+        label(TAB_TITLES[name], x + w / 2, y + 6, 15, (255, 255, 255) if chosen else INK,
+              "bold" if chosen else "normal", align="center")
+
+    def draw_panel_box(self) -> tuple[float, float, float, float]:
+        x, y, w, h = CODE_BOX
+        with f.saved_state():
+            f.shadow(0, 3, 10, (30, 40, 70, 28))
+            f.no_stroke()
+            f.fill(PAPER)
+            f.draw_path(rounded(x, y, w, h, 10))
+        f.no_fill()
+        f.stroke(LINE)
+        f.stroke_width(1)
+        f.draw_path(rounded(x, y, w, h, 10))
+        return x, y, w, h
+
+    def draw_scroll_bar(self) -> None:
+        x, y, w, h = CODE_BOX
+        top = self.max_code_scroll()
+        if top > 0:                                   # a slim scroll bar
+            track = h - 2 * CODE_PAD
+            bar = max(24.0, track * track / (track + top))
+            f.no_stroke()
+            f.fill(GREY)
+            f.draw_path(rounded(x + w - 9, y + CODE_PAD + (track - bar) * self.code_scroll / top, 5, bar, 2.5))
+
+    def draw_explain(self, entry: Entry) -> None:
+        x, y, w, h = self.draw_panel_box()
+        with f.saved_state():
+            f.clip(rect_path(x + 4, y + 6, w - 8, h - 12))
+            if not entry.how:
+                label(EXPLAIN_NONE, x + CODE_PAD, y + CODE_PAD, 15, MUTED)
+            else:
+                columns = (("How it works", entry.how), ("Make it yours", entry.make))
+                for column, (heading, bullets) in enumerate(columns):
+                    cx = x + CODE_PAD + column * (EXPLAIN_COL_W + 2 * CODE_PAD)
+                    cy = y + CODE_PAD - self.code_scroll
+                    label(heading, cx, cy, 17, ACCENT, "bold")
+                    cy += 30
+                    for bullet in bullets:
+                        label("•", cx + 2, cy, EXPLAIN_SIZE, MUTED)
+                        text_in_box(bullet, cx + EXPLAIN_INDENT, cy, EXPLAIN_COL_W - EXPLAIN_INDENT, 400,
+                                    EXPLAIN_SIZE, INK, leading=EXPLAIN_LEADING)
+                        lines = wrap_count(bullet, EXPLAIN_COL_W - EXPLAIN_INDENT, EXPLAIN_SIZE)
+                        cy += lines * EXPLAIN_LEADING + EXPLAIN_GAP
+        self.draw_scroll_bar()
 
     def draw_button(self, name: str, rect) -> None:
         x, y, w, h = rect
@@ -626,16 +759,7 @@ class Browser:
         label(text, x + w / 2, y + 9, 15, color, "bold" if main else "normal", align="center")
 
     def draw_code(self, entry: Entry) -> None:
-        x, y, w, h = CODE_BOX
-        with f.saved_state():
-            f.shadow(0, 3, 10, (30, 40, 70, 28))
-            f.no_stroke()
-            f.fill(PAPER)
-            f.draw_path(rounded(x, y, w, h, 10))
-        f.no_fill()
-        f.stroke(LINE)
-        f.stroke_width(1)
-        f.draw_path(rounded(x, y, w, h, 10))
+        x, y, w, h = self.draw_panel_box()
         with f.saved_state():
             f.clip(rect_path(x + 4, y + 6, w - 8, h - 12))
             f.no_stroke()
@@ -649,16 +773,29 @@ class Browser:
                        w - 2 * CODE_PAD, None, INK)
             f.text_font(None)
             f.text_leading(None)
-        top = self.max_code_scroll()
-        if top > 0:                                   # a slim scroll bar
-            track = h - 2 * CODE_PAD
-            bar = max(24.0, track * track / (track + top))
-            f.no_stroke()
-            f.fill(GREY)
-            f.draw_path(rounded(x + w - 9, y + CODE_PAD + (track - bar) * self.code_scroll / top, 5, bar, 2.5))
+        self.draw_scroll_bar()
 
 
 # ---- drawing helpers (work on the window `f` or on a picture)
+def wrap_count(message: str, width: float, size: float) -> int:
+    """How many lines ``message`` takes when wrapped to ``width`` at text size ``size``."""
+    try:
+        f.text_size(size)
+        f.text_style("normal")
+        measure = f.text_width
+        measure("x")
+    except Exception:                     # no sketch yet: a safe guess, 0.58 em per letter
+        measure = lambda text: len(text) * size * 0.58          # noqa: E731
+    lines, line = 1, ""
+    for word in message.split():
+        trial = f"{line} {word}" if line else word
+        if line and measure(trial) > width:
+            lines, line = lines + 1, word
+        else:
+            line = trial
+    return lines
+
+
 def label(message: str, x: float, y: float, size: float, color, style: str = "normal", align: str = "left") -> None:
     f.no_stroke()
     f.text_size(size)
@@ -732,7 +869,8 @@ def load_entries(where: Locations | None = None) -> list[Entry]:
     entries = []
     where = where or LOCATIONS
     for path in list_examples(where.examples):
-        title, description = title_and_description(path)
+        parts = explanation(path)
+        title, description = parts.title, parts.description
         ident = example_id(path)
         picture = where.images / f"{ident}.png"
         try:
@@ -741,7 +879,7 @@ def load_entries(where: Locations | None = None) -> list[Entry]:
             image = None
         entries.append(Entry(path, path.parent.name, ident, title, description,
                              is_time_dependent(path), path.read_text(encoding="utf-8"),
-                             image, make_thumbnail(image)))
+                             image, make_thumbnail(image), parts.how, parts.make))
     return entries
 
 

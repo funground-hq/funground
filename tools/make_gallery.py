@@ -21,7 +21,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))      # the example list and parsing live in the package: one source of truth
 from funground.gallery import (AREAS, TIME_DEPENDENT_MARK, area_rank, example_id, is_time_dependent,  # noqa: E402,F401
-                               list_examples, title_and_description)
+                               explanation, list_examples, title_and_description)
 GALLERY = ROOT / "examples" / "gallery"
 OUT = ROOT / "docs" / "gallery"
 IMAGES = OUT / "images"
@@ -48,6 +48,18 @@ SHOWCASE_PICKS = [
 
 def examples() -> list[Path]:
     return list_examples(GALLERY)
+
+
+def explanation_block(path: Path) -> list[str]:
+    """How it works and Make it yours, in one collapsed section (S-120): 83 open lists would bury the pictures."""
+    parts = explanation(path)
+    if not parts.how:
+        return []
+    lines = ["<details>", "<summary>How it works, and how to make it yours</summary>", "", "**How it works**", ""]
+    lines += [f"- {point}" for point in parts.how]
+    lines += ["", "**Make it yours**", ""]
+    lines += [f"- {idea}" for idea in parts.make]
+    return lines + ["", "</details>", ""]
 
 
 def build_index() -> str:
@@ -77,6 +89,9 @@ def build_index() -> str:
             "",
             description + (" *(Uses real time, so the picture varies from run to run.)*" if is_time_dependent(path) else ""),
             "",
+        ]
+        parts += explanation_block(path)
+        parts += [
             f"Source: [`{source}`](../../{source})",
             "",
         ]
