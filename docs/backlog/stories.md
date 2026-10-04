@@ -190,3 +190,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-116 | E-15 | `save(..., text="shapes")` for handoff files (D-060) | 13 |
 | S-117 | E-22 | Project capstones: raga explorer, poster series, voice game, rangoli (D-063) | 14 |
 | S-118 | E-17 | Sound quality across the board (D-064) | 14 |
+| S-120 | E-22 | Every example explains itself: what you see, how it works, make it yours (D-065) | 15 |
+| S-121 | E-22 | Four more projects with their own guide pages (D-065) | 15 |
+| S-122 | E-22 | User guide solidified: read-through, exercises, errors page, glossary, learning path (D-065) | 15 |
+| S-123 | E-23 | Developer docs refreshed for Sprints 11-14 (D-065) | 15 |

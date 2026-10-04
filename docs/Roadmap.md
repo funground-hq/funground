@@ -62,7 +62,8 @@ CI green on the 12-cell matrix (S-039). The package is published as **funground*
 | 11 — media, controls | sound playback and analysis; GIF and MP4 export; controls; guide and gallery completed; release prepared |
 | 12 — text depth, examples in the package (D-049) | font fallback; `python -m funground.gallery`; text to points; text-box overflow; font information; erase |
 | 13 — making sound, microphone, SVG text (D-049, D-055, D-056) | tones, notes, pluck, melody (sargam too), pitch; microphone input; real text in SVG; PDF-text polish |
-| 14 — seeing sound (D-056) | onsets and tempo; chroma, key and chords; sound visualisation; music and raga teaching examples; release 0.1 |
+| 14 — seeing sound (D-056) | onsets and tempo; chroma, key and chords; sound visualisation; music and raga teaching examples; projects |
+| 15 — documentation, examples, projects (D-065) | every example explains itself; four more projects; the guide solidified; developer docs; release 0.1 |
 
 Sprint contents are the starting plan; each sprint's planning confirms or moves them.
 
