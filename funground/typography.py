@@ -63,16 +63,17 @@ class Glyph:
 class FontResource:
     """One loaded font: HarfBuzz font + fontTools glyph set + outline cache."""
 
-    def __init__(self, path: str = DEFAULT_FONT) -> None:
+    def __init__(self, path: str = DEFAULT_FONT, face: int = 0) -> None:
         self.path = path
-        self._tt = TTFont(path)
+        self.face = face                  # S-119: which font of a .ttc/.otc collection (0 for a plain file)
+        self._tt = TTFont(path, fontNumber=face)
         self.units_per_em: int = self._tt["head"].unitsPerEm
         self.ascent: int = self._tt["hhea"].ascent
         self.descent: int = self._tt["hhea"].descent
         self._order = self._tt.getGlyphOrder()
         self._glyph_set = self._tt.getGlyphSet()
         with open(path, "rb") as fh:
-            self._face = hb.Face(fh.read())
+            self._face = hb.Face(fh.read(), face)
         self._hb = hb.Font(self._face)
         self._hb.scale = (self.units_per_em, self.units_per_em)
         # S-090: a variable font's axes (tag -> (min, max)); empty for a static font.
@@ -390,7 +391,7 @@ def _itemise(text: str, primary: FontResource, learner: tuple) -> tuple:
     """Split *text* into runs (font, start, end), each cluster given to the first font that has all of it (T18).
     Spaces and punctuation stay with the run before them when its font is a text font and has them.
     Memoised: the answer depends only on the text, the primary font and the chain."""
-    key = (text, primary.path, learner)
+    key = (text, primary.path, primary.face, learner)
     hit = _ITEMISE_CACHE.get(key)
     if hit is not None:
         return hit
@@ -578,23 +579,62 @@ def _resolve_font_path(path: str, base_dir: str | None) -> str:
     return _resolve_path(path, base_dir, "f.load_font()", "font")
 
 
-def load_font(path: str, base_dir: str | None = None) -> Font:
+def _face_count(path: str) -> int:
+    """How many fonts a file holds: the number in a .ttc/.otc collection, otherwise 1."""
+    try:
+        with open(path, "rb") as fh:
+            head = fh.read(12)
+    except OSError:
+        return 1
+    if head[:4] == b"ttcf" and len(head) == 12:
+        return max(1, int.from_bytes(head[8:12], "big"))
+    return 1
+
+
+def _face_index(resolved: str, face, who: str = "f.load_font()") -> int:
+    """The number of the face *face* names in the font file *resolved* (S-119, contract T11): a
+    whole number, or a style name ("Bold") or a full name ("Nirmala UI Bold"), ignoring capitals.
+    A face the file does not have raises `ValueError` that lists the faces it has."""
+    count = _face_count(resolved)
+    if isinstance(face, bool) or not isinstance(face, (int, str)):
+        raise ValueError(f"{who}: face must be a whole number or a style name like 'Bold', not {face!r}")
+    infos = _font_names(resolved)
+    if isinstance(face, int):
+        if not 0 <= face < count:
+            raise ValueError(f"{who}: face {face} is not in this file, which has {count} "
+                             f"{'face' if count == 1 else 'faces'} (numbered from 0)")
+        return face
+    wanted = face.strip().lower()
+    if infos is not None:
+        for i, (families, style, fulls) in enumerate(infos):
+            if wanted and (wanted == style.lower() or wanted in fulls):
+                return i
+    listed = ", ".join(repr(info[1] or "?") for info in infos) if infos else "none readable"
+    raise ValueError(f"{who}: no face called {face!r} in this file (its styles: {listed})")
+
+
+def load_font(path: str, base_dir: str | None = None, face: int | str = 0) -> Font:
     """Load a TrueType/OpenType font file and return a `Font` (contract T11).
 
     A relative *path* is looked for next to the sketch file (*base_dir*) first, then in the
     current folder. A missing file raises `FileNotFoundError` naming both places looked; a file
     that is not a font raises `ValueError`. Loading the same file again returns the same key;
     a different file with the same name gets "name~2", then "name~3".
+
+    A .ttc or .otc file holds several fonts (S-119): *face* is the number of the one to use
+    (0 is the first) or its style or full name, like "Bold" or "Nirmala UI Bold". Each face of a
+    collection is its own font, with its own key ("name.ttc", then "name.ttc#1", ...).
     """
     resolved = _resolve_font_path(path, base_dir)
-    cache_key = os.path.normcase(resolved)
+    number = _face_index(resolved, face)
+    cache_key = (os.path.normcase(resolved), number)
     key = _path_to_key.get(cache_key)
     if key is None:
         try:
-            resource = FontResource(resolved)
+            resource = FontResource(resolved, number)
         except Exception as exc:
             raise ValueError(f"f.load_font(): {path!r} is not a font funground can read ({exc})") from exc
-        name = os.path.basename(resolved)
+        name = os.path.basename(resolved) + (f"#{number}" if number else "")
         key, n = name, 2
         while key in _registry:
             key = f"{name}~{n}"
@@ -617,7 +657,7 @@ def effective_font(state) -> FontResource:
 
 
 # ---- fonts installed on this computer (S-102, contract T18)
-_system_names: dict[tuple, tuple | None] = {}       # (path, mtime) -> (family names, style) or None; read once each
+_system_names: dict[tuple, list | None] = {}       # (path, mtime) -> one (families, style, full names) per face, or None; read once each
 
 
 def _system_font_dirs() -> list[str]:
@@ -633,30 +673,45 @@ def _system_font_dirs() -> list[str]:
 
 
 def _font_names(path: str):
-    """(lower-case family names, style name) read from a font file's `name` table, cached; None if unreadable."""
+    """For each face in a font file: (lower-case family names, style name, lower-case full names), read from
+    its `name` table and cached; None if the file is unreadable. A plain font has one face; a collection
+    (S-119) has one for each of its fonts. The full names are the `name` table's full name and every
+    "family style" pair, so "Nirmala UI Bold" finds the Bold face."""
     try:
         key = (path, os.path.getmtime(path))
     except OSError:
         return None
     if key not in _system_names:
+        infos = []
         try:
-            tt = TTFont(path, lazy=True)
-            try:
-                table = tt["name"]
-                families = {table.getDebugName(i).lower() for i in (1, 16) if table.getDebugName(i)}
-                style = table.getDebugName(17) or table.getDebugName(2) or ""
-            finally:
-                tt.close()
-            _system_names[key] = (families, style) if families else None
+            for number in range(_face_count(path)):
+                tt = TTFont(path, lazy=True, fontNumber=number)
+                try:
+                    table = tt["name"]
+                    got = {i: table.getDebugName(i) for i in (1, 2, 4, 16, 17)}
+                finally:
+                    tt.close()
+                families = {got[i].lower() for i in (1, 16) if got[i]}
+                style = got[17] or got[2] or ""
+                fulls = {got[4].lower()} if got[4] else set()
+                for fam, sty in ((got[1], got[2]), (got[16], got[17])):
+                    if fam and sty:
+                        fulls.add(f"{fam} {sty}".lower())
+                infos.append((families, style, fulls))
+            _system_names[key] = infos if any(info[0] for info in infos) else None
         except Exception:
             _system_names[key] = None
     return _system_names[key]
 
 
+_PLAIN_STYLES = ("regular", "book", "roman", "normal")
+
+
 def system_font(name: str) -> Font:
     """The font installed on this computer whose family name is *name*, ignoring capitals (contract T18).
-    When several faces share the family, the Regular one is used. Raises `FileNotFoundError` naming *name*
-    when there is none. Only .ttf and .otf files are read; the font is loaded like `load_font`."""
+    *name* may also end in a style or be a full name ("Nirmala UI Bold"). When several faces share the
+    family, the Regular one is used. Raises `FileNotFoundError` naming *name* when there is none. .ttf, .otf,
+    .ttc and .otc files are read (a collection's faces each count); the font is loaded like `load_font`."""
     if not isinstance(name, str):
         raise TypeError(f"f.system_font() takes a family name, not {type(name).__name__}")
     wanted = name.strip().lower()
@@ -665,12 +720,16 @@ def system_font(name: str) -> Font:
         for root, dirs, files in os.walk(folder):
             dirs.sort()
             for file in sorted(files):
-                if not file.lower().endswith((".ttf", ".otf")):
+                if not file.lower().endswith((".ttf", ".otf", ".ttc", ".otc")):
                     continue
                 path = os.path.join(root, file)
-                names = _font_names(path)
-                if names is not None and wanted in names[0]:
-                    found.append((names[1].lower() not in ("regular", "book", "roman", "normal"), path))
+                infos = _font_names(path)
+                for number, (families, style, fulls) in enumerate(infos or ()):
+                    if wanted in fulls:
+                        found.append((0, path, number))                     # the exact style asked for
+                    elif wanted in families:
+                        found.append((0 if style.lower() in _PLAIN_STYLES else 1, path, number))
     if not found:
         raise FileNotFoundError(f"f.system_font(): no installed font with the family name {name!r}")
-    return load_font(min(found)[1])
+    _, path, number = min(found)
+    return load_font(path, face=number)

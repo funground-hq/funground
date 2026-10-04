@@ -73,8 +73,10 @@ _SHAPES = {
 }
 
 
-def make_static_font(folder: Path, name: str = "TestStatic", cff: bool = False, fs_type: int = 0) -> str:
-    """Write ``<name>.ttf`` (or ``.otf`` with CFF outlines) into *folder* and return its path."""
+def make_static_font(folder: Path, name: str = "TestStatic", cff: bool = False, fs_type: int = 0,
+                     style: str = "Regular", advance: int = 600, filename: str | None = None) -> str:
+    """Write ``<name>.ttf`` (or ``.otf`` with CFF outlines) into *folder* and return its path.
+    *style* is the style name, *advance* the width of every letter, *filename* the file's own name."""
     order = [".notdef", "space", *_SHAPES]
     fb = FontBuilder(UPEM, isTTF=not cff)
     fb.setupGlyphOrder(order)
@@ -83,7 +85,7 @@ def make_static_font(folder: Path, name: str = "TestStatic", cff: bool = False, 
     if cff:
         charstrings = {}
         for glyph, points in shapes.items():
-            pen = T2CharStringPen(600, None)
+            pen = T2CharStringPen(advance, None)
             if points:
                 pen.moveTo(points[0])
                 for pt in points[1:]:
@@ -102,11 +104,30 @@ def make_static_font(folder: Path, name: str = "TestStatic", cff: bool = False, 
                 pen.closePath()
             glyphs[glyph] = pen.glyph()
         fb.setupGlyf(glyphs)
-    fb.setupHorizontalMetrics({g: (600, 50) for g in order})
+    fb.setupHorizontalMetrics({g: (advance, 50) for g in order})
     fb.setupHorizontalHeader(ascent=800, descent=-200)
-    fb.setupNameTable({"familyName": name, "styleName": "Regular"})
+    fb.setupNameTable({"familyName": name, "styleName": style})
     fb.setupOS2(fsType=fs_type, sTypoAscender=800, sTypoDescender=-200, usWinAscent=800, usWinDescent=200)
     fb.setupPost()
-    out = Path(folder) / f"{name}.{'otf' if cff else 'ttf'}"
+    out = Path(folder) / (filename or f"{name}.{'otf' if cff else 'ttf'}")
     fb.save(str(out))
+    return str(out)
+
+
+def make_collection(folder: Path, name: str = "TestColl", styles: tuple = ("Regular", "Bold"),
+                    extension: str = "ttc") -> str:
+    """Write ``<name>.ttc`` (S-119): one face for each of *styles*, all in the family *name*. The first
+    face has letters 600 units wide and each later one 100 wider, so the faces are told apart by width."""
+    from fontTools.ttLib import TTFont
+    from fontTools.ttLib.ttCollection import TTCollection
+
+    folder = Path(folder)
+    fonts = []
+    for i, style in enumerate(styles):
+        path = make_static_font(folder, name, style=style, advance=600 + 100 * i, filename=f"{name}-{style}.part")
+        fonts.append(TTFont(path))
+    collection = TTCollection()
+    collection.fonts = fonts
+    out = folder / f"{name}.{extension}"
+    collection.save(str(out))
     return str(out)

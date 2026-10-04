@@ -455,9 +455,38 @@ If there is no such font, it raises `FileNotFoundError` and says the name. Look 
 to see what you have. funground looks only when you ask. A sketch that uses `f.system_font()` can look
 different on another computer, because the other computer may have different fonts.
 
+### Telugu, Tamil, Bengali and other scripts
+
+Hindi (Devanagari) is built in. For Telugu, Tamil, Bengali, Kannada and many more, use a font that
+is already on your computer:
+
+```py
+f.text_fallback(f.system_font("Nirmala UI"))     # Windows
+f.text("నమస్తే తెలుగు", 20, 20)
+```
+
+The family name depends on the computer:
+
+| Computer | Try |
+|---|---|
+| Windows | `"Nirmala UI"`. It has Telugu, Tamil, Bengali, Kannada, Gujarati, Malayalam and more. |
+| macOS | A name such as `"Kohinoor Telugu"` or `"Kohinoor Bangla"`. Check the exact name in Font Book. |
+| Linux | Install the `fonts-noto` package, then use a name such as `"Noto Sans Telugu"`. |
+
+Some of these fonts come as a collection (a `.ttc` file with several styles inside). `f.system_font()`
+looks inside collections for you. To pick a style, add it to the name: `f.system_font("Nirmala UI Bold")`.
+With `f.load_font()` on a collection file, say which one with `face`: `f.load_font("Nirmala.ttc", face="Bold")`.
+
+Or download a free Noto font for your script from [fonts.google.com/noto](https://fonts.google.com/noto)
+and load it: `f.text_fallback(f.load_font("NotoSansTelugu-Regular.ttf"))`. Put the file next to your sketch.
+
+**Your sketch then needs that font on other computers.** A font from `f.system_font()` is only there
+if the other computer has it too. A font you loaded from a file works anywhere, as long as the file
+goes with your sketch. A PDF or SVG you save usually carries the letters it needs inside the file.
+
 | Function | What it does |
 |---|---|
 | `f.text_fallback(*fonts)` | Fonts to try for letters the current font lacks, before the built-in ones. No arguments: only the built-in ones. `None`: no fallback. |
-| `f.system_font(name)` | A font installed on this computer, found by family name. `FileNotFoundError` if there is none. |
+| `f.system_font(name)` | A font installed on this computer, found by family name, or by family and style (`"Nirmala UI Bold"`). Reads font collections too. `FileNotFoundError` if there is none. |
 
 **Next:** [7. Animation and time](07_animation_and_time.md)

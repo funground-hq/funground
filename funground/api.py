@@ -517,9 +517,10 @@ def text_size(size: int) -> None:
 
 
 # ---- fonts and styles (S-054, contract T11/T12)
-def load_font(path: str):
+def load_font(path: str, face: int | str = 0):
     """Load a TrueType/OpenType font file; pass the result to f.text_font(). A relative path is
-    looked for next to the sketch file first, then in the current folder."""
+    looked for next to the sketch file first, then in the current folder. A .ttc file holds several
+    fonts: face is the number of the one you want (0 is the first) or its style, like face="Bold"."""
     caller = inspect.currentframe()
     base_dir = None
     if caller is not None and caller.f_back is not None:
@@ -528,7 +529,7 @@ def load_font(path: str):
             import os
 
             base_dir = os.path.dirname(os.path.abspath(sketch_file))
-    return active_sketch().load_font(path, base_dir=base_dir)
+    return active_sketch().load_font(path, base_dir=base_dir, face=face)
 
 
 def text_font(font, size: float | None = None) -> None:
@@ -556,7 +557,7 @@ def text_fallback(*fonts) -> None:
 
 
 def system_font(name: str):
-    """A font installed on this computer, found by its family name, like f.system_font("Arial"). Raises FileNotFoundError when there is none."""
+    """A font installed on this computer, found by its family name, like f.system_font("Arial") or with a style, like "Nirmala UI Bold". Font collections (.ttc) are read too. Raises FileNotFoundError when there is none."""
     return active_sketch().system_font(name)
 
 
