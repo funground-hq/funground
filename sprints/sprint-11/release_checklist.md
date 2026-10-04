@@ -24,7 +24,7 @@ irreversible actions).
 - [ ] Root `README.md` install line: switch from the git URL to `pip install funground`. Guide chapter 1 already says that.
 - [ ] Version `0.1.0.dev0` → `0.1.0` in `pyproject.toml`, in a commit of its own.
 - [ ] Build again from a clean checkout of the tagged commit, then run `twine check`.
-- [ ] Install from TestPyPI in clean venvs on Windows, macOS and Linux, and run the smoke test. CI can do Linux and macOS headless.
+- [ ] Dry run: run `release.yml` by hand → TestPyPI upload plus install and smoke test on Windows, macOS and Linux (`smoke-test` job).
 
 ## Maintainer decisions and checks
 
@@ -34,5 +34,12 @@ irreversible actions).
 - [ ] **Manual run on a real macOS and a real Linux desktop** (Roadmap prerequisite): the gallery browser, a window with HiDPI, full screen, keyboard and mouse, the controls panel, and sound.
 - [ ] **Microphone, once per system (Windows, macOS, Linux)** — with the gallery's tuner (`python -m funground.gallery`, Sound → Tuner): sing or play a note and check the name and needle; on macOS also check the permission prompt and the message after "Don't allow". Not needed per learner or per microphone.
 - [ ] **Live SVG text in Illustrator and Inkscape** (T19, D-059): open a saved SVG with Hindi and Latin text, check it is editable and shaped correctly (Illustrator: World-Ready Paragraph Composer).
-- [ ] **PyPI account and trusted publishing** set up for `funground` under the `funground-hq` organisation. The name was checked as free under D-020; check again just before publishing.
-- [ ] **Go-ahead to publish.** Then Claude tags `v0.1.0`, pushes the tag, and publishes. Trusted publishing from CI is preferred over a local upload.
+- [x] **PyPI account:** maverick27 (linked to GitHub samir-joshi). Organisation `funground` requested, pending approval; not needed to publish (transfer the project later).
+- [ ] **Pending publishers** (trusted publishing, no tokens), matching `.github/workflows/release.yml`:
+  - pypi.org → Account → Publishing → pending publisher: project `funground`, owner `funground-hq`, repository `funground`, workflow `release.yml`, environment `pypi`;
+  - test.pypi.org: the same with environment `testpypi`;
+  - optional: in GitHub, Settings → Environments → `pypi` → required reviewer = you, so publishing waits for your click.
+  - The name was free on both indexes on 4 Oct 2026.
+- [ ] **Go-ahead to publish.** Then Claude tags `v0.1.0` and pushes the tag; `release.yml` builds, checks, publishes to TestPyPI, smoke-tests on three systems and publishes to PyPI (after your approval click if the environment is protected).
+- [ ] **Raga data spot-check** (`funground/data/ragas.json`) by you or a music teacher.
+- [ ] **Listening check** of the sound examples after S-118.

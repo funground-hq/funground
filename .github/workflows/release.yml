@@ -1,0 +1,108 @@
+# Release funground to TestPyPI and PyPI with trusted publishing (no passwords or tokens).
+#
+# On PyPI and TestPyPI, add a "pending publisher" (account > Publishing) with:
+#   project name: funground   owner: funground-hq   repository: funground
+#   workflow: release.yml     environment: pypi (on PyPI) / testpypi (on TestPyPI)
+#
+# How it runs:
+#   - "Run workflow" by hand (workflow_dispatch): build, publish to TestPyPI, then install from
+#     TestPyPI on Windows, macOS and Linux and run a smoke test. Nothing goes to the real PyPI.
+#   - Pushing a tag v* (e.g. v0.1.0): the same, then publish to PyPI. The `pypi` environment can be
+#     protected in GitHub (Settings > Environments > pypi > required reviewers) so the maintainer
+#     clicks "Approve" before anything is published.
+# A version can be uploaded only once to each index, so a TestPyPI dry run of a version uses up
+# that version on TestPyPI (not on PyPI).
+
+name: release
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install --upgrade build twine
+      - run: python -m build
+      - run: python -m twine check dist/*
+      - name: The tag matches the package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          test "v$version" = "${GITHUB_REF_NAME}" || { echo "tag ${GITHUB_REF_NAME} does not match version $version"; exit 1; }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish-testpypi:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  smoke-test:
+    needs: publish-testpypi
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      FUNGROUND_HEADLESS: "1"
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install funground from TestPyPI (dependencies from PyPI)
+        shell: bash
+        run: |
+          for i in 1 2 3 4 5; do
+            python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ funground && break
+            echo "not on TestPyPI yet, waiting"; sleep 30
+          done
+      - name: Smoke test
+        shell: bash
+        run: |
+          python - <<'EOF'
+          import funground as f, pypdf
+          f.size(200, 100); f.background("white"); f.fill("navy"); f.text_size(20)
+          f.text("Hello 0.1 नमस्ते", 10, 20); f.circle(150, 60, 40)
+          f.save("smoke.pdf"); f.save("smoke.svg"); f.save("smoke.png")
+          text = pypdf.PdfReader("smoke.pdf").pages[0].extract_text()
+          assert "Hello" in text, text
+          tune = f.melody("S R G m P", sa="C4", tuning="just"); assert tune.duration() > 1
+          print("smoke ok:", len(f.__all__), "names")
+          EOF
+          python -m funground.gallery --list | head -5
+
+  publish-pypi:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: smoke-test
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
