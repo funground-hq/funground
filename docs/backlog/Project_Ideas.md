@@ -15,9 +15,9 @@ except where `sprints/` says so.
 | # | Project | What the learner builds | Features | Level |
 |---|---|---|---|---|
 | 1 | Raga explorer ⭐ | Pick a raga; hear its aroha and avaroha over a tanpura drone; swaras light up on a ladder; sing it back and see your pitch line against Sa and Pa | `melody(sa=…, tuning="just")`, `pluck`/`tone` drone, `microphone`, `pitch`, `frequency_to_note(sa=…)`, controls, raga table | Beginner+ |
-| 2 | Tuner and practice coach | A tuner with a needle, plus a "hold this note for 3 seconds" challenge scored for steadiness | `microphone`, `pitch`, `frequency_to_note`, `level` | Beginner |
-| 3 | Ear-training game | The sketch plays a note or interval; the learner sings or clicks the answer; score, streak, and a progress chart saved as PDF | `note`, `melody`, `microphone`, `pitch`, buttons, PDF | Beginner+ |
-| 4 | Visual music box | Compose on a clickable time × pitch grid; it loops; export the tune as WAV and the grid as a poster PDF | `note`/`pluck`, `sequence`, `mix`, `save("x.wav")`, mouse, PDF | Beginner |
+| 2 | **Built (S-114)** Tuner and practice coach | A tuner with a needle, plus a "hold this note for 3 seconds" challenge scored for steadiness | `microphone`, `pitch`, `frequency_to_note`, `level` | Beginner |
+| 3 | **Built (S-114)** Ear-training game | The sketch plays a note or interval; the learner sings or clicks the answer; score, streak, and a progress chart saved as PDF | `note`, `melody`, `microphone`, `pitch`, buttons, PDF | Beginner+ |
+| 4 | **Built (S-114)** Visual music box | Compose on a clickable time × pitch grid; it loops; export the tune as WAV and the grid as a poster PDF | `note`/`pluck`, `sequence`, `mix`, `save("x.wav")`, mouse, PDF | Beginner |
 | 5 | Sound portrait | Record 5 s of your voice; draw its wave, a spectrum ribbon and its pitch line as a print-ready artwork | `capture`, `samples`, `spectrum`, `pitch`, gradients, layered PDF/SVG | Intermediate |
 | 6 | Music visualiser | Load a song; bars, rings and particles react to loudness and spectrum; record it as MP4 or GIF | `load_sound`, `level`, `spectrum`, `noise`, blend modes, `save_movie`/`save_gif` | Beginner+ |
 | 7 | Beat-reactive light show ⭐ | Shapes flash on beats and change colour with the chord | onsets and tempo, chords, blend, shadows | Intermediate |

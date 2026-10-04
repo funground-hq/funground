@@ -1,0 +1,1445 @@
+[
+ {
+  "color": [
+   20,
+   25,
+   43,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 22
+  },
+  "text": "Ear training: swaras above Sa",
+  "x": 20,
+  "y": 14
+ },
+ {
+  "color": [
+   255,
+   215,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 15
+  },
+  "text": "which swara is the second note?",
+  "x": 20,
+  "y": 46
+ },
+ {
+  "color": [
+   159,
+   180,
+   216,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    159,
+    180,
+    216,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "score 0 of 0     streak 0     best 0",
+  "x": 20,
+  "y": 72
+ },
+ {
+  "color": [
+   159,
+   180,
+   216,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    159,
+    180,
+    216,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 14
+  },
+  "text": "Sa is D4.  A small letter is flat; M is sharp.",
+  "x": 20,
+  "y": 96
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    70,
+    85,
+    138,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 20,
+  "y": 128
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "S",
+  "x": 61.556640625,
+  "y": 141.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 120,
+  "y": 128
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "r",
+  "x": 163.1220703125,
+  "y": 141.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 220,
+  "y": 128
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "R",
+  "x": 261.13623046875,
+  "y": 141.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 320,
+  "y": 128
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "g",
+  "x": 361.556640625,
+  "y": 141.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 20,
+  "y": 180
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "G",
+  "x": 60.57568359375,
+  "y": 193.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 120,
+  "y": 180
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "m",
+  "x": 159.18115234375,
+  "y": 193.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 220,
+  "y": 180
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "M",
+  "x": 259.96044921875,
+  "y": 193.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 320,
+  "y": 180
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "P",
+  "x": 361.77880859375,
+  "y": 193.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 20,
+  "y": 232
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "d",
+  "x": 61.556640625,
+  "y": 245.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 120,
+  "y": 232
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "D",
+  "x": 160.60986328125,
+  "y": 245.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 220,
+  "y": 232
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "n",
+  "x": 261.5634765625,
+  "y": 245.8515625
+ },
+ {
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 92,
+  "x": 320,
+  "y": 232
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "N",
+  "x": 360.763671875,
+  "y": 245.8515625
+ },
+ {
+  "color": [
+   159,
+   180,
+   216,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    159,
+    180,
+    216,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "or sing the second note and hold it",
+  "x": 20,
+  "y": 300
+ },
+ {
+  "color": [
+   159,
+   180,
+   216,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    159,
+    180,
+    216,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "space: hear again     enter or n: next question",
+  "x": 20,
+  "y": 322
+ },
+ {
+  "color": [
+   159,
+   180,
+   216,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    159,
+    180,
+    216,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "arrow keys and enter: answer",
+  "x": 20,
+  "y": 342
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 369
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "0",
+  "x": 458,
+  "y": 372.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 344
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "1",
+  "x": 458,
+  "y": 347.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 319
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "2",
+  "x": 458,
+  "y": 322.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 294
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "3",
+  "x": 458,
+  "y": 297.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 269
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "4",
+  "x": 458,
+  "y": 272.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 244
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "5",
+  "x": 458,
+  "y": 247.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 219
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "6",
+  "x": 458,
+  "y": 222.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 194
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "7",
+  "x": 458,
+  "y": 197.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 169
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "8",
+  "x": 458,
+  "y": 172.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 144
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "9",
+  "x": 458,
+  "y": 147.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 119
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "10",
+  "x": 458,
+  "y": 122.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 94
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "11",
+  "x": 458,
+  "y": 97.43359375
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    39,
+    48,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 170,
+  "x": 450,
+  "y": 69
+ },
+ {
+  "color": [
+   111,
+   127,
+   168,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    111,
+    127,
+    168,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "12",
+  "x": 458,
+  "y": 72.43359375
+ },
+ {
+  "color": [
+   159,
+   180,
+   216,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    159,
+    180,
+    216,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 12,
+   "text_valign": "bottom"
+  },
+  "text": "steps above the start",
+  "x": 450,
+  "y": 396.03125
+ }
+]

@@ -645,6 +645,38 @@ A short song is built from two parts with f.melody() and put together with f.mix
 
 Source: [`examples/gallery/music/07_a_songs_fingerprint.py`](../../examples/gallery/music/07_a_songs_fingerprint.py)
 
+### Music: draw a wave and hear it
+
+![Music: draw a wave and hear it](images/music-08_draw_a_wave.png)
+
+Every sound is a wave, and the shape of the wave is what makes a flute sound different from a violin. Drag the mouse inside the box on the left to draw one period of a wave. f.create_sound() repeats your shape 220 times a second, so you hear it as a note, and it starts again when you let go. The right box is the spectrum: a bar for each pitch in the sound. A smooth wave has one tall bar. A sharp, jagged wave has many. Try the buttons for a sine, a square, a saw and a soft wave, then draw your own. It is the same note each time, only the shape changes. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/08_draw_a_wave.py`](../../examples/gallery/music/08_draw_a_wave.py)
+
+### Music: compose and save
+
+![Music: compose and save](images/music-09_compose_and_save.png)
+
+Click the squares to write a tune. Time goes across: there are 16 beats. Pitch goes up: the rows are the notes of a scale that always sounds right, because it has only five notes (a pentatonic scale), or the swaras of a major scale if you tick "sargam". Squares in the same column sound together. The loop plays on its own, and the white line sweeps along it. The notes are f.melody() in its soft voice, with a quiet low pulse from f.mix() and a little reverb from sound.reverb(). After a moment without a click, the tune is made again. "save WAV" writes my_tune.wav with sound.save(). "save poster" writes the grid as a PDF with f.save(). The files go in the folder the sketch runs in. The gallery browser shows you where. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/09_compose_and_save.py`](../../examples/gallery/music/09_compose_and_save.py)
+
+### Music: ear training
+
+![Music: ear training](images/music-10_ear_training.png)
+
+The sketch plays two notes. The first is your starting note. The second is a mystery, higher than the first. Say how far up it is. In "swara" mode the starting note is Sa, and you name the swara you heard (a small letter is komal, flat, and a capital M is tivra, sharp). In "interval" mode the starting note changes, and you name the gap between the notes, like a minor 3rd. Answer by clicking a button, by pressing the swara's letter (or the left and right keys, then Enter), or by singing the second note and holding it steady. The singing is read from the microphone: each pitch is folded into one octave, and the middle of the last five readings is used. The ladder shows the right answer with its two notes. With no microphone, clicks and keys still work. Space plays the notes again, and Enter or N asks the next question.
+
+Source: [`examples/gallery/music/10_ear_training.py`](../../examples/gallery/music/10_ear_training.py)
+
+### Music: a piano roll of a tune you wrote
+
+![Music: a piano roll of a tune you wrote](images/music-11_piano_roll.png)
+
+The tune is a string of notes, shown at the top. This sketch reads the string itself and draws each note as a bar: time goes across, and higher notes sit higher up. The roll scrolls past a fixed line as the tune plays, and each note lights up while it sounds. Tick the box to draw f.draw_pitch_line() on top: the pitch that sound.pitch() hears, which should run along the bars that have just played. This works because the notes were written in code, so the sketch already knows them. A piano roll made from a recording would need a program that listens and guesses the notes, which means machine learning. Change the string, and the roll changes too. *(Uses real time, so the picture varies from run to run.)*
+
+Source: [`examples/gallery/music/11_piano_roll.py`](../../examples/gallery/music/11_piano_roll.py)
+
 ## Projects
 
 ### Event poster series
