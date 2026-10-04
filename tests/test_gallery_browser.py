@@ -340,3 +340,66 @@ def test_each_run_gets_its_own_folder(browser, monkeypatch):
     assert first != second and first.parent == second.parent
     assert first.name == browser.app.entry.path.stem
     assert (first / "a.png").is_file() and (second / "a.png").is_file()
+
+
+def test_the_detail_view_shows_how_it_works_and_make_it_yours(browser, tmp_path):
+    """S-120: an explained example opens on its explanation; E and S (or the tabs) switch panels."""
+    probe = {}
+
+    def after(n, app):
+        if n == 0:
+            probe["entry"] = next(e for e in app.entries if e.how)
+            probe["plain"] = next((e for e in app.entries if not e.how), None)
+            app.open(probe["entry"])
+        if n == 2:
+            probe["after_open"] = app.panel
+            browser.f.save(str(tmp_path / "explain.png"))
+        if n == 4:
+            probe["after_s"] = app.panel
+        if n == 6:
+            probe["after_tab"] = app.panel
+
+    script = {3: press("s"), 5: click(*centre(browser.TABS["explain"]))}
+    run(browser, script, after)
+    entry = probe["entry"]
+    assert 3 <= len(entry.how) <= 6 and 3 <= len(entry.make) <= 5
+    assert probe["after_open"] == "explain"
+    assert probe["after_s"] == "code"
+    assert probe["after_tab"] == "explain"
+    assert (tmp_path / "explain.png").stat().st_size > 1000
+    assert "How it works" in entry.path.read_text(encoding="utf-8")
+    assert entry.description and "How it works" not in entry.description
+
+
+def test_an_example_without_sections_opens_on_its_code(browser):
+    seen = {}
+
+    def after(n, app):
+        if n == 0:
+            plain = next((e for e in app.entries if not e.how), None)
+            if plain is None:
+                seen["panel"] = "code"            # every example is explained: nothing to check
+            else:
+                app.open(plain)
+        if n == 2 and "panel" not in seen:
+            seen["panel"] = app.panel
+
+    run(browser, {}, after)
+    assert seen["panel"] == "code"
+
+
+def test_the_explanation_scrolls_when_it_is_long(browser):
+    seen = {}
+
+    def after(n, app):
+        if n == 0:
+            app.open(next(e for e in app.entries if e.how))
+            app.entry.how = app.entry.how + ("An extra point that is long enough to wrap onto more than one line of the panel. " * 3,) * 8
+        if n == 1:
+            seen["top"] = app.max_code_scroll()
+            app.wheel(2)
+        if n == 2:
+            seen["scroll"] = app.code_scroll
+
+    run(browser, {}, after)
+    assert seen["top"] > 0 and 0 < seen["scroll"] <= seen["top"]

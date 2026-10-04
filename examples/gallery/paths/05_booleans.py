@@ -3,6 +3,27 @@
 Two shapes can be joined, overlapped, cut and mixed with union, intersection, difference and xor.
 Each one gives back a new path. The bottom panel shows remove_overlap, which turns a crossing
 outline into one clean edge.
+
+How it works:
+- f.path() starts an empty path. Its methods .circle() and .polygon() add a ring and a star outline
+  to it.
+- Four path methods combine two paths: union, intersection, difference and xor. Each gives back a
+  new path and leaves the old ones alone.
+- The example writes them as the operators | & - and ^. They mean the same as the four methods, in
+  that order.
+- f.draw_path() draws a path with the current fill and stroke. Combined paths are real shapes, so
+  they can have holes.
+- star_points() takes every second corner of a pentagon. The outline crosses itself, and
+  path.remove_overlap() turns it into one clean edge.
+- f.push(), f.translate() and f.pop() slide the clean copy to the right. The path itself does not
+  change.
+
+Make it yours:
+- Move the star: change cx + 14 in two_shapes() to cx + 40 and watch each result change.
+- Swap the two paths in the difference: star - ring is not the same as ring - star.
+- Replace the ring with f.path().rect(...) or f.path().ellipse(...).
+- Cut a hole in a result with a third shape: (ring | star) - f.path().circle(x, y, 15).
+- Fill a result with f.linear_gradient() instead of a flat colour.
 """
 import math
 

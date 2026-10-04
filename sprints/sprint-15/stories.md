@@ -18,7 +18,7 @@ More capstone projects are added.
 ## Story set
 
 ### S-120 Every example explains itself — E-22
-- [ ] S-120.1 A pilot on four examples, to fix one standard for an example's docstring, shown by the gallery browser and the gallery index:
+- [x] S-120.1 A pilot on four examples, to fix one standard for an example's docstring, shown by the gallery browser and the gallery index:
   - a title line;
   - **What you see**;
   - **How it works** (the core mechanics in 3–6 points, naming the funground functions and the idea behind them);

@@ -1,12 +1,30 @@
 """Music: hear a raga
 
-f.ragas() lists the ragas funground knows, and f.raga(name) tells you about one: its thaat
-(parent scale), the swaras it uses, its aroha (the way up) and avaroha (the way down), its
-vadi and samvadi (the two most important notes) and the time of day it belongs to. Pick a
-raga with the slider or the left and right keys. Its aroha and avaroha play over a drone,
-both with a little reverb, and each swara lights up as it sounds. Swaras the raga leaves out are dark.
-f.match_ragas() then says which ragas use the most similar swaras: ragas that share
-the same swaras come out almost level, as only the notes are compared.
+Pick a raga with the slider or the left and right keys. Its aroha (the way up) and avaroha (the
+way down) play over a drone, and each swara lights up as it sounds. The text gives its thaat,
+vadi, samvadi, pakad and time of day, and the three ragas with the most similar swaras.
+
+How it works:
+- f.ragas() lists the names funground knows. f.raga(name) gives one raga, with .thaat, .swaras,
+  .aroha, .avaroha, .vadi, .samvadi, .time and .pakad.
+- f.drone() makes a steady background note, and f.melody() turns a string of swara names into a
+  tune. Sa is the home note and "-" is a rest.
+- The tune and the drone each use .reverb() and .loop(). The room() helper adds the echo's tail
+  back onto the start, so the loop has no gap.
+- Every frame, tune.current_time() divided by the length of a beat says which swara is sounding.
+  That one is drawn in gold.
+- f.create_slider() picks the raga, and choose() builds a new tune when the slider moves.
+- f.match_ragas() takes how often each of the 12 swaras is used. It gives back the ragas whose
+  swaras are most alike, best first.
+
+Make it yours:
+- Change SA from "C#4" to another note, such as "D4". The whole tune and its lights move to that
+  key.
+- Change TEMPO to make the tune slower or faster.
+- Change tuning="just" to tuning="equal" in f.melody() and listen for the small differences.
+- Play the pakad instead: build the tune from raga.pakad.split() instead of the aroha and avaroha.
+- Change the background colour to fit raga.time, for example a dark blue for night ragas and a warm
+  one for morning.
 """
 # gallery: time-dependent
 import funground as f
