@@ -694,3 +694,19 @@ Source: [`examples/gallery/projects/01_event_posters.py`](../../examples/gallery
 A pattern that is the same all the way round, made from one petal that is turned again and again. Each petal is a lens shape (two circles overlapped) with a smaller lens cut out of it, using path booleans. The centre is a rosette of joined circles. The colours are festival palettes, picked in "hsb" colour mode. The rings turn slowly, one way and then the other. The words at the bottom are made of dots, one for each point that text_to_points finds along the letters. Use the controls under the canvas: the sliders set the petals, the rings and the palette, the checkbox switches the dots on and off, and "new design" picks a fresh set of shapes. "save" (or the S key) writes rangoli.svg and rangoli.pdf. They hold plain shapes, ready for printing or for a laser cutter.
 
 Source: [`examples/gallery/projects/02_rangoli.py`](../../examples/gallery/projects/02_rangoli.py)
+
+### Raga explorer
+
+![Raga explorer](images/projects-03_raga_explorer.png)
+
+Pick a raga with the slider or the left and right keys. The page tells you its thaat (parent scale), its vadi and samvadi (the two most important swaras) and the time of day it belongs to. Press "listen" to hear its aroha (the way up) and avaroha (the way down) over a quiet tanpura drone. The aroha and avaroha are played with a meend, a glide, into the last note. Each swara lights up on the ladder as it sounds. Swaras the raga leaves out stay dark. Press "sing" and sing the raga, with Sa on D, in any octave that suits you. The microphone hears you, and your pitch is drawn on the ladder as a pink line. The line is folded into one octave, and it is smoothed and broken at silences, so it stays calm. A row turns red if you sing a swara that the raga does not use. Press "stop" and the explorer counts which swaras you sang. It shows them as bars, and it shows the three ragas whose notes fit them best. It compares notes only. It does not know the raga's way of moving, which is most of what makes a raga. Wear headphones, so the drone does not get into the microphone.
+
+Source: [`examples/gallery/projects/03_raga_explorer.py`](../../examples/gallery/projects/03_raga_explorer.py)
+
+### Voice-controlled game
+
+![Voice-controlled game](images/projects-04_voice_game.png)
+
+A little bird flies through gates, and your voice is the control. Say "aaah" and the bird goes up. The louder you are, the higher it goes. Go quiet and it sinks. Fly through the gap in each gate to score. Touch a gate and the game is over. If you have no microphone, or the room is too quiet for shouting, press the space bar: each press hops the bird up, and a quick tap makes a small hop. Why loudness and not pitch? Loudness is easy to control and easy to measure: any sound at all moves the bird, and it never goes missing. Pitch is harder. The microphone only reports a pitch when it hears one clear note, so breathy sounds and noise give nothing, and the bird would fall at the wrong moment. The game also listens to the room for half a second at the start, to learn how quiet it is. Stay quiet then. It keeps learning how loud you are, so a whisper or a shout can both fly the bird.
+
+Source: [`examples/gallery/projects/04_voice_game.py`](../../examples/gallery/projects/04_voice_game.py)
