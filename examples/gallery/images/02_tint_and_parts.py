@@ -1,8 +1,23 @@
 """Tinting a picture and drawing part of it
 
-f.tint() colours every picture drawn after it: the red, green and blue of each pixel are
-multiplied by the tint, and its alpha too. f.no_tint() stops it. To draw only part of a
-picture, give image() four more numbers: the left, top, width and height of the part.
+The same photo is drawn three times with a tint, and then three small parts of it are drawn
+bigger. A tint colours every picture drawn after it.
+
+How it works:
+- f.tint() multiplies each pixel's red, green and blue by the tint, and its alpha too.
+  f.tint(255, 170, 120) keeps all the red and takes some green and blue away, which looks warm.
+- f.tint(255, 120) is white at about half strength, so the picture is half see-through.
+- f.no_tint() stops the tint. Without it, every later picture would be tinted too.
+- f.image(photo, x, y, w, h, sx, sy, sw, sh) draws only part. The last four numbers are the left,
+  top, width and height of the part, in the photo's own pixels.
+- The part is drawn into the box x, y, w, h, so a small part fills a bigger box.
+
+Make it yours:
+- Change the three numbers in a tint. Try f.tint(100, 255, 100) for green.
+- Use a colour name, as the last picture does: f.tint("gold") or f.tint("skyblue").
+- Change the numbers in a part, such as 130, 160, 100, 75, to pick out a different bit.
+- Make a part smaller, such as 50 by 38, to zoom in more.
+- Draw a part into a tall, thin box and see how it stretches.
 """
 import funground as f
 

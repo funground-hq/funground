@@ -23,8 +23,8 @@ More capstone projects are added.
   - **What you see**;
   - **How it works** (the core mechanics in 3–6 points, naming the funground functions and the idea behind them);
   - **Make it yours** (3–5 extension ideas, from easy to harder).
-- [ ] S-120.2 Apply it to all 83 examples, area by area. A test enforces the three sections.
-- [ ] S-120.3 The gallery browser's detail view and `docs/gallery/README.md` show the three sections.
+- [x] S-120.2 Apply it to all 83 examples, area by area. A test enforces the three sections.
+- [x] S-120.3 The gallery browser's detail view and `docs/gallery/README.md` show the three sections.
 
 ### S-121 More projects — E-22 *(from `docs/backlog/Project_Ideas.md`)*
 - [ ] Four more capstones, each a gallery example plus its own guide page:

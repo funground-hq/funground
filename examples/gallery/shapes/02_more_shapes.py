@@ -2,6 +2,24 @@
 
 square, triangle, quad and polygon for straight-sided shapes; arc for part of an ellipse, with
 angles in degrees turning clockwise from the right, in three modes: open, chord and pie.
+
+How it works:
+- f.square(x, y, size) is placed by its top-left corner. f.triangle() takes three corners and
+  f.quad() takes four.
+- f.polygon() takes a list of (x, y) points and joins them in order. It can have any number of
+  corners.
+- f.arc(x, y, width, height, start, stop) draws part of an ellipse. Angles are in degrees. 0 points
+  right and the angle grows clockwise.
+- The last, optional, value of f.arc() is the mode. "open" leaves the ends loose, "chord" joins
+  them with a straight line, and "pie" joins them to the centre.
+- The stroke and fill are set once at the top. They stay the same for every shape.
+
+Make it yours:
+- Change 270 in the f.arc() lines to make a bigger or smaller slice. Try 90 or 180.
+- Change the start angle from 0 to 45 to turn the slice round.
+- Add a corner to the f.polygon() list to make a six-sided shape.
+- Move one point of the f.quad() and see how the shape bends.
+- Use f.no_stroke() or a new f.stroke() colour above the shapes.
 """
 import funground as f
 

@@ -3,6 +3,22 @@
 Give rect() or square() one more number and every corner is rounded by that radius.
 Give it four numbers and each corner gets its own radius. They go clockwise,
 starting at the top left. A radius that is too big is cut down to fit.
+
+How it works:
+- f.rect(x, y, width, height, radius) rounds every corner by one radius. f.square() works the same.
+- With four radii, as in f.rect(30, 130, 260, 120, 30, 30, 30, 4), each corner has its own. They go
+  clockwise from the top left.
+- A radius bigger than the shape allows is cut down to fit. That is why 999 gives a pill shape.
+- f.shadow() adds a soft shadow to what you draw next, and f.no_shadow() switches it off again.
+- f.path().rect() makes a rounded rectangle as a path, and the | operator joins it to a circle
+  into one shape. f.draw_path() draws it.
+
+Make it yours:
+- Change the 12 on the second button to a bigger or smaller radius.
+- Change the four radii on the speech bubble. Try 4, 30, 30, 30 to move the tail.
+- Change the shadow: f.shadow(6, 8, blur=10) takes how far right, how far down, and how soft.
+- Join the path to the circle with & in place of |, to keep only the part where they overlap.
+- Add a button of your own with f.rect(x, y, 160, 60, 20) and f.text() on top.
 """
 import funground as f
 

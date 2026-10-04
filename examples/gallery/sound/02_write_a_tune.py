@@ -1,11 +1,27 @@
 """Making sound: write a tune, then watch it play
 
-f.melody() turns text into a sound. A note is a name like "E4", a dash is a rest, and
-:2 after a note makes it last two beats. Here the tune is a short list, so the same
-list builds the sound and draws the bars. The top shows the wave itself. A soft chord
-from f.mix() plays underneath, and sound.reverb() puts the tune in a small room.
-sound.pitch() reads the note that is sounding now. With no sound device the sketch
-still runs, in silence.
+A tune is written as a short list in the code. The same list makes the sound and draws the bars.
+The top shows the wave itself. A soft chord plays underneath. The text at the bottom names the
+note that is sounding. With no sound device, the sketch still runs, in silence.
+
+How it works:
+- TUNE is a list of (note, beats) pairs. The code joins it into text such as "E4:1 G4:1 A4:2".
+  A note is a name like "E4", a dash is a rest, and :2 means two beats.
+- f.melody(text, tempo=TEMPO) turns that text into a sound. sound.reverb(0.2) puts it in a small
+  room.
+- tune.samples() gives the wave as a list of numbers. The loop in draw() draws the few that are
+  around the place where tune.current_time() says the sound is now.
+- f.mix() adds three quiet, long notes into one chord. f.note() and f.tone() make them. Each is
+  quiet, so the sum stays below the loudest a sound can be.
+- The bars use the same TUNE list. A note is gold while tune.current_time() is inside it.
+- tune.pitch() gives the pitch that is sounding, and f.frequency_to_note() turns it into a name.
+
+Make it yours:
+- Change TEMPO to play the tune slower or faster.
+- Change the notes in TUNE, or add ("C5", 2) at the end. The sound and the bars both follow.
+- Change the chord. Try "F3" and "A3" in place of "E3" and "G3" in f.mix().
+- Change 0.2 in .reverb(0.2) to 0.6 for a bigger room.
+- Use a sharper voice: f.melody(text, tempo=TEMPO, wave="square").
 """
 # gallery: time-dependent
 import math

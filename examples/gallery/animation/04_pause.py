@@ -1,8 +1,25 @@
 """Pause, step and quit
 
-no_loop() stops draw() being called every frame (it still runs once); a key callback can call
-redraw() to draw one more frame or loop() to carry on. is_looping() says which it is doing, and
-exit() ends the sketch.
+no_loop() stops draw() being called every frame, though it still runs once. Press keys to run,
+pause, take one step or quit.
+
+How it works:
+- f.no_loop() in setup() means the sketch starts paused. draw() runs once and then waits.
+- key_pressed() runs once each time a key goes down. f.key says which key it was.
+- Space calls f.loop() to carry on, or f.no_loop() to stop again. f.is_looping() says which it is
+  doing now, and the text shows it.
+- The "s" key calls f.redraw(), which runs draw() exactly one more time. That is a single step.
+- The "q" key calls f.exit() and the sketch ends.
+- angle goes up by 6 in each draw(), and f.rotate() turns the square by it.
+
+Make it yours:
+- Change angle += 6 to a smaller or bigger step.
+- Change the colours in f.fill() and f.stroke().
+- Swap f.rect(-80, -80, 160, 160) for f.circle(0, 0, 160) or f.ellipse(0, 0, 200, 100). The shape
+  is centred on (0, 0), so it turns about its middle.
+- Add a key: in key_pressed(), add elif f.key == "r": and set angle = 0. Put angle in the global
+  line of key_pressed() first.
+- Start running instead of paused: delete the f.no_loop() line in setup().
 """
 import funground as f
 

@@ -1,8 +1,26 @@
 """Loading an SVG drawing
 
-f.load_svg() reads an SVG file and gives you a picture, like f.load_image(). The picture
-is made of the SVG's shapes, not of pixels, so you can draw it small or large and it stays
-sharp. f.svg_paths() gives the same shapes as paths, for booleans and clips.
+f.load_svg() reads an SVG file and gives you a picture. It is made of shapes, not pixels, so it
+stays sharp when it is large. f.svg_paths() gives the same shapes as paths.
+
+How it works:
+- f.load_svg("data/badge.svg") works like f.load_image(). A relative path is looked for next to
+  this file.
+- f.image() draws the badge small, large and turned. It follows f.translate() and f.rotate().
+- f.svg_paths() gives one path for each shape in the file. The first, the round plate, is kept in
+  plate.
+- A path can be changed with .translate() and .scale() and combined with other paths. plate -
+  inner cuts the middle out and leaves a ring.
+- f.clip(ring) means anything drawn afterwards only shows inside the ring. The tomato stripes are
+  clipped to it.
+- f.saved_state() puts the clip and the transforms away again.
+
+Make it yours:
+- Use your own SVG: put it in the data folder and change both file names.
+- Change 0.6 in the inner scale to make the ring thicker or thinner.
+- Change the stripe colour in f.stroke("tomato").
+- Change the 14 in range(-160, 320, 14) to space the stripes closer or wider.
+- Draw the badge many times in a loop, with a different size each time.
 """
 import funground as f
 

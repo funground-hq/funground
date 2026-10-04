@@ -1,7 +1,21 @@
 """Shapes with holes
 
-Between begin_contour() and end_contour(), list the corners of a hole. funground makes the hole
-cut out of the shape whichever way round you draw it.
+A square frame and a wheel. Each is one shape with a hole cut out of the middle.
+
+How it works:
+- f.begin_shape() starts a shape and f.vertex() lists the corners of the outside edge.
+- f.begin_contour() starts a hole. List the corners of the hole, then call f.end_contour().
+- funground makes the hole cut out whichever way round you list the corners, so you do not have
+  to think about direction.
+- f.end_shape(close=True) finishes the whole shape. The fill and stroke follow both outlines.
+- ring_of_points() makes the corners of a ring with cos and sin. A hole of 6 corners is a hexagon.
+
+Make it yours:
+- Change the 6 in ring_of_points(460, 180, 60, 6): 3 makes a triangle hole and 40 a round one.
+- Change the wheel's hole radius, 60, to make a thicker or thinner rim.
+- Make the square's hole bigger or smaller: move the corners in the second list.
+- Add a second hole: put another f.begin_contour() and f.end_contour() pair before f.end_shape().
+- Change the colours: f.fill("skyblue") and f.stroke("navy").
 """
 import math
 

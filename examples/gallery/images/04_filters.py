@@ -1,10 +1,25 @@
 """Changing pictures: copy, resize, mask and filters
 
-picture.copy() makes a new picture that you can change without touching the first. picture.resize(w, h)
-changes the size of a picture. picture.mask(other) lets the other picture decide what shows through.
-picture.filter(kind) changes every pixel: "threshold", "gray", "invert", "blur", "posterize", "erode",
-"dilate" or "opaque". Some take a value, like picture.filter("blur", 3). f.filter() does the same
-to the whole canvas: change what you have drawn so far.
+One photo is copied, shrunk and put through a set of filters. A mask lets a round hole show the
+photo. The big photo is never changed, only copies of it.
+
+How it works:
+- picture.copy() makes a new picture. Changing the copy does not touch the first.
+- picture.resize(w, h) changes the size of a picture.
+- A picture's filter(kind) changes every pixel. The kinds are "threshold", "gray", "invert", "blur",
+  "posterize", "erode", "dilate" and "opaque". Some take a value, such as pic.filter("blur", 3).
+- picture.mask(other) lets the other picture decide what shows through. Its alpha is what counts,
+  so a black circle drawn on a see-through picture makes a round hole.
+- f.filter() does the same to the whole canvas. Here it is used once, then f.get() picks the result
+  up as a new picture.
+- filtered() and put() are helper functions, so each cell of the grid is one short line.
+
+Make it yours:
+- Change the 3 in filtered("blur", 3) to blur more or less.
+- Change the 4 in "posterize" to 2 or 8.
+- Try a different filter in a cell, such as "invert" in place of "gray".
+- Change the circle size in masked(): 100 is its diameter.
+- Use a different shape for the mask: draw hole.rect(...) in place of hole.circle(...).
 """
 import funground as f
 

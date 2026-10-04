@@ -2,6 +2,22 @@
 
 Not every picture moves. A script has no functions: f.size() makes the canvas, the lines after
 it draw on it, f.save() writes a file at once, and f.show() opens a window to look at it.
+
+How it works:
+- There is no setup() and no draw(). The lines run once, from top to bottom.
+- f.size() makes the canvas. After that, each line draws on top of the ones before it.
+- Order matters. The sea is drawn after the sun, so it covers the bottom of the sun.
+- f.fill() and f.stroke() set the style for what follows. f.no_stroke() switches the outline off.
+- f.circle(), f.rect(), f.quad(), f.triangle(), f.line() and f.text() draw the sun, sea, boat and
+  words.
+- f.save("a_script.pdf") writes the picture to a file. f.show() opens a window with it.
+
+Make it yours:
+- Change the sky: f.background("lightskyblue") takes any colour name.
+- Move the sun with the two numbers after 470 in the f.circle() lines. Move both circles together.
+- Save as a different kind of file: use "a_script.png" or "a_script.svg" in f.save().
+- Add a second boat: copy the hull, mast and sail lines and change the numbers.
+- Add stars with f.circle() before the sea is drawn, or change the words in f.text().
 """
 import funground as f
 

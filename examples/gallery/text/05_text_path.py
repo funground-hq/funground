@@ -1,8 +1,25 @@
 """Letters as shapes
 
-f.text_path() gives the outlines of a word as a path, set exactly as f.text() would set it.
-Cut the letters out of a panel with difference(), draw only their edge with expand_stroke(),
-or fill them with a gradient. The path has no colour, so you choose one when you draw it.
+f.text_path() gives the outlines of a word as a path. Here the word CUT is cut out of a panel, the
+word EDGE shows only its edge, and the word FILL is filled with a gradient.
+
+How it works:
+- f.text_path(message, x, y) returns a path set exactly as f.text() would set it. It has no colour
+  yet, so you choose one when you draw it.
+- panel.difference(word) cuts the letters out of the panel. The stripes behind show through the
+  holes.
+- f.clip() keeps the stripes inside the panel shape. f.push() and f.pop() end the clip afterwards.
+- expand_stroke(4, join="miter") turns the outline of the letters into a thin shape you can fill.
+  Only the edge is left.
+- f.linear_gradient() makes a fill that changes colour along a line. f.draw_path() draws the
+  letters with it.
+
+Make it yours:
+- Change the words: "CUT", "EDGE" and "FILL" can be any text.
+- Change the gradient colours in the list ["deeppink", "orange", "gold"].
+- Make the edge thicker: change the 4 in expand_stroke(4, ...), or try join="round".
+- Cut a different shape from the panel: use f.path().circle(320, 105, 70) in place of word.
+- Change the stripes: use other colours in the f.fill() line, or change 40 for wider stripes.
 """
 import funground as f
 

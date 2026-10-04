@@ -3,6 +3,23 @@
 f.blend_mode() changes how new drawing mixes with what is already on the canvas: "multiply"
 darkens like overlapping inks, "screen" lightens like overlapping lights. f.opacity() makes
 everything after it see-through, and f.shadow() gives it a soft shadow.
+
+How it works:
+- f.blend_mode(mode) decides how a new shape mixes with what is under it. trio() draws the same
+  three circles in each mode, then sets "normal" again.
+- "multiply" darkens, as when inks overlap. "screen" and "add" lighten, as when lights overlap.
+  That is why they sit on a dark panel: on white there would be nothing to see.
+- f.opacity(amount) makes everything after it see-through. 255 is solid and 0 is invisible.
+  The three green squares use 255, 170 and 85. The 255 call afterwards puts it back.
+- f.shadow(x_offset, y_offset, blur=...) adds a soft shadow under what you draw next. It moves right
+  and down by the first two numbers. f.no_shadow() switches it off.
+
+Make it yours:
+- Try other modes in the trio() calls: "overlay", "darken", "lighten" or "difference".
+- Change the three numbers in [255, 170, 85] to make the squares more or less see-through.
+- Change the shadow: a bigger blur makes it softer, and negative offsets throw it up and left.
+- Give the shadow a colour: f.shadow(6, 8, blur=10, color=(255, 0, 0, 120)).
+- Change the three circle colours in the list inside trio().
 """
 import funground as f
 

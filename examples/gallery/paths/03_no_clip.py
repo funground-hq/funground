@@ -1,7 +1,23 @@
 """Clipping on and off
 
-no_clip() removes clipping until the end of the saved_state block; when the block ends, the
-clip that was there before comes back.
+Stripes are clipped so they only show inside a tall window. A red circle on the left ignores the
+clip, and a gold circle on the right obeys it.
+
+How it works:
+- f.clip(path) keeps later drawing inside the path. Anything outside it is hidden.
+- f.no_clip() switches the clipping off. It lasts until the end of its with f.saved_state(): block.
+- When that block ends, the clip that was there before comes back. The gold circle is clipped again.
+- Blocks can sit inside blocks. The inner one holds the exception, and the outer one holds the
+  clip.
+- f.fill() with four numbers, such as (255, 99, 71, 200), is a see-through colour. The last number
+  is the see-through amount.
+
+Make it yours:
+- Move the tomato circle: change 160 in f.circle(160, 200, 160) and see where the clip cuts.
+- Change the porthole: edit the four corners in the path at the top.
+- Change the stripe colours or width: "navy", "skyblue" and the 40 in the loop.
+- Remove the inner block: take out f.no_clip() and see the circle get cut.
+- Change the last number in the fill colour, 200, to 100 for a fainter circle.
 """
 import funground as f
 

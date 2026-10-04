@@ -3,28 +3,27 @@
 This script draws a poster and saves it as poster.pdf and poster.svg, and again as poster_final.pdf
 and poster_final.svg. The files carry more than a picture.
 
-The poster has four layers: "background", "artwork", "words" and "notes". The "notes" layer is
-hidden with f.hide_layer(), so it is in the files but switched off.
+How it works:
+- The poster has four layers, made with f.layer("name"). The "notes" layer is hidden with
+  f.hide_layer(), so it is in the files but switched off.
+- The words are real text, with English, Hindi and an emoji. funground's fallback fonts draw the
+  Hindi and the emoji.
+- The PDF opens in Acrobat or Illustrator, with the layers in the layers panel. The SVG opens in
+  Inkscape or Illustrator, where the layers are Inkscape layers. The text can be selected and
+  changed.
+- To edit the text, the font must be installed on your computer. For Hindi in Illustrator, switch on
+  the World-Ready Composer in its Type settings. Guide chapter 13 has more on fonts.
+- Save two copies for a handoff. poster.pdf and poster.svg have live text, for you to edit.
+  poster_final.pdf and poster_final.svg use text="shapes". Every letter is a shape, so they look
+  right without the font. The layers are still layers, but the letters cannot be edited.
+- The gallery picture shows the poster. The hidden notes are not in it.
 
-The words are real text. There is an English headline, a Hindi line and an emoji. funground's
-built-in fallback fonts draw the Hindi and the emoji.
-
-What opens where:
-- The PDF opens in Acrobat or Illustrator. The layers show in the layers panel, and you can switch
-  each one on and off. The text can be selected and searched.
-- The SVG opens in Inkscape or Illustrator. The layers are Inkscape layers. The text is live, so
-  you can click it and change it.
-- To edit the text, the font must be installed on your computer. Without it, the program swaps in
-  another font. Guide chapter 13 ("Saving your work") has the section on fonts.
-- For Hindi in Illustrator, switch on the World-Ready Composer in its Type settings. Without it
-  the letters can come out joined up wrongly.
-
-The golden rule of handoffs: save two copies. poster.pdf and poster.svg have live text, for you to
-edit. poster_final.pdf and poster_final.svg are saved with text="shapes", for a client, a developer
-or a print shop. Every letter in them is a shape, so they look right without the font. The layers
-are still layers. The letters can no longer be edited.
-
-The gallery picture shows the poster. The hidden notes are not in it.
+Make it yours:
+- Change the headline "Open Day" and the other words.
+- Change the gradient colours in the "background" layer.
+- Hide another layer: f.hide_layer("artwork") after drawing it.
+- Add a layer of your own with a new with f.layer("stars"): block.
+- Save a copy with a different name, such as f.save("poster2.svg", text="shapes").
 """
 import funground as f
 

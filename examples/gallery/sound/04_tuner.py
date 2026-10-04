@@ -1,11 +1,29 @@
 """Sound: a tuner that listens
 
-f.microphone() listens to your computer's microphone. mic.start() begins, and then
-mic.pitch() gives the pitch of the one note you sing or play, or None when it is quiet.
-f.frequency_to_note() turns that pitch into a name like "A4". The needle shows whether
-you are a little flat (left) or sharp (right). The bar at the bottom is mic.level().
-Nothing is recorded or played back. With no microphone to hear, the sketch still runs,
-and just waits.
+Sing or play one note into your microphone. The big letters show its name, like A4. The needle
+shows whether you are a little flat (left) or sharp (right), and it turns green when you are in
+tune. The bar at the bottom is how loud you are. Nothing is recorded or played back. With no
+microphone, the sketch still runs and waits.
+
+How it works:
+- f.microphone() makes the microphone, and mic.start() begins listening. f.microphones() lists
+  the ones the computer has, and the first is named at the top.
+- mic.pitch() gives the pitch of the one note it hears, in hertz, or None when it is quiet.
+  mic.level() says how loud it is, from 0 to 1.
+- f.frequency_to_note() turns the pitch into a name. cents_off() then measures how far the pitch is
+  from that note. A cent is one hundredth of a semitone, so 50 cents is halfway to the next note.
+- The needle moves a third of the way to its target each frame, which smooths the shaking.
+- f.arc() draws the dial, and sin() and cos() put the needle at the right angle. 50 cents is 45
+  degrees.
+- A note needs 20 quiet frames before the name goes back to "-", so a short gap does not wipe it.
+
+Make it yours:
+- Change the 5 in abs(needle) < 5 to 10 and the tuner is easier to please.
+- Change the 0.3 in needle += (target - needle) * 0.3. A smaller number is calmer, a bigger one
+  is quicker.
+- Change quiet_frames > 20 to hold the name for longer or shorter.
+- Change the colours: "limegreen" and "tomato" in draw().
+- Change f.text_size(80) to make the note name bigger or smaller.
 """
 # gallery: time-dependent
 import math

@@ -1,11 +1,28 @@
 """Music: sing with the drone
 
-f.drone() makes a sound like a tanpura: plucked strings on Pa and Sa that ring on and on.
-Sing along with it. The microphone hears you, and your pitch is drawn as a line that moves
-to the left. The bright lines are Sa and Pa. Try to hold your voice on them, and watch the
-line go flat when you are in tune. f.frequency_to_note(hz, sa=SA) names the swara you sing.
-sound.reverb() lets the strings ring in a room. Change SA to suit your voice. With no
-microphone the drone still plays and the line waits.
+A drone plays, and you sing along. The microphone hears you, and your pitch is drawn as a line
+that moves to the left. The bright lines are Sa and Pa. Try to hold your voice on them. With no
+microphone, the drone still plays and the line waits.
+
+How it works:
+- Sa is the home note of Indian music, and the drone holds it. SA = "D3" is a comfortable Sa for
+  many voices. f.drone(SA, 7) makes a sound like a tanpura: plucked strings that play Pa, Sa, Sa,
+  Sa and ring on. Pa is the fifth note above Sa.
+- Reverb makes the strings warmer, but it adds a tail, and the loop would pause. room() folds the
+  tail back onto the start, so the loop has no gap.
+- mic.pitch() gives your pitch in hertz, or None when you are quiet. The code turns it into cents
+  above Sa: 100 cents is one semitone, so Pa is 700 and the next Sa up is 1200.
+- GUIDES holds the lines to sing to. y_for() turns cents into a height on the screen.
+- line keeps the last 280 readings. A None is a gap, where the line breaks.
+- f.frequency_to_note(hz, sa=SA) names the swara you sing, for example "P" or "G".
+
+Make it yours:
+- Change SA to "C3" or "A3" to suit your voice. The lines move with it.
+- Add a guide line for Ga, the third swara. Add (400, "G", "tomato") to GUIDES.
+- Change the drone for a raga without Pa. Use f.drone(SA, 7, pattern="m S' S' S"), with Ma on the
+  first string.
+- Change 0.4 in room(f.drone(...), 0.4) to 0 for a dry drone, or to 0.7 for a big room.
+- Change the pink line's colour and f.stroke_width().
 """
 # gallery: time-dependent
 import math

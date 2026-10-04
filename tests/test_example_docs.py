@@ -16,8 +16,8 @@ A bullet may carry on over the next lines (indented). Every ``f.<name>`` written
 must be a real name in ``funground.__all__``, and ``sound.<name>``, ``picture.<name>``,
 ``path.<name>`` or ``microphone.<name>`` must be a real method of that kind of object.
 
-For now the standard is enforced only on the examples listed in ``EXPLAINED``. The list grows as
-each area is done (S-120.2); the last step replaces it with every example (see ``ENFORCED``).
+Every gallery example is held to the standard (``ENFORCED = ALL``); ``EXPLAINED`` keeps the four
+pilot examples of S-120.1, which the pilot test still checks by name.
 """
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ from conftest import ROOT
 
 GALLERY = ROOT / "examples" / "gallery"
 
-# Examples that have the full standard. Add an example here when its docstring is done.
+# The four pilot examples of S-120.1.
 EXPLAINED = [
     "basics/02_setup_and_draw.py",
     "paths/05_booleans.py",
@@ -47,16 +47,13 @@ EXPLAINED = [
     "projects/02_rangoli.py",
 ]
 
-# The one switch: when every example is done, make ENFORCED = ALL and delete EXPLAINED.
 ALL = gallery.list_examples(GALLERY)
-ENFORCED = [GALLERY / name for name in EXPLAINED]
-# While the roll-out is under way, FUNGROUND_DOCS_AREAS=basics,shapes checks every example in those areas too.
-_AREAS = [a for a in os.environ.get("FUNGROUND_DOCS_AREAS", "").split(",") if a]
-if _AREAS:
-    ENFORCED = sorted(set(ENFORCED) | {p for p in ALL if p.parent.name in _AREAS})
+ENFORCED = ALL                # every example explains itself (S-120, D-065)
 
 HOW_RANGE = range(3, 7)       # 3 to 6 bullets
 MAKE_RANGE = range(3, 6)      # 3 to 5 bullets
+
+from funground.picture import ALLOWED_METHODS as PICTURE_METHODS   # forwarded to the picture's own sketch
 
 OBJECTS = {"sound": [Sound], "picture": [Picture], "path": [PathBuilder, GeometryPath],
            "microphone": [Microphone]}
@@ -97,7 +94,8 @@ def test_the_names_in_the_docstring_exist(path: Path):
     missing = sorted(name for name in module_names if name not in funground.__all__)
     assert not missing, f"{path.name}: not in funground.__all__: {missing}"
     bad = sorted(f"{kind}.{name}" for kind, name in pairs
-                 if not any(hasattr(cls, name) for cls in OBJECTS[kind]))
+                 if not any(hasattr(cls, name) for cls in OBJECTS[kind])
+                 and not (kind == "picture" and name in PICTURE_METHODS))
     assert not bad, f"{path.name}: not a method or attribute of that object: {bad}"
 
 

@@ -1,8 +1,25 @@
 """Movers with vectors
 
-A Vector holds an x and a y together: a position, a velocity, a force. Each frame the forces
-add to the velocity and the velocity adds to the position, just as in p5.js - methods like
-add() and limit() change the vector itself. heading() gives the direction, for the arrows.
+A Vector holds an x and a y together: a position, a velocity or a force. Six gold dots fall,
+bounce and drift in the wind, each with a little arrow that shows where it is going.
+
+How it works:
+- f.Vector(x, y) holds two numbers. Each mover has a position and a velocity, both vectors.
+- Each frame, forces add to the velocity and the velocity adds to the position.
+  velocity.add(gravity).add(wind) does the first. position.add(velocity) does the second.
+- Methods like add() and limit() change the vector itself. limit(12) stops the speed passing 12.
+- Operators such as position + velocity * 6 make new vectors, so the old ones stay as they are.
+- At the floor and the sides the sketch flips the velocity with * -1. f.constrain() keeps the dot
+  inside the window.
+- f.Vector.from_angle() makes the first velocity. velocity.heading() gives the direction, and
+  f.rotate() uses it to turn the arrow heads.
+
+Make it yours:
+- Change the gravity: f.Vector(0, 0.3). Try a bigger y, or a negative one to fall upwards.
+- Change the wind: f.Vector(0.05, 0). Make it bigger, or give it a y part.
+- Change the 0.9 in the floor bounce: closer to 1 bounces higher, smaller bounces lower.
+- Change range(6) to add more movers, and the 95 spacing so they still fit.
+- Change f.random_seed(3) to another number to start them differently.
 """
 import funground as f
 

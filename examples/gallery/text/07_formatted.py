@@ -1,9 +1,24 @@
 """Mixed styles in one text
 
-A FormattedString holds runs of text. Each run can have its own size, style and colour.
-Settings you leave out follow the drawing state, so they can change between frames.
-f.text() draws it, and f.text_box() wraps it. Whatever does not fit comes back as a
-FormattedString too, still styled, ready for the next box. f.text_path() gives its outlines.
+A FormattedString holds runs of text. Each run can have its own size, style and colour. It can be
+drawn, wrapped into columns, or turned into outlines.
+
+How it works:
+- f.FormattedString() starts an empty text. .append(text, size=, style=, color=) adds a run, and
+  you can chain the calls.
+- A setting you leave out follows the drawing state. The sentence uses the f.text_size() and f.fill()
+  set in draw().
+- f.text() draws a FormattedString in one go, and f.text_box() wraps it into a box.
+- f.text_box() returns what did not fit, still styled. The second box carries on in the same styles.
+- f.text_path() turns a FormattedString into outlines, so "Out" and "line" at different sizes
+  become one shape.
+
+Make it yours:
+- Change the colours in INK and RED. They are plain (red, green, blue) numbers.
+- Add a run to the heading: heading.append("!", size=44, style="italic", color=INK).
+- Make the BIG word bigger: change size=40 in that append() call.
+- Change the box width, 280, in both f.text_box() calls and watch the lines re-wrap.
+- Fill the outline with f.linear_gradient() instead of the flat colour.
 """
 import funground as f
 

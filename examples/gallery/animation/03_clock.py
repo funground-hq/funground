@@ -1,8 +1,27 @@
 """A clock
 
-hour(), minute() and second() read the computer's clock; day(), month() and year() the date.
-millis() counts milliseconds since the sketch started and frame_rate() says how many frames per
-second it is really drawing.
+hour(), minute() and second() read the computer's clock. day(), month() and year() give the date.
+millis() counts milliseconds since the sketch started. frame_rate() says how many frames a second
+it is really drawing.
+
+How it works:
+- f.hour(), f.minute() and f.second() give the time as whole numbers. f.day(), f.month() and
+  f.year() give the date.
+- hand() draws one hand. It moves the origin to the middle of the clock with f.translate() and
+  turns with f.rotate(). Then it draws a line along the x axis.
+- An angle of 0 points right, but a clock starts at 12. So hand() turns by angle - 90.
+- The hour hand turns 30 degrees an hour, the minute and second hands 6 degrees a step. The hour
+  hand also adds half a degree for each minute, so it creeps round.
+- f.saved_state() keeps each hand's turn and stroke from leaking into the next one.
+- f.millis() and f.frame_rate() are written at the bottom, with an f-string.
+
+Make it yours:
+- Change the hand colours, widths and lengths in the three hand() calls.
+- Add tick marks. Loop 12 times, rotate 30 degrees each time, and draw a short line at the edge.
+- Make a stopwatch hand: hand(f.millis() / 1000 * 6, 140, 2, "navy") turns once a minute from the
+  start.
+- Show the time in 12-hour form: use f.hour() % 12 in the f-string.
+- Move the clock and the text to new places by changing the 200 and 400 values.
 """
 # gallery: time-dependent
 import funground as f

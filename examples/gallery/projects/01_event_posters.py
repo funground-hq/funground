@@ -1,15 +1,28 @@
 """Event poster series
 
-One list of events becomes a whole series of posters. Each event gets its own page, with a
-gradient background, a burst of shapes joined and cut with path booleans, a rounded panel, a
-bold headline, the details, a line in Hindi and an emoji. The three layers are called
-"background", "art" and "words".
+One list of events becomes a whole series of posters. Each event gets its own page, with a gradient
+background, a burst of shapes, a rounded panel, a bold headline, the details, a line in Hindi and an
+emoji. It saves PDF and SVG files. The gallery picture shows the last page.
 
-The script saves events.pdf (every page, real text), events_1.svg, events_2.svg and so on (live
-text, for editing) and events_final_1.svg and so on (text="shapes", for handing over).
-The gallery picture shows the last page.
+How it works:
+- The whole poster is data plus a few functions. EVENTS is a list of dictionaries, with words, an
+  emoji and a colour theme for each event. Add one and you get another poster.
+- Three functions draw the three layers: background_layer(), art_layer() and words_layer(). Each
+  runs inside with f.layer("..."), so the layers stay separate in the saved files.
+- burst() makes a star with f.path().polygon(). art_layer() joins and cuts paths with | (union) and
+  - (difference), and fills them with f.linear_gradient().
+- f.FormattedString() mixes bold, italic and colour in one headline. f.text_box() wraps the details
+  in a box. The Hindi line and the emoji use the built-in fallback fonts.
+- A loop calls f.new_page(WIDTH, HEIGHT) for each event, and make_poster() draws on that page.
+  f.save("events.pdf") writes every page. f.save("events.svg") writes events_1.svg, events_2.svg
+  and so on, with live text. text="shapes" turns every letter into a shape, for handing over.
 
-Add an event to EVENTS and run the script again to make another poster.
+Make it yours:
+- Add an event to EVENTS: copy a dictionary, change the words and the four theme colours.
+- Change "points" in an event to give the burst more or fewer points.
+- Change the Hindi line to a line in your own language.
+- Move the bite out of the sun: change circle(290, 215, 120) in art_layer().
+- Change the colours in a theme, such as the (255, 196, 61) accent, and run again.
 """
 import math
 
