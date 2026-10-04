@@ -11,6 +11,7 @@ the ADRs, which this folder links to rather than repeats.
 | [Architecture.md](Architecture.md) | You want to know how a call becomes pixels or a file, which module may import which library, and which rules must never break. |
 | [Adding_a_feature.md](Adding_a_feature.md) | You are about to build a story. It is the step-by-step recipe, with the review checklist. |
 | [Testing.md](Testing.md) | You need to add a test, understand a failing one, or know what CI runs. |
+| [Releasing.md](Releasing.md) | You are releasing a version to PyPI, or setting up trusted publishing. |
 
 ## Quick start
 
