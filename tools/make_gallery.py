@@ -33,7 +33,7 @@ FRAMES = 30
 SHOWCASE_PICKS = [
     ("colour-03_gradients", "A sunset sky made from a gradient, with a gradient-filled shape on top."),
     ("compositing-01_blend_opacity_shadow", "Blend modes, opacity and soft shadows."),
-    ("shapes-04_rounded", "Rectangles with rounded corners, each corner its own size."),
+    ("projects-03_raga_explorer", "Pick a raga, hear it over a drone, and sing it back against a ladder of swaras: this one is animated and listens to your microphone."),
     ("curves-01_curves", "Smooth curves drawn through points you choose."),
     ("paths-05_booleans", "Shapes joined, cut and overlapped with union, intersection, difference and xor."),
     ("text-05_text_path", "Letters turned into shapes, then cut, outlined and filled with a gradient."),

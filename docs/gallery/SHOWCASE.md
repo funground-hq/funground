@@ -19,13 +19,13 @@ Blend modes, opacity and soft shadows.
 
 Source: [`examples/gallery/compositing/01_blend_opacity_shadow.py`](../../examples/gallery/compositing/01_blend_opacity_shadow.py)
 
-## Rounded corners
+## Raga explorer
 
-![Rounded corners](images/shapes-04_rounded.png)
+![Raga explorer](images/projects-03_raga_explorer.png)
 
-Rectangles with rounded corners, each corner its own size.
+Pick a raga, hear it over a drone, and sing it back against a ladder of swaras: this one is animated and listens to your microphone.
 
-Source: [`examples/gallery/shapes/04_rounded.py`](../../examples/gallery/shapes/04_rounded.py)
+Source: [`examples/gallery/projects/03_raga_explorer.py`](../../examples/gallery/projects/03_raga_explorer.py)
 
 ## Curves
 

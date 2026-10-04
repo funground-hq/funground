@@ -14,8 +14,8 @@ except where `sprints/` says so.
 
 | # | Project | What the learner builds | Features | Level |
 |---|---|---|---|---|
-| 1 | Raga explorer ⭐ | Pick a raga; hear its aroha and avaroha over a tanpura drone; swaras light up on a ladder; sing it back and see your pitch line against Sa and Pa | `melody(sa=…, tuning="just")`, `pluck`/`tone` drone, `microphone`, `pitch`, `frequency_to_note(sa=…)`, controls, raga table | Beginner+ |
-| 2 | **Built (S-114)** Tuner and practice coach | A tuner with a needle, plus a "hold this note for 3 seconds" challenge scored for steadiness | `microphone`, `pitch`, `frequency_to_note`, `level` | Beginner |
+| 1 | **Built (S-117)** Raga explorer ⭐ | Pick a raga; hear its aroha and avaroha over a tanpura drone; swaras light up on a ladder; sing it back and see your pitch line against Sa and Pa | `melody(sa=…, tuning="just")`, `pluck`/`tone` drone, `microphone`, `pitch`, `frequency_to_note(sa=…)`, controls, raga table | Beginner+ |
+| 2 | **Partly built (S-108 tuner; the hold-a-note challenge is not)** Tuner and practice coach | A tuner with a needle, plus a "hold this note for 3 seconds" challenge scored for steadiness | `microphone`, `pitch`, `frequency_to_note`, `level` | Beginner |
 | 3 | **Built (S-114)** Ear-training game | The sketch plays a note or interval; the learner sings or clicks the answer; score, streak, and a progress chart saved as PDF | `note`, `melody`, `microphone`, `pitch`, buttons, PDF | Beginner+ |
 | 4 | **Built (S-114)** Visual music box | Compose on a clickable time × pitch grid; it loops; export the tune as WAV and the grid as a poster PDF | `note`/`pluck`, `sequence`, `mix`, `save("x.wav")`, mouse, PDF | Beginner |
 | 5 | Sound portrait | Record 5 s of your voice; draw its wave, a spectrum ribbon and its pitch line as a print-ready artwork | `capture`, `samples`, `spectrum`, `pitch`, gradients, layered PDF/SVG | Intermediate |
@@ -39,7 +39,7 @@ except where `sprints/` says so.
 | # | Project | What the learner builds | Features | Level |
 |---|---|---|---|---|
 | 15 | Scratch-card reveal game | Prizes under a foil layer scratched off with the mouse; sounds when one is found | `layer`, `erase`, `pluck`/`tone`, mouse | Beginner |
-| 16 | Voice-controlled game | A bird flies higher the louder or higher you sing; obstacles; a score | `microphone`, `level`/`pitch`, collisions, sound effects | Beginner+ |
+| 16 | **Built (S-117)** Voice-controlled game | A bird flies higher the louder or higher you sing; obstacles; a score | `microphone`, `level`/`pitch`, collisions, sound effects | Beginner+ |
 | 17 | Drawing app with layers | Brush, eraser, colour sliders, layer show and hide, undo; save as PNG and a layered PDF | `layer`, `erase`, controls, `create_graphics`, PDF layers | Intermediate |
 
 ## Generative art
