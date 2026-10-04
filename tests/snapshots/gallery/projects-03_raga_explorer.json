@@ -1,0 +1,999 @@
+[
+ {
+  "color": [
+   27,
+   20,
+   36,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 32,
+   "text_valign": "center"
+  },
+  "text": "Yaman",
+  "x": 24,
+  "y": 19.375
+ },
+ {
+  "color": [
+   216,
+   200,
+   232,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    216,
+    200,
+    232,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "Kalyan thaat.  evening: the first prahar of the night, about 6 to 9 pm",
+  "x": 24,
+  "y": 59.8515625
+ },
+ {
+  "color": [
+   255,
+   165,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    165,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "vadi: G",
+  "x": 24,
+  "y": 81.8515625
+ },
+ {
+  "color": [
+   88,
+   196,
+   184,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    88,
+    196,
+    184,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "samvadi: N",
+  "x": 134,
+  "y": 81.8515625
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    122,
+    79,
+    160,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 409
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "S",
+  "x": 36,
+  "y": 411.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    44,
+    34,
+    54,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 382
+ },
+ {
+  "color": [
+   91,
+   77,
+   104,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    91,
+    77,
+    104,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "r",
+  "x": 36,
+  "y": 384.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    122,
+    79,
+    160,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 355
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "R",
+  "x": 36,
+  "y": 357.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    44,
+    34,
+    54,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 328
+ },
+ {
+  "color": [
+   91,
+   77,
+   104,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    91,
+    77,
+    104,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "g",
+  "x": 36,
+  "y": 330.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    122,
+    79,
+    160,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 301
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": null,
+   "stroke": [
+    255,
+    165,
+    0,
+    255
+   ],
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 301
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "G",
+  "x": 36,
+  "y": 303.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    44,
+    34,
+    54,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 274
+ },
+ {
+  "color": [
+   91,
+   77,
+   104,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    91,
+    77,
+    104,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "m",
+  "x": 36,
+  "y": 276.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    122,
+    79,
+    160,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 247
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "M",
+  "x": 36,
+  "y": 249.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    122,
+    79,
+    160,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 220
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "P",
+  "x": 36,
+  "y": 222.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    44,
+    34,
+    54,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 193
+ },
+ {
+  "color": [
+   91,
+   77,
+   104,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    91,
+    77,
+    104,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "d",
+  "x": 36,
+  "y": 195.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    122,
+    79,
+    160,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 166
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "D",
+  "x": 36,
+  "y": 168.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    44,
+    34,
+    54,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 139
+ },
+ {
+  "color": [
+   91,
+   77,
+   104,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    91,
+    77,
+    104,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "n",
+  "x": 36,
+  "y": 141.1875
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": [
+    122,
+    79,
+    160,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 112
+ },
+ {
+  "height": 23,
+  "op": "Rect",
+  "radii": [
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "style": {
+   "fill": null,
+   "stroke": [
+    88,
+    196,
+    184,
+    255
+   ],
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 24,
+  "y": 112
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 16,
+   "text_valign": "center"
+  },
+  "text": "N",
+  "x": 36,
+  "y": 114.1875
+ },
+ {
+  "color": [
+   138,
+   122,
+   154,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    138,
+    122,
+    154,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 13
+  },
+  "text": "aroha, up",
+  "x": 470,
+  "y": 112
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 15
+  },
+  "text": "N, R G M P D N S'",
+  "x": 470,
+  "y": 130
+ },
+ {
+  "color": [
+   138,
+   122,
+   154,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    138,
+    122,
+    154,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 13
+  },
+  "text": "avaroha, down",
+  "x": 470,
+  "y": 176
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 15
+  },
+  "text": "S' N D P M G R S",
+  "x": 470,
+  "y": 194
+ },
+ {
+  "color": [
+   138,
+   122,
+   154,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    138,
+    122,
+    154,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 13
+  },
+  "text": "pakad, a phrase",
+  "x": 470,
+  "y": 240
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 15
+  },
+  "text": "N, R G R S P M G R S",
+  "x": 470,
+  "y": 258
+ },
+ {
+  "color": [
+   216,
+   200,
+   232,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    216,
+    200,
+    232,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 13
+  },
+  "text": "Dark rows are swaras this raga",
+  "x": 470,
+  "y": 308
+ },
+ {
+  "color": [
+   216,
+   200,
+   232,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    216,
+    200,
+    232,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 13
+  },
+  "text": "leaves out. Gold rows light up as it",
+  "x": 470,
+  "y": 324.25
+ },
+ {
+  "color": [
+   216,
+   200,
+   232,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    216,
+    200,
+    232,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 13
+  },
+  "text": "sounds. Singing a swara it leaves",
+  "x": 470,
+  "y": 340.5
+ },
+ {
+  "color": [
+   216,
+   200,
+   232,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    216,
+    200,
+    232,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 13
+  },
+  "text": "out turns a row red.",
+  "x": 470,
+  "y": 356.75
+ },
+ {
+  "color": [
+   138,
+   122,
+   154,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    138,
+    122,
+    154,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "left and right keys, or the slider: another raga.   Then press listen or sing.",
+  "x": 24,
+  "y": 443.8515625
+ }
+]
