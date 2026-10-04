@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "funground"
-version = "0.1.0.dev0"
+version = "0.1.0.dev1"
 description = "Creative coding for learners: p5.js/Processing and DrawBot-style 2D drawing in Python."
 readme = "README.md"
 license = "LGPL-2.1-or-later"
