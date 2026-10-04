@@ -64,7 +64,7 @@ Shapes, rounded corners, curves and paths, with path booleans (union, difference
 gradients, blend modes and shadows; transforms; text with alignment, text boxes, ligatures, mixed
 styles and fonts; animation and loop control; mouse and keyboard events; sliders, checkboxes and
 buttons; noise and randomness; vectors; pictures, SVG drawings, pixels and filters; off-screen
-graphics; sound (play a tune, read its volume); and saving as PNG, PDF (with real text and several
+graphics; sound (play a tune, read its volume, listen through the microphone, and learn with it: draw a wave and hear it, compose and save, ear training, a piano roll); and saving as PNG, PDF (with real text and several
 pages), SVG, numbered frames, or an animated GIF or MP4. Text is drawn the same way on every
 computer. PDF and SVG output stays sharp at any size.
 

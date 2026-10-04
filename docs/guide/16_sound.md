@@ -578,6 +578,48 @@ f.run()
 (The notes in that sketch are all in one octave, so a chord such as "Am" comes out as A4, C4, E4. That
 is fine for the chord finder, which ignores the octave.)
 
+## Learning with sound
+
+Four gallery examples in the Music area use sound to teach. Each one is a small sketch you can open,
+run and change.
+
+### Draw a wave and hear it
+
+![Draw a wave and hear it](../gallery/images/music-08_draw_a_wave.png)
+
+Every sound is a wave, and the shape of the wave is its colour, or timbre. Drag the mouse in the box to
+draw one period of a wave. `f.create_sound()` repeats it 220 times a second, and the sketch plays it
+again when you let go. `f.draw_spectrum()` shows which pitches are in it. A smooth wave has one tall
+bar and a jagged one has many. Four buttons give you a sine, a square, a saw and a soft wave to start from.
+
+### Compose and save
+
+![Compose and save](../gallery/images/music-09_compose_and_save.png)
+
+Click squares on a grid: beats go across and notes go up. The notes come from a five-note scale, or from
+sargam if you tick the box, so nothing you write sounds wrong. The loop is `f.melody()` with a quiet pulse
+from `f.mix()` and a little reverb, and a line sweeps along it. "save WAV" writes the tune with `sound.save()`
+and "save poster" writes the grid as a PDF with `f.save()`. Both files go in the folder the sketch runs in.
+
+### Ear training
+
+![Ear training](../gallery/images/music-10_ear_training.png)
+
+The sketch plays a starting note and then a mystery note. Say how far up it is: a swara above Sa, or an
+interval such as a major 3rd. Click a button, press a key, or sing the note into the microphone. The
+sketch keeps your score and your streak, and the ladder shows the right answer with its two notes. It folds
+the sung pitch into one octave and smooths it, the same way as the sargam-over-a-drone example in the Sound area of the gallery. With no
+microphone, clicks and keys still work.
+
+### A piano roll of a tune you wrote
+
+![A piano roll of a tune you wrote](../gallery/images/music-11_piano_roll.png)
+
+A melody string is read by the sketch and drawn as bars: time goes across and pitch goes up. The roll scrolls
+past a fixed line, and each note lights up as it sounds. Tick the box to lay `f.draw_pitch_line()` over it and
+see the pitch that `sound.pitch()` hears follow the bars. This only works because the notes were written in
+code. A piano roll from a recording would have to guess the notes, which needs machine learning.
+
 ## Good to know
 
 - **No sound device?** The sketch still works. With no speakers, or with `FUNGROUND_HEADLESS=1`,
