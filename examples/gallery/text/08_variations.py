@@ -1,10 +1,23 @@
 """Variable font axes
 
-f.font_variations(wght=700) sets the axes of a variable font, like its weight or width.
-The built-in font is not variable, so here the three lines look the same: an axis the
-font does not have is ignored, which makes the call safe to leave in. Load a variable
-font with f.load_font() and the weight really changes. f.font_variations() with nothing
-in the brackets goes back to the font's own defaults.
+Some fonts have axes, such as weight and width, that you can slide between values. This example
+asks for different weights. The built-in font has no axes, so all the lines look the same.
+
+How it works:
+- f.font_variations(wght=700) sets axes of a variable font by name. wght is weight and wdth is
+  width.
+- An axis the font does not have is ignored. That makes the call safe to leave in a sketch.
+- You can set more than one axis at once, as in f.font_variations(wght=700, wdth=75).
+- f.font_variations() with nothing in the brackets goes back to the font's own defaults.
+- f.load_font() loads a font file. With a variable font, the weight really changes.
+
+Make it yours:
+- Change the words and the size, f.text_size(36). The weights will not change, but the layout will.
+- Change the numbers: wght=100 is thin and wght=900 is very heavy, in fonts that allow them.
+- Load a variable font file with f.load_font(), then call f.text_font() with it before the lines.
+- Animate it: f.font_variations(wght=300 + f.frame_count % 400) in draw(). It moves with a variable
+  font.
+- Try another axis name, such as slnt or opsz. The call is safe to try.
 """
 import funground as f
 

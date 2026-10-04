@@ -1,8 +1,24 @@
 """Text in boxes and columns
 
-f.text_box() wraps text inside a box and gives back whatever did not fit, so the rest can
-flow on into the next box - the way DrawBot's textBox() works. A "\n" inside f.text() starts
-a new line, and f.text_leading() sets the distance from one line to the next.
+f.text_box() wraps text inside a box and gives back whatever did not fit. That leftover text flows
+on into the second box, so the story runs across two columns.
+
+How it works:
+- f.text_box(message, x, y, width, height) breaks the words into lines that fit the width, and
+  stops when the height is full.
+- It returns the part it could not show, as text. Pass that to the next f.text_box() call, and the
+  story carries on.
+- If the leftover is empty, everything fitted. The example checks "if rest:" to show a warning.
+- A "\n" in the message starts a new line. The heading uses one.
+- f.text_leading() sets the distance between lines. f.text_leading(None) goes back to automatic,
+  which is 1.25 times the text size.
+
+Make it yours:
+- Change the box width, 256, or the height, 216, and see where the story breaks.
+- Make the text bigger: change f.text_size(15), and watch more of it spill out of the second box.
+- Change the line gap: use f.text_leading(22) for the story, instead of None.
+- Add a third column: draw another f.rect(), then pass rest to a third f.text_box().
+- Write your own words in STORY.
 """
 import funground as f
 

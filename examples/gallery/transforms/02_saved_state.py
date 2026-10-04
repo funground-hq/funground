@@ -1,7 +1,24 @@
 """saved_state and angles
 
-with f.saved_state(): is push() and pop() in one block: whatever the block changes is undone at
-the end. rotate() takes degrees; f.radians() converts for math.sin and math.cos.
+Two rings of twelve shapes. The gold bars are placed with rotate(). The blue dots are placed with
+sine and cosine. The text at the bottom turns a maths answer back into degrees.
+
+How it works:
+- with f.saved_state(): is f.push() and f.pop() in one block. Whatever the block changes is undone
+  at the end.
+- Inside the block, f.translate() and f.rotate() turn each bar around the centre (200, 200). The
+  blue ring is then not affected.
+- f.rotate() takes degrees. Python's math.sin and math.cos want radians, so f.radians() converts.
+- The blue ring uses x = centre + radius * cos(angle) and y = centre + radius * sin(angle). It is
+  the same kind of ring, made another way.
+- f.degrees() goes the other way, so atan2 gives 45 degrees for the point (1, 1).
+
+Make it yours:
+- Change the 30 in range(0, 360, 30) to 20 or 45 and see how many bars you get.
+- Change the radius 100 in the blue ring, or the bar length 80.
+- Make the bars turn: use f.rotate(angle + f.frame_count) in draw().
+- Colour each bar differently: put f.fill(f.color(angle % 255, 100, 200)) inside the block.
+- Draw the blue dots with a smaller step and a smaller circle for a smoother ring.
 """
 import math
 

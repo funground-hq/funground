@@ -1,8 +1,24 @@
 """A booklet with three pages
 
-A script can make a document. f.new_page() ends one page and starts the next. A size name such
-as "A5" sets the page size, and f.page_size() gives the numbers for a name. f.save("booklet.pdf")
-writes every page into one PDF. The gallery picture shows the last page, which is on its side.
+A script can make a document. Three pages are drawn, and f.save("booklet.pdf") writes them into
+one PDF. The gallery picture shows the last page, which is on its side.
+
+How it works:
+- f.new_page() ends one page and starts the next. A size name such as "A5" sets the page size.
+- Colours and text settings carry over to the next page, so page 2 does not set its size again.
+- f.page_size("A5", landscape=True) gives the width and height as numbers. They go straight into
+  f.new_page(*...) for the last page. The * unpacks the pair into two values.
+- f.linear_gradient() fills the cover and the last page with a smooth blend of colours.
+- f.text_box() wraps a long line of text inside a box, and f.text_align() places it.
+- f.save("booklet.pdf") writes every page into one PDF. f.page_count() says how many there are,
+  and f.show() shows the last page in a window.
+
+Make it yours:
+- Change "A5" to "A4" or "A6" in the first f.new_page() call.
+- Change the texts, the title and the colours on the three pages.
+- Add a fourth page. Call f.new_page() and draw on it before f.save().
+- Make the last page upright. Replace the page_size line with a plain f.new_page().
+- Draw more on page 2. Use f.width and f.height to place shapes, so they fit if you change the size.
 """
 import funground as f
 

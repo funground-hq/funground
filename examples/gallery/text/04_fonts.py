@@ -1,8 +1,22 @@
 """Fonts and styles
 
-f.text_style() switches between the four built-in styles: normal, bold, italic and
-bold_italic. f.load_font() reads a font file from disk and f.text_font() switches to it;
-f.text_font(None) goes back to the built-in family, remembering whatever style was set.
+The first four lines use the four built-in styles. The fifth uses a font loaded from a file. The
+last line goes back to the built-in font.
+
+How it works:
+- f.text_style() picks one of four styles: "normal", "bold", "italic" or "bold_italic".
+- f.load_font() reads a font file from disk and gives you a font to use. The path is relative to
+  the example.
+- f.text_font(font, size=28) switches to that font, and can set the size in the same call.
+- f.text_font(None) goes back to the built-in family. The style you set before is remembered.
+- A font setting stays until you change it. That is why the example resets it at the end.
+
+Make it yours:
+- Change a line of text, or its size: f.text_size(32) sets the size for the four style lines.
+- Change the colour of one line with f.fill() just before it.
+- Draw the four styles in a loop over ["normal", "bold", "italic", "bold_italic"].
+- Change the size of the loaded font: the 28 in f.text_font(mono, size=28).
+- Load a font file of your own and use it in place of "fonts/DejaVuSansMono.ttf".
 """
 import funground as f
 

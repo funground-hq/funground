@@ -1,13 +1,32 @@
 """Music: compose and save
 
-Click the squares to write a tune. Time goes across: there are 16 beats. Pitch goes up: the
-rows are the notes of a scale that always sounds right, because it has only five notes
-(a pentatonic scale), or the swaras of a major scale if you tick "sargam". Squares in the same
-column sound together. The loop plays on its own, and the white line sweeps along it. The notes
-are f.melody() in its soft voice, with a quiet low pulse from f.mix() and a little reverb
-from sound.reverb(). After a moment without a click, the tune is made again. "save WAV"
-writes my_tune.wav with sound.save(). "save poster" writes the grid as a PDF with f.save().
-The files go in the folder the sketch runs in. The gallery browser shows you where.
+Click the squares to write a tune. Time goes across, with 16 beats. Pitch goes up. The rows are
+the five notes of a pentatonic scale, which always sounds right. Tick "sargam" to use the swaras
+S R G m P D N S' instead. The tune loops on its own, and a white line sweeps along it. "save WAV"
+writes my_tune.wav, and "save poster" writes a PDF of the grid.
+
+How it works:
+- cells[row][beat] is a grid of True and False. mouse_pressed() turns a mouse position into a row
+  and a beat, and flips that square.
+- rebuild() turns the grid into text for f.melody(): "-" for an empty beat, and a chord such as
+  "[C4 E4]" for squares in the same column. In sargam mode, it adds sa=SA, tuning="just". Sa is the
+  home note, and a swara is a note named from it.
+- A soft low pulse on every fourth beat comes from f.tone() and f.sequence(). f.mix() adds the
+  pulse to the notes. room() adds a little reverb, then folds its tail back onto the start, so the
+  loop has no gap.
+- A tune is made again 30 frames after your last click, so quick clicking does not rebuild it every
+  time.
+- f.create_button() and f.create_checkbox() make the controls. tune.is_playing() and
+  tune.current_time() / STEP find the beat that is sounding.
+- tune.save("my_tune.wav") writes the sound. f.save("grid_poster.pdf") writes the picture, after
+  drawing the grid again on white.
+
+Make it yours:
+- Change STEP. A smaller number is a faster tune.
+- Change PENTATONIC to another scale. Try ["A3", "C4", "D4", "E4", "G4", "A4", "C5", "D5"].
+- Change SA to "D4" and tick "sargam" to hear the swaras on a new Sa.
+- Change START to write a different starting tune. Each pair is (beat, row).
+- Change beat % 4 to beat % 2 for a faster pulse.
 """
 # gallery: time-dependent
 import funground as f

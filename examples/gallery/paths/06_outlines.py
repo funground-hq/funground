@@ -1,7 +1,24 @@
 """Outlines, tests and moving paths
 
-expand_stroke turns a thick line into a shape you can fill with a gradient. contains tells you
-whether a point is inside a shape. bounds gives the box around it. rotate and scale make copies.
+Three thick lines are turned into shapes with a gradient. A grid of dots tests which points are
+inside a shape. A ring of petals is made by turning and shrinking one path.
+
+How it works:
+- path.expand_stroke() turns a thick line into a shape you can fill, so it can take a gradient. The
+  options are width, cap, join and dash.
+- f.linear_gradient() fills a shape with colours that change along a line.
+- path.contains(x, y) says whether a point is inside the shape. The dots are green when it does.
+- path.bounds() gives the box around the shape as (x, y, width, height). The red rectangle is
+  drawn from it.
+- path.rotate(), path.translate() and path.scale() give back a moved copy. The petals are one
+  path changed twelve times.
+
+Make it yours:
+- Change the width= numbers in jobs, such as width=18 for the wave.
+- Change the dash list [22, 10]: the first number is the dash and the second is the gap.
+- Move the shape in blob().translate(330, 170) and watch the green dots follow it.
+- Change the step of the petals: i * 30 and the range(12) for more or fewer.
+- Change the gradient colours in ["tomato", "slateblue"].
 """
 import funground as f
 

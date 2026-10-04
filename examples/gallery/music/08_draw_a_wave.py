@@ -1,11 +1,32 @@
 """Music: draw a wave and hear it
 
-Every sound is a wave, and the shape of the wave is what makes a flute sound different from a
-violin. Drag the mouse inside the box on the left to draw one period of a wave. f.create_sound()
-repeats your shape 220 times a second, so you hear it as a note, and it starts again when you
-let go. The right box is the spectrum: a bar for each pitch in the sound. A smooth wave has one
-tall bar. A sharp, jagged wave has many. Try the buttons for a sine, a square, a saw and a soft
-wave, then draw your own. It is the same note each time, only the shape changes.
+Every sound is a wave, and the shape of the wave decides how it sounds. Drag the mouse inside the
+left box to draw one repeat of a wave, and let go to hear it. The right box is the spectrum: a bar
+for each pitch. A smooth wave has one tall bar, and a jagged wave has many. Four buttons give you
+a sine, a square, a saw and a soft wave to start from.
+
+How it works:
+- shape is a list of N=48 heights, from -1 to 1. mouse_pressed(), mouse_dragged() and
+  mouse_released() change them. paint() moves the point nearest the mouse. The drag code fills the
+  points the mouse jumped over, so a fast drag leaves no gaps.
+- rebuild() makes one second of sound from the shape. For each of the 44,100 numbers, it works out
+  where that moment falls in the shape and blends two neighbouring points. PITCH = 220 repeats a
+  second is the note A3.
+- f.create_sound(numbers) turns the list into a sound, and sound.loop() plays it. The sketch removes
+  the average first, so the wave does not sit above zero.
+- f.draw_spectrum(sound, ...) draws the bars on the right.
+- f.create_button() makes the four buttons. button.clicked() is true on the frame it is pressed,
+  and preset() builds the shape.
+- f.begin_shape(), f.vertex() and f.end_shape() draw the shape, and the same shape again four times
+  at the bottom. That repeated wave is what the speaker follows.
+
+Make it yours:
+- Change PITCH to 330 or 440 for a higher note.
+- Change set_volume(0.8) in rebuild() to play it quieter.
+- Add a triangle wave. In preset(), before the else, add elif name == "triangle": and
+  out.append(4 * abs(p - 0.5) - 1). Then add "triangle" to the list of names in setup().
+- Change the colours: "deepskyblue" and "orange".
+- Draw a wave with sharp corners and compare its spectrum with a smooth one.
 """
 # gallery: time-dependent
 import math

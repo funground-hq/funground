@@ -1,17 +1,32 @@
 """Voice-controlled game
 
-A little bird flies through gates, and your voice is the control. Say "aaah" and the bird goes
-up. The louder you are, the higher it goes. Go quiet and it sinks. Fly through the gap in each
-gate to score. Touch a gate and the game is over. If you have no microphone, or the room is too
-quiet for shouting, press the space bar: each press hops the bird up, and a quick tap makes a
-small hop.
+A little bird flies through gates, and your voice is the control. Say "aaah" and the bird goes up.
+The louder you are, the higher it goes. Go quiet and it sinks. Fly through the gap in each gate to
+score. Touch a gate and the game is over. With no microphone, press the space bar to hop the bird up.
 
-Why loudness and not pitch? Loudness is easy to control and easy to measure: any sound at all
-moves the bird, and it never goes missing. Pitch is harder. The microphone only reports a pitch
-when it hears one clear note, so breathy sounds and noise give nothing, and the bird would
-fall at the wrong moment. The game also listens to the room for half a second at the start, to
-learn how quiet it is. Stay quiet then. It keeps learning how loud you are, so a whisper or a
-shout can both fly the bird.
+How it works:
+- The game has three states: "ready", "play" and "over". update() moves the game on, and draw()
+  paints it. draw_scene(), draw_gate(), draw_bird() and draw_meter() do the painting.
+- listen() turns the microphone into one number from 0 to 1. For the first CALIBRATE frames, it
+  learns how quiet the room is. After that, mic.level() is smoothed, and loud follows your voice, so
+  a whisper or a shout both work. f.constrain() keeps the result between 0 and 1.
+- Loudness controls the bird, not pitch. Loudness is easy to measure and never goes missing, and
+  mic.pitch() gives nothing for breath or noise.
+- voice is the larger of listen() and hop. The space bar sets hop to 1, and it fades by 93% each
+  frame.
+- The bird eases toward a target height, set by voice. Gates are dictionaries in a list. They slide
+  left, and score goes up when one passes. f.random() picks each gap, and f.random_seed(11) makes
+  the first gates the same every time.
+- hits() finds the nearest point of each gate box to the bird and checks the distance. The sound
+  effects come from f.pluck(), f.note() and f.tone(), and sound.play() plays them.
+
+Make it yours:
+- Change GAP from 150 to 200 for an easier game, or to 120 for a harder one.
+- Change SPACING for gates closer together or further apart. Change the 3 in speed = 3 + ... to
+  change the speed.
+- Change f.random_seed(11) to another number for different gates.
+- Change the colours of the bird, such as f.fill(255, 200, 40) for the body.
+- Change the sounds: try "C6" in sound_point, or 200 in sound_crash.
 """
 import math
 

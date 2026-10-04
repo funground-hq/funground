@@ -1,8 +1,23 @@
 """Loading and drawing an image
 
-f.load_image() reads a picture file (PNG, JPEG, GIF, BMP, TGA) and gives you a picture.
-f.image() draws it, at its own size or stretched. It follows f.translate(), f.rotate()
-and f.opacity() like any other drawing.
+f.load_image() reads a picture file and gives you a picture. f.image() draws it at its own size,
+smaller, turned and half see-through.
+
+How it works:
+- f.load_image("data/photo.jpg") reads PNG, JPEG, GIF, BMP and TGA files. A relative path is looked
+  for next to this file. It runs once, outside draw(), so the file is read only once.
+- f.image(photo, x, y) draws the picture at its own size, with its top-left corner at (x, y).
+- Give a width and a height and the picture is stretched to fit.
+- A picture follows f.translate(), f.rotate() and f.opacity() like any other drawing. The smaller
+  copy is turned inside f.saved_state(), so the turn stays inside it.
+- The red stripe shows that the last copy, with f.opacity(128), is half see-through.
+
+Make it yours:
+- Put your own picture in the data folder and change "data/photo.jpg" to its name.
+- Change the 160 and 120 in the turned copy to make it bigger. Keep 4 by 3 so it is not squashed.
+- Change the -10 in f.rotate() to turn it another way.
+- Change the 128 in f.opacity() from 0 (gone) to 255 (solid).
+- Draw the photo again at several places with a loop.
 """
 import funground as f
 

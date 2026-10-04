@@ -3,6 +3,23 @@
 bezier_vertex bends toward two control points; curve_vertex draws a smooth curve through the
 points (the first and last only steer it); curve_tightness straightens it. bezier and curve draw
 one curve in a single call; bezier_point and bezier_tangent find places and directions along it.
+
+How it works:
+- f.bezier_vertex(x1, y1, x2, y2, x3, y3) inside f.begin_shape() ... f.end_shape() draws a curve
+  that bends towards two control points. The grey lines show them. f.quadratic_vertex() uses one.
+- f.curve_vertex() draws a smooth curve that passes through each point. The first and last points
+  only steer the ends.
+- f.curve_tightness() changes the same points from loose (0) to straight (close to 1).
+- f.bezier() and f.curve() draw a whole curve in one call.
+- f.bezier_point() gives the position at a place t along the curve, from 0 to 1. f.bezier_tangent()
+  gives its direction. The example uses both to turn small arrowheads along the curve.
+
+Make it yours:
+- Move the control points of the first f.bezier_vertex() and watch the bend.
+- Change the points list: move a point, or add one more. Both curves follow.
+- Try another value in the (0, "tomato") pair, such as 0.5.
+- Change range(7) and t = i / 6 to range(13) and i / 12 for more arrowheads.
+- Change the numbers in f.bezier(400, 330, ...). Keep the arrowhead code in step if you do.
 """
 import math
 

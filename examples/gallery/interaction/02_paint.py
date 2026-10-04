@@ -1,8 +1,26 @@
 """A paint program
 
-Callbacks are functions you define with special names; funground calls them when something
-happens. mouse_dragged draws, mouse_wheel changes the brush, key_pressed clears or picks a
-colour, and pmouse_x/pmouse_y (last frame's mouse) join the strokes up smoothly.
+Drag the mouse to paint. The wheel changes the brush, the keys r, g and b pick a colour, and c
+clears the page. A right click drops a dot.
+
+How it works:
+- Callbacks are functions with special names, such as mouse_dragged(). You define them, and
+  funground calls them when something happens.
+- f.background("white") is in setup(), so it runs once. draw() never wipes the canvas, and the
+  paint stays.
+- mouse_dragged() draws a line from f.pmouse_x, f.pmouse_y (where the mouse was last frame) to
+  f.mouse_x, f.mouse_y (where it is now). That joins the strokes up smoothly.
+- mouse_pressed() checks f.mouse_button and draws a dot on a right click. mouse_wheel(delta)
+  changes the brush size, and f.constrain() keeps it between 1 and 40.
+- key_pressed() uses f.key to clear or to pick a colour. key_typed() prints the key to the console.
+- draw() redraws the strip at the bottom each frame, so the words stay up to date.
+
+Make it yours:
+- Add colours: put "y": "gold" in the dictionary in key_pressed().
+- Change the brush limits: 1 and 40 in f.constrain().
+- Change the starting colour (colour = "navy") or the starting brush (brush = 8).
+- Make the right click drop a bigger dot: change brush * 3 to brush * 6 in mouse_pressed().
+- Delete the print line in key_typed() if you do not want the messages in the console.
 """
 import funground as f
 

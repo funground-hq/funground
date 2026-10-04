@@ -1,11 +1,23 @@
 """Spacing and ligatures
 
-f.text_tracking() adds space after every letter, or takes it away.
-f.text_features() turns OpenType features on or off by name:
-"liga" joins letters like f, f and i into one shape, and "salt" picks alternate letters.
-f.text_features() with nothing in the brackets goes back to the font's own choices.
-A variable font has axes, like weight. f.font_variations(wght=700) sets them. This gallery
-has no variable font, so see the guide for that one.
+f.text_tracking() adds space after every letter, or takes it away. f.text_features() turns font
+features on or off by name. The notes on the left say what each line shows.
+
+How it works:
+- f.text_tracking(n) adds n pixels after each letter. A negative number pulls the letters closer.
+- f.text_width() counts the extra space too. The red line is as wide as the widest word.
+- f.text_features(liga=False) turns off ligatures. A ligature joins letters, like f and i, into one
+  shape.
+- f.text_features(salt=True) picks the font's alternate letters. Look at the a.
+- f.text_features() with nothing in the brackets goes back to the font's own choices.
+- The label() helper uses f.push() and f.pop() so its own settings do not leak into the sample.
+
+Make it yours:
+- Change the list [-3, 0, 4, 12] to other tracking values, and the word in f.text("Spacing", ...).
+- Try wide tracking on a short heading in capitals. It often looks smart.
+- Change the sample words for ligatures. Try "fi", "fl" and "ff" in your own text.
+- Turn the ligatures off with f.text_features(liga=False) and look at "fi" and "fl": the letters part.
+- Print a width: f.text(f.text_width("Spacing"), 24, 380).
 """
 import funground as f
 

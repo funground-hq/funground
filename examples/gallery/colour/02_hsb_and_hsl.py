@@ -3,6 +3,24 @@
 f.hsb(hue, saturation, brightness) and f.hsl(hue, saturation, lightness) make colours by hue:
 0 red, 120 green, 240 blue, and around again. By default a tuple means red, green, blue. f.color()
 makes a colour you can read (.hue, .brightness ...), and lerp_color mixes two colours.
+
+How it works:
+- A hue is a place on the colour wheel, from 0 to 360 degrees. f.hsb(i * 15, 90, 95) steps round the
+  wheel to make the top strip.
+- f.hsl() is like f.hsb(), but its third number is lightness. 0 is black, 50 is the pure colour and
+  100 is white. The second strip keeps one hue and changes only that number.
+- f.color() makes a colour object. It has parts you can read: .red, .green, .blue, .alpha, .hue,
+  .saturation, .brightness and .lightness. The two text lines print them.
+- f.lerp_color(start, end, amount) mixes two colours. 0 gives the first, 1 gives the second and 0.5
+  is halfway. The row of circles uses it.
+- The last circle uses f.frame_count in the hue, so it slowly cycles. The hue wraps after 360.
+
+Make it yours:
+- Change the 200 in f.hsl(200, 70, i * 10) to another hue, such as 0 or 120.
+- Lower the 90 in f.hsb(i * 15, 90, 95) to make a paler wheel.
+- Change "tomato" and "royalblue" to other colours and see the blend.
+- Make the last circle change faster: change the 4 in f.frame_count * 4.
+- Print another reading of tomato, such as tomato.hue, with a new f.text() line.
 """
 import funground as f
 

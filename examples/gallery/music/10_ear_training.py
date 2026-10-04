@@ -1,14 +1,32 @@
 """Music: ear training
 
-The sketch plays two notes. The first is your starting note. The second is a mystery, higher
-than the first. Say how far up it is. In "swara" mode the starting note is Sa, and you name the
-swara you heard (a small letter is komal, flat, and a capital M is tivra, sharp). In "interval"
-mode the starting note changes, and you name the gap between the notes, like a minor 3rd.
-Answer by clicking a button, by pressing the swara's letter (or the left and right keys, then
-Enter), or by singing the second note and holding it steady. The singing is read from the
-microphone: each pitch is folded into one octave, and the middle of the last five readings is
-used. The ladder shows the right answer with its two notes. With no microphone, clicks and keys
-still work. Space plays the notes again, and Enter or N asks the next question.
+The sketch plays two notes. The first is your starting note. The second is a mystery, higher than
+the first. Say how far up it is: click a button, press a key, or sing the second note. In "swara"
+mode the starting note is Sa and you name the swara. In "interval" mode the starting note changes,
+and you name the gap, like a minor 3rd. Space plays the notes again, and Enter or N asks the next
+question.
+
+How it works:
+- Sa is the home note, and a swara is a note named from it. SWARAS lists them by steps above Sa:
+  S r R g G m M P d D n N. A small letter is komal (flat), and a capital M is tivra (sharp).
+- new_question() uses f.random_choice() to pick a step, never the same one twice in a row, and
+  builds the question. play_question() plays it with f.melody(), such as "S:2 G:3 -:1", and
+  sound.reverb(0.15).
+- mouse_pressed() checks the button rectangles. key_pressed() reads the swara letters, the arrow
+  keys and Enter. Each calls answer(), which scores it.
+- Singing is read with mic.pitch(). sung_steps() turns the pitch into steps above the start and
+  folds it into one octave with % 12. listen() takes the middle of the last five readings, and
+  HOLD steady frames count as an answer.
+- The microphone waits until the notes have finished (f.millis() and quiet_until), so it does not
+  hear the question.
+- f.create_slider() picks the mode. The ladder on the right shows the right answer.
+
+Make it yours:
+- Change HOLD to 10 to make singing an answer quicker.
+- Change SA to "C4". Sa moves, and so do both notes.
+- Add notes to STARTS, such as "A3" and "B3", for more starting notes in interval mode.
+- Make it easier: in new_question(), change range(low, low + 12) to range(low, low + 8).
+- Change tempo=90 in play_question() to slow the notes down.
 """
 import math
 

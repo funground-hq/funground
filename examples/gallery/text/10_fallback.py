@@ -1,9 +1,22 @@
 """Letters from other fonts
 
-No font has every letter. When the font you are using lacks one, funground draws it from another
-font and keeps the line together: same size, same baseline. Here one greeting mixes English, Hindi
-and emoji, with no extra code. The emoji have one colour, the colour of the fill. The grey line
-turns the help off with f.text_fallback(None), so the missing letters show as empty boxes.
+No font has every letter. When the font you use lacks one, funground draws it from another font and
+keeps the line together. One greeting mixes English, Hindi and emoji, with no extra code.
+
+How it works:
+- When a letter is missing, funground borrows it from another font. Size and baseline stay the same.
+- The emoji have one colour: the colour of the fill. Each one in the row gets its own fill.
+- f.text_width() measures the whole line, borrowed letters included. The bar shows that width.
+- f.text_fallback(None) turns the help off. The missing letters then show as empty boxes.
+- f.system_font() looks for an installed font by its family name. It raises FileNotFoundError if
+  there is none, so setup() catches that.
+
+Make it yours:
+- Change GREETING to your own words. Try another language or more emoji.
+- Change the emoji in the row of five, or the colours in f.color().
+- Change the size of the first line: the 54 in f.text_size(54).
+- Move the switched-off line: change the 340 in f.text(GREETING, 320, 340), and compare the two greetings.
+- Ask for a font you have installed: put its family name in f.system_font() in setup().
 """
 import funground as f
 

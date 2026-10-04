@@ -1,8 +1,24 @@
 """Move with the keyboard
 
-Two ways to read the keyboard. For smooth movement, ask every frame whether a key is held:
-f.key_down("left"). For one-off actions, define key_pressed(), which runs once per press;
-f.key says which key it was. key_released() runs when the key comes back up.
+The arrow keys move a circle. The space bar changes its colour. The words at the bottom say which
+key came up last.
+
+How it works:
+- There are two ways to read the keyboard. For smooth movement, ask in every frame whether a key is
+  held: f.key_down("left").
+- For one-off actions, define key_pressed(). It runs once for each press, and f.key says which key
+  it was. Here the space bar switches the colour.
+- key_released() runs when a key comes back up, and the sketch writes the key into message.
+- Each held key changes x or y by speed. f.constrain() then keeps the circle inside the window.
+- draw() wipes with f.background() and draws the circle at x, y every frame.
+
+Make it yours:
+- Change speed = 4 for a faster or slower circle.
+- Add the letter keys: write if f.key_down("a") or f.key_down("left"): to move with either.
+- Change the two colours in key_pressed(), or add a third.
+- Make a key change the size. Use f.key == "b" in key_pressed() and a size variable in
+  f.circle().
+- Add a second circle that moves with w, a, s and d.
 """
 import funground as f
 

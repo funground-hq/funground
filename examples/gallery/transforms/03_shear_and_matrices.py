@@ -1,7 +1,25 @@
 """Shear and matrices
 
-shear_x and shear_y slant everything drawn afterwards; apply_matrix multiplies in any transform
-at once; reset_matrix forgets all transforms until the end of the saved_state block.
+Three chequerboards: one leaning to the right, one climbing to the right, and one rotated and
+stretched with a single matrix. A red circle ignores the transform.
+
+How it works:
+- f.shear_x() slants everything drawn afterwards sideways. f.shear_y() slants it up and down. Both
+  take degrees.
+- f.apply_matrix() multiplies in any transform at once. The third board turns and stretches in one
+  go.
+- Its six numbers are a, b, c and d, which turn and stretch, then the two that move the board.
+- f.reset_matrix() forgets every transform inside the block, so the circle uses plain window
+  coordinates.
+- Each board sits in a with f.saved_state(): block, so one board's transform does not touch the
+  next.
+
+Make it yours:
+- Change the 25 in f.shear_x(25): try 45, or a negative number.
+- Change the 1.4 in f.apply_matrix(): it is the sideways stretch. 1.0 means no stretch.
+- Change the angle in math.radians(20) to 45 and see the third board turn.
+- Make the board bigger: checker(12, 8) in place of checker() draws a 12 by 12 board of 8 pixel cells.
+- Add a fourth board that uses f.shear_x() and f.shear_y() together.
 """
 import math
 

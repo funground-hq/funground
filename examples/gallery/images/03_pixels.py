@@ -1,9 +1,26 @@
 """Reading and writing single pixels
 
-f.set() makes one pixel a colour, and f.get() reads one back as a colour. f.load_pixels() copies the
-whole canvas into the list f.pixels: four numbers for each pixel (red, green, blue, alpha), row by row.
-Change the list, then f.update_pixels() writes it back. A Python loop over every pixel is slow, so
-keep the area small.
+Five small tricks work on single pixels. A tile is built with f.set() and read with f.get(),
+colours are swapped over, and a band of the canvas turns grey.
+
+How it works:
+- f.set(x, y, colour) makes one pixel a colour. f.get(x, y) reads one back as a colour, with
+  .red, .green and .blue.
+- f.get(x, y, w, h) with a size gives a picture, which is a copy of that part of the canvas.
+- f.load_pixels() copies the canvas into the list f.pixels. It holds four numbers for each pixel
+  (red, green, blue, alpha), row by row.
+- The loops change the numbers in the list. f.update_pixels() writes them back to the canvas.
+  A picture made with f.create_graphics() has its own load_pixels() and update_pixels(), used on
+  the scene copy.
+- f.create_graphics(w, h) makes an empty picture to draw on. The tile and the scene use it.
+- A Python loop over every pixel is slow, so the example keeps the areas small.
+
+Make it yours:
+- Change the 14 and 12 in make_tile() to change its colours.
+- Change what the swap does: in the loop, set pixels[i + 1] = 0 to remove the green.
+- Change the grey band: the range(350, 400) says which rows. Try range(0, 400) to grey everything.
+- Change the wave: use 18 * math.sin(x / 30) with other numbers for a bigger or tighter wave.
+- Change probe_x and probe_y to read the colour from another place.
 """
 import math
 

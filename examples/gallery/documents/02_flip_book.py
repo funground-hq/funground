@@ -1,9 +1,24 @@
 """A flip book saved as a GIF
 
-Every page of a script is one frame of a GIF. f.frame_duration(0.15) says how long each page is
-shown, in seconds. f.save("flip_book.gif") writes all the pages, in order, and the GIF loops for
-ever. All the pages must be the same size. An MP4 works the same way, f.save("flip_book.mp4"),
-but it needs the free program ffmpeg. The gallery picture shows the last page.
+Every page of a script is one frame of a GIF. Eight pages show a ball bouncing across, and
+f.save("flip_book.gif") writes them in order. The gallery picture shows the last page.
+
+How it works:
+- f.size(320, 240) sets the size of every page. All the pages must be the same size.
+- f.frame_duration(0.15) says how long each page is shown, in seconds.
+- The loop draws one page for each step. f.new_page() starts each new page after the first.
+- across goes from 0 to 1 over the pages. It sets the ball's x, and height sets how high the ball
+  is. height is 0 at both ends and 1 in the middle, which makes the bounce.
+- The shadow gets smaller as the ball rises, so f.ellipse() uses 40 - 20 * height.
+- f.save("flip_book.gif") writes every page, and the GIF loops for ever. An MP4 works the same way
+  with f.save("flip_book.mp4"), but it needs the free program ffmpeg.
+
+Make it yours:
+- Change STEPS = 8 to a bigger number for a smoother flip book. Try 16.
+- Change 0.15 in f.frame_duration() to speed it up or slow it down.
+- Change 140 in the ball's y value to make it bounce higher or lower.
+- Change the colours in f.background() and f.fill().
+- Make the ball grow as it rises: use 40 + 20 * height as its size.
 """
 import funground as f
 

@@ -1,11 +1,32 @@
 """Making sound: a sargam phrase over a drone
 
-With sa="D4", f.melody() reads swaras instead of note names: S r R g G m M P d D n N.
-A ' after a swara is the octave above and a comma is the octave below. Here the notes
-use just tuning, the pure ratios from Sa. Under the phrase, a drone of plucked strings
-plays Pa, Sa, Sa, Sa over and over. sound.reverb() gives the phrase and the strings a
-room to ring in. The ladder shows the swara that sound.pitch() hears. The pink line follows the phrase only: it
-folds each reading into one octave, takes the middle of the last five, and breaks at rests.
+A short phrase in sargam (note names used in Indian music) plays over a drone. A ladder has one
+row for each swara, with Sa at the bottom. The row for the swara you hear lights up, and a pink
+line follows the voice up and down.
+
+How it works:
+- Sa is the home note, the one the music is built on. Here it is D4. A swara is a note named
+  from Sa: S r R g G m M P d D n N. A small letter is komal (flat), and a capital M is tivra
+  (sharp).
+- f.melody(PHRASE, sa=SA, tuning="just") reads swaras instead of note names. A ' after a swara is
+  the octave above, and a comma is the octave below. "just" tuning uses pure ratios from Sa.
+- A drone is a steady background that holds Sa and Pa. This one imitates a tanpura, the stringed
+  instrument that plays it. f.pluck() makes plucked strings, f.sequence() joins them one after
+  another, and sound.reverb() gives them a room to ring in.
+- The hum is made from numbers: f.create_sound() turns a list of three added sine waves into a
+  sound.
+- phrase.pitch() gives the pitch now. swara_height() uses a % 12 to fold it into one octave, so the
+  voice always lands on a row of the ladder.
+- The pink line takes the middle of the last five readings, so it is calm, and it breaks at rests.
+
+Make it yours:
+- Change SA to "C4" or "A3". The whole phrase and the drone move to that key.
+- Change PHRASE. S is Sa, and R, G, m, P, D, N are the other swaras. Add :2 to make one last
+  longer.
+- Change TEMPO to sing it faster or slower.
+- Change tuning="just" to tuning="equal" and listen for the small differences.
+- Change the first string of the drone: use "m," in place of "P," in strings. A drone for some
+  ragas has Ma there.
 """
 # gallery: time-dependent
 import math

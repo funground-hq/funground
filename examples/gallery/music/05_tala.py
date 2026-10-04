@@ -1,10 +1,30 @@
 """Music: a tala goes round
 
-A tala is a cycle of beats that comes round again and again. f.tala_info(name) gives its
-beats, its vibhags (the groups the beats fall in), the beats you clap (tali) and wave
-(khali), and the bols: the syllables a tabla player says for each stroke. f.tala(name)
-plays one cycle with simple drum sounds. Here the bols sit round a circle and the beat
-playing now glows. The sam, beat 1, is marked X; a wave is marked 0. Keys 1 to 6 pick a tala.
+A tala is a cycle of beats that comes round again and again. Here the bols sit round a circle,
+and the beat playing now glows. The sam, beat 1, is marked X, and a wave is marked 0. Keys 1 to
+6 pick a tala.
+
+How it works:
+- A tala is a repeating pattern of beats. The beats fall in groups called vibhags. You clap at the
+  start of some groups (tali) and wave at the start of others (khali). Beat 1 is the sam, where
+  the cycle begins and lands. A bol is the syllable a tabla player says for one beat, and the
+  theka is the whole pattern of bols.
+- f.talas() lists the six talas. f.tala_info(name) gives .beats, .vibhag, .tali, .khali, .sam
+  and .bols.
+- f.tala(info.name, tempo=TEMPO) makes one cycle with simple drum sounds. choose() stops the old
+  cycle, makes a new one and loops it.
+- Each frame, cycle.current_time() divided by the length of a beat says which beat is playing.
+- Each bol sits at an angle on the circle, found with math.cos() and math.sin(). The beat that
+  is playing glows gold.
+- marks() decides the sign over each beat: X for the sam, 0 for a wave and 2, 3, ... for the other
+  claps. key_pressed() reads the keys 1 to 6.
+
+Make it yours:
+- Change TEMPO. A bigger number is faster.
+- Start with another tala: change choose(0) in setup() to choose(2).
+- Change the colour of the glow, f.fill(255, 200, 80, 90), or its size, 64.
+- Print the bols when a tala is chosen: add print(info.bols) to the end of choose().
+- Change the radius 150 of the circle. It is used for both x and y in draw().
 """
 # gallery: time-dependent
 import math

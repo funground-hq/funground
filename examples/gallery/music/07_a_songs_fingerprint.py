@@ -1,11 +1,28 @@
 """Music: a song's fingerprint
 
-A short song is built from two parts with f.melody() and put together with f.mix(). Then
-f.spectrogram() turns the whole sound into a picture: time goes across, pitch goes up,
-and the louder a pitch is, the brighter it is. You can see each note as a bright dash,
-and the low bass notes along the bottom. Click to play the song, and a line shows where
-it is. The picture is also saved as fingerprint.png. With no sound device the song plays
-silently and keeps time.
+A short song is turned into a picture. Time goes across, pitch goes up, and the louder a pitch
+is, the brighter it is. Each note is a bright dash, and the low bass notes run along the bottom.
+Click to play the song, and a line shows where it is. The picture is also saved as
+fingerprint.png. With no sound device, the song plays silently.
+
+How it works:
+- f.melody() makes the tune, and makes the bass again with wave="sine" and volume=0.35. f.mix()
+  adds the two into one song. The bass is quiet, so the sum does not clip.
+- f.spectrogram(song, WIDTH, HEIGHT) turns the whole sound into a picture. Its brightest colour is
+  the fill colour at that moment, so setup() calls f.fill() first.
+- fingerprint.save("fingerprint.png") writes the picture, and f.image() draws it.
+- The picture runs from 40 Hz to 16,000 Hz. pitch_height() uses a log to find where a note name
+  sits, so the side labels C3, C4, C5 and C6 are in the right place.
+- mouse_pressed() calls song.play(). While song.is_playing(), the line sits at
+  song.current_time() / song.duration() of the way across.
+
+Make it yours:
+- Change the notes in LEAD or BASS.
+- Change TEMPO. A faster song makes a shorter, tighter picture.
+- Change f.fill(255, 150, 60) to another colour. The whole picture changes colour.
+- Change wave="sine" to wave="square" in the bass. Square waves have many more lines above each
+  note.
+- Make the picture bigger: raise WIDTH and HEIGHT, and the size in f.size().
 """
 import funground as f
 

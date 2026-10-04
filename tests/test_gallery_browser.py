@@ -205,7 +205,8 @@ def test_wheel_scrolls_the_grid_and_the_code(browser):
     script = {1: [InputEvent("mouse_wheel", 400, 300, delta=3.0)],
               2: [InputEvent("mouse_wheel", 400, 300, delta=-30.0)],
               3: click(*centre(browser.area_rect(0))), 4: click(*centre(browser.card_rect(0))),
-              5: [InputEvent("mouse_wheel", 400, 500, delta=2.0)]}
+              5: press("s"),                       # every example opens on Explain now (S-120); scroll the code
+              6: [InputEvent("mouse_wheel", 400, 500, delta=2.0)]}
     seen = {}
 
     def after(n, app):
@@ -214,7 +215,7 @@ def test_wheel_scrolls_the_grid_and_the_code(browser):
     run(browser, script, after)
     assert seen[1][0] == 3.0 * browser.WHEEL_STEP
     assert seen[2][0] == 0.0                            # never above the top
-    assert 0.0 < seen[5][1] <= browser.app.max_code_scroll()
+    assert 0.0 < seen[6][1] <= browser.app.max_code_scroll()
 
 
 def test_screenshots_of_the_grid_and_a_detail_view(browser, tmp_path):

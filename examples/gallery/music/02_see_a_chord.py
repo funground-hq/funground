@@ -1,9 +1,28 @@
 """Music: see a chord
 
-Chords play one after another. sound.chroma() gives twelve numbers: how strong each note
-name (C, C#, D ... B) is right now, whatever the octave. They are the twelve bars.
-sound.chord() names the chord that fits, and f.chord_notes() lists its notes, which are
-lit on the small keyboard. With no sound device the chords stay silent and the bars stay flat.
+Chords play one after another. The twelve bars show how strong each note name is right now.
+The chord's name is at the top, and the notes of the chord are lit on a small keyboard. With no
+sound device, the chords stay silent and the bars stay flat.
+
+How it works:
+- PROGRESSION is a list of chord names. f.chord_notes("Am") lists the note names in a chord.
+  voicing() adds octave numbers to them, going up from octave 3.
+- Each chord is f.mix() of f.note() sounds. The notes are quiet, so the sum does not clip.
+  f.sequence() puts the chords one after another, and sound.reverb(0.2) adds a little room.
+- song.chroma() gives 12 numbers for C, C#, D ... B. Each says how strong that note name is now,
+  in any octave. The bars are those twelve numbers.
+- shown[i] moves a third of the way to the new number each frame, so the bars glide.
+- song.chord() names the chord that fits what is sounding. It gives nothing between chords, so the
+  sketch keeps the last name.
+- The keys are rectangles. White ones are drawn first and black ones on top. The notes of the
+  chord are gold or orange.
+
+Make it yours:
+- Change PROGRESSION. Try "Em", "A7" or "Cmaj7".
+- Change SECONDS to make the chords shorter or longer.
+- Change "triangle" in make_chord() to "sine" or "square". The bars show the new sound.
+- Change the colours: "gold" and "steelblue" in draw().
+- Change the 0.3 in the bars' smoothing. A smaller number glides more slowly.
 """
 # gallery: time-dependent
 import funground as f

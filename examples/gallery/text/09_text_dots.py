@@ -1,10 +1,23 @@
 """Words made of dots
 
-f.text_to_points() walks along the outline of a word and gives back a point every few
-pixels. Draw a small circle at each point and the word is made of beads. A smaller
-spacing gives more dots. The same call works with any font, size and alignment, because
-it follows f.text_path(). f.current_font() tells you which font is in use: its family,
-its style, and whether it has the characters you want.
+f.text_to_points() walks along the outline of a word and gives back a point every few pixels. Draw
+a small circle at each point and the word is made of beads.
+
+How it works:
+- f.text_to_points(message, x, y, spacing) returns a list of (x, y) points along the letters.
+- A smaller spacing gives more points. "DOTS" uses 9 and "closer" uses 4.
+- The loop draws f.circle() at each point. The colour changes with the point number i, so it
+  shifts along the word.
+- It follows f.text_path(), so it works with any font, size, style and alignment you have set.
+- f.current_font() tells you which font is in use. font.family(), font.style() and
+  font.contains() say what it is and whether it has the letters you need.
+
+Make it yours:
+- Change the words, or the spacing numbers 9 and 4.
+- Change the dot size: the last number in f.circle(x, y, 7).
+- Draw squares instead: use f.rect(x, y, 6, 6) in the loop.
+- Make the dots jiggle: add f.random(-2, 2) to x and y.
+- Colour by position: use f.map_range(x, 0, f.width, 0, 255) for a colour channel.
 """
 import funground as f
 

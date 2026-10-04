@@ -2,6 +2,23 @@
 
 The same four numbers, drawn under each drawing mode. The red dot marks (x, y) in every box.
 rect_mode and ellipse_mode have four modes each. image_mode has three.
+
+How it works:
+- A shape is given four numbers. A mode decides what they mean. The default for f.rect() is
+  "corner": x, y is the top-left corner, then width and height.
+- f.rect_mode() and f.ellipse_mode() take "corner", "corners", "center" or "radius". "corners" reads
+  the last two numbers as a second corner. "radius" reads them as half the width and half the height.
+- f.image_mode() has "corner", "corners" and "center". The picture comes from f.create_graphics().
+- f.saved_state() puts back the style, the mode and the moved origin at the end of each box. One
+  mode does not leak into the next box.
+- f.translate() moves the origin to each box, so every box can use the same X and Y.
+
+Make it yours:
+- Change X, Y, A and B at the top. Every box changes at once.
+- Try A = 120 and B = 90. In "corners" mode they now work as the second corner.
+- Add another box: copy one of the loop blocks and use a new colour with f.rect_mode("center").
+- Call f.rect_mode("center") once, before the loops, and see how the plain f.rect() calls change.
+- Change the colours in make_picture() and watch the image boxes.
 """
 import funground as f
 

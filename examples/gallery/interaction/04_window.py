@@ -1,9 +1,26 @@
 """The window: cursor, size and full screen
 
-f.cursor() picks the mouse pointer - here a hand over the button, crosshairs elsewhere - and
-f.no_cursor() hides it. Press f for f.full_screen(), where f.width and f.height become the
-screen's size, and 1, 2 or 3 for f.resize_canvas(). Everything is placed using f.width and
-f.height, so the drawing fits whatever the size.
+The pointer is a hand over the button and crosshairs everywhere else. Press f for full screen,
+1, 2 or 3 to change the window's size, and h to hide the pointer.
+
+How it works:
+- f.cursor() picks the mouse pointer: "arrow", "cross", "hand", "move", "text" or "wait".
+  f.no_cursor() hides it.
+- over_button() compares f.mouse_x and f.mouse_y with the button's box. draw() uses it to pick the
+  cursor and the colour.
+- f.full_screen() makes the window fill the screen. f.width and f.height then become the screen's
+  size.
+- f.resize_canvas() changes the size when you press 1, 2 or 3. The sizes are in the SIZES
+  dictionary.
+- Everything is placed with f.width and f.height, so the drawing fits whatever the size is.
+
+Make it yours:
+- Add a size: put "4": (300, 600) in SIZES. Press 4 to try it.
+- Change "hand" to "move" or "wait" to see other pointers.
+- Change the size of the button: the 90 and 30 are half its width and height. Change them in
+  over_button() and in f.rect() together.
+- Make a second button lower down and give it its own over test.
+- Change the colours in f.background() and f.fill().
 """
 import funground as f
 

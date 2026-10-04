@@ -1,18 +1,33 @@
 """Raga explorer
 
-Pick a raga with the slider or the left and right keys. The page tells you its thaat (parent
-scale), its vadi and samvadi (the two most important swaras) and the time of day it belongs to.
-Press "listen" to hear its aroha (the way up) and avaroha (the way down) over a quiet tanpura
-drone. The aroha and avaroha are played with a meend, a glide, into the last note. Each swara
-lights up on the ladder as it sounds. Swaras the raga leaves out stay dark.
+Pick a raga with the slider or the left and right keys. The page shows its thaat (parent scale),
+its vadi and samvadi (its two most important swaras) and the time of day it belongs to. "listen"
+plays its aroha (the way up) and avaroha (the way down) over a drone, lighting each swara. "sing"
+lets you sing it, and then shows which ragas fit your notes best.
 
-Press "sing" and sing the raga, with Sa on D, in any octave that suits you. The microphone hears
-you, and your pitch is drawn on the ladder as a pink line. The line is folded into one octave,
-and it is smoothed and broken at silences, so it stays calm. A row turns red if you sing a swara
-that the raga does not use. Press "stop" and the explorer counts which swaras you sang. It shows
-them as bars, and it shows the three ragas whose notes fit them best. It compares notes only. It
-does not know the raga's way of moving, which is most of what makes a raga. Wear headphones, so
-the drone does not get into the microphone.
+How it works:
+- The program is five small parts. Data comes from f.ragas() and f.raga(). Sounds come from
+  make_drone() and make_tune(). Singing is read by listen_to_voice(). Results come from
+  work_out_the_singing(). The drawing is in draw(), show_notes() and show_results().
+- A variable called mode (idle, listen, sing, thinking or result) says what the page is doing.
+  update() reads the buttons and the slider and changes the mode. draw() paints what the mode says.
+- make_tune() joins raga.aroha and raga.avaroha, with a rest between. A meend, a glide, runs into
+  the last note, written with ~. f.melody(..., sa=SA, tuning="just") plays it. Sa is the home note.
+- make_drone() uses f.drone(). A drone is the steady tanpura note under the singer. A raga with no
+  Pa gets Ni on the first string. Each sound is made once and kept in a dictionary.
+- The ladder has a row for each swara. A row is dark if the raga leaves that swara out. The vadi
+  and samvadi have a coloured border. The lit row follows tune.current_time().
+- When you sing, mic.pitch() is folded into one octave and smoothed. A row turns red for a swara the
+  raga does not use. On "stop", mic.capture(seconds).swara_histogram(SA) counts the swaras, and
+  f.match_ragas(shares)[:3] gives the closest three ragas. It compares notes only. A raga is also
+  its way of moving between them.
+
+Make it yours:
+- Change TEMPO to make the aroha and avaroha slower or faster.
+- Remove the glide. In make_tune(), use tokens = up + ["-"] + down + ["-", "-"].
+- Change GATE if your room is noisy or quiet. A bigger number needs a louder voice.
+- Change the ladder colours, such as "#7a4fa0" for the swaras that the raga uses.
+- Change the matches that show. Change [:3] in work_out_the_singing() to [:2] to show two ragas.
 """
 import math
 import time

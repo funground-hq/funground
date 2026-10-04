@@ -2,6 +2,24 @@
 
 stroke_cap sets how a line ends, stroke_join how corners look, and stroke_dash draws dashed
 outlines. They are style, like fill: saved_state puts them back.
+
+How it works:
+- f.stroke_cap() sets how a line ends: "butt" stops at the end, "square" goes a little further, and
+  "round" adds a half circle.
+- f.stroke_join() sets how a corner looks: "miter" is sharp, "bevel" is cut flat and "round" is
+  smooth. The zigzag() shape uses f.begin_shape(), f.vertex() and f.end_shape().
+- f.miter_limit(4) stops a very sharp corner from sticking out too far.
+- f.stroke_dash([16, 8]) draws dashes 16 pixels long with 8-pixel gaps. f.no_dash() makes lines
+  solid again.
+- Cap, join and dash are style, like fill. f.saved_state() puts them back after each block, so one
+  line does not change the next.
+
+Make it yours:
+- Change the numbers in f.stroke_dash([16, 8]). Try [4, 4] or [30, 10].
+- Make the lines thicker or thinner: change f.stroke_width(18) at the top.
+- Change f.miter_limit(4) to 1 and watch the sharp corner get cut.
+- Change the shape in zigzag(): move the f.vertex() points to make the corners sharper.
+- Dash the line at the bottom: add f.stroke_dash([10, 6]) before f.line(380, 370, 560, 370).
 """
 import funground as f
 
