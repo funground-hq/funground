@@ -221,3 +221,13 @@ sprint review adds its entry here.
 - Claude reviewed and merged, pinned each builder's choices in the contract, fixed a test-harness gap, and recorded
   three process slips and their fixes in the sprint review.
 
+### Sprint 14: seeing sound, ragas, sound quality, projects (4 Oct 2026)
+- The maintainer set the direction: visualising sound as funground's strength, ragas for learners, four project
+  capstones, and, after listening, a call to improve sound quality across the board. Claude decided the analysis,
+  raga and sound-quality designs under D-034.
+- Claude Opus 5.5 sub-agents built the raga table, checking every fact against at least two web sources with
+  citations, and the sound-quality work. Claude Sonnet 5 sub-agents built rhythm and harmony, drawing sound,
+  font collections, the teaching examples and the capstones, several of them in parallel worktrees.
+- Claude reviewed and merged everything, resolved the conflicts, checked the published key-finding profiles
+  against two sources, and wrote the release workflow and the release documentation.
+
