@@ -92,8 +92,8 @@ def burst(cx, cy, outer, inner, points):
 
 def background_layer(event):
     top, bottom, accent, ink = theme_of(event)
-    f.layer("background").clear()                  # a layer keeps its drawing, so wipe it first
     with f.layer("background"):
+        f.clear()                                  # a layer keeps its drawing, so wipe it first
         f.no_stroke()
         f.fill(f.linear_gradient(0, 0, 0, HEIGHT, [top, bottom]))
         f.rect(0, 0, WIDTH, HEIGHT)
@@ -118,8 +118,8 @@ def confetti(event, accent, sun):
 def art_layer(event):
     top, bottom, accent, ink = theme_of(event)
     sun, rays = event["sun"], event["points"]
-    f.layer("art").clear()
     with f.layer("art"):
+        f.clear()
         f.no_stroke()
         confetti(event, accent, sun)
         # A glow: a big burst joined to a disc.
@@ -154,8 +154,8 @@ def headline_of(event, size):
 
 def words_layer(event, caret, hindi):
     top, bottom, accent, ink = theme_of(event)
-    f.layer("words").clear()
     with f.layer("words"):
+        f.clear()
         f.no_stroke()
         # A long headline gets smaller, so that it always fits.
         size = 54
@@ -194,8 +194,8 @@ def note_layer(message):
     """A short message over the poster. It is hidden while a file is saved, so it is never in a file."""
     global note_layer_made
     note_layer_made = True
-    f.layer("note").clear()
     with f.layer("note"):
+        f.clear()
         if message:
             f.no_stroke()
             f.fill(20, 20, 40, 225)

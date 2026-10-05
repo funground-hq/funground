@@ -88,7 +88,7 @@ class Text(Op):
 # ---- vector ops (public since Sprint 4: S-027 transforms, S-028 paths)
 @dataclass(frozen=True, slots=True)
 class Save(Op):
-    pass
+    layer_block: bool = False         # S-095 (F16): the implicit push() of a `with f.layer(...)` block
 
 
 @dataclass(frozen=True, slots=True)
@@ -265,7 +265,7 @@ OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash
                                "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges",
                                "tint", "sx", "sy", "sw", "sh", "radii",
                                "text_tracking", "text_features", "font_variations", "text_fallback",
-                               "erasing", "erase", "layer", "layer_hidden"})
+                               "erasing", "erase", "layer", "layer_hidden", "layer_block"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).

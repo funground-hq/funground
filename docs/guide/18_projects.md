@@ -113,8 +113,8 @@ keeps the poster quick. `f.hide_layer()` and `f.show_layer()` switch a layer on 
 box for each one, and you can see what each layer does.
 
 ```py
-f.layer("art").clear()                      # wipe the layer, then draw it again
 with f.layer("art"):
+    f.clear()                               # wipe the layer, then draw it again
     f.circle(240, 250, 300)
 f.hide_layer("art")                         # it keeps its drawing; it is just not shown
 ```
