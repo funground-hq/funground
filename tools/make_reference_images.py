@@ -68,7 +68,7 @@ def render(sketch: Path, out: Path, frames: int = FRAMES) -> Path:
     if not out.exists() and script._script:
         # A script (S-076) never calls f.run(): its picture is the finished canvas.
         script._script_flush()
-        save_pixels(script._renderer.pixels(), str(out))
+        save_pixels(script._view_pixels(), str(out))          # with its layers composited, as f.show() and saves see it
     if not out.exists():
         raise RuntimeError(f"{sketch.name} never showed a frame; nothing saved")
     return out
