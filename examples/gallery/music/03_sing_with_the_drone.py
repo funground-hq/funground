@@ -15,6 +15,8 @@ How it works:
 - GUIDES holds the lines to sing to. y_for() turns cents into a height on the screen.
 - line keeps the last 280 readings. A None is a gap, where the line breaks.
 - f.frequency_to_note(hz, sa=SA) names the swara you sing, for example "P" or "G".
+  The small bar at the top right shows how loud the microphone hears you, in decibels (loudness()),
+  so you can see it hears you even if your microphone is quiet.
 
 Make it yours:
 - Change SA to "C3" or "A3" to suit your voice. The lines move with it.
@@ -22,7 +24,8 @@ Make it yours:
 - Change the drone for a raga without Pa. Use f.drone(SA, 7, pattern="m S' S' S"), with Ma on the
   first string.
 - Change 0.4 in room(f.drone(...), 0.4) to 0 for a dry drone, or to 0.7 for a big room.
-- Change the pink line's colour and f.stroke_width().
+- Change the pink line's colour and f.stroke_width(). Change the -70 and 50 in loudness() if the
+  bar moves too much or too little.
 """
 # gallery: time-dependent
 import math
@@ -52,6 +55,12 @@ line = []                                  # cents above Sa for each frame, or N
 
 # The lines to sing to: (cents above Sa, swara, colour)
 GUIDES = [(-500, "P,", "#2f6f6a"), (0, "S", "gold"), (700, "P", "#58c4b8"), (1200, "S'", "gold")]
+
+
+def loudness(level):
+    """A number from 0 to 1 for a bar. It uses decibels, so a quiet laptop microphone still moves it:
+    -70 dB (a very quiet room) is 0 and -20 dB (loud) is 1."""
+    return f.constrain((20 * math.log10(level + 1e-9) + 70) / 50, 0, 1)
 
 
 def y_for(cents):
@@ -97,6 +106,15 @@ def draw():
     f.fill("white")
     sung = f.frequency_to_note(hz, sa=SA) if hz else "-"
     f.text(f"Sa is {SA}.   You sing: {sung}", 40, 25)
+
+    # the microphone light: it moves whenever the microphone hears anything
+    f.fill(60, 70, 90)
+    f.rect(500, 18, 120, 10, 5)
+    f.fill("limegreen" if hz else "deepskyblue")
+    f.rect(500, 18, 120 * loudness(mic.level()) + 0.001, 10, 5)
+    f.fill("gray")
+    f.text_size(11)
+    f.text("hearing you", 500, 40)
 
 
 f.run()

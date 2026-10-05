@@ -18,7 +18,8 @@ How it works:
   folds it into one octave with % 12. listen() takes the middle of the last five readings, and
   HOLD steady frames count as an answer.
 - The microphone waits until the notes have finished (f.millis() and quiet_until), so it does not
-  hear the question.
+  hear the question. The small bar at the bottom left shows how loud the microphone hears you, in
+  decibels (loudness()), so you can see it hears you even if it is quiet.
 - f.create_slider() picks the mode. The ladder on the right shows the right answer.
 
 Make it yours:
@@ -26,7 +27,8 @@ Make it yours:
 - Change SA to "C4". Sa moves, and so do both notes.
 - Add notes to STARTS, such as "A3" and "B3", for more starting notes in interval mode.
 - Make it easier: in new_question(), change range(low, low + 12) to range(low, low + 8).
-- Change tempo=90 in play_question() to slow the notes down.
+- Change tempo=90 in play_question() to slow the notes down. Change the -70 and 50 in loudness()
+  if the bar moves too much or too little.
 """
 import math
 
@@ -118,6 +120,12 @@ def answer(steps):
         streak = 0
         message = "not quite. it was " + name_of(question["steps"])
     play_question()
+
+
+def loudness(level):
+    """A number from 0 to 1 for a bar. It uses decibels, so a quiet laptop microphone still moves it:
+    -70 dB (a very quiet room) is 0 and -20 dB (loud) is 1."""
+    return f.constrain((20 * math.log10(level + 1e-9) + 70) / 50, 0, 1)
 
 
 def sung_steps():
@@ -242,6 +250,14 @@ def draw():
         f.text("or sing the second note and hold it" + hearing, 20, 300)
     f.text("space: hear again     enter or n: next question", 20, 322)
     f.text("arrow keys and enter: answer", 20, 342)
+    if mic is not None:                            # the microphone light: it moves for any sound
+        f.no_stroke()
+        f.fill("#27304d")
+        f.rect(100, 366, 120, 10, 5)
+        f.fill("limegreen" if held_note is not None else "deepskyblue")
+        f.rect(100, 366, 120 * loudness(mic.level()) + 0.001, 10, 5)
+        f.fill("#9fb4d8")
+        f.text("hearing you", 20, 363)
 
     # the ladder: one rung for each step above the start
     f.text_align("left", "center")

@@ -54,7 +54,7 @@ LIMIT_INPUT = 1.2              # louder sums are first scaled down to this peak,
 # pitch(): the numbers that decide "no clear pitch" (contract A3).
 PITCH_WINDOW = 2048
 PITCH_MIN_HZ, PITCH_MAX_HZ = 50.0, 2000.0
-PITCH_MIN_RMS = 0.01           # quieter than this (about -40 dB) is "quiet"
+PITCH_MIN_RMS = 0.001          # quieter than this (-60 dB) is "quiet": laptop microphones are very quiet; the clarity check rejects noise
 PITCH_MIN_CLARITY = 0.7        # a repeating wave scores about 1, noise about 0.1
 
 

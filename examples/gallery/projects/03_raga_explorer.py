@@ -18,14 +18,16 @@ How it works:
 - The ladder has a row for each swara. A row is dark if the raga leaves that swara out. The vadi
   and samvadi have a coloured border. The lit row follows tune.current_time().
 - When you sing, mic.pitch() is folded into one octave and smoothed. A row turns red for a swara the
-  raga does not use. On "stop", mic.capture(seconds).swara_histogram(SA) counts the swaras, and
+  raga does not use. While you sing, a small bar at the bottom shows how loud the microphone hears
+  you, in decibels (loudness()), so you can see it hears you. On "stop", mic.capture(seconds).swara_histogram(SA) counts the swaras, and
   f.match_ragas(shares)[:3] gives the closest three ragas. It compares notes only. A raga is also
   its way of moving between them.
 
 Make it yours:
 - Change TEMPO to make the aroha and avaroha slower or faster.
 - Remove the glide. In make_tune(), use tokens = up + ["-"] + down + ["-", "-"].
-- Change GATE if your room is noisy or quiet. A bigger number needs a louder voice.
+- Change GATE if your room is noisy or quiet. A bigger number needs a louder voice. The 0.001 is
+  very quiet (-60 dB), because laptop microphones are. Try 0.005 in a noisy room.
 - Change the ladder colours, such as "#7a4fa0" for the swaras that the raga uses.
 - Change the matches that show. Change [:3] in work_out_the_singing() to [:2] to show two ragas.
 """
@@ -44,7 +46,7 @@ NAMES = f.ragas()
 # the ladder: one row for each swara, S at the bottom
 LEFT, WIDTH = 24, 420
 TOP, ROW = 112, 27
-GATE = 0.01                                # the microphone must be at least this loud to count
+GATE = 0.001                               # the microphone must be at least this loud to count (-60 dB)
 CHARTS = 470                               # where the right-hand panel starts
 
 try:
@@ -122,6 +124,12 @@ def choose(index):
     raga = f.raga(NAMES[index])
     shares, matches, message = [], [], ""
     del trail[:]
+
+
+def loudness(level):
+    """A number from 0 to 1 for a bar. It uses decibels, so a quiet laptop microphone still moves it:
+    -70 dB (a very quiet room) is 0 and -20 dB (loud) is 1."""
+    return f.constrain((20 * math.log10(level + 1e-9) + 70) / 50, 0, 1)
 
 
 def swara_height(hz):
@@ -291,6 +299,13 @@ def draw():
     elif mode == "sing":
         f.fill("hotpink")
         f.text("Listening. Sing the raga, with Sa on D, then press stop.", LEFT, 452)
+        f.fill("#3a2d48")                                  # the microphone light: it moves for any sound
+        f.rect(560, 446, 100, 10, 5)
+        f.fill("limegreen" if trail and trail[-1] is not None else "hotpink")
+        f.rect(560, 446, 100 * loudness(mic.level()) + 0.001, 10, 5)
+        f.fill("#8a7a9a")
+        f.text_size(12)
+        f.text("hearing you", 560, 466)
     elif message:
         f.fill("tomato")
         f.text(message, LEFT, 452)

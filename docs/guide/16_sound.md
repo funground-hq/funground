@@ -298,6 +298,8 @@ fraction of a second that it heard. When it is not listening they give `0`, a li
 Here is a tuner. Sing or hum a note, or play one on an instrument.
 
 ```python
+import math
+
 import funground as f
 
 mic = f.microphone()
@@ -316,7 +318,8 @@ def draw():
     f.text_size(64)
     f.text(f.frequency_to_note(hz) if hz else "-", 150, 90)
     f.fill("deepskyblue")
-    f.rect(20, 160, 260 * min(1, mic.level() * 4), 16)
+    db = 20 * math.log10(mic.level() + 1e-9)                 # decibels: a quiet room is about -65
+    f.rect(20, 160, 260 * f.constrain((db + 70) / 50, 0, 1), 16)
 
 
 f.run()
@@ -325,6 +328,12 @@ f.run()
 `mic.pitch()` is `None` when it is quiet or when there is no clear note, so the sketch above shows a
 dash. `f.microphones()` lists the names of the microphones on your computer. Give part of a name to
 `f.microphone("USB")` to choose one.
+
+Laptop microphones can be very quiet. A voice may read only 0.01 on `mic.level()`, and a quiet room
+0.0005. So the microphone examples measure loudness against the room, in decibels. You can do the
+same in two lines: `db = 20 * math.log10(level + 1e-9)` turns a level into decibels, and
+`above = db - room_db` says how far above the quiet room you are. Measure `room_db` for half a
+second at the start, while nothing is happening.
 
 ### Record, then draw
 
