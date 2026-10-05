@@ -59,7 +59,8 @@ The origin `(0, 0)` is the **top-left** corner. `x` grows to the right and `y` g
 ## More examples
 
 The [Examples Gallery](../gallery/README.md) shows every part of funground with a picture and
-the code that makes it. To browse it in a window, run `python -m funground.gallery`. Click
+the code that makes it. To browse it in a window, run `python -m funground.gallery`
+(the Projects at the top are the best place to start). Click
 a picture to read its code, press **Enter** to run it, and press **C** to copy it into your folder.
 Files an example saves go to a temporary folder. The browser tells you where, and the **O** key opens that folder.
 
