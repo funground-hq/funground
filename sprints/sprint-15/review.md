@@ -41,12 +41,14 @@ marker (`ir.Save.layer_block`), the quiet-microphone thresholds, and the gallery
 | S-121 More projects | Typographic portrait, kinetic type, scratch card, flow-field print; chapter 18 is an index of eight project pages, each with "How it works" | Sonnet sub-agents (three in parallel, numbers pinned per builder) |
 | S-122 The guide, solidified | Learning-path README; See also and Try it in chapters 1–17; errors page (about 40 cases, from real messages); glossary (63 terms) | Sonnet sub-agent |
 | S-123 Developer docs | Architecture for Sprints 11–15 (sound, controls, motion, text in files, layers, gallery package), naming trap, layers rule; Testing and Adding a feature re-checked; design-note index | Sonnet sub-agent |
+| S-125 API reference (added, D-066) | 180 public functions, 14 live values and 17 returned classes (134 methods) have structured docstrings, so `help(f.circle)` is useful; `docs/reference/API.md` generated from them (22 groups, reference tables from the code: colours, blend modes, keys, page sizes, formats, waves, sargam, ragas and talas, fonts, environment variables); 709-test check keeps it complete and current | Sonnet sub-agents (three in parallel) |
+| S-126 Documentation collection (added, D-066) | `docs/README.md` front door; note comparing funground with p5 and DrawBot (facts checked in the corpora and on the web) | Sonnet sub-agents |
 | Voice game setup screen | Room check, live meter with movable lift/full marks, practice bird; 9 new tests | Sonnet sub-agent |
 
 ## Test results
 
 ```
-2561 passed in 470.56s   (Sprint 14 close: 2338)
+3270 passed in 544.86s   (Sprint 14 close: 2338; 709 of the new ones check the API docs)
 ```
 
 The guide test now also checks links on the errors, glossary and project pages, and runs `python` fences
@@ -72,7 +74,8 @@ on project pages.
 
 ## Decisions
 
-None new. Work was under D-065 (maintainer) and D-034 (routine design).
+D-066 (maintainer): API reference from docstrings and a documentation collection in 0.1.
+Otherwise none new. Work was under D-065 (maintainer) and D-034 (routine design).
 Small design choices made under D-034:
 - kinetic type: Enter toggles typing, so G can record;
 - voice setup: Left/Right moves "full height", as keys have no Shift;
@@ -83,6 +86,10 @@ Small design choices made under D-034:
 - **Hide the voice game's sliders during play?** It needs a small library addition: removing or hiding
   controls. Backlog, or 0.1?
 - **Chapter 9 is 750 lines.** Split into shapes and pictures after 0.1?
+- **Comparison note wording:** "a small project with a small team and no wider community yet", and HiDPI
+  verified on Windows only (Semantic Contract C3). Right?
+- **Internal-looking public names** found while documenting (for example `Microphone.close`, `Picture.from_pixels`,
+  `Color.parse`, `Run.apply`): rename to underscores after 0.1, or leave?
 - **Sprint 14 sign-off** is still open (its own questions: more Indic fonts, melody legato).
 
 ## Sign-off

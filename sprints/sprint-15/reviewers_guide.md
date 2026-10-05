@@ -32,6 +32,10 @@ developer docs match the code.
 10. `docs/guide/18_projects.md` and one project page, for example `projects/07_scratch_card.md`.
 11. One chapter's "Try it" section, for example chapter 3 or 10.
 
+12. In Python: `import funground as f` then `help(f.circle)`, `help(f.melody)`, `help(f.layer)`.
+13. `docs/reference/API.md`: skim one group and the reference tables at the end.
+14. `docs/README.md` and `docs/reference/Compared_with_p5_and_DrawBot.md`: is the comparison fair?
+
 ## 3. Optional
 
 - `docs/developer/Architecture.md`: the new subsystem sections and the two invariants.
