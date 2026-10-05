@@ -1,38 +1,39 @@
 """Voice-controlled game
 
-A little bird flies through gates, and your voice is the control. Say "aaah" and the bird goes up.
-The louder you are, the higher it goes. Go quiet and it sinks. Fly through the gap in each gate to
-score. Touch a gate and the game is over. With no microphone, press the space bar to hop the bird up.
+A little bird flies through gates, and your voice is the control. First comes a "set up your voice"
+screen. It measures the quiet of your room, shows a live bar of how loud you are, and lets you move
+two marks on it: where the bird starts to lift, and where it reaches full height. A practice bird on
+the right shows the result, so you can test before you play. Then say "aaah" and the bird goes up.
+The louder you are, the higher it goes. Fly through the gap in each gate to score. Touch a gate and
+the game is over. With no microphone, press the space bar to hop the bird up.
 
 How it works:
-- The game has three states: "ready", "play" and "over". update() moves the game on, and draw()
-  paints it. draw_scene(), draw_gate(), draw_bird() and draw_meter() do the painting.
-- listen() turns the microphone into one number from 0 to 1. Microphones differ a lot: a laptop
-  one can be hundreds of times quieter than a headset. So the game measures loudness in decibels
-  (db()) and compares it with the room. For the first CALIBRATE frames, it listens to the quiet
-  room and keeps the middle reading, the median, as the floor. After that, it smooths mic.level()
-  and measures how many decibels you are above the floor. Eight decibels above is 0, and 33 is 1.
-  f.constrain() keeps the result between 0 and 1.
-- The small "mic" bar shows the raw decibels above the floor, all the time, so you can see the
-  game hears you. The "voice" bar shows what the game uses. Loudness controls the bird, not pitch,
-  because mic.pitch() gives nothing for breath or noise.
-- voice is the larger of listen() and hop. The space bar sets hop to 1, and it fades by 93% each
-  frame.
+- The game has four states: "setup", "ready", "play" and "over". update() moves the game on, and
+  draw() paints it. draw_setup(), draw_scene(), draw_gate(), draw_bird() and draw_meter() do the
+  painting.
+- listen() turns the microphone into one number from 0 to 1. Microphones differ a lot, so the game
+  measures loudness in decibels (db()) and compares it with the room. For the first CALIBRATE frames
+  (a second), it listens to the quiet room and keeps the middle reading, the median, as the floor.
+  After that, it smooths mic.level() and measures how many decibels you are above the floor.
+- settings() gives the two marks, "starts at" and "full at", from the sliders that f.create_slider()
+  made. Below "starts at" the result is 0, and at "full at" it is 1. f.constrain() keeps it between.
+  The arrow keys move the sliders too, and key_pressed() reads them.
+- The setup screen draws a tall bar of your loudness, the two marks, and a practice bird that eases
+  toward the height your voice gives. The small "mic" bar shows the raw decibels in every state.
+  Loudness controls the bird, not pitch, because mic.pitch() gives nothing for breath or noise.
 - The bird eases toward a target height, set by voice. Gates are dictionaries in a list. They slide
-  left, and score goes up when one passes. f.random() picks each gap, and f.random_seed(11) makes
-  the first gates the same every time.
-- hits() finds the nearest point of each gate box to the bird and checks the distance. The sound
-  effects come from f.pluck(), f.note() and f.tone(), and sound.play() plays them.
+  left, and score goes up when one passes. hits() finds the nearest point of each gate box to the
+  bird. The sounds come from f.pluck(), f.note() and f.tone(), and sound.play() plays them.
 
 Make it yours:
 - Change GAP from 150 to 200 for an easier game, or to 120 for a harder one.
+- Change QUIET_DB = 15 and RANGE_DB = 30. They are where the two sliders start, in decibels above
+  the room. A quieter voice needs a smaller QUIET_DB.
 - Change SPACING for gates closer together or further apart. Change the 3 in speed = 3 + ... to
   change the speed.
-- Change QUIET_DB = 15 to 10 if the bird does not hear a soft voice, or to 20 if it jumps at small
-  noises. Change RANGE_DB = 30 to 20 so a quieter voice reaches the top.
-- Change f.random_seed(11) to another number for different gates. Change the colours of the bird,
-  such as f.fill(255, 200, 40) for the body.
-- Change the sounds: try "C6" in sound_point, or 200 in sound_crash.
+- Add a third slider in setup(), for how quickly the bird falls: change the 0.14 in update().
+- Change the colours of the bird, such as f.fill(255, 200, 40) for the body, or the sounds: try
+  "C6" in sound_point.
 """
 import math
 
@@ -45,9 +46,12 @@ BIRD_R = 15
 GATE_W = 64
 GAP = 150                                  # the height of the opening in each gate
 SPACING = 210                              # how far apart the gates are
-CALIBRATE = 30                             # frames spent listening to the quiet room at the start (half a second)
-QUIET_DB = 15                              # decibels above the room that still count as nothing (breath, typing)
-RANGE_DB = 30                              # then this many more decibels take the voice from 0 to 1
+CALIBRATE = 60                             # frames spent listening to the quiet room (a second)
+QUIET_DB = 15                              # where "starts at" begins: decibels above the room that count as nothing
+RANGE_DB = 30                              # then this many more decibels take the voice from 0 to 1 ("full at")
+SCALE_DB = 60                              # the setup meter shows 0 to this many decibels above the room
+METER_TOP, METER_BOTTOM = 84, 340          # where the setup meter is drawn
+BUTTON = (265, 318, 210, 44)               # the "start game" button on the setup screen: x, y, width, height
 LOW, HIGH = 50, GROUND - 28                # the bird stays between these heights
 
 try:
@@ -62,7 +66,11 @@ sound_start = f.pluck("C5", 0.5, volume=0.4)
 sound_point = f.note("G5", 0.18, volume=0.35)
 sound_crash = f.tone(120, 0.45, wave="triangle", volume=0.45, release=0.3)
 
-state = "ready"                            # ready, play or over
+state = "setup"                            # setup, ready, play or over
+start_at = None                            # the slider for where the bird starts to lift (made in setup())
+full_at = None                             # the slider for where it reaches full height
+calibrate_from = 0                         # the frame when the room measuring began
+practice_y = float(HIGH)                   # the practice bird on the setup screen
 bird_y = 200.0
 gates = []
 score = 0
@@ -90,17 +98,68 @@ def reset():
 
 
 def setup():
+    global start_at, full_at
     f.size(W, H)
     f.random_seed(11)
+    start_at = f.create_slider(0, 40, QUIET_DB, step=1, label="starts at (dB)")
+    full_at = f.create_slider(10, 70, QUIET_DB + RANGE_DB, step=1, label="full at (dB)")
     reset()
     if mic:
         mic.start()
 
 
+def settings():
+    """The two marks, in decibels above the room: where the bird starts to lift, and where it is at full height."""
+    low = start_at.value()
+    return low, max(full_at.value(), low + 5)      # full is always a little above start
+
+
+def calibrating():
+    return f.frame_count - calibrate_from < CALIBRATE
+
+
+def measure_room_again():
+    global calibrate_from, quiet
+    calibrate_from = f.frame_count
+    quiet = []
+
+
+def begin():
+    """Leave the setup screen. With no microphone, the space bar that got us here is also the first hop."""
+    global state, hop
+    reset()
+    state = "ready"
+    hop = 1.0 if mic is None else 0.0
+
+
 def key_pressed():
-    global hop
-    if f.key == " ":
+    global hop, state
+    key = f.key.lower() if isinstance(f.key, str) and len(f.key) == 1 else f.key
+    if state == "setup":
+        if key in ("enter", " "):
+            begin()
+        elif key == "r" and mic:
+            measure_room_again()
+        elif key == "up":
+            start_at.value(start_at.value() + 1)
+        elif key == "down":
+            start_at.value(start_at.value() - 1)
+        elif key == "right":
+            full_at.value(full_at.value() + 1)
+        elif key == "left":
+            full_at.value(full_at.value() - 1)
+        return
+    if key == "s" and state in ("ready", "over"):
+        state = "setup"
+        return
+    if key == " ":
         hop = 1.0
+
+
+def mouse_pressed():
+    x, y, w, h = BUTTON
+    if state == "setup" and x <= f.mouse_x <= x + w and y <= f.mouse_y <= y + h:
+        begin()
 
 
 def db(level):
@@ -114,8 +173,8 @@ def listen():
     if mic is None:
         return 0.0
     now = db(mic.level())
-    if f.frame_count < CALIBRATE:          # at the start, just learn the quiet of the room
-        if f.frame_count > 5:              # the first few frames are the microphone waking up
+    if calibrating():                      # at the start, just learn the quiet of the room
+        if f.frame_count - calibrate_from > 5:     # the first few frames are the microphone waking up
             quiet.append(now)
         if quiet:
             floor = max(-80.0, sorted(quiet)[len(quiet) // 2])    # the median: a click does not move it
@@ -123,7 +182,8 @@ def listen():
         return 0.0
     heard += (now - heard) * 0.35          # smooth the jumps
     above = max(0.0, heard - floor)        # decibels louder than the room
-    return f.constrain((above - QUIET_DB) / RANGE_DB, 0, 1)
+    low, high = settings()
+    return f.constrain((above - low) / (high - low), 0, 1)
 
 
 def hits(gate):
@@ -137,13 +197,15 @@ def hits(gate):
 
 
 def update():
-    global state, bird_y, voice, hop, score, best, crashed_at
+    global state, bird_y, voice, hop, score, best, crashed_at, practice_y
     voice = max(listen(), hop)
     hop *= 0.93                            # a space bar press lifts the bird for a moment
     if hop < 0.05:
         hop = 0.0
 
-    if state == "ready":
+    if state == "setup":
+        practice_y += ((HIGH - voice * (HIGH - LOW)) - practice_y) * 0.14
+    elif state == "ready":
         bird_y = 200 + 8 * math.sin(f.frame_count * 0.1)
         if voice > 0.3 or hop > 0.9:
             state = "play"
@@ -245,19 +307,105 @@ def draw_hearing():
     if mic is None:
         f.text("no microphone found: press space", 12, 14)
         return
-    calibrating = f.frame_count < CALIBRATE
+    waiting = calibrating()
     f.text("mic", 12, 14)
     f.fill(0, 0, 0, 50)
     f.rect(38, 8, 80, 12, 6)
-    share = 0.0 if calibrating else f.constrain(above / 40, 0, 1)
-    f.fill("limegreen" if above > QUIET_DB and not calibrating else "gray")
+    share = 0.0 if waiting else f.constrain(above / 40, 0, 1)
+    f.fill("limegreen" if above > settings()[0] and not waiting else "gray")
     f.rect(38, 8, 80 * share + 0.001, 12, 6)
     f.fill(40, 60, 90, 200)
     f.text(mic_name[:40], 12, H - 12)
 
 
+def meter_y(decibels):
+    """The height on the setup meter of a number of decibels above the room."""
+    return METER_BOTTOM - f.constrain(decibels / SCALE_DB, 0, 1) * (METER_BOTTOM - METER_TOP)
+
+
+def draw_setup():
+    """The set up your voice screen: room check, live meter with two marks, a practice bird, and the start button."""
+    draw_scene()
+    f.no_stroke()
+    f.fill(255, 255, 255, 235)
+    f.rect(20, 30, W - 40, 370, 16)
+    f.fill(40, 60, 90)
+    f.text_align("center", "center")
+    f.text_size(26)
+    f.text("Set up your voice", W / 2, 56)
+
+    x, y, w, h = BUTTON
+    f.fill(60, 160, 110)
+    f.rect(x, y, w, h, 12)
+    f.fill("white")
+    f.text_size(18)
+    f.text("start game  (Enter)", x + w / 2, y + h / 2)
+    f.fill(40, 60, 90)
+    if mic is None:
+        f.text_size(17)
+        f.text("no microphone found:", W / 2, 150)
+        f.text("press space to play with the space bar", W / 2, 180)
+        return
+
+    low, high = settings()
+    f.text_size(14)
+    f.text("your voice", 67, 72)
+    f.fill(0, 0, 0, 40)                            # the meter, and how loud you are right now
+    f.rect(50, METER_TOP, 34, METER_BOTTOM - METER_TOP, 6)
+    f.fill("limegreen" if above > low and not calibrating() else "gold")
+    f.rect(50, meter_y(above), 34, METER_BOTTOM - meter_y(above) + 0.001, 6)
+    f.text_align("left", "center")
+    for decibels, name, colour in ((low, "starts to lift", "seagreen"), (high, "full height", "tomato")):
+        f.stroke(colour)
+        f.stroke_width(3)
+        f.line(40, meter_y(decibels), 94, meter_y(decibels))
+        f.no_stroke()
+        f.fill(colour)
+        f.text(f"{name}: {decibels} dB", 100, meter_y(decibels))
+    f.stroke(40, 60, 90)                           # the room: the bottom of the meter
+    f.stroke_width(2)
+    f.line(40, METER_BOTTOM, 94, METER_BOTTOM)
+    f.no_stroke()
+    f.fill(40, 60, 90)
+    f.text(f"the quiet room: {round(floor)} dB", 40, METER_BOTTOM + 22)
+
+    f.text_size(15)
+    if calibrating():
+        left = CALIBRATE - (f.frame_count - calibrate_from)
+        f.fill(200, 90, 40)
+        f.text("Stay quiet... measuring the room", 265, 100)
+        f.fill(0, 0, 0, 40)
+        f.rect(265, 118, 210, 10, 5)
+        f.fill(200, 90, 40)
+        f.rect(265, 118, 210 * (1 - left / CALIBRATE) + 0.001, 10, 5)
+    else:
+        f.text("Say aaah softly, then loudly.", 265, 100)
+        f.text("Adjust until soft lifts a little", 265, 120)
+        f.text("and loud reaches the top.", 265, 140)
+    f.fill(40, 60, 90)
+    f.text_size(14)
+    f.text(f"Up / Down: starts at  ({low} dB)", 265, 190)
+    f.text(f"Left / Right: full at  ({high} dB)", 265, 212)
+    f.text("or use the two sliders below the game", 265, 234)
+    f.text("R: measure the room again", 265, 268)
+
+    f.fill(0, 0, 0, 40)                            # the practice bird
+    f.rect(515, 34, 80, HIGH - LOW + 30, 14)
+    f.fill(255, 200, 40)
+    f.circle(555, practice_y, 28)
+    f.fill("black")
+    f.circle(561, practice_y - 4, 5)
+    f.fill(40, 60, 90)
+    f.text_align("center", "center")
+    f.text("try it", 555, HIGH + 30)
+
+
 def draw():
     update()
+    if state == "setup":
+        draw_setup()
+        draw_hearing()
+        return
     draw_scene()
     for gate in gates:
         draw_gate(gate)
@@ -278,20 +426,24 @@ def draw():
     f.text_align("center", "center")
     f.text_size(20)
     if state == "ready":
-        f.rect(165, 120, 350, 70, 14)
+        f.rect(165, 120, 350, 86, 14)
         f.fill(40, 60, 90)
-        if mic and f.frame_count < CALIBRATE:
+        if mic and calibrating():
             f.text("listening... stay quiet a moment", 340, 155)
         else:
             f.text("Say aaah to fly: louder is higher", 340, 145)
             f.text_size(15)
             f.text("or press the space bar" + ("" if mic else "  (no microphone found)"), 340, 172)
+        f.text_size(13)
+        f.text("S: voice settings", 340, 194)
     elif state == "over":
-        f.rect(165, 120, 350, 70, 14)
+        f.rect(165, 120, 350, 86, 14)
         f.fill(40, 60, 90)
         f.text(f"Oh no! Score {score}", 340, 145)
         f.text_size(15)
         f.text("Make a sound or press space to fly again", 340, 172)
+        f.text_size(13)
+        f.text("S: voice settings", 340, 194)
 
 
 f.run()
