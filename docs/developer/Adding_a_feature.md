@@ -37,9 +37,13 @@ decision (for example "S-092, D-041"). Tests and code follow the row, never the 
   decision (step 0). Add it to `ALLOWED` in `tests/test_boundaries.py` in the same change.
 - Add a `Sketch` method that checks arguments, applies modes, and records ops. Errors are plain
   English and name the function and what to do instead.
-- Add the facade function in `funground/api.py`. It is a thin wrapper that calls
-  `active_sketch()`. Give it a docstring and full type hints, because the contract test compares
-  the signature text.
+- Add the facade function in `funground/api.py`. It is a thin wrapper. Give it a docstring and full
+  type hints, because the contract test compares the signature text. **Pick the accessor on
+  purpose** (the layers rule in Architecture, "Key invariants"): a function that draws calls
+  `active_sketch()`, so it lands in an open `with f.layer(...)` block. Every other function (size,
+  save, input, time, randomness, loop control) calls `canvas_sketch()`.
+- **Name the module carefully.** A new submodule must not share a name with a public function (the
+  naming trap in Architecture). Check the name against `__all__` first.
 
 ## 3. Make the name public
 
@@ -59,7 +63,25 @@ SVG result if the row says something about it. Use the fixtures described in
 ## 5. A gallery example
 
 Write `examples/gallery/<area>/NN_name.py`. It is an ordinary complete sketch. Its docstring is the
-gallery text: the first line is the title, the rest is the description, in plain English.
+gallery text, and it follows a standard that `tests/test_example_docs.py` enforces for **every**
+example (S-120, D-065):
+
+```text
+Title line
+
+What you see: one short paragraph.
+
+How it works:
+- 3 to 6 bullets: the idea, and the funground functions that do it.
+
+Make it yours:
+- 3 to 5 bullets: ideas to extend it, easiest first.
+```
+
+A bullet may carry on over the next lines, indented. Every `f.<name>` in the docstring must be a real
+name in `funground.__all__`, and every `sound.<name>`, `picture.<name>`, `path.<name>` or
+`microphone.<name>` must be a real method of that kind of object. Write it in plain English. The
+gallery browser and `docs/gallery/README.md` show these parts, so a missing part fails the test.
 
 **It must be original, and it is published as CC0** (D-026).
 Never copy or translate an example, in whole or in part, from p5.js, Processing, DrawBot, py5, a
@@ -84,16 +106,27 @@ Then:
    .venv/Scripts/python tools/check_originality.py --corpus <corpus-folder> examples/gallery/<area>/NN_name.py
    ```
 
-   The tool compares your code against corpora of well-known creative-coding collections. A
-   corpus folder is a local checkout; `--fetch DIR` clones the pinned corpora into `DIR`. Exit code
-   0 means nothing was flagged, 1 means something was. With no paths it checks all example code.
+   The tool compares your code against corpora of well-known creative-coding collections.
+   `--corpus` names a local folder of corpus files (give it more than once for more folders).
+   `--fetch DIR` clones the pinned corpora into `DIR` and exits; it needs the network. The
+   maintainer's copy is outside the repository, in `C:\Projects\funground-corpora`.
+   `--report FILE` writes the result table as Markdown. Exit code 0 means nothing was flagged, 1 means
+   something was. With no paths it checks all example code.
    Record the result in [docs/qa/Example_Provenance.md](../qa/Example_Provenance.md). The tool
    cannot see books or videos, and it finds copied expression, not a similar idea.
-3. If the example is time-dependent, add the line `# gallery: time-dependent`. It is then
-   smoke-tested only.
-4. A new area folder must be added to `AREAS` in `tools/make_gallery.py`, or it is listed last.
-5. If the feature needs a data file, put it beside the example (for example `data/`). A relative
+3. If the example is time-dependent (it uses the clock, the microphone or anything else that varies
+   from run to run), add the line `# gallery: time-dependent`. It is then smoke-tested only: no
+   golden, no snapshot, and `make_gallery.py` keeps its committed picture unless you pass `--force`.
+4. A new area folder must be added to `AREAS` in `funground/gallery.py`, or it is listed last. That
+   is the one list: the browser and `tools/make_gallery.py` both read it.
+5. A script example (no `draw()`, ends in `f.show()`) is pictured with its layers composited, as
+   `f.show()` and a save would show it. You do nothing for this, but do not expect the golden to be the
+   bare canvas.
+6. If the feature needs a data file, put it beside the example (for example `data/`). A relative
    path is found next to the sketch file first.
+
+If the example listens to a microphone, read the quiet-microphone rule in
+[Testing.md](Testing.md) too: it must work when the room is very quiet.
 
 `tests/test_gallery.py` also demands that every public name is used (`f.<name>`) by some gallery
 example. `NOT_YET_IN_GALLERY` may only shrink.
@@ -105,12 +138,16 @@ example. `NOT_YET_IN_GALLERY` may only shrink.
 ```
 
 This renders every example headless and writes `docs/gallery/images/<area>-<name>.png` and the
-index `docs/gallery/README.md` from the examples' docstrings. `--index` rewrites the index only.
-`--force` also re-renders time-dependent pictures. `test_index_is_up_to_date` and
+index `docs/gallery/README.md` from the examples' docstrings. **Run it without `--force`.** A
+time-dependent example already has a committed picture, and the tool keeps it (it prints
+"time-dependent, kept"), so the run changes only the pictures that are new. `--force` re-renders the
+time-dependent pictures too. Use it only when you mean to change one, and say so in your report.
+`--index` rewrites the index only. `test_index_is_up_to_date` and
 `test_every_example_has_a_gallery_image` fail until you have run it. The tool never draws by hand,
 so a picture cannot drift from its code.
 
-You can look at the result with the browser: `python -m funground.gallery`.
+The tool imports `AREAS` and the other helpers from `funground/gallery.py`. You can look at the
+result with the browser: `python -m funground.gallery` (`--list` prints the examples with no window).
 
 ## 7. A guide section
 
@@ -157,9 +194,25 @@ it is allowed. Copying code or example text is not. Name the page or the source 
 A story that adds a subsystem, a new dependency or a non-obvious mechanism gets a design note
 `docs/design/<Topic>_Note.md`: problem, design, rejected alternatives, invariants, limits, and where
 the tests are. Update [Architecture.md](Architecture.md) in the same change if a layer, a boundary
-or an invariant moved.
+or an invariant moved, and add the note to the index in [docs/design/README.md](../design/README.md).
 
-## 12. The review checklist
+## 12. Parallel builders
+
+When several builders work at the same time:
+
+- **The brief names each builder's files and example numbers.** In Sprint 14 every builder created
+  the `music/` area and numbered its examples from 01, so the review had to renumber them. Say, for
+  example, "builder A: `music/01` to `music/03`; builder B: `music/04` to `music/06`".
+- **Builders in the same folder never overlap on files.** Work that might overlap goes to a worktree.
+- **Scratch scripts get unique names**, so a builder never runs another's stale helper.
+- **Shared files are merged by the main session**: `funground/__init__.py` (`__all__`),
+  `funground/api.py`, `tests/test_api_contract.py`, the Quick Reference, the CHANGELOG and `AREAS`.
+  To merge a worktree, take its new files as they are and merge the shared files by hand. Then run
+  the gallery tests twice and `tools/make_gallery.py`. A golden written in a worktree is new evidence:
+  look at it, and check it was written on Windows.
+- **Stage named files only** when committing, never a whole folder another builder is writing in.
+
+## 13. The review checklist
 
 The main session reviews every diff, reruns the suite and commits. Use this list before you hand
 over, and expect it afterwards.
@@ -171,9 +224,13 @@ over, and expect it afterwards.
 - [ ] Backend imports are only in their provider; `tests/test_boundaries.py` passes.
 - [ ] `__all__` and `tests/test_api_contract.py` agree.
 - [ ] Unit tests cover each clause of the contract row, including errors.
-- [ ] The gallery example is original, CC0, and has a golden and a snapshot. The originality check
+- [ ] The gallery example is original, CC0, and has a golden and a snapshot. Its docstring follows
+  the standard (`tests/test_example_docs.py`). The originality check
   was run, and the result is in `docs/qa/Example_Provenance.md`.
-- [ ] `tools/make_gallery.py` was run; the images and the index are current.
+- [ ] `tools/make_gallery.py` was run without `--force`; the images and the index are current, and
+  no existing time-dependent picture changed unless that was the point.
+- [ ] A new drawing function uses `active_sketch()`; any other new function uses `canvas_sketch()`.
+- [ ] A new module's name is not a public function's name.
 - [ ] The guide section's code blocks run; the Quick Reference row exists; the CHANGELOG line exists.
 - [ ] p5 or DrawBot names are cited with where they were checked.
 - [ ] Learner-facing text is plain English with British spelling in prose and American spelling in

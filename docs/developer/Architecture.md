@@ -1,6 +1,6 @@
 # Architecture
 
-How funground is built, as the code stands through Sprint 10. This page is kept true to the code
+How funground is built, as the code stands after Sprint 15. This page is kept true to the code
 in the same change as the code (see [PROCESS](../PROCESS.md), "Sprint lifecycle"). If this page and
 the source disagree, the source and the tests win.
 
@@ -18,8 +18,8 @@ draw-op IR is the contract. Cairo draws. pygame-ce runs the window. Learners nev
         |
         v
  +------------------+   funground/__init__.py   the public names, __all__, live values
- |  public facade   |   funground/api.py        one function per name; talks to the active Sketch
- +--------+---------+
+ |  public facade   |   funground/api.py        one function per name; drawing talks to active_sketch(),
+ +--------+---------+                           everything else to canvas_sketch() (section 5)
           |
           v
  +------------------+   funground/sketch.py     lifecycle, live values, validation,
@@ -34,26 +34,37 @@ draw-op IR is the contract. Cairo draws. pygame-ce runs the window. Learners nev
       |        |
       v        v
  +---------+  +-----------------+
- | Cairo   |  | export/         |   PNG / PDF / SVG, replaying the same ops
- | Renderer|  | (cairo, pypdf)  |
- +----+----+  +--------+--------+
+ | Cairo   |  | export/         |   PNG / PDF / SVG, replaying the same ops;
+ | Renderer|  | (cairo, pypdf)  |   real text and real layers in the files;
+ +----+----+  +--------+--------+   GIF and MP4 (motion.py)
       |                |
       v                v
   BGRA pixels       a file on disk
       |
       v
- +------------------+   funground/platform/     pygame-ce window, input, timing, present;
- |    platform      |                           or the headless platform (no window)
- +------------------+
+ +------------------+   funground/platform/     pygame-ce window, input, timing, present, the
+ |    platform      |                           controls panel below the canvas; or the headless
+ +------------------+                           platform (no window)
       |
       v
    the window
+
+ Beside the ops pipeline, not part of it:
+
+ +------------------+   sound.py, synth.py, analysis.py, hindustani.py, microphone_input.py,
+ |  sound and music |   sound_views.py: Sound objects, microphones, ragas. They play, listen and
+ +------------------+   analyse. They add nothing to the IR. The drawing views (sound_views.py)
+                        draw with ordinary drawing calls.
+ +------------------+   funground/gallery.py    the Examples Gallery browser (a funground sketch)
+ |  gallery package |   funground/examples/     the examples, mapped into the package at build time
+ +------------------+
 ```
 
 Read it top to bottom for one drawing call:
 
 1. The learner calls `f.circle(...)`. `__init__.py` re-exports the function from `api.py`.
-2. `api.py` forwards it to the active `Sketch` (`active_sketch()`).
+2. `api.py` forwards it to the active `Sketch` (`active_sketch()`: the canvas's own sketch, or the
+   open layer's sketch inside `with f.layer(...)`).
 3. The `Sketch` checks the arguments, applies the drawing modes, takes the current
    `GraphicsState` and appends an `ir.Circle` op to `self.frame`. Nothing is drawn yet.
 4. At the end of `draw()` the `Sketch` hands the whole `Frame` to its renderer
@@ -67,7 +78,7 @@ Read it top to bottom for one drawing call:
 | Module | What it does |
 |---|---|
 | `funground/__init__.py` | The public names and `__all__`. A module `__getattr__` serves the live values (`f.width`, `f.mouse_x` and so on) so they are never stale copies. |
-| `funground/api.py` | The facade. One thin function per public name, forwarding to the active `Sketch`. Holds `active_sketch()`, `use_sketch()` (for tests), the exit hint for a forgotten `f.run()`, and `LIVE_NAMES`. Imports no backend. |
+| `funground/api.py` | The facade. One thin function per public name. Holds `canvas_sketch()` and `active_sketch()` (the layers rule, section 5), `use_sketch()` (for tests), the exit hint for a forgotten `f.run()`, and `LIVE_NAMES`. Imports no backend. The sound, music and drawing-sound modules are imported lazily inside the functions that need them. |
 | `funground/sketch.py` | The `Sketch` class. It owns the platform, the renderer, the `StateStack`, the `Frame`, the random generators, loop control, pages and saving. `run_namespace()` is the callback loop. Choosing the platform and renderer happens here (`default_platform()`, `default_renderer()`). |
 | `funground/state.py` | `GraphicsState` (frozen: fill, stroke, widths, text settings, blend mode, modes and so on) and `StateStack` (`save`, `restore`, `unwind`). |
 | `funground/ir.py` | The op dataclasses (`Circle`, `Rect`, `Text`, `FillPath`, `Image`, `Pixels` and the rest), `Frame`, and JSON conversion (`to_jsonable`, `from_jsonable`). |
@@ -76,10 +87,23 @@ Read it top to bottom for one drawing call:
 | `funground/platform/base.py` | The `Platform` protocol and the small data types (`InputEvent`, `InputState`, `Pixels`). |
 | `funground/platform/pygame_platform.py` | `PygamePlatform`: window, events, mouse and keys, frame pacing, HiDPI detection, cursors. |
 | `funground/platform/headless.py` | `HeadlessPlatform`: no window, no waiting, input always idle. Chosen by `FUNGROUND_HEADLESS=1`. Used by the tests and by the gallery tools. |
-| `funground/export/__init__.py` | `save_pixels`, `save_frame`, `save_document`, `save_picture`. Replays ops onto Cairo PDF and SVG surfaces. |
+| `funground/export/__init__.py` | `save_pixels`, `save_frame`, `save_document`, `save_picture`. Replays ops onto Cairo PDF and SVG surfaces, then hands the file to `pdf_text.py`, `svg_text.py` and `layers.py`. |
+| `funground/export/pdf_text.py` | Real, searchable text in PDFs (T15, D-043). Swaps marker groups for text with an embedded font subset, using pypdf. Also holds the marker geometry that `svg_text.py` and `layers.py` share. |
+| `funground/export/svg_text.py` | Live, editable `<text>` in SVG files (T19, D-059). |
+| `funground/export/layers.py` | Named layers in PDF (optional content groups) and SVG (Inkscape layer groups) (F16, D-053). |
+| `funground/export/motion.py` | GIF and MP4 files (M1, D-048): Pillow for a GIF when installed, else ffmpeg; MP4 always through ffmpeg (D-045). The only module that finds or runs ffmpeg. |
+| `funground/controls.py` | Sliders, checkboxes and buttons and their panel (U1, D-047). Plain Python; no pygame. |
+| `funground/sound.py` | `Sound` objects: playback on a clock, level, spectrum, pitch, rhythm and harmony methods. The only user of `pygame.mixer`. |
+| `funground/synth.py` | Sound from numbers (A3, A9): waves, envelopes, notes, plucks, melodies. Plain Python, no device. |
+| `funground/analysis.py` | Onsets, tempo, beats, chroma, chords, key (A5, A6). Plain Python. |
+| `funground/hindustani.py`, `funground/data/ragas.json` | Ragas and talas: drone, tala, tonic, swara histogram, raga matching (A8). The table names its sources. |
+| `funground/microphone_input.py` | `Microphone` (A4, D-058). Uses pygame's experimental `pygame._sdl2.audio`, in three small functions. |
+| `funground/sound_views.py` | Ready-made drawings of a sound or microphone: wave, spectrum, spectrogram, pitch line (A7). |
+| `funground/gallery.py` | The Examples Gallery browser, `python -m funground.gallery`. Holds `AREAS`, the locator and the explanation reader. |
+| `funground/fonts/` | The bundled fonts: DejaVu Sans, and the Noto fallback fonts (emoji, symbols, Devanagari). |
 | `funground/capabilities.py` | `Capability`, `FungroundError`, `FungroundWarning`, `missing_capability()`. |
 
-The `Sketch` is big (about 1800 lines) on purpose: it is the one place that turns a learner's call
+The `Sketch` is big (over 2000 lines) on purpose: it is the one place that turns a learner's call
 into ops. Helpers with no state live in their own modules (see section 4).
 
 ### Choosing a renderer and platform
@@ -141,14 +165,17 @@ every file in `funground/`. Its `ALLOWED` table is the truth:
 
 | Library | May be imported by | Why there |
 |---|---|---|
-| pygame-ce (`pygame`) | `funground/platform/`, `funground/imaging.py` | pygame-ce is the window, input and timing layer, and it decodes image files. It draws nothing (D-008, a test checks for `pygame.draw` and `pygame.font`). `imaging.py` reads image files with it so that no second image library is needed (ADR-004, D-028). |
+| pygame-ce (`pygame`), window and images | `funground/platform/`, `funground/imaging.py` | pygame-ce is the window, input and timing layer, and it decodes image files. It draws nothing (D-008, a test checks for `pygame.draw` and `pygame.font`). `imaging.py` reads image files with it so that no second image library is needed (ADR-004, D-028). |
+| pygame-ce audio (`pygame.mixer`, `pygame._sdl2.audio`) | `funground/sound.py`, `funground/microphone_input.py` | Sound playback and microphone input (D-046, D-058). One file for each. `microphone_input.py` uses pygame-ce's experimental module, kept in three small functions so a change is easy to follow. |
 | Cairo (`cairo`, pycairo) | `funground/renderers/`, `funground/export/` | Cairo is the renderer and the PDF and SVG writer. Keeping it in two folders means one place to change if the renderer changes (ADR-001, ADR-002, D-011). |
-| pypdf | `funground/export/` | To rewrite Cairo's PDF so that text is real, searchable text (D-043; S-094). It belongs with the other file-writing code. |
+| pypdf | `funground/export/` | To rewrite Cairo's PDF so that text is real, searchable text and layers are real layers (D-043, D-053). It belongs with the other file-writing code. |
+| imageio-ffmpeg (`imageio_ffmpeg`) | `funground/export/` | The optional `funground[video]` extra: an ffmpeg program for MP4 export, found by `find_ffmpeg()` in `export/motion.py` (D-045). |
 | skia-pathops (`pathops`) | `funground/pathops.py` | Path booleans and stroke expansion. One module converts between funground's `Path` and Skia's, so the rest of the code never sees Skia (ADR-005, D-037). |
 | svgelements | `funground/svg.py` | Reads SVG files and gives back funground geometry (D-041). |
 
-Other backend names are reserved in the test (`skia`, `blend2d`, `moderngl`, `OpenGL`) so that a
-future provider has to be added to `ALLOWED` on purpose. `renderers/` is already allowed `skia`,
+`BACKENDS` in the test lists `pygame`, `cairo`, `skia`, `blend2d`, `moderngl`, `OpenGL`, `pathops`,
+`svgelements`, `pypdf` and `imageio_ffmpeg`. The names nobody uses yet (`skia`, `blend2d`, `moderngl`,
+`OpenGL`) are reserved, so that a future provider has to be added to `ALLOWED` on purpose. `renderers/` is already allowed `skia`,
 `blend2d` and `pygame` for that reason.
 
 A second test, `test_public_facade_imports_no_backend`, checks that `api.py`, `__init__.py`,
@@ -156,7 +183,9 @@ A second test, `test_public_facade_imports_no_backend`, checks that `api.py`, `_
 
 Not every third-party library is a backend. `fontTools` and `uharfbuzz` (shaping and outlines in
 `typography.py`) are not in the table, because they produce plain funground geometry, not drawing.
-Pillow is optional and only `imaging.py` reaches for it.
+Pillow is optional. `imaging.py` reaches for it for rarer filters, and `export/motion.py` for GIFs;
+each imports it inside one small function and falls back when it is missing. The plain-Python modules
+(`synth.py`, `analysis.py`, `hindustani.py`, `controls.py`) import no backend at all.
 
 **To add a provider**, add its directory or file to `ALLOWED` in the same change. A new runtime
 dependency is a decision for the maintainer (D-034) and needs a decision-log row and, if it is
@@ -171,7 +200,12 @@ Where to read the reasons:
 - [ADR-003](../design/ADR-003-out-of-scope.md): what funground deliberately does not do.
 - [ADR-004](../design/ADR-004-image-provider.md): pygame-ce reads images; Pillow is optional.
 - [ADR-005](../design/ADR-005-path-operations.md): skia-pathops for path booleans.
-- [Decision_Log.md](../design/Decision_Log.md): D-008, D-011, D-028, D-037, D-041, D-043.
+- [ADR-006](../design/ADR-006-simple-tones.md): simple tones and notes, without a synthesis engine.
+- [Decision_Log.md](../design/Decision_Log.md): D-008, D-011, D-028, D-037, D-041, D-043, D-045,
+  D-046, D-058.
+
+Every design note and ADR is indexed, with when to read it, in
+[docs/design/README.md](../design/README.md).
 
 ## 4. Subsystems
 
@@ -182,18 +216,22 @@ Each subsystem is small. Some have a design note in `docs/design/`.
 Text is turned into glyph outlines. `uharfbuzz` shapes the text. `fontTools` reads the outlines.
 Each glyph becomes a cached `Path`. `CairoRenderer` does this when it meets an `ir.Text` op
 (`_text_ops`), so every platform draws the same letters. The bundled font is DejaVu Sans in
-`funground/fonts/`. `typography.py` also holds `load_font`, font variations and OpenType features,
+`funground/fonts/`, with Noto Emoji, Noto Sans Symbols 2 and Noto Sans Devanagari beside it as
+fallbacks for letters DejaVu lacks (T18, D-052). `load_font` also reads a font collection
+(`.ttc` or `.otc`): each face in it is its own font, keyed `name.ttc`, `name.ttc#1` and so on
+(S-119). `typography.py` also holds `load_font`, font variations and OpenType features,
 wrapping (`wrap_lines`) and measuring (`text_width`, `text_metrics`).
 
 `formatted.py` holds `FormattedString`: a list of runs, each with its own settings. It holds the
 data and the line breaking. The `Sketch` does the measuring and drawing (`_fs_*` methods).
 
 Notes: [Text_Subsystem_Note.md](../design/Text_Subsystem_Note.md) and
-[Typography_Note.md](../design/Typography_Note.md). Contract rows T1 to T15.
+[Typography_Note.md](../design/Typography_Note.md). Contract rows T1 to T19.
 
 PDF text (T15, D-043, S-094): every PDF carries real text. The renderer draws each text run as a
 marker group; `export/pdf_text.py` swaps the markers for text with an embedded font subset after
-Cairo has written the file. See [PDF_Text_Note.md](../design/PDF_Text_Note.md). SVG keeps outlines.
+Cairo has written the file. See [PDF_Text_Note.md](../design/PDF_Text_Note.md). SVG text is in
+"Text in files" below.
 
 ### Colour and paint: `color.py` and `paint.py`
 
@@ -240,7 +278,7 @@ Layers (F16, D-053, S-095 and S-096): `f.layer(name)` is a canvas-sized picture,
 canvas as an `ir.Image` tagged with its name, never stored in the frame. In a PDF or SVG the
 renderer draws each layer as a marker group; `export/layers.py` turns it into an optional content
 group (PDF) or an Inkscape layer group (SVG) after Cairo has written the file. Note:
-[Layers_Note.md](../design/Layers_Note.md).
+[Layers_Note.md](../design/Layers_Note.md). The "Layers" subsystem below has the rest.
 
 ### Pages: `pages.py`
 
@@ -271,6 +309,111 @@ LGPL-2.1 (the funground licence is the same family), credited in the file header
 [THIRD_PARTY_LICENSES.md](../../THIRD_PARTY_LICENSES.md). It is the one place where code from
 another project is in the package. Do not copy more. See the "Examples are original" rule in
 [PROCESS](../PROCESS.md).
+
+### Sound and music: `sound.py`, `synth.py`, `analysis.py`, `hindustani.py`, `microphone_input.py`
+
+Sound is a subsystem beside the drawing pipeline. It adds nothing to the IR.
+
+- `synth.py` makes lists of samples (numbers from -1 to 1 at 44 100 a second) from maths: waves built
+  from harmonics so they do not alias, envelopes, notes, plucks, melodies and sargam strings. No
+  device and no pygame. `hindustani.py` does the same for ragas and talas, from the table in
+  `data/ragas.json`.
+- `sound.py` turns samples into a `Sound`. A sound keeps its own state (playing, paused, stopped,
+  position) on a clock, not on the audio device, so `is_playing()`, the position and the analysis
+  behave the same with or without a device (A2). With `FUNGROUND_HEADLESS=1` it is silent but in time.
+  The base class `_Analysis` (level, spectrum, pitch) is shared with the microphone.
+- `analysis.py` is the rhythm and harmony code (onsets, tempo, beats, chroma, chords, key). It first
+  lowers the sample rate to about 11 025 a second, because a pure-Python FFT is slow. `Sound` gets
+  the methods that call it.
+- `microphone_input.py` listens on SDL's audio thread into a ring buffer of the last 10 seconds. A lock
+  guards the buffer. The microphone is never played back. A quiet laptop microphone is a design case:
+  `pitch()` hears down to -60 dB, and the microphone examples measure dB above the room.
+- `sound_views.py` draws a sound or microphone (wave, spectrum, spectrogram, pitch line) with ordinary
+  drawing calls on the sketch it is given, so the views work in layers, pictures, PDF and SVG. Only
+  the spectrogram is made of pixels.
+- `api.py` imports these modules inside the functions that use them, so `import funground` stays
+  fast and a learner who never makes a sound never loads them. Mind the naming trap in section 5.
+
+Notes: [Sound_Making_Note.md](../design/Sound_Making_Note.md) (making sound, quality, the
+microphone, drawing sound), [Music_Analysis_Note.md](../design/Music_Analysis_Note.md),
+[Ragas_Note.md](../design/Ragas_Note.md) (sources, methods and limits),
+[Music_Research_Note.md](../design/Music_Research_Note.md) (the options that were weighed) and
+[ADR-006](../design/ADR-006-simple-tones.md). Contract rows A1 to A9. Decisions D-046, D-055 to D-058,
+D-061, D-062 and D-064.
+
+### Controls: `controls.py` and the platform panel
+
+`f.create_slider()`, `f.create_checkbox()` and `f.create_button()` return control objects. The sketch
+owns a `ControlPanel` that lays them out and applies the mouse rules (press, drag, release) in panel
+coordinates. `panel_ops()` turns the panel into draw ops for a renderer of its own.
+
+The panel is **chrome**: it sits below the canvas, its ops never join the canvas's frame, and so it is
+never in `width` or `height`, saves, `get()`, pixels or IR snapshots (U1). `Platform.set_controls()`
+and `present_panel()` carry it. A platform with a window makes the window taller by the panel's height
+and routes the mouse to it. The headless platform returns False and the controls simply keep their
+values. `controls.py` never imports pygame. Decision D-047.
+
+### Motion export: `export/motion.py`
+
+`f.save_frames()`, `f.save_gif()`, `f.save_movie()` and `f.frame_duration()` (M1, D-048) collect frames
+as plain RGB bytes at the canvas's logical size. A GIF is written by Pillow when it is installed, else
+by ffmpeg. An MP4 is always written by ffmpeg, fed raw frames through a pipe. `find_ffmpeg()` is the one
+place that looks for ffmpeg. With none found, the error says how to get one (the `funground[video]`
+extra, D-045).
+
+### Text in files: `export/pdf_text.py` and `export/svg_text.py`
+
+funground draws text as outlines, but a file made for editing needs real text. Both exporters use the
+same trick, because Cairo knows nothing about the text it drew as paths:
+
+1. While drawing, the renderer is given a collector. For each text run it asks for a **marker**: a
+   large four-cornered shape that is drawn as a clipped group, so Cairo writes the group on its own.
+2. After Cairo finishes the file, the collector finds each marker in the output and replaces it.
+   `pdf_text.py` puts in PDF text with an embedded font subset (using pypdf). `svg_text.py` puts in a
+   `<text>` element that names the font by family, plus an embedded subset as `@font-face` for
+   browsers.
+
+The marker geometry (`marker_corners`, `marker_number`, `marker_map`) lives in `pdf_text.py` and is
+shared with `layers.py`. Notes: [PDF_Text_Note.md](../design/PDF_Text_Note.md) and
+[Text_In_Files_Note.md](../design/Text_In_Files_Note.md). Contract rows T15 and T19.
+Decisions D-043, D-059 and D-060.
+
+### Layers: `Sketch.layer` and `export/layers.py`
+
+`f.layer(name)` returns a canvas-sized `Picture`, made on first use and kept in `Sketch._layers`.
+`with f.layer("sky"):` sets `Sketch._layer_open`, so `active_sketch()` hands the drawing functions the
+layer's own sketch (see "The layers rule" in section 5). Layers do not nest. The visible layers are put
+over the canvas in the order they were first made, by `Sketch._with_layers()`. `_view_pixels()` is the
+canvas with its layers composited. That is what `f.show()`, PNG saves and `get()` see.
+
+The block's own `push()` is marked in the op stream (`ir.Save(layer_block=True)`), so a picture's
+history can tell it from a learner's. A background or clear inside a layer block keeps the layer
+vector in PDF and SVG.
+
+In a PDF or SVG the renderer draws each layer as a marker group (the same trick as text), and
+`export/layers.py` turns it into an optional content group (PDF) or an Inkscape layer group (SVG).
+A hidden layer is in the file, switched off. Note: [Layers_Note.md](../design/Layers_Note.md).
+Contract row F16. Decision D-053.
+
+### The gallery in the package: `gallery.py`
+
+The gallery browser is a funground sketch (`python -m funground.gallery`), and the examples travel with
+the install (S-103, D-049, contract R18). The repository keeps examples in `examples/gallery/` and
+pictures in `docs/gallery/images/`. `pyproject.toml` maps them into the wheel without moving them:
+
+```toml
+[tool.setuptools.package-dir]
+"funground.examples" = "examples/gallery"
+"funground.gallery_images" = "docs/gallery/images"
+```
+
+Both are also in `packages`, and `package-data` globs pick up `*/*.py`, `*/data/*`, `*/fonts/*` and
+`*.png`. `funground/gallery.py` holds `AREAS` (the one list of area folders, their order and titles),
+the locator that finds the examples in a checkout or in an installed layout (`locate`, `Locations`),
+`explanation()` (reads the "How it works" and "Make it yours" parts of an example's docstring) and
+`copy_example`, which never overwrites a file. `tools/make_gallery.py` and the tests import from it, so
+there is one source of truth. The examples' CC0 licence (`examples/LICENSE`) travels in the wheel with
+the other licences. `tests/test_gallery_package.py` builds a wheel to prove all of this.
 
 ### Capabilities: `capabilities.py`
 
@@ -329,6 +472,31 @@ differs from the two lists plus the live values.
 
 `src_v0.5/` is the pristine v0.5 baseline. Never edit it.
 
+### The naming trap: a submodule must never share a public function's name
+
+`funground/__init__.py` has `f.<name>` for every public function. Suppose a submodule has the same
+name as a public function. When something imports the submodule lazily (`from . import ragas` inside a
+function), Python sets `funground.ragas` to the **module**. That replaces the function `f.ragas`, and
+the learner's next `f.ragas()` fails with "module is not callable". This happened twice in Sprint 14,
+with `ragas` and `microphone`. The modules were renamed `hindustani.py` and `microphone_input.py`.
+
+Before you add a module, check its name against `__all__`. `sound.py` is safe only because there is no
+public function `f.sound`. When in doubt, give the file a longer name.
+
+### The layers rule: drawing uses `active_sketch()`, everything else `canvas_sketch()`
+
+Inside `with f.layer(...)` the drawing must go to the layer, but `f.width`, `f.mouse_x`, `f.random()`,
+`f.save()`, `f.size()`, loop control and time must keep their canvas meaning. So `api.py` has two
+accessors:
+
+- `active_sketch()`: the open layer's sketch inside a layer block, otherwise the canvas's. **Drawing
+  functions use it** (shapes, colour and style, transforms, text, images, `push` and `pop`).
+- `canvas_sketch()`: always the canvas's own sketch. **Every other function uses it.**
+
+A new public function picks one on purpose. If it draws, use `active_sketch()`. If it reads or
+changes the canvas, the loop, input, time, randomness or files, use `canvas_sketch()`. Mixing them up
+is the usual layers bug: a drawing call that ignores the layer, or a `size()` that lands in it.
+
 ### Other rules that hold everywhere
 
 - Two correct renderers may differ in pixels. They may not differ in ops
@@ -350,21 +518,37 @@ are in [THIRD_PARTY_LICENSES.md](../../THIRD_PARTY_LICENSES.md); check it when y
 | uharfbuzz (>= 0.45) | Shapes text: glyph choice, kerning, ligatures, features | Apache-2.0 (HarfBuzz inside is Old MIT) | `typography.py` |
 | skia-pathops (>= 0.9) | Path booleans, overlap removal, stroke expansion | BSD-3-Clause | `pathops.py` |
 | svgelements (>= 1.9) | Reads SVG files | MIT | `svg.py` |
-| pypdf (>= 5) | Rewrites Cairo's PDF so text is real text (D-043) | BSD-3-Clause | `export/` |
+| pypdf (>= 5) | Rewrites Cairo's PDF so text and layers are real (D-043, D-053) | BSD-3-Clause | `export/` |
 
-Optional or development only:
+The sound, music, controls and motion modules need nothing beyond these and the standard library.
+`synth.py`, `analysis.py` and `hindustani.py` are plain Python.
 
-| Dependency | Why | Licence |
-|---|---|---|
-| pytest (>= 8) | The test runner (`dev` extra) | MIT |
-| Pillow (>= 11) | The `dev` extra tests both filter paths, with and without it. The `extras` extra adds it for rarer filters at full speed | MIT-CMU (HPND) |
-| pypdfium2 (>= 4) | Renders PDFs in tests (`dev` extra) | Apache-2.0 or BSD-3-Clause |
+Optional, in the `pyproject.toml` extras:
 
-The licences for these three are from memory of the projects, and `THIRD_PARTY_LICENSES.md` does not
-list them (funground does not ship them). Check the package you install.
+| Extra | Dependency | Why | Licence |
+|---|---|---|---|
+| `extras` | Pillow (>= 11) | Rarer filters at full speed, and GIF export without ffmpeg | MIT-CMU (HPND) |
+| `video` | imageio-ffmpeg (>= 0.5) | An ffmpeg program for MP4 export (D-045). Run as a separate program, never linked | BSD-2-Clause; the ffmpeg it bundles is a GPLv3 build |
+| `dev` | pytest (>= 8) | The test runner | MIT |
+| `dev` | Pillow (>= 11) | The tests cover the filter and GIF paths with and without it | MIT-CMU (HPND) |
+| `dev` | pypdfium2 (>= 4) | Renders PDFs in tests, to check text and layers as a viewer would | Apache-2.0 or BSD-3-Clause |
+| `dev` | imageio-ffmpeg (>= 0.5) | A real ffmpeg for the one real-ffmpeg test | as above |
+| `dev` | build (>= 1) | Builds a wheel in `test_gallery_package.py` | MIT |
 
-Bundled in the package: DejaVu Sans (Bitstream Vera licence), the p5-derived noise function (LGPL-2.1)
-and the colour-name table (from pygame-ce, LGPL-2.1). The library itself is `LGPL-2.1-or-later`.
-Example code is CC0 (D-026).
+`THIRD_PARTY_LICENSES.md` lists the runtime dependencies and imageio-ffmpeg. It does not list
+pytest, pypdfium2 or build, because funground does not ship them. The licences for those three are
+from memory of the projects, so check the package you install.
 
-pypdf is used only by `funground/export/pdf_text.py` (S-094), to put real text into Cairo's PDFs.
+Bundled in the package:
+
+- DejaVu Sans, four styles (Bitstream Vera licence; `DejaVu-LICENSE.txt`);
+- Noto Emoji, Noto Sans Symbols 2 and Noto Sans Devanagari, the fallback fonts (SIL Open Font
+  Licence 1.1; `Noto-OFL.txt`; contract T18, D-052);
+- the p5-derived noise function (LGPL-2.1);
+- the colour-name table (from pygame-ce, LGPL-2.1);
+- `data/ragas.json`, the raga and tala table (facts with cited sources; see
+  [Ragas_Note.md](../design/Ragas_Note.md));
+- the gallery examples and pictures (CC0 code, `examples/LICENSE`).
+
+The library itself is `LGPL-2.1-or-later`. Example code is CC0 (D-026). DejaVu Sans Mono sits in the
+repository beside one example and is not in the installed package.
