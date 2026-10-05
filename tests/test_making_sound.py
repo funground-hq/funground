@@ -185,8 +185,22 @@ def test_noise_has_no_pitch_and_silence_has_none(clock):
 def test_pitch_is_none_when_not_playing_or_too_quiet(clock):
     snd = f.tone(440, 1.0)
     assert snd.pitch() is None                                  # not playing
-    assert pitch_at(f.tone(440, 1.0, volume=0.005), clock, 0.5) is None   # below the loudness limit
+    assert pitch_at(f.tone(440, 1.0, volume=0.0005), clock, 0.5) is None   # below the loudness limit (RMS 0.001)
+    assert pitch_at(f.tone(440, 1.0, volume=0.004), clock, 0.5) == pytest.approx(440, rel=0.005)   # RMS 0.003: a quiet laptop microphone
     assert pitch_at(f.tone(440, 1.0, volume=0.05), clock, 0.5) == pytest.approx(440, rel=0.005)
+
+
+def test_quiet_noise_and_hiss_still_have_no_pitch():
+    """The loudness limit is -60 dB (RMS 0.001), so noise at quiet-microphone levels is rejected by
+    the clarity check, not by the loudness limit."""
+    import random
+    rng = random.Random(5)
+    for target in (0.001, 0.002, 0.005, 0.01):
+        window = [rng.gauss(0, target) for _ in range(2048)]
+        assert synth.find_pitch(window, RATE) is None, target
+    quiet_sine = [0.003 * math.sqrt(2) * math.sin(2 * math.pi * 220 * i / RATE) for i in range(2048)]
+    assert synth.find_pitch(quiet_sine, RATE) == pytest.approx(220, rel=0.01)
+    assert synth.find_pitch([0.0004 * math.sin(2 * math.pi * 220 * i / RATE) for i in range(2048)], RATE) is None
 
 
 def test_attack_and_release_shape_the_ends():

@@ -39,7 +39,7 @@ MIN_PULSE = 0.12                 # how regular the onsets must be (autocorrelati
 # ---- harmony
 CHROMA_LOW_HZ, CHROMA_HIGH_HZ = 65.0, 2000.0
 CHROMA_FRAME = 2048              # samples (at the analysis rate) in a chroma frame: about 0.19 s
-CHROMA_QUIET = 0.004             # a spectrum with no peak above this (full scale is 1) has no chroma
+CHROMA_QUIET = 0.0005            # a spectrum with no peak above this (full scale is 1) has no chroma (quiet laptop microphones need it low)
 CHORD_MIN_SCORE = 0.85           # how well a chord must match, from 0 to 1
 SINGLE_VOICE = 0.2               # if the second strongest pitch class is below this, it is one voice
 KEY_MIN_SCORE = 0.3              # correlation a key must have

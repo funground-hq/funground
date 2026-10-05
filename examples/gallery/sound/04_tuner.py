@@ -2,14 +2,15 @@
 
 Sing or play one note into your microphone. The big letters show its name, like A4. The needle
 shows whether you are a little flat (left) or sharp (right), and it turns green when you are in
-tune. The bar at the bottom is how loud you are. Nothing is recorded or played back. With no
-microphone, the sketch still runs and waits.
+tune. The bar at the bottom is how loud you are, so you can see it hears you. Nothing is recorded or played back. With
+no microphone, the sketch still runs and waits.
 
 How it works:
 - f.microphone() makes the microphone, and mic.start() begins listening. f.microphones() lists
   the ones the computer has, and the first is named at the top.
 - mic.pitch() gives the pitch of the one note it hears, in hertz, or None when it is quiet.
-  mic.level() says how loud it is, from 0 to 1.
+  mic.level() says how loud it is, from 0 to 1. Laptop microphones can be very quiet, so the bar
+  at the bottom uses decibels (loudness()) and still moves for a soft voice.
 - f.frequency_to_note() turns the pitch into a name. cents_off() then measures how far the pitch is
   from that note. A cent is one hundredth of a semitone, so 50 cents is halfway to the next note.
 - The needle moves a third of the way to its target each frame, which smooths the shaking.
@@ -22,7 +23,8 @@ Make it yours:
 - Change the 0.3 in needle += (target - needle) * 0.3. A smaller number is calmer, a bigger one
   is quicker.
 - Change quiet_frames > 20 to hold the name for longer or shorter.
-- Change the colours: "limegreen" and "tomato" in draw().
+- Change the colours: "limegreen" and "tomato" in draw(). Change the -70 and 50 in loudness() if
+  the bar moves too much or too little.
 - Change f.text_size(80) to make the note name bigger or smaller.
 """
 # gallery: time-dependent
@@ -35,6 +37,12 @@ listen_to = (f.microphones() or ["no microphone"])[0]     # shown at the top
 needle = 0.0              # cents sharp (+) or flat (-), smoothed
 name = "-"
 quiet_frames = 0
+
+
+def loudness(level):
+    """A number from 0 to 1 for a bar. It uses decibels, so a quiet laptop microphone still moves it:
+    -70 dB (a very quiet room) is 0 and -20 dB (loud) is 1."""
+    return f.constrain((20 * math.log10(level + 1e-9) + 70) / 50, 0, 1)
 
 
 def cents_off(hz, note_name):
@@ -89,7 +97,10 @@ def draw():
     f.fill("dimgray")
     f.rect(20, 330, 480, 14)
     f.fill("deepskyblue")
-    f.rect(20, 330, 480 * min(1, mic.level() * 4), 14)
+    f.rect(20, 330, 480 * loudness(mic.level()) + 0.001, 14)
+    f.fill("gray")
+    f.text_size(12)
+    f.text("hearing you", 260, 322)
 
 
 f.run()
