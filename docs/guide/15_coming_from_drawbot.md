@@ -93,8 +93,7 @@ Letters as a path:
 
 | DrawBot `BezierPath` | funground |
 |---|---|
-| `path.text(txt, offset, font, fontSize, align)` | `f.text_path(message, x, y)` (uses the current font, size, style and alignment; a `"
-"` starts a new line) |
+| `path.text(txt, offset, font, fontSize, align)` | `f.text_path(message, x, y)` (uses the current font, size, style and alignment; a `"\n"` starts a new line) |
 
 Asking about a font:
 
@@ -309,8 +308,17 @@ f.show()                                        # look at it; close the window t
 
 ## What is not here
 
-Some DrawBot features are not in funground. CMYK colour is left out for good. The list linked below says why.
+Some DrawBot features are not in funground. CMYK colour is left out for good. [The list of what is left out](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
 
-Some features are left out on purpose. [The list of what is left out](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
+## See also
+
+- Gallery: [Documents and pages](../gallery/README.md#documents-and-pages), [Saving your work](../gallery/README.md#saving-your-work) and [Paths and clipping](../gallery/README.md#paths-and-clipping).
+- Quick Reference: [9. One-page cheat sheet](../reference/Quick_Reference.md#9-one-page-cheat-sheet).
+
+## Try it
+
+1. Port a DrawBot sketch of your own that uses `oval()`. Remember that the origin is at the top-left.
+2. Write a script with two pages of different sizes and save it as a PDF.
+3. Use `f.color_mode("rgb", 1)` so you can write colours as 0 to 1 numbers, as in DrawBot.
 
 **Next:** [16. Sound](16_sound.md)

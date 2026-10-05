@@ -175,4 +175,15 @@ is replayed as shapes and the hole shows what is behind it. Erasing straight on 
 in a PDF the earlier drawing stays and the hole is not visible. SVG files use a filter for it, so
 the result depends on the program that opens the file. If it matters, erase on a picture, or save a PNG.
 
+## See also
+
+- Gallery: [Fill, stroke and lines](../gallery/README.md#fill-stroke-and-lines) and [Blending, opacity and shadows](../gallery/README.md#blending-opacity-and-shadows).
+- Quick Reference: [3. Colours, fill, stroke and text](../reference/Quick_Reference.md#3-colours-fill-stroke-and-text).
+
+## Try it
+
+1. Draw a rectangle with no fill and a thick, dashed outline. Hint: `f.stroke_dash(...)`.
+2. Draw three overlapping circles with `f.blend_mode("multiply")`. Then try `"screen"` on a dark background.
+3. Give a circle a shadow with `f.shadow(6, 6, 8)`. Then use `f.no_shadow()` so the next shape has none.
+
 **Next:** [6. Text](06_text.md)

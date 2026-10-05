@@ -18,7 +18,7 @@ the behaviour itself changed on purpose, with the reason each time.
 | `createCanvas(w, h)` | `size(w, h)` | `f.size(w, h)` |
 | `width`, `height` | `width`, `height` | `f.width`, `f.height` |
 | `background(color)` | `background(color)` | `f.background(color)` |
-| `frameRate(fps)` | `frameRate(fps)` | `f.run(fps=...)` — see below |
+| `frameRate(fps)` | `frameRate(fps)` | `f.size(w, h, fps=...)` or `f.run(fps=...)` — see below |
 
 Processing already calls its canvas function `size()`, so that name should feel familiar even
 coming from p5.
@@ -205,7 +205,7 @@ These are not gaps. They are choices, and each one has a reason.
 | A graphics buffer keeps its pixels between frames (Processing also needs `beginDraw()`/`endDraw()` around every use) | `f.create_graphics()` pictures keep their pixels between frames too, with no begin/end needed | Simpler than Processing's `PGraphics`; matches p5's `createGraphics()` |
 | A p5 sketch runs in a browser tab; nothing closes it from the keyboard. A Processing sketch quits on Escape by default | **Escape** always ends a funground sketch | A teaching convenience carried over from Processing |
 | `setup()`/`draw()` start running as soon as the script loads — no explicit call needed | The sketch runs only once you call `f.run()`, at the end of the file | Makes the starting point explicit, and lets a test harness or a script run several sketches in one process |
-| `frameRate(fps)` both sets and reads the target rate | `f.run(fps=...)` sets it once, when the sketch starts; `f.frame_rate()` only reads the *measured* rate | funground's rate is fixed for the run rather than changeable mid-sketch |
+| `frameRate(fps)` both sets and reads the target rate | `f.size(w, h, fps=...)` (or `f.run(fps=...)`) sets it once, when the sketch starts; `f.frame_rate()` only reads the *measured* rate | funground's rate is fixed for the run rather than changeable mid-sketch |
 
 ## A porting walk-through
 
@@ -274,5 +274,19 @@ Some things a p5 or Processing sketch might use are not in funground. 3D and run
 browser are not part of the first release.
 
 Some features are left out on purpose. [This list](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
+
+Funground can also do a few things p5 cannot: it saves PDF and SVG files with real text and layers (chapter 13), and it makes and listens to sound and music (chapters 16 and 17).
+
+## See also
+
+- Gallery: every area. The [Examples Gallery](../gallery/README.md) shows each feature with its code.
+- Quick Reference: [9. One-page cheat sheet](../reference/Quick_Reference.md#9-one-page-cheat-sheet).
+- Python messages such as `NameError` are in [When something goes wrong](errors.md#nameerror-or-attributeerror-on-an-f-name).
+
+## Try it
+
+1. Take a tiny p5 sketch of your own (a circle that follows the mouse) and write it again in funground.
+2. List three names that changed between p5 and funground, and say which of them changed to avoid hiding a Python built-in.
+3. Port the walk-through's moving dot, then change it to use `f.delta_time`.
 
 **Next:** [15. Coming from DrawBot](15_coming_from_drawbot.md)

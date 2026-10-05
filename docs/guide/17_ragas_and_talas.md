@@ -240,4 +240,16 @@ sang, and listen for the rest.
 - **Mistakes.** A raga or tala that is not in the table, a pattern that is not swaras, a tempo of 0 or
   a histogram that is not 12 numbers of 0 or more give a `ValueError` that says what was wrong.
 
+## See also
+
+- Gallery: [Music](../gallery/README.md#music) (Sing with the drone, Hear a raga, Tala) and [Sound](../gallery/README.md#sound).
+- Quick Reference: [Ragas and talas](../reference/Quick_Reference.md#ragas-and-talas).
+- Words: [Sa, swara, raga, tala, sam, tali and khali](glossary.md).
+
+## Try it
+
+1. Print `f.raga("Bhupali").swaras` and `f.raga("Bhupali").aroha`, then play the aroha with `f.melody()`.
+2. Play Teentaal with `f.tala("Teentaal", tempo=100)` and clap on the tali beats.
+3. Play a raga's aroha over a drone, with `sa="C4"` in the melody and `"C3"` for the drone.
+
 **Previous:** [16. Sound](16_sound.md) · **Next:** [18. Projects](18_projects.md)

@@ -267,4 +267,16 @@ Pages belong to scripts. In an animated sketch, `f.new_page()` is an error.
 Set the environment variable `FUNGROUND_HEADLESS=1` and funground draws without opening a
 window — useful for making many pictures at once. Combine it with `f.run(max_frames=...)`.
 
+## See also
+
+- Gallery: [Saving your work](../gallery/README.md#saving-your-work) and [Documents and pages](../gallery/README.md#documents-and-pages).
+- Quick Reference: [6. Saving a picture](../reference/Quick_Reference.md#6-saving-a-picture).
+- Save failing? See [When something goes wrong](errors.md#saving-and-recording). Words: [PDF, SVG and live text](glossary.md#p).
+
+## Try it
+
+1. Save your first sketch as a PNG, then as a PDF. Zoom right in on both. What is different?
+2. Draw text on a transparent background (`f.clear()`) and save it as a PNG.
+3. Make a script with three pages (`f.new_page()`) and save it as one PDF.
+
 **Next:** [14. Coming from p5.js and Processing](14_coming_from_p5_processing.md)

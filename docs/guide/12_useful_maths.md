@@ -90,4 +90,16 @@ f.run()
 
 ![Movers with vectors](../gallery/images/motion-01_movers.png)
 
+## See also
+
+- Gallery: [Useful maths](../gallery/README.md#useful-maths) and [Motion](../gallery/README.md#motion).
+- Quick Reference: [5. Mouse, keyboard and useful helpers](../reference/Quick_Reference.md#5-mouse-keyboard-and-useful-helpers).
+- Words: [vector](glossary.md#v).
+
+## Try it
+
+1. Use `f.map_range()` to turn the mouse's x into a colour from 0 to 255.
+2. Draw 10 circles between two points with `f.lerp()`, spaced evenly.
+3. Make a ball with a `f.Vector` position and speed that bounces off all four edges.
+
 **Next:** [13. Saving your work](13_saving_your_work.md)

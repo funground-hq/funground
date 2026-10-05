@@ -112,4 +112,16 @@ screen.
 
 ![The window: cursor, size and full screen](../gallery/images/interaction-04_window.png)
 
+## See also
+
+- Gallery: [Basics](../gallery/README.md#basics) and [Interaction](../gallery/README.md#interaction) (for the window).
+- Quick Reference: [1. The basic idea](../reference/Quick_Reference.md#1-the-basic-idea).
+- Forgot `f.run()`, or the window closes at once? See [When something goes wrong](errors.md).
+
+## Try it
+
+1. In the first sketch, make the dot go back to the left edge when it reaches the right one. Hint: the `%` sign.
+2. Remove `f.background(...)` from `draw()`. What does the dot leave behind? Put it back, then try `f.background((0, 0, 0, 20))` instead.
+3. Turn the moving sketch into a script: no `setup()`, no `draw()`, no `f.run()`. Draw five circles in a row with a `for` loop, save a PNG and call `f.show()`.
+
 **Next:** [3. Shapes](03_shapes.md)

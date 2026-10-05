@@ -64,4 +64,16 @@ the code that makes it. To browse it in a window, run `python -m funground.galle
 a picture to read its code, press **Enter** to run it, and press **C** to copy it into your folder.
 Files an example saves go to a temporary folder. The browser tells you where, and the **O** key opens that folder.
 
+## See also
+
+- Gallery: [Basics](../gallery/README.md#basics), or browse every example with `python -m funground.gallery`.
+- Quick Reference: [1. The basic idea](../reference/Quick_Reference.md#1-the-basic-idea).
+- Stuck? [When something goes wrong](errors.md) lists the messages you are most likely to see. Words you do not know are in the [glossary](glossary.md).
+
+## Try it
+
+1. Change `"tomato"` to another colour name, such as `"teal"`, and run the sketch again.
+2. Move the circle to the top-left corner, then to the bottom-right corner. Use `f.width` and `f.height` for the second one.
+3. Draw a second shape after the circle with `f.rect(40, 40, 100, 60)`. What happens if you draw it *before* the circle?
+
 **Next:** [2. The sketch: setup, draw and run](02_the_sketch.md)

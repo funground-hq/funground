@@ -67,4 +67,16 @@ x += 150 * f.delta_time      # 150 pixels per second
 
 ![A clock](../gallery/images/animation-03_clock.png)
 
+## See also
+
+- Gallery: [Animation and time](../gallery/README.md#animation-and-time) and [Motion](../gallery/README.md#motion).
+- Quick Reference: [4. Animation and changing variables](../reference/Quick_Reference.md#4-animation-and-changing-variables).
+- To record an animation as a GIF, see [13. Saving your work](13_saving_your_work.md#gif-and-mp4).
+
+## Try it
+
+1. Make the bouncing ball bounce up and down as well as across.
+2. Move the ball with `f.delta_time` instead of a fixed step, at 200 pixels a second. Then ask for `fps=30` in `f.size()`. Does the speed change?
+3. Draw a clock hand that turns once a minute. Hint: `f.second()` and `f.rotate()`.
+
 **Next:** [8. Transforms and saved_state](08_transforms.md)
