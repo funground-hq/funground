@@ -14,11 +14,12 @@ from conftest import ROOT, run_sketch
 
 GUIDE = ROOT / "docs" / "guide"
 CHAPTERS = sorted(GUIDE.glob("[0-9][0-9]_*.md"))
+PROJECTS = sorted((GUIDE / "projects").glob("[0-9][0-9]_*.md"))
 BLOCK = re.compile(r"```python\n(.*?)```", re.S)
 
 
 def _runnable_blocks():
-    for chapter in CHAPTERS:
+    for chapter in [*CHAPTERS, *PROJECTS]:
         for i, match in enumerate(BLOCK.finditer(chapter.read_text(encoding="utf-8")), 1):
             yield pytest.param(chapter, match.group(1), id=f"{chapter.stem}#{i}")
 
@@ -42,7 +43,7 @@ def test_complete_examples_run_as_printed(chapter, code, tmp_path, monkeypatch):
 
 def test_relative_links_and_images_resolve():
     broken = []
-    for page in [GUIDE / "README.md", GUIDE / "errors.md", GUIDE / "glossary.md", *CHAPTERS]:
+    for page in [GUIDE / "README.md", GUIDE / "errors.md", GUIDE / "glossary.md", *CHAPTERS, *PROJECTS]:
         for target in re.findall(r"\]\(([^)#:]+)\)", page.read_text(encoding="utf-8")):
             if not (page.parent / target).resolve().exists():
                 broken.append(f"{page.name}: {target}")

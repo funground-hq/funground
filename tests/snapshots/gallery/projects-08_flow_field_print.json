@@ -1,0 +1,54 @@
+[
+ {
+  "color": [
+   244,
+   238,
+   224,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 483.0,
+  "op": "Rect",
+  "style": {
+   "fill": null,
+   "stroke": [
+    24,
+    36,
+    64,
+    140
+   ],
+   "stroke_width": 1,
+   "text_size": 12,
+   "text_valign": "center"
+  },
+  "width": 694.0,
+  "x": 13.0,
+  "y": 13.0
+ },
+ {
+  "color": [
+   120,
+   120,
+   120,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    120,
+    120,
+    120,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 12,
+   "text_valign": "center"
+  },
+  "text": "R: new pattern    P: save flow_field.pdf for A3",
+  "x": 26,
+  "y": 490.015625
+ }
+]
