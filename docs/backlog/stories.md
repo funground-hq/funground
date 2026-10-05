@@ -194,3 +194,4 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-121 | E-22 | Four more projects with their own guide pages (D-065) | 15 |
 | S-122 | E-22 | User guide solidified: read-through, exercises, errors page, glossary, learning path (D-065) | 15 |
 | S-123 | E-23 | Developer docs refreshed for Sprints 11-14 (D-065) | 15 |
+| S-124 | E-22 | Poster designer: a visible way to edit the headline (an on-screen "type to edit" hint or a text field control); a multi-page PDF from an animated sketch (library: pages outside scripts) | later |
