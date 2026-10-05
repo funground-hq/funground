@@ -27,25 +27,25 @@ More capstone projects are added.
 - [x] S-120.3 The gallery browser's detail view and `docs/gallery/README.md` show the three sections.
 
 ### S-121 More projects — E-22 *(from `docs/backlog/Project_Ideas.md`)*
-- [ ] Four more capstones, each a gallery example plus its own guide page:
+- [x] Four more capstones, each a gallery example plus its own guide page:
   - 12 Typographic portrait;
   - 13 Kinetic type;
   - 15 Scratch-card reveal game;
   - 18 Flow-field print.
 
   Each page has **how it works**, three stages (make it work, make it yours, make it shine) and challenge cards.
-- [ ] Chapter 18 becomes an index of project pages, `docs/guide/projects/*.md`, one page per project, with the existing four moved there and each given a "How it works" section.
+- [x] Chapter 18 becomes an index of project pages, `docs/guide/projects/*.md`, one page per project, with the existing four moved there and each given a "How it works" section.
 
 ### S-122 The user guide, solidified — E-22
-- [ ] A full read-through for consistency, flow, cross-links between chapters, the gallery and the Quick Reference, and stale text.
-- [ ] Each chapter ends with a short "Try it" exercise or two.
-- [ ] A new page, "When something goes wrong": the common errors, what they mean and how to fix them, written from funground's own error messages.
-- [ ] A glossary of terms: sketch, frame, picture, layer, path, swara, …
-- [ ] The guide README becomes a learning path (beginner → intermediate → projects).
+- [x] A full read-through for consistency, flow, cross-links between chapters, the gallery and the Quick Reference, and stale text.
+- [x] Each chapter ends with a short "Try it" exercise or two.
+- [x] A new page, "When something goes wrong": the common errors, what they mean and how to fix them, written from funground's own error messages.
+- [x] A glossary of terms: sketch, frame, picture, layer, path, swara, …
+- [x] The guide README becomes a learning path (beginner → intermediate → projects).
 
 ### S-123 Developer docs refreshed — E-23
-- [ ] `docs/developer/Architecture.md` covers the sound, analysis, raga, layers, text-in-files and gallery-package modules added in Sprints 11–14.
-- [ ] Design-note index; `Adding_a_feature.md` and `Testing.md` re-checked against the code.
+- [x] `docs/developer/Architecture.md` covers the sound, analysis, raga, layers, text-in-files and gallery-package modules added in Sprints 11–14.
+- [x] Design-note index; `Adding_a_feature.md` and `Testing.md` re-checked against the code.
 
 ### S-073 Release 0.1 — E-02 *(carried)*
 - [ ] `sprints/sprint-11/release_checklist.md` and `docs/developer/Releasing.md`

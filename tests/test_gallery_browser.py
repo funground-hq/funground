@@ -453,7 +453,10 @@ def test_the_sidebar_scrolls_when_there_are_more_areas_than_fit(browser, tmp_pat
     assert shot.stat().st_size > 1000
 
 
-def test_the_projects_front_door_is_visible_and_shows_the_four_projects(browser, tmp_path):
+PROJECTS = len(list((ROOT / "examples" / "gallery" / "projects").glob("[0-9][0-9]_*.py")))
+
+
+def test_the_projects_front_door_is_visible_and_shows_every_project(browser, tmp_path):
     shot = tmp_path / "front_door.png"
 
     def after(n, app):
@@ -467,7 +470,7 @@ def test_the_projects_front_door_is_visible_and_shows_the_four_projects(browser,
     x, y, w, h = browser.area_rect(1)
     assert y + h < browser.H and browser.area_rect(1)[1] == browser.AREA_TOP + browser.ROW_H
     assert states[1] == ("grid", "projects", None, "")
-    assert count == 4 == len(app.visible())
+    assert count == PROJECTS == len(app.visible())
     assert all(e.area == "projects" for e in app.visible())
     assert shot.stat().st_size > 1000
 
@@ -476,9 +479,9 @@ def test_all_shows_the_projects_first(browser):
     run(browser, {})
     app = browser.app
     shown = app.visible()
-    assert [e.area for e in shown[:4]] == ["projects"] * 4
+    assert [e.area for e in shown[:PROJECTS]] == ["projects"] * PROJECTS
     assert len(shown) == len(app.entries)
-    assert all(e.area != "projects" for e in shown[4:])
+    assert all(e.area != "projects" for e in shown[PROJECTS:])
 
 
 def test_long_area_names_are_cut_to_fit_the_sidebar(browser):

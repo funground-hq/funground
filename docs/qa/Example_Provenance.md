@@ -131,6 +131,11 @@ ideas (top-left anchors, translated origins, slow change).
   `03_sargam_over_a_drone.py` were checked on their own against the same 2,974 corpus files.
   Nothing was flagged (combined score 0.16 each, no shared calls or numbers). Both were
   written from the sound features they show (`melody`, `mix`, `pluck`, `pitch`).
+- **S-121, 5 October 2026.** The four new projects in `examples/gallery/projects/`
+  (`05_typographic_portrait.py`, `06_kinetic_type.py`, `07_scratch_card.py`,
+  `08_flow_field_print.py`) were checked on their own against the same corpora. Nothing was flagged.
+  The highest combined scores were 0.19 (05, against a p5.js `@example`), 0.16 (06, against the
+  p5.js-website `Springs.js`), 0.16 (07) and 0.19 (08).
 
 ## Limits, stated honestly
 

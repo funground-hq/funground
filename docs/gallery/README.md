@@ -2480,3 +2480,121 @@ A little bird flies through gates, and your voice is the control. First comes a 
 </details>
 
 Source: [`examples/gallery/projects/04_voice_game.py`](../../examples/gallery/projects/04_voice_game.py)
+
+### Typographic portrait
+
+![Typographic portrait](images/projects-05_typographic_portrait.png)
+
+A picture redrawn from letters. The picture is cut into a grid, and each cell gets one letter. A bright cell gets a big letter and a dark cell gets a small one, so the letters draw the picture. Use the controls under the canvas to change the size of the cells, the letters, the colours and the order of light and dark. Press P (or "save PDF") to write portrait.pdf for a big print.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.load_image() reads the photo that comes with the gallery. A copy is shrunk with picture.resize() to one pixel for each cell. picture.load_pixels() then gives the red, green and blue of every cell in picture.pixels.
+- brightness() turns those three numbers into one number from 0 to 1. The letter's size is that number times the size of the cell. The cell size slider changes how many cells there are.
+- The letters come from LETTER_SETS. Cell number n gets piece n of the word, round and round, so "funground" runs along each row. The Devanagari set works because the built-in fonts cover it.
+- Nothing changes while you leave the sliders alone, so draw() only paints again when something has changed. The picture is kept on the canvas in between, and that keeps the sketch quick.
+- f.save("portrait.pdf") writes every letter as live text in a vector file, which stays sharp at any size. "save SVG" does the same for portrait.svg. A note layer says where the file went.
+
+**Make it yours**
+
+- Change the 1.5 in letter_size() to make the biggest letters bigger or smaller.
+- Add your own word to LETTER_SETS. Use short pieces, such as your name split in two or three.
+- Put in a different picture: change the name in f.load_image(), and set SIZE to match its shape.
+- Make the letters turn with the picture: in paint(), call f.rotate() with a number that depends on the brightness.
+- Draw the biggest letters in bold: call f.text_style("bold") when the brightness is above 0.8.
+
+</details>
+
+Source: [`examples/gallery/projects/05_typographic_portrait.py`](../../examples/gallery/projects/05_typographic_portrait.py)
+
+### Kinetic type
+
+![Kinetic type](images/projects-06_kinetic_type.png)
+
+A word made of dots. Move the mouse over it and the dots scatter, then spring back to their places. Press Enter, type a new word, and press Enter again. Two sliders set how hard the mouse pushes and how tight the springs are. Press G (or click "record GIF") to record three seconds as kinetic.gif.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.text_to_points() gives a list of points along the letters. Each point becomes a dot: a home place and a position, both f.Vector objects, and a speed (also a Vector).
+- Every frame each dot feels two forces. The mouse pushes it away, more strongly the closer the mouse is. A spring pulls it home, harder the further it has gone. The speed is then slowed a little, so the dot settles and does not swing for ever.
+- f.noise() moves each home a tiny way as time passes, so the word is never quite still. Dots near each other move alike, because noise gives nearby numbers nearby answers.
+- A dot's colour comes from how fast it is moving. f.lerp_color() mixes calm blue with hot orange.
+- f.save_gif("kinetic.gif", 3) records the next three seconds. While it records, a ghost mouse sweeps across the word, so the GIF shows a scatter even if your mouse is elsewhere.
+
+**Make it yours**
+
+- Change DAMPING from 0.86 to 0.95 for a bouncier word, or to 0.7 for a stiff one.
+- Change REACH, how far from the mouse the dots feel it, from 110 to 200.
+- Change the spacing in f.text_to_points(): a smaller number gives more, smaller dots.
+- Colour the dots by where they are: use f.hsb() with the x place of the home for the hue.
+- Pull the dots toward the mouse and not away: change the sign in push().
+
+</details>
+
+Source: [`examples/gallery/projects/06_kinetic_type.py`](../../examples/gallery/projects/06_kinetic_type.py)
+
+### Scratch-card reveal game
+
+![Scratch-card reveal game](images/projects-07_scratch_card.png)
+
+A silver foil hides three symbols. Hold the mouse button down and scratch the foil away. When most of the foil over a symbol is gone, the symbol counts as found, a soft chime plays, and the counter goes up. Find three that match and you win. Press N for a new card. Every card number always hides the same symbols, so card 1 is the same each time. With no sound device the game is simply silent.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- The foil is a layer: `with f.layer("foil"):`. A layer keeps its drawing from frame to frame, so the foil is painted once for each card, and the scratches stay.
+- To scratch, the sketch calls f.erase() inside the foil layer and then draws circles along the mouse's path. Drawing now removes the foil and does not paint it, so the card under it shows through. f.no_erase() is not needed: every `with` block starts with painting again.
+- The symbols are on the canvas under the layer. f.random_seed(card) and f.random_choice() pick the same three symbols for the same card number. Stars, hearts, moons and diamonds are drawn with f.polygon() and with paths joined by | and -.
+- A layer cannot be read back, so the sketch keeps its own list of sample points inside each symbol. A point is cleared when a scratch passes close to it (f.distance()). At 60% cleared, the symbol is found.
+- f.pluck() makes the chime, and sound.play() plays it. Three notes rise as you find them. f.melody() plays a little tune for a win.
+- f.mouse_x, f.mouse_y and f.is_mouse_pressed give the scratch. f.key reads N in key_pressed().
+
+**Make it yours**
+
+- Change BRUSH from 17 to 30 for a coin-sized scratch, or to 10 for a pin.
+- Change the 0.6 in FOUND_AT. A smaller number finds symbols sooner.
+- Change WIN_CHANCE for easier or harder cards. 1 means every card wins.
+- Add a fifth symbol: write a function like draw_heart() and add its name to KINDS and to draw_symbol().
+- Change the notes in CHIMES, or the tune in win_tune.
+
+</details>
+
+Source: [`examples/gallery/projects/07_scratch_card.py`](../../examples/gallery/projects/07_scratch_card.py)
+
+### Flow-field print
+
+![Flow-field print](images/projects-08_flow_field_print.png)
+
+Hundreds of tiny walkers cross the page, and each one leaves a thin line. A hidden map of noise tells every walker which way to turn, so the lines flow side by side like wind, water or grain in wood. Overlapping lines mix their colours. Use the sliders under the canvas to change the swirl, the number of lines and the colours. Press R for a new pattern. Press P (or the "save PDF" button) to write flow_field.pdf: a print for an A3 sheet, made of lines and not of dots, so it stays sharp at any size.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- A noise field gives an angle at every point: f.noise(x * scale, y * scale) is a number from 0 to 1, and times 720 it becomes a direction. A small scale makes wide, slow swirls. A big scale makes tight ones.
+- Each walker holds its place in an f.Vector. Every step, f.Vector.from_angle() makes a short arrow that points the way the field says, and .add() moves the walker along it.
+- Each walker draws its short step as a line on the "trails" layer, using `with f.layer("trails"):`. The layer keeps what was drawn, so each frame only adds the new steps, and the canvas under it holds the paper and the frame.
+- f.blend_mode("screen") or f.blend_mode("multiply") makes overlapping lines mix their colours. Light lines on dark paper use "screen". Dark lines on light paper use "multiply".
+- Every walker also keeps its list of points. To print, the sketch makes a picture the size of an A3 page (f.page_size("A3", landscape=True)) and draws each walker once, as one line made with begin_shape() and vertex(). Joining the steps into one line keeps the PDF small: about one line for each walker, and not one for every step.
+- f.noise_seed() and f.random_seed() make each pattern repeatable, and R adds one to the seed.
+
+**Make it yours**
+
+- Change the 720 in angle_at(): 360 makes gentler curves, 1440 makes busier ones.
+- Add a palette to PALETTES: a name, a paper colour, three line colours and "screen" or "multiply". Then raise the palette slider's top value.
+- Change STEP (the length of each step) and LENGTHS (how many steps a walker takes) for long, smooth lines or short, sharp ones.
+- Change the line colour's last number, the 90 in PALETTES, to make the lines fainter or stronger.
+- Make walkers start in a circle and not all over the page: use f.Vector.from_angle() in new_walkers().
+
+</details>
+
+Source: [`examples/gallery/projects/08_flow_field_print.py`](../../examples/gallery/projects/08_flow_field_print.py)
