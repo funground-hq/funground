@@ -621,7 +621,7 @@ If you want a pitch game, treat `None` as "do nothing" and smooth the pitch firs
 
 **Learn the room.** Rooms and microphones are not equally quiet. In the first half second, listen
 and keep the middle reading, in decibels. Then measure how many decibels you are above it. A voice
-8 decibels above the room counts as 0, and 33 decibels above counts as 1.
+15 decibels above the room counts as 0, and 45 decibels above counts as 1.
 
 ```py
 db = 20 * math.log10(mic.level() + 1e-9)
@@ -631,6 +631,30 @@ if f.frame_count < 30:
 else:
     voice = f.constrain((db - floor - 15) / 30, 0, 1)
 ```
+
+**Let the player set up their voice.** Every voice and microphone is different, so do not make
+the player edit the code. Show a set up screen before the game. It needs four things.
+
+- **A room check.** Listen for a second, as above, and show the quiet level it found.
+- **A live bar.** Show how many decibels above the room the voice is right now. Draw two marks on
+  it: "starts to lift" and "full height".
+- **Two sliders.** `f.create_slider()` makes a slider. Make them in `setup()`, and read them with
+  `.value()`. One slider moves each mark. Arrow keys can move them too, in `key_pressed()`.
+- **A practice bird.** It uses the same marks as the real bird, so the player can say "aaah" softly
+  and then loudly, and see what will happen before the game begins.
+
+```py
+def settings():
+    low = start_at.value()
+    return low, max(full_at.value(), low + 5)      # the top mark stays a little above the bottom one
+
+
+voice = f.constrain((above - settings()[0]) / (settings()[1] - settings()[0]), 0, 1)
+```
+
+Use a variable such as `state = "setup"` to say which screen is showing. The Enter key, or a
+click on a "start game" button, changes it to `"ready"`. The `S` key can bring the setup screen back,
+and the sliders keep their values.
 
 **Add gates.** A gate is a dictionary: where it is, and the height of its gap. Each frame, move
 every gate left. When one is off the screen, take it away and add a new one on the right.
@@ -769,17 +793,25 @@ f.run()
 ### Stage 3: make it shine
 
 The full version is in the gallery: `examples/gallery/projects/04_voice_game.py`. It has a sky with
-a gradient, clouds and hills, a bird with a wing that flaps, and gates with caps. It learns the
-room's quiet in the first half second, then measures your voice in decibels above the room, so a
-quiet laptop microphone works. A small "mic" bar at the top shows what the microphone hears, so you
+a gradient, clouds and hills, a bird with a wing that flaps, and gates with caps. It opens on a
+"Set up your voice" screen. It learns the room's quiet in the first second, then shows a tall bar of
+your voice in decibels above the room, with two marks you can move: where the bird starts to lift,
+and where it reaches full height. Use the up and down arrow keys, the left and right arrow keys, or
+the two sliders under the game. A practice bird on the right shows the result. Press Enter to start,
+`R` to measure the room again, and `S` on the ready or game over screen to come back and change
+things. With no microphone, the screen says so and the space bar starts the game. A small "mic" bar
+at the top shows what the microphone hears, so you
 can see it hears you, and a bar on the left shows what the game uses. The game also shows the
 name of the microphone. The game gets a little faster with
 each point. After a crash it waits a moment before it starts again, so the shout that crashed you
 does not start it at once. It plays a pluck to begin, a note for each point and a thud at the end.
-The best score is kept while the game is open. The first screen is always the same.
+The best score and your settings are kept while the game is open. The first screen is always the
+same.
 
 ### Challenge cards
 
+- **Can you** add a third slider to the setup screen for how quickly the bird falls? Use its value
+  in place of the `0.14` that eases the bird toward its target.
 - **Can you** make the gap smaller for each point, until it is only 100 pixels high?
 - **Can you** use pitch and not loudness? Higher is up. Smooth it, and do nothing on `None`.
 - **Can you** add a coin between the gates? Score two points if the bird touches it.

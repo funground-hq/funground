@@ -2456,27 +2456,26 @@ Source: [`examples/gallery/projects/03_raga_explorer.py`](../../examples/gallery
 
 ![Voice-controlled game](images/projects-04_voice_game.png)
 
-A little bird flies through gates, and your voice is the control. Say "aaah" and the bird goes up. The louder you are, the higher it goes. Go quiet and it sinks. Fly through the gap in each gate to score. Touch a gate and the game is over. With no microphone, press the space bar to hop the bird up.
+A little bird flies through gates, and your voice is the control. First comes a "set up your voice" screen. It measures the quiet of your room, shows a live bar of how loud you are, and lets you move two marks on it: where the bird starts to lift, and where it reaches full height. A practice bird on the right shows the result, so you can test before you play. Then say "aaah" and the bird goes up. The louder you are, the higher it goes. Fly through the gap in each gate to score. Touch a gate and the game is over. With no microphone, press the space bar to hop the bird up.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
 
 **How it works**
 
-- The game has three states: "ready", "play" and "over". update() moves the game on, and draw() paints it. draw_scene(), draw_gate(), draw_bird() and draw_meter() do the painting.
-- listen() turns the microphone into one number from 0 to 1. Microphones differ a lot: a laptop one can be hundreds of times quieter than a headset. So the game measures loudness in decibels (db()) and compares it with the room. For the first CALIBRATE frames, it listens to the quiet room and keeps the middle reading, the median, as the floor. After that, it smooths mic.level() and measures how many decibels you are above the floor. Eight decibels above is 0, and 33 is 1. f.constrain() keeps the result between 0 and 1.
-- The small "mic" bar shows the raw decibels above the floor, all the time, so you can see the game hears you. The "voice" bar shows what the game uses. Loudness controls the bird, not pitch, because mic.pitch() gives nothing for breath or noise.
-- voice is the larger of listen() and hop. The space bar sets hop to 1, and it fades by 93% each frame.
-- The bird eases toward a target height, set by voice. Gates are dictionaries in a list. They slide left, and score goes up when one passes. f.random() picks each gap, and f.random_seed(11) makes the first gates the same every time.
-- hits() finds the nearest point of each gate box to the bird and checks the distance. The sound effects come from f.pluck(), f.note() and f.tone(), and sound.play() plays them.
+- The game has four states: "setup", "ready", "play" and "over". update() moves the game on, and draw() paints it. draw_setup(), draw_scene(), draw_gate(), draw_bird() and draw_meter() do the painting.
+- listen() turns the microphone into one number from 0 to 1. Microphones differ a lot, so the game measures loudness in decibels (db()) and compares it with the room. For the first CALIBRATE frames (a second), it listens to the quiet room and keeps the middle reading, the median, as the floor. After that, it smooths mic.level() and measures how many decibels you are above the floor.
+- settings() gives the two marks, "starts at" and "full at", from the sliders that f.create_slider() made. Below "starts at" the result is 0, and at "full at" it is 1. f.constrain() keeps it between. The arrow keys move the sliders too, and key_pressed() reads them.
+- The setup screen draws a tall bar of your loudness, the two marks, and a practice bird that eases toward the height your voice gives. The small "mic" bar shows the raw decibels in every state. Loudness controls the bird, not pitch, because mic.pitch() gives nothing for breath or noise.
+- The bird eases toward a target height, set by voice. Gates are dictionaries in a list. They slide left, and score goes up when one passes. hits() finds the nearest point of each gate box to the bird. The sounds come from f.pluck(), f.note() and f.tone(), and sound.play() plays them.
 
 **Make it yours**
 
 - Change GAP from 150 to 200 for an easier game, or to 120 for a harder one.
+- Change QUIET_DB = 15 and RANGE_DB = 30. They are where the two sliders start, in decibels above the room. A quieter voice needs a smaller QUIET_DB.
 - Change SPACING for gates closer together or further apart. Change the 3 in speed = 3 + ... to change the speed.
-- Change QUIET_DB = 8 to 4 if the bird does not hear a soft voice, or to 12 if it jumps at small noises. Change RANGE_DB = 25 to 15 so a quieter voice reaches the top.
-- Change f.random_seed(11) to another number for different gates. Change the colours of the bird, such as f.fill(255, 200, 40) for the body.
-- Change the sounds: try "C6" in sound_point, or 200 in sound_crash.
+- Add a third slider in setup(), for how quickly the bird falls: change the 0.14 in update().
+- Change the colours of the bird, such as f.fill(255, 200, 40) for the body, or the sounds: try "C6" in sound_point.
 
 </details>
 

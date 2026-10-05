@@ -33,9 +33,8 @@
     ]
    },
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "width": 640,
@@ -53,9 +52,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 90.0,
@@ -72,9 +70,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 120.0,
@@ -91,9 +88,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 60.0,
@@ -110,9 +106,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 98.0,
@@ -129,9 +124,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 215.0,
@@ -148,9 +142,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 239.0,
@@ -167,9 +160,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 191.0,
@@ -186,9 +178,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 221.4,
@@ -205,9 +196,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 500.0,
@@ -224,9 +214,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 536.0,
@@ -243,9 +232,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 464.0,
@@ -262,9 +250,8 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "x": 509.6,
@@ -281,9 +268,8 @@
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "width": 360,
@@ -301,9 +287,8 @@
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "width": 420,
@@ -321,9 +306,8 @@
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "width": 640,
@@ -341,9 +325,8 @@
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
+   "stroke_width": 2,
+   "text_size": 12,
    "text_valign": "center"
   },
   "width": 640,
@@ -351,555 +334,89 @@
   "y": 370
  },
  {
-  "height": 122.80934195627643,
-  "op": "Rect",
-  "style": {
-   "fill": [
-    60,
-    160,
-    110,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 64,
-  "x": 520,
-  "y": -4
- },
- {
-  "height": 101.1906580437236,
-  "op": "Rect",
-  "style": {
-   "fill": [
-    60,
-    160,
-    110,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 64,
-  "x": 520,
-  "y": 268.8093419562764
- },
- {
-  "height": 22,
+  "height": 370,
   "op": "Rect",
   "radii": [
-   5.0,
-   5.0,
-   5.0,
-   5.0
+   16.0,
+   16.0,
+   16.0,
+   16.0
   ],
-  "style": {
-   "fill": [
-    80,
-    190,
-    130,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 76,
-  "x": 514,
-  "y": 96.80934195627643
- },
- {
-  "height": 22,
-  "op": "Rect",
-  "radii": [
-   5.0,
-   5.0,
-   5.0,
-   5.0
-  ],
-  "style": {
-   "fill": [
-    80,
-    190,
-    130,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 76,
-  "x": 514,
-  "y": 268.8093419562764
- },
- {
-  "height": 136.77041019046447,
-  "op": "Rect",
-  "style": {
-   "fill": [
-    60,
-    160,
-    110,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 64,
-  "x": 730,
-  "y": -4
- },
- {
-  "height": 87.22958980953553,
-  "op": "Rect",
-  "style": {
-   "fill": [
-    60,
-    160,
-    110,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 64,
-  "x": 730,
-  "y": 282.7704101904645
- },
- {
-  "height": 22,
-  "op": "Rect",
-  "radii": [
-   5.0,
-   5.0,
-   5.0,
-   5.0
-  ],
-  "style": {
-   "fill": [
-    80,
-    190,
-    130,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 76,
-  "x": 724,
-  "y": 110.77041019046447
- },
- {
-  "height": 22,
-  "op": "Rect",
-  "radii": [
-   5.0,
-   5.0,
-   5.0,
-   5.0
-  ],
-  "style": {
-   "fill": [
-    80,
-    190,
-    130,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 76,
-  "x": 724,
-  "y": 282.7704101904645
- },
- {
-  "height": 184.1473759230848,
-  "op": "Rect",
-  "style": {
-   "fill": [
-    60,
-    160,
-    110,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 64,
-  "x": 940,
-  "y": -4
- },
- {
-  "height": 39.85262407691516,
-  "op": "Rect",
-  "style": {
-   "fill": [
-    60,
-    160,
-    110,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 64,
-  "x": 940,
-  "y": 330.14737592308484
- },
- {
-  "height": 22,
-  "op": "Rect",
-  "radii": [
-   5.0,
-   5.0,
-   5.0,
-   5.0
-  ],
-  "style": {
-   "fill": [
-    80,
-    190,
-    130,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 76,
-  "x": 934,
-  "y": 158.1473759230848
- },
- {
-  "height": 22,
-  "op": "Rect",
-  "radii": [
-   5.0,
-   5.0,
-   5.0,
-   5.0
-  ],
-  "style": {
-   "fill": [
-    80,
-    190,
-    130,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 76,
-  "x": 934,
-  "y": 330.14737592308484
- },
- {
-  "height": 124.53450911297054,
-  "op": "Rect",
-  "style": {
-   "fill": [
-    60,
-    160,
-    110,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 64,
-  "x": 1150,
-  "y": -4
- },
- {
-  "height": 99.46549088702943,
-  "op": "Rect",
-  "style": {
-   "fill": [
-    60,
-    160,
-    110,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 64,
-  "x": 1150,
-  "y": 270.53450911297057
- },
- {
-  "height": 22,
-  "op": "Rect",
-  "radii": [
-   5.0,
-   5.0,
-   5.0,
-   5.0
-  ],
-  "style": {
-   "fill": [
-    80,
-    190,
-    130,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 76,
-  "x": 1144,
-  "y": 98.53450911297054
- },
- {
-  "height": 22,
-  "op": "Rect",
-  "radii": [
-   5.0,
-   5.0,
-   5.0,
-   5.0
-  ],
-  "style": {
-   "fill": [
-    80,
-    190,
-    130,
-    255
-   ],
-   "stroke": [
-    30,
-    100,
-    70,
-    255
-   ],
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 76,
-  "x": 1144,
-  "y": 270.53450911297057
- },
- {
-  "op": "Save"
- },
- {
-  "op": "Concat",
-  "transform": [
-   1.0,
-   0.0,
-   0.0,
-   1.0,
-   130,
-   201.91399463371187
-  ]
- },
- {
-  "op": "Concat",
-  "transform": [
-   1.0,
-   0.0,
-   -0.0,
-   1.0,
-   0.0,
-   0.0
-  ]
- },
- {
-  "diameter": 30,
-  "op": "Circle",
   "style": {
    "fill": [
     255,
-    200,
+    255,
+    255,
+    235
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 12,
+   "text_valign": "center"
+  },
+  "width": 600,
+  "x": 20,
+  "y": 30
+ },
+ {
+  "color": [
+   40,
+   60,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
     40,
+    60,
+    90,
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_align": "center",
-   "text_size": 20,
+   "text_size": 26,
    "text_valign": "center"
   },
-  "x": 0,
-  "y": 0
+  "text": "Set up your voice",
+  "x": 206.12939453125,
+  "y": 40.8671875
  },
  {
-  "height": 11.869790111049365,
-  "op": "Ellipse",
+  "height": 44,
+  "op": "Rect",
+  "radii": [
+   12.0,
+   12.0,
+   12.0,
+   12.0
+  ],
   "style": {
    "fill": [
-    255,
-    150,
-    30,
+    60,
+    160,
+    110,
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_align": "center",
-   "text_size": 20,
+   "text_size": 26,
    "text_valign": "center"
   },
-  "width": 16,
-  "x": -5,
-  "y": 5.402342583287025
+  "width": 210,
+  "x": 265,
+  "y": 318
  },
  {
   "color": [
    255,
-   110,
-   40,
+   255,
+   255,
    255
   ],
-  "op": "FillPath",
-  "path": [
-   [
-    "move",
-    [
-     12,
-     -3
-    ]
-   ],
-   [
-    "line",
-    [
-     24,
-     2
-    ]
-   ],
-   [
-    "line",
-    [
-     12,
-     6
-    ]
-   ],
-   [
-    "close"
-   ]
-  ]
- },
- {
-  "diameter": 9,
-  "op": "Circle",
+  "op": "Text",
   "style": {
    "fill": [
     255,
@@ -908,61 +425,65 @@
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_align": "center",
-   "text_size": 20,
+   "text_size": 18,
    "text_valign": "center"
   },
-  "x": 5,
-  "y": -5
+  "text": "start game  (Enter)",
+  "x": 283.744140625,
+  "y": 329.5234375
  },
  {
-  "diameter": 4,
-  "op": "Circle",
+  "color": [
+   40,
+   60,
+   90,
+   255
+  ],
+  "op": "Text",
   "style": {
    "fill": [
-    0,
-    0,
-    0,
+    40,
+    60,
+    90,
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_align": "center",
-   "text_size": 20,
+   "text_size": 14,
    "text_valign": "center"
   },
-  "x": 7,
-  "y": -5
+  "text": "your voice",
+  "x": 30.509765625,
+  "y": 63.8515625
  },
  {
-  "op": "Restore"
- },
- {
-  "height": 292,
+  "height": 256,
   "op": "Rect",
   "radii": [
-   7.0,
-   7.0,
-   7.0,
-   7.0
+   6.0,
+   6.0,
+   6.0,
+   6.0
   ],
   "style": {
    "fill": [
     0,
     0,
     0,
-    50
+    40
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_align": "center",
-   "text_size": 20,
+   "text_size": 14,
    "text_valign": "center"
   },
-  "width": 14,
-  "x": 16,
-  "y": 50
+  "width": 34,
+  "x": 50,
+  "y": 84
  },
  {
   "height": 0.001,
@@ -981,37 +502,389 @@
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_align": "center",
-   "text_size": 20,
+   "text_size": 14,
    "text_valign": "center"
   },
-  "width": 14,
-  "x": 16,
+  "width": 34,
+  "x": 50,
+  "y": 340
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke_width": 3,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "x1": 40,
+  "x2": 94,
+  "y1": 276.0,
+  "y2": 276.0
+ },
+ {
+  "color": [
+   46,
+   139,
+   87,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "starts to lift: 15 dB",
+  "x": 100,
+  "y": 267.8515625
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    46,
+    139,
+    87,
+    255
+   ],
+   "stroke": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke_width": 3,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "x1": 40,
+  "x2": 94,
+  "y1": 148.0,
+  "y2": 148.0
+ },
+ {
+  "color": [
+   255,
+   99,
+   71,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 3,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "full height: 45 dB",
+  "x": 100,
+  "y": 139.8515625
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    255,
+    99,
+    71,
+    255
+   ],
+   "stroke": [
+    40,
+    60,
+    90,
+    255
+   ],
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "x1": 40,
+  "x2": 94,
+  "y1": 340,
+  "y2": 340
+ },
+ {
+  "color": [
+   40,
+   60,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    40,
+    60,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "the quiet room: -80 dB",
+  "x": 40,
+  "y": 353.8515625
+ },
+ {
+  "color": [
+   200,
+   90,
+   40,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    200,
+    90,
+    40,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 15,
+   "text_valign": "center"
+  },
+  "text": "Stay quiet... measuring the room",
+  "x": 265,
+  "y": 91.26953125
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    40
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 15,
+   "text_valign": "center"
+  },
+  "width": 210,
+  "x": 265,
+  "y": 118
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "radii": [
+   5.0,
+   5.0,
+   5.0,
+   5.0
+  ],
+  "style": {
+   "fill": [
+    200,
+    90,
+    40,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 15,
+   "text_valign": "center"
+  },
+  "width": 101.50099999999999,
+  "x": 265,
+  "y": 118
+ },
+ {
+  "color": [
+   40,
+   60,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    40,
+    60,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "Up / Down: starts at  (15 dB)",
+  "x": 265,
+  "y": 181.8515625
+ },
+ {
+  "color": [
+   40,
+   60,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    40,
+    60,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "Left / Right: full at  (45 dB)",
+  "x": 265,
+  "y": 203.8515625
+ },
+ {
+  "color": [
+   40,
+   60,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    40,
+    60,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "or use the two sliders below the game",
+  "x": 265,
+  "y": 225.8515625
+ },
+ {
+  "color": [
+   40,
+   60,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    40,
+    60,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "R: measure the room again",
+  "x": 265,
+  "y": 259.8515625
+ },
+ {
+  "height": 322,
+  "op": "Rect",
+  "radii": [
+   14.0,
+   14.0,
+   14.0,
+   14.0
+  ],
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    40
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "width": 80,
+  "x": 515,
+  "y": 34
+ },
+ {
+  "diameter": 28,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    200,
+    40,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "x": 555,
   "y": 342.0
  },
  {
-  "color": [
-   40,
-   60,
-   90,
-   255
-  ],
-  "op": "Text",
+  "diameter": 5,
+  "op": "Circle",
   "style": {
    "fill": [
-    40,
-    60,
-    90,
+    0,
+    0,
+    0,
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
-   "text_size": 12
+   "stroke_width": 2,
+   "text_size": 14,
+   "text_valign": "center"
   },
-  "text": "voice",
-  "x": 12,
-  "y": 350
+  "x": 561,
+  "y": 338.0
  },
  {
   "color": [
@@ -1029,7 +902,32 @@
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
+   "text_align": "center",
+   "text_size": 14,
+   "text_valign": "center"
+  },
+  "text": "try it",
+  "x": 538.3203125,
+  "y": 363.8515625
+ },
+ {
+  "color": [
+   40,
+   60,
+   90,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    40,
+    60,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 2,
    "text_size": 12,
    "text_valign": "center"
   },
@@ -1054,7 +952,7 @@
     50
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_size": 12,
    "text_valign": "center"
   },
@@ -1079,7 +977,7 @@
     255
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_size": 12,
    "text_valign": "center"
   },
@@ -1103,113 +1001,12 @@
     200
    ],
    "stroke": null,
-   "stroke_width": 3,
+   "stroke_width": 2,
    "text_size": 12,
    "text_valign": "center"
   },
   "text": "microphone",
   "x": 12,
   "y": 401.015625
- },
- {
-  "color": [
-   40,
-   60,
-   90,
-   255
-  ],
-  "op": "Text",
-  "style": {
-   "fill": [
-    40,
-    60,
-    90,
-    255
-   ],
-   "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 46,
-   "text_valign": "center"
-  },
-  "text": "0",
-  "x": 305.36669921875,
-  "y": 13.2265625
- },
- {
-  "color": [
-   40,
-   60,
-   90,
-   255
-  ],
-  "op": "Text",
-  "style": {
-   "fill": [
-    40,
-    60,
-    90,
-    255
-   ],
-   "stroke": null,
-   "stroke_width": 3,
-   "text_align": "right",
-   "text_size": 16,
-   "text_valign": "center"
-  },
-  "text": "best 0",
-  "x": 574.125,
-  "y": 14.6875
- },
- {
-  "height": 70,
-  "op": "Rect",
-  "radii": [
-   14.0,
-   14.0,
-   14.0,
-   14.0
-  ],
-  "style": {
-   "fill": [
-    255,
-    255,
-    255,
-    235
-   ],
-   "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "width": 350,
-  "x": 165,
-  "y": 120
- },
- {
-  "color": [
-   40,
-   60,
-   90,
-   255
-  ],
-  "op": "Text",
-  "style": {
-   "fill": [
-    40,
-    60,
-    90,
-    255
-   ],
-   "stroke": null,
-   "stroke_width": 3,
-   "text_align": "center",
-   "text_size": 20,
-   "text_valign": "center"
-  },
-  "text": "listening... stay quiet a moment",
-  "x": 180.25390625,
-  "y": 143.359375
  }
 ]
