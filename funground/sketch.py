@@ -184,6 +184,11 @@ class Sketch:
         self._emit(ir.Save())
         self._states.save()
 
+    def _push_layer_block(self) -> None:
+        """The implicit push() of a layer block: a Save marked so a picture's history can tell it from a learner's."""
+        self._emit(ir.Save(layer_block=True))
+        self._states.save()
+
     def pop(self) -> None:
         if self._states.depth == 0:
             warnings.warn(

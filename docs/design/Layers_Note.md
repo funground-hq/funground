@@ -143,6 +143,8 @@ SVG has only the layer step; if it fails the SVG is drawn again as S-095 wrote i
 - **ElementTree's prefix table is global;** the SVG step sets the SVG, xlink and inkscape prefixes
   while it writes and puts the table back afterwards.
 
+- **A wipe inside a layer block keeps the layer vector.** The block's own `push()` is an `ir.Save` marked `layer_block` (omitted from snapshots when false); a picture's history restarts at a `background` or `clear` inside only that Save as `[Save, ResetMatrix, wipe]`, but still stops if a learner's own `push()` is open.
+
 ## Tests
 
 `tests/test_layer_files.py`: OCG names, order and `/OFF`; one Form XObject per layer carrying its

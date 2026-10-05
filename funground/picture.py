@@ -153,7 +153,7 @@ class Picture:
         self._persistent_depth = 0
         self._version = 0
         self._history: list[ir.Op] | None = []     # [] to start: a fresh, transparent picture
-        self._open_saves = 0                          # push()es not yet popped, over the picture's whole life
+        self._save_stack: list[bool] = []             # push()es not yet popped, over the picture's whole life (True = a layer block's own)
         self._snapshot_cache: dict[int, Snapshot] = {}
         self._layer_owner: Sketch | None = None    # S-095 (F16): the canvas sketch that made this layer
         self._layer_name: str | None = None
@@ -187,7 +187,7 @@ class Picture:
             raise TypeError("only a layer can be used with 'with'. Make one with f.layer(\"name\"); "
                             "to draw on a picture from f.create_graphics(), call its methods, e.g. g.circle(...)")
         owner._enter_layer(self)
-        self._sketch.push()                  # each block starts from a fresh transform and leaves no state behind
+        self._sketch._push_layer_block()     # each block starts from a fresh transform and leaves no state behind
         self._sketch.reset_matrix()
         return self
 
@@ -239,15 +239,22 @@ class Picture:
             if isinstance(op, ir.Pixels):
                 self._history = None               # raster writes cannot be replayed as vectors (P7)
             elif _resets_history(op):
-                # A reset inside an open push() would leave its pop() unmatched (and lose the transform the
-                # push() was guarding), so history stops until a reset with no push() open; files use pixels.
-                self._history = [op] if self._open_saves == 0 else None
+                # A reset inside a learner's open push() would leave its pop() unmatched (and lose the transform
+                # the push() was guarding), so history stops until a reset with no push() open; files use pixels.
+                # A reset inside only a layer block's own implicit push is safe: the block reset the matrix and
+                # nothing else is open, so history restarts with that Save, so the block's Restore is matched.
+                if not self._save_stack:
+                    self._history = [op]
+                elif self._save_stack == [True]:
+                    self._history = [ir.Save(layer_block=True), ir.ResetMatrix(), op]
+                else:
+                    self._history = None
             elif self._history is not None:
                 self._history.append(op)
             if isinstance(op, ir.Save):
-                self._open_saves += 1
-            elif isinstance(op, ir.Restore) and self._open_saves:
-                self._open_saves -= 1
+                self._save_stack.append(op.layer_block)
+            elif isinstance(op, ir.Restore) and self._save_stack:
+                self._save_stack.pop()
         # else: still unavailable, and nothing in this batch resumed collecting.
         if self._history is not None and len(self._history) > HISTORY_LIMIT:
             self._history = None

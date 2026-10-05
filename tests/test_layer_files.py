@@ -614,3 +614,68 @@ def test_a_push_left_open_on_the_canvas_does_not_move_the_layers_in_files(tmp_pa
     page = pdfium.PdfDocument(str(out))[0]
     img = page.render(scale=1).to_pil().convert("RGB")
     assert img.getpixel((10, 10)) == (255, 0, 0)        # the dot is where the window shows it
+
+
+# ---------------------------------------------------------------- a wipe inside the layer block (F16, P3)
+def _wipe_every_frame(tmp_path, wipe, inner=None, frames=3):
+    """A sketch that wipes layer "x" inside its block every frame, then saves a PDF, an SVG and a PNG."""
+    s = Sketch(platform=HeadlessPlatform())
+    api.use_sketch(s)
+
+    def draw():
+        f.background(255, 255, 255)
+        with f.layer("x"):
+            f.no_stroke()
+            if inner:
+                f.push()
+                f.translate(10, 5)
+            wipe()
+            f.fill(255, 0, 0)
+            f.circle(f.frame_count * 5 + 25, 40, 30)
+            if inner:
+                f.pop()
+        if f.frame_count == frames - 1:
+            f.save(str(tmp_path / "a.pdf"))
+            f.save(str(tmp_path / "a.svg"))
+            f.save(str(tmp_path / "a.png"))
+
+    s.run_namespace({"setup": lambda: f.size(120, 80), "draw": draw}, max_frames=frames)
+
+
+def _layer_is_looking_right(tmp_path):
+    page = render(tmp_path / "a.pdf")
+    png = Image.open(tmp_path / "a.png").convert("RGB")
+    assert mean_difference(page, png) < 0.5
+    return page
+
+
+@pytest.mark.parametrize("how", ["background", "clear"])
+def test_a_wipe_inside_the_layer_block_keeps_the_layer_vector(tmp_path, how):
+    def wipe():
+        if how == "background":
+            f.background(200, 230, 255)
+        else:
+            f.clear()
+
+    _wipe_every_frame(tmp_path, wipe)
+    drawn = dict(layer_xobjects(tmp_path / "a.pdf"))
+    assert set(drawn) == {"x"} and not has_image_under(drawn["x"])
+    groups = layer_groups(tmp_path / "a.svg")
+    assert groups[0].find(f".//{SVG}path") is not None
+    assert groups[0].find(f".//{SVG}image") is None
+    page = _layer_is_looking_right(tmp_path)
+    if how == "background":
+        assert page.getpixel((5, 5)) == (200, 230, 255)
+    else:
+        assert page.getpixel((5, 5)) == (255, 255, 255)
+    assert page.getpixel((35, 40)) == (255, 0, 0)               # last frame: the disc at x = 35
+
+
+def test_a_wipe_inside_a_learners_push_in_the_block_is_safe_as_pixels(tmp_path):
+    _wipe_every_frame(tmp_path, lambda: f.background(200, 230, 255), inner=True)
+    drawn = dict(layer_xobjects(tmp_path / "a.pdf"))
+    assert has_image_under(drawn["x"])
+    groups = layer_groups(tmp_path / "a.svg")
+    assert groups[0].find(f".//{SVG}image") is not None
+    page = _layer_is_looking_right(tmp_path)
+    assert page.getpixel((115, 75)) == (200, 230, 255) and page.getpixel((45, 45)) == (255, 0, 0)
