@@ -53,7 +53,14 @@ def _number(v: object, what: str) -> float | int:
 
 
 class Control:
-    """What every control shares: a label, and a link to the panel that shows it."""
+    """What a slider, a checkbox and a button share: a label.
+
+    You do not make a Control yourself. Use f.create_slider(), f.create_checkbox() and f.create_button().
+    They sit in a panel below the canvas, in the order you made them. Make them in setup() and read them
+    in draw().
+
+    See also: Slider, Checkbox, Button
+    """
 
     def __init__(self, label: str | None) -> None:
         if label is not None and not isinstance(label, str):
@@ -63,6 +70,17 @@ class Control:
 
     @property
     def label(self) -> str:
+        """The text shown beside the control.
+
+        Returns:
+            the label, or "" when it has none.
+
+        Example:
+            box = f.create_checkbox("Show grid")
+            print(box.label)    # Show grid
+
+        See also: create_slider, create_checkbox, create_button
+        """
         return self._label
 
     def _touch(self) -> None:
@@ -72,7 +90,21 @@ class Control:
 
 
 class Slider(Control):
-    """A value between `low` and `high`, kept to `step` when one is given."""
+    """A control that holds a number between a low and a high end. You drag it in the panel below the canvas.
+
+    You get one from f.create_slider(low, high, value, step, label). Make it in setup(). In draw(), read
+    it with slider.value(). It starts at value, or at low if you give none. If you give a step, the value
+    moves in jumps of that size from low. Whole numbers in give whole numbers out, when low and step are
+    both whole.
+
+    Example:
+        size_slider = f.create_slider(10, 200, 50, label="size")
+
+        def draw():
+            f.circle(200, 200, size_slider.value())
+
+    See also: create_slider, value, Checkbox, Button
+    """
 
     def __init__(self, low, high, value=None, step=None, label=None) -> None:
         super().__init__(label)
@@ -92,14 +124,35 @@ class Slider(Control):
 
     @property
     def low(self):
+        """The smallest value the slider can have.
+
+        Returns:
+            the low end, as given.
+
+        See also: high, step
+        """
         return self._low
 
     @property
     def high(self):
+        """The largest value the slider can have.
+
+        Returns:
+            the high end, as given.
+
+        See also: low, step
+        """
         return self._high
 
     @property
     def step(self):
+        """The size of each jump of the slider.
+
+        Returns:
+            the step as given, or None when the slider moves smoothly.
+
+        See also: low, high
+        """
         return self._step
 
     def _set(self, v) -> None:
@@ -118,14 +171,45 @@ class Slider(Control):
             self._touch()
 
     def value(self, v=_UNSET):
-        """`slider.value()` reads the value; `slider.value(v)` sets it (kept in range, rounded to step)."""
+        """Read the slider's number, or set it.
+
+        With no argument it reads the value. With a number it sets the value, which is kept between low and
+        high and rounded to the step. It changes in the panel too.
+
+        Arguments:
+            v: the new value. Leave it out to read the value.
+
+        Returns:
+            the value when you leave v out. None when you set it.
+
+        Raises:
+            TypeError: if v is not a number.
+            ValueError: if v is infinity or nan.
+
+        Example:
+            s = f.create_slider(0, 1, 0.5)
+            print(s.value())    # 0.5
+            s.value(0.8)
+
+        See also: text, low, high
+        """
         if v is _UNSET:
             return self._value
         self._set(_number(v, "a slider's value"))
         return None
 
     def text(self) -> str:
-        """The value as the panel shows it."""
+        """The value as the panel shows it.
+
+        Returns:
+            the value as text. A step of 0.1 gives one decimal place.
+
+        Example:
+            s = f.create_slider(0, 1, 0.5, 0.1)
+            print(s.text())    # 0.5
+
+        See also: value
+        """
         return _format(self._value, self._step)
 
 
@@ -144,14 +228,41 @@ def _format(v, step) -> str:
 
 
 class Checkbox(Control):
-    """A box that is ticked or not."""
+    """A box that is ticked or not. You click it in the panel below the canvas.
+
+    You get one from f.create_checkbox(label, checked). Make it in setup(). In draw(), read it with
+    box.checked().
+
+    Example:
+        grid = f.create_checkbox("Show grid", True)
+
+        def draw():
+            if grid.checked():
+                f.line(0, 200, 400, 200)
+
+    See also: create_checkbox, checked, Slider, Button
+    """
 
     def __init__(self, label, checked=False) -> None:
         super().__init__(label)
         self._checked = bool(checked)
 
     def checked(self, b=_UNSET):
-        """`box.checked()` reads it; `box.checked(True)` sets it."""
+        """Read whether the box is ticked, or tick or untick it.
+
+        Arguments:
+            b: True to tick it, False to untick it. Leave it out to read.
+
+        Returns:
+            True or False when you leave b out. None when you set it.
+
+        Example:
+            box = f.create_checkbox("Fill", True)
+            if box.checked():
+                box.checked(False)
+
+        See also: create_checkbox
+        """
         if b is _UNSET:
             return self._checked
         b = bool(b)
@@ -162,7 +273,20 @@ class Checkbox(Control):
 
 
 class Button(Control):
-    """A button. `clicked()` is true once for each click since it was last asked."""
+    """A button that you click in the panel below the canvas.
+
+    You get one from f.create_button(label). Make it in setup(). In draw(), ask button.clicked(). It is True
+    once for each click.
+
+    Example:
+        again = f.create_button("Again")
+
+        def draw():
+            if again.clicked():
+                f.background("white")
+
+    See also: create_button, clicked, Slider, Checkbox
+    """
 
     def __init__(self, label) -> None:
         super().__init__(label)
@@ -170,6 +294,19 @@ class Button(Control):
         self._down = False
 
     def clicked(self) -> bool:
+        """Whether the button was clicked since you last asked.
+
+        It is True once for each click. Asking again straight away gives False.
+
+        Returns:
+            True if there was a click since the last time you asked, otherwise False.
+
+        Example:
+            if again.clicked():
+                f.background("white")
+
+        See also: create_button
+        """
         was, self._clicks = self._clicks, False
         return was
 

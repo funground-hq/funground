@@ -111,7 +111,26 @@ def make(name: str | None = None, frame_source=None) -> "Microphone":
 
 
 class Microphone(_Analysis):
-    """A microphone from f.microphone(). See contract A4."""
+    """A microphone that your sketch can listen to.
+
+    You get one from f.microphone(). Call start() to begin listening and stop() to end. While it listens,
+    level(), spectrum(), pitch(), is_onset(), chroma(), chord(), tonic() and swara_histogram() work as they
+    do on a Sound. They tell you about the last fraction of a second. When it is not listening they give 0,
+    a list of zeros, None or False.
+
+    capture(seconds) gives you a Sound made of the last few seconds it heard (up to 10), so you can play
+    it, save it, draw it or look at its whole-sound features such as tempo().
+
+    The microphone is never played back, so there is no squeal from the speakers. Nothing is recorded to a
+    file unless you call save() on a capture. With FUNGROUND_HEADLESS=1 it is silent and hears nothing.
+
+    Example:
+        mic = f.microphone()
+        mic.start()
+        f.circle(200, 200, 20 + 400 * mic.level())
+
+    See also: microphone, microphones, Sound
+    """
 
     def __init__(self, device_name: str | None, frame_source=None, silent: bool = False):
         self._device_name = device_name
@@ -130,7 +149,19 @@ class Microphone(_Analysis):
 
     # ---- listening
     def start(self) -> None:
-        """Start listening. It forgets what it heard before."""
+        """Start listening.
+
+        It forgets what it heard before. Calling it when it is already listening does nothing.
+
+        Raises:
+            RuntimeError: if there is no microphone, or the computer will not let funground use it.
+
+        Example:
+            mic = f.microphone()
+            mic.start()
+
+        See also: stop, is_listening, capture
+        """
         if self._listening:
             return
         with self._lock:
@@ -145,7 +176,14 @@ class Microphone(_Analysis):
         self._version += 1
 
     def stop(self) -> None:
-        """Stop listening. What it heard is kept, so capture() still works."""
+        """Stop listening, but keep what was heard, so that capture() still works.
+
+        Example:
+            recording = mic.capture(2)
+            mic.stop()
+
+        See also: start, capture
+        """
         if not self._listening:
             return
         if self._device is not None:
@@ -154,7 +192,17 @@ class Microphone(_Analysis):
         self._version += 1
 
     def is_listening(self) -> bool:
-        """True between start() and stop()."""
+        """Whether the microphone is listening.
+
+        Returns:
+            True between start() and stop(), otherwise False.
+
+        Example:
+            if not mic.is_listening():
+                mic.start()
+
+        See also: start, stop
+        """
         return self._listening
 
     # ---- the ring buffer
@@ -207,25 +255,77 @@ class Microphone(_Analysis):
                          f"microphone.capture(seconds).{what}() to look at what was heard")
 
     def onsets(self):
-        """Not for a microphone. Use ``microphone.capture(seconds).onsets()``."""
+        """Not for a microphone, because it looks at a whole sound.
+
+        Use mic.capture(seconds).onsets() to look at what was heard.
+
+        Raises:
+            ValueError: always, with a message that points to capture().
+
+        See also: capture, is_onset
+        """
         self._whole_sound_only("onsets")
 
     def tempo(self):
-        """Not for a microphone. Use ``microphone.capture(seconds).tempo()``."""
+        """Not for a microphone, because it looks at a whole sound.
+
+        Use mic.capture(seconds).tempo() to look at what was heard.
+
+        Raises:
+            ValueError: always, with a message that points to capture().
+
+        See also: capture
+        """
         self._whole_sound_only("tempo")
 
     def beats(self):
-        """Not for a microphone. Use ``microphone.capture(seconds).beats()``."""
+        """Not for a microphone, because it looks at a whole sound.
+
+        Use mic.capture(seconds).beats() to look at what was heard.
+
+        Raises:
+            ValueError: always, with a message that points to capture().
+
+        See also: capture
+        """
         self._whole_sound_only("beats")
 
     def key(self):
-        """Not for a microphone. Use ``microphone.capture(seconds).key()``."""
+        """Not for a microphone, because it looks at a whole sound.
+
+        Use mic.capture(seconds).key() to look at what was heard.
+
+        Raises:
+            ValueError: always, with a message that points to capture().
+
+        See also: capture, chroma
+        """
         self._whole_sound_only("key")
 
     # ---- capture
     def capture(self, seconds: float):
-        """A new sound made of the last *seconds* the microphone heard (up to 10). If it has heard
-        less than that, the start is silence, so the sound is always *seconds* long."""
+        """Make a new sound from the last few seconds the microphone heard.
+
+        If it has heard less than that, the start is silence, so the sound is always as long as you asked.
+        It is an ordinary Sound: play it, save it, or draw its wave with samples().
+
+        Arguments:
+            seconds: how much to keep, more than 0 and at most 10.
+
+        Returns:
+            a new Sound that is `seconds` long.
+
+        Raises:
+            ValueError: if seconds is not more than 0 and at most 10.
+
+        Example:
+            mic = f.microphone()
+            mic.start()
+            recording = mic.capture(1)   # use it after about a second
+            recording.save("heard.wav")  # writes a new file
+
+        See also: start, stop
+        """
         if (isinstance(seconds, bool) or not isinstance(seconds, (int, float))
                 or not 0 < seconds <= BUFFER_SECONDS):
             raise ValueError(f"microphone.capture(): seconds must be more than 0 and at most "
@@ -235,7 +335,15 @@ class Microphone(_Analysis):
         return _sound._from_samples(values, self._rate, self._frame_source, "microphone.capture()")
 
     def close(self) -> None:
-        """Stop and let go of the device (used when a sketch ends)."""
+        """Stop listening and let go of the microphone.
+
+        funground calls it when a sketch ends, so you do not need to.
+
+        Example:
+            mic.close()
+
+        See also: stop
+        """
         self.stop()
         if self._device is not None:
             try:

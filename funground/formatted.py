@@ -17,7 +17,19 @@ from .color import Color
 
 @dataclass(frozen=True, slots=True)
 class Run:
-    """One run of text and its own settings. None means "not given"."""
+    """One piece of a FormattedString: some text and the settings that were given for it.
+
+    You get the runs of a FormattedString from its runs property. A run is read-only. The fields are
+    text, font (the name of the font, or None), size, style, color, tracking, features and variations. A
+    field that is None was not given, so it follows the drawing state when the text is drawn.
+
+    Example:
+        line = f.FormattedString().append("Hello ", size=40).append("world", style="bold")
+        for run in line.runs:
+            print(run.text, run.size)
+
+    See also: FormattedString
+    """
 
     text: str
     font: str | None = None            # the font registry key (T11)
@@ -29,7 +41,18 @@ class Run:
     variations: tuple | None = None    # sorted (tag, number) pairs
 
     def apply(self, state):
-        """The GraphicsState to draw this run with: *state*, with this run's own settings on top."""
+        """Work out the drawing state for this run.
+
+        funground uses it when it draws formatted text. You do not need to call it.
+
+        Arguments:
+            state: a drawing state, the current settings for fill, text and so on.
+
+        Returns:
+            a drawing state: the one you gave, with this run's own settings put on top.
+
+        See also: with_text
+        """
         changes = {}
         if self.font is not None:
             changes["font"] = self.font
@@ -46,12 +69,43 @@ class Run:
         return state.with_(**changes) if changes else state
 
     def with_text(self, text: str) -> "Run":
+        """Make a new run with the same settings and different text.
+
+        funground uses it when it breaks text into lines. You do not need to call it.
+
+        Arguments:
+            text: the new text.
+
+        Returns:
+            a new Run.
+
+        See also: apply
+        """
         return Run(text, self.font, self.size, self.style, self.color, self.tracking,
                    self.features, self.variations)
 
 
 class FormattedString:
-    """Text made of runs, each with its own font, size, style, colour and so on (contract T14)."""
+    """Text made of runs, where each run can have its own font, size, style, colour and so on.
+
+    Make an empty one with f.FormattedString(), then add runs with append(). Draw it with f.text() or
+    f.text_box() in place of an ordinary string. f.text_box() gives back what did not fit as a
+    FormattedString, and its runs keep their settings.
+
+    A setting that you leave out for a run is not fixed. It follows the drawing state when the text is
+    drawn, so a push() or a text_size() still reaches it.
+
+    str(line) is the plain text, len(line) is the number of characters, and a + b joins two formatted
+    strings (or a formatted string and an ordinary string) into a new one.
+
+    Example:
+        line = f.FormattedString()
+        line.append("big ", size=60, color="tomato")
+        line.append("and small", size=20)
+        f.text(line, 20, 100)
+
+    See also: text, text_box, append
+    """
 
     __slots__ = ("_runs",)
 
@@ -68,8 +122,34 @@ class FormattedString:
     def append(self, text: object, font=None, size: float | None = None, style: str | None = None,
                color=None, tracking: float | None = None, features: dict | None = None,
                variations: dict | None = None) -> "FormattedString":
-        """Add a run. Every setting you give belongs to this run; one you leave out follows the
-        drawing state when the text is drawn. Returns the same FormattedString, so calls chain."""
+        """Add a run of text to the end.
+
+        Every setting you give belongs to this run. A setting you leave out follows the drawing state when
+        the text is drawn. Numbers for the colour are read in the colour mode of the moment you call append().
+
+        Arguments:
+            text: what to add. It is turned into text with str(). Empty text adds no run.
+            font: a font from f.load_font(), or the path of a font file.
+            size: the text size in pixels, more than 0.
+            style: "normal", "bold", "italic" or "bold_italic". It is for the built-in font only.
+            color: the colour of this run. Any colour that f.fill() takes.
+            tracking: the extra space after every letter, in pixels.
+            features: a dictionary of OpenType features to turn on or off, like {"liga": False}.
+            variations: a dictionary of axes of a variable font, like {"wght": 700}.
+
+        Returns:
+            this same FormattedString, so calls can chain.
+
+        Raises:
+            TypeError: if font, size, tracking, features or variations is of the wrong kind.
+            ValueError: if size is 0 or less, or style is not one of the four.
+
+        Example:
+            line = f.FormattedString()
+            line.append("Hello ", size=40).append("world", style="bold", color="navy")
+
+        See also: runs, text
+        """
         from .api import active_sketch
         from .sketch import Sketch
         from .typography import TEXT_STYLES, Font
@@ -135,6 +215,17 @@ class FormattedString:
     # ---- reading
     @property
     def runs(self) -> tuple[Run, ...]:
+        """The runs, in order.
+
+        Returns:
+            a tuple of Run objects.
+
+        Example:
+            line = f.FormattedString().append("a").append("b", size=30)
+            print(len(line.runs))    # 2
+
+        See also: append
+        """
         return self._runs
 
     def __str__(self) -> str:
@@ -176,16 +267,30 @@ class FormattedString:
         return FormattedString._of(runs)
 
     def lines(self) -> list[list[tuple[str, int | None]]]:
-        """Split at every "\\n": each line is a list of (text, run index) pieces."""
+        """Split the text at every new line.
+
+        funground uses it when it draws text. You do not need to call it.
+
+        Returns:
+            a list of lines. Each line is a list of (text, run index) pieces.
+
+        See also: wrap
+        """
         return self.wrap(None)[0]
 
     def wrap(self, fits) -> tuple[list[list[tuple[str, int | None]]], list[int]]:
-        """Break into lines (contract T10, T14). *fits(pieces)* says whether a candidate line, a list of
-        (text, run index) pieces, is narrow enough; None means no wrapping, only "\\n" breaks.
+        """Break the text into lines that fit, at spaces.
 
-        Returns (lines, starts): starts[i] is the character where line i begins, so
-        `self._from(starts[i])` is the text from that line on. Lines break at spaces; a word wider
-        than the box is broken between letters. A blank line keeps one empty piece, so it still has a height.
+        funground uses it when it draws text in a box. You do not need to call it. A word that is wider than
+        the box is broken between letters. A blank line keeps one empty piece, so that it still has a height.
+
+        Arguments:
+            fits: a function that takes a candidate line, a list of (text, run index) pieces, and says whether it is narrow enough. None means no wrapping, only new lines.
+
+        Returns:
+            (lines, starts). lines is a list of lines, each a list of (text, run index) pieces. starts[i] is the character where line i begins.
+
+        See also: lines
         """
         text, owner = self._flat()
         lines: list[list[tuple[str, int | None]]] = []

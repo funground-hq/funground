@@ -28,7 +28,31 @@ _DATA = Path(__file__).with_name("data") / "ragas.json"
 # ---- the table
 @dataclass(frozen=True)
 class Raga:
-    """One raga from the table. Read-only. The phrases are sargam strings for f.melody(sa=...)."""
+    """One raga from funground's small table. It is read-only.
+
+    You get one from f.raga(name). Its parts are:
+    name: the raga's name.
+    thaat: the parent scale it belongs to.
+    swaras: the notes it uses, as a tuple of letters such as ("S", "R", "G"). Small r, g, d and n are komal (flat). M is tivra (sharp) Ma.
+    aroha: the way up, as a sargam string that f.melody(text, sa=...) can play.
+    avaroha: the way down, as a sargam string.
+    pakad: a phrase that marks the raga, as a sargam string.
+    vadi: the most important swara.
+    samvadi: the second most important swara.
+    time: the traditional time of day to perform it.
+    notes: where the sources differ, and other things to know. It may be empty.
+    sources: a tuple of texts that say where each fact was checked.
+
+    str(raga) gives a short summary. A raga is much more than its notes, and the table gives a start, not
+    the raga.
+
+    Example:
+        yaman = f.raga("Yaman")
+        print(yaman.thaat, yaman.swaras)
+        f.melody(yaman.aroha, sa="D4").play()
+
+    See also: raga, ragas, melody, match_ragas
+    """
 
     name: str
     thaat: str
@@ -49,7 +73,27 @@ class Raga:
 
 @dataclass(frozen=True)
 class Tala:
-    """One tala from the table. Read-only. Beats are counted from 1, so the sam is beat 1."""
+    """One tala from funground's small table. It is read-only.
+
+    You get one from f.tala_info(name). Beats are counted from 1, so the sam is beat 1. Its parts are:
+    name: the tala's name.
+    beats: how many beats in one cycle.
+    vibhag: the divisions, as a tuple of beat counts such as (4, 4, 4, 4).
+    tali: the beat numbers that are claps.
+    khali: the beat numbers that are waves (the empty beats).
+    sam: the first beat, always 1.
+    bols: the theka, the drum syllables, one for each beat.
+    notes: where the sources differ, and other things to know. It may be empty.
+    sources: a tuple of texts that say where each fact was checked.
+
+    str(tala) gives a short summary. Use f.tala(name) to hear the theka.
+
+    Example:
+        teentaal = f.tala_info("Teentaal")
+        print(teentaal.beats, teentaal.bols)
+
+    See also: tala_info, talas, tala
+    """
 
     name: str
     beats: int

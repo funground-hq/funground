@@ -496,7 +496,22 @@ _path_to_key: dict[str, str] = {}
 
 
 class Font:
-    """A font loaded with `f.load_font()`; pass it to `f.text_font()` (contract T11)."""
+    """A font that you can pass to f.text_font(), or ask questions about.
+
+    You get one from f.load_font(path) (a font file), f.system_font(name) (a font installed on this
+    computer) or f.current_font() (the font in use now). The font's name, which funground uses to find it,
+    is font.name: the file name, or the file name with ~2, ~3 and so on when two files share a name. A
+    font from a collection (.ttc) file has # and the face number after the file name.
+
+    Two fonts are equal when they have the same name.
+
+    Example:
+        face = f.load_font("MyFont.ttf")   # your own file
+        f.text_font(face)
+        print(face.family(), face.style())
+
+    See also: load_font, system_font, current_font, text_font
+    """
 
     __slots__ = ("name",)
 
@@ -521,23 +536,79 @@ class Font:
         return resource
 
     def family(self) -> str:
-        """The family name from the font's `name` table, like "DejaVu Sans" (contract T17)."""
+        """The family name of the font, as written in the font file.
+
+        Returns:
+            the name, such as "DejaVu Sans".
+
+        Example:
+            print(f.current_font().family())
+
+        See also: style, variations, features
+        """
         return self._resource().family
 
     def style(self) -> str:
-        """The style name from the font's `name` table, like "Bold" (contract T17)."""
+        """The style name of the font, as written in the font file.
+
+        Returns:
+            the name, such as "Bold" or "Book".
+
+        Example:
+            print(f.current_font().style())
+
+        See also: family
+        """
         return self._resource().style_name
 
     def variations(self) -> dict[str, tuple[float, float, float]]:
-        """Variable axes: tag -> (minimum, default, maximum). {} for a font that is not variable."""
+        """The axes of a variable font and how far each one can go.
+
+        An ordinary font has none. Use f.font_variations() to set an axis.
+
+        Returns:
+            a dictionary from the axis tag, such as "wght", to (minimum, default, maximum). It is {} for a font that is not variable.
+
+        Example:
+            for tag, (low, normal, high) in f.current_font().variations().items():
+                print(tag, low, normal, high)
+
+        See also: features, family
+        """
         return self._resource().axis_ranges()
 
     def features(self) -> list[str]:
-        """The OpenType feature tags the font has, sorted, like ["kern", "liga"]."""
+        """The OpenType features that the font has.
+
+        Use f.text_features() to turn one on or off.
+
+        Returns:
+            a sorted list of four-letter tags, such as ["kern", "liga"].
+
+        Example:
+            print(f.current_font().features())
+
+        See also: variations, contains
+        """
         return self._resource().feature_tags()
 
     def contains(self, text: str) -> bool:
-        """True when the font has a glyph for every character of *text* (spaces count; a new line is ignored)."""
+        """Whether the font has a shape for every character of some text.
+
+        Spaces count. A new line is ignored.
+
+        Arguments:
+            text: the text to check.
+
+        Returns:
+            True when every character has a shape in the font, otherwise False.
+
+        Example:
+            if not f.current_font().contains("hello"):
+                print("some letters are missing")
+
+        See also: features, family
+        """
         return self._resource().has_text(text)
 
 

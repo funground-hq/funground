@@ -157,12 +157,19 @@ _HANN = [0.5 - 0.5 * math.cos(2 * math.pi * i / (FFT_SIZE - 1)) for i in range(F
 
 
 class _Analysis:
-    """level(), spectrum(), pitch(), is_onset(), chroma() and chord(), shared by sounds (A2, A3, A5, A6)
-    and microphones (A4). The numbers are worked out in analysis.py.
+    """The listening methods that a sound and a microphone share.
 
-    A class using it provides ``_window(count)`` (the latest *count* mono samples), ``_rate``,
-    ``_version``, ``_cache``, ``_frame_source``, ``_name``, ``_analysing()`` (is there anything to
-    measure now?) and ``_ready()`` (make the samples available)."""
+    level(), spectrum(), pitch(), is_onset(), chroma(), chord(), tonic() and swara_histogram() work in the
+    same way on a Sound and on a Microphone. They tell you about the sound as it is now, so call them in
+    draw(). They give 0, a list of zeros, None or False when nothing is playing or listening.
+
+    The numbers are worked out in plain Python, in analysis.py and hindustani.py.
+    """
+
+    # Contract A2, A3, A5, A6 (sounds) and A4 (microphones). A class using this provides
+    # ``_window(count)`` (the latest *count* mono samples), ``_rate``, ``_version``, ``_cache``,
+    # ``_frame_source``, ``_name``, ``_analysing()`` (is there anything to measure now?) and
+    # ``_ready()`` (make the samples available).
 
     def _cached(self, key, compute):
         frame = self._frame_source() if self._frame_source else 0
@@ -177,8 +184,21 @@ class _Analysis:
         return value
 
     def level(self) -> float:
-        """How loud it is now, from 0 to 1 (root mean square of the last 1/30 second).
-        0 when nothing is playing or listening."""
+        """How loud the sound is right now, from 0 (silent) to 1.
+
+        It is the root mean square of the last 1/30 of a second, so it follows the music. It is 0 when the
+        sound is not playing, or the microphone is not listening.
+
+        Returns:
+            a number from 0 to 1.
+
+        Example:
+            snd = f.load_sound("song.wav")   # your own file
+            snd.loop()
+            f.circle(200, 200, 50 + 300 * snd.level())
+
+        See also: spectrum, pitch, is_onset
+        """
         if not self._analysing():
             return 0.0
         return self._cached("level", self._compute_level)
@@ -189,8 +209,29 @@ class _Analysis:
         return min(1.0, math.sqrt(sum(v * v for v in window) / len(window)))
 
     def spectrum(self, bands: int = 32) -> list[float]:
-        """How strong the sound is now in each of *bands* ranges of pitch, from 0 to 1, low to
-        high, evenly spaced in pitch from 40 Hz to 16 kHz. All zeros when not playing."""
+        """How strong the sound is now in each of several ranges of pitch, from low notes to high notes.
+
+        The ranges are called bands. They are spaced evenly in pitch, from 40 Hz to 16 kHz, so each one is
+        about the same number of notes wide. A band is strong when the sound has a lot of that pitch. You get
+        a list of zeros when the sound is not playing, or the microphone is not listening.
+
+        Arguments:
+            bands: how many ranges to split the sound into, a whole number from 1 to 256. It is 32 at first.
+
+        Returns:
+            a list of `bands` numbers from 0 to 1, lowest pitch first.
+
+        Raises:
+            ValueError: if bands is not a whole number from 1 to 256.
+
+        Example:
+            snd = f.tone(220, 2)
+            snd.play()
+            for i, strength in enumerate(snd.spectrum(16)):
+                f.rect(20 + i * 24, 380, 20, -300 * strength)
+
+        See also: level, pitch, chroma
+        """
         if isinstance(bands, bool) or not isinstance(bands, int) or not 1 <= bands <= MAX_BANDS:
             raise ValueError(f"{self._name}.spectrum(): bands must be a whole number from 1 to {MAX_BANDS}, not {bands!r}")
         if not self._analysing():
@@ -235,9 +276,24 @@ class _Analysis:
         return out
 
     def pitch(self) -> float | None:
-        """The frequency, in hertz, of the one voice heard now, or None when it is quiet or has no
-        clear pitch (or nothing is playing or listening). It looks at the last 2 048 samples. It is
-        for one voice or instrument at a time, not chords."""
+        """The frequency of the one voice or instrument heard right now.
+
+        It looks at the last 2 048 samples. It is for one note at a time, not for chords. It looks for
+        pitches from 50 to 2000 Hz. It gives None when the sound is quiet, when it has no clear pitch (noise
+        has none), or when nothing is playing or listening.
+
+        Returns:
+            the frequency in hertz, or None.
+
+        Example:
+            mic = f.microphone()
+            mic.start()
+            hz = mic.pitch()
+            if hz:
+                f.text(f.frequency_to_note(hz), 20, 40)
+
+        See also: chroma, chord, level
+        """
         if not self._analysing():
             return None
         return self._cached("pitch", self._compute_pitch)
@@ -247,8 +303,20 @@ class _Analysis:
         return synth.find_pitch(self._window(synth.PITCH_WINDOW), self._rate)
 
     def is_onset(self) -> bool:
-        """True in the frame where a new note or hit is heard, for flashing a light on each one. It looks
-        at the last third of a second. False when nothing is playing or listening."""
+        """Whether a new note or hit is heard in this frame.
+
+        Use it to flash a light on each beat or note. It looks at the last 0.3 seconds. It is False
+        when nothing is playing or listening.
+
+        Returns:
+            True in the frame where a new note or hit begins, otherwise False.
+
+        Example:
+            if song.is_onset():
+                f.background("white")
+
+        See also: onsets, level
+        """
         if not self._analysing():
             self._onset_last = -1.0
             return False
@@ -273,8 +341,21 @@ class _Analysis:
         return found
 
     def chroma(self) -> list[float]:
-        """Twelve numbers from 0 to 1: how strong each note name (C, C#, D ... B) is now, whatever the
-        octave. The strongest is 1. All zeros when nothing is playing or listening, or it is quiet."""
+        """How strong each of the twelve note names is right now, whatever the octave.
+
+        The numbers are for C, C#, D, D#, E, F, F#, G, G#, A, A# and B, in that order. The strongest is 1.
+        All of them are 0 when nothing is playing or listening, or when it is quiet.
+
+        Returns:
+            a list of 12 numbers from 0 to 1.
+
+        Example:
+            notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+            for i, strength in enumerate(song.chroma()):
+                f.text(notes[i], 20 + i * 30, 380 - 200 * strength)
+
+        See also: chord, pitch, key
+        """
         if not self._analysing():
             return [0.0] * 12
         return list(self._cached("chroma", self._compute_chroma))
@@ -285,8 +366,20 @@ class _Analysis:
         return analysis.chroma_of(self._window(count), self._rate)
 
     def chord(self) -> str | None:
-        """The chord sounding now, as a name like "C", "Am", "G7", "Fmaj7" or "Bdim", or None when no
-        chord stands out (one voice is not a chord). It is for clear piano, guitar or synth chords."""
+        """The chord sounding now, as a name.
+
+        The name is a note followed by nothing (major), m, dim, aug, 7, maj7 or m7, such as "C", "Am", "G7",
+        "Fmaj7" or "Bdim". One voice on its own is not a chord. It is meant for clear chords on a piano, a
+        guitar or a synth, not for a busy band.
+
+        Returns:
+            the chord name, or None when no chord stands out.
+
+        Example:
+            f.text(song.chord() or "-", 150, 100)
+
+        See also: chroma, key, chord_notes
+        """
         if not self._analysing():
             return None
         return self._cached("chord", lambda: analysis.chord_of(self._compute_chroma()))
@@ -304,17 +397,45 @@ class _Analysis:
         return ragas.pitch_track(self._window(10 * self._rate), self._rate)[0]
 
     def tonic(self) -> float | None:
-        """A guess at Sa, in hertz, or None when too little had a clear pitch. It is a heuristic:
-        it counts how long each pitch was heard, folded into one octave, and picks the pitch that
-        best explains a strong Sa and Pa (see funground.hindustani.tonic for the method and its limits)."""
+        """A guess at Sa, the starting note of a singer, in hertz.
+
+        It counts how long each pitch was heard, folded into one octave. It then picks the pitch that best
+        explains a strong Sa and Pa. It is a rough guide, not an answer. For a microphone it uses the last
+        10 seconds. For a sound it uses the whole sound.
+
+        Returns:
+            the frequency of Sa in hertz, or None when too little had a clear pitch.
+
+        Example:
+            sa = recording.tonic()
+            if sa:
+                print(f.frequency_to_note(sa))
+
+        See also: swara_histogram, pitch, match_ragas
+        """
         from . import hindustani as ragas
 
         return ragas.tonic(self._pitch_track())
 
     def swara_histogram(self, sa) -> list[float]:
-        """12 numbers, one for each swara S r R g G m M P d D n N above *sa* (a note name like 'D4'
-        or hertz): the share of the time with a clear pitch spent within 50 cents of that swara, in
-        any octave. They add up to 1 (all 0 if nothing had a pitch)."""
+        """How much of the singing was on each swara.
+
+        Each number is the share of the time with a clear pitch that was spent within 50 cents (half a
+        semitone) of that swara, in any octave. The twelve swaras above Sa are S, r, R, g, G, m, M, P, d, D,
+        n and N. The numbers add up to 1, or are all 0 if nothing had a pitch.
+
+        Arguments:
+            sa: the note that Sa is, as a note name like "D4" or as a number of hertz.
+
+        Returns:
+            a list of 12 numbers, the first for S and the last for N.
+
+        Example:
+            hist = recording.swara_histogram("D4")
+            print(f.match_ragas(hist)[0])
+
+        See also: tonic, match_ragas
+        """
         from . import hindustani as ragas
 
         sa_hz = ragas._sa_hz(sa, f"{self._name}.swara_histogram()")
@@ -322,7 +443,27 @@ class _Analysis:
 
 
 class Sound(_Analysis):
-    """A sound from f.load_sound(). See contract A1 (playback) and A2 (analysis)."""
+    """A sound that you can play, listen to and change.
+
+    You get one from f.load_sound() (a file), f.create_sound() (a list of numbers), f.tone(), f.note(),
+    f.pluck(), f.melody(), f.drone() and f.tala() (made for you), f.sequence() and f.mix() (made from
+    other sounds), and mic.capture() (made from what a microphone heard). All of them are the same kind
+    of object.
+
+    A sound keeps its own place and state (playing, paused or stopped), kept by a clock. So is_playing()
+    and the listening methods behave the same with or without a sound device. With no device, or with
+    FUNGROUND_HEADLESS=1, a sound plays silently and keeps time.
+
+    Methods that change a sound's state (play, loop, stop, pause, set_volume, pan) change this sound.
+    Methods that make something new (reverb) give you a new sound and leave this one alone.
+
+    Example:
+        beep = f.tone(440, 1)
+        beep.play()
+        f.circle(200, 200, 50 + 300 * beep.level())
+
+    See also: load_sound, create_sound, tone, mix, Microphone
+    """
 
     def __init__(self, device_sound, mixer, silent: bool, frame_source=None, made=None):
         self._snd = device_sound
@@ -373,7 +514,23 @@ class Sound(_Analysis):
         channel.set_volume(left, right)
 
     def pan(self, position: float) -> None:
-        """Move the sound between the speakers, from -1 (all left) to 1 (all right). 0 is the middle."""
+        """Move the sound between the left and right speakers.
+
+        It works on any sound. level() and spectrum() do not change with pan. save() keeps the pan.
+
+        Arguments:
+            position: a number from -1 (all left) to 1 (all right). 0 is the middle.
+
+        Raises:
+            ValueError: if position is not a number from -1 to 1.
+
+        Example:
+            snd = f.tone(440, 1)
+            snd.pan(-1)     # left speaker only
+            snd.play()
+
+        See also: set_volume, play
+        """
         if isinstance(position, bool) or not isinstance(position, (int, float)) or not -1 <= position <= 1:
             raise ValueError(f"sound.pan(): pan must be from -1 (left) to 1 (right), not {position!r}")
         self._pan = float(position)
@@ -395,22 +552,58 @@ class Sound(_Analysis):
             self._snd.stop()
 
     def play(self) -> None:
-        """Play from the start, or from where pause() left it. Playing again starts it again."""
+        """Play the sound from the start, or from where pause() left it.
+
+        Playing a sound that is already playing starts it again from the start. A sound that is not
+        looping stops by itself at the end.
+
+        Example:
+            beep = f.tone(440, 1)
+            beep.play()
+
+        See also: loop, pause, stop, is_playing
+        """
         self._start(False)
 
     def loop(self) -> None:
-        """Play over and over."""
+        """Play the sound over and over, until you call stop() or pause().
+
+        Example:
+            drone = f.drone("D3", 8)
+            drone.loop()
+
+        See also: play, stop, pause
+        """
         self._start(True)
 
     def stop(self) -> None:
-        """Stop and go back to the start."""
+        """Stop the sound and go back to its start.
+
+        Example:
+            snd = f.tone(440, 5)
+            snd.play()
+            snd.stop()
+
+        See also: pause, play
+        """
         self._device_stop()
         self._state = "stopped"
         self._held = 0.0
         self._version += 1
 
     def pause(self) -> None:
-        """Stop and keep the place; play() carries on from there."""
+        """Stop the sound and keep the place, so that play() carries on from there.
+
+        Nothing happens if the sound is not playing.
+
+        Example:
+            snd = f.tone(440, 5)
+            snd.play()
+            snd.pause()
+            snd.play()     # carries on
+
+        See also: play, stop, current_time
+        """
         self._update()
         if self._state != "playing":
             return
@@ -421,7 +614,23 @@ class Sound(_Analysis):
             self._channel.pause()
 
     def set_volume(self, volume: float) -> None:
-        """Set the loudness, from 0 (silent) to 1 (full)."""
+        """Set how loud the sound plays.
+
+        It does not change the numbers inside the sound, so level() and samples() are not affected.
+
+        Arguments:
+            volume: a number from 0 (silent) to 1 (full). It is 1 at first.
+
+        Raises:
+            ValueError: if volume is not a number from 0 to 1.
+
+        Example:
+            snd = f.tone(440, 1)
+            snd.set_volume(0.3)
+            snd.play()
+
+        See also: get_volume, pan
+        """
         if isinstance(volume, bool) or not isinstance(volume, (int, float)) or not 0 <= volume <= 1:
             raise ValueError(f"sound.set_volume(): volume must be from 0 to 1, not {volume!r}")
         self._volume = float(volume)
@@ -429,20 +638,66 @@ class Sound(_Analysis):
             self._snd.set_volume(self._volume)
 
     def get_volume(self) -> float:
-        """The loudness set by set_volume() (1 at first)."""
+        """The loudness set by set_volume().
+
+        Returns:
+            a number from 0 to 1. It is 1 until you change it.
+
+        Example:
+            snd = f.tone(440, 1)
+            snd.set_volume(0.5)
+            print(snd.get_volume())
+
+        See also: set_volume
+        """
         return self._volume
 
     def is_playing(self) -> bool:
-        """True while the sound is playing (a paused or finished sound is not playing)."""
+        """Whether the sound is playing now.
+
+        A paused sound is not playing. A sound that has reached its end is not playing.
+
+        Returns:
+            True while the sound is playing, otherwise False.
+
+        Example:
+            if not song.is_playing():
+                song.play()
+
+        See also: play, pause, stop
+        """
         self._update()
         return self._state == "playing"
 
     def duration(self) -> float:
-        """The length of the sound, in seconds."""
+        """The length of the sound.
+
+        Returns:
+            the length in seconds.
+
+        Example:
+            snd = f.tone(440, 2)
+            print(snd.duration())     # 2.0 or a little more
+
+        See also: current_time
+        """
         return self._duration
 
     def current_time(self) -> float:
-        """Where the sound is now, in seconds from its start."""
+        """Where the sound is now.
+
+        A sound that is stopped is at 0. A paused sound stays where it stopped.
+
+        Returns:
+            the time in seconds from the start of the sound.
+
+        Example:
+            snd = f.melody("C4 E4 G4")
+            snd.loop()
+            f.rect(0, 190, 400 * snd.current_time() / snd.duration(), 20)
+
+        See also: duration, pause
+        """
         self._update()
         return self._position_now()
 
@@ -484,21 +739,69 @@ class Sound(_Analysis):
         return self._rhythm_result
 
     def onsets(self) -> list[float]:
-        """The times, in seconds from the start, where a note or hit begins. Worked out once for the
-        whole sound, then remembered (a three-minute song takes a few seconds the first time)."""
+        """The times where a note or a hit begins.
+
+        It looks at the whole sound. It is worked out once, then remembered. A three-minute song takes a few
+        seconds the first time. A microphone has no whole sound, so use mic.capture(seconds).onsets().
+
+        Returns:
+            a list of times in seconds from the start, earliest first.
+
+        Example:
+            song = f.melody("C4 E4 G4 C5")
+            print(song.onsets())
+
+        See also: is_onset, tempo, beats
+        """
         return list(self._rhythm().onsets)
 
     def tempo(self) -> float | None:
-        """The speed in beats a minute (from 60 to 200), or None when there is no clear pulse."""
+        """The speed of the music.
+
+        It looks at the whole sound, and is worked out once. A sound with no clear pulse has no tempo.
+
+        Returns:
+            the speed in beats a minute, from 60 to 200, or None when there is no clear pulse.
+
+        Example:
+            song = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
+            print(song.tempo())
+
+        See also: beats, onsets
+        """
         return self._rhythm().tempo
 
     def beats(self) -> list[float]:
-        """The times, in seconds, of the beats at the sound's tempo, lined up with its onsets.
-        Empty when there is no clear pulse."""
+        """The times of the beats, at the sound's tempo.
+
+        They are lined up with the onsets. It looks at the whole sound.
+
+        Returns:
+            a list of times in seconds from the start, or an empty list when there is no clear pulse.
+
+        Example:
+            song = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
+            beats = song.beats()
+            song.play()
+
+        See also: tempo, onsets, is_onset
+        """
         return list(self._rhythm().beats)
 
     def key(self) -> str | None:
-        """The key of the whole sound, like "G major" or "E minor", or None when no key stands out."""
+        """The key of the whole sound.
+
+        It adds up the chroma over the whole sound and says which key fits best. It is worked out once.
+
+        Returns:
+            a name like "G major" or "E minor", or None when no key stands out.
+
+        Example:
+            song = f.melody("C4 E4 G4 C5 G4 E4 C4")
+            print(song.key())
+
+        See also: chord, chroma
+        """
         if self._key_result is None:
             values, rate = self._whole()
             self._key_result = (analysis.key_of(values, rate),)
@@ -549,8 +852,22 @@ class Sound(_Analysis):
 
     # ---- the numbers, saving and pitch (A3)
     def samples(self) -> list[float]:
-        """The sound as one list of numbers from -1 to 1 (one channel, however many it has).
-        Draw it to see the wave. Pan and volume are not in it."""
+        """The sound as a list of numbers.
+
+        A sound is a long list of numbers, one for each tiny slice of time. A mono sound has 44 100 of them
+        a second. If the sound has more than one channel, they are mixed into one. Draw them to see the wave.
+        The pan and the volume are not in the numbers.
+
+        Returns:
+            a list of numbers from -1 to 1.
+
+        Example:
+            wave = f.tone(220, 1).samples()
+            for x in range(399):
+                f.line(x, 100 - 80 * wave[x * 4], x + 1, 100 - 80 * wave[x * 4 + 4])
+
+        See also: create_sound, save
+        """
         if self._made is not None:
             return list(self._made[0])
         self._load_samples()
@@ -570,16 +887,51 @@ class Sound(_Analysis):
         return synth.resample(self.samples(), self._rate, rate)
 
     def reverb(self, amount: float = 0.3) -> "Sound":
-        """A new sound: this one played in a room (contract A9). *amount* 0 is dry (the sound
-        unchanged), 1 is a large hall. The room's echoes ring on after the end, so the new sound is
-        longer (up to 1.5 s at 1). It is one channel; the volume and pan are not carried over."""
+        """Make a new sound that is this sound played in a room.
+
+        The room's echoes ring on after the end, so the new sound is longer, by up to 1.5 seconds at 1. The
+        new sound has one channel. The volume and pan are not carried over. This sound is not changed.
+
+        It takes a moment to work out: about a twentieth of a second for each second of sound. Make the new
+        sound once, at the start, not in draw().
+
+        Arguments:
+            amount: the size of the room, from 0 (no room, the sound is unchanged) to 1 (a large hall). It is 0.3 at first.
+
+        Returns:
+            a new Sound.
+
+        Raises:
+            ValueError: if amount is not a number from 0 to 1.
+
+        Example:
+            dry = f.pluck("G3", 1.5)
+            wet = dry.reverb(0.5)
+            wet.play()
+
+        See also: mix, sequence
+        """
         if isinstance(amount, bool) or not isinstance(amount, (int, float)) or not 0 <= amount <= 1:
             raise ValueError(f"sound.reverb(): amount must be from 0 (dry) to 1 (a large hall), not {amount!r}")
         values = synth.reverb_samples(self._samples_at(synth.RATE), float(amount))
         return _from_samples(values, synth.RATE, self._frame_source, "sound.reverb()")
 
     def save(self, path: str) -> None:
-        """Write the sound to a 16-bit WAV file. The pan is kept; the volume is not."""
+        """Write the sound to a 16-bit WAV file.
+
+        The pan is kept in the file. The volume is not.
+
+        Arguments:
+            path: the file name, such as "tune.wav".
+
+        Raises:
+            ValueError: if path is empty or not text, or the file cannot be written.
+
+        Example:
+            f.melody("C4 E4 G4").save("tune.wav")    # writes a new file
+
+        See also: samples, create_sound
+        """
         import wave
 
         if not isinstance(path, str) or not path:

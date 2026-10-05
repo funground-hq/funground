@@ -88,6 +88,9 @@ purpose.
 After this part you can find any function, understand any message and look up any word.
 
 - The [Quick Reference](../reference/Quick_Reference.md): every function, by topic, on one page.
+- The [API reference](../reference/API.md): every name with its arguments, results and an example, plus tables of colours, fixed words, page sizes, ragas and talas.
+- [funground compared with p5 and DrawBot](../reference/Compared_with_p5_and_DrawBot.md): the matching names, if you know those tools.
+- [All the documentation](../README.md): one page that links everything.
 - [When something goes wrong](errors.md): the common error messages, what they mean and how to fix them.
 - The [glossary](glossary.md): plain meanings for the words this guide uses.
 - The [Examples Gallery](../gallery/README.md): every feature with a picture and the code that makes it.
