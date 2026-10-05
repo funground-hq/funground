@@ -10,7 +10,8 @@ the ADRs, which this folder links to rather than repeats.
 |---|---|
 | [Architecture.md](Architecture.md) | You want to know how a call becomes pixels or a file, which module may import which library, and which rules must never break. |
 | [Adding_a_feature.md](Adding_a_feature.md) | You are about to build a story. It is the step-by-step recipe, with the review checklist. |
-| [Testing.md](Testing.md) | You need to add a test, understand a failing one, or know what CI runs. |
+| [Testing.md](Testing.md) | You need to add a test, understand a failing one, regenerate a golden legitimately, or know what CI runs. |
+| [Design index](../design/README.md) | You want to find the design note or ADR for the code you are touching. |
 | [Releasing.md](Releasing.md) | You are releasing a version to PyPI, or setting up trusted publishing. |
 
 ## Quick start
@@ -25,11 +26,13 @@ You need Python 3.11 or newer and a copy of the repository.
    .venv/bin/python -m pip install -e ".[dev]"          # macOS and Linux
    ```
 
-   `[dev]` adds pytest, Pillow and pypdfium2 to funground's own dependencies.
+   `[dev]` adds pytest, Pillow, pypdfium2, imageio-ffmpeg (a real ffmpeg for the MP4 test) and build
+   (for the wheel test) to funground's own dependencies. A learner who wants MP4 files installs
+   `funground[video]`; one who wants fast filters and GIFs installs `funground[extras]`.
 2. **Linux only:** install the Cairo library first, for example
    `sudo apt install libcairo2-dev pkg-config python3-dev`. On macOS, if `pycairo` fails to build,
    run `brew install cairo pkg-config`. Windows needs nothing extra.
-3. Run the whole test suite. It takes about 3 minutes:
+3. Run the whole test suite. It takes about 2 to 3 minutes:
 
    ```sh
    .venv/Scripts/python -m pytest -o addopts="" -q
@@ -53,7 +56,7 @@ All tools are in `tools/`. Run them from the repository root.
 | Tool | What it does |
 |---|---|
 | `python -m funground.gallery` | A browser for the Examples Gallery, written in funground; it ships in the package (S-103). Needs a window. Left and Right move between examples, Enter runs one, C copies one into the current folder. `--list` prints the examples with no window. `python tools/gallery_browser.py` still works in a checkout. |
-| `python tools/make_gallery.py` | Renders every gallery example headless into `docs/gallery/images/` and rewrites the gallery index. `--index` rewrites the index only. |
+| `python tools/make_gallery.py` | Renders every gallery example headless into `docs/gallery/images/` and rewrites the gallery index. Run it without `--force`: a time-dependent example keeps its committed picture. `--force` re-renders those too; `--index` rewrites the index only. |
 | `python tools/make_reference_images.py` | Renders the Quick Reference pictures from `examples/reference/`. |
 | `python tools/check_originality.py --corpus <path> [files]` | Checks that example code is original, by comparing it with corpora of well-known sketches. `--fetch <dir>` clones the corpora. Exit code 1 means something was flagged. |
 
@@ -65,7 +68,8 @@ Read the nearest one to your question. Each line says when.
 
 - [Architecture.md](Architecture.md): how the code is built now.
 - [Adding_a_feature.md](Adding_a_feature.md): how to build a story from contract row to changelog.
-- [Testing.md](Testing.md): kinds of test, how to add them, and the CI matrix.
+- [Testing.md](Testing.md): kinds of test, how to add them, fakes for devices, regenerating a golden, and the CI matrix.
+- [Releasing.md](Releasing.md): trusted publishing, the release workflow and how to make a release.
 
 ### Process and direction
 
@@ -92,18 +96,13 @@ Read the nearest one to your question. Each line says when.
   [ADR-002](../design/ADR-002-renderer-selection-reopened.md) Cairo as the reference renderer,
   [ADR-003](../design/ADR-003-out-of-scope.md) what is out of scope,
   [ADR-004](../design/ADR-004-image-provider.md) image files,
-  [ADR-005](../design/ADR-005-path-operations.md) path booleans.
+  [ADR-005](../design/ADR-005-path-operations.md) path booleans,
+  [ADR-006](../design/ADR-006-simple-tones.md) simple tones and notes.
   Read them when you want to change a provider or a boundary. They are never edited after
   acceptance.
-- Design notes in [docs/design/](../design/), one per subsystem. Read the one for the code you are
-  touching: [Text_Subsystem_Note.md](../design/Text_Subsystem_Note.md),
-  [Typography_Note.md](../design/Typography_Note.md),
-  [Pictures_and_Images_Note.md](../design/Pictures_and_Images_Note.md),
-  [Scripts_and_Pages_Note.md](../design/Scripts_and_Pages_Note.md),
-  [Paths_Note.md](../design/Paths_Note.md),
-  [SVG_Import_Note.md](../design/SVG_Import_Note.md),
-  [Compositing_Note.md](../design/Compositing_Note.md) and
-  [Browser_Mode_Note.md](../design/Browser_Mode_Note.md).
+- [docs/design/README.md](../design/README.md): the index of every design note and ADR, one line
+  each on what it covers and when to read it. Start there to find the note for the code you are
+  touching (text, paths, pictures, SVG, layers, PDF and SVG text, sound, music analysis, ragas and more).
 - [Playground_Technology_Architecture_v2.md](../design/Playground_Technology_Architecture_v2.md):
   the Sprint 2 architecture record. History only. Current code is in
   [Architecture.md](Architecture.md).
