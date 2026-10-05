@@ -16,6 +16,23 @@ ColorLike = Any  # str | tuple[int, ...] | list[int] | Color
 
 @dataclass(frozen=True, slots=True)
 class Color:
+    """A colour, as red, green, blue and alpha numbers.
+
+    You get one from f.color(), f.hsb(), f.hsl(), f.lerp_color() and f.get(x, y). You can give it to
+    fill(), stroke(), background() and every other command that takes a colour. A colour cannot be
+    changed.
+
+    Read its parts as c.red, c.green, c.blue and c.alpha (each a whole number from 0 to 255), c.hue (0 to
+    360) and c.saturation, c.brightness and c.lightness (each 0 to 100). The short names c.r, c.g, c.b and
+    c.a are the same as red, green, blue and alpha.
+
+    Example:
+        c = f.color("tomato")
+        print(c.red, c.green, c.blue)    # 255 99 71
+        f.fill(c)
+
+    See also: color, hsb, hsl, lerp_color
+    """
     r: int
     g: int
     b: int
@@ -29,68 +46,235 @@ class Color:
 
     @property
     def rgb(self) -> tuple[int, int, int]:
+        """The red, green and blue parts together.
+
+        Returns:
+            a tuple (red, green, blue), each a whole number from 0 to 255.
+
+        Example:
+            r, g, b = f.color("tomato").rgb
+
+        See also: rgba
+        """
         return (self.r, self.g, self.b)
 
     @property
     def rgba(self) -> tuple[int, int, int, int]:
+        """The red, green, blue and alpha parts together.
+
+        Returns:
+            a tuple (red, green, blue, alpha), each a whole number from 0 to 255.
+
+        Example:
+            print(f.color("tomato").rgba)    # (255, 99, 71, 255)
+
+        See also: rgb
+        """
         return (self.r, self.g, self.b, self.a)
 
     # ---- readable components (S-044, contract S12). RGB and alpha 0-255; hue 0-360;
     # saturation and brightness are HSB, lightness is HSL, all 0-100.
     @property
     def red(self) -> int:
+        """How much red the colour has.
+
+        Returns:
+            a whole number from 0 to 255.
+
+        Example:
+            print(f.color("tomato").red)
+
+        See also: green, blue
+        """
         return self.r
 
     @property
     def green(self) -> int:
+        """How much green the colour has.
+
+        Returns:
+            a whole number from 0 to 255.
+
+        Example:
+            print(f.color("tomato").green)
+
+        See also: red, blue
+        """
         return self.g
 
     @property
     def blue(self) -> int:
+        """How much blue the colour has.
+
+        Returns:
+            a whole number from 0 to 255.
+
+        Example:
+            print(f.color("tomato").blue)
+
+        See also: red, green
+        """
         return self.b
 
     @property
     def alpha(self) -> int:
+        """How solid the colour is.
+
+        Returns:
+            a whole number from 0 (see-through) to 255 (solid).
+
+        Example:
+            print(f.color(255, 0, 0, 128).alpha)    # 128
+
+        See also: rgba
+        """
         return self.a
 
     @property
     def hue(self) -> float:
+        """The hue of the colour: its place on the colour wheel.
+
+        Returns:
+            a number from 0 to 360. Red is 0, green is 120 and blue is 240.
+
+        Example:
+            print(f.color("blue").hue)    # 240.0
+
+        See also: saturation, brightness, lightness
+        """
         h, _, _ = colorsys.rgb_to_hsv(self.r / 255, self.g / 255, self.b / 255)
         return h * 360
 
     @property
     def saturation(self) -> float:
+        """How strong the colour is, in the HSB way of measuring.
+
+        Returns:
+            a number from 0 (grey) to 100 (the strongest colour).
+
+        Example:
+            print(f.color("red").saturation)    # 100.0
+
+        See also: hue, brightness
+        """
         _, s, _ = colorsys.rgb_to_hsv(self.r / 255, self.g / 255, self.b / 255)
         return s * 100
 
     @property
     def brightness(self) -> float:
+        """How bright the colour is, in the HSB way of measuring.
+
+        Returns:
+            a number from 0 (black) to 100 (full brightness).
+
+        Example:
+            print(f.color("red").brightness)    # 100.0
+
+        See also: hue, saturation, lightness
+        """
         _, _, v = colorsys.rgb_to_hsv(self.r / 255, self.g / 255, self.b / 255)
         return v * 100
 
     @property
     def lightness(self) -> float:
+        """How light the colour is, in the HSL way of measuring.
+
+        Returns:
+            a number from 0 (black) to 100 (white). A pure colour such as red is 50.
+
+        Example:
+            print(f.color("red").lightness)    # 50.0
+
+        See also: brightness, hue
+        """
         _, l, _ = colorsys.rgb_to_hls(self.r / 255, self.g / 255, self.b / 255)
         return l * 100
 
     @classmethod
     def from_hsb(cls, h: float, s: float, b: float, a: float = 255) -> "Color":
+        """Make a colour from hue, saturation and brightness.
+
+        f.hsb() does the same, and is the one to use in a sketch.
+
+        Arguments:
+            h: the hue in degrees. It wraps round, so 370 is the same as 10.
+            s: the saturation, from 0 to 100. Numbers outside are cut off.
+            b: the brightness, from 0 to 100. Numbers outside are cut off.
+            a: the alpha, from 0 to 255. It is 255 at first.
+
+        Returns:
+            a new Color.
+
+        Raises:
+            ValueError: if a value is not a number.
+
+        See also: from_hsl, hue
+        """
         r, g, bl = colorsys.hsv_to_rgb(*_hue_and_percents(h, s, b))
         return cls(round(r * 255), round(g * 255), round(bl * 255), _component(a))
 
     @classmethod
     def from_hsl(cls, h: float, s: float, l: float, a: float = 255) -> "Color":
+        """Make a colour from hue, saturation and lightness.
+
+        f.hsl() does the same, and is the one to use in a sketch.
+
+        Arguments:
+            h: the hue in degrees. It wraps round, so 370 is the same as 10.
+            s: the saturation, from 0 to 100. Numbers outside are cut off.
+            l: the lightness, from 0 to 100. Numbers outside are cut off.
+            a: the alpha, from 0 to 255. It is 255 at first.
+
+        Returns:
+            a new Color.
+
+        Raises:
+            ValueError: if a value is not a number.
+
+        See also: from_hsb, lightness
+        """
         hh, ss, ll = _hue_and_percents(h, s, l)
         r, g, b = colorsys.hls_to_rgb(hh, ll, ss)
         return cls(round(r * 255), round(g * 255), round(b * 255), _component(a))
 
     def lerp(self, other: "Color", amount: float) -> "Color":
+        """Make a colour that is part of the way from this colour to another.
+
+        f.lerp_color() does the same. It mixes red, green, blue and alpha.
+
+        Arguments:
+            other: the Color to mix towards.
+            amount: how much of the way to go, from 0 (this colour) to 1 (the other). Numbers outside are cut off.
+
+        Returns:
+            a new Color.
+
+        Example:
+            mid = f.color("red").lerp(f.color("blue"), 0.5)
+
+        See also: from_hsb
+        """
         t = max(0.0, min(1.0, float(amount)))
         return Color(*(round(x + (y - x) * t) for x, y in zip(self.rgba, other.rgba)))
 
     @classmethod
     def parse(cls, value: ColorLike) -> "Color":
-        """Accept every form the v0.5 Quick Reference documents."""
+        """Read a colour from any of the forms that funground accepts.
+
+        Every command that takes a colour uses it. You do not need to call it.
+
+        Arguments:
+            value: a name like "tomato", a hex string like "#FF6347", a tuple of 2, 3 or 4 numbers, one grey number, or another Color.
+
+        Returns:
+            a Color. If you give a Color, you get the same one back.
+
+        Raises:
+            ValueError: if the colour is not understood, or a part is not from 0 to 255.
+            TypeError: if the value is True or False.
+
+        See also: from_hsb, from_hsl
+        """
         if isinstance(value, Color):
             return value
         if isinstance(value, str):

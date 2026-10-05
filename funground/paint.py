@@ -16,6 +16,23 @@ from .color import Color
 
 @dataclass(frozen=True, slots=True)
 class Gradient:
+    """A blend of colours that you can use in place of a colour.
+
+    You get one from f.linear_gradient() (colours along a line) and f.radial_gradient() (colours outward
+    from a centre). Give it to fill(), stroke() or background(). It is read in the drawing space of the
+    moment you draw the shape, so it follows translate(), rotate() and scale() like the shape does. In a
+    PDF or SVG file it stays a true gradient.
+
+    A gradient cannot be changed. Its parts are kind ("linear" or "radial"), points (x1, y1, x2, y2 for a
+    linear gradient, and x, y, radius for a radial one) and stops (a tuple of (position, colour) pairs,
+    with positions from 0 to 1).
+
+    Example:
+        sky = f.linear_gradient(0, 0, 0, 400, ["navy", "skyblue"])
+        f.background(sky)
+
+    See also: linear_gradient, radial_gradient, fill
+    """
     kind: str                                   # "linear" | "radial"
     points: tuple[float, ...]                   # linear: x1, y1, x2, y2 · radial: x, y, radius
     stops: tuple[tuple[float, Color], ...]      # (offset 0-1, colour), offsets non-decreasing

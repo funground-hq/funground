@@ -67,9 +67,18 @@ def _resets_history(op: ir.Op) -> bool:
 
 @dataclass(frozen=True, slots=True)
 class Snapshot:
-    """An immutable copy of a Picture at one version (contract P3): what ``image()``/``save()``
+    """A frozen copy of a picture at one moment.
 
-    capture at the moment they are called, so later drawing on the picture cannot change it."""
+    funground makes one for you when you draw a picture with image() or save it, so that drawing on the
+    picture later cannot change what was already drawn. You do not make one yourself.
+
+    It holds the picture's name and version, its pixels (as bytes, blue, green, red and alpha for each
+    pixel, in the layout that Cairo uses), its size in pixels and in logical units, its scale, and its
+    drawing history (the drawing steps since the last opaque background() or clear, or None when only the
+    pixels are known).
+
+    See also: Picture
+    """
 
     name: str
     version: int
@@ -133,7 +142,32 @@ class _PictureBacking:
 
 
 class Picture:
-    """An off-screen canvas (contract P1): ``f.create_graphics(width, height)`` makes one."""
+    """A surface that you can draw on and then draw onto the canvas, save, copy or use as a mask.
+
+    You get one from f.create_graphics(width, height) (an empty, see-through canvas), f.layer(name) (a
+    layer that sits over the canvas), f.load_image(path) (a picture file), f.load_svg(path) (a vector
+    file), f.get(x, y, w, h) (a copy of part of the canvas) and f.spectrogram() (a picture of a sound).
+
+    A picture has its own state and its own transform, and nothing about it is cleared between frames. It
+    starts see-through. Draw on it with the same commands as f.: fill, stroke, circle, rect, line, text,
+    push, pop, translate, rotate, scale, begin_shape, path, clip, background, clear, get, set, filter and
+    so on. For example, g.circle(50, 50, 20) draws on the picture g. Window-only commands such as size(),
+    run() and cursor(), and plain helpers such as random() and noise(), are not on a picture.
+
+    The picture's width and height, in pixels, are g.width and g.height. Its name is g.name.
+
+    A layer made by f.layer() is a picture too. Use it with with: everything drawn inside the block goes to
+    the layer.
+
+    Example:
+        g = f.create_graphics(100, 100)
+        g.fill("tomato")
+        g.circle(50, 50, 80)
+        f.image(g, 10, 10)
+        f.image(g, 120, 10, 50, 50)    # the same picture, smaller
+
+    See also: create_graphics, layer, load_image, image, copy, save
+    """
 
     def __init__(self, width: int, height: int, backing_scale: float, name: str) -> None:
         self.width = width
@@ -160,11 +194,22 @@ class Picture:
 
     @classmethod
     def from_pixels(cls, width: int, height: int, bgra: bytes, name: str) -> "Picture":
-        """A picture holding decoded image pixels (contract P4, ``f.load_image``).
+        """Make a picture from decoded image pixels.
 
-        Its scale is 1, so its physical size is the image's own size in pixels. *bgra* is
-        Cairo's ARGB32 layout (premultiplied, see ``funground.imaging``). The history is
-        ``None`` ("pixels only", P3) until an opaque background/clear on it starts one.
+        f.load_image() uses it. You do not need to call it.
+
+        Arguments:
+            width, height: the size of the image in pixels.
+            bgra: the pixels as bytes: blue, green, red and alpha for each pixel, with the colour already multiplied by the alpha.
+            name: the name for the picture.
+
+        Returns:
+            a new Picture whose scale is 1.
+
+        Raises:
+            RuntimeError: if bgra is not the right length for the size.
+
+        See also: copy
         """
         pic = cls(width, height, 1.0, name)
         surface = pic._sketch._renderer.surface
@@ -209,7 +254,23 @@ class Picture:
 
     @property
     def pixels(self) -> bytearray | None:
-        """Red, green, blue, alpha of every pixel after ``g.load_pixels()``; None before it (contract P8)."""
+        """The colour of every pixel, after load_pixels().
+
+        It is a list of numbers, four for each pixel (red, green, blue, alpha, each from 0 to 255), row by row
+        from the top left. Change the numbers, then call update_pixels() to put them back on the picture.
+
+        Returns:
+            the numbers, or None before g.load_pixels() has been called.
+
+        Example:
+            g = f.create_graphics(10, 10)
+            g.background("white")
+            g.load_pixels()
+            g.pixels[0] = 0       # no red in the first pixel
+            g.update_pixels()
+
+        See also: copy, mask
+        """
         return self._sketch.pixels
 
     @pixels.setter
@@ -277,9 +338,22 @@ class Picture:
 
     # ------------------------------------------------------------ copy, resize, mask (contract P9)
     def copy(self) -> "Picture":
-        """A new picture with the same pixels and drawing history; changing one never changes the other.
+        """Make a new picture with the same pixels and drawing history.
 
-        The copy starts with the default drawing state and transform, like any new picture."""
+        Changing one picture never changes the other. The copy starts with the default drawing state and
+        transform, like any new picture.
+
+        Returns:
+            a new Picture.
+
+        Example:
+            g = f.create_graphics(100, 100)
+            g.circle(50, 50, 80)
+            h = g.copy()
+            h.background("black")    # g is not changed
+
+        See also: resize, mask
+        """
         snap = self._snapshot()
         other = Picture(self.width, self.height, self._scale, self._sketch._next_graphics_name())
         other._sketch._name_root = self._sketch._name_root
@@ -288,10 +362,23 @@ class Picture:
         return other
 
     def resize(self, width: int, height: int) -> None:
-        """Change this picture to width x height logical pixels, scaling its pixels smoothly.
+        """Change the size of the picture, in place, scaling its pixels smoothly.
 
-        A 0 for one side keeps the shape of the picture. The drawing history is dropped, and the
-        transform, clip and any open push() start again (the surface is new)."""
+        Put a 0 for one side to keep the shape of the picture. The drawing history is dropped. The transform,
+        the clip and any open push() start again.
+
+        Arguments:
+            width, height: the new size in pixels, whole numbers. One of them may be 0 to keep the shape. Both may not be 0.
+
+        Raises:
+            ValueError: if a side is not a whole number, is negative, or both are 0.
+
+        Example:
+            photo = f.load_image("photo.png")    # your own file
+            photo.resize(200, 0)                 # 200 wide, with the height to match
+
+        See also: copy, mask
+        """
         from . import imaging
 
         w, h = _size(width, "width"), _size(height, "height")
@@ -320,7 +407,25 @@ class Picture:
         self._history = None
 
     def mask(self, other: "Picture") -> None:
-        """Multiply this picture's alpha by the alpha of *other*, which is scaled to this picture's size first."""
+        """Make this picture see-through where another picture is see-through, in place.
+
+        Each pixel's alpha is multiplied by the alpha of the other picture, which is scaled to this picture's
+        size first. Only how see-through the mask is matters, not its colours. Draw a shape on a see-through picture to use it as a stencil.
+
+        Arguments:
+            other: the Picture to use as the mask.
+
+        Raises:
+            TypeError: if other is not a Picture.
+
+        Example:
+            photo = f.load_image("photo.png")           # your own file
+            stencil = f.create_graphics(photo.width, photo.height)
+            stencil.circle(photo.width / 2, photo.height / 2, photo.width)
+            photo.mask(stencil)                         # now it is a circle
+
+        See also: copy, image
+        """
         from . import imaging
 
         if not isinstance(other, Picture):
@@ -346,21 +451,51 @@ class Picture:
               width: float | None = None, height: float | None = None,
               sx: float | None = None, sy: float | None = None,
               sw: float | None = None, sh: float | None = None) -> None:
-        """Draw *picture* (or the part sx, sy, sw, sh of it) onto this one (never itself),
-        the same as ``f.image()``."""
+        """Draw another picture onto this one, the same as f.image() does on the canvas.
+
+        You can give a box to fit it in, and a part of the picture to use. It uses this picture's current
+        transform, clip, blend mode and opacity.
+
+        Arguments:
+            picture: the Picture to draw. It cannot be this picture.
+            x, y: where to put it (the top left corner, unless image_mode() says otherwise).
+            width, height: the size to draw it, in pixels. They are the picture's own size if left out.
+            sx, sy, sw, sh: the part of the picture to use, as a box in its own pixels. Give all four or none.
+
+        Raises:
+            TypeError: if picture is not a Picture.
+            ValueError: if picture is this picture, if only some of sx, sy, sw and sh are given, or if sw or sh is 0 or less.
+
+        Example:
+            g = f.create_graphics(200, 200)
+            stamp = f.create_graphics(20, 20)
+            stamp.fill("gold")
+            stamp.circle(10, 10, 18)
+            g.image(stamp, 50, 50)
+
+        See also: copy, save
+        """
         draw_image(self._sketch, picture, x, y, width, height, sx, sy, sw, sh)
 
     # ------------------------------------------------------------ save() (contract P2)
     def save(self, path: str, *, text: str = "live") -> None:
-        """Write this picture to *path* immediately: PNG = its pixels; PDF/SVG replay its
+        """Write the picture to a file straight away.
 
-        drawing history as vectors when one is available. When it is not (past 10 000 ops
-        since the last opaque background/clear, or none collected yet), the picture's pixels
-        are embedded as a raster image instead - the same fallback ``f.image()`` uses for a
-        historyless picture on a PDF/SVG target (contract P3) - so a save never fails just
-        because a picture drew a lot; it only stops staying vector. In a PDF or SVG,
-        ``text="shapes"`` draws every letter as a shape instead of live text (contract T20). The actual Cairo work
-        lives in ``funground.export`` (Cairo stays behind that provider, S-052).
+        The file type comes from the name. A PNG file gets the picture's pixels. A PDF or SVG file replays the
+        drawing as shapes when it can. It cannot when the picture drew more than 10 000 things since its last
+        opaque background or clear, or when its pixels were changed directly. Then the pixels are put in the
+        file as an image instead, so saving never fails for being too big.
+
+        Arguments:
+            path: the file name, such as "art.png", "art.pdf" or "art.svg".
+            text: for PDF and SVG files only. "live" keeps text as text. "shapes" draws every letter as a shape. It is "live" at first.
+
+        Example:
+            g = f.create_graphics(200, 200)
+            g.circle(100, 100, 150)
+            g.save("circle.png")    # writes a new file
+
+        See also: copy, image
         """
         from .export import save_picture
 

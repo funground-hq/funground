@@ -18,6 +18,8 @@ your picture in it.
 > `Co-Authored-By: Claude …` line. See [AI disclosure](#ai-disclosure) below and
 > [AI-USAGE.md](AI-USAGE.md) for the full account.
 
+**Documentation:** start at the [documentation front door](docs/README.md).
+
 ```python
 import funground as f
 
@@ -57,6 +59,8 @@ python -m pip install git+https://github.com/funground-hq/funground
 - [Showcase](docs/gallery/SHOWCASE.md): a dozen of the best pictures on one page.
 - See every example in a window: `python -m funground.gallery`
 - [Quick Reference](docs/reference/Quick_Reference.md): every function on one page.
+- [API reference](docs/reference/API.md): every name, with its arguments and an example.
+- [All the documentation](docs/README.md): one page that links everything, in the order you need it.
 
 ## What it can do
 

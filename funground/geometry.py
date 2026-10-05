@@ -94,37 +94,127 @@ Segment = tuple
 
 @dataclass(frozen=True, slots=True)
 class Path:
+    """The plain data of a path: a fixed list of moves, lines, curves and closes.
+
+    You get one from PathBuilder.geometry. Most sketches never need it, because f.path() gives you a
+    PathBuilder with friendlier methods. A Path cannot be changed. Every method that builds returns a new
+    Path and leaves the first alone.
+
+    The parts are in Path.segments, a tuple. Each part is a tuple: ("move", (x, y)), ("line", (x, y)),
+    ("cubic", (cx1, cy1), (cx2, cy2), (x, y)) or ("close",). A Path is also a sequence: len(p)
+    counts the parts and you can loop over them. y grows downward and angles are in degrees.
+
+    Example:
+        p = f.path().circle(50, 50, 60).geometry
+        print(len(p), p.is_closed)
+
+    See also: path
+    """
     segments: tuple[Segment, ...] = ()
 
     # ---- builders (each returns a new Path)
     def move_to(self, x: float, y: float) -> "Path":
+        """Make a new path with a new part started at a point.
+
+        Arguments:
+            x, y: the point.
+
+        Returns:
+            a new Path.
+
+        See also: line_to, close
+        """
         return Path(self.segments + (("move", (x, y)),))
 
     def line_to(self, x: float, y: float) -> "Path":
+        """Make a new path with a straight line added.
+
+        Arguments:
+            x, y: the end of the line.
+
+        Returns:
+            a new Path.
+
+        See also: move_to, cubic_to
+        """
         return Path(self.segments + (("line", (x, y)),))
 
     def cubic_to(self, c1x: float, c1y: float, c2x: float, c2y: float, x: float, y: float) -> "Path":
+        """Make a new path with a cubic Bezier curve added.
+
+        Arguments:
+            c1x, c1y: the first control point.
+            c2x, c2y: the second control point.
+            x, y: the end of the curve.
+
+        Returns:
+            a new Path.
+
+        See also: quad_to, line_to
+        """
         return Path(self.segments + (("cubic", (c1x, c1y), (c2x, c2y), (x, y)),))
 
     def quad_to(self, cx: float, cy: float, x: float, y: float) -> "Path":
-        """Quadratic curve, stored as the equivalent cubic (renderers need only one curve kind)."""
+        """Make a new path with a quadratic Bezier curve added.
+
+        It is stored as the same curve written as a cubic, so a path only needs one kind of curve.
+
+        Arguments:
+            cx, cy: the control point.
+            x, y: the end of the curve.
+
+        Returns:
+            a new Path.
+
+        Raises:
+            ValueError: if the path has no current point.
+
+        See also: cubic_to
+        """
         px, py = self.current_point()
         c1 = (px + 2 / 3 * (cx - px), py + 2 / 3 * (cy - py))
         c2 = (x + 2 / 3 * (cx - x), y + 2 / 3 * (cy - y))
         return Path(self.segments + (("cubic", c1, c2, (x, y)),))
 
     def close(self) -> "Path":
+        """Make a new path with the current part closed.
+
+        Returns:
+            a new Path.
+
+        See also: move_to, is_closed
+        """
         return Path(self.segments + (("close",),))
 
     @classmethod
     def rect(cls, x: float, y: float, w: float, h: float) -> "Path":
+        """Make a new path that is one closed rectangle.
+
+        Arguments:
+            x, y: the top left corner.
+            w, h: the width and the height.
+
+        Returns:
+            a new Path.
+
+        See also: rounded_rect, ellipse
+        """
         return cls().move_to(x, y).line_to(x + w, y).line_to(x + w, y + h).line_to(x, y + h).close()
 
     @classmethod
     def rounded_rect(cls, x: float, y: float, w: float, h: float, radii: tuple[float, float, float, float]) -> "Path":
-        """A rectangle with quarter-ellipse corners; *radii* are top-left, top-right, bottom-right, bottom-left.
+        """Make a new path that is one closed rectangle with rounded corners.
 
-        The radii must already be clamped (see rect_radii). A zero radius gives a sharp corner."""
+        Arguments:
+            x, y: the top left corner.
+            w, h: the width and the height.
+            radii: four corner radii: top left, top right, bottom right, bottom left. They must already be no more than half the shorter side. A radius of 0 gives a sharp corner.
+
+        Returns:
+            a new Path.
+
+        See also: rect
+        """
         tl, tr, br, bl = radii
         path = cls()
         corners = (
@@ -142,7 +232,19 @@ class Path:
 
     @classmethod
     def ellipse(cls, cx: float, cy: float, rx: float, ry: float) -> "Path":
-        """Four-cubic approximation (max radial error ~0.03 %)."""
+        """Make a new path that is one closed ellipse.
+
+        It is built from four curves, and is within about 0.03 per cent of a true ellipse.
+
+        Arguments:
+            cx, cy: the centre.
+            rx, ry: the radii across and down.
+
+        Returns:
+            a new Path.
+
+        See also: rect
+        """
         k = 0.5522847498307936
         return (
             cls()
@@ -155,11 +257,21 @@ class Path:
         )
 
     def arc_to(self, cx: float, cy: float, rx: float, ry: float, start: float, stop: float) -> "Path":
-        """Append the elliptical arc from angle *start* to *stop* (degrees, clockwise on screen).
+        """Make a new path with an arc of an ellipse added.
 
-        The point at angle a is (cx + rx*cos a, cy + ry*sin a): 0 is +x, 90 is straight down
-        (contract F1/F5). The arc begins with a line from the current point to the arc's
-        start, or a move_to if the path is empty. Split into <= 90 degree cubic pieces.
+        The point at angle a is (cx + rx * cos a, cy + ry * sin a), so 0 degrees is right and 90 degrees is
+        straight down. The arc begins with a line from the current point to the start of the arc, or with a
+        move if the path is empty.
+
+        Arguments:
+            cx, cy: the centre of the ellipse.
+            rx, ry: the radii across and down.
+            start, stop: the angles where the arc begins and ends, in degrees, turning clockwise on the screen. If stop is not above start, only the line to the start is added.
+
+        Returns:
+            a new Path.
+
+        See also: ellipse, line_to
         """
         start_pt = (cx + rx * math.cos(math.radians(start)), cy + ry * math.sin(math.radians(start)))
         path = self.move_to(*start_pt) if self.is_empty else self.line_to(*start_pt)
@@ -190,14 +302,25 @@ class Path:
 
     @property
     def is_empty(self) -> bool:
+        """Whether the path has no parts.
+
+        Returns:
+            True when there are no parts, otherwise False.
+
+        See also: is_closed
+        """
         return not self.segments
 
     @property
     def is_closed(self) -> bool:
-        """True when every sub-path that draws something ends with close().
+        """Whether every part that draws something ends with a close.
 
-        Contract F3: only closed shapes are filled; a trailing move_to on its
-        own draws nothing and does not count.
+        Only closed shapes are filled. A move at the end on its own draws nothing, and does not count.
+
+        Returns:
+            True when the path is closed. An empty path is not closed.
+
+        See also: close, is_empty
         """
         pending = False  # a sub-path with segments that has not been closed yet
         for seg in self.segments:
@@ -212,6 +335,16 @@ class Path:
         return bool(self.segments) and not pending
 
     def current_point(self) -> Point:
+        """The point where the path now ends.
+
+        Returns:
+            an (x, y) pair.
+
+        Raises:
+            ValueError: if the path is empty, so it has no current point.
+
+        See also: move_to, points
+        """
         start: Point | None = None
         current: Point | None = None
         for seg in self.segments:
@@ -226,12 +359,28 @@ class Path:
         return current
 
     def points(self) -> Iterator[Point]:
+        """Every point in the path, including curve control points, in order.
+
+        Returns:
+            an iterator of (x, y) pairs.
+
+        See also: bounds, current_point
+        """
         for seg in self.segments:
             for pt in seg[1:]:
                 yield pt
 
     def bounds(self) -> tuple[float, float, float, float] | None:
-        """(min_x, min_y, max_x, max_y) over all points incl. control points, or None."""
+        """The box that holds every point of the path, including curve control points.
+
+        Because it counts control points, a curved path may have a smaller real extent. PathBuilder.bounds()
+        gives the exact one.
+
+        Returns:
+            (min_x, min_y, max_x, max_y), or None for an empty path.
+
+        See also: points
+        """
         pts = list(self.points())
         if not pts:
             return None
@@ -239,6 +388,16 @@ class Path:
         return (min(xs), min(ys), max(xs), max(ys))
 
     def transformed(self, t: Transform) -> "Path":
+        """Make a new path with every point moved by a transform.
+
+        Arguments:
+            t: a Transform from funground.geometry, which turns a point (x, y) into (a*x + c*y + e, b*x + d*y + f).
+
+        Returns:
+            a new Path. It is this path itself when the transform changes nothing.
+
+        See also: bounds
+        """
         if t.is_identity:
             return self
         out = []
