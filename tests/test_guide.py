@@ -42,7 +42,7 @@ def test_complete_examples_run_as_printed(chapter, code, tmp_path, monkeypatch):
 
 def test_relative_links_and_images_resolve():
     broken = []
-    for page in [GUIDE / "README.md", *CHAPTERS]:
+    for page in [GUIDE / "README.md", GUIDE / "errors.md", GUIDE / "glossary.md", *CHAPTERS]:
         for target in re.findall(r"\]\(([^)#:]+)\)", page.read_text(encoding="utf-8")):
             if not (page.parent / target).resolve().exists():
                 broken.append(f"{page.name}: {target}")

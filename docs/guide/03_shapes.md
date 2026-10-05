@@ -171,4 +171,16 @@ The picture below shows more: buttons, a speech bubble, a shadow and radii that 
 
 For any other outline, build it from points: see [9. Paths, clipping and pictures](09_paths_and_clipping.md).
 
+## See also
+
+- Gallery: [Shapes](../gallery/README.md#shapes).
+- Quick Reference: [2. Coordinates and drawing](../reference/Quick_Reference.md#2-coordinates-and-drawing) and [8. Shapes, paths and clipping](../reference/Quick_Reference.md#8-shapes-paths-and-clipping).
+- Words: [canvas, coordinates and path](glossary.md).
+
+## Try it
+
+1. Draw a face: a big circle, two small circles for eyes and an `f.arc()` for the smile.
+2. Draw a row of five squares with a `for` loop. Hint: add a number to `x` each time round.
+3. Draw the same `f.rect()` four times, once with each `f.rect_mode()`. Where does each one land?
+
 **Next:** [4. Colour](04_colour.md)

@@ -183,4 +183,16 @@ A gradient's positions are measured in the same space as the shapes, so after `f
 or `f.rotate()` the gradient moves and turns with the shape. Saved as PDF or SVG, a gradient
 stays smooth at any zoom.
 
+## See also
+
+- Gallery: [Colour](../gallery/README.md#colour).
+- Quick Reference: [3. Colours, fill, stroke and text](../reference/Quick_Reference.md#3-colours-fill-stroke-and-text) and [10. Named colours](../reference/Quick_Reference.md#10-named-colours-and-other-fixed-names).
+- Colour not accepted? See [When something goes wrong](errors.md#a-colour-is-not-accepted).
+
+## Try it
+
+1. Paint the background with a colour written as hex, such as `"#2E4057"`, then draw a circle in `(255, 200, 0)`.
+2. Draw 12 circles in a row, each one a different hue. Hint: `f.hsb(i * 30, 80, 90)`.
+3. Make a sky: a background `f.linear_gradient()` from dark blue at the top to orange at the bottom.
+
 **Next:** [5. Fill, stroke and lines](05_fill_stroke_lines.md)

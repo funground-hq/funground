@@ -65,4 +65,16 @@ the first applied to your shape.
 
 ![Rotating squares](../gallery/images/transforms-01_rotating_squares.png)
 
+## See also
+
+- Gallery: [Transforms](../gallery/README.md#transforms).
+- Quick Reference: [7. Transforms and the state stack](../reference/Quick_Reference.md#7-transforms-and-the-state-stack).
+- Words: [transform, push and pop](glossary.md).
+
+## Try it
+
+1. Draw a flower: 8 ellipses, each one turned a little more than the last, around the centre of the canvas.
+2. Make a square spin about its own centre. Hint: `f.translate()` to the centre first, then `f.rotate()`, then draw with `f.rect_mode("center")`.
+3. Draw a shape inside `with f.saved_state():` after a `f.fill("red")`. Draw another shape after the block. Which colour is it?
+
 **Next:** [9. Paths, clipping and pictures](09_paths_and_clipping.md)

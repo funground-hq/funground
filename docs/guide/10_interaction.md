@@ -163,4 +163,16 @@ A few things to know:
 
 `f.is_mouse_pressed` is the live value and `mouse_pressed()` is the callback, as in p5.js.
 
+## See also
+
+- Gallery: [Interaction](../gallery/README.md#interaction).
+- Quick Reference: [5. Mouse, keyboard and useful helpers](../reference/Quick_Reference.md#5-mouse-keyboard-and-useful-helpers).
+- Controls in `draw()`? See [When something goes wrong](errors.md#controls-in-draw).
+
+## Try it
+
+1. Draw a circle that follows the mouse and gets bigger while a button is held.
+2. Press the arrow keys to move a square around. Hint: `f.key_down("left")`.
+3. Add a slider for the size of a circle and a checkbox that turns the fill on and off.
+
 **Next:** [11. Randomness and noise](11_randomness_and_noise.md)

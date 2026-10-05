@@ -53,4 +53,16 @@ f.run()
 **Speed.** Each `noise()` call takes a few microseconds, so about 1,500 calls per frame keep a
 sketch at 60 frames per second. For big textures, use fewer octaves or bigger tiles.
 
+## See also
+
+- Gallery: [Randomness and noise](../gallery/README.md#randomness-and-noise).
+- Quick Reference: [5. Mouse, keyboard and useful helpers](../reference/Quick_Reference.md#5-mouse-keyboard-and-useful-helpers).
+- Words: [noise](glossary.md#n).
+
+## Try it
+
+1. Scatter 200 small circles at random places. Add `f.random_seed(1)` in `setup()`. What changes?
+2. Give each circle a random colour with `f.random_choice([...])` from a list of colour names.
+3. Draw a wavy line with `f.noise()`, then move it along by adding `f.frame_count` to the noise input.
+
 **Next:** [12. Useful maths](12_useful_maths.md)

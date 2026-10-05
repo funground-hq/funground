@@ -747,4 +747,16 @@ f.run()
 | `g.filter(kind, value)` | Change every pixel of the picture. |
 | `f.filter(kind, value)` | Change everything drawn on the canvas so far. |
 
+## See also
+
+- Gallery: [Paths and clipping](../gallery/README.md#paths-and-clipping), [Curves](../gallery/README.md#curves), [Pictures and images](../gallery/README.md#pictures-and-images) and [Blending](../gallery/README.md#blending-opacity-and-shadows) (for pictures and layers).
+- Quick Reference: [8. Shapes, paths and clipping](../reference/Quick_Reference.md#8-shapes-paths-and-clipping).
+- A file that will not load? See [When something goes wrong](errors.md#a-file-is-not-found).
+
+## Try it
+
+1. Draw a five-point star with `f.begin_shape()` and `f.vertex()`. Then make it a different size by changing two numbers.
+2. Cut a circular hole in a rectangle with a path boolean: `f.path().rect(...) - f.path().circle(...)`.
+3. Draw stripes, but only inside a circle. Hint: `f.clip()`, inside `with f.saved_state():`.
+
 **Next:** [10. Interaction: mouse, keyboard and controls](10_interaction.md)

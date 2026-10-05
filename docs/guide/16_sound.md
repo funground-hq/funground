@@ -74,7 +74,7 @@ def draw():
 f.run()
 ```
 
-The gallery has a bigger one: [a tune and its bars](../gallery/README.md).
+The gallery has a bigger one: see the [Sound area](../gallery/README.md#sound).
 
 ## Making sound
 
@@ -652,5 +652,17 @@ code. A piano roll from a recording would have to guess the notes, which needs m
 - **Mistakes.** A file that is not there gives `FileNotFoundError`, saying where it looked. A file
   that is not a sound gives `ValueError`. So do a volume outside 0 to 1 and `bands` outside 1 to
   256. The functions that make sound say which argument was wrong.
+
+## See also
+
+- Gallery: [Sound](../gallery/README.md#sound) and [Music](../gallery/README.md#music).
+- Quick Reference: [Sound](../reference/Quick_Reference.md#sound).
+- No microphone or no sound? See [When something goes wrong](errors.md#sound-and-the-microphone). Words: [sample, frequency, pitch, spectrum and decibel](glossary.md).
+
+## Try it
+
+1. Play one second of the note A with `f.note("A4", 1)`. Then play it an octave higher.
+2. Write a short tune with `f.melody()`, with a rest and a chord in it, and draw its wave with `f.draw_wave()`.
+3. Make a circle that gets bigger when you speak into the microphone. Hint: `mic.level()`.
 
 **Previous:** [15. Coming from DrawBot](15_coming_from_drawbot.md) · **Next:** [17. Ragas and talas](17_ragas_and_talas.md)

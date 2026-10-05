@@ -384,8 +384,7 @@ f.run()
 | `font.style()` | The style name, like `"Bold"`. The built-in normal style is called `"Book"`. |
 | `font.variations()` | The axes of a variable font: a dict of tag to `(minimum, default, maximum)`, like `{"wght": (100, 400, 900)}`. `{}` for a font that is not variable. |
 | `font.features()` | The OpenType features the font has, as a sorted list of tags like `["kern", "liga"]`. |
-| `font.contains(text)` | `True` when the font has a letter for every character of `text`. A space needs a glyph like any letter. A new line `"
-"` is ignored, because text turns it into a new line. Other control characters, like a tab, are checked. |
+| `font.contains(text)` | `True` when the font has a letter for every character of `text`. A space needs a glyph like any letter. A new line `"\n"` is ignored, because text turns it into a new line. Other control characters, like a tab, are checked. |
 
 ## Letters your font does not have
 
@@ -488,5 +487,17 @@ goes with your sketch. A PDF or SVG you save usually carries the letters it need
 |---|---|
 | `f.text_fallback(*fonts)` | Fonts to try for letters the current font lacks, before the built-in ones. No arguments: only the built-in ones. `None`: no fallback. |
 | `f.system_font(name)` | A font installed on this computer, found by family name, or by family and style (`"Nirmala UI Bold"`). Reads font collections too. `FileNotFoundError` if there is none. |
+
+## See also
+
+- Gallery: [Text](../gallery/README.md#text).
+- Quick Reference: [3. Colours, fill, stroke and text](../reference/Quick_Reference.md#3-colours-fill-stroke-and-text).
+- Saving text in PDF and SVG files is in [13. Saving your work](13_saving_your_work.md). A missing font is in [When something goes wrong](errors.md#a-file-is-not-found).
+
+## Try it
+
+1. Write your name in the middle of the canvas. Hint: `f.text_align("center", "center")`.
+2. Pour a paragraph into two columns with two calls to `f.text_box()`. Pass what the first one returns to the second.
+3. Make your name out of dots with `f.text_to_points()`. Change `spacing` to see what it does.
 
 **Next:** [7. Animation and time](07_animation_and_time.md)
