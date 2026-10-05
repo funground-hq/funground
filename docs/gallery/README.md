@@ -2004,7 +2004,7 @@ Source: [`examples/gallery/sound/03_sargam_over_a_drone.py`](../../examples/gall
 
 ![Sound: a tuner that listens](images/sound-04_tuner.png)
 
-Sing or play one note into your microphone. The big letters show its name, like A4. The needle shows whether you are a little flat (left) or sharp (right), and it turns green when you are in tune. The bar at the bottom is how loud you are. Nothing is recorded or played back. With no microphone, the sketch still runs and waits. *(Uses real time, so the picture varies from run to run.)*
+Sing or play one note into your microphone. The big letters show its name, like A4. The needle shows whether you are a little flat (left) or sharp (right), and it turns green when you are in tune. The bar at the bottom is how loud you are, so you can see it hears you. Nothing is recorded or played back. With no microphone, the sketch still runs and waits. *(Uses real time, so the picture varies from run to run.)*
 
 <details>
 <summary>How it works, and how to make it yours</summary>
@@ -2012,7 +2012,7 @@ Sing or play one note into your microphone. The big letters show its name, like 
 **How it works**
 
 - f.microphone() makes the microphone, and mic.start() begins listening. f.microphones() lists the ones the computer has, and the first is named at the top.
-- mic.pitch() gives the pitch of the one note it hears, in hertz, or None when it is quiet. mic.level() says how loud it is, from 0 to 1.
+- mic.pitch() gives the pitch of the one note it hears, in hertz, or None when it is quiet. mic.level() says how loud it is, from 0 to 1. Laptop microphones can be very quiet, so the bar at the bottom uses decibels (loudness()) and still moves for a soft voice.
 - f.frequency_to_note() turns the pitch into a name. cents_off() then measures how far the pitch is from that note. A cent is one hundredth of a semitone, so 50 cents is halfway to the next note.
 - The needle moves a third of the way to its target each frame, which smooths the shaking.
 - f.arc() draws the dial, and sin() and cos() put the needle at the right angle. 50 cents is 45 degrees.
@@ -2023,7 +2023,7 @@ Sing or play one note into your microphone. The big letters show its name, like 
 - Change the 5 in abs(needle) < 5 to 10 and the tuner is easier to please.
 - Change the 0.3 in needle += (target - needle) * 0.3. A smaller number is calmer, a bigger one is quicker.
 - Change quiet_frames > 20 to hold the name for longer or shorter.
-- Change the colours: "limegreen" and "tomato" in draw().
+- Change the colours: "limegreen" and "tomato" in draw(). Change the -70 and 50 in loudness() if the bar moves too much or too little.
 - Change f.text_size(80) to make the note name bigger or smaller.
 
 </details>
@@ -2108,7 +2108,7 @@ A drone plays, and you sing along. The microphone hears you, and your pitch is d
 - mic.pitch() gives your pitch in hertz, or None when you are quiet. The code turns it into cents above Sa: 100 cents is one semitone, so Pa is 700 and the next Sa up is 1200.
 - GUIDES holds the lines to sing to. y_for() turns cents into a height on the screen.
 - line keeps the last 280 readings. A None is a gap, where the line breaks.
-- f.frequency_to_note(hz, sa=SA) names the swara you sing, for example "P" or "G".
+- f.frequency_to_note(hz, sa=SA) names the swara you sing, for example "P" or "G". The small bar at the top right shows how loud the microphone hears you, in decibels (loudness()), so you can see it hears you even if your microphone is quiet.
 
 **Make it yours**
 
@@ -2116,7 +2116,7 @@ A drone plays, and you sing along. The microphone hears you, and your pitch is d
 - Add a guide line for Ga, the third swara. Add (400, "G", "tomato") to GUIDES.
 - Change the drone for a raga without Pa. Use f.drone(SA, 7, pattern="m S' S' S"), with Ma on the first string.
 - Change 0.4 in room(f.drone(...), 0.4) to 0 for a dry drone, or to 0.7 for a big room.
-- Change the pink line's colour and f.stroke_width().
+- Change the pink line's colour and f.stroke_width(). Change the -70 and 50 in loudness() if the bar moves too much or too little.
 
 </details>
 
@@ -2198,7 +2198,7 @@ Sing, hum or talk to the microphone and watch three views of the same sound. The
 - f.draw_spectrum(mic, x, y, w, h, bands=40) draws a bar for each range of pitch, low on the left and high on the right.
 - f.draw_pitch_line(mic, x, y, w, h, seconds=6, low="C3", high="C6") draws the note you sing, scrolling across. It leaves a gap when you are quiet.
 - These functions draw with the current fill and stroke. So the code sets f.fill() and f.stroke() before each one, to give each view its own colour.
-- label() is a small helper that writes a title above each view.
+- label() is a small helper that writes a title above each view. The small bar at the top right shows how loud the microphone hears you, in decibels (loudness()), even for a quiet microphone.
 
 **Make it yours**
 
@@ -2206,7 +2206,7 @@ Sing, hum or talk to the microphone and watch three views of the same sound. The
 - Change seconds=6 to 12 to see a longer stretch of your voice.
 - Change low="C3" and high="C6" to "C2" and "C5" for a deep voice.
 - Change the colours in the f.fill() and f.stroke() lines.
-- Make the window taller with f.size(), and give each view more height.
+- Make the window taller with f.size(), and give each view more height. Change the -70 and 50 in loudness() if the bar moves too much or too little.
 
 </details>
 
@@ -2316,7 +2316,7 @@ The sketch plays two notes. The first is your starting note. The second is a mys
 - new_question() uses f.random_choice() to pick a step, never the same one twice in a row, and builds the question. play_question() plays it with f.melody(), such as "S:2 G:3 -:1", and sound.reverb(0.15).
 - mouse_pressed() checks the button rectangles. key_pressed() reads the swara letters, the arrow keys and Enter. Each calls answer(), which scores it.
 - Singing is read with mic.pitch(). sung_steps() turns the pitch into steps above the start and folds it into one octave with % 12. listen() takes the middle of the last five readings, and HOLD steady frames count as an answer.
-- The microphone waits until the notes have finished (f.millis() and quiet_until), so it does not hear the question.
+- The microphone waits until the notes have finished (f.millis() and quiet_until), so it does not hear the question. The small bar at the bottom left shows how loud the microphone hears you, in decibels (loudness()), so you can see it hears you even if it is quiet.
 - f.create_slider() picks the mode. The ladder on the right shows the right answer.
 
 **Make it yours**
@@ -2325,7 +2325,7 @@ The sketch plays two notes. The first is your starting note. The second is a mys
 - Change SA to "C4". Sa moves, and so do both notes.
 - Add notes to STARTS, such as "A3" and "B3", for more starting notes in interval mode.
 - Make it easier: in new_question(), change range(low, low + 12) to range(low, low + 8).
-- Change tempo=90 in play_question() to slow the notes down.
+- Change tempo=90 in play_question() to slow the notes down. Change the -70 and 50 in loudness() if the bar moves too much or too little.
 
 </details>
 
@@ -2366,27 +2366,27 @@ Source: [`examples/gallery/music/11_piano_roll.py`](../../examples/gallery/music
 
 ![Event poster series](images/projects-01_event_posters.png)
 
-One list of events becomes a whole series of posters. Each event gets its own page, with a gradient background, a burst of shapes, a rounded panel, a bold headline, the details, a line in Hindi and an emoji. It saves PDF and SVG files. The gallery picture shows the last page.
+A poster designer. Flip through the events with the buttons or the arrow keys, and type to change the headline. Sliders change the colours, the sun and its rays. Tick boxes to hide the background, the art or the words. Buttons save the posters as PDF and SVG files, with real text.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
 
 **How it works**
 
-- The whole poster is data plus a few functions. EVENTS is a list of dictionaries, with words, an emoji and a colour theme for each event. Add one and you get another poster.
-- Three functions draw the three layers: background_layer(), art_layer() and words_layer(). Each runs inside with f.layer("..."), so the layers stay separate in the saved files.
+- EVENTS is a list of dictionaries: words, an emoji, a colour theme and the style settings. The controls change the dictionary of the current event, so what you see is also what is saved.
+- Three functions draw the three layers: background_layer(), art_layer() and words_layer(). Each runs inside with f.layer("..."), and a layer keeps what it was given. So a layer is drawn again only when something it shows changes, and draw() stays quick. The three tick boxes call f.hide_layer() and f.show_layer().
 - burst() makes a star with f.path().polygon(). art_layer() joins and cuts paths with | (union) and
-- (difference), and fills them with f.linear_gradient().
-- f.FormattedString() mixes bold, italic and colour in one headline. f.text_box() wraps the details in a box. The Hindi line and the emoji use the built-in fallback fonts.
-- A loop calls f.new_page(WIDTH, HEIGHT) for each event, and make_poster() draws on that page. f.save("events.pdf") writes every page. f.save("events.svg") writes events_1.svg, events_2.svg and so on, with live text. text="shapes" turns every letter into a shape, for handing over.
+- (difference), and fills them with f.linear_gradient(). The "shuffle art" button changes the seed for the confetti, and f.random_seed() makes the same seed give the same confetti.
+- f.FormattedString() mixes bold, italic and colour in one headline. f.text_box() wraps the details. The Hindi line and the emoji use the built-in fallback fonts. key_typed() adds letters to the headline, and key_pressed() handles Backspace and the arrows. The caret blinks as time passes.
+- A poster in an animated sketch is one page, and f.new_page() belongs to scripts. So "save PDF" draws each event in turn, one per frame, and calls f.save("events_1.pdf"), f.save("events_2.pdf") and so on. The saved files keep the layers and real text. "save SVG" writes poster.svg with live text. "save final SVG" writes poster_final.svg with text="shapes": every letter is a shape, for handing over.
 
 **Make it yours**
 
 - Add an event to EVENTS: copy a dictionary, change the words and the four theme colours.
-- Change "points" in an event to give the burst more or fewer points.
-- Change the Hindi line to a line in your own language.
-- Move the bite out of the sun: change circle(290, 215, 120) in art_layer().
-- Change the colours in a theme, such as the (255, 196, 61) accent, and run again.
+- Change "sun" or "points" in an event to start with a bigger sun or more rays.
+- Change the Hindi line in an event to a line in your own language.
+- Move the bite out of the sun: change the numbers in circle(...) in art_layer().
+- Change MAX_TITLE to allow a longer headline, or CONFETTI for more or less confetti.
 
 </details>
 
@@ -2438,13 +2438,13 @@ Pick a raga with the slider or the left and right keys. The page shows its thaat
 - make_tune() joins raga.aroha and raga.avaroha, with a rest between. A meend, a glide, runs into the last note, written with ~. f.melody(..., sa=SA, tuning="just") plays it. Sa is the home note.
 - make_drone() uses f.drone(). A drone is the steady tanpura note under the singer. A raga with no Pa gets Ni on the first string. Each sound is made once and kept in a dictionary.
 - The ladder has a row for each swara. A row is dark if the raga leaves that swara out. The vadi and samvadi have a coloured border. The lit row follows tune.current_time().
-- When you sing, mic.pitch() is folded into one octave and smoothed. A row turns red for a swara the raga does not use. On "stop", mic.capture(seconds).swara_histogram(SA) counts the swaras, and f.match_ragas(shares)[:3] gives the closest three ragas. It compares notes only. A raga is also its way of moving between them.
+- When you sing, mic.pitch() is folded into one octave and smoothed. A row turns red for a swara the raga does not use. While you sing, a small bar at the bottom shows how loud the microphone hears you, in decibels (loudness()), so you can see it hears you. On "stop", mic.capture(seconds).swara_histogram(SA) counts the swaras, and f.match_ragas(shares)[:3] gives the closest three ragas. It compares notes only. A raga is also its way of moving between them.
 
 **Make it yours**
 
 - Change TEMPO to make the aroha and avaroha slower or faster.
 - Remove the glide. In make_tune(), use tokens = up + ["-"] + down + ["-", "-"].
-- Change GATE if your room is noisy or quiet. A bigger number needs a louder voice.
+- Change GATE if your room is noisy or quiet. A bigger number needs a louder voice. The 0.001 is very quiet (-60 dB), because laptop microphones are. Try 0.005 in a noisy room.
 - Change the ladder colours, such as "#7a4fa0" for the swaras that the raga uses.
 - Change the matches that show. Change [:3] in work_out_the_singing() to [:2] to show two ragas.
 
@@ -2464,8 +2464,8 @@ A little bird flies through gates, and your voice is the control. Say "aaah" and
 **How it works**
 
 - The game has three states: "ready", "play" and "over". update() moves the game on, and draw() paints it. draw_scene(), draw_gate(), draw_bird() and draw_meter() do the painting.
-- listen() turns the microphone into one number from 0 to 1. For the first CALIBRATE frames, it learns how quiet the room is. After that, mic.level() is smoothed, and loud follows your voice, so a whisper or a shout both work. f.constrain() keeps the result between 0 and 1.
-- Loudness controls the bird, not pitch. Loudness is easy to measure and never goes missing, and mic.pitch() gives nothing for breath or noise.
+- listen() turns the microphone into one number from 0 to 1. Microphones differ a lot: a laptop one can be hundreds of times quieter than a headset. So the game measures loudness in decibels (db()) and compares it with the room. For the first CALIBRATE frames, it listens to the quiet room and keeps the middle reading, the median, as the floor. After that, it smooths mic.level() and measures how many decibels you are above the floor. Eight decibels above is 0, and 33 is 1. f.constrain() keeps the result between 0 and 1.
+- The small "mic" bar shows the raw decibels above the floor, all the time, so you can see the game hears you. The "voice" bar shows what the game uses. Loudness controls the bird, not pitch, because mic.pitch() gives nothing for breath or noise.
 - voice is the larger of listen() and hop. The space bar sets hop to 1, and it fades by 93% each frame.
 - The bird eases toward a target height, set by voice. Gates are dictionaries in a list. They slide left, and score goes up when one passes. f.random() picks each gap, and f.random_seed(11) makes the first gates the same every time.
 - hits() finds the nearest point of each gate box to the bird and checks the distance. The sound effects come from f.pluck(), f.note() and f.tone(), and sound.play() plays them.
@@ -2474,8 +2474,8 @@ A little bird flies through gates, and your voice is the control. Say "aaah" and
 
 - Change GAP from 150 to 200 for an easier game, or to 120 for a harder one.
 - Change SPACING for gates closer together or further apart. Change the 3 in speed = 3 + ... to change the speed.
-- Change f.random_seed(11) to another number for different gates.
-- Change the colours of the bird, such as f.fill(255, 200, 40) for the body.
+- Change QUIET_DB = 8 to 4 if the bird does not hear a soft voice, or to 12 if it jumps at small noises. Change RANGE_DB = 25 to 15 so a quieter voice reaches the top.
+- Change f.random_seed(11) to another number for different gates. Change the colours of the bird, such as f.fill(255, 200, 40) for the body.
 - Change the sounds: try "C6" in sound_point, or 200 in sound_crash.
 
 </details>

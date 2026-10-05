@@ -28,7 +28,7 @@ except where `sprints/` says so.
 
 | # | Project | What the learner builds | Features | Level |
 |---|---|---|---|---|
-| 10 | **Built (S-117)** Event poster series | A poster per event from a list; Hindi and English text, emoji, gradients, rounded panels; a multi-page layered PDF for print, and SVGs for editing | pages, `text_box`, `FormattedString`, fallback fonts, layers, PDF/SVG | Beginner+ |
+| 10 | **Built (S-117)** Event poster series | An interactive poster per event from a list; Hindi and English text, emoji, gradients, rounded panels; a layered PDF for print, and SVGs for editing | pages, `text_box`, `FormattedString`, fallback fonts, layers, PDF/SVG | Beginner+ |
 | 11 | Zine or recipe book | A multi-page booklet with filtered and masked photos, text flowing from page to page, page numbers | `new_page`, `text_box` overflow, `load_image`, filters, `mask` | Intermediate |
 | 12 | Typographic portrait | A photo redrawn from letters whose size follows brightness; a vector PDF for large prints | `load_image`, `get`/pixels, `text`, PDF | Beginner+ |
 | 13 | Kinetic type | A word made of dots that scatter on mouse-over and return; saved as a GIF | `text_to_points`, `Vector`, `noise`, `save_gif` | Beginner+ |

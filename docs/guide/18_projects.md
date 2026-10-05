@@ -13,85 +13,110 @@ There is no right answer. If it looks good to you, it is done.
 ## Project 1: Event poster series
 
 Schools, clubs and festivals need posters. They need a lot of them, and they should all look like
-a family. Computer code is good at that. You write one poster, and the code makes the rest.
+a family. Computer code is good at that. You write one poster, and the code makes the rest. In this
+project the poster is a small **designer**: you flip through the events, type a new headline, change the
+colours and save the files.
 
 ### Stage 1: make it work
 
-One poster, one page. A script is enough, because nothing moves. The background is a gradient. The
-headline is text. The panel is a rounded rectangle.
-
-```python
-import funground as f
-
-f.size(480, 680)
-f.no_stroke()
-
-# the background: a gradient from top to bottom
-f.fill(f.linear_gradient(0, 0, 0, 680, [(38, 70, 140), (120, 70, 170)]))
-f.rect(0, 0, 480, 680)
-
-# a big yellow circle
-f.fill(255, 196, 61)
-f.circle(240, 250, 300)
-
-# a rounded panel for the details, then the words
-f.fill(255, 255, 255, 235)
-f.rect(36, 440, 408, 200, 34)
-f.fill(38, 40, 90)
-f.text_align("center", "top")
-f.text_size(54)
-f.text("Book Fair", 240, 40)
-f.text_size(24)
-f.text("Sat 14 March, 10 am", 240, 480)
-
-f.save("poster.pdf")
-f.show()
-```
-
-Run it and open `poster.pdf`. The text in it is real text. You can select it and search for it.
-
-### Stage 2: make it yours
-
-Now make a **list of events**. Each event is a dictionary: a title, a date and a place. A loop makes
-one page for each. `f.new_page()` ends one page and starts the next.
+A list of events, one poster, and two buttons to flip through them. The background is a gradient.
+The headline is text. The panel is a rounded rectangle. The buttons sit in a panel under the canvas.
+The left and right arrow keys flip the events too.
 
 ```python
 import funground as f
 
 EVENTS = [
-    {"title": "Book Fair", "date": "Sat 14 March", "colour": (38, 70, 140)},
-    {"title": "Music Night", "date": "Fri 21 March", "colour": (20, 90, 90)},
-    {"title": "Spring Mela", "date": "Sun 30 March", "colour": (170, 40, 90)},
+    {"title": "Book Fair", "date": "Sat 14 March, 10 am", "colour": (38, 70, 140)},
+    {"title": "Music Night", "date": "Fri 21 March, 7 pm", "colour": (20, 90, 90)},
+    {"title": "Spring Mela", "date": "Sun 30 March, 11 am", "colour": (170, 40, 90)},
 ]
+index = 0
 
-for event in EVENTS:
-    f.new_page(480, 680)
+
+def setup():
+    global previous, next_one
+    f.size(480, 680)
+    previous = f.create_button("previous")
+    next_one = f.create_button("next")
+
+
+def key_pressed():
+    global index
+    if f.key == "left":
+        index = (index - 1) % len(EVENTS)
+    if f.key == "right":
+        index = (index + 1) % len(EVENTS)
+
+
+def draw():
+    global index
+    if previous.clicked():                  # true once for each click
+        index = (index - 1) % len(EVENTS)
+    if next_one.clicked():
+        index = (index + 1) % len(EVENTS)
+    event = EVENTS[index]
+
     f.no_stroke()
-    f.background(event["colour"])
-    f.fill(255)
-    f.text_align("center", "center")
-    f.text_size(54)
-    f.text(event["title"], 240, 300)
+    f.fill(f.linear_gradient(0, 0, 0, 680, [event["colour"], (120, 70, 170)]))
+    f.rect(0, 0, 480, 680)
+    f.fill(255, 196, 61)                    # a big yellow circle
+    f.circle(240, 250, 300)
+    f.fill(255, 255, 255, 235)              # a rounded panel for the details
+    f.rect(36, 440, 408, 200, 34)
+    f.fill(38, 40, 90)
+    f.text_align("center", "top")
     f.text_size(24)
-    f.text(event["date"], 240, 370)
+    f.text(event["date"], 240, 480)
+    f.fill(255)
+    f.text_size(54)
+    f.text(event["title"], 240, 40)
 
-f.save("events.pdf")        # every page, in one PDF
-f.save("events.svg")        # events_1.svg, events_2.svg, events_3.svg
-f.show()
+
+f.run()
 ```
+
+Run it and press the buttons. Each event is a dictionary, so a new event is one more line in the list.
+
+### Stage 2: make it yours
 
 Here are some ways to make it more yours.
 
-**Use layers.** A layer is a see-through sheet. In a PDF or SVG it stays a layer, so a designer can
-switch it on and off or change it. Put the background, the artwork and the words on their own layers.
+**Type the headline.** `key_typed()` is called for each letter you type. Add it to the title.
+Backspace arrives in `key_pressed()` as `"backspace"`. The edit goes into the event itself, so
+anything you save later uses it.
 
 ```py
-with f.layer("background"):
-    f.background(event["colour"])
+def key_typed():
+    event = EVENTS[index]
+    if f.key.isalnum() or f.key == " ":
+        event["title"] += f.key
+
+
+def key_pressed():
+    if f.key == "backspace":
+        EVENTS[index]["title"] = EVENTS[index]["title"][:-1]
+```
+
+**Add sliders.** A slider can turn the colours or change the size of the sun. Make it once in
+`setup()` and read it in `draw()`. Keep each setting in the event, so every event can look different.
+
+```py
+hue = f.create_slider(-180, 180, 0, step=1, label="hue")
+sun = f.create_slider(90, 190, 150, step=1, label="sun size")
+```
+
+**Use layers.** A layer is a see-through sheet. In a PDF or SVG it stays a layer, so a designer can
+switch it on and off or change it. Put the background, the artwork and the words on their own layers.
+A layer keeps what you drew on it, so you only draw it again when something it shows changes. That
+keeps the poster quick. `f.hide_layer()` and `f.show_layer()` switch a layer on and off. Add a tick
+box for each one, and you can see what each layer does.
+
+```py
+f.layer("art").clear()                      # wipe the layer, then draw it again
 with f.layer("art"):
     f.circle(240, 250, 300)
-with f.layer("words"):
-    f.text(event["title"], 240, 40)
+f.hide_layer("art")                         # it keeps its drawing; it is just not shown
 ```
 
 **Use mixed text.** A `FormattedString` can hold a bold word and an italic word in two colours.
@@ -104,7 +129,7 @@ f.text(headline, 240, 40)
 ```
 
 **Use more scripts.** The text in a poster does not have to be English. Add a line in Hindi, and an
-emoji. funground's fallback fonts draw them.
+emoji. funground's fallback fonts draw them. A "Hindi line" tick box can switch the line on and off.
 
 ```py
 f.text("किताबें पढ़ो, सपने गढ़ो", 240, 600)
@@ -121,30 +146,69 @@ crescent = f.path().circle(240, 250, 200) - f.path().circle(290, 215, 160)
 f.draw_path(crescent)
 ```
 
+**Shuffle the art.** `f.random_seed(n)` makes the random numbers the same each time, for the same
+`n`. Keep a seed in each event. A "shuffle art" button adds one to it and draws the confetti again.
+
+```py
+if shuffle.clicked():
+    event["seed"] += 1
+    f.random_seed(event["seed"])
+    x, y = f.random(20, 460), f.random(20, 420)
+```
+
+**Save the files.** `f.save("poster.svg")` in an animated sketch writes the file at the end of the
+frame, with the canvas and its layers as they are. A button can call it. The files keep the layers,
+and the text stays real text, which you can select and search for.
+
+A page belongs to a script, not to an animated sketch, so `f.new_page()` does not work here. To
+save every event, draw one event on each frame and save a file for it: `events_1.pdf`,
+`events_2.pdf` and so on. Keep a list of jobs, and do one job on each frame.
+
+```py
+jobs = [(0, "events_1.pdf"), (1, "events_2.pdf"), (2, "events_3.pdf")]
+
+def draw():
+    if jobs:
+        number, name = jobs.pop(0)
+        draw_poster(EVENTS[number])         # draw everything for this event
+        f.save(name)                        # written at the end of this frame
+        return
+```
+
 **Hand it over.** Save one copy for yourself and one copy to give away. The copy with
 `text="shapes"` turns every letter into a shape, so it looks right on any computer, even one
 without your fonts. See chapter 13 for the golden rule of handoffs.
 
 ```py
-f.save("events.svg")                        # live text, for editing
-f.save("events_final.svg", text="shapes")   # for handing over
+f.save("poster.svg")                        # live text, for editing
+f.save("poster_final.svg", text="shapes")   # for handing over
 ```
+
+If you would rather make a printed series in one go, a script can do it. A script can have many
+pages. Loop over the events, call `f.new_page(480, 680)` for each, and `f.save("events.pdf")` writes
+one PDF with every page.
 
 ### Stage 3: make it shine
 
-The full version is in the gallery: `examples/gallery/projects/01_event_posters.py`. It has a
-burst of shapes made with booleans, three layers, a headline with two styles, a text box for the
-details, a Hindi line and an emoji. It saves `events.pdf`, one live SVG for each page and one
-SVG with shapes for each page. Run it, then open the files in a PDF viewer or in Inkscape.
+The full version is in the gallery: `examples/gallery/projects/01_event_posters.py`. It is a poster
+designer. The buttons and the arrow keys flip the events, and typing changes the headline, with a
+blinking caret. Sliders turn the hue and change the size of the sun and the number of its rays. A
+tick box shows or hides the Hindi line. A button shuffles the confetti. Three tick boxes show or
+hide the background, the art and the words, so you can see the layers. The burst of shapes is made
+with booleans. The headline has two styles, the details sit in a text box, and there is a Hindi line
+and an emoji. Three buttons save the files: `events_1.pdf`, `events_2.pdf` and `events_3.pdf` (the
+posters, with layers and real text), `poster.svg` (live text) and `poster_final.svg` (letters as
+shapes). A note on the poster says where the files went. Run it, then open the files in a PDF
+viewer or in Inkscape.
 
 ### Challenge cards
 
 - **Can you** add a fourth event, with its own colours? You should only have to change the list.
-- **Can you** make a poster in portrait and one in landscape in the same PDF? Give `new_page`
-  two different sizes.
-- **Can you** put the event's date in a round badge in the corner of the poster?
-- **Can you** add a hidden layer called "notes" with a reminder for the person who prints the poster?
-- **Can you** make the artwork different for each event? Use a different number of points in the burst.
+- **Can you** let the date be edited as well as the title? Press Enter to switch between them.
+- **Can you** add a slider for the size of the confetti?
+- **Can you** add a layer called "notes" with a reminder for the person who prints the poster?
+  Hide it so it is in the file but not on the page.
+- **Can you** save a landscape poster as well? A script can give `new_page` two different sizes.
 
 ## Project 2: Rangoli and mandala generator
 
@@ -397,7 +461,7 @@ recent = []
 
 def next_point():
     """A row above Sa (0 is S, 11 is N), or None when there is nothing to draw."""
-    hz = mic.pitch() if mic.level() > 0.01 else None        # gate
+    hz = mic.pitch() if mic.level() > 0.001 else None       # gate
     if hz is None:
         del recent[:]
         return None
@@ -443,7 +507,8 @@ f.run()
 ```
 
 Wear headphones, so the drone does not get into the microphone. Sing with Sa on D. If the line
-does not move, lower `0.01` in the gate. If it jumps about in a noisy room, raise it.
+does not move, lower `0.001` in the gate. If it jumps about in a noisy room, raise it, to `0.005`
+for example. (`0.001` is very quiet. Laptop microphones are.)
 
 **Count what you sang.** `mic.capture(seconds)` gives a sound of the last few seconds you sang.
 Count the swaras in it, and let `f.match_ragas` say which ragas use those notes.
@@ -489,12 +554,15 @@ computer with no microphone, and in a room too quiet for shouting.
 
 ### Stage 1: make it work
 
-The bird. `mic.level()` is how loud the sound is, from 0 to 1. Loud should mean up, so the bird's
-height comes from the level. The bird moves a part of the way each frame, so it glides and does not
+The bird. `mic.level()` is how loud the sound is, from 0 to 1. Laptop microphones can be very
+quiet: a voice may only read 0.01. So the code turns the level into decibels, which show small
+sounds as clearly as big ones, and the bird's height comes from that. Loud should mean up. The bird moves a part of the way each frame, so it glides and does not
 jump. The space bar adds a hop. A computer with no microphone gives an error from `f.microphone()`,
 so the sketch catches it and carries on with the keyboard.
 
 ```python
+import math
+
 import funground as f
 
 try:
@@ -519,7 +587,8 @@ def key_pressed():
 
 def draw():
     global bird_y, hop
-    voice = min(1, mic.level() * 6) if mic else 0       # 0 is quiet and 1 is loud
+    db = 20 * math.log10(mic.level() + 1e-9) if mic else -99     # decibels: -65 is a quiet room
+    voice = f.constrain((db + 65) / 35, 0, 1)                    # 0 is quiet and 1 is loud
     voice = max(voice, hop)
     hop *= 0.93                                          # a hop fades away
     target = 330 - voice * 280                           # loud is up
@@ -537,8 +606,8 @@ def draw():
 f.run()
 ```
 
-Say "aaah" and the bird goes up. If it does not rise much, make the `6` bigger. If it rises for the
-slightest noise, make it smaller.
+Say "aaah" and the bird goes up. If it does not rise much, make the `65` smaller. If it rises for
+the slightest noise, make it bigger.
 
 ### Stage 2: make it yours
 
@@ -550,15 +619,17 @@ slightest noise, make it smaller.
 
 If you want a pitch game, treat `None` as "do nothing" and smooth the pitch first, as in project 3.
 
-**Learn the room.** Rooms are not equally quiet. In the first half second, listen and keep the
-average level. Take it away from every later reading, so a noisy room does not lift the bird.
+**Learn the room.** Rooms and microphones are not equally quiet. In the first half second, listen
+and keep the middle reading, in decibels. Then measure how many decibels you are above it. A voice
+8 decibels above the room counts as 0, and 33 decibels above counts as 1.
 
 ```py
+db = 20 * math.log10(mic.level() + 1e-9)
 if f.frame_count < 30:
-    quiet.append(mic.level())                         # stay quiet for half a second
-    floor = sum(quiet) / len(quiet)
+    quiet.append(db)                                  # stay quiet for half a second
+    floor = sorted(quiet)[len(quiet) // 2]            # the middle one: a click does not move it
 else:
-    voice = min(1, max(0, mic.level() - floor) * 6)
+    voice = f.constrain((db - floor - 8) / 25, 0, 1)
 ```
 
 **Add gates.** A gate is a dictionary: where it is, and the height of its gap. Each frame, move
@@ -608,7 +679,7 @@ bird_y, hop, score, best = 200.0, 0.0, 0, 0
 playing = False
 gates = []
 quiet = []
-floor = 0.0
+floor = -80.0
 
 
 def new_gate(x):
@@ -652,11 +723,12 @@ def draw():
     global bird_y, hop, score, best, floor, playing
     voice = 0
     if mic:
+        db = 20 * math.log10(mic.level() + 1e-9)       # loudness in decibels
         if f.frame_count < 30:                     # learn how quiet the room is
-            quiet.append(mic.level())
-            floor = sum(quiet) / len(quiet)
+            quiet.append(db)
+            floor = sorted(quiet)[len(quiet) // 2]    # the middle reading
         else:
-            voice = min(1, max(0, mic.level() - floor) * 6)
+            voice = f.constrain((db - floor - 8) / 25, 0, 1)
     voice = max(voice, hop)
     hop *= 0.93
     if playing:
@@ -698,8 +770,10 @@ f.run()
 
 The full version is in the gallery: `examples/gallery/projects/04_voice_game.py`. It has a sky with
 a gradient, clouds and hills, a bird with a wing that flaps, and gates with caps. It learns the
-room's quiet in the first half second, then keeps learning how loud you are, so a whisper and a
-shout can both fly the bird. A bar on the left shows your voice. The game gets a little faster with
+room's quiet in the first half second, then measures your voice in decibels above the room, so a
+quiet laptop microphone works. A small "mic" bar at the top shows what the microphone hears, so you
+can see it hears you, and a bar on the left shows what the game uses. The game also shows the
+name of the microphone. The game gets a little faster with
 each point. After a crash it waits a moment before it starts again, so the shout that crashed you
 does not start it at once. It plays a pluck to begin, a note for each point and a thud at the end.
 The best score is kept while the game is open. The first screen is always the same.
