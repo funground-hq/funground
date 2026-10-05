@@ -28,8 +28,8 @@ Make it yours:
 - Change GAP from 150 to 200 for an easier game, or to 120 for a harder one.
 - Change SPACING for gates closer together or further apart. Change the 3 in speed = 3 + ... to
   change the speed.
-- Change QUIET_DB = 8 to 4 if the bird does not hear a soft voice, or to 12 if it jumps at small
-  noises. Change RANGE_DB = 25 to 15 so a quieter voice reaches the top.
+- Change QUIET_DB = 15 to 10 if the bird does not hear a soft voice, or to 20 if it jumps at small
+  noises. Change RANGE_DB = 30 to 20 so a quieter voice reaches the top.
 - Change f.random_seed(11) to another number for different gates. Change the colours of the bird,
   such as f.fill(255, 200, 40) for the body.
 - Change the sounds: try "C6" in sound_point, or 200 in sound_crash.
@@ -46,8 +46,8 @@ GATE_W = 64
 GAP = 150                                  # the height of the opening in each gate
 SPACING = 210                              # how far apart the gates are
 CALIBRATE = 30                             # frames spent listening to the quiet room at the start (half a second)
-QUIET_DB = 8                               # decibels above the room that still count as nothing
-RANGE_DB = 25                              # then this many more decibels take the voice from 0 to 1
+QUIET_DB = 15                              # decibels above the room that still count as nothing (breath, typing)
+RANGE_DB = 30                              # then this many more decibels take the voice from 0 to 1
 LOW, HIGH = 50, GROUND - 28                # the bird stays between these heights
 
 try:

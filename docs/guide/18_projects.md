@@ -629,7 +629,7 @@ if f.frame_count < 30:
     quiet.append(db)                                  # stay quiet for half a second
     floor = sorted(quiet)[len(quiet) // 2]            # the middle one: a click does not move it
 else:
-    voice = f.constrain((db - floor - 8) / 25, 0, 1)
+    voice = f.constrain((db - floor - 15) / 30, 0, 1)
 ```
 
 **Add gates.** A gate is a dictionary: where it is, and the height of its gap. Each frame, move
@@ -728,7 +728,7 @@ def draw():
             quiet.append(db)
             floor = sorted(quiet)[len(quiet) // 2]    # the middle reading
         else:
-            voice = f.constrain((db - floor - 8) / 25, 0, 1)
+            voice = f.constrain((db - floor - 15) / 30, 0, 1)
     voice = max(voice, hop)
     hop *= 0.93
     if playing:

@@ -81,15 +81,16 @@ def test_the_game_stays_still_in_a_quiet_room(monkeypatch):
     assert -70 < ns["floor"] < -55                          # about 0.0005 in decibels
 
 
-@pytest.mark.parametrize("speech", [0.003, 0.01, 0.05, 0.3])
-def test_the_game_hears_quiet_speech(monkeypatch, speech):
+# Sensitivity after the maintainer found 8/25 dB too sensitive (5 Oct 2026): QUIET_DB = 15, RANGE_DB = 30.
+# A whisper (0.003) shows on the mic bar but barely lifts the bird; speech lifts it; a clear "aaah" tops it.
+@pytest.mark.parametrize("speech, low, high", [(0.003, 0.0, 0.15), (0.01, 0.25, 0.55), (0.05, 0.7, 1.0), (0.3, 0.95, 1.0)])
+def test_the_game_hears_quiet_speech(monkeypatch, speech, low, high):
     _play(monkeypatch, speech, speech_from=60)
     ns = _run(GALLERY / "projects" / "04_voice_game.py", 120)
-    assert ns["above"] > 10                                  # the mic bar shows the voice
-    assert ns["voice"] > 0.1                                 # clearly above 0
+    assert ns["above"] > 10                                  # the mic bar shows the voice, even a whisper
+    assert low <= ns["voice"] <= high
     if speech >= 0.01:
-        assert ns["voice"] > 0.5
-    assert ns["state"] == "play"                             # and the bird takes off
+        assert ns["state"] == "play"                         # and speech makes the bird take off
 
 
 def test_the_game_works_with_a_loud_room_and_a_louder_voice(monkeypatch):
@@ -99,7 +100,7 @@ def test_the_game_works_with_a_loud_room_and_a_louder_voice(monkeypatch):
                         lambda self, n: ((loud if api.active_sketch().frame_count >= 60 else quiet) * 20)[:n])
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
     ns = _run(GALLERY / "projects" / "04_voice_game.py", 120)
-    assert ns["voice"] > 0.9                                 # 40 dB above the room: the top
+    assert ns["voice"] > 0.75                                # 40 dB above a loud room: near the top
 
 
 def test_the_game_without_a_microphone_still_says_so(monkeypatch):
