@@ -47,5 +47,13 @@ More capstone projects are added.
 - [x] `docs/developer/Architecture.md` covers the sound, analysis, raga, layers, text-in-files and gallery-package modules added in Sprints 11–14.
 - [x] Design-note index; `Adding_a_feature.md` and `Testing.md` re-checked against the code.
 
+### S-125 API reference from docstrings — E-23 *(added 5 Oct, D-066)*
+- [ ] Every public function and live value, and the public methods of the objects funground returns (sounds, microphones, pictures, snapshots, vectors, paths, shapes, fonts, formatted strings, controls), has a structured docstring, so `help(f.circle)` is useful.
+- [ ] `tools/make_api_reference.py` generates `docs/reference/API.md` from the code, grouped like the Quick Reference, with reference tables for constants and fixed words (colours, blend modes, keys, page sizes, waves, ragas and talas, file formats). A test checks every docstring and that the page is current.
+
+### S-126 Documentation collection — E-23 *(added 5 Oct, D-066)*
+- [ ] `docs/README.md` is the front door to all documentation: start here, guide, projects, gallery, Quick Reference, API reference, errors, glossary, comparison, developer and design docs.
+- [ ] A note, `docs/reference/Compared_with_p5_and_DrawBot.md`: what funground shares with p5 and DrawBot, where it differs, and why.
+
 ### S-073 Release 0.1 — E-02 *(carried)*
 - [ ] `sprints/sprint-11/release_checklist.md` and `docs/developer/Releasing.md`
