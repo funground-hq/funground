@@ -86,8 +86,9 @@ def test_it_lists_every_gallery_example_grouped_by_area(browser):
     assert app.areas[0] == (None, "All", len(app.entries))
     real = app.areas[1:]
     assert sum(count for _, _, count in real) == len(app.entries)
-    assert [key for key, _, _ in real] == sorted({e.area for e in app.entries},
-                                                  key=lambda a: (browser.area_rank(a), a))
+    ordered = sorted({e.area for e in app.entries}, key=lambda a: (browser.area_rank(a), a))
+    ordered.remove("projects")
+    assert [key for key, _, _ in real] == ["projects"] + ordered      # the front door is second
     for key, title, _ in real:
         assert title == browser.AREAS.get(key, key.title())
     assert app.view == "grid" and app.area is None
@@ -118,11 +119,16 @@ def test_clicks_and_keys_move_between_views(browser):
     assert states[7] == ("grid", None, None, "")
 
 
+def app_first_area(browser, examples):
+    """The first area under All in the sidebar (Projects, the front door)."""
+    return browser.FRONT_DOOR
+
+
 def test_previous_stops_at_the_first_example_and_next_at_the_last(browser):
     script = {1: click(*centre(browser.area_rect(1))), 2: click(*centre(browser.card_rect(0))),
               3: press("left")}
     examples = browser.list_examples(browser.LOCATIONS.examples)
-    first_area = examples[0].parent.name
+    first_area = app_first_area(browser, examples)
     count = sum(1 for p in examples if p.parent.name == first_area)
     for n in range(4, 5 + count):
         script[n] = press("right")
@@ -238,6 +244,8 @@ def test_screenshots_of_the_grid_and_a_detail_view(browser, tmp_path):
 def test_c_and_the_copy_button_copy_the_example_and_never_overwrite(browser, tmp_path):
     keys = sorted({p.parent.name for p in browser.list_examples(browser.LOCATIONS.examples)},
                   key=lambda a: (browser.area_rank(a), a))
+    keys.remove("projects")                             # the front door comes first in the sidebar
+    keys.insert(0, "projects")
     images_area = 1 + keys.index("images")
     script = {1: click(*centre(browser.area_rect(images_area))), 2: click(*centre(browser.card_rect(0))),
               3: press("c"), 4: click(*centre(browser.BUTTONS["copy"]))}
@@ -404,3 +412,77 @@ def test_the_explanation_scrolls_when_it_is_long(browser):
 
     run(browser, {}, after)
     assert seen["top"] > 0 and 0 < seen["scroll"] <= seen["top"]
+
+
+def test_every_area_row_fits_in_the_window_without_scrolling(browser):
+    run(browser, {})
+    app = browser.app
+    assert len(app.areas) >= 21
+    assert app.max_side_scroll() == 0.0
+    for i in range(len(app.areas)):
+        x, y, w, h = browser.area_rect(i)
+        assert 0 <= x and x + w <= browser.SIDE_W and y >= browser.AREA_TOP
+        assert y + h <= browser.H - browser.SIDE_BOTTOM_PAD
+    assert browser.AREA_TOP + len(app.areas) * browser.ROW_H < browser.H - 30     # a margin
+
+
+def test_the_sidebar_scrolls_when_there_are_more_areas_than_fit(browser, tmp_path):
+    shot = tmp_path / "sidebar.png"
+    script = {1: [InputEvent("mouse_wheel", 100, 400, delta=-5.0)],
+              2: [InputEvent("mouse_wheel", 100, 400, delta=50.0)],
+              3: [InputEvent("mouse_wheel", 600, 400, delta=2.0)]}      # over the grid: not the sidebar
+    seen = {}
+
+    def after(n, app):
+        if n == 0:                                    # pretend there are 40 areas
+            app.areas = app.areas + [(f"extra{i}", f"Extra {i}", 0) for i in range(19)]
+        seen[n] = (app.side_scroll, app.grid_scroll)
+        if n == 2:
+            browser.f.save(str(shot))
+        if n == 4:                                    # the last row is now reachable by a click
+            x, y, w, h = browser.area_rect(len(app.areas) - 1, app.side_scroll)
+            assert browser.side_viewport()[1] <= y and y + h <= browser.H
+            app.click(*centre((x, y, w, h)))
+            assert app.area == app.areas[-1][0]
+
+    run(browser, script, after)
+    app = browser.app
+    assert seen[1][0] == 0.0                          # never above the top
+    assert seen[2][0] == app.max_side_scroll() > 0    # never past the end
+    assert seen[3][0] == seen[2][0] and seen[3][1] >= 0
+    assert shot.stat().st_size > 1000
+
+
+def test_the_projects_front_door_is_visible_and_shows_the_four_projects(browser, tmp_path):
+    shot = tmp_path / "front_door.png"
+
+    def after(n, app):
+        if n == 1:
+            browser.f.save(str(shot))
+
+    states = run(browser, {1: click(*centre(browser.area_rect(1)))}, after)
+    app = browser.app
+    key, title, count = app.areas[1]
+    assert (key, title) == ("projects", "Projects")
+    x, y, w, h = browser.area_rect(1)
+    assert y + h < browser.H and browser.area_rect(1)[1] == browser.AREA_TOP + browser.ROW_H
+    assert states[1] == ("grid", "projects", None, "")
+    assert count == 4 == len(app.visible())
+    assert all(e.area == "projects" for e in app.visible())
+    assert shot.stat().st_size > 1000
+
+
+def test_all_shows_the_projects_first(browser):
+    run(browser, {})
+    app = browser.app
+    shown = app.visible()
+    assert [e.area for e in shown[:4]] == ["projects"] * 4
+    assert len(shown) == len(app.entries)
+    assert all(e.area != "projects" for e in shown[4:])
+
+
+def test_long_area_names_are_cut_to_fit_the_sidebar(browser):
+    run(browser, {})
+    room = browser.SIDE_W - 28 - 24 - 40
+    assert browser.fit_text("Blending, opacity and shadows", room, 14) != "Blending, opacity and shadows"
+    assert browser.fit_text("Basics", room, 14) == "Basics"

@@ -12,7 +12,7 @@ Views
              the explanation (How it works, Make it yours) or the source code.
 
 Mouse
-    Click an area, a picture or a button. The wheel scrolls the grid or the code.
+    Click an area, a picture or a button. The wheel scrolls the list of areas, the grid or the code, whichever the pointer is over.
 
 Keys
     Left / Right    previous / next example (in the current area)
@@ -251,8 +251,13 @@ STILL = "A still picture: press Run to see it move."
 
 # ---- layout (all in window pixels; pure functions, so tests can aim clicks)
 SIDE_W = 240
-ROW_H = 31
+ROW_H = 27                        # 21 rows end at y = 659 in a 720-pixel window: room to spare
+ROW_PAD = 4                       # the gap under each row is inside ROW_H
 AREA_TOP = 92
+SIDE_BOTTOM_PAD = 10              # the list stops this far above the window's bottom edge
+FRONT_DOOR = "projects"           # shown as a highlighted entry directly under "All"
+FRONT_TITLE = "★ Projects"
+SIDE_TITLES = {"compositing": "Blending and shadows"}   # shorter names for the sidebar only
 GX, GY = 264, 88                  # top-left of the grid viewport
 GRID_BOTTOM = H - 34
 COLS, CARD_W, CARD_H, GAP = 3, 252, 212, 16
@@ -282,8 +287,13 @@ BUTTONS = {                       # detail-view buttons: x, y, width, height
 WHEEL_STEP = 48
 
 
-def area_rect(i: int) -> tuple[int, int, int, int]:
-    return (14, AREA_TOP + i * ROW_H, SIDE_W - 28, ROW_H - 3)
+def area_rect(i: int, scroll: float = 0.0) -> tuple[float, float, int, int]:
+    return (14, AREA_TOP + i * ROW_H - scroll, SIDE_W - 28, ROW_H - ROW_PAD)
+
+
+def side_viewport() -> tuple[int, int, int, int]:
+    """The part of the sidebar that shows the list of areas (it scrolls)."""
+    return (0, AREA_TOP - 4, SIDE_W - 1, H - SIDE_BOTTOM_PAD - AREA_TOP + 4)
 
 
 def card_rect(i: int, scroll: float = 0.0) -> tuple[float, float, int, int]:
@@ -328,6 +338,7 @@ class Browser:
     typing: bool = False
     grid_scroll: float = 0.0
     code_scroll: float = 0.0
+    side_scroll: float = 0.0
     panel: str = "code"                                # the lower panel: "explain" or "code"
     status: tuple[str, int] = ("", 0)
     running: dict = field(default_factory=dict)
@@ -340,8 +351,11 @@ class Browser:
     # ---- queries
     def visible(self) -> list[Entry]:
         words = self.filter.strip().lower()
-        return [e for e in self.entries
-                if (self.area is None or e.area == self.area) and words in e.title.lower()]
+        shown = [e for e in self.entries
+                 if (self.area is None or e.area == self.area) and words in e.title.lower()]
+        if self.area is None:                         # "All" opens with the projects first
+            shown.sort(key=lambda e: e.area != FRONT_DOOR)      # a stable sort keeps the order inside
+        return shown
 
     def position(self) -> int:
         shown = self.visible()
@@ -360,6 +374,11 @@ class Browser:
 
     def max_grid_scroll(self) -> float:
         return max(0.0, self.grid_height() - (GRID_BOTTOM - GY))
+
+    def max_side_scroll(self) -> float:
+        """How far the list of areas can scroll: 0 when every row fits."""
+        end = AREA_TOP + len(self.areas) * ROW_H
+        return max(0.0, end - (H - SIDE_BOTTOM_PAD))
 
     def code_lines(self, entry: Entry) -> int:
         chars = max(1, int((CODE_BOX[2] - 2 * CODE_PAD) / self._char_width()))
@@ -472,10 +491,12 @@ class Browser:
 
     # ---- input
     def click(self, x: float, y: float, frame: int = 0) -> None:
-        for i, (key, _, _) in enumerate(self.areas):
-            if inside(x, y, area_rect(i)):
-                self.choose_area(key)
-                return
+        if inside(x, y, side_viewport()):
+            for i, (key, _, _) in enumerate(self.areas):
+                if inside(x, y, area_rect(i, self.side_scroll)):
+                    self.choose_area(key)
+                    return
+            return
         if self.view == "grid":
             if inside(x, y, grid_viewport()):
                 for i, entry in enumerate(self.visible()):
@@ -506,8 +527,11 @@ class Browser:
             return self.folder_of(self.entry) is not None
         return True
 
-    def wheel(self, delta: float) -> None:
-        if self.view == "grid":
+    def wheel(self, delta: float, x: float | None = None, y: float | None = None) -> None:
+        """Scroll what is under the pointer: the list of areas, the grid or the code."""
+        if x is not None and y is not None and inside(x, y, side_viewport()):
+            self.side_scroll = min(max(0.0, self.side_scroll + delta * WHEEL_STEP), self.max_side_scroll())
+        elif self.view == "grid":
             self.grid_scroll = min(max(0.0, self.grid_scroll + delta * WHEEL_STEP), self.max_grid_scroll())
         else:
             self.code_scroll = min(max(0.0, self.code_scroll + delta * WHEEL_STEP), self.max_code_scroll())
@@ -562,7 +586,8 @@ class Browser:
 
     def hovering(self) -> bool:
         x, y = f.mouse_x, f.mouse_y
-        if any(inside(x, y, area_rect(i)) for i in range(len(self.areas))):
+        if inside(x, y, side_viewport()) and any(inside(x, y, area_rect(i, self.side_scroll))
+                                                 for i in range(len(self.areas))):
             return True
         if self.view == "grid":
             return inside(x, y, grid_viewport()) and self.card_at(x, y) is not None
@@ -583,16 +608,32 @@ class Browser:
         f.rect(SIDE_W - 1, 0, 1, H)
         label("funground", 24, 20, 24, INK, "bold")
         label("Examples gallery", 24, 54, 14, MUTED)
-        for i, (key, title, count) in enumerate(self.areas):
-            x, y, w, h = area_rect(i)
-            chosen = key == self.area
-            hover = inside(f.mouse_x, f.mouse_y, (x, y, w, h))
-            if chosen or hover:
-                f.no_stroke()
-                f.fill(ACCENT if chosen else (255, 255, 255))
-                f.draw_path(rounded(x, y, w, h, 8))
-            label(title, x + 12, y + 6, 15, (255, 255, 255) if chosen else INK)
-            label(str(count), x + w - 12, y + 6, 14, (214, 226, 246) if chosen else MUTED, align="right")
+        with f.saved_state():
+            f.clip(rect_path(*side_viewport()))
+            for i, (key, title, count) in enumerate(self.areas):
+                x, y, w, h = area_rect(i, self.side_scroll)
+                if y + h < AREA_TOP - 4 or y > H:
+                    continue
+                chosen = key == self.area
+                hover = inside(f.mouse_x, f.mouse_y, (x, y, w, h)) and inside(f.mouse_x, f.mouse_y, side_viewport())
+                front = key == FRONT_DOOR
+                if chosen or hover or front:
+                    f.no_stroke()
+                    f.fill(ACCENT if chosen else (255, 255, 255) if hover else ACCENT_SOFT)
+                    f.draw_path(rounded(x, y, w, h, 8))
+                shown = FRONT_TITLE if front else SIDE_TITLES.get(key, title)
+                number = str(count)
+                f.text_size(14)
+                room = w - 24 - f.text_width(number) - 8
+                label(fit_text(shown, room, 14, "bold" if front else "normal"), x + 12, y + 4, 14,
+                      (255, 255, 255) if chosen else ACCENT if front else INK, "bold" if front else "normal")
+                label(number, x + w - 12, y + 4, 13, (214, 226, 246) if chosen else MUTED, align="right")
+            top = self.max_side_scroll()
+            if top > 0:                                   # a slim scroll bar, like the code panel's
+                track = side_viewport()[3] - 8
+                bar = max(24.0, track * track / (track + top))
+                f.fill(LINE)
+                f.draw_path(rounded(SIDE_W - 9, AREA_TOP + (track - bar) * self.side_scroll / top, 5, bar, 2.5))
 
     def draw_help(self) -> None:
         f.no_stroke()
@@ -805,6 +846,20 @@ def label(message: str, x: float, y: float, size: float, color, style: str = "no
     f.text_style("normal")
 
 
+def fit_text(message: str, width: float, size: float, style: str = "normal") -> str:
+    """``message``, cut short with an ellipsis if it is wider than ``width``."""
+    f.text_size(size)
+    f.text_style(style)
+    try:
+        if f.text_width(message) <= width:
+            return message
+        while message and f.text_width(message + "…") > width:
+            message = message[:-1]
+        return message.rstrip() + "…"
+    finally:
+        f.text_style("normal")
+
+
 def text_in_box(message: str, x: float, y: float, w: float, h: float, size: float, color,
                 style: str = "normal", leading: float | None = None) -> None:
     f.no_stroke()
@@ -886,6 +941,9 @@ def load_entries(where: Locations | None = None) -> list[Entry]:
 def list_areas(entries: list[Entry]) -> list[tuple[str | None, str, int]]:
     keys = sorted({e.area for e in entries}, key=lambda a: (area_rank(a), a))
     areas: list[tuple[str | None, str, int]] = [(None, "All", len(entries))]
+    if FRONT_DOOR in keys:                      # the front door sits directly under "All"
+        keys.remove(FRONT_DOOR)
+        keys.insert(0, FRONT_DOOR)
     for key in keys:
         areas.append((key, AREAS.get(key, key.title()), sum(e.area == key for e in entries)))
     return areas
@@ -915,7 +973,7 @@ def mouse_pressed():
 
 
 def mouse_wheel(delta):
-    app.wheel(delta)
+    app.wheel(delta, f.mouse_x, f.mouse_y)
 
 
 def key_pressed():
