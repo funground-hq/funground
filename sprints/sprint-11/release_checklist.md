@@ -24,7 +24,7 @@ irreversible actions).
 - [ ] Root `README.md` install line: switch from the git URL to `pip install funground`. Guide chapter 1 already says that.
 - [ ] Version `0.1.0.dev0` → `0.1.0` in `pyproject.toml`, in a commit of its own.
 - [ ] Build again from a clean checkout of the tagged commit, then run `twine check`.
-- [ ] Dry run: run `release.yml` by hand → TestPyPI upload plus install and smoke test on Windows, macOS and Linux (`smoke-test` job).
+- [x] Dry run: run `release.yml` by hand → TestPyPI upload plus install and smoke test on Windows, macOS and Linux (`smoke-test` job). Passed 5 Oct 2026 with 0.1.0.dev1 (run 37274058907); the first run found the Linux Cairo prerequisite, now installed in the smoke test as the docs say.
 
 ## Maintainer decisions and checks
 
