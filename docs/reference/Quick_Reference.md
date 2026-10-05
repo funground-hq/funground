@@ -482,7 +482,7 @@ Mouse values are updated automatically before each call to `draw()`.
 |---|---|---|
 | `f.mouse_x` | Current mouse x-coordinate. | `f.circle(f.mouse_x, f.mouse_y, 30)` |
 | `f.mouse_y` | Current mouse y-coordinate. | |
-| `f.is_mouse_pressed` | `True` while any of the first three mouse buttons is held. | `if f.mouse_pressed: f.fill("tomato")` |
+| `f.is_mouse_pressed` | `True` while any of the first three mouse buttons is held. | `if f.is_mouse_pressed: f.fill("tomato")` |
 | `f.pmouse_x`, `f.pmouse_y` | Where the mouse was in the previous frame. | `f.line(f.pmouse_x, f.pmouse_y, f.mouse_x, f.mouse_y)` |
 | `f.mouse_button` | The last button pressed: `"left"`, `"center"`, `"right"` (or `None`). | `if f.mouse_button == "right": ...` |
 | `f.is_key_pressed` | `True` while any key is held. | `if f.is_key_pressed: ...` |
