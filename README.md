@@ -10,14 +10,6 @@ your picture in it.
 > **Status: pre-release.** The first release, 0.1, will be published on PyPI as `funground`.
 > Until then, install from this repository (below). Names may still change before 0.1.
 
-> **Built with AI.** funground is developed by Samir Joshi with substantial help from Anthropic's
-> Claude, used through Claude Code: most of the code, tests and documentation were written by
-> Claude under the maintainer's direction. The maintainer sets the direction, takes every design
-> decision, and reviews and signs off each sprint. The full test suite of more than 1,600 tests,
-> including pixel-exact images, checks every change. Commits Claude helped write say so in a
-> `Co-Authored-By: Claude …` line. See [AI disclosure](#ai-disclosure) below and
-> [AI-USAGE.md](AI-USAGE.md) for the full account.
-
 **Documentation:** start at the [documentation front door](docs/README.md).
 
 ```python
@@ -80,31 +72,6 @@ reviews, a decision log and architecture decision records. See [docs/PROCESS.md]
 [docs/Roadmap.md](docs/Roadmap.md) and [docs/design/](docs/design/).
 To contribute, start with the [developer documentation](docs/developer/README.md).
 
-## AI disclosure
-
-- **Who does what.** The maintainer, Samir Joshi, decides what funground is and how it behaves. Every
-  decision is recorded in [docs/design/Decision_Log.md](docs/design/Decision_Log.md). Claude proposes
-  options and recommendations, writes code, tests and documentation, and runs the checks. The
-  maintainer reviews each sprint before it closes.
-- **Models.** The commit history names the models that helped:
-  - Claude Fable 5.1;
-  - Claude Opus 5;
-  - Claude Opus 5.5;
-  - Claude Sonnet 5, as a sub-agent for well-specified stories, reviewed by the main model before
-    commit.
-
-  How work is split between models is described in [docs/PROCESS.md](docs/PROCESS.md), under
-  "Who does what".
-- **How changes are checked.** Nothing is merged without the full test suite passing:
-  - the public API contract;
-  - behaviour pinned in [docs/design/Semantic_Contract.md](docs/design/Semantic_Contract.md);
-  - drawing-operation snapshots;
-  - pixel-exact golden images.
-- **Attribution.** Commits written with Claude's help end with a `Co-Authored-By: Claude …` line,
-  so GitHub shows Claude as a co-author.
-- **The full account,** with the instructions that steer the work and a sprint-by-sprint log, is in
-  [AI-USAGE.md](AI-USAGE.md).
-
 ## Licence
 
 funground is licensed under the **GNU Lesser General Public License, version 2.1 or later**
@@ -120,5 +87,6 @@ in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
 
 ## Credits
 
-Who made funground, the software and the sound methods it is built on, where the raga data and fonts
-come from, and the ideas the examples build on are in [CREDITS.md](CREDITS.md).
+Where the software, sound methods, raga data, fonts and example ideas come from is in
+[CREDITS.md](CREDITS.md). funground is developed with AI assistance; [AI-USAGE.md](AI-USAGE.md)
+describes how.

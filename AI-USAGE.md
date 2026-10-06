@@ -2,8 +2,8 @@
 
 funground is built by one maintainer, Samir Joshi, working with Anthropic's Claude through
 [Claude Code](https://claude.com/claude-code). This file says how, so that teachers, contributors
-and reviewers can judge the work for themselves. The short version is in the
-[README](README.md#ai-disclosure). This file was adopted by decision D-024.
+and reviewers can judge the work for themselves.
+This file was adopted by decision D-024; the README links it in one line (D-068).
 
 ## Who does what
 
