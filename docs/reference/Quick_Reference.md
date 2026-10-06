@@ -512,6 +512,7 @@ controls keep their values, and setting them still works.
 | `box.checked()` / `box.checked(True)` | Read / set. | `if grid.checked(): draw_grid()` |
 | `f.create_button(label)` | a button. | `reset = f.create_button("reset")` |
 | `button.clicked()` | `True` once for each click since it was last asked. | `if reset.clicked(): points.clear()` |
+| `control.visible()` / `control.visible(False)` | Read / hide or show any control. A hidden control is not drawn or clickable, keeps its value, and leaves its row blank. Works in `draw()`. | `size.visible(playing is False)` |
 
 ![Mouse and keyboard](images/07_input.png)
 

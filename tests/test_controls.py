@@ -555,3 +555,117 @@ def test_panel_clicks_are_read_in_logical_pixels_on_a_hidpi_screen(pg, monkeypat
     seen = []
     run_pg(setup, draw, frames=3, mouse_pressed=lambda: seen.append(1))
     assert got["box"].checked() is True and seen == []
+
+
+# ---------------------------------------------------------------- hiding controls (S-127, D-067)
+
+def _panel_pixels(panel, width=300):
+    from funground.renderers.cairo2d import CairoRenderer
+    from funground import ir
+
+    r = CairoRenderer()
+    r.attach(width, panel.height, 1.0)
+    r.render(ir.Frame(panel_ops(panel, width)))
+    return bytes(r.pixels().data)
+
+
+def test_a_control_is_visible_by_default_and_can_be_hidden_and_shown():
+    for c in (Slider(0, 1), Checkbox("a"), Button("b")):
+        assert c.visible() is True
+        assert c.visible(False) is None
+        assert c.visible() is False
+        c.visible(True)
+        assert c.visible() is True
+
+
+def test_a_hidden_slider_ignores_press_and_drag_and_a_drag_in_progress_ends():
+    panel = ControlPanel()
+    s = panel.add(Slider(0, 100, 10, label="size"))
+    r = panel.layout(300)[0]
+    mid = (r["x0"] + r["x1"]) / 2
+    s.visible(False)
+    panel.press(mid, 10, 300)
+    assert s.value() == 10 and not panel.holding
+    s.visible(True)
+    panel.press(mid, 10, 300)
+    assert s.value() == pytest.approx(50) and panel.holding
+    s.visible(False)
+    assert not panel.holding
+    panel.drag(r["x1"], 10, 300)
+    assert s.value() == pytest.approx(50)
+
+
+def test_a_hidden_button_and_checkbox_ignore_clicks_and_keep_a_pending_click():
+    panel = ControlPanel()
+    b = panel.add(Button("go"))
+    box = panel.add(Checkbox("x"))
+    bx, by, bw, bh = panel.layout(200)[0]["button"]
+    panel.press(bx + 2, by + 2, 200)
+    panel.release(bx + 2, by + 2, 200)           # a click is waiting
+    b.visible(False)
+    box.visible(False)
+    panel.press(bx + 2, by + 2, 200)
+    panel.release(bx + 2, by + 2, 200)
+    panel.press(12, ROW_HEIGHT + 12, 200)
+    assert box.checked() is False
+    assert b.clicked() is True                   # the pending click stayed, no new one was made
+    assert b.clicked() is False
+    box.visible(True)
+    panel.press(12, ROW_HEIGHT + 12, 200)
+    assert box.checked() is True
+
+
+def test_a_hidden_control_keeps_its_value_and_can_still_be_set():
+    s = Slider(0, 10, 3)
+    box = Checkbox("a", True)
+    s.visible(False)
+    box.visible(False)
+    assert s.value() == 3 and box.checked() is True
+    s.value(7)
+    box.checked(False)
+    assert s.value() == 7 and box.checked() is False
+
+
+def test_hiding_a_control_keeps_the_panel_height_and_the_places():
+    panel = ControlPanel()
+    s = panel.add(Slider(0, 10))
+    c = panel.add(Checkbox("a"))
+    before = panel.height, [dict(r) for r in panel.layout(300)]
+    s.visible(False)
+    assert (panel.height, panel.layout(300)) == before
+    c.visible(False)
+    assert (panel.height, panel.layout(300)) == before
+
+
+def test_a_hidden_control_is_not_drawn_and_its_row_is_blank():
+    panel = ControlPanel()
+    s = panel.add(Slider(0, 10, 5, label="size"))
+    panel.add(Checkbox("grid", True))
+    shown = _panel_pixels(panel)
+    v = panel.version
+    s.visible(False)
+    assert panel.version > v                     # the panel draws again
+    hidden = _panel_pixels(panel)
+    assert hidden != shown
+    stride = 300 * 4
+    row0 = hidden[1 * stride: ROW_HEIGHT * stride]          # below the top edge line
+    assert set(row0[i:i + 3] for i in range(0, len(row0), 4)) == {bytes((238, 238, 238))}
+    assert hidden[ROW_HEIGHT * stride:] == shown[ROW_HEIGHT * stride:]     # the other row is the same
+    s.visible(True)
+    assert _panel_pixels(panel) == shown
+
+
+def test_visible_can_be_called_in_draw(pg):
+    got = {}
+
+    def setup():
+        p.size(200, 100)
+        got["s"] = p.create_slider(0, 10, 4)
+
+    def draw():
+        got["s"].visible(p.frame_count < 1)
+        got.setdefault("seen", []).append(got["s"].visible())
+
+    run_pg(setup, draw, frames=3)
+    assert got["seen"] == [True, False, False]
+    assert got["s"].value() == 4

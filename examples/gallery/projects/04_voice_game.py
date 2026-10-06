@@ -17,7 +17,8 @@ How it works:
   After that, it smooths mic.level() and measures how many decibels you are above the floor.
 - settings() gives the two marks, "starts at" and "full at", from the sliders that f.create_slider()
   made. Below "starts at" the result is 0, and at "full at" it is 1. f.constrain() keeps it between.
-  The arrow keys move the sliders too, and key_pressed() reads them.
+  The arrow keys move the sliders too, and key_pressed() reads them. update() shows the sliders on the
+  setup screen only: .visible() hides them while you play, and they keep their values.
 - The setup screen draws a tall bar of your loudness, the two marks, and a practice bird that eases
   toward the height your voice gives. The small "mic" bar shows the raw decibels in every state.
   Loudness controls the bird, not pitch, because mic.pitch() gives nothing for breath or noise.
@@ -202,6 +203,8 @@ def update():
     hop *= 0.93                            # a space bar press lifts the bird for a moment
     if hop < 0.05:
         hop = 0.0
+    start_at.visible(state == "setup")     # the sliders show on the setup screen only
+    full_at.visible(state == "setup")
 
     if state == "setup":
         practice_y += ((HIGH - voice * (HIGH - LOW)) - practice_y) * 0.14

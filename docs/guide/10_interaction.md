@@ -161,6 +161,19 @@ A few things to know:
 - **No window?** With `FUNGROUND_HEADLESS=1` the controls keep their values, and setting them still
   works, so you can test a sketch.
 
+**Hiding a control.** Every control has `visible()`. `control.visible(False)` hides it and
+`control.visible(True)` shows it again. A hidden control is not drawn and cannot be used, but it
+keeps its value, and its space in the panel stays blank. The window never changes size. You can call
+`visible()` in `draw()`.
+
+```py
+
+size = f.create_slider(10, 120, 60, label="size")   # in setup()
+
+# in draw():
+size.visible(not f.is_mouse_pressed)    # hide the slider while the mouse is down
+```
+
 `f.is_mouse_pressed` is the live value and `mouse_pressed()` is the callback, as in p5.js.
 
 ## See also
