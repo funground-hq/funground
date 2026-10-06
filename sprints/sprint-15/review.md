@@ -1,6 +1,6 @@
 # Sprint 15 review — release 0.1: documentation, examples that explain themselves, more projects
 
-**Dates:** 4–5 October 2026, under D-065. **Draft for the maintainer's sign-off.**
+**Dates:** 4–5 October 2026, under D-065. **Signed off 6 October 2026.**
 
 **Goal:** before 0.1, make funground easy to learn from:
 - every example explains itself;
@@ -94,7 +94,7 @@ Small design choices made under D-034:
 
 ## Sign-off
 
-*Awaiting the maintainer.*
+**Signed off by the maintainer, 6 October 2026.** Sprint closed.
 
 ## Retrospective
 

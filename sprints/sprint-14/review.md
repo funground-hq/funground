@@ -1,6 +1,6 @@
 # Sprint 14 review — release 0.1: seeing sound, ragas, sound quality, projects
 
-**Dates:** 4 October 2026, under D-056, D-057, D-061 to D-064. **Draft for the maintainer's sign-off.**
+**Dates:** 4 October 2026, under D-056, D-057, D-061 to D-064. **Signed off 6 October 2026.**
 
 **Goal:**
 - make sound visible;
@@ -91,7 +91,7 @@ CI: green on b8dfbc9 (all of Sprint 14's code); later pushes are docs only
 
 ## Sign-off
 
-*Awaiting the maintainer.*
+**Signed off by the maintainer, 6 October 2026.** Sprint closed.
 
 ## Retrospective
 
