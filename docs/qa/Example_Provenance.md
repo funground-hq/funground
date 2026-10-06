@@ -29,6 +29,9 @@ and how that claim was checked.
 - **The check catches real copies.** As a control, a DrawBot example and a Processing example
   were copied verbatim from the corpora and checked as if they were ours: both were flagged.
 
+The ideas and traditions the examples build on (which this check cannot see) are credited in the
+[ideas table in CREDITS.md](../../CREDITS.md#ideas-the-examples-build-on).
+
 ## How it was checked
 
 `tools/check_originality.py` compares our example code against a corpus of files from

@@ -179,6 +179,10 @@ large and it stays sharp. The first screen is always the same.
 - **Can you** print on A4 and not A3? Change one word, then check the size of the file.
 - **Can you** add a second field that is added to the first, and see what the lines do?
 
+## Credits and ideas
+
+A flow field is a well-known generative-art technique: a grid of angles that walkers follow. Tyler Hobbs's essay [Flow Fields](https://www.tylerxhobbs.com/words/flow-fields) explains it. The noise is funground's translation of p5.js's `noise()`, in the tradition of Ken Perlin's noise. See [CREDITS.md](../../../CREDITS.md#drawing-and-maths).
+
 **Back to:** [18. Projects](../18_projects.md). Related chapters:
 [11. Randomness and noise](../11_randomness_and_noise.md) (`noise`),
 [12. Useful maths](../12_useful_maths.md) (`Vector`),

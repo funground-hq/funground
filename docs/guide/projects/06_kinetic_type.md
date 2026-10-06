@@ -195,6 +195,10 @@ Enter again and the new dots fly in. Press G, or click "record GIF", and it reco
 - **Can you** use two words, one above the other, and press Tab to swap them?
 - **Can you** make a click send out a ring of push that spreads from the mouse?
 
+## Credits and ideas
+
+This project builds on the idea of a spring that pulls each dot home ([Hooke's law](https://en.wikipedia.org/wiki/Hooke%27s_law)), a standard way to animate motion also taught in Daniel Shiffman's [The Nature of Code](https://natureofcode.com/). The code is written for funground (CC0). See [CREDITS.md](../../../CREDITS.md#ideas-the-examples-build-on).
+
 **Back to:** [18. Projects](../18_projects.md). Useful chapters: [6. Text](../06_text.md),
 [7. Animation and time](../07_animation_and_time.md), [10. Interaction](../10_interaction.md),
 [11. Randomness and noise](../11_randomness_and_noise.md) and

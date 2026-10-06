@@ -243,4 +243,8 @@ viewer or in Inkscape.
   Hide it so it is in the file but not on the page.
 - **Can you** save a landscape poster as well? A script can give `new_page` two different sizes.
 
+## Credits and ideas
+
+Event posters are an everyday kind of design, and this project has no single source or inspiration to credit. The code is written for funground (CC0). See [CREDITS.md](../../../CREDITS.md#ideas-the-examples-build-on).
+
 **Back to:** [18. Projects](../18_projects.md)

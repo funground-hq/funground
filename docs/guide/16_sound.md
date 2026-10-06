@@ -653,6 +653,14 @@ code. A piano roll from a recording would have to guess the notes, which needs m
   that is not a sound gives `ValueError`. So do a volume outside 0 to 1 and `bands` outside 1 to
   256. The functions that make sound say which argument was wrong.
 
+## Where the sound comes from
+
+Playing and mixing use pygame-ce's mixer (SDL audio), and the microphone uses pygame-ce's
+experimental `pygame._sdl2.audio`. Everything else is funground's own plain Python, with no numpy and
+no audio library: the plucked string is the Karplus-Strong method, the room is a Schroeder-style
+reverb, the spectrum is an FFT, and pitch is found by autocorrelation. [CREDITS.md](../../CREDITS.md#sound)
+names each method with its reference.
+
 ## See also
 
 - Gallery: [Sound](../gallery/README.md#sound) and [Music](../gallery/README.md#music).

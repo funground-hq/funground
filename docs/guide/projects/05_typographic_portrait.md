@@ -210,6 +210,10 @@ file went. Open the PDF in a viewer and zoom in as far as you like.
 - **Can you** draw the letters in two colours, one for light cells and one for dark cells?
 - **Can you** make the word appear letter by letter, as if it were being typed?
 
+## Credits and ideas
+
+This project builds on the idea of pictures made from letters, in the tradition of [ASCII art](https://en.wikipedia.org/wiki/ASCII_art). The code is written for funground (CC0). See [CREDITS.md](../../../CREDITS.md#ideas-the-examples-build-on).
+
 **Back to:** [18. Projects](../18_projects.md). Useful chapters: [6. Text](../06_text.md),
 [9. Paths, clipping and pictures](../09_paths_and_clipping.md), [4. Colour](../04_colour.md) and
 [13. Saving your work](../13_saving_your_work.md).
