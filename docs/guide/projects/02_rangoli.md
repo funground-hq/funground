@@ -171,4 +171,8 @@ or click "save" to write `rangoli.svg` and `rangoli.pdf`.
 - **Can you** add a ring of dots between the petals?
 - **Can you** save every new design as its own file, `rangoli_1.svg`, `rangoli_2.svg`, and so on?
 
+## Credits and ideas
+
+This project builds on the idea of rangoli, the Indian floor art of patterns that repeat round a centre ([Rangoli](https://en.wikipedia.org/wiki/Rangoli)). The code is written for funground (CC0). See [CREDITS.md](../../../CREDITS.md#ideas-the-examples-build-on).
+
 **Back to:** [18. Projects](../18_projects.md)

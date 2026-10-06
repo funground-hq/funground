@@ -117,3 +117,8 @@ guide are public domain (CC0): copy them into your own work with no conditions.
 
 funground's dependencies and the bundled DejaVu fonts **keep their own licences**. They are listed
 in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
+
+## Credits
+
+Who made funground, the software and the sound methods it is built on, where the raga data and fonts
+come from, and the ideas the examples build on are in [CREDITS.md](CREDITS.md).

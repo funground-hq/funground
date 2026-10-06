@@ -52,6 +52,8 @@ Each line says when to read the page.
   architecture, how to add a feature, testing and releasing.
 - [Design documents](design/README.md): read these to learn why funground works the way it does.
   They hold the semantic contract, design notes and decisions.
+- [Credits and sources](../CREDITS.md): read this to see where the sound methods, the raga data, the fonts
+  and the ideas behind the examples come from.
 - [How we work](PROCESS.md): read this to learn how sprints, stories and reviews run.
 - [Quality notes](qa/Test_Strategy.md): read this for the test strategy and where each example
   came from ([example provenance](qa/Example_Provenance.md)).

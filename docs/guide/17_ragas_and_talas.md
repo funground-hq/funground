@@ -240,6 +240,23 @@ sang, and listen for the rest.
 - **Mistakes.** A raga or tala that is not in the table, a pattern that is not swaras, a tempo of 0 or
   a histogram that is not 12 numbers of 0 or more give a `ValueError` that says what was wrong.
 
+## Sources
+
+The table was checked in October 2026 against these pages, and each raga and tala lists the ones
+behind it. The books they cite (Bor and others, *The Raga Guide*; Kaufmann, *The Ragas of North India*;
+Bhatkhande) were not read directly. A teacher remains the best authority.
+
+- [Tanarang](https://tanarang.com/) and [SwarGanga](https://www.swarganga.org/): the main sources for
+  ragas and talas.
+- [Rajan Parrikar's essays](https://www.parrikar.org/hindustani/): phrases, history and disagreements.
+- [Wikipedia](https://en.wikipedia.org/) raga and tala articles.
+- [NCERT *Kriti*, class 8](https://ncert.nic.in/textbook/pdf/hekr107.pdf) and
+  [NIOS *Hindustani Music*, talas](https://www.nios.ac.in/media/documents/Hindustani_Music_242/hindustanimusicpracticalbook2/ch_HMB2-4.pdf).
+- [Darbar](https://darbar.org/raga/), [Chandrakantha](https://chandrakantha.com/music-and-dance/i-class-music/index-of-tals/)
+  and the [University of Washington thekas page](https://sites.math.washington.edu/~gangolli/Music428Thekas.html).
+
+The full list, with what each was used for, is in [CREDITS.md](../../CREDITS.md#indian-music-ragas-and-talas).
+
 ## See also
 
 - Gallery: [Music](../gallery/README.md#music) (Sing with the drone, Hear a raga, Tala) and [Sound](../gallery/README.md#sound).

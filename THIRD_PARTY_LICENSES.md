@@ -1,5 +1,7 @@
 # Third-party licences
 
+Where each piece of software, method, data set, font and idea comes from is in [CREDITS.md](CREDITS.md). This page is about licences.
+
 funground itself is licensed under the **GNU Lesser General Public License, version 2.1 or (at
 your option) any later version** (`LGPL-2.1-or-later`); see [LICENSE](LICENSE). The software it
 builds on keeps its own licence, listed here. Where the two differ, each component's own licence
@@ -38,6 +40,7 @@ Their licences apply to them as installed.
 | [skia-pathops](https://github.com/fonttools/skia-pathops) | BSD-3-Clause | a cut-down build of [Skia](https://skia.org)'s path code (BSD-3-Clause) |
 | [svgelements](https://github.com/meerk40t/svgelements) | MIT | — |
 | [pypdf](https://github.com/py-pdf/pypdf) | BSD-3-Clause | — |
+| [Pillow](https://pillow.readthedocs.io) (optional, `funground[extras]`) | MIT-CMU (formerly called HPND) | Used for some picture filters when it is installed; funground works without it |
 | [imageio-ffmpeg](https://github.com/imageio/imageio-ffmpeg) (optional, `funground[video]`) | BSD-2-Clause; the ffmpeg program it bundles is a GPLv3 build, run as a separate program and never linked | — |
 
 The licence versions shown are those declared by the releases funground is tested with
@@ -52,3 +55,7 @@ the noise function above:
 - [Processing](https://processing.org): core library LGPL-2.1.
 - [p5.js](https://p5js.org): LGPL-2.1.
 - [DrawBot](https://www.drawbot.com): BSD-style licence.
+- [The Nature of Code](https://natureofcode.com/) (Daniel Shiffman): a book whose ideas on motion and forces the examples
+  resemble; its example collections were used only as a comparison set for the originality check.
+
+The methods, books and papers behind the sound and the raga data are credited in [CREDITS.md](CREDITS.md).

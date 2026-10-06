@@ -45,8 +45,8 @@ on `sound._Analysis` and `Sound` in `funground/sound.py`. Tests: `tests/test_rhy
   with the Krumhansl-Schmuckler major and minor profiles on all 12 tonics (best must reach 0.3).
 - **Profiles.** From the probe-tone ratings in Krumhansl and Kessler (1982), Psychological Review 89, 334-368
   (also Krumhansl 1990): major 6.35 2.23 3.48 2.33 4.38 4.09 2.52 5.19 2.39 3.66 2.29 2.88; minor 6.33 2.68 3.52 5.38
-  2.60 3.53 2.54 4.75 3.98 2.69 3.34 3.17. They were written from memory and could not be checked against the paper
-  in this build (no network, no copy). Check them before release.
+  2.60 3.53 2.54 4.75 3.98 2.69 3.34 3.17. First written from memory; checked on 4 Oct 2026 against Aarden and von Hippel,
+  Music Theory Online 10.2 (2004), and partitura's `key_identification`, and found to match.
 
 ## Measured (Windows, pure Python)
 

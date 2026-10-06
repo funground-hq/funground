@@ -185,6 +185,10 @@ same card each time. The first screen is always the same.
 - **Can you** keep a score: one point for a win, and the total shown on the screen?
 - **Can you** hide a prize word under the foil as well as the symbols?
 
+## Credits and ideas
+
+This project builds on the idea of the [scratchcard](https://en.wikipedia.org/wiki/Scratchcard), a coating you rub off to see what is under it. The code is written for funground (CC0). See [CREDITS.md](../../../CREDITS.md#ideas-the-examples-build-on).
+
 **Back to:** [18. Projects](../18_projects.md). Related chapters:
 [9. Paths, clipping and pictures](../09_paths_and_clipping.md) (layers and erasing),
 [10. Interaction](../10_interaction.md) (the mouse and the keys),

@@ -238,4 +238,8 @@ moment.
 - **Can you** show the time of day as a sun or a moon, drawn with shapes?
 - **Can you** keep the best match from each singing in a list, and show the last five?
 
+## Credits and ideas
+
+The ragas, talas and the tanpura drone come from the Hindustani tradition ([Raga](https://en.wikipedia.org/wiki/Raga), [Tanpura](https://en.wikipedia.org/wiki/Tanpura)). The facts in the table are checked against published sources, listed in [CREDITS.md](../../../CREDITS.md#indian-music-ragas-and-talas); a teacher is still the best authority.
+
 **Back to:** [18. Projects](../18_projects.md)
