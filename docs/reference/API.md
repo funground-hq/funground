@@ -7099,6 +7099,33 @@ print(box.label)    # Show grid
 
 See also: [`create_slider`](#fn-create_slider), [`create_checkbox`](#fn-create_checkbox), [`create_button`](#fn-create_button).
 
+<a id="cls-Control-visible"></a>
+#### `Control.visible`
+
+```py
+Control.visible(flag=<not given>)
+```
+
+Read whether the control is shown, or hide or show it.
+
+A hidden control is not drawn and cannot be pressed, dragged or clicked. Its space in the panel stays
+blank, so the panel keeps its height and nothing moves when you show it again. It keeps its value.
+value(), checked() and clicked() still work while it is hidden. You can call visible() in draw().
+
+| Argument | Meaning |
+|---|---|
+| `flag` | True to show the control, False to hide it. Leave it out to read. |
+
+**Returns.** True or False when you leave flag out. None when you set it.
+
+```py
+size = f.create_slider(10, 100, 50)
+size.visible(False)
+print(size.visible())    # False
+```
+
+See also: `value`, `checked`, [`create_slider`](#fn-create_slider).
+
 <a id="cls-Slider"></a>
 ### `Slider`
 
@@ -7226,6 +7253,33 @@ s.value(0.8)
 
 See also: [`text`](#fn-text), `low`, `high`.
 
+<a id="cls-Slider-visible"></a>
+#### `Slider.visible`
+
+```py
+Slider.visible(flag=<not given>)
+```
+
+Read whether the control is shown, or hide or show it.
+
+A hidden control is not drawn and cannot be pressed, dragged or clicked. Its space in the panel stays
+blank, so the panel keeps its height and nothing moves when you show it again. It keeps its value.
+value(), checked() and clicked() still work while it is hidden. You can call visible() in draw().
+
+| Argument | Meaning |
+|---|---|
+| `flag` | True to show the control, False to hide it. Leave it out to read. |
+
+**Returns.** True or False when you leave flag out. None when you set it.
+
+```py
+size = f.create_slider(10, 100, 50)
+size.visible(False)
+print(size.visible())    # False
+```
+
+See also: `value`, `checked`, [`create_slider`](#fn-create_slider).
+
 <a id="cls-Checkbox"></a>
 ### `Checkbox`
 
@@ -7287,6 +7341,33 @@ print(box.label)    # Show grid
 
 See also: [`create_slider`](#fn-create_slider), [`create_checkbox`](#fn-create_checkbox), [`create_button`](#fn-create_button).
 
+<a id="cls-Checkbox-visible"></a>
+#### `Checkbox.visible`
+
+```py
+Checkbox.visible(flag=<not given>)
+```
+
+Read whether the control is shown, or hide or show it.
+
+A hidden control is not drawn and cannot be pressed, dragged or clicked. Its space in the panel stays
+blank, so the panel keeps its height and nothing moves when you show it again. It keeps its value.
+value(), checked() and clicked() still work while it is hidden. You can call visible() in draw().
+
+| Argument | Meaning |
+|---|---|
+| `flag` | True to show the control, False to hide it. Leave it out to read. |
+
+**Returns.** True or False when you leave flag out. None when you set it.
+
+```py
+size = f.create_slider(10, 100, 50)
+size.visible(False)
+print(size.visible())    # False
+```
+
+See also: `value`, `checked`, [`create_slider`](#fn-create_slider).
+
 <a id="cls-Button"></a>
 ### `Button`
 
@@ -7344,6 +7425,33 @@ print(box.label)    # Show grid
 ```
 
 See also: [`create_slider`](#fn-create_slider), [`create_checkbox`](#fn-create_checkbox), [`create_button`](#fn-create_button).
+
+<a id="cls-Button-visible"></a>
+#### `Button.visible`
+
+```py
+Button.visible(flag=<not given>)
+```
+
+Read whether the control is shown, or hide or show it.
+
+A hidden control is not drawn and cannot be pressed, dragged or clicked. Its space in the panel stays
+blank, so the panel keeps its height and nothing moves when you show it again. It keeps its value.
+value(), checked() and clicked() still work while it is hidden. You can call visible() in draw().
+
+| Argument | Meaning |
+|---|---|
+| `flag` | True to show the control, False to hide it. Leave it out to read. |
+
+**Returns.** True or False when you leave flag out. None when you set it.
+
+```py
+size = f.create_slider(10, 100, 50)
+size.visible(False)
+print(size.visible())    # False
+```
+
+See also: `value`, `checked`, [`create_slider`](#fn-create_slider).
 
 <a id="cls-Color"></a>
 ### `Color`

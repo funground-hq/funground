@@ -208,6 +208,22 @@ def test_s_returns_to_the_setup_screen_and_keeps_the_settings(monkeypatch):
     assert ns["state"] == "setup" and ns["settings"]()[0] == 22
 
 
+def test_the_sliders_show_on_the_setup_screen_and_hide_in_play(monkeypatch):
+    _play(monkeypatch, SPEECH_RMS, speech_from=10_000)
+    ns = _run(GAME, 20)
+    assert ns["state"] == "setup"
+    assert ns["start_at"].visible() and ns["full_at"].visible()
+    _play(monkeypatch, SPEECH_RMS, speech_from=60)
+    ns = _run(GAME, 130, at={5: lambda ns: ns["start_at"].value(5), 65: press("enter")})
+    assert ns["state"] == "play"
+    assert not ns["start_at"].visible() and not ns["full_at"].visible()
+    assert ns["settings"]()[0] == 5                           # hidden, but the value is kept
+    _play(monkeypatch, SPEECH_RMS, speech_from=10_000)
+    ns = _run(GAME, 90, at={70: press("enter"), 80: press("s")})
+    assert ns["state"] == "setup"
+    assert ns["start_at"].visible() and ns["full_at"].visible()
+
+
 def test_without_a_microphone_space_starts_the_game(monkeypatch):
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
 

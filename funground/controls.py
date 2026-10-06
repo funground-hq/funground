@@ -67,6 +67,7 @@ class Control:
             raise TypeError(f"a control's label must be text, not {type(label).__name__}")
         self._label = label or ""
         self._panel: ControlPanel | None = None
+        self._visible = True
 
     @property
     def label(self) -> str:
@@ -82,6 +83,36 @@ class Control:
         See also: create_slider, create_checkbox, create_button
         """
         return self._label
+
+    def visible(self, flag=_UNSET):
+        """Read whether the control is shown, or hide or show it.
+
+        A hidden control is not drawn and cannot be pressed, dragged or clicked. Its space in the panel stays
+        blank, so the panel keeps its height and nothing moves when you show it again. It keeps its value.
+        value(), checked() and clicked() still work while it is hidden. You can call visible() in draw().
+
+        Arguments:
+            flag: True to show the control, False to hide it. Leave it out to read.
+
+        Returns:
+            True or False when you leave flag out. None when you set it.
+
+        Example:
+            size = f.create_slider(10, 100, 50)
+            size.visible(False)
+            print(size.visible())    # False
+
+        See also: value, checked, create_slider
+        """
+        if flag is _UNSET:
+            return self._visible
+        flag = bool(flag)
+        if flag != self._visible:
+            self._visible = flag
+            if not flag and self._panel is not None:
+                self._panel._let_go(self)
+            self._touch()
+        return None
 
     def _touch(self) -> None:
         """Tell the panel something changed, so it is drawn again."""
@@ -397,6 +428,8 @@ class ControlPanel:
         if not 0 <= row < len(self.controls):
             return
         c, r = self.controls[row], self.layout(width)[row]
+        if not c._visible:
+            return
         if isinstance(c, Slider):
             if r["x0"] - 8 <= x <= r["x1"] + 8:
                 self._drag = c
@@ -429,6 +462,13 @@ class ControlPanel:
                     c._clicks = True
             self.version += 1
 
+    def _let_go(self, c: Control) -> None:
+        """A control was hidden: a drag it was holding ends, and a pressed button pops up."""
+        if self._drag is c:
+            self._drag = None
+        if isinstance(c, Button):
+            c._down = False
+
     @property
     def holding(self) -> bool:
         """True while a press that began in the panel is still held."""
@@ -459,6 +499,8 @@ def panel_ops(panel: ControlPanel, width: int) -> list[ir.Op]:
 
     font = default_font()
     for c, r in zip(panel.controls, panel.layout(width)):
+        if not c._visible:
+            continue                          # its row stays blank
         mid = r["mid"]
         if isinstance(c, Slider):
             if c.label:

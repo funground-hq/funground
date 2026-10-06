@@ -133,7 +133,9 @@ the player edit the code. Show a set up screen before the game. It needs four th
 - **A live bar.** Show how many decibels above the room the voice is right now. Draw two marks on
   it: "starts to lift" and "full height".
 - **Two sliders.** `f.create_slider()` makes a slider. Make them in `setup()`, and read them with
-  `.value()`. One slider moves each mark. Arrow keys can move them too, in `key_pressed()`.
+  `.value()`. One slider moves each mark. Arrow keys can move them too, in `key_pressed()`. Once
+  the game starts, hide them with `start_at.visible(False)`. They keep their values, and
+  `visible(True)` brings them back on the setup screen.
 - **A practice bird.** It uses the same marks as the real bird, so the player can say "aaah" softly
   and then loudly, and see what will happen before the game begins.
 
@@ -311,5 +313,9 @@ same.
 - **Can you** add a coin between the gates? Score two points if the bird touches it.
 - **Can you** save the best score in a file, so it is still there next time?
 - **Can you** swap the bird for a kite, a balloon or a rocket, and the gates for something else?
+
+## Credits and ideas
+
+This project builds on the idea of [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) (Dong Nguyen, 2013): a bird, one control and gaps to fly through. Here the control is your voice instead of a tap. The code is written for funground (CC0); the loudness and microphone methods are credited in [CREDITS.md](../../../CREDITS.md#sound).
 
 **Back to:** [18. Projects](../18_projects.md)
