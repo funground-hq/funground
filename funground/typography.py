@@ -624,22 +624,32 @@ def default_font() -> FontResource:
     return _builtin(STYLE_FILES["normal"])
 
 
+# S-132 Play: every file found by _resolve_path in this process (images, SVGs, sounds, fonts), for f.keep()'s
+# record. {absolute path: what} in the order first read.
+files_read: dict[str, str] = {}
+
+
+def _note_read(resolved: str, what: str) -> str:
+    files_read.setdefault(os.path.abspath(resolved), what)
+    return resolved
+
+
 def _resolve_path(path: str, base_dir: str | None, who: str, what: str) -> str:
     """Contract T11/P4: a relative path is found next to the sketch file first, then the cwd."""
     if os.path.isabs(path):
         if os.path.exists(path):
-            return os.path.normpath(path)
+            return _note_read(os.path.normpath(path), what)
         raise FileNotFoundError(f"{who}: no {what} file found at {path!r}")
     tried = []
     if base_dir is not None:
         candidate = os.path.join(base_dir, path)
         tried.append(candidate)
         if os.path.exists(candidate):
-            return os.path.normpath(candidate)
+            return _note_read(os.path.normpath(candidate), what)
     candidate = os.path.join(os.getcwd(), path)
     tried.append(candidate)
     if os.path.exists(candidate):
-        return os.path.normpath(candidate)
+        return _note_read(os.path.normpath(candidate), what)
     raise FileNotFoundError(
         f"{who}: no {what} file found at '{tried[0]}'" +
         (f" or '{tried[1]}'" if len(tried) > 1 else "")

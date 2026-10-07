@@ -17,6 +17,7 @@ In the examples, `import funground as f` is understood.
 - [Transforms and the state stack](#transforms-and-the-state-stack): [`translate`](#fn-translate), [`rotate`](#fn-rotate), [`scale`](#fn-scale), [`shear_x`](#fn-shear_x), [`shear_y`](#fn-shear_y), [`apply_matrix`](#fn-apply_matrix), [`reset_matrix`](#fn-reset_matrix), [`push`](#fn-push), [`pop`](#fn-pop), [`saved_state`](#fn-saved_state)
 - [Paths and clipping](#paths-and-clipping): [`path`](#fn-path), [`draw_path`](#fn-draw_path), [`clip`](#fn-clip), [`no_clip`](#fn-no_clip)
 - [Marks](#marks): [`mark`](#fn-mark)
+- [Play](#play): [`variations`](#fn-variations), [`keep`](#fn-keep), [`play`](#fn-play)
 - [Pictures and layers](#pictures-and-layers): [`create_graphics`](#fn-create_graphics), [`layer`](#fn-layer), [`hide_layer`](#fn-hide_layer), [`show_layer`](#fn-show_layer)
 - [Images and SVG](#images-and-svg): [`image`](#fn-image), [`image_mode`](#fn-image_mode), [`load_image`](#fn-load_image), [`load_svg`](#fn-load_svg), [`svg_paths`](#fn-svg_paths)
 - [Pixels and filters](#pixels-and-filters): [`get`](#fn-get), [`set`](#fn-set), [`load_pixels`](#fn-load_pixels), [`update_pixels`](#fn-update_pixels), [`filter`](#fn-filter)
@@ -934,7 +935,7 @@ f.background(color: 'Color', *more: 'float') -> 'None'
 
 Fill the whole canvas with one colour.
 
-It ignores the fill, the stroke, the transform and any clip. Call it near the start of draw() to clear the last frame. Leave it out when you want trails. Inside a ``with f.layer(...)`` block it clears that layer.
+It ignores the fill, the stroke, the transform and any clip. Call it near the start of draw() to clear the last frame. Leave it out when you want trails. Inside a ``with f.layer(...)`` block it clears that layer. Inside a function drawn by variations(), it paints that version's whole picture.
 
 | Argument | Meaning |
 |---|---|
@@ -2328,6 +2329,95 @@ flower.place(100, 100)
 
 See also: [`path`](#fn-path), [`load_svg`](#fn-load_svg), [`saved_state`](#fn-saved_state), [`layer`](#fn-layer).
 
+<a id="play"></a>
+## Play
+
+<a id="fn-variations"></a>
+### `f.variations`
+
+```py
+f.variations(fn, **values) -> 'list'
+```
+
+Draw several versions of a drawing side by side, as a labelled contact sheet.
+
+Write the drawing as a function with a parameter, then give a list of values to try. variations() calls the function once for each value, and draws each result in its own cell over f.ground.content, with a thin frame and a label such as "gap = 35". With two parameters it tries every pair: one row for each value of the first, one column for each value of the second. With one parameter it chooses a row or a grid, whichever makes the cells largest.
+
+Each version is drawn as if on the whole canvas, then made smaller to fit its cell. Every cell is made smaller by the same amount, so the cells can be compared. A cell shows only what is inside the canvas. Each version starts from the style you have when you call variations() and no transform, so one version's fill() cannot change the next. Each version also starts from the same random seed, so the versions differ only in the parameter. background() in the function paints that version's whole picture.
+
+It works in a script, in setup(), and in draw(), where it draws the sheet again every frame.
+
+| Argument | Meaning |
+|---|---|
+| `fn` | the function that draws one version. It is called with the parameters by name, such as fn(gap=35). |
+| `values` | one or two parameters, each with a list of values to try, such as gap=[10, 20, 35]. |
+
+**Returns.** A list with one (values, mark) pair for each cell, in order. values is a dictionary such as {"gap": 35}; mark is that version as a Mark, so chosen.place(0, 0) draws it full size.
+
+**Raises.**
+
+- `TypeError`: fn cannot be called, or a parameter is given one value instead of a list.
+- `ValueError`: there is no parameter, more than two, a list is empty, or the cells do not fit in the canvas.
+
+```py
+def study(gap):
+    for i in range(12):
+        f.circle(f.ground.content.left + i * gap, f.ground.content.cy, 20)
+
+f.variations(study, gap=[10, 20, 35, 60])
+```
+
+See also: [`keep`](#fn-keep), [`mark`](#fn-mark), [`random_seed`](#fn-random_seed), [`play`](#fn-play).
+
+<a id="fn-keep"></a>
+### `f.keep`
+
+```py
+f.keep(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'
+```
+
+Save this version of your picture in a studio folder, with what made it.
+
+The files go in a folder called studio next to your sketch file (or in the current folder when there is no file). They are numbered in order, after any already there: 001.png, 002.png and so on. Each kept version has a picture (.png), a copy of your sketch (.py), and a record (.json). The record holds your note, the settings you give, every control's value, the random seed, the size and margin, the page or frame, the date, the versions of funground and Python, the fonts used and the files read. It also lists what it could not keep, such as fonts installed on this computer. It prints one line saying where it saved.
+
+In a script it keeps the canvas as drawn so far. In an animated sketch it keeps the current frame, written when the frame is complete. Calling it from key_pressed() keeps a version each time you press a key.
+
+| Argument | Meaning |
+|---|---|
+| `note` | a few words about this version, such as "gap 35 reads as a rhythm". |
+| `pdf` | True also saves a .pdf, a vector drawing that stays sharp when printed. The default is False. |
+| `settings` | any values you want to remember with it, such as gap=35. |
+
+**Returns.** The path of the files without their ending, such as "studio/007".
+
+**Raises.**
+
+- `RuntimeError`: it is used inside a ``with f.mark()`` block, or before f.size().
+- `TypeError`: the note is not text.
+
+```py
+f.keep("gap 35 reads as a rhythm", gap=35)
+f.keep("for printing", pdf=True)
+```
+
+See also: [`variations`](#fn-variations), [`save`](#fn-save), [`random_seed`](#fn-random_seed), [`play`](#fn-play).
+
+<a id="fn-play"></a>
+### `f.play`
+
+```py
+f.play
+```
+
+Exploring: variations side by side, and keeping the versions you like.
+
+f.play holds the same two functions as f.variations and f.keep, under one name: f.play.variations(study, gap=[10, 20]) and f.play.keep("note"). This is a prototype: one of the two ways of writing them will be removed.
+
+```py
+f.play.variations(study, gap=[10, 20, 35])
+f.play.keep("gap 20 is calm")
+```
+
 <a id="pictures-and-layers"></a>
 ## Pictures and layers
 
@@ -3473,7 +3563,7 @@ See also: [`mm`](#fn-mm), [`size`](#fn-size), [`grid`](#fn-grid).
 ### `f.ground`
 
 ```py
-f.ground(...)
+f.ground
 ```
 
 A rectangle with margins. ``f.ground`` is the whole canvas; ``f.ground.content`` is inside the margins.
@@ -4567,7 +4657,7 @@ if not song.is_playing():
     song.play()
 ```
 
-See also: `play`, `pause`, [`stop`](#fn-stop).
+See also: [`play`](#fn-play), `pause`, [`stop`](#fn-stop).
 
 <a id="cls-Sound-key"></a>
 #### `Sound.key`
@@ -4625,7 +4715,7 @@ drone = f.drone("D3", 8)
 drone.loop()
 ```
 
-See also: `play`, [`stop`](#fn-stop), `pause`.
+See also: [`play`](#fn-play), [`stop`](#fn-stop), `pause`.
 
 <a id="cls-Sound-onsets"></a>
 #### `Sound.onsets`
@@ -4673,7 +4763,7 @@ snd.pan(-1)     # left speaker only
 snd.play()
 ```
 
-See also: `set_volume`, `play`.
+See also: `set_volume`, [`play`](#fn-play).
 
 <a id="cls-Sound-pause"></a>
 #### `Sound.pause`
@@ -4693,7 +4783,7 @@ snd.pause()
 snd.play()     # carries on
 ```
 
-See also: `play`, [`stop`](#fn-stop), `current_time`.
+See also: [`play`](#fn-play), [`stop`](#fn-stop), `current_time`.
 
 <a id="cls-Sound-pitch"></a>
 #### `Sound.pitch`
@@ -4894,7 +4984,7 @@ snd.play()
 snd.stop()
 ```
 
-See also: `pause`, `play`.
+See also: `pause`, [`play`](#fn-play).
 
 <a id="cls-Sound-swara_histogram"></a>
 #### `Sound.swara_histogram`
@@ -7325,7 +7415,7 @@ The family name of the font, as written in the font file.
 print(f.current_font().family())
 ```
 
-See also: `style`, `variations`, `features`.
+See also: `style`, [`variations`](#fn-variations), `features`.
 
 <a id="cls-Font-features"></a>
 #### `Font.features`
@@ -7344,7 +7434,7 @@ Use f.text_features() to turn one on or off.
 print(f.current_font().features())
 ```
 
-See also: `variations`, `contains`.
+See also: [`variations`](#fn-variations), `contains`.
 
 <a id="cls-Font-style"></a>
 #### `Font.style`

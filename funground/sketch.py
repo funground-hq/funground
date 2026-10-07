@@ -72,6 +72,14 @@ Namespace = dict[str, Any]
 _run_started = False          # set once any sketch has been run; the exit hint reads it (S-076)
 
 
+def new_seed() -> int:
+    """A seed for a run that set none (S-132 Play): unpredictable, short enough to type, and taken
+    without touching Python's own random module."""
+    import secrets
+
+    return secrets.randbelow(1_000_000)
+
+
 class Sketch:
     def __init__(self, platform: Platform | None = None, renderer: Renderer | None = None) -> None:
         if platform is None:
@@ -91,8 +99,11 @@ class Sketch:
         # The shape between begin_shape() and end_shape(), if one is open (S-028).
         self._shape: ShapeBuilder | None = None
         # funground keeps its own generator so random_seed() never disturbs a
-        # learner's own `import random`.
-        self._rng = _random.Random()
+        # learner's own `import random`. S-132 Play: every run has a recorded seed. Until the learner
+        # calls random_seed(n), it is one chosen here, so f.random_seed(seed) can repeat the run.
+        self._seed = new_seed()
+        self._seed_chosen_by = "funground"          # "funground" (chosen at the start) or "you" (random_seed(n))
+        self._rng = _random.Random(self._seed)
         # Smooth noise, ported from p5.js (S-047); seeded separately, as in p5.
         self._noise = Noise()
 
@@ -1886,7 +1897,12 @@ class Sketch:
         return self._rng.uniform(low, high)
 
     def random_seed(self, seed: int | None = None) -> None:
+        if seed is None:                          # a fresh, unpredictable start, still recorded (S-132 Play)
+            seed, by = new_seed(), "funground"
+        else:
+            by = "you"
         self._rng.seed(seed)
+        self._seed, self._seed_chosen_by = seed, by
 
     def noise(self, x: float, y: float = 0.0, z: float = 0.0) -> float:
         return self._noise(x, y, z)
