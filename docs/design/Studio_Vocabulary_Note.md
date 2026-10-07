@@ -1,7 +1,7 @@
 # Studio vocabulary: Ground, Mark, Rules, Play
 
-**Status:** approved for release 0.1 (D-069, D-070). Ground and Mark are in 0.1. Play is prototyped
-alongside them and earns its place in 0.1 through the six studios and the assessment. Player and
+**Status:** approved for release 0.1 (D-069, D-070, D-071). Ground, Mark and Play are in 0.1. Play is
+prototyped first; its names, form and behaviour are agreed with the maintainer before they are pinned. Player and
 `mark.outline()` are deferred. A second AI reviewer's conditions, accepted by the maintainer, are folded in.
 
 **Why.** The 64-studio atlas teaches creativity: make, vary, notice, choose, explain. Inspired by John
@@ -240,5 +240,5 @@ what it added to exploration, and where the existing API remains the better choi
 - Mark is built on recorded ops, not on Picture. It is immutable once finished, and also constructible
   directly from a path.
 - Deferred: `mark.outline()`, derived marks (`scaled`, `rotated`), retained placements, Player.
-- Scope: Ground and Mark in 0.1. Play is prototyped and its release scope decided after the six studios
-  and the assessment.
+- Scope: Ground and Mark in 0.1. Play also in 0.1 (D-071): prototyped first, then its shape agreed
+  with the maintainer. Open: flat names (`f.variations`, `f.keep`) or a `f.play` namespace.

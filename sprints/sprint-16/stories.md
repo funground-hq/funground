@@ -20,7 +20,7 @@ requests from the maintainer's review, then release 0.1.
 ### S-132 Studio vocabulary: Ground, Mark, Rules, Play — E-24 *(D-069, D-070; design in `docs/design/Studio_Vocabulary_Note.md`)*
 - [ ] Ground: page names and `margin=` in `f.size`, `f.ground` and `f.ground.content`, `f.grid`, `f.mm`/`f.inch` (G1).
 - [ ] Mark: `f.mark()` (block or from a path), `mark.place(...)` with anchor/scale/rotate/opacity, nesting, bounds, isolated capture, vector in PDF/SVG (K1-K3).
-- [ ] Play (prototype; release scope decided after the assessment): `f.variations`, `f.keep(..., pdf=True)`, a seed recorded for every run (E1-E2).
+- [ ] Play, in 0.1 (D-071): a prototype of variations and keep (a seed recorded for every run), then its names, form and behaviour agreed with the maintainer and pinned (E1-E2).
 - [ ] Six studios written twice (today's funground and the vocabulary), tested; the three Mark demonstrations; an assessment.
 
 ### S-073 Release 0.1 — E-02 *(carried)*
