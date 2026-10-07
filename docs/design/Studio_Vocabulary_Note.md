@@ -154,6 +154,66 @@ change.
   or save files raise an error that names the mark. Controls cannot be made in a mark.
 - **Layers.** A mark can be placed inside `with f.layer(...)`. A layer cannot be opened inside a mark.
 
+### Placement additions (D-072, from the comparison with PShape)
+
+**Style override.** `place(..., style="own" | "current")` is the analogue of PShape's `disableStyle()`.
+- `"own"`, the default, draws the recorded style.
+- `"current"` draws every element with the style in force at placement. You set that style the usual
+  way first, so there are **no per-property keywords** and no long call:
+
+  ```py
+  f.fill("black")
+  f.no_stroke()
+  flower.place(x, y, style="current")          # a silhouette of a multicolour flower
+  ```
+
+  What `"current"` replaces:
+  - **Closed shapes and paths:** fill, stroke, stroke width, caps, joins, miter limit and dash. A
+    gradient fill becomes the current fill, and `no_fill()`/`no_stroke()` apply.
+  - **Lines and open strokes:** stroke, width, caps and dash.
+  - **Text:** its colour. Font, size and shaping are unchanged, because they are geometry.
+  - **Images and pictures:** unchanged.
+  - **Nested marks:** the same rules, all the way down.
+  - **Opacity and blend:** they still come from `place()`'s own arguments.
+
+**Fit.** `place(..., width=None, height=None)` is the analogue of `shape(s, x, y, w, h)`.
+- Giving one of them scales the mark uniformly to that size, from its bounds.
+- Giving both fits it inside the box, keeping its proportions and centring it.
+- Using either with `scale=` raises an error.
+- Typical use is a grid cell: `flower.place(cell.cx, cell.cy, anchor="center", width=cell.w * 0.8)`.
+
+**From an SVG file.** `f.mark("leaf.svg")` is the analogue of `loadShape`.
+- It makes a finished mark from the file's shapes, colours and groups, as vectors.
+- Its origin is the file's top-left.
+- `style="current"` can recolour it.
+
+## Compared with Processing's PShape, p5 and DrawBot
+
+| | PShape (Processing) | Mark |
+|---|---|---|
+| Construction | `createShape(...)`, `beginShape`/`vertex`, `createShape(GROUP)` with `addChild`, `loadShape("x.svg")` | A block capturing ordinary drawing, `f.mark(path, ...)` or `f.mark("x.svg")` |
+| Contents | Shapes and vertices with styles; no text | Shapes, paths, gradients, shaped text, images, pictures and nested marks |
+| Parts | `getChild`, `getVertex`/`setVertex`, editable | Opaque (editing parts deferred: it needs a mutable tree) |
+| Style | Baked in; `disableStyle()` uses the current style | Baked in; `place(style="current")` uses the current style |
+| Transforms | `s.rotate()` and the like change the shape and **accumulate**: a common beginner trap | Each placement has its own transform; the mark never changes |
+| Placement and size | `shape(s, x, y[, w, h])`, `shapeMode` | `place(x, y, scale=, rotate=, anchor=, width=, height=)` |
+| Group opacity | No group alpha in 2D | The whole mark fades as one (a transparency group in PDF) |
+
+- **p5.js:** `createGraphics()` is a fixed-size off-screen bitmap, like funground's Picture.
+  `buildGeometry()` captures drawing into reusable geometry, but only for WebGL 3D.
+- **DrawBot:** `BezierPath` is reusable geometry with Booleans and transforms; style is supplied when it
+  is drawn, like funground's Path.
+
+Immutability is a design choice, not something the concept requires; PShape shows a mutable shape can
+work. Its accumulating transforms are the strongest argument that immutability suits learners.
+funground's contribution is the combination:
+- capturing ordinary drawing, including text;
+- anchors and fitting;
+- group opacity;
+- the studio workflow.
+
+The six studios test that combination; the note does not claim it is new.
+
 ### How it relates to what exists
 
 | | What it is | Use it for |
@@ -239,6 +299,7 @@ what it added to exploration, and where the existing API remains the better choi
 - `f.keep(..., pdf=True)` is optional.
 - Mark is built on recorded ops, not on Picture. It is immutable once finished, and also constructible
   directly from a path.
-- Deferred: `mark.outline()`, derived marks (`scaled`, `rotated`), retained placements, Player.
+- Added (D-072): `place(style="current")`, `place(width=, height=)`, `f.mark("file.svg")`.
+- Deferred: `mark.outline()`, derived marks (`scaled`, `rotated`), editing parts, retained placements, Player.
 - Scope: Ground and Mark in 0.1. Play also in 0.1 (D-071): prototyped first, then its shape agreed
   with the maintainer. Open: flat names (`f.variations`, `f.keep`) or a `f.play` namespace.
