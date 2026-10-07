@@ -8,12 +8,12 @@ LICENSE and THIRD_PARTY_LICENSES.md.
 The algorithm, the lattice size, the octave rule and the seeding generator are
 p5's, so ``noise_seed(n)`` then ``noise(x, y, z)`` gives the same numbers as
 ``noiseSeed(n)`` / ``noise(x, y, z)`` in p5.js. Without a seed the lattice is
-random, as in p5. Negative inputs are mirrored (p5 takes the absolute value).
+random, as in p5, but made from a seed chosen at first use and recorded (S-132 Play),
+so the run can be repeated. Negative inputs are mirrored (p5 takes the absolute value).
 """
 from __future__ import annotations
 
 import math
-import random
 
 PERLIN_YWRAPB = 4
 PERLIN_YWRAP = 1 << PERLIN_YWRAPB
@@ -29,10 +29,22 @@ class Noise:
         self.octaves = 4
         self.falloff = 0.5
         self._perlin: list[float] | None = None
+        self.seed_value: int | None = None        # S-132 Play: the seed in use, recorded by f.keep()
+        self.seed_chosen_by: str | None = None    # "you" (noise_seed) or "funground" (chosen at first use)
 
     def seed(self, value: int | None) -> None:
-        """p5's noiseSeed: a linear congruential generator fills the lattice."""
-        z = (int(value) if value is not None else int(random.random() * _LCG_M)) & 0xFFFFFFFF
+        """p5's noiseSeed: a linear congruential generator fills the lattice.
+
+        With no value, a seed is chosen and recorded (S-132 Play), so an unseeded run can be repeated
+        with noise_seed(seed). It never touches Python's own random module."""
+        if value is None:
+            import secrets
+
+            value, self.seed_chosen_by = secrets.randbelow(1_000_000), "funground"
+        else:
+            self.seed_chosen_by = "you"
+        self.seed_value = value
+        z = int(value) & 0xFFFFFFFF
         table = []
         for _ in range(PERLIN_SIZE + 1):
             z = (_LCG_A * z + _LCG_C) % _LCG_M
@@ -47,8 +59,9 @@ class Noise:
 
     def __call__(self, x: float, y: float = 0.0, z: float = 0.0) -> float:
         perlin = self._perlin
-        if perlin is None:
-            perlin = self._perlin = [random.random() for _ in range(PERLIN_SIZE + 1)]
+        if perlin is None:                     # never seeded: choose a seed now and record it (S-132 Play)
+            self.seed(None)
+            perlin = self._perlin
         cos, pi, size = math.cos, math.pi, PERLIN_SIZE      # locals: this loop is the hot path
         x, y, z = abs(x), abs(y), abs(z)
         xi, yi, zi = math.floor(x), math.floor(y), math.floor(z)
