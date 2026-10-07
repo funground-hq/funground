@@ -98,6 +98,7 @@ class Sketch:
 
         # Live values (contract R1, R4, R5, I1) and window settings.
         self.width = 640
+        self._margin = (0, 0, 0, 0)                # S-132: (top, right, bottom, left), kept across pages and resizes
         self.height = 480
         self.fps = 60
         self.title = "funground"
@@ -281,11 +282,26 @@ class Sketch:
         return math.degrees(radians)
 
     # ------------------------------------------------------------ window
-    def size(self, width: int, height: int, *, title: str = "funground", fps: int = 60) -> None:
+    def size(self, width: Any, height: int | None = None, *, title: str = "funground", fps: int = 60,
+             margin: Any = 0, landscape: bool = False) -> None:
+        if isinstance(width, str):                      # a page name (S-132, contract G1)
+            from .pages import page_size
+
+            if height is not None:
+                raise ValueError("f.size(): a page-size name stands alone, e.g. f.size(\"A4\"), without a height")
+            width, height = page_size(width, landscape)
+        elif landscape:
+            raise ValueError("f.size(): landscape=True goes with a page name, e.g. f.size(\"A4\", landscape=True)")
+        elif height is None:
+            raise ValueError("f.size() needs both width and height, or a page name such as \"A4\"")
         if width <= 0 or height <= 0:
             raise ValueError("width and height must be positive")
         if fps <= 0:
             raise ValueError("fps must be positive")
+        from .surface import check_margin
+
+        margin = check_margin(margin, width, height)       # before anything changes
+        self._margin = margin
         self.width = int(width)
         self.height = int(height)
         self.fps = int(fps)
@@ -302,6 +318,13 @@ class Sketch:
         self._give_panel()
         pw, ph = self._platform.open_window(self.width, self.height, self.title)
         self._attach(pw, ph)
+
+    @property
+    def ground(self):
+        """The canvas as a Ground (S-132, contract G1): its edges, centre and margins."""
+        from .surface import Ground
+
+        return Ground(0, 0, self.width, self.height, self._margin)
 
     # ---- scripts (S-076, contract R13-R15)
     def _begin_script(self) -> None:
@@ -356,8 +379,11 @@ class Sketch:
         if w <= 0 or h <= 0:
             raise ValueError("width and height must be positive")
         if not self._script:                      # the first page, as f.size() would start it
-            self.size(w, h)
+            self.size(w, h, margin=self._margin)
             return
+        from .surface import check_margin
+
+        check_margin(self._margin, w, h)           # the margin persists, so it must fit the new page
         self._sync_canvas()
         self._pages.append((self.width, self.height, list(self._with_layers(self.frame, files=True)),
                             bytes(self._view_pixels().data)))
@@ -482,7 +508,7 @@ class Sketch:
     # ---- window control (S-057, contract R12)
     def resize_canvas(self, width: int, height: int) -> None:
         """A new canvas size while the sketch runs; the canvas starts blank, like p5's resizeCanvas."""
-        self.size(width, height, title=self.title, fps=self.fps)
+        self.size(width, height, title=self.title, fps=self.fps, margin=self._margin)
 
     def full_screen(self) -> None:
         """Make the canvas fill the screen; f.width and f.height become the screen's size."""

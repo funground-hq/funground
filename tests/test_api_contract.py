@@ -23,7 +23,7 @@ V05_FUNCTIONS = {
     "point": "(x: 'float', y: 'float') -> 'None'",
     "random": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "rect": "(x: 'float', y: 'float', width: 'float', height: 'float', *radii: 'float') -> 'None'",
-    "size": "(width: 'int', height: 'int', *, title: 'str' = 'funground', fps: 'int' = 60) -> 'None'",
+    "size": "(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int' = 60, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'",  # S-132: page names, margin
     "stop": "() -> 'None'",
     "stroke": "(color: 'Color', *more: 'float') -> 'None'",
     "stroke_width": "(pixels: 'int') -> 'None'",
@@ -205,6 +205,10 @@ ADDED_FUNCTIONS = {
     "save_gif": "(path: 'str', seconds: 'float') -> 'None'",
     "save_movie": "(path: 'str', seconds: 'float') -> 'None'",
     "frame_duration": "(seconds: 'float') -> 'None'",
+    # S-132 Ground
+    "grid": "(cols: 'int', rows: 'int', *, gutter: 'float | tuple' = 0, area: 'object' = None) -> 'list'",
+    "mm": "(n: 'float') -> 'float'",
+    "inch": "(n: 'float') -> 'float'",
     # S-095 layers
     "layer": "(name: 'str') -> 'Picture'",
     "hide_layer": "(name: 'str') -> 'None'",
@@ -241,7 +245,7 @@ ADDED_FUNCTIONS = {
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
 # S-045 added pmouse_x/y, mouse_button, key, key_code and is_key_pressed.
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "is_mouse_pressed", "pmouse_x", "pmouse_y",
-               "mouse_button", "key", "key_code", "is_key_pressed", "frame_count", "delta_time", "pixels"}
+               "mouse_button", "key", "key_code", "is_key_pressed", "frame_count", "delta_time", "pixels", "ground"}
 
 
 def _sig(name: str) -> str:

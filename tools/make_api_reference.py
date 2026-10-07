@@ -72,6 +72,7 @@ GROUPS: dict[str, list[str]] = {
     "Interaction and controls": ["key_down", "cursor", "no_cursor", "create_button", "create_checkbox",
                                  "create_slider"],
     "Saving": ["save", "save_frames", "save_gif", "save_movie"],
+    "Ground": ["grid", "mm", "inch", "ground"],
     "Motion and pages": ["frame_duration", "new_page", "page_size", "page_count"],
     "Sound": ["load_sound", "create_sound", "tone", "note", "pluck", "melody", "sequence", "mix", "drone",
               "note_to_frequency", "frequency_to_note", "chord_notes"],

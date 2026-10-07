@@ -170,6 +170,17 @@ else:
 f.circle(f.mouse_x, f.mouse_y, 40)
 ```
 
+**Ground: page names, margins, grids and units**
+
+| Call | What it does | Example |
+|---|---|---|
+| `f.size("A4", landscape=True)` | A page name instead of numbers (the names of `f.page_size`). | `f.size("A5")` |
+| `f.size(w, h, margin=m)` | Keep a margin free: one number, or `(top, right, bottom, left)`. It is a guide, not a clip, and it stays across pages and resizes. | `f.size(600, 400, margin=30)` |
+| `f.ground` | The whole canvas: `left`, `top`, `right`, `bottom`, `width`, `height`, `cx`, `cy`, `margin`. Read-only and always up to date. | `f.rect(f.ground.left, f.ground.top, f.ground.width, 20)` |
+| `f.ground.content` | The area inside the margins, with the same fields. With no margin it is `f.ground`. | `f.ground.content.left` |
+| `f.grid(cols, rows, gutter=0, area=None)` | A list of cells, row by row, left to right. Each cell has `x`, `y`, `w`, `h`, `cx`, `cy`, `col`, `row`, `index`. `area` can be a cell, so grids nest. | `for c in f.grid(3, 2, gutter=10): f.circle(c.cx, c.cy, c.w)` |
+| `f.mm(n)`, `f.inch(n)` | Millimetres and inches as funground units (72 to the inch). | `f.size("A4", margin=f.mm(15))` |
+
 ---
 
 ## 3. Colours, fill, stroke and text

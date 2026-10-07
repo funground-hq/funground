@@ -23,7 +23,7 @@ _active: Sketch | None = None
 
 LIVE_NAMES = frozenset(
     {"width", "height", "mouse_x", "mouse_y", "is_mouse_pressed", "pmouse_x", "pmouse_y", "mouse_button",
-     "key", "key_code", "is_key_pressed", "frame_count", "delta_time", "pixels"}
+     "key", "key_code", "is_key_pressed", "frame_count", "delta_time", "pixels", "ground"}
 )
 
 # What each live value is, in the same format as the function docstrings (S-125).
@@ -124,6 +124,14 @@ LIVE_DOCS: dict[str, str] = {
     Example:
         x += 120 * f.delta_time
     """,
+    "ground": """The canvas as a rectangle, with its margins.
+
+    It is a read-only value, always up to date, like width. It has left, top, right, bottom, width, height, cx and cy (the centre), and margin, a tuple (top, right, bottom, left) from size(). It starts at (0, 0), so left and top are 0, and right and bottom are the canvas width and height. Its content is the area inside the margins: a value of the same kind, whose own margin is (0, 0, 0, 0) and whose own content is itself. With no margin, ground.content is ground. It follows size(), resize_canvas() and new_page(). The margin stays when the canvas changes size. Margins are a guide: drawing outside them is allowed. Inside a ``with f.layer(...)`` block it is still the canvas.
+
+    Example:
+        f.size(400, 300, margin=20)
+        f.rect(f.ground.content.left, f.ground.content.top, f.ground.content.width, f.ground.content.height)
+    """,
     "pixels": """The canvas pixels, after load_pixels().
 
     It is a bytearray with red, green, blue and alpha (0 to 255, not premultiplied) for every pixel, row by row from the top left. The pixel at (x, y) starts at index (y * f.width + x) * 4. It is None until you call load_pixels(). Change the numbers in place, then call update_pixels(). Inside a ``with f.layer(...)`` block it holds the layer's pixels.
@@ -188,7 +196,7 @@ def live_value(name: str) -> object:
     This is what ``f.width``, ``f.mouse_x`` and the other live values call behind the scenes. Inside a ``with f.layer(...)`` block, "pixels" is the layer's pixels. Most learners never call this.
 
     Arguments:
-        name: one of "width", "height", "mouse_x", "mouse_y", "pmouse_x", "pmouse_y", "is_mouse_pressed", "mouse_button", "key", "key_code", "is_key_pressed", "frame_count", "delta_time" or "pixels".
+        name: one of "width", "height", "mouse_x", "mouse_y", "pmouse_x", "pmouse_y", "is_mouse_pressed", "mouse_button", "key", "key_code", "is_key_pressed", "frame_count", "delta_time", "pixels" or "ground".
 
     Returns:
         The value that name has now.
@@ -243,25 +251,29 @@ atexit.register(exit_hint)
 
 
 # ---- window / lifecycle
-def size(width: int, height: int, *, title: str = "funground", fps: int = 60) -> None:
+def size(width: int | str, height: int | None = None, *, title: str = "funground", fps: int = 60,
+         margin: float | tuple = 0, landscape: bool = False) -> None:
     """Create the canvas, or change its size.
 
-    Call it once, at the start of setup(). In an animated sketch it opens the window. In a script (a file with no draw()) it makes a canvas with no window; use show() to look at it. If setup() never calls size(), run() opens a 640 by 480 window for you.
+    Call it once, at the start of setup(). In an animated sketch it opens the window. In a script (a file with no draw()) it makes a canvas with no window; use show() to look at it. If setup() never calls size(), run() opens a 640 by 480 window for you. Instead of numbers you can give a page name, such as size("A4") (see page_size). The margin is a guide for your drawing: read it back with f.ground.content, or use grid(). It does not clip anything.
 
     Arguments:
-        width, height: the canvas size in pixels. Both must be above 0.
+        width: the canvas width in pixels (above 0), or a page name such as "A4".
+        height: the canvas height in pixels (above 0). Leave it out when width is a page name.
         title: the text in the window's title bar. The default is "funground".
         fps: the target frames per second. The default is 60. It must be above 0.
+        margin: the space kept free around the edge. One number is used on all four sides. A tuple of four numbers is (top, right, bottom, left). The default is 0. It stays when the canvas changes size or a new page starts.
+        landscape: True turns a named page on its side, as in size("A4", landscape=True). The default is False. It only goes with a page name.
 
     Raises:
-        ValueError: the width, height or fps is 0 or less.
+        ValueError: the width, height or fps is 0 or less, a page name has a height, the name is unknown, a margin is negative, or the margins leave no room.
 
     Example:
-        f.size(640, 400, title="Bounce", fps=30)
+        f.size("A4", margin=f.mm(15))
 
-    See also: run, resize_canvas, full_screen
+    See also: ground, grid, run, resize_canvas, full_screen, page_size
     """
-    canvas_sketch().size(width, height, title=title, fps=fps)
+    canvas_sketch().size(width, height, title=title, fps=fps, margin=margin, landscape=landscape)
 
 
 def run(*, fps: int | None = None, max_frames: int | None = None) -> None:
@@ -360,6 +372,78 @@ def page_size(name: str, landscape: bool = False) -> tuple[int, int]:
     from .pages import page_size as _page_size
 
     return _page_size(name, landscape)
+
+
+def grid(cols: int, rows: int, *, gutter: float | tuple = 0, area: object = None) -> list:
+    """Divide an area into a grid of equal cells.
+
+    The cells cover f.ground.content (the canvas inside the margins), or the area you give. The list goes row by row, left to right, so the first cell is top left. Each cell has x, y (its top left corner), w, h (its size), cx, cy (its centre), col, row and index (0 for the first cell). It also has left, top, right, bottom, width and height, so a cell can be the area of another grid.
+
+    Arguments:
+        cols: how many columns. A whole number above 0.
+        rows: how many rows. A whole number above 0.
+        gutter: the gap between cells. One number is used both across and down. A tuple (column_gutter, row_gutter) sets them apart. The default is 0.
+        area: what to divide. It is any object with left, top, width and height, such as f.ground or a cell. The default None is f.ground.content.
+
+    Returns:
+        A list of cols times rows cells.
+
+    Raises:
+        ValueError: cols or rows is 0 or less, a gutter is negative, or the gutters leave no room for the cells.
+
+    Example:
+        for cell in f.grid(3, 2, gutter=10):
+            f.circle(cell.cx, cell.cy, cell.w * 0.8)
+
+    See also: ground, size, mm
+    """
+    from .surface import make_grid
+
+    if area is None:
+        area = canvas_sketch().ground.content
+    return make_grid(cols, rows, gutter, area)
+
+
+def mm(n: float) -> float:
+    """Convert millimetres to funground units.
+
+    One unit is one point, as in a PDF: 72 to the inch, so 1 mm is about 2.83 units. It is a plain conversion. It does not change the canvas.
+
+    Arguments:
+        n: a length in millimetres.
+
+    Returns:
+        The length in funground units, as a float.
+
+    Example:
+        f.size("A4", margin=f.mm(15))
+
+    See also: inch, size, grid
+    """
+    from .surface import mm as _mm
+
+    return _mm(n)
+
+
+def inch(n: float) -> float:
+    """Convert inches to funground units.
+
+    One unit is one point, as in a PDF: 72 to the inch. It is a plain conversion. It does not change the canvas.
+
+    Arguments:
+        n: a length in inches.
+
+    Returns:
+        The length in funground units, as a float. inch(1) is 72.0.
+
+    Example:
+        f.size(f.inch(6), f.inch(4))
+
+    See also: mm, size, grid
+    """
+    from .surface import inch as _inch
+
+    return _inch(n)
 
 
 def stop() -> None:
