@@ -303,3 +303,31 @@ what it added to exploration, and where the existing API remains the better choi
 - Deferred: `mark.outline()`, derived marks (`scaled`, `rotated`), editing parts, retained placements, Player.
 - Scope: Ground and Mark in 0.1. Play also in 0.1 (D-071): prototyped first, then its shape agreed
   with the maintainer. Open: flat names (`f.variations`, `f.keep`) or a `f.play` namespace.
+
+## Decided (D-073, 7 October 2026): Area, Grid and Play's shape
+
+- **Area** is an immutable rectangle value.
+  - It has `left`, `top`, `right`, `bottom`, `width`, `height`, `cx` and `cy`.
+  - Make one with `f.area(x, y, w, h)`. `area.inset(all)` or `area.inset(top=, right=, bottom=, left=)` gives a smaller one.
+  - An inset larger than the area is an error.
+  - `area.grid(cols, rows, gutter=)` makes a grid inside it.
+  - `f.ground`, `f.ground.content` and every cell are Areas.
+- **Grid** is returned by `f.grid()` and `area.grid()`.
+  - It iterates and indexes like a list, as before, but is a Grid: a public return-type change.
+  - `g.cell(col, row)` is zero-based.
+  - `g.span(col, row, cols=1, rows=1)` returns an Area that includes the inner gutters.
+  - `g.column_count` and `g.row_count` are numbers. `g.columns` and `g.rows` are lists of Areas.
+  - Invalid cells or spans raise clear errors.
+  - A cell is an Area with `col`, `row` and `index`.
+- **Guides.** `g.show()` draws thin guide lines and leaves the drawing state unchanged. It is excluded from
+  saved files unless asked for. If on-screen-only drawing needs large renderer changes, guides are deferred
+  and Area and Grid ship without them.
+- **Play is flat:** `f.variations()` and `f.keep()`. "Play" stays the teaching word.
+  - With one parameter, `variations` makes a row while the cells stay readable; `columns=` overrides.
+  - It returns `(values, mark)` pairs. The labels belong to the sheet, not to the marks.
+  - Every cell shares one scale and one coordinate frame, so changes in position stay visible.
+  - `background()` inside a study paints only its own cell.
+  - K in an animated sketch keeps the next drawn frame, recording that frame's state.
+  - Random and noise seeds are both recorded. Explicit seeds are kept as given, with no range limit.
+- **A recorded seed makes funground's randomness repeatable; it does not make every sketch reproducible.**
+  The record's dependency list and its "not captured" list say so.
