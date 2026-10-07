@@ -24,13 +24,14 @@ In the examples, `import funground as f` is understood.
 - [Time](#time): [`year`](#fn-year), [`month`](#fn-month), [`day`](#fn-day), [`hour`](#fn-hour), [`minute`](#fn-minute), [`second`](#fn-second), [`millis`](#fn-millis)
 - [Interaction and controls](#interaction-and-controls): [`key_down`](#fn-key_down), [`cursor`](#fn-cursor), [`no_cursor`](#fn-no_cursor), [`create_button`](#fn-create_button), [`create_checkbox`](#fn-create_checkbox), [`create_slider`](#fn-create_slider)
 - [Saving](#saving): [`save`](#fn-save), [`save_frames`](#fn-save_frames), [`save_gif`](#fn-save_gif), [`save_movie`](#fn-save_movie)
+- [Ground](#ground): [`grid`](#fn-grid), [`mm`](#fn-mm), [`inch`](#fn-inch), [`ground`](#fn-ground)
 - [Motion and pages](#motion-and-pages): [`frame_duration`](#fn-frame_duration), [`new_page`](#fn-new_page), [`page_size`](#fn-page_size), [`page_count`](#fn-page_count)
 - [Sound](#sound): [`load_sound`](#fn-load_sound), [`create_sound`](#fn-create_sound), [`tone`](#fn-tone), [`note`](#fn-note), [`pluck`](#fn-pluck), [`melody`](#fn-melody), [`sequence`](#fn-sequence), [`mix`](#fn-mix), [`drone`](#fn-drone), [`note_to_frequency`](#fn-note_to_frequency), [`frequency_to_note`](#fn-frequency_to_note), [`chord_notes`](#fn-chord_notes)
 - [Music analysis and the microphone](#music-analysis-and-the-microphone): [`microphone`](#fn-microphone), [`microphones`](#fn-microphones)
 - [Drawing sound](#drawing-sound): [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`spectrogram`](#fn-spectrogram), [`draw_pitch_line`](#fn-draw_pitch_line)
 - [Ragas and talas](#ragas-and-talas): [`ragas`](#fn-ragas), [`raga`](#fn-raga), [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`match_ragas`](#fn-match_ragas)
 - [Classes](#classes): [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString)
-- [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
+- [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
 
@@ -41,28 +42,31 @@ In the examples, `import funground as f` is understood.
 ### `f.size`
 
 ```py
-f.size(width: 'int', height: 'int', *, title: 'str' = 'funground', fps: 'int' = 60) -> 'None'
+f.size(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int' = 60, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'
 ```
 
 Create the canvas, or change its size.
 
-Call it once, at the start of setup(). In an animated sketch it opens the window. In a script (a file with no draw()) it makes a canvas with no window; use show() to look at it. If setup() never calls size(), run() opens a 640 by 480 window for you.
+Call it once, at the start of setup(). In an animated sketch it opens the window. In a script (a file with no draw()) it makes a canvas with no window; use show() to look at it. If setup() never calls size(), run() opens a 640 by 480 window for you. Instead of numbers you can give a page name, such as size("A4") (see page_size). The margin is a guide for your drawing: read it back with f.ground.content, or use grid(). It does not clip anything.
 
 | Argument | Meaning |
 |---|---|
-| `width`, `height` | the canvas size in pixels. Both must be above 0. |
+| `width` | the canvas width in pixels (above 0), or a page name such as "A4". |
+| `height` | the canvas height in pixels (above 0). Leave it out when width is a page name. |
 | `title` | the text in the window's title bar. The default is "funground". |
 | `fps` | the target frames per second. The default is 60. It must be above 0. |
+| `margin` | the space kept free around the edge. One number is used on all four sides. A tuple of four numbers is (top, right, bottom, left). The default is 0. It stays when the canvas changes size or a new page starts. |
+| `landscape` | True turns a named page on its side, as in size("A4", landscape=True). The default is False. It only goes with a page name. |
 
 **Raises.**
 
-- `ValueError`: the width, height or fps is 0 or less.
+- `ValueError`: the width, height or fps is 0 or less, a page name has a height, the name is unknown, a margin is negative, or the margins leave no room.
 
 ```py
-f.size(640, 400, title="Bounce", fps=30)
+f.size("A4", margin=f.mm(15))
 ```
 
-See also: [`run`](#fn-run), [`resize_canvas`](#fn-resize_canvas), [`full_screen`](#fn-full_screen).
+See also: [`ground`](#fn-ground), [`grid`](#fn-grid), [`run`](#fn-run), [`resize_canvas`](#fn-resize_canvas), [`full_screen`](#fn-full_screen), [`page_size`](#fn-page_size).
 
 <a id="fn-resize_canvas"></a>
 ### `f.resize_canvas`
@@ -3338,6 +3342,95 @@ f.save_movie("spin.mp4", 2)
 
 See also: [`save_gif`](#fn-save_gif), [`save_frames`](#fn-save_frames), [`frame_duration`](#fn-frame_duration).
 
+<a id="ground"></a>
+## Ground
+
+<a id="fn-grid"></a>
+### `f.grid`
+
+```py
+f.grid(cols: 'int', rows: 'int', *, gutter: 'float | tuple' = 0, area: 'object' = None) -> 'list'
+```
+
+Divide an area into a grid of equal cells.
+
+The cells cover f.ground.content (the canvas inside the margins), or the area you give. The list goes row by row, left to right, so the first cell is top left. Each cell has x, y (its top left corner), w, h (its size), cx, cy (its centre), col, row and index (0 for the first cell). It also has left, top, right, bottom, width and height, so a cell can be the area of another grid.
+
+| Argument | Meaning |
+|---|---|
+| `cols` | how many columns. A whole number above 0. |
+| `rows` | how many rows. A whole number above 0. |
+| `gutter` | the gap between cells. One number is used both across and down. A tuple (column_gutter, row_gutter) sets them apart. The default is 0. |
+| `area` | what to divide. It is any object with left, top, width and height, such as f.ground or a cell. The default None is f.ground.content. |
+
+**Returns.** A list of cols times rows cells.
+
+**Raises.**
+
+- `ValueError`: cols or rows is 0 or less, a gutter is negative, or the gutters leave no room for the cells.
+
+```py
+for cell in f.grid(3, 2, gutter=10):
+    f.circle(cell.cx, cell.cy, cell.w * 0.8)
+```
+
+See also: [`ground`](#fn-ground), [`size`](#fn-size), [`mm`](#fn-mm).
+
+<a id="fn-mm"></a>
+### `f.mm`
+
+```py
+f.mm(n: 'float') -> 'float'
+```
+
+Convert millimetres to funground units.
+
+One unit is one point, as in a PDF: 72 to the inch, so 1 mm is about 2.83 units. It is a plain conversion. It does not change the canvas.
+
+| Argument | Meaning |
+|---|---|
+| `n` | a length in millimetres. |
+
+**Returns.** The length in funground units, as a float.
+
+```py
+f.size("A4", margin=f.mm(15))
+```
+
+See also: [`inch`](#fn-inch), [`size`](#fn-size), [`grid`](#fn-grid).
+
+<a id="fn-inch"></a>
+### `f.inch`
+
+```py
+f.inch(n: 'float') -> 'float'
+```
+
+Convert inches to funground units.
+
+One unit is one point, as in a PDF: 72 to the inch. It is a plain conversion. It does not change the canvas.
+
+| Argument | Meaning |
+|---|---|
+| `n` | a length in inches. |
+
+**Returns.** The length in funground units, as a float. inch(1) is 72.0.
+
+```py
+f.size(f.inch(6), f.inch(4))
+```
+
+See also: [`mm`](#fn-mm), [`size`](#fn-size), [`grid`](#fn-grid).
+
+<a id="fn-ground"></a>
+### `f.ground`
+
+```py
+f.ground(...)
+```
+
+A rectangle with margins. ``f.ground`` is the whole canvas; ``f.ground.content`` is inside the margins.
+
 <a id="motion-and-pages"></a>
 ## Motion and pages
 
@@ -4084,6 +4177,18 @@ It is a whole number. It is 0 during the first draw(), 1 during the second, and 
 
 ```py
 f.rotate(f.frame_count * 3)
+```
+
+<a id="live-ground"></a>
+### `f.ground`
+
+The canvas as a rectangle, with its margins.
+
+It is a read-only value, always up to date, like width. It has left, top, right, bottom, width, height, cx and cy (the centre), and margin, a tuple (top, right, bottom, left) from size(). It starts at (0, 0), so left and top are 0, and right and bottom are the canvas width and height. Its content is the area inside the margins: a value of the same kind, whose own margin is (0, 0, 0, 0) and whose own content is itself. With no margin, ground.content is ground. It follows size(), resize_canvas() and new_page(). The margin stays when the canvas changes size. Margins are a guide: drawing outside them is allowed. Inside a ``with f.layer(...)`` block it is still the canvas.
+
+```py
+f.size(400, 300, margin=20)
+f.rect(f.ground.content.left, f.ground.content.top, f.ground.content.width, f.ground.content.height)
 ```
 
 <a id="live-height"></a>

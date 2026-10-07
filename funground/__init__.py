@@ -129,6 +129,9 @@ from .api import (
     opacity,
     page_count,
     page_size,
+    grid,
+    inch,
+    mm,
     path,
     point,
     polygon,
@@ -311,6 +314,9 @@ __all__ = [
     "opacity",
     "page_count",
     "page_size",
+    "grid",
+    "inch",
+    "mm",
     "path",
     "point",
     "polygon",
@@ -393,6 +399,7 @@ __all__ = [
     "frame_count",
     "delta_time",
     "pixels",
+    "ground",
 ]
 
 
