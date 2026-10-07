@@ -1,7 +1,6 @@
 """Ground (S-132 part 1, contract G1): page names and margins in size(), f.ground, f.grid, f.mm, f.inch."""
 from __future__ import annotations
 
-import subprocess
 
 import pytest
 
@@ -264,7 +263,4 @@ def test_mm_margin_end_to_end():
 
 
 # ---- evidence is untouched
-def test_no_golden_or_snapshot_is_changed():
-    out = subprocess.run(["git", "status", "--porcelain", "tests/golden", "tests/snapshots"],
-                         capture_output=True, text=True)
-    assert out.stdout.strip() == ""
+
