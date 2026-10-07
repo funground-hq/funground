@@ -850,6 +850,14 @@ A finished mark never changes, and placing it never changes it. For a variation,
 example in a function that returns one. Make marks in `setup()` (or at the top) and place them in
 `draw()`.
 
+**Play (a prototype: the names and form are still to be agreed)**
+
+| Call | What it does | Example |
+|---|---|---|
+| `f.variations(fn, name=[...])` | call `fn` once for each value and draw the results side by side, each in a labelled cell over `f.ground.content`. Two parameters give a grid: rows for the first, columns for the second. Each version starts from the style at the call, no transform and the same random seed. Returns a list of `(values, mark)` pairs. | `f.variations(study, gap=[10, 20, 35, 60])` |
+| `f.keep(note, pdf=False, **settings)` | save the picture as it is now in a `studio` folder next to the sketch, numbered `001`, `002`, …: a `.png`, a copy of the sketch (`.py`) and a record (`.json`) of the note, settings, controls, seed, size, fonts and files read. `pdf=True` adds a `.pdf`. | `f.keep("gap 35 reads as a rhythm", gap=35)` |
+| `f.play.variations(...)`, `f.play.keep(...)` | the same two functions under one name. | `f.play.keep("calm")` |
+
 **Off-screen pictures**
 
 | Call | What it does | Example |

@@ -10,6 +10,7 @@ import inspect
 import sys
 from contextlib import AbstractContextManager
 
+from . import exploring as _exploring  # S-132 Play: variations and keep (the Play section at the end)
 from .color import ColorLike as Color
 from .controls import Button, Checkbox, Slider  # noqa: F401  (public through f.create_slider and friends, S-101)
 from .marks import NOT_GIVEN, Mark, mark_from_path, mark_from_svg, refuse_in_mark  # S-132: marks (the Marks section at the end)
@@ -760,7 +761,7 @@ def frame_duration(seconds: float) -> None:
 def background(color: Color, *more: float) -> None:
     """Fill the whole canvas with one colour.
 
-    It ignores the fill, the stroke, the transform and any clip. Call it near the start of draw() to clear the last frame. Leave it out when you want trails. Inside a ``with f.layer(...)`` block it clears that layer.
+    It ignores the fill, the stroke, the transform and any clip. Call it near the start of draw() to clear the last frame. Leave it out when you want trails. Inside a ``with f.layer(...)`` block it clears that layer. Inside a function drawn by variations(), it paints that version's whole picture.
 
     Arguments:
         color: a colour name such as "white", a hex string such as "#F05A45", an (r, g, b) or (r, g, b, a) tuple, a colour from f.color(), or a gradient. One number is a grey.
@@ -775,6 +776,9 @@ def background(color: Color, *more: float) -> None:
 
     See also: clear, fill, color_mode
     """
+    if _exploring.in_cell():                      # S-132 Play: in a variations cell it paints the cell's ground
+        _exploring.cell_background(color, more)
+        return
     refuse_in_mark("f.background()")
     active_sketch().background(color, *more)
 
@@ -3702,3 +3706,85 @@ def mark(path: PathBuilder | str | None = None, *, fill: Color | None = NOT_GIVE
                             "with it. To recolour it, use place(..., style=\"current\").")
         return mark_from_svg(path, _sketch_folder())
     return mark_from_path(path, fill, stroke, stroke_width)
+
+
+# ---- play: variations and keep (S-132 part 3, a prototype for D-071; both forms until the review)
+def variations(fn, **values) -> list:
+    """Draw several versions of a drawing side by side, as a labelled contact sheet.
+
+    Write the drawing as a function with a parameter, then give a list of values to try. variations() calls the function once for each value, and draws each result in its own cell over f.ground.content, with a thin frame and a label such as "gap = 35". With two parameters it tries every pair: one row for each value of the first, one column for each value of the second. With one parameter it chooses a row or a grid, whichever makes the cells largest.
+
+    Each version is drawn as if on the whole canvas, then made smaller to fit its cell. Every cell is made smaller by the same amount, so the cells can be compared. A cell shows only what is inside the canvas. Each version starts from the style you have when you call variations() and no transform, so one version's fill() cannot change the next. Each version also starts from the same random seed, so the versions differ only in the parameter. background() in the function paints that version's whole picture.
+
+    It works in a script, in setup(), and in draw(), where it draws the sheet again every frame.
+
+    Arguments:
+        fn: the function that draws one version. It is called with the parameters by name, such as fn(gap=35).
+        **values: one or two parameters, each with a list of values to try, such as gap=[10, 20, 35].
+
+    Returns:
+        A list with one (values, mark) pair for each cell, in order. values is a dictionary such as {"gap": 35}; mark is that version as a Mark, so chosen.place(0, 0) draws it full size.
+
+    Raises:
+        TypeError: fn cannot be called, or a parameter is given one value instead of a list.
+        ValueError: there is no parameter, more than two, a list is empty, or the cells do not fit in the canvas.
+
+    Example:
+        def study(gap):
+            for i in range(12):
+                f.circle(f.ground.content.left + i * gap, f.ground.content.cy, 20)
+
+        f.variations(study, gap=[10, 20, 35, 60])
+
+    See also: keep, mark, random_seed, play
+    """
+    return _exploring.variations(fn, values)
+
+
+def keep(note: str = "", *, pdf: bool = False, **settings) -> str:
+    """Save this version of your picture in a studio folder, with what made it.
+
+    The files go in a folder called studio next to your sketch file (or in the current folder when there is no file). They are numbered in order, after any already there: 001.png, 002.png and so on. Each kept version has a picture (.png), a copy of your sketch (.py), and a record (.json). The record holds your note, the settings you give, every control's value, the random seed, the size and margin, the page or frame, the date, the versions of funground and Python, the fonts used and the files read. It also lists what it could not keep, such as fonts installed on this computer. It prints one line saying where it saved.
+
+    In a script it keeps the canvas as drawn so far. In an animated sketch it keeps the current frame, written when the frame is complete. Calling it from key_pressed() keeps a version each time you press a key.
+
+    Arguments:
+        note: a few words about this version, such as "gap 35 reads as a rhythm".
+        pdf: True also saves a .pdf, a vector drawing that stays sharp when printed. The default is False.
+        **settings: any values you want to remember with it, such as gap=35.
+
+    Returns:
+        The path of the files without their ending, such as "studio/007".
+
+    Raises:
+        RuntimeError: it is used inside a ``with f.mark()`` block, or before f.size().
+        TypeError: the note is not text.
+
+    Example:
+        f.keep("gap 35 reads as a rhythm", gap=35)
+        f.keep("for printing", pdf=True)
+
+    See also: variations, save, random_seed, play
+    """
+    return _exploring.keep(note, pdf, settings, inspect.currentframe().f_back)
+
+
+class Play:
+    """Exploring: variations side by side, and keeping the versions you like.
+
+    f.play holds the same two functions as f.variations and f.keep, under one name: f.play.variations(study, gap=[10, 20]) and f.play.keep("note"). This is a prototype: one of the two ways of writing them will be removed.
+
+    Example:
+        f.play.variations(study, gap=[10, 20, 35])
+        f.play.keep("gap 20 is calm")
+    """
+
+    __slots__ = ()
+    variations = staticmethod(variations)
+    keep = staticmethod(keep)
+
+    def __repr__(self) -> str:
+        return "<f.play: variations, keep>"
+
+
+play = Play()
