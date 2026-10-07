@@ -62,6 +62,7 @@ GROUPS: dict[str, list[str]] = {
     "Transforms and the state stack": ["translate", "rotate", "scale", "shear_x", "shear_y", "apply_matrix",
                                        "reset_matrix", "push", "pop", "saved_state"],
     "Paths and clipping": ["path", "draw_path", "clip", "no_clip"],
+    "Marks": ["mark"],
     "Pictures and layers": ["create_graphics", "layer", "hide_layer", "show_layer"],
     "Images and SVG": ["image", "image_mode", "load_image", "load_svg", "svg_paths"],
     "Pixels and filters": ["get", "set", "load_pixels", "update_pixels", "filter"],

@@ -12,6 +12,7 @@ from contextlib import AbstractContextManager
 
 from .color import ColorLike as Color
 from .controls import Button, Checkbox, Slider  # noqa: F401  (public through f.create_slider and friends, S-101)
+from .marks import NOT_GIVEN, Mark, mark_from_path, mark_from_svg, refuse_in_mark  # S-132: marks (the Marks section at the end)
 from .paths import PathBuilder
 from .typography import Font
 from .picture import Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
@@ -299,6 +300,7 @@ def show() -> None:
 
     See also: size, new_page, save
     """
+    refuse_in_mark("f.show()")
     canvas_sketch().show()
 
 
@@ -320,6 +322,7 @@ def new_page(width: int | str | None = None, height: int | None = None) -> None:
 
     See also: page_count, page_size, save
     """
+    refuse_in_mark("f.new_page()")
     canvas_sketch().new_page(width, height)
 
 
@@ -536,6 +539,7 @@ def save(path: str, *, text: str = "live") -> None:
 
     See also: save_frames, save_gif, save_movie, new_page
     """
+    refuse_in_mark("f.save()")
     canvas_sketch().save(path, text=text)
 
 
@@ -608,6 +612,7 @@ def save_frames(pattern: str, count: int) -> None:
 
     See also: save, save_gif, save_movie
     """
+    refuse_in_mark("f.save_frames()")
     canvas_sketch().save_frames(pattern, count)
 
 
@@ -625,6 +630,7 @@ def save_gif(path: str, seconds: float) -> None:
 
     See also: save_movie, save_frames, frame_duration
     """
+    refuse_in_mark("f.save_gif()")
     canvas_sketch().save_gif(path, seconds)
 
 
@@ -642,6 +648,7 @@ def save_movie(path: str, seconds: float) -> None:
 
     See also: save_gif, save_frames, frame_duration
     """
+    refuse_in_mark("f.save_movie()")
     canvas_sketch().save_movie(path, seconds)
 
 
@@ -683,6 +690,7 @@ def background(color: Color, *more: float) -> None:
 
     See also: clear, fill, color_mode
     """
+    refuse_in_mark("f.background()")
     active_sketch().background(color, *more)
 
 
@@ -937,6 +945,7 @@ def clear() -> None:
 
     See also: background, erase, save
     """
+    refuse_in_mark("f.clear()")
     active_sketch().clear()
 
 
@@ -2289,6 +2298,7 @@ def layer(name: str) -> Picture:
 
     See also: hide_layer, show_layer, create_graphics
     """
+    refuse_in_mark("f.layer()")
     return canvas_sketch().layer(name)
 
 
@@ -2347,6 +2357,7 @@ def create_slider(low: float, high: float, value: float | None = None, step: flo
 
     See also: create_checkbox, create_button
     """
+    refuse_in_mark("f.create_slider()")
     return canvas_sketch().create_slider(low, high, value, step, label)
 
 
@@ -2369,6 +2380,7 @@ def create_checkbox(label: str, checked: bool = False) -> Checkbox:
 
     See also: create_slider, create_button
     """
+    refuse_in_mark("f.create_checkbox()")
     return canvas_sketch().create_checkbox(label, checked)
 
 
@@ -2390,6 +2402,7 @@ def create_button(label: str) -> Button:
 
     See also: create_slider, create_checkbox
     """
+    refuse_in_mark("f.create_button()")
     return canvas_sketch().create_button(label)
 
 
@@ -3156,6 +3169,7 @@ def get(x: float, y: float, w: float | None = None, h: float | None = None):
 
     See also: set, load_pixels, image
     """
+    refuse_in_mark("f.get()")
     return active_sketch().get(x, y, w, h)
 
 
@@ -3174,6 +3188,7 @@ def set(x: float, y: float, color, *more: float) -> None:  # noqa: A001  (p5's n
 
     See also: get, update_pixels
     """
+    refuse_in_mark("f.set()")
     active_sketch().set(x, y, color, *more)
 
 
@@ -3189,6 +3204,7 @@ def load_pixels() -> None:
 
     See also: update_pixels, get, set
     """
+    refuse_in_mark("f.load_pixels()")
     active_sketch().load_pixels()
 
 
@@ -3202,6 +3218,7 @@ def update_pixels() -> None:
 
     See also: load_pixels, set
     """
+    refuse_in_mark("f.update_pixels()")
     active_sketch().update_pixels()
 
 
@@ -3222,6 +3239,7 @@ def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's 
 
     See also: get, create_graphics
     """
+    refuse_in_mark("f.filter()")
     active_sketch().filter(kind, value)
 
 
@@ -3546,3 +3564,56 @@ def distance(x1: float, y1: float, x2: float, y2: float) -> float:
     """
     return Sketch.distance(x1, y1, x2, y2)
 
+
+
+# ---- marks (S-132, contract K1-K3, D-069, D-070)
+def mark(path: PathBuilder | str | None = None, *, fill: Color | None = NOT_GIVEN, stroke: Color | None = NOT_GIVEN,
+         stroke_width: float | None = None) -> Mark:
+    """Make a mark: a drawing kept as a value, to place as often as you like.
+
+    Use it with ``with``: ``with f.mark() as m:`` records the drawing calls in the block instead of drawing them. Each part keeps the fill, stroke and font it was drawn with. The block starts with the current style and no transform, so (0, 0) is the mark's own origin. When it ends, the transform, style and clip are exactly as before, even after an error. Then m.place(x, y) draws the mark. Inside the block you cannot open a layer, make controls, save files, or read or change pixels.
+
+    Give a path instead to make a mark from it at once. It is filled (if closed) and stroked with the current style, changed by fill, stroke and stroke_width when you give them.
+
+    Give the name of an SVG file to make a mark of its shapes, each with the file's own colours. A name that is not a full path is looked for next to the sketch first, as load_svg() does. The mark's origin is the file's top-left corner.
+
+    A mark stays sharp at any size, and stays real shapes and text in a saved PDF or SVG. It cannot be changed once it is made.
+
+    Arguments:
+        path: a path made with f.path(), or the name of an .svg file. Leave it out to record a block.
+        fill: the fill for a path, as fill() takes it. None means no fill. Left out, it is the current fill.
+        stroke: the stroke for a path, as stroke() takes it. None means no stroke. Left out, it is the current stroke.
+        stroke_width: the stroke width for a path. Left out (None), it is the current width.
+
+    Returns:
+        A Mark, with place(), bounds(), width, height and is_empty.
+
+    Raises:
+        TypeError: path is not a path or a file name, or fill, stroke or stroke_width is given without a path.
+        ValueError: the file name does not end in ".svg", or the file is not an SVG file.
+        FileNotFoundError: the SVG file is not there.
+
+    Example:
+        leaf = f.mark(f.path().ellipse(0, 0, 40, 16), fill="olive", stroke=None)
+        badge = f.mark("badge.svg")
+        with f.mark() as flower:
+            f.fill("gold")
+            f.circle(0, 0, 24)
+        flower.place(100, 100)
+
+    See also: path, load_svg, saved_state, layer
+    """
+    styled = fill is not NOT_GIVEN or stroke is not NOT_GIVEN or stroke_width is not None
+    if path is None:
+        if styled:
+            raise TypeError("f.mark(): fill, stroke and stroke_width go with a path, as f.mark(path, fill=...). "
+                            "In a `with f.mark() as m:` block, call f.fill() and f.stroke() inside it.")
+        return Mark()
+    if isinstance(path, str):
+        if not path.lower().endswith(".svg"):
+            raise ValueError(f"f.mark() reads only SVG files, whose names end in \".svg\", not {path!r}")
+        if styled:
+            raise TypeError("f.mark(): an SVG file keeps its own colours, so fill, stroke and stroke_width do not go "
+                            "with it. To recolour it, use place(..., style=\"current\").")
+        return mark_from_svg(path, _sketch_folder())
+    return mark_from_path(path, fill, stroke, stroke_width)

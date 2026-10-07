@@ -16,6 +16,7 @@ In the examples, `import funground as f` is understood.
 - [Text and fonts](#text-and-fonts): [`text`](#fn-text), [`text_align`](#fn-text_align), [`text_ascent`](#fn-text_ascent), [`text_descent`](#fn-text_descent), [`text_leading`](#fn-text_leading), [`text_box`](#fn-text_box), [`text_path`](#fn-text_path), [`text_to_points`](#fn-text_to_points), [`current_font`](#fn-current_font), [`text_size`](#fn-text_size), [`text_style`](#fn-text_style), [`text_tracking`](#fn-text_tracking), [`text_fallback`](#fn-text_fallback), [`system_font`](#fn-system_font), [`text_features`](#fn-text_features), [`font_variations`](#fn-font_variations), [`text_width`](#fn-text_width), [`text_font`](#fn-text_font), [`load_font`](#fn-load_font)
 - [Transforms and the state stack](#transforms-and-the-state-stack): [`translate`](#fn-translate), [`rotate`](#fn-rotate), [`scale`](#fn-scale), [`shear_x`](#fn-shear_x), [`shear_y`](#fn-shear_y), [`apply_matrix`](#fn-apply_matrix), [`reset_matrix`](#fn-reset_matrix), [`push`](#fn-push), [`pop`](#fn-pop), [`saved_state`](#fn-saved_state)
 - [Paths and clipping](#paths-and-clipping): [`path`](#fn-path), [`draw_path`](#fn-draw_path), [`clip`](#fn-clip), [`no_clip`](#fn-no_clip)
+- [Marks](#marks): [`mark`](#fn-mark)
 - [Pictures and layers](#pictures-and-layers): [`create_graphics`](#fn-create_graphics), [`layer`](#fn-layer), [`hide_layer`](#fn-hide_layer), [`show_layer`](#fn-show_layer)
 - [Images and SVG](#images-and-svg): [`image`](#fn-image), [`image_mode`](#fn-image_mode), [`load_image`](#fn-load_image), [`load_svg`](#fn-load_svg), [`svg_paths`](#fn-svg_paths)
 - [Pixels and filters](#pixels-and-filters): [`get`](#fn-get), [`set`](#fn-set), [`load_pixels`](#fn-load_pixels), [`update_pixels`](#fn-update_pixels), [`filter`](#fn-filter)
@@ -31,7 +32,7 @@ In the examples, `import funground as f` is understood.
 - [Ragas and talas](#ragas-and-talas): [`ragas`](#fn-ragas), [`raga`](#fn-raga), [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`match_ragas`](#fn-match_ragas)
 - [Classes](#classes): [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
-- [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
+- [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
 
 <a id="sketch-and-loop"></a>
@@ -2276,6 +2277,52 @@ Remove clipping.
 It lasts until the enclosing pop() or the end of the saved_state() block, which brings the previous clip back.
 
 See also: [`clip`](#fn-clip), [`saved_state`](#fn-saved_state).
+
+<a id="marks"></a>
+## Marks
+
+<a id="fn-mark"></a>
+### `f.mark`
+
+```py
+f.mark(path: 'PathBuilder | str | None' = None, *, fill: 'Color | None' = <not given>, stroke: 'Color | None' = <not given>, stroke_width: 'float | None' = None) -> 'Mark'
+```
+
+Make a mark: a drawing kept as a value, to place as often as you like.
+
+Use it with ``with``: ``with f.mark() as m:`` records the drawing calls in the block instead of drawing them. Each part keeps the fill, stroke and font it was drawn with. The block starts with the current style and no transform, so (0, 0) is the mark's own origin. When it ends, the transform, style and clip are exactly as before, even after an error. Then m.place(x, y) draws the mark. Inside the block you cannot open a layer, make controls, save files, or read or change pixels.
+
+Give a path instead to make a mark from it at once. It is filled (if closed) and stroked with the current style, changed by fill, stroke and stroke_width when you give them.
+
+Give the name of an SVG file to make a mark of its shapes, each with the file's own colours. A name that is not a full path is looked for next to the sketch first, as load_svg() does. The mark's origin is the file's top-left corner.
+
+A mark stays sharp at any size, and stays real shapes and text in a saved PDF or SVG. It cannot be changed once it is made.
+
+| Argument | Meaning |
+|---|---|
+| `path` | a path made with f.path(), or the name of an .svg file. Leave it out to record a block. |
+| `fill` | the fill for a path, as fill() takes it. None means no fill. Left out, it is the current fill. |
+| `stroke` | the stroke for a path, as stroke() takes it. None means no stroke. Left out, it is the current stroke. |
+| `stroke_width` | the stroke width for a path. Left out (None), it is the current width. |
+
+**Returns.** A Mark, with place(), bounds(), width, height and is_empty.
+
+**Raises.**
+
+- `TypeError`: path is not a path or a file name, or fill, stroke or stroke_width is given without a path.
+- `ValueError`: the file name does not end in ".svg", or the file is not an SVG file.
+- `FileNotFoundError`: the SVG file is not there.
+
+```py
+leaf = f.mark(f.path().ellipse(0, 0, 40, 16), fill="olive", stroke=None)
+badge = f.mark("badge.svg")
+with f.mark() as flower:
+    f.fill("gold")
+    f.circle(0, 0, 24)
+flower.place(100, 100)
+```
+
+See also: [`path`](#fn-path), [`load_svg`](#fn-load_svg), [`saved_state`](#fn-saved_state), [`layer`](#fn-layer).
 
 <a id="pictures-and-layers"></a>
 ## Pictures and layers
@@ -6665,6 +6712,169 @@ p = f.path().circle(40, 50, 60).xor(f.path().circle(70, 50, 60))
 ```
 
 See also: `union`, `intersection`, `difference`.
+
+<a id="cls-Mark"></a>
+### `Mark`
+
+```py
+Mark() -> 'None'
+```
+
+A drawing kept as a value, which you can place as often as you like.
+
+Make one with a block: ``with f.mark() as m:``. The drawing calls inside the block are recorded, not
+drawn, each with the fill, stroke and font it was drawn with. Or make one from a path with
+f.mark(path, fill=..., stroke=...). Then m.place(x, y) draws it, with its own origin (0, 0) at
+(x, y), and with any scale, rotation and opacity.
+
+A mark keeps the drawing steps, not pixels. It is sharp at any size on screen, and real shapes and
+text in a saved PDF or SVG. A finished mark cannot be changed, and placing it never changes it. To
+make a variation, make a new mark, for example in a function that takes the parts that vary.
+
+A mark's block starts with the current style and with no transform, so its coordinates are its own.
+When the block ends, the transform, style and clip are exactly as before it, even if the block
+raised an error. Inside the block you cannot open a layer, make controls, save files or read pixels.
+
+```py
+with f.mark() as flower:
+    for a in range(0, 360, 60):
+        with f.saved_state():
+            f.rotate(a)
+            f.fill("tomato")
+            f.ellipse(0, -30, 18, 40)
+    f.fill("gold")
+    f.circle(0, 0, 24)
+flower.place(150, 200)
+flower.place(400, 200, scale=0.5, rotate=15, opacity=0.6)
+```
+
+<a id="cls-Mark-bounds"></a>
+#### `Mark.bounds`
+
+```py
+Mark.bounds() -> 'tuple[float, float, float, float] | None'
+```
+
+Return the area the mark covers, in its own coordinates.
+
+The area includes stroke widths, joins and caps, and text. It is never smaller than what the mark
+paints, and at most a tiny bit larger. The mark's origin (0, 0) is where place() puts (x, y), so x
+and y are often negative.
+
+**Returns.** (x, y, w, h): the left, the top, the width and the height. None for an empty mark.
+
+**Raises.**
+
+- `RuntimeError`: the mark is unfinished.
+
+```py
+x, y, w, h = flower.bounds()
+```
+
+See also: `width`, `height`, `is_empty`, `place`.
+
+<a id="cls-Mark-height"></a>
+#### `Mark.height`
+
+```py
+Mark.height  # property
+```
+
+The height of the area the mark covers, from bounds(); 0 for an empty mark.
+
+**Raises.**
+
+- `RuntimeError`: the mark is unfinished.
+
+```py
+f.size(400, int(flower.height) + 20)
+```
+
+See also: `width`, `bounds`.
+
+<a id="cls-Mark-is_empty"></a>
+#### `Mark.is_empty`
+
+```py
+Mark.is_empty  # property
+```
+
+Whether the mark paints nothing.
+
+**Returns.** True when the mark paints nothing (and bounds() is None), otherwise False.
+
+**Raises.**
+
+- `RuntimeError`: the mark is unfinished.
+
+```py
+if not flower.is_empty:
+    flower.place(100, 100)
+```
+
+See also: `bounds`.
+
+<a id="cls-Mark-place"></a>
+#### `Mark.place`
+
+```py
+Mark.place(x: 'float', y: 'float', *, scale: 'float | tuple[float, float] | None' = None, rotate: 'float' = 0, opacity: 'float' = 1, anchor: 'str' = 'origin', width: 'float | None' = None, height: 'float | None' = None, style: 'str' = 'own') -> 'None'
+```
+
+Draw the mark now, with its origin at (x, y).
+
+The mark follows the current transform and clip, so it works inside saved_state() and translate(), inside a layer block, and inside another mark's block (marks can be made of marks). The mark itself never changes.
+
+The mark is moved to (x, y), then turned by rotate, then sized by scale, all around the anchor point. So with anchor="center" the centre of the mark lands on (x, y) and stays there.
+
+width and height size the mark from its bounds, keeping its proportions. Give one of them, and the mark is scaled to that width or height. Give both, and the mark is scaled to fit inside a box of that size and centred in it; then anchor places the box ("origin" counts as "top-left"). This happens before rotate.
+
+style="own" (the default) draws every part with the style it was recorded with. style="current" draws every part with the style in force now instead, so f.fill("black") then place(..., style="current") gives a black silhouette. It replaces, for each part: on closed shapes and paths, the fill, stroke, stroke width, caps, joins, miter limit and dash (a gradient fill too, and no_fill() or no_stroke() now take the fill or stroke away); on lines and open paths, the stroke, its width, caps and dash; on text, its colour, which comes from the fill as text() does (font, size and shaping stay). Pictures are unchanged. Marks inside the mark follow the same rules. Blend mode and opacity never come from the current style: opacity is the argument here.
+
+| Argument | Meaning |
+|---|---|
+| `x`, `y` | where the anchor point lands. |
+| `scale` | one number to size both ways, or two as (sx, sy). Left out (None), the mark keeps its own size. A negative number mirrors it. 0 is an error. |
+| `rotate` | degrees to turn, clockwise on screen. |
+| `opacity` | from 0 (invisible) to 1 (solid, the default). The whole mark fades as one piece, so its overlapping parts do not show through each other. |
+| `anchor` | which point of the mark lands on (x, y). "origin" (the default) is the mark's own (0, 0). The others use bounds(): "center", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom" and "bottom-right". |
+| `width`, `height` | the size to make the mark, in pixels, keeping its proportions (see above). They cannot be used with scale. |
+| `style` | "own" (the default) or "current" (see above). |
+
+**Raises.**
+
+- `RuntimeError`: the mark is unfinished, or still being recorded.
+- `ValueError`: the anchor or style is unknown, the mark is empty and the anchor is not "origin" or a width or height is given, opacity is outside 0 to 1, scale is 0, width or height is not above 0, or scale is given with width or height.
+- `TypeError`: a number is not a number.
+
+```py
+flower.place(150, 200)
+flower.place(400, 200, scale=0.5, rotate=15, opacity=0.6)
+flower.place(200, 150, anchor="center", width=80)
+f.fill("black")
+flower.place(300, 200, style="current")
+```
+
+See also: [`mark`](#fn-mark), `bounds`, [`saved_state`](#fn-saved_state).
+
+<a id="cls-Mark-width"></a>
+#### `Mark.width`
+
+```py
+Mark.width  # property
+```
+
+The width of the area the mark covers, from bounds(); 0 for an empty mark.
+
+**Raises.**
+
+- `RuntimeError`: the mark is unfinished.
+
+```py
+gap = flower.width + 10
+```
+
+See also: `height`, `bounds`.
 
 <a id="cls-Path"></a>
 ### `Path`
