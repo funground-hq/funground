@@ -26,3 +26,7 @@ class Renderer(Protocol):
 
     def pixels(self) -> Pixels:
         """The surface's current contents, for the platform to present."""
+
+    def ink_bounds(self, ops) -> tuple[float, float, float, float] | None:
+        """The area a list of ops would paint, as (x, y, w, h) in their own coordinates, never
+        smaller than the ink; None when they paint nothing. Draws nothing (S-132: a mark's bounds)."""
