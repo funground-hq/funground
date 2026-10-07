@@ -92,6 +92,7 @@ Read it top to bottom for one drawing call:
 | `funground/export/svg_text.py` | Live, editable `<text>` in SVG files (T19, D-059). |
 | `funground/export/layers.py` | Named layers in PDF (optional content groups) and SVG (Inkscape layer groups) (F16, D-053). |
 | `funground/export/motion.py` | GIF and MP4 files (M1, D-048): Pillow for a GIF when installed, else ffmpeg; MP4 always through ffmpeg (D-045). The only module that finds or runs ffmpeg. |
+| `funground/marks.py` | `Mark`, a drawing kept as a value (S-132, K1-K3): the recorder behind `with f.mark()`, placement, the current-style rewrite and the guard that refuses layers, controls, saves and pixel calls inside a block. No backend; bounds come from the renderer's `ink_bounds`. |
 | `funground/controls.py` | Sliders, checkboxes and buttons and their panel (U1, D-047). Plain Python; no pygame. |
 | `funground/sound.py` | `Sound` objects: playback on a clock, level, spectrum, pitch, rhythm and harmony methods. The only user of `pygame.mixer`. |
 | `funground/synth.py` | Sound from numbers (A3, A9): waves, envelopes, notes, plucks, melodies. Plain Python, no device. |
@@ -414,6 +415,25 @@ the locator that finds the examples in a checkout or in an installed layout (`lo
 `copy_example`, which never overwrites a file. `tools/make_gallery.py` and the tests import from it, so
 there is one source of truth. The examples' CC0 licence (`examples/LICENSE`) travels in the wheel with
 the other licences. `tests/test_gallery_package.py` builds a wheel to prove all of this.
+
+### Marks: `marks.py`
+
+A mark (S-132, contract K1-K3, D-069, D-070) is a drawing kept as recorded ops, not pixels.
+
+- **Recording.** `with f.mark()` swaps the active sketch's `frame` and `StateStack` for fresh ones (an
+  internal `_Recorder`), so drawing calls append their ops, each with its style snapshot, to the mark.
+  The fresh stack starts from the current style; the fresh frame has no transform or clip. On exit,
+  normal or not, the frame, the stack, an open shape and the smoothing setting are put back. While a
+  block is open, `api.py` refuses layers, controls, saves and pixel calls (`refuse_in_mark`).
+- **Finishing.** The ops become an immutable tuple. A `ResetMatrix` in the block is rewritten into the
+  inverse of the transform made so far in the block, so it returns to the mark's origin, not the canvas's.
+- **Placing** appends `Save`, one `Concat`, the ops and `Restore` to the active sketch's frame (the
+  canvas, the open layer, or another mark being recorded, which is how marks nest). Opacity below 1, or a
+  mark that erases or calls `no_clip()`, adds `ir.BeginGroup`/`ir.EndGroup`; the renderer draws them with
+  `push_group` and `paint_with_alpha`, limited to the group's bounds, and a PDF gets a transparency group.
+  `style="current"` places a rewritten copy of the ops (`restyle`), cached per style.
+- **Bounds** come from `CairoRenderer.ink_bounds(ops)`: a Cairo recording surface at 32 units per pixel,
+  so they are conservative and within 1/32 of a unit. Cairo stays inside `renderers/`.
 
 ### Capabilities: `capabilities.py`
 

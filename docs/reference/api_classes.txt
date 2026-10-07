@@ -5,6 +5,7 @@ vector.Vector
 formatted.FormattedString
 formatted.Run
 paths.PathBuilder
+marks.Mark
 geometry.Path
 typography.Font
 controls.Control

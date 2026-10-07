@@ -52,6 +52,8 @@ def test_every_op_round_trips_through_json():
         ir.ResetMatrix(),
         ir.Image("graphics-1", 1, 5, 6, 20, 10),
         ir.Pixels(2, 3, 4, 5, 123456),
+        ir.BeginGroup(0.5, "multiply", (1.0, 2.0, 3.0, 4.0)),
+        ir.EndGroup(),
     ]
     assert {type(o) for o in ops} == set(ir.OP_TYPES.values()), "add new ops to this test"
     text = json.dumps(ir.Frame(ops).to_jsonable(), sort_keys=True)

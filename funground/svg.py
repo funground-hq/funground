@@ -357,26 +357,34 @@ def _dashes(text, scale: float) -> tuple:
 # ------------------------------------------------------------------ drawing
 def draw(doc: SvgDocument, picture) -> None:
     """Draw every shape onto *picture* with its ordinary drawing commands (so the history is vector)."""
-    picture.push()
+    draw_shapes(doc, picture._sketch)
+    picture._flush()
+
+
+def draw_shapes(doc: SvgDocument, sketch) -> None:
+    """Draw every shape with *sketch*'s ordinary drawing commands, inside one push() and pop().
+
+    ``draw`` uses it for a picture's own sketch (f.load_svg); ``f.mark("x.svg")`` uses it while a mark
+    records (S-132), so the mark keeps each shape's fill and stroke as vector ops."""
+    sketch.push()
     try:
         for shape in doc.shapes:
             if shape.fill is not None and not shape.fill_geometry.is_empty:
-                picture.no_stroke()
-                picture.fill(shape.fill)
-                picture.draw_path(shape.fill_geometry)
+                sketch.no_stroke()
+                sketch.fill(shape.fill)
+                sketch.draw_path(shape.fill_geometry)
             if shape.stroke is not None:
-                picture.no_fill()
-                picture.stroke(shape.stroke)
+                sketch.no_fill()
+                sketch.stroke(shape.stroke)
                 # f.stroke_width() takes whole numbers; an SVG's widths are often fractions.
-                picture._sketch._states.update(stroke_width=shape.stroke_width)
-                picture.stroke_cap(shape.cap)
-                picture.stroke_join(shape.join)
-                picture.miter_limit(shape.miter_limit)
+                sketch._states.update(stroke_width=shape.stroke_width)
+                sketch.stroke_cap(shape.cap)
+                sketch.stroke_join(shape.join)
+                sketch.miter_limit(shape.miter_limit)
                 if shape.dash:
-                    picture.stroke_dash(list(shape.dash), shape.dash_offset)
+                    sketch.stroke_dash(list(shape.dash), shape.dash_offset)
                 else:
-                    picture.no_dash()
-                picture.draw_path(shape.geometry)
+                    sketch.no_dash()
+                sketch.draw_path(shape.geometry)
     finally:
-        picture.pop()
-    picture._flush()
+        sketch.pop()

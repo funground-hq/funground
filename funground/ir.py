@@ -210,10 +210,34 @@ class Pixels(Op):
     data: Any = field(default=None, compare=False, repr=False)
 
 
-AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image, Pixels]
+@dataclass(frozen=True, slots=True)
+class BeginGroup(Op):
+    """Start a group (S-132, contract K2): the ops up to the matching ``EndGroup`` are drawn on their
+    own, then put down as one piece with *opacity* (0 to 1) and *blend_mode*, so the group's own
+    overlapping parts never show through each other. A PDF gets a transparency group.
+
+    Only a mark's placement emits it, and only when needed (opacity below 1, or a mark that erases or
+    removes clipping), so a frame without such a placement never contains one. *bounds* is the area
+    (x, y, w, h), in the current coordinates, that the group's ops can paint, or () when not known: a
+    renderer may make the group no larger than that. The fields are written to JSON only when they
+    differ from their defaults (OMIT_WHEN_DEFAULT)."""
+
+    opacity: float = 1.0
+    blend_mode: str = "normal"
+    bounds: tuple = ()
+
+
+@dataclass(frozen=True, slots=True)
+class EndGroup(Op):
+    """Put the group opened by the matching ``BeginGroup`` down onto what is under it (S-132)."""
+
+
+AnyOp = Union[Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image, Pixels,
+              BeginGroup, EndGroup]
 OP_TYPES: dict[str, type] = {
     cls.__name__: cls
-    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image, Pixels)
+    for cls in (Clear, Circle, Ellipse, Rect, Line, Point, Text, Save, Restore, Concat, ClipPath, ResetClip, FillPath, StrokePath, SetAntialias, ResetMatrix, Image, Pixels,
+                BeginGroup, EndGroup)
 }
 
 
@@ -227,6 +251,10 @@ class Frame:
 
     def append(self, op: Op) -> None:
         self._ops.append(op)
+
+    def extend(self, ops) -> None:
+        """Append several ops at once (S-132: a mark's placement adds its ops in one step)."""
+        self._ops.extend(ops)
 
     def clear(self) -> None:
         self._ops.clear()
@@ -265,7 +293,7 @@ OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash
                                "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges",
                                "tint", "sx", "sy", "sw", "sh", "radii",
                                "text_tracking", "text_features", "font_variations", "text_fallback",
-                               "erasing", "erase", "layer", "layer_hidden", "layer_block"})
+                               "erasing", "erase", "layer", "layer_hidden", "layer_block", "bounds"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).
@@ -357,7 +385,7 @@ def op_from_jsonable(d: dict[str, Any]) -> Op:
         if f.name not in d and f.name in OMIT_WHEN_DEFAULT:
             continue                                   # omitted because it was the default
         v = d[f.name]
-        if f.name == "radii":
+        if f.name in ("radii", "bounds"):
             kwargs[f.name] = tuple(v)
         elif f.name in ("dash", "shadow", "tint"):
             kwargs[f.name] = _extra_from_jsonable(f.name, v)

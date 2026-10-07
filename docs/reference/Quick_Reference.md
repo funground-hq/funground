@@ -828,6 +828,28 @@ you can draw again and again.
 | `f.clip(path)` | Limit **later** drawing to the inside of `path` until the enclosing `pop()` / end of the `with f.saved_state():` block. | `with f.saved_state(): f.clip(tri); ...` |
 | `f.no_clip()` | Remove clipping until the enclosing `pop()` / end of the block, which brings the previous clip back. | `with f.saved_state(): f.no_clip(); ...` |
 
+**Marks**
+
+A mark is a drawing kept as a value: make it once, place it as often as you like. It stays sharp at
+any size, and stays real shapes and text in a saved PDF or SVG.
+
+| Call | What it does | Example |
+|---|---|---|
+| `with f.mark() as m:` | record the drawing in the block instead of drawing it. Each part keeps the fill, stroke and font it was drawn with. The block starts with the current style and no transform, so `(0, 0)` is the mark's own origin. Afterwards the transform, style and clip are exactly as before, even after an error. In the block you cannot open a layer, make controls, save, or read or change pixels (`RuntimeError`). | `with f.mark() as flower: f.circle(0, 0, 24)` |
+| `f.mark(path, fill=..., stroke=..., stroke_width=...)` | a mark made from a path at once, with the current style changed by what you give. `None` means no fill or no stroke. | `leaf = f.mark(f.path().ellipse(0, 0, 40, 16), fill="olive", stroke=None)` |
+| `f.mark("file.svg")` | a mark of an SVG file's shapes, with the file's own colours. Its origin is the file's top-left corner. Found next to the sketch first, like `f.load_svg`. | `badge = f.mark("badge.svg")` |
+| `m.place(x, y)` | draw the mark now, its origin at `(x, y)`. It follows the current transform and clip, works inside a layer block, and inside another mark's block (marks made of marks). | `flower.place(150, 200)` |
+| `m.place(x, y, scale=s, rotate=deg, opacity=a)` | moved to `(x, y)`, then turned, then sized, around the anchor point. `scale` is one number or `(sx, sy)`. `opacity` from 0 to 1 fades the whole mark as one piece. | `flower.place(400, 200, scale=0.5, rotate=15, opacity=0.6)` |
+| `m.place(x, y, anchor="center")` | which point lands on `(x, y)`: `"origin"` (the default), or a point of the mark's bounds: `"center"`, `"top-left"`, `"top"`, `"top-right"`, `"left"`, `"right"`, `"bottom-left"`, `"bottom"`, `"bottom-right"`. | `border.place(20, 390, anchor="bottom-left")` |
+| `m.place(x, y, width=w, height=h)` | size the mark from its bounds, keeping its shape. One of them: that width or height. Both: as large as fits inside the box, centred in it, and the anchor places the box. Not with `scale`. | `flower.place(cx, cy, anchor="center", width=60)` |
+| `m.place(x, y, style="current")` | draw every part with the style in force now instead of its own: fill and stroke (and their widths, caps, joins and dash) on shapes, the stroke on lines, the colour of text. Pictures keep theirs. | `f.fill("black"); f.no_stroke(); flower.place(80, 80, style="current")` |
+| `m.bounds()` | `(x, y, w, h)` of what the mark paints, in its own coordinates, strokes and text included; never smaller than the ink. `None` for an empty mark. | `x, y, w, h = flower.bounds()` |
+| `m.width`, `m.height`, `m.is_empty` | the size of the bounds (0 when empty), and whether the mark paints nothing. | `gap = flower.width + 10` |
+
+A finished mark never changes, and placing it never changes it. For a variation, make a new mark, for
+example in a function that returns one. Make marks in `setup()` (or at the top) and place them in
+`draw()`.
+
 **Off-screen pictures**
 
 | Call | What it does | Example |
