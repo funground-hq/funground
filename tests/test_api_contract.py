@@ -240,6 +240,8 @@ ADDED_FUNCTIONS = {
     "update_pixels": "() -> 'None'",
     # S-080 copy, resize, mask, filters (the picture methods copy/resize/mask/filter are in test_filters.py)
     "filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
+    # S-132 marks (contract K1-K3, D-069, D-070)
+    "mark": "(path: 'PathBuilder | str | None' = None, *, fill: 'Color | None' = <not given>, stroke: 'Color | None' = <not given>, stroke_width: 'float | None' = None) -> 'Mark'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

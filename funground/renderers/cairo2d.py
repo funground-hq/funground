@@ -66,6 +66,8 @@ class CairoRenderer:
         # layer is drawn inside a marker group that the exporter turns into a real file layer, and
         # hidden layers are drawn too (switched off in the file). Never set for the window or PNG.
         self.file_layers = None
+        # S-132 (K2): the BeginGroup ops whose EndGroup has not come yet (a mark's placement nests them).
+        self._groups: list[ir.BeginGroup] = []
 
     # ---- lifecycle
     def attach(self, width: int, height: int, scale: float = 1.0) -> None:
@@ -116,6 +118,30 @@ class CairoRenderer:
                 ctx.restore(); depth -= 1
         finally:
             ctx.restore()
+
+    # ---- measuring (S-132, contract K1: a mark's bounds)
+    # Cairo reports ink extents in whole device units, rounded outward. Measuring at 32 device units per
+    # logical unit keeps the bounds within 1/32 of a unit of the ink, and still never smaller than it.
+    MEASURE_SCALE = 32.0
+
+    def ink_bounds(self, ops) -> tuple[float, float, float, float] | None:
+        """The area that *ops* would paint, as (x, y, w, h) in their own coordinates, or None for none.
+
+        The ops are replayed onto a Cairo recording surface, which measures what each one would cover:
+        fills, strokes with their width, caps and joins, text by its glyph outlines, shadows and
+        pictures. The result is conservative: never smaller than the ink, at most 1/32 of a unit larger
+        on each side. Nothing is drawn anywhere."""
+        surface = cairo.RecordingSurface(cairo.CONTENT_COLOR_ALPHA, None)
+        ctx = self.context_for(surface, self.MEASURE_SCALE)
+        try:
+            self.draw(ctx, ir.Frame(list(ops)))
+            x, y, w, h = surface.ink_extents()
+        finally:
+            surface.finish()
+        if w <= 0 or h <= 0:
+            return None
+        k = self.MEASURE_SCALE
+        return (x / k, y / k, w / k, h / k)
 
     def draw_batch(self, ctx: cairo.Context, frame: ir.Frame, depth: int = 0) -> int:
         """Draw *frame* onto *ctx* without the per-frame Save/Restore wrapper or unwind that
@@ -204,11 +230,40 @@ class CairoRenderer:
                     self._draw_image(ctx, op, self._alpha)
             elif t is ir.Pixels:
                 self._draw_pixels(ctx, op)
+            elif t is ir.BeginGroup:                  # S-132 (K2): a mark placed as one piece
+                self._begin_group(ctx, op)
+            elif t is ir.EndGroup:
+                group = self._groups.pop()
+                ctx.pop_group_to_source()
+                ctx.set_operator(self._BLENDS[group.blend_mode])
+                ctx.paint_with_alpha(group.opacity)
+                ctx.restore()                     # the save in _begin_group: operator, source and size clip
             else:
                 raise NotImplementedError(f"{self.name} renderer cannot draw {t.__name__}")
             if composite is not None:
                 ctx.restore(); self._alpha = 1.0; self._erase = None
         return depth
+
+    def _begin_group(self, ctx: cairo.Context, op: "ir.BeginGroup") -> None:
+        """S-132 (K2): open a group. With *bounds*, the group is first limited to them, rounded out to
+        whole device pixels plus one, so a small mark on a large canvas gets a small group (fast), and
+        no edge pixel of the ink is cut."""
+        self._groups.append(op)
+        ctx.save()
+        if op.bounds:
+            x, y, w, h = op.bounds
+            corners = [ctx.user_to_device(px, py) for px, py in ((x, y), (x + w, y), (x, y + h), (x + w, y + h))]
+            x0 = math.floor(min(c[0] for c in corners)) - 1
+            y0 = math.floor(min(c[1] for c in corners)) - 1
+            x1 = math.ceil(max(c[0] for c in corners)) + 1
+            y1 = math.ceil(max(c[1] for c in corners)) + 1
+            matrix = ctx.get_matrix()
+            ctx.identity_matrix()
+            ctx.new_path()
+            ctx.rectangle(x0, y0, x1 - x0, y1 - y0)
+            ctx.clip()
+            ctx.set_matrix(matrix)
+        ctx.push_group()
 
     # ---- compositing: blend mode, opacity, shadow (S-051, contract S14)
     _DRAWING = frozenset({ir.Circle, ir.Ellipse, ir.Rect, ir.Line, ir.Point, ir.Text, ir.FillPath, ir.StrokePath,
