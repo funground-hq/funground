@@ -63,6 +63,7 @@ GROUPS: dict[str, list[str]] = {
                                        "reset_matrix", "push", "pop", "saved_state"],
     "Paths and clipping": ["path", "draw_path", "clip", "no_clip"],
     "Marks": ["mark"],
+    "Play": ["variations", "keep", "play"],
     "Pictures and layers": ["create_graphics", "layer", "hide_layer", "show_layer"],
     "Images and SVG": ["image", "image_mode", "load_image", "load_svg", "svg_paths"],
     "Pixels and filters": ["get", "set", "load_pixels", "update_pixels", "filter"],
@@ -201,6 +202,8 @@ def esc(text: str) -> str:
 
 
 def signature_text(prefix: str, name: str, obj, drop_first: bool = False) -> str:
+    if not callable(obj):                                  # a namespace such as f.play: its name alone
+        return f"{prefix}{name}"
     try:
         sig = inspect.signature(obj)
     except (TypeError, ValueError):

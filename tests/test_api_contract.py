@@ -242,7 +242,14 @@ ADDED_FUNCTIONS = {
     "filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
     # S-132 marks (contract K1-K3, D-069, D-070)
     "mark": "(path: 'PathBuilder | str | None' = None, *, fill: 'Color | None' = <not given>, stroke: 'Color | None' = <not given>, stroke_width: 'float | None' = None) -> 'Mark'",
+    # S-132 part 3 Play, a prototype (D-071): both forms until the maintainer's review; no contract row yet
+    "variations": "(fn, **values) -> 'list'",
+    "keep": "(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'",
 }
+
+# Public names that are namespaces, not functions, so they have no signature (S-132 Play prototype:
+# f.play.variations and f.play.keep are the same functions as f.variations and f.keep).
+ADDED_NAMESPACES = {"play"}
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
 # S-045 added pmouse_x/y, mouse_button, key, key_code and is_key_pressed.
@@ -273,7 +280,7 @@ def test_run_keeps_v05_call_forms():
 
 
 def test_public_all_is_exactly_the_contract():
-    assert set(p.__all__) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES
+    assert set(p.__all__) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES | ADDED_NAMESPACES
 
 
 def test_live_values_are_dynamic_module_attributes():

@@ -72,7 +72,7 @@ REFUSED: dict[str, str] = {
     "f.create_checkbox()": "controls belong to the window, not to a mark. Make them in setup(), outside the block.",
     "f.create_button()": "controls belong to the window, not to a mark. Make them in setup(), outside the block.",
     "f.save()": _SAVE, "f.save_frames()": _SAVE, "f.save_gif()": _SAVE, "f.save_movie()": _SAVE,
-    "f.show()": _SAVE, "f.new_page()": _SAVE,
+    "f.show()": _SAVE, "f.new_page()": _SAVE, "f.keep()": _SAVE,
     "f.size()": "a mark has no size of its own; bounds() measures its drawing. Set the canvas size before the block.",
     "f.get()": _PIXELS, "f.set()": _PIXELS, "f.load_pixels()": _PIXELS, "f.update_pixels()": _PIXELS,
     "f.filter()": _PIXELS,
