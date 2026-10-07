@@ -17,6 +17,12 @@ requests from the maintainer's review, then release 0.1.
 - [ ] Both at the repository root and inside the package; the documentation front door says "using an AI assistant? give it this file".
 - [ ] `AGENTS.md` for AI agents contributing to funground: setup and tests, never plain `python`, provider boundaries and the naming trap, the docstring format and regenerating `API.md`, golden-image rules, links to `PROCESS.md` and the developer docs.
 
+### S-132 Studio vocabulary: Ground, Mark, Rules, Play — E-24 *(D-069; design in `docs/design/Studio_Vocabulary_Note.md`, names awaiting approval)*
+- [ ] Ground: page names and `margin=` in `f.size`, `f.ground`, `f.grid`, `f.mm`/`f.inch` (G1).
+- [ ] Mark: `f.mark()` recording, placement with anchor/scale/rotate/opacity, nesting, bounds, vector in PDF/SVG (K1-K3).
+- [ ] Play: `f.variations`, `f.keep`, a seed recorded for every run (E1-E2).
+- [ ] Six studios written twice (today's funground and the vocabulary), tested; the three Mark demonstrations; an assessment.
+
 ### S-073 Release 0.1 — E-02 *(carried)*
 - [ ] Version 0.1.0, changelog date, README absolute image links and install line.
 - [ ] Quick Reference matches the code (input values update on release too; `stroke_width` keeps fractions).
