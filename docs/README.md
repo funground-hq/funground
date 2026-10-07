@@ -21,6 +21,8 @@ Each line says when to read the page.
 
 - [Projects](guide/18_projects.md): read this when you know the basics and want to make something
   whole, such as a poster, a game or a raga explorer.
+- [Studios](guide/19_studios.md): read this to compose on a page with margins and a grid, place
+  marks, and compare and keep versions. Each studio is written twice, with and without these words.
 
 ## The gallery
 

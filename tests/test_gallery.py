@@ -35,9 +35,8 @@ GOLDEN_PLATFORM = "Windows"
 
 # Public names not yet shown by any example. This list may only shrink: the test below
 # fails if a listed name is now covered, and S-072 (release 0.1) requires it empty.
-# S-132: Ground and Mark get their gallery examples with the studios (Sprint 16); part 4 added f.area
-# (D-073), and removed f.play.
-NOT_YET_IN_GALLERY: set[str] = {"area", "grid", "ground", "inch", "mm", "mark", "variations", "keep"}
+# S-132: the six studios (examples/gallery/studios/) show Ground, Area and Grid, Mark and Play.
+NOT_YET_IN_GALLERY: set[str] = set()
 
 
 @pytest.fixture(autouse=True)

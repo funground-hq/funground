@@ -35,3 +35,5 @@ You do not have to do the projects in order. Pick the one that sounds like fun.
 | 8 | [Flow-field print](projects/08_flow_field_print.md) | Thousands of noise-guided lines, saved as a vector PDF for a big print | `noise`, `Vector`, `layer`, blend, PDF | Beginner+ |
 
 **Previous:** [17. Ragas and talas](17_ragas_and_talas.md)
+
+**Next:** [19. Studios: the same picture, twice](19_studios.md)

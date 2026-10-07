@@ -6,6 +6,7 @@ Every sketch here is a complete program: run it with `python <file>.py`.
 |---|---|
 | [gallery/](gallery/) | One small sketch per feature, grouped by topic. The pictures are in the [Examples Gallery](../docs/gallery/README.md). |
 | [reference/](reference/) | The sketches printed in the [Quick Reference](../docs/reference/Quick_Reference.md). |
+| [studios/](studios/) | The studios of [guide chapter 19](../docs/guide/19_studios.md) written without the studio words, to compare with `gallery/studios/`. |
 | [session1/](session1/) | The first-lesson sketches, from a first window to transforms and paths. |
 
 ## Licence: do anything you like with these
