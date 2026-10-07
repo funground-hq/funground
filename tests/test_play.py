@@ -1,4 +1,4 @@
-"""Play: f.variations, f.keep and the recorded seed (S-132 part 3, a prototype for D-071; no contract row yet)."""
+"""Play: f.variations, f.keep and the recorded seeds (S-132 parts 3 and 4, contracts E1 and E2, D-071, D-073)."""
 from __future__ import annotations
 
 import importlib
@@ -49,8 +49,6 @@ def _headless(monkeypatch, tmp_path):
 
 # ---------------------------------------------------------------- variations: layout and labels
 def test_one_parameter_in_a_wide_content_area_is_one_row(sketch):
-    # The layout makes the cells largest. Cells have the canvas's shape, so a row wins only when the
-    # area (here, inside wide top and bottom margins) is much wider than the canvas.
     f.size(800, 400, margin=(150, 0, 150, 0))
     result = f.variations(lambda gap: f.circle(gap, 100, 20), gap=[10, 20, 30, 40])
     assert len(result) == 4
@@ -60,11 +58,68 @@ def test_one_parameter_in_a_wide_content_area_is_one_row(sketch):
     assert len({round(t.x) for t in found}) == 4
 
 
-def test_one_parameter_on_a_square_canvas_wraps_into_a_near_square_grid(sketch):
+def test_one_parameter_is_a_row_while_it_stays_readable(sketch):
+    # A row, even on a square canvas where a 2 x 2 grid would make bigger cells: four pictures of
+    # (600 - 3 * 10) / 4 = 142.5 units are readable.
     f.size(600, 600)
     f.variations(lambda n: f.circle(300, 300, n), n=[10, 20, 30, 40])
     found = labels(sketch)
-    assert len({round(t.y) for t in found}) == 2 and len({round(t.x) for t in found}) == 2
+    assert len({round(t.y) for t in found}) == 1 and len({round(t.x) for t in found}) == 4
+
+
+def test_the_row_rule_is_the_picture_width_and_the_label_not_a_count():
+    from funground.surface import Area
+
+    area = Area(0, 0, 600, 600)
+    # 5 cells: (600 - 40) / 5 = 112 wide, at least MIN_ROW_PICTURE (100): readable.
+    assert exploring.row_is_readable(["n = 1"] * 5, area, 600, 600)
+    # 6 cells: (600 - 50) / 6 = 91.7 wide: too narrow.
+    assert not exploring.row_is_readable(["n = 1"] * 6, area, 600, 600)
+    # The same 5 cells, but a label wider than its picture: not readable.
+    assert not exploring.row_is_readable(["a_long_parameter_name = 123456789"] * 5, area, 600, 600)
+    # 12 cells in a very wide area: (4000 - 110) / 12 = 324 wide: still a row. No fixed count.
+    assert exploring.row_is_readable(["n = 1"] * 12, Area(0, 0, 4000, 300), 600, 600)
+
+
+def test_one_parameter_that_is_not_readable_as_a_row_wraps_into_a_grid(sketch):
+    f.size(600, 600)
+    f.variations(lambda n: f.circle(300, 300, n), n=list(range(1, 9)))
+    found = labels(sketch)
+    assert len({round(t.y) for t in found}) == 3 and len({round(t.x) for t in found}) == 3   # near-square
+
+
+def test_columns_chooses_the_columns_for_one_parameter(sketch):
+    f.size(600, 400)
+    f.variations(lambda n: f.circle(300, 200, n), columns=2, n=[10, 20, 30, 40, 50])
+    found = labels(sketch)
+    assert len({round(t.x) for t in found}) == 2 and len({round(t.y) for t in found}) == 3
+    sketch.frame.clear()
+    f.variations(lambda n: f.circle(300, 200, n), columns=1, n=[10, 20])
+    assert len({round(t.x) for t in labels(sketch)}) == 1
+
+
+@pytest.mark.parametrize("columns, error", [(0, ValueError), (-1, ValueError), (2.5, TypeError), (True, TypeError)])
+def test_bad_columns_are_explained(sketch, columns, error):
+    f.size(600, 400)
+    with pytest.raises(error, match="columns"):
+        f.variations(lambda n: None, columns=columns, n=[1, 2])
+
+
+def test_columns_with_two_parameters_is_an_error(sketch):
+    f.size(600, 400)
+    with pytest.raises(ValueError, match="two parameters.*columns= cannot be used"):
+        f.variations(lambda a, b: None, columns=2, a=[1, 2], b=[3, 4])
+
+
+def test_the_sheet_is_laid_out_on_a_grid_of_the_content_area(sketch):
+    # The cells are exactly the cells of ground.content.grid(cols, rows, gutter=GUTTER), and each label sits
+    # at the left of its centred picture.
+    f.size(600, 400, margin=20)
+    f.variations(lambda n: None, n=[1, 2, 3])
+    grid = f.ground.content.grid(3, 1, gutter=exploring.GUTTER)
+    k = exploring.picture_scale(grid[0], 600, 400)
+    for t, cell in zip(labels(sketch), grid):
+        assert t.x == pytest.approx(cell.cx - 600 * k / 2)
 
 
 def test_two_parameters_give_rows_for_the_first_and_columns_for_the_second(sketch):
@@ -176,6 +231,15 @@ def test_every_cell_is_scaled_by_the_same_amount(sketch):
 
 
 # ---------------------------------------------------------------- variations: return value and errors
+def test_the_labels_and_frames_belong_to_the_sheet_not_to_the_marks(sketch):
+    f.size(400, 200)
+    result = f.variations(lambda r: f.circle(200, 100, r), r=[10, 40])
+    for _, m in result:
+        assert not any(type(op) is ir.Text for op in m._ops)
+        assert [type(op) for op in m._ops] == [ir.Circle]
+    assert [t.text for t in labels(sketch)] == ["r = 10", "r = 40"]
+
+
 def test_the_result_is_values_and_marks_you_can_place(sketch):
     f.size(400, 200)
     result = f.variations(lambda r: f.circle(200, 100, r), r=[10, 40])
@@ -347,6 +411,105 @@ def key_pressed():
     assert (tmp_path / "studio" / "001.png").read_bytes()[:4] == b"\x89PNG"
 
 
+def _png_colour(path: Path) -> tuple:
+    return tuple(pygame.image.load(str(path)).get_at((5, 5)))[:3]
+
+
+def _run_animated(tmp_path, source: str, platform) -> dict:
+    path = tmp_path / "anim.py"
+    path.write_text(source, encoding="utf-8")
+    sketch = api.use_sketch(Sketch(platform=platform))
+    ns = {"__name__": "__main__", "__file__": str(path)}
+    exec(compile(source, str(path), "exec"), ns)
+    sketch.run_namespace(ns, max_frames=5)
+    return ns
+
+
+SAME_FRAME = """
+import os
+import funground as f
+
+COLOURS = ["red", "lime", "blue", "yellow", "black", "white"]
+seen = {}
+
+def setup():
+    global level
+    f.size(120, 80)
+    level = f.create_slider(0, 10, 0, 1, label="level")
+
+def draw():
+    level.value(f.frame_count)                         # the control changes every frame
+    f.random_seed(1000 + f.frame_count)                # so does the seed
+    f.background(COLOURS[f.frame_count])
+    f.text_style("bold" if f.frame_count == 2 else "normal")    # only frame 2 uses the bold font
+    f.text("x", 10, 40)
+
+def key_pressed():
+    if f.key == "k":
+        base = f.keep("from a key")
+        seen["now"] = [os.path.exists(base + e) for e in (".png", ".py", ".json")]
+"""
+
+
+def test_keep_from_a_key_writes_every_file_for_the_next_drawn_frame(tmp_path):
+    # The key arrives before frame 2 is drawn. The picture, the copy and the record are all written when
+    # frame 2 is complete, and the record holds frame 2's number, control value, seed and font.
+    _run_animated(tmp_path, SAME_FRAME, KeyAt(2, "k"))
+    studio = tmp_path / "studio"
+    record = json.loads((studio / "001.json").read_text(encoding="utf-8"))
+    assert record["frame_count"] == 2
+    assert record["controls"] == [{"kind": "slider", "label": "level", "value": 2}]
+    assert record["seed"] == 1002 and record["seed_chosen_by"] == "you"
+    assert [u["file"] for u in record["fonts_used"]] == ["DejaVuSans-Bold.ttf"]
+    assert _png_colour(studio / "001.png") == (0, 0, 255)            # frame 2 is blue
+    assert (studio / "001.py").exists()
+
+
+def test_keep_waits_for_the_end_of_the_frame(tmp_path):
+    ns = _run_animated(tmp_path, SAME_FRAME, KeyAt(2, "k"))
+    assert ns["seen"]["now"] == [False, False, False]                 # nothing written at the key press
+    assert (tmp_path / "studio" / "001.json").exists()                # but all of it at the frame's end
+
+
+def test_keep_in_draw_keeps_the_frame_being_drawn(tmp_path):
+    source = SAME_FRAME.replace("def key_pressed():", "def unused():") + """
+_draw = draw
+def draw():
+    _draw()
+    if f.frame_count == 3:
+        f.keep("in draw", pdf=True)
+"""
+    _run_animated(tmp_path, source, HeadlessPlatform())
+    studio = tmp_path / "studio"
+    record = json.loads((studio / "001.json").read_text(encoding="utf-8"))
+    assert record["frame_count"] == 3 and record["seed"] == 1003
+    assert record["fonts_used"][0]["file"] == "DejaVuSans.ttf"
+    assert _png_colour(studio / "001.png") == (255, 255, 0)          # frame 3 is yellow
+    assert (studio / "001.pdf").read_bytes()[:5] == b"%PDF-"
+
+
+def test_two_keeps_in_one_frame_get_two_numbers(tmp_path):
+    source = SAME_FRAME + """
+def key_pressed():
+    if f.key == "k":
+        f.keep("one")
+        f.keep("two")
+"""
+    _run_animated(tmp_path, source, KeyAt(1, "k"))
+    studio = tmp_path / "studio"
+    notes = [json.loads((studio / f"00{i}.json").read_text(encoding="utf-8"))["note"] for i in (1, 2)]
+    assert notes == ["one", "two"]
+
+
+def test_keep_after_no_loop_keeps_the_frame_on_screen(tmp_path):
+    source = SAME_FRAME.replace("    f.size(120, 80)\n", "    f.size(120, 80)\n    f.no_loop()\n")
+    _run_animated(tmp_path, source, KeyAt(2, "k"))
+    studio = tmp_path / "studio"
+    record = json.loads((studio / "001.json").read_text(encoding="utf-8"))
+    assert record["frame_count"] == 0                                 # only frame 0 was ever drawn
+    assert _png_colour(studio / "001.png") == (255, 0, 0)
+
+
 def test_keep_is_refused_inside_a_mark(sketch):
     f.size(200, 100)
     with pytest.raises(RuntimeError, match=r"f\.keep\(\) cannot be used inside"):
@@ -407,6 +570,36 @@ def test_the_recorded_seeds_do_not_touch_pythons_random_module():
     assert random.random() == expected
 
 
+@pytest.mark.parametrize("seed", [2 ** 80 + 7, -123456789012345, 0, 999_999_999_999])
+def test_explicit_seeds_are_kept_exactly_as_given(tmp_path, seed):
+    api.use_sketch(Sketch())
+    run_file(tmp_path, f"import funground as f\nf.size(50, 50)\nf.random_seed({seed})\nf.noise_seed({seed})\n"
+                       f"f.keep()\n")
+    record = json.loads((tmp_path / "studio" / "001.json").read_text(encoding="utf-8"))
+    assert record["seed"] == seed and record["seed_chosen_by"] == "you"
+    assert record["noise_seed"] == seed and record["noise_seed_chosen_by"] == "you"
+
+
+@pytest.mark.parametrize("seed", [2 ** 80 + 7, -123456789012345])
+def test_large_and_negative_seeds_repeat_their_numbers(seed):
+    api.use_sketch(Sketch())
+    f.random_seed(seed)
+    f.noise_seed(seed)
+    first = [f.random(), f.noise(0.5, 1.5)]
+    api.use_sketch(Sketch())
+    f.random_seed(seed)
+    f.noise_seed(seed)
+    assert [f.random(), f.noise(0.5, 1.5)] == first
+
+
+def test_automatic_seeds_are_short():
+    for _ in range(20):
+        sketch = Sketch()
+        assert 0 <= sketch._seed < 1_000_000
+        sketch.noise(0.1)
+        assert 0 <= sketch._noise.seed_value < 1_000_000
+
+
 def test_keep_records_the_automatic_seed(tmp_path):
     api.use_sketch(Sketch())
     run_file(tmp_path, "import funground as f\nf.size(100, 100)\nf.noise(0.3)\nf.keep()\n")
@@ -416,29 +609,22 @@ def test_keep_records_the_automatic_seed(tmp_path):
     assert record["noise_seed"] == sketch._noise.seed_value and record["noise_seed_chosen_by"] == "funground"
 
 
-# ---------------------------------------------------------------- both forms and the naming trap
-def test_the_namespace_holds_the_same_two_functions():
-    assert f.play.variations is f.variations and f.play.keep is f.keep
-    assert "play" in f.__all__ and "variations" in f.__all__ and "keep" in f.__all__
-
-
-def test_both_forms_draw_the_same_sheet(sketch):
-    f.size(300, 200)
-    f.variations(dots, size=[4, 8])
-    flat = list(sketch.frame.ops)
-    sketch.frame.clear()
-    f.play.variations(dots, size=[4, 8])
-    assert list(sketch.frame.ops) == flat
+# ---------------------------------------------------------------- flat names only, and the naming trap
+def test_there_is_no_play_namespace():
+    """D-073: Play is flat, f.variations and f.keep. "Play" stays the teaching word, not a name."""
+    assert "play" not in f.__all__ and "variations" in f.__all__ and "keep" in f.__all__
+    assert not hasattr(f, "play") and not hasattr(api, "Play")
+    with pytest.raises(AttributeError):
+        f.play  # noqa: B018
 
 
 def test_no_submodule_hides_a_public_name():
-    """A submodule is set as an attribute of the package when it is imported, so a funground/play.py would
-    replace f.play. The two old clashes, color and noise, are re-bound by __init__ after their modules load."""
+    """A submodule is set as an attribute of the package when it is imported, so a funground/area.py would
+    replace f.area. The two old clashes, color and noise, are re-bound by __init__ after their modules load."""
     modules = {m.name for m in pkgutil.iter_modules([str(PACKAGE)])}
-    assert not {"play", "variations", "keep"} & modules
+    assert not {"play", "variations", "keep", "area", "grid"} & modules
     assert modules & set(f.__all__) == {"color", "noise"}
     assert (PACKAGE / "exploring.py").exists()
     for name in sorted(modules):
         importlib.import_module(f"funground.{name}")
-    assert isinstance(f.play, api.Play)
-    assert callable(f.variations) and callable(f.keep)
+    assert callable(f.variations) and callable(f.keep) and callable(f.area) and callable(f.grid)

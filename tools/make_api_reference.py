@@ -63,7 +63,7 @@ GROUPS: dict[str, list[str]] = {
                                        "reset_matrix", "push", "pop", "saved_state"],
     "Paths and clipping": ["path", "draw_path", "clip", "no_clip"],
     "Marks": ["mark"],
-    "Play": ["variations", "keep", "play"],
+    "Play": ["variations", "keep"],
     "Pictures and layers": ["create_graphics", "layer", "hide_layer", "show_layer"],
     "Images and SVG": ["image", "image_mode", "load_image", "load_svg", "svg_paths"],
     "Pixels and filters": ["get", "set", "load_pixels", "update_pixels", "filter"],
@@ -74,7 +74,7 @@ GROUPS: dict[str, list[str]] = {
     "Interaction and controls": ["key_down", "cursor", "no_cursor", "create_button", "create_checkbox",
                                  "create_slider"],
     "Saving": ["save", "save_frames", "save_gif", "save_movie"],
-    "Ground": ["grid", "mm", "inch", "ground"],
+    "Ground": ["area", "grid", "mm", "inch", "ground"],
     "Motion and pages": ["frame_duration", "new_page", "page_size", "page_count"],
     "Sound": ["load_sound", "create_sound", "tone", "note", "pluck", "melody", "sequence", "mix", "drone",
               "note_to_frequency", "frequency_to_note", "chord_notes"],
@@ -202,7 +202,7 @@ def esc(text: str) -> str:
 
 
 def signature_text(prefix: str, name: str, obj, drop_first: bool = False) -> str:
-    if not callable(obj):                                  # a namespace such as f.play: its name alone
+    if not callable(obj):                                  # a value such as f.ground: its name alone
         return f"{prefix}{name}"
     try:
         sig = inspect.signature(obj)
@@ -227,10 +227,14 @@ class Page:
         return "\n".join(self.out).rstrip("\n") + "\n"
 
 
-def see_also(names: list[str], known: set[str]) -> str:
+def see_also(names: list[str], known: set[str], owner: tuple[str, set[str]] | None = None) -> str:
+    """The See also line. In a class member's entry (*owner* is (class name, its member names)), a name is
+    looked for in the class first, so Sound.play links to Sound.play and not to an f. function."""
     parts = []
     for n in names:
-        if n in known:
+        if owner is not None and n in owner[1]:
+            parts.append(f"[`{n}`](#cls-{owner[0]}-{n})")
+        elif n in known:
             kind = "cls" if inspect.isclass(getattr(f, n, None)) else "fn"
             parts.append(f"[`{n}`](#{kind}-{n})")
         else:
@@ -239,7 +243,7 @@ def see_also(names: list[str], known: set[str]) -> str:
 
 
 def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | None, known: set[str],
-                 level: str = "###") -> None:
+                 level: str = "###", owner: tuple[str, set[str]] | None = None) -> None:
     d = parse_doc(doc)
     page.add(f'<a id="{anchor}"></a>', f"{level} {heading}", "", "```py", sig, "```", "")
     page.add(d["summary"] or "*(no documentation yet)*", "")
@@ -260,7 +264,7 @@ def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | Non
     if d["Example"]:
         page.add("```py", d["Example"], "```", "")
     if d["see"]:
-        page.add(see_also(d["see"], known), "")
+        page.add(see_also(d["see"], known, owner), "")
 
 
 def table(page: Page, headers: list[str], rows: list[list]) -> None:
@@ -471,14 +475,16 @@ def build() -> str:
             p.add("")
         if d["Example"]:
             p.add("```py", d["Example"], "```", "")
-        for mname, member in public_members(cls):
+        members = public_members(cls)
+        owner = (name, {mname for mname, _ in members})
+        for mname, member in members:
             anchor = f"cls-{name}-{mname}"
             if isinstance(member, property):
                 render_entry(p, anchor, f"`{name}.{mname}`", f"{name}.{mname}  # property", member.fget.__doc__,
-                             known, level="####")
+                             known, level="####", owner=owner)
             else:
                 render_entry(p, anchor, f"`{name}.{mname}`", signature_text(f"{name}.", mname, member, True),
-                             member.__doc__, known, level="####")
+                             member.__doc__, known, level="####", owner=owner)
 
     reference_tables(p)
     return p.text()

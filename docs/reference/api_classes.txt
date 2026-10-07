@@ -6,6 +6,10 @@ formatted.FormattedString
 formatted.Run
 paths.PathBuilder
 marks.Mark
+surface.Area
+surface.Ground
+surface.Cell
+surface.Grid
 geometry.Path
 typography.Font
 controls.Control

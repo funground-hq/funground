@@ -178,6 +178,15 @@ class Sketch:
         self._layers: dict[str, Picture] = {}
         self._layers_hidden: set[str] = set()
         self._layer_open: Picture | None = None
+        # S-132 part 4, contract G2: grid guides shown in the window only. Each is a few ops drawn over the
+        # finished frame (and its layers) on the way to the screen, never into self.frame, so no saved file,
+        # get() or pixels sees them. A script keeps them per page, for show().
+        self._guides: list[ir.Op] = []
+        self._pages_guides: list[list[ir.Op]] = []
+        # S-132 part 4, contract E2: work waiting for the end of the frame being drawn (f.keep() in an
+        # animated sketch), each called with drawn=True after the frame is drawn, or drawn=False when the
+        # loop drew no frame this time (no_loop()), so it uses the frame on screen.
+        self._frame_end: list[Callable[[bool], None]] = []
 
     # ------------------------------------------------------------ state
     @property
@@ -319,6 +328,7 @@ class Sketch:
         self.title = title
         self._check_capabilities()
         self._pages = []
+        self._pages_guides = []
         self._pages_full = []
         self._page_durations = []
         self._frame_duration = 0.1
@@ -363,6 +373,7 @@ class Sketch:
         self._page_full = False
         self._reset_pixel_state()
         self._drop_layers()
+        self._guides = []
 
     # ---- pages (S-084, contract R16, R17, D1)
     def new_page(self, width: Any = None, height: int | None = None) -> None:
@@ -398,6 +409,7 @@ class Sketch:
         self._sync_canvas()
         self._pages.append((self.width, self.height, list(self._with_layers(self.frame, files=True)),
                             bytes(self._view_pixels().data)))
+        self._pages_guides.append(self._guides)
         self._pages_full.append(self._page_full)
         self._page_durations.append(self._frame_duration)
         self.width, self.height = int(w), int(h)
@@ -460,7 +472,8 @@ class Sketch:
                 pw, ph = platform.open_window(self.width, self.height, self.title)
             renderer.attach(pw, ph, platform.backing_scale)
             renderer._base_matrix = renderer._ctx.get_matrix()
-            renderer.draw_batch(renderer._ctx, self._with_layers(self.frame), 0)   # the kept drawing, at the window's scale
+            # the kept drawing and its guides (G2), at the window's scale
+            renderer.draw_batch(renderer._ctx, ir.Frame([*self._with_layers(self.frame), *self._guides]), 0)
             platform.start()
             platform.set_cursor(self._cursor)
             pixels = renderer.pixels()
@@ -474,6 +487,7 @@ class Sketch:
     def _show_pages(self, platform, renderer) -> None:
         """show() for a document: the current page first; Left and Right turn the pages (contract R17)."""
         pages = self._document_pages()
+        guides = [*self._pages_guides, self._guides]
         full = [*self._pages_full, self._page_full]
         total = len(pages)
         index = total - 1
@@ -487,7 +501,7 @@ class Sketch:
                     pw, ph = platform.open_window(w, h, title)
                 renderer.attach(pw, ph, platform.backing_scale)
                 renderer._base_matrix = renderer._ctx.get_matrix()
-                renderer.draw_batch(renderer._ctx, ir.Frame(list(ops)), 0)
+                renderer.draw_batch(renderer._ctx, ir.Frame([*ops, *guides[i]]), 0)    # the page and its guides (G2)
                 shown = renderer.pixels()
                 platform.present(shown)
                 return shown
@@ -513,6 +527,7 @@ class Sketch:
         self._renderer.attach(pw, ph, self._platform.backing_scale)
         self._reset_pixel_state()
         self._drop_layers()
+        self._guides = []
         self._has_window = True
         self._platform.set_cursor(self._cursor)
 
@@ -527,6 +542,7 @@ class Sketch:
         if not self.running:                   # a script: the screen's size, no window until show() (R14)
             self.width, self.height = self._platform.display_size()
             self._pages = []
+            self._pages_guides = []
             self._pages_full = []
             self._page_durations = []
             self._frame_duration = 0.1
@@ -697,12 +713,13 @@ class Sketch:
         top = [ir.Restore()] * depth + [ir.Save(), ir.ResetMatrix(), ir.ResetClip()]
         return ir.Frame([*frame, *top, *layers, ir.Restore()])
 
-    def _view(self):
+    def _view(self, guides: bool = False):
         """A renderer whose surface is the canvas with the visible layers over it (the canvas's own
-        renderer when there are none). Call after the canvas has been drawn up to date."""
-        if not self._layers:
-            return self._renderer
-        layers = self._layer_ops()
+        renderer when there are none). With *guides*, the grid guides go on top (contract G2): only the
+        window asks for them. Call after the canvas has been drawn up to date."""
+        layers = self._layer_ops() if self._layers else []
+        if guides and self._guides:
+            layers = [*layers, *self._guides]
         if not layers:
             return self._renderer
         src = self._renderer.pixels()
@@ -716,11 +733,11 @@ class Sketch:
         view.draw_batch(view._ctx, ir.Frame(layers), 0)
         return view
 
-    def _view_pixels(self):
+    def _view_pixels(self, guides: bool = False):
         """The pixels of _view(), as a copy when they are not the canvas's own surface."""
         from .platform.base import Pixels
 
-        view = self._view()
+        view = self._view(guides)
         pixels = view.pixels()
         if view is self._renderer:
             return pixels
@@ -811,11 +828,59 @@ class Sketch:
         else:
             self._renderer.render(self.frame)
         self._refresh_panel()
-        self._platform.present(self._view_pixels())          # the canvas with its visible layers over it (F16)
+        self._platform.present(self._view_pixels(guides=True))   # the canvas, its visible layers (F16), guides (G2)
         self._queue_sequence_frame()
         self._record_motion_frame()
         self._flush_saves()
+        self._run_frame_end(True)
         self.frame.clear()
+        self._guides = []                                     # guides last one frame (G2)
+
+    def _run_frame_end(self, drawn: bool) -> None:
+        """Run the work waiting for the end of the frame (f.keep() in an animated sketch, contract E2)."""
+        waiting, self._frame_end = self._frame_end, []
+        for work in waiting:
+            work(drawn)
+
+    # ---- guides (S-132 part 4, contract G2)
+    def _transform_now(self) -> Transform:
+        """The transform the next drawing would use: self.frame's transforms, walked from the start of the
+        frame (or page), through its saves and restores. reset_matrix() goes back to the identity."""
+        stack: list[Transform] = []
+        m = Transform()
+        for op in self.frame:
+            t = type(op)
+            if t is ir.Save or t is ir.BeginGroup:
+                stack.append(m)
+            elif t is ir.Restore or t is ir.EndGroup:
+                if stack:
+                    m = stack.pop()
+            elif t is ir.Concat:
+                m = m.concat(op.transform)
+            elif t is ir.ResetMatrix:
+                m = Transform()
+        return m
+
+    def _guide_op(self, path, color) -> ir.StrokePath:
+        """One stroke, 1 unit wide, of every guide line. It carries its own style, so the current one is unused."""
+        return ir.StrokePath(_geometry_of(path, "grid.show"), self.read_color(color), 1.0, "butt", "miter")
+
+    def draw_guides(self, path, color) -> None:
+        """grid.show(in_files=True): the guide lines as ordinary drawing, in the current transform and clip.
+        One op with its own style, so the drawing state is not touched."""
+        self._require_window()
+        self._emit(self._guide_op(path, color))
+
+    def show_guides(self, target: "Sketch", path, color) -> None:
+        """grid.show(): the guide lines for the window only, in *target*'s current transform (the canvas, or
+        the open layer). They are kept apart from the frame and drawn over it on the way to the screen."""
+        self._require_window()
+        op = self._guide_op(path, color)
+        m = target._transform_now()
+        ops: list[ir.Op] = [ir.Save(), ir.ResetMatrix(), ir.ResetClip()]
+        if not m.is_identity:
+            ops.append(ir.Concat(m))
+        self._guides.extend([*ops, op, ir.Restore()])
 
     # ------------------------------------------------------------ pixels (S-079, contract P7, P8)
     def _reset_pixel_state(self) -> None:
@@ -2129,6 +2194,8 @@ class Sketch:
                     self.last_ops = self.frame.ops  # what the latest drawn frame asked for (IR snapshot)
                     self._render()   # draws, presents, flushes f.save()
                     self.frame_count += 1
+                if self._frame_end:                    # no frame was drawn (no_loop()): keep the one on screen
+                    self._run_frame_end(False)
 
                 iterations += 1
                 if max_frames is not None and iterations >= max_frames:
@@ -2144,6 +2211,8 @@ class Sketch:
             self._reset_pixel_state()
             self._drop_layers()
             self._pending_saves.clear()
+            self._frame_end.clear()                  # a keep the sketch did not live to finish is dropped
+            self._guides = []
             self._frame_sequence = None
             self._motion = None                      # a recording the sketch did not live to finish is dropped
             self._renderer.attach(0, 0)

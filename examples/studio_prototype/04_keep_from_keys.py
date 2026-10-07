@@ -6,8 +6,10 @@ slider's value and the frame number in its record.
 
 How it works:
 - key_pressed() runs once each time a key goes down. f.key says which key it was.
-- f.keep() inside it keeps the frame being drawn. The record lists every control and its value,
-  so you do not have to write the slider's value down yourself.
+- f.keep() inside it keeps the next frame that is drawn. The picture, the copy of this file and
+  the record are all written when that frame is complete, so they all describe the same frame.
+- The record lists every control and its value, so you do not have to write the slider's value
+  down yourself.
 - The extra setting twist= is there to show that you can add your own notes as well.
 """
 import funground as f

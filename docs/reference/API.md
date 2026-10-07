@@ -17,7 +17,7 @@ In the examples, `import funground as f` is understood.
 - [Transforms and the state stack](#transforms-and-the-state-stack): [`translate`](#fn-translate), [`rotate`](#fn-rotate), [`scale`](#fn-scale), [`shear_x`](#fn-shear_x), [`shear_y`](#fn-shear_y), [`apply_matrix`](#fn-apply_matrix), [`reset_matrix`](#fn-reset_matrix), [`push`](#fn-push), [`pop`](#fn-pop), [`saved_state`](#fn-saved_state)
 - [Paths and clipping](#paths-and-clipping): [`path`](#fn-path), [`draw_path`](#fn-draw_path), [`clip`](#fn-clip), [`no_clip`](#fn-no_clip)
 - [Marks](#marks): [`mark`](#fn-mark)
-- [Play](#play): [`variations`](#fn-variations), [`keep`](#fn-keep), [`play`](#fn-play)
+- [Play](#play): [`variations`](#fn-variations), [`keep`](#fn-keep)
 - [Pictures and layers](#pictures-and-layers): [`create_graphics`](#fn-create_graphics), [`layer`](#fn-layer), [`hide_layer`](#fn-hide_layer), [`show_layer`](#fn-show_layer)
 - [Images and SVG](#images-and-svg): [`image`](#fn-image), [`image_mode`](#fn-image_mode), [`load_image`](#fn-load_image), [`load_svg`](#fn-load_svg), [`svg_paths`](#fn-svg_paths)
 - [Pixels and filters](#pixels-and-filters): [`get`](#fn-get), [`set`](#fn-set), [`load_pixels`](#fn-load_pixels), [`update_pixels`](#fn-update_pixels), [`filter`](#fn-filter)
@@ -26,7 +26,7 @@ In the examples, `import funground as f` is understood.
 - [Time](#time): [`year`](#fn-year), [`month`](#fn-month), [`day`](#fn-day), [`hour`](#fn-hour), [`minute`](#fn-minute), [`second`](#fn-second), [`millis`](#fn-millis)
 - [Interaction and controls](#interaction-and-controls): [`key_down`](#fn-key_down), [`cursor`](#fn-cursor), [`no_cursor`](#fn-no_cursor), [`create_button`](#fn-create_button), [`create_checkbox`](#fn-create_checkbox), [`create_slider`](#fn-create_slider)
 - [Saving](#saving): [`save`](#fn-save), [`save_frames`](#fn-save_frames), [`save_gif`](#fn-save_gif), [`save_movie`](#fn-save_movie)
-- [Ground](#ground): [`grid`](#fn-grid), [`mm`](#fn-mm), [`inch`](#fn-inch), [`ground`](#fn-ground)
+- [Ground](#ground): [`area`](#fn-area), [`grid`](#fn-grid), [`mm`](#fn-mm), [`inch`](#fn-inch), [`ground`](#fn-ground)
 - [Motion and pages](#motion-and-pages): [`frame_duration`](#fn-frame_duration), [`new_page`](#fn-new_page), [`page_size`](#fn-page_size), [`page_count`](#fn-page_count)
 - [Sound](#sound): [`load_sound`](#fn-load_sound), [`create_sound`](#fn-create_sound), [`tone`](#fn-tone), [`note`](#fn-note), [`pluck`](#fn-pluck), [`melody`](#fn-melody), [`sequence`](#fn-sequence), [`mix`](#fn-mix), [`drone`](#fn-drone), [`note_to_frequency`](#fn-note_to_frequency), [`frequency_to_note`](#fn-frequency_to_note), [`chord_notes`](#fn-chord_notes)
 - [Music analysis and the microphone](#music-analysis-and-the-microphone): [`microphone`](#fn-microphone), [`microphones`](#fn-microphones)
@@ -34,7 +34,7 @@ In the examples, `import funground as f` is understood.
 - [Ragas and talas](#ragas-and-talas): [`ragas`](#fn-ragas), [`raga`](#fn-raga), [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`match_ragas`](#fn-match_ragas)
 - [Classes](#classes): [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
-- [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
+- [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
 
 <a id="sketch-and-loop"></a>
@@ -2336,28 +2336,31 @@ See also: [`path`](#fn-path), [`load_svg`](#fn-load_svg), [`saved_state`](#fn-sa
 ### `f.variations`
 
 ```py
-f.variations(fn, **values) -> 'list'
+f.variations(fn, *, columns: 'int | None' = None, **values) -> 'list'
 ```
 
 Draw several versions of a drawing side by side, as a labelled contact sheet.
 
-Write the drawing as a function with a parameter, then give a list of values to try. variations() calls the function once for each value, and draws each result in its own cell over f.ground.content, with a thin frame and a label such as "gap = 35". With two parameters it tries every pair: one row for each value of the first, one column for each value of the second. With one parameter it chooses a row or a grid, whichever makes the cells largest.
+Write the drawing as a function with a parameter, then give a list of values to try. variations() calls the function once for each value, and draws each result in its own cell over f.ground.content, with a thin frame and a label such as "gap = 35".
 
-Each version is drawn as if on the whole canvas, then made smaller to fit its cell. Every cell is made smaller by the same amount, so the cells can be compared. A cell shows only what is inside the canvas. Each version starts from the style you have when you call variations() and no transform, so one version's fill() cannot change the next. Each version also starts from the same random seed, so the versions differ only in the parameter. background() in the function paints that version's whole picture.
+With one parameter the versions go in one row while every cell stays readable: each picture at least 100 units wide, with its label fitting on one line under it. When they do not fit, they wrap into the grid that makes the cells largest (near-square on a square canvas). columns= chooses the number of columns yourself. With two parameters it tries every pair: one row for each value of the first, one column for each value of the second, so columns= is not allowed.
+
+Each version is drawn as if on the whole canvas, then made smaller to fit its cell. Every cell is made smaller by the same amount and keeps the canvas's coordinates, so a change of size or position shows. Each cell shows only the canvas's rectangle: drawing outside the canvas is cut off in the sheet, but kept in the returned mark. Each version starts from the style you have when you call variations() and no transform, so one version's fill() cannot change the next. Each version also starts from the same random seed, so the versions differ only in the parameter. background() in the function paints only that version's cell; in the returned mark it is a rectangle the size of the canvas.
 
 It works in a script, in setup(), and in draw(), where it draws the sheet again every frame.
 
 | Argument | Meaning |
 |---|---|
 | `fn` | the function that draws one version. It is called with the parameters by name, such as fn(gap=35). |
+| `columns` | with one parameter, how many columns the sheet has, a whole number above 0. The default None chooses: one row while it stays readable, otherwise a grid. A parameter of your function cannot be called columns. |
 | `values` | one or two parameters, each with a list of values to try, such as gap=[10, 20, 35]. |
 
-**Returns.** A list with one (values, mark) pair for each cell, in order. values is a dictionary such as {"gap": 35}; mark is that version as a Mark, so chosen.place(0, 0) draws it full size.
+**Returns.** A list with one (values, mark) pair for each version, in order. values is a dictionary such as {"gap": 35}; mark is that version as a Mark, without its frame or label, so chosen.place(0, 0) draws it full size.
 
 **Raises.**
 
-- `TypeError`: fn cannot be called, or a parameter is given one value instead of a list.
-- `ValueError`: there is no parameter, more than two, a list is empty, or the cells do not fit in the canvas.
+- `TypeError`: fn cannot be called, a parameter is given one value instead of a list, or columns is not a whole number.
+- `ValueError`: there is no parameter, more than two, a list is empty, columns is 0 or less or given with two parameters, or the cells do not fit in the canvas.
 
 ```py
 def study(gap):
@@ -2367,7 +2370,7 @@ def study(gap):
 f.variations(study, gap=[10, 20, 35, 60])
 ```
 
-See also: [`keep`](#fn-keep), [`mark`](#fn-mark), [`random_seed`](#fn-random_seed), [`play`](#fn-play).
+See also: [`keep`](#fn-keep), [`mark`](#fn-mark), [`random_seed`](#fn-random_seed).
 
 <a id="fn-keep"></a>
 ### `f.keep`
@@ -2378,9 +2381,11 @@ f.keep(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'
 
 Save this version of your picture in a studio folder, with what made it.
 
-The files go in a folder called studio next to your sketch file (or in the current folder when there is no file). They are numbered in order, after any already there: 001.png, 002.png and so on. Each kept version has a picture (.png), a copy of your sketch (.py), and a record (.json). The record holds your note, the settings you give, every control's value, the random seed, the size and margin, the page or frame, the date, the versions of funground and Python, the fonts used and the files read. It also lists what it could not keep, such as fonts installed on this computer. It prints one line saying where it saved.
+The files go in a folder called studio next to your sketch file (or in the current folder when there is no file). They are numbered in order, after any already there: 001.png, 002.png and so on. Each kept version has a picture (.png), a copy of your sketch (.py), and a record (.json). The record holds your note, the settings you give, every control's value, the random and noise seeds, the size and margin, the page or frame, the date, the versions of funground and Python, the fonts used and the files read. It also lists what it could not keep, such as fonts installed on this computer. It prints one line saying where it saved. Grid guides from show() are not in the picture.
 
-In a script it keeps the canvas as drawn so far. In an animated sketch it keeps the current frame, written when the frame is complete. Calling it from key_pressed() keeps a version each time you press a key.
+In a script it keeps the canvas as drawn so far, at once. In an animated sketch it keeps the next frame that is drawn: the frame being drawn when you call it from draw(), or the next one when you call it from key_pressed() or another event. The picture, the copy and the record are all written when that frame is complete, so the frame number, the controls, the seeds and the fonts in the record are that frame's. If no frame is drawn (after no_loop()), it keeps the frame on the screen.
+
+The seeds make funground's random() and noise() repeatable: f.random_seed(n) and f.noise_seed(n) with the recorded numbers give the same values again. A recorded seed makes funground's randomness repeatable; it does not make every sketch reproducible. The record's lists of fonts, files read and what it could not keep say what else the picture depends on.
 
 | Argument | Meaning |
 |---|---|
@@ -2388,7 +2393,7 @@ In a script it keeps the canvas as drawn so far. In an animated sketch it keeps 
 | `pdf` | True also saves a .pdf, a vector drawing that stays sharp when printed. The default is False. |
 | `settings` | any values you want to remember with it, such as gap=35. |
 
-**Returns.** The path of the files without their ending, such as "studio/007".
+**Returns.** The path of the files without their ending, such as "studio/007". In an animated sketch the files appear there when the frame is complete.
 
 **Raises.**
 
@@ -2400,23 +2405,7 @@ f.keep("gap 35 reads as a rhythm", gap=35)
 f.keep("for printing", pdf=True)
 ```
 
-See also: [`variations`](#fn-variations), [`save`](#fn-save), [`random_seed`](#fn-random_seed), [`play`](#fn-play).
-
-<a id="fn-play"></a>
-### `f.play`
-
-```py
-f.play
-```
-
-Exploring: variations side by side, and keeping the versions you like.
-
-f.play holds the same two functions as f.variations and f.keep, under one name: f.play.variations(study, gap=[10, 20]) and f.play.keep("note"). This is a prototype: one of the two ways of writing them will be removed.
-
-```py
-f.play.variations(study, gap=[10, 20, 35])
-f.play.keep("gap 20 is calm")
-```
+See also: [`variations`](#fn-variations), [`save`](#fn-save), [`random_seed`](#fn-random_seed).
 
 <a id="pictures-and-layers"></a>
 ## Pictures and layers
@@ -2865,11 +2854,13 @@ f.random_seed(seed: 'int | None' = None) -> 'None'
 
 Make random() repeatable.
 
-The same seed gives the same sequence. It also covers random_gaussian(), random_choice() and the random parts of sounds.
+The same seed gives the same sequence. It also covers random_gaussian(), random_choice() and the random parts of sounds. Any whole number works, however large or negative, and f.keep() records it exactly as you gave it.
+
+When you do not call random_seed(), funground picks a seed at the start of the run (a number below 1,000,000) and f.keep() records it, so f.random_seed(that number) gives the same random numbers again. A recorded seed makes funground's randomness repeatable; it does not make every sketch reproducible, because a sketch can also depend on the mouse, the clock, files or Python's own random module.
 
 | Argument | Meaning |
 |---|---|
-| `seed` | a whole number. The default None starts from a different, unpredictable place each time. |
+| `seed` | a whole number. The default None starts from a different, unpredictable place each time, and records where. |
 
 ```py
 f.random_seed(7)
@@ -2935,7 +2926,7 @@ f.noise_seed(seed: 'int') -> 'None'
 
 Make noise() repeatable.
 
-The same seed gives the same values as p5.js's noiseSeed.
+The same seed gives the same values as p5.js's noiseSeed. Any whole number works, and f.keep() records it exactly as you gave it. Without noise_seed(), funground picks one the first time noise() is used, and f.keep() records that.
 
 | Argument | Meaning |
 |---|---|
@@ -3482,36 +3473,75 @@ See also: [`save_gif`](#fn-save_gif), [`save_frames`](#fn-save_frames), [`frame_
 <a id="ground"></a>
 ## Ground
 
+<a id="fn-area"></a>
+### `f.area`
+
+```py
+f.area(x: 'float', y: 'float', w: 'float', h: 'float') -> 'Area'
+```
+
+Make an area: a rectangle kept as a value.
+
+An area has left, top, right, bottom, width, height, cx and cy (its centre). inset() gives a smaller area inside it, and grid() divides it into cells. f.ground, f.ground.content and every grid cell are areas too. An area may be 0 wide or 0 high, but not less. It draws nothing by itself.
+
+| Argument | Meaning |
+|---|---|
+| `x` | the left edge. |
+| `y` | the top edge. |
+| `w` | the width, 0 or more. |
+| `h` | the height, 0 or more. |
+
+**Returns.** A new Area.
+
+**Raises.**
+
+- `TypeError`: a value is not a number.
+- `ValueError`: w or h is negative, or a value is not finite.
+
+```py
+panel = f.area(40, 40, 320, 200)
+f.rect(panel.left, panel.top, panel.width, panel.height)
+for cell in panel.inset(10).grid(4, 2, gutter=6):
+    f.circle(cell.cx, cell.cy, 20)
+```
+
+See also: [`grid`](#fn-grid), [`ground`](#fn-ground).
+
 <a id="fn-grid"></a>
 ### `f.grid`
 
 ```py
-f.grid(cols: 'int', rows: 'int', *, gutter: 'float | tuple' = 0, area: 'object' = None) -> 'list'
+f.grid(cols: 'int', rows: 'int', *, gutter: 'float | tuple' = 0, area: 'object' = None) -> 'Grid'
 ```
 
 Divide an area into a grid of equal cells.
 
-The cells cover f.ground.content (the canvas inside the margins), or the area you give. The list goes row by row, left to right, so the first cell is top left. Each cell has x, y (its top left corner), w, h (its size), cx, cy (its centre), col, row and index (0 for the first cell). It also has left, top, right, bottom, width and height, so a cell can be the area of another grid.
+The cells cover f.ground.content (the canvas inside the margins), or the area you give. The grid works like a list of its cells, row by row, left to right: a for loop goes through them, len() counts them, g[0] is the top-left cell, g[-1] the last, and g[1:3] gives a list. Each cell is an area (left, top, right, bottom, width, height, cx, cy) with col, row and index, all counted from 0, so a cell can be the area of another grid.
+
+The grid also has g.cell(col, row), g.span(col, row, cols, rows) for one area over several cells and the gutters between them, g.column_count and g.row_count, g.columns and g.rows as lists of areas, and g.show() to draw guide lines in the window.
 
 | Argument | Meaning |
 |---|---|
 | `cols` | how many columns. A whole number above 0. |
 | `rows` | how many rows. A whole number above 0. |
 | `gutter` | the gap between cells. One number is used both across and down. A tuple (column_gutter, row_gutter) sets them apart. The default is 0. |
-| `area` | what to divide. It is any object with left, top, width and height, such as f.ground or a cell. The default None is f.ground.content. |
+| `area` | what to divide: an area such as f.ground, a cell or f.area(...), or any object with left, top, width and height. The default None is f.ground.content. |
 
-**Returns.** A list of cols times rows cells.
+**Returns.** A Grid of cols times rows cells.
 
 **Raises.**
 
+- `TypeError`: cols or rows is not a whole number, a gutter is not a number, or area has no edges.
 - `ValueError`: cols or rows is 0 or less, a gutter is negative, or the gutters leave no room for the cells.
 
 ```py
-for cell in f.grid(3, 2, gutter=10):
-    f.circle(cell.cx, cell.cy, cell.w * 0.8)
+g = f.grid(3, 2, gutter=10)
+for cell in g:
+    f.circle(cell.cx, cell.cy, cell.width * 0.8)
+g.show()
 ```
 
-See also: [`ground`](#fn-ground), [`size`](#fn-size), [`mm`](#fn-mm).
+See also: [`area`](#fn-area), [`ground`](#fn-ground), [`size`](#fn-size), [`mm`](#fn-mm).
 
 <a id="fn-mm"></a>
 ### `f.mm`
@@ -3566,7 +3596,18 @@ See also: [`mm`](#fn-mm), [`size`](#fn-size), [`grid`](#fn-grid).
 f.ground
 ```
 
-A rectangle with margins. ``f.ground`` is the whole canvas; ``f.ground.content`` is inside the margins.
+The canvas as an area, with its margins.
+
+f.ground is the whole canvas and f.ground.content is the part inside the margins. Both are areas, so they have left, top, right, bottom, width, height, cx and cy, and inset() and grid(). f.ground is made fresh each time you read it, so it always matches the canvas. You do not make a Ground yourself: set the margins with f.size(..., margin=...).
+
+```py
+f.size("A5", margin=f.mm(12))
+f.background("linen")
+c = f.ground.content
+f.rect(c.left, c.top, c.width, c.height)
+```
+
+See also: [`area`](#fn-area), [`grid`](#fn-grid), [`size`](#fn-size).
 
 <a id="motion-and-pages"></a>
 ## Motion and pages
@@ -4319,9 +4360,9 @@ f.rotate(f.frame_count * 3)
 <a id="live-ground"></a>
 ### `f.ground`
 
-The canvas as a rectangle, with its margins.
+The canvas as an area, with its margins.
 
-It is a read-only value, always up to date, like width. It has left, top, right, bottom, width, height, cx and cy (the centre), and margin, a tuple (top, right, bottom, left) from size(). It starts at (0, 0), so left and top are 0, and right and bottom are the canvas width and height. Its content is the area inside the margins: a value of the same kind, whose own margin is (0, 0, 0, 0) and whose own content is itself. With no margin, ground.content is ground. It follows size(), resize_canvas() and new_page(). The margin stays when the canvas changes size. Margins are a guide: drawing outside them is allowed. Inside a ``with f.layer(...)`` block it is still the canvas.
+It is a read-only value, always up to date, like width. It is an Area, so it has left, top, right, bottom, width, height, cx and cy (the centre), and inset() and grid(). It also has margin, a tuple (top, right, bottom, left) from size(). It starts at (0, 0), so left and top are 0, and right and bottom are the canvas width and height. Its content is the area inside the margins: a value of the same kind, whose own margin is (0, 0, 0, 0) and whose own content is itself. With no margin, ground.content is ground. It follows size(), resize_canvas() and new_page(). The margin stays when the canvas changes size. Margins are a guide: drawing outside them is allowed. Inside a ``with f.layer(...)`` block it is still the canvas.
 
 ```py
 f.size(400, 300, margin=20)
@@ -4515,7 +4556,7 @@ beats = song.beats()
 song.play()
 ```
 
-See also: `tempo`, `onsets`, `is_onset`.
+See also: [`tempo`](#cls-Sound-tempo), [`onsets`](#cls-Sound-onsets), [`is_onset`](#cls-Sound-is_onset).
 
 <a id="cls-Sound-chord"></a>
 #### `Sound.chord`
@@ -4536,7 +4577,7 @@ guitar or a synth, not for a busy band.
 f.text(song.chord() or "-", 150, 100)
 ```
 
-See also: `chroma`, `key`, [`chord_notes`](#fn-chord_notes).
+See also: [`chroma`](#cls-Sound-chroma), [`key`](#cls-Sound-key), [`chord_notes`](#fn-chord_notes).
 
 <a id="cls-Sound-chroma"></a>
 #### `Sound.chroma`
@@ -4558,7 +4599,7 @@ for i, strength in enumerate(song.chroma()):
     f.text(notes[i], 20 + i * 30, 380 - 200 * strength)
 ```
 
-See also: `chord`, `pitch`, `key`.
+See also: [`chord`](#cls-Sound-chord), [`pitch`](#cls-Sound-pitch), [`key`](#cls-Sound-key).
 
 <a id="cls-Sound-current_time"></a>
 #### `Sound.current_time`
@@ -4579,7 +4620,7 @@ snd.loop()
 f.rect(0, 190, 400 * snd.current_time() / snd.duration(), 20)
 ```
 
-See also: `duration`, `pause`.
+See also: [`duration`](#cls-Sound-duration), [`pause`](#cls-Sound-pause).
 
 <a id="cls-Sound-duration"></a>
 #### `Sound.duration`
@@ -4597,7 +4638,7 @@ snd = f.tone(440, 2)
 print(snd.duration())     # 2.0 or a little more
 ```
 
-See also: `current_time`.
+See also: [`current_time`](#cls-Sound-current_time).
 
 <a id="cls-Sound-get_volume"></a>
 #### `Sound.get_volume`
@@ -4616,7 +4657,7 @@ snd.set_volume(0.5)
 print(snd.get_volume())
 ```
 
-See also: `set_volume`.
+See also: [`set_volume`](#cls-Sound-set_volume).
 
 <a id="cls-Sound-is_onset"></a>
 #### `Sound.is_onset`
@@ -4637,7 +4678,7 @@ if song.is_onset():
     f.background("white")
 ```
 
-See also: `onsets`, `level`.
+See also: [`onsets`](#cls-Sound-onsets), [`level`](#cls-Sound-level).
 
 <a id="cls-Sound-is_playing"></a>
 #### `Sound.is_playing`
@@ -4657,7 +4698,7 @@ if not song.is_playing():
     song.play()
 ```
 
-See also: [`play`](#fn-play), `pause`, [`stop`](#fn-stop).
+See also: [`play`](#cls-Sound-play), [`pause`](#cls-Sound-pause), [`stop`](#cls-Sound-stop).
 
 <a id="cls-Sound-key"></a>
 #### `Sound.key`
@@ -4677,7 +4718,7 @@ song = f.melody("C4 E4 G4 C5 G4 E4 C4")
 print(song.key())
 ```
 
-See also: `chord`, `chroma`.
+See also: [`chord`](#cls-Sound-chord), [`chroma`](#cls-Sound-chroma).
 
 <a id="cls-Sound-level"></a>
 #### `Sound.level`
@@ -4699,7 +4740,7 @@ snd.loop()
 f.circle(200, 200, 50 + 300 * snd.level())
 ```
 
-See also: `spectrum`, `pitch`, `is_onset`.
+See also: [`spectrum`](#cls-Sound-spectrum), [`pitch`](#cls-Sound-pitch), [`is_onset`](#cls-Sound-is_onset).
 
 <a id="cls-Sound-loop"></a>
 #### `Sound.loop`
@@ -4715,7 +4756,7 @@ drone = f.drone("D3", 8)
 drone.loop()
 ```
 
-See also: [`play`](#fn-play), [`stop`](#fn-stop), `pause`.
+See also: [`play`](#cls-Sound-play), [`stop`](#cls-Sound-stop), [`pause`](#cls-Sound-pause).
 
 <a id="cls-Sound-onsets"></a>
 #### `Sound.onsets`
@@ -4736,7 +4777,7 @@ song = f.melody("C4 E4 G4 C5")
 print(song.onsets())
 ```
 
-See also: `is_onset`, `tempo`, `beats`.
+See also: [`is_onset`](#cls-Sound-is_onset), [`tempo`](#cls-Sound-tempo), [`beats`](#cls-Sound-beats).
 
 <a id="cls-Sound-pan"></a>
 #### `Sound.pan`
@@ -4763,7 +4804,7 @@ snd.pan(-1)     # left speaker only
 snd.play()
 ```
 
-See also: `set_volume`, [`play`](#fn-play).
+See also: [`set_volume`](#cls-Sound-set_volume), [`play`](#cls-Sound-play).
 
 <a id="cls-Sound-pause"></a>
 #### `Sound.pause`
@@ -4783,7 +4824,7 @@ snd.pause()
 snd.play()     # carries on
 ```
 
-See also: [`play`](#fn-play), [`stop`](#fn-stop), `current_time`.
+See also: [`play`](#cls-Sound-play), [`stop`](#cls-Sound-stop), [`current_time`](#cls-Sound-current_time).
 
 <a id="cls-Sound-pitch"></a>
 #### `Sound.pitch`
@@ -4808,7 +4849,7 @@ if hz:
     f.text(f.frequency_to_note(hz), 20, 40)
 ```
 
-See also: `chroma`, `chord`, `level`.
+See also: [`chroma`](#cls-Sound-chroma), [`chord`](#cls-Sound-chord), [`level`](#cls-Sound-level).
 
 <a id="cls-Sound-play"></a>
 #### `Sound.play`
@@ -4827,7 +4868,7 @@ beep = f.tone(440, 1)
 beep.play()
 ```
 
-See also: [`loop`](#fn-loop), `pause`, [`stop`](#fn-stop), `is_playing`.
+See also: [`loop`](#cls-Sound-loop), [`pause`](#cls-Sound-pause), [`stop`](#cls-Sound-stop), [`is_playing`](#cls-Sound-is_playing).
 
 <a id="cls-Sound-reverb"></a>
 #### `Sound.reverb`
@@ -4883,7 +4924,7 @@ for x in range(399):
     f.line(x, 100 - 80 * wave[x * 4], x + 1, 100 - 80 * wave[x * 4 + 4])
 ```
 
-See also: [`create_sound`](#fn-create_sound), [`save`](#fn-save).
+See also: [`create_sound`](#fn-create_sound), [`save`](#cls-Sound-save).
 
 <a id="cls-Sound-save"></a>
 #### `Sound.save`
@@ -4908,7 +4949,7 @@ The pan is kept in the file. The volume is not.
 f.melody("C4 E4 G4").save("tune.wav")    # writes a new file
 ```
 
-See also: `samples`, [`create_sound`](#fn-create_sound).
+See also: [`samples`](#cls-Sound-samples), [`create_sound`](#fn-create_sound).
 
 <a id="cls-Sound-set_volume"></a>
 #### `Sound.set_volume`
@@ -4935,7 +4976,7 @@ snd.set_volume(0.3)
 snd.play()
 ```
 
-See also: `get_volume`, `pan`.
+See also: [`get_volume`](#cls-Sound-get_volume), [`pan`](#cls-Sound-pan).
 
 <a id="cls-Sound-spectrum"></a>
 #### `Sound.spectrum`
@@ -4967,7 +5008,7 @@ for i, strength in enumerate(snd.spectrum(16)):
     f.rect(20 + i * 24, 380, 20, -300 * strength)
 ```
 
-See also: `level`, `pitch`, `chroma`.
+See also: [`level`](#cls-Sound-level), [`pitch`](#cls-Sound-pitch), [`chroma`](#cls-Sound-chroma).
 
 <a id="cls-Sound-stop"></a>
 #### `Sound.stop`
@@ -4984,7 +5025,7 @@ snd.play()
 snd.stop()
 ```
 
-See also: `pause`, [`play`](#fn-play).
+See also: [`pause`](#cls-Sound-pause), [`play`](#cls-Sound-play).
 
 <a id="cls-Sound-swara_histogram"></a>
 #### `Sound.swara_histogram`
@@ -5010,7 +5051,7 @@ hist = recording.swara_histogram("D4")
 print(f.match_ragas(hist)[0])
 ```
 
-See also: `tonic`, [`match_ragas`](#fn-match_ragas).
+See also: [`tonic`](#cls-Sound-tonic), [`match_ragas`](#fn-match_ragas).
 
 <a id="cls-Sound-tempo"></a>
 #### `Sound.tempo`
@@ -5030,7 +5071,7 @@ song = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
 print(song.tempo())
 ```
 
-See also: `beats`, `onsets`.
+See also: [`beats`](#cls-Sound-beats), [`onsets`](#cls-Sound-onsets).
 
 <a id="cls-Sound-tonic"></a>
 #### `Sound.tonic`
@@ -5053,7 +5094,7 @@ if sa:
     print(f.frequency_to_note(sa))
 ```
 
-See also: `swara_histogram`, `pitch`, [`match_ragas`](#fn-match_ragas).
+See also: [`swara_histogram`](#cls-Sound-swara_histogram), [`pitch`](#cls-Sound-pitch), [`match_ragas`](#fn-match_ragas).
 
 <a id="cls-Microphone"></a>
 ### `Microphone`
@@ -5096,7 +5137,7 @@ Use mic.capture(seconds).beats() to look at what was heard.
 
 - `ValueError`: always, with a message that points to capture().
 
-See also: `capture`.
+See also: [`capture`](#cls-Microphone-capture).
 
 <a id="cls-Microphone-capture"></a>
 #### `Microphone.capture`
@@ -5127,7 +5168,7 @@ recording = mic.capture(1)   # use it after about a second
 recording.save("heard.wav")  # writes a new file
 ```
 
-See also: `start`, [`stop`](#fn-stop).
+See also: [`start`](#cls-Microphone-start), [`stop`](#cls-Microphone-stop).
 
 <a id="cls-Microphone-chord"></a>
 #### `Microphone.chord`
@@ -5148,7 +5189,7 @@ guitar or a synth, not for a busy band.
 f.text(song.chord() or "-", 150, 100)
 ```
 
-See also: `chroma`, `key`, [`chord_notes`](#fn-chord_notes).
+See also: [`chroma`](#cls-Microphone-chroma), [`key`](#cls-Microphone-key), [`chord_notes`](#fn-chord_notes).
 
 <a id="cls-Microphone-chroma"></a>
 #### `Microphone.chroma`
@@ -5170,7 +5211,7 @@ for i, strength in enumerate(song.chroma()):
     f.text(notes[i], 20 + i * 30, 380 - 200 * strength)
 ```
 
-See also: `chord`, `pitch`, `key`.
+See also: [`chord`](#cls-Microphone-chord), [`pitch`](#cls-Microphone-pitch), [`key`](#cls-Microphone-key).
 
 <a id="cls-Microphone-close"></a>
 #### `Microphone.close`
@@ -5187,7 +5228,7 @@ funground calls it when a sketch ends, so you do not need to.
 mic.close()
 ```
 
-See also: [`stop`](#fn-stop).
+See also: [`stop`](#cls-Microphone-stop).
 
 <a id="cls-Microphone-is_listening"></a>
 #### `Microphone.is_listening`
@@ -5205,7 +5246,7 @@ if not mic.is_listening():
     mic.start()
 ```
 
-See also: `start`, [`stop`](#fn-stop).
+See also: [`start`](#cls-Microphone-start), [`stop`](#cls-Microphone-stop).
 
 <a id="cls-Microphone-is_onset"></a>
 #### `Microphone.is_onset`
@@ -5226,7 +5267,7 @@ if song.is_onset():
     f.background("white")
 ```
 
-See also: `onsets`, `level`.
+See also: [`onsets`](#cls-Microphone-onsets), [`level`](#cls-Microphone-level).
 
 <a id="cls-Microphone-key"></a>
 #### `Microphone.key`
@@ -5243,7 +5284,7 @@ Use mic.capture(seconds).key() to look at what was heard.
 
 - `ValueError`: always, with a message that points to capture().
 
-See also: `capture`, `chroma`.
+See also: [`capture`](#cls-Microphone-capture), [`chroma`](#cls-Microphone-chroma).
 
 <a id="cls-Microphone-level"></a>
 #### `Microphone.level`
@@ -5265,7 +5306,7 @@ snd.loop()
 f.circle(200, 200, 50 + 300 * snd.level())
 ```
 
-See also: `spectrum`, `pitch`, `is_onset`.
+See also: [`spectrum`](#cls-Microphone-spectrum), [`pitch`](#cls-Microphone-pitch), [`is_onset`](#cls-Microphone-is_onset).
 
 <a id="cls-Microphone-onsets"></a>
 #### `Microphone.onsets`
@@ -5282,7 +5323,7 @@ Use mic.capture(seconds).onsets() to look at what was heard.
 
 - `ValueError`: always, with a message that points to capture().
 
-See also: `capture`, `is_onset`.
+See also: [`capture`](#cls-Microphone-capture), [`is_onset`](#cls-Microphone-is_onset).
 
 <a id="cls-Microphone-pitch"></a>
 #### `Microphone.pitch`
@@ -5307,7 +5348,7 @@ if hz:
     f.text(f.frequency_to_note(hz), 20, 40)
 ```
 
-See also: `chroma`, `chord`, `level`.
+See also: [`chroma`](#cls-Microphone-chroma), [`chord`](#cls-Microphone-chord), [`level`](#cls-Microphone-level).
 
 <a id="cls-Microphone-spectrum"></a>
 #### `Microphone.spectrum`
@@ -5339,7 +5380,7 @@ for i, strength in enumerate(snd.spectrum(16)):
     f.rect(20 + i * 24, 380, 20, -300 * strength)
 ```
 
-See also: `level`, `pitch`, `chroma`.
+See also: [`level`](#cls-Microphone-level), [`pitch`](#cls-Microphone-pitch), [`chroma`](#cls-Microphone-chroma).
 
 <a id="cls-Microphone-start"></a>
 #### `Microphone.start`
@@ -5361,7 +5402,7 @@ mic = f.microphone()
 mic.start()
 ```
 
-See also: [`stop`](#fn-stop), `is_listening`, `capture`.
+See also: [`stop`](#cls-Microphone-stop), [`is_listening`](#cls-Microphone-is_listening), [`capture`](#cls-Microphone-capture).
 
 <a id="cls-Microphone-stop"></a>
 #### `Microphone.stop`
@@ -5377,7 +5418,7 @@ recording = mic.capture(2)
 mic.stop()
 ```
 
-See also: `start`, `capture`.
+See also: [`start`](#cls-Microphone-start), [`capture`](#cls-Microphone-capture).
 
 <a id="cls-Microphone-swara_histogram"></a>
 #### `Microphone.swara_histogram`
@@ -5403,7 +5444,7 @@ hist = recording.swara_histogram("D4")
 print(f.match_ragas(hist)[0])
 ```
 
-See also: `tonic`, [`match_ragas`](#fn-match_ragas).
+See also: [`tonic`](#cls-Microphone-tonic), [`match_ragas`](#fn-match_ragas).
 
 <a id="cls-Microphone-tempo"></a>
 #### `Microphone.tempo`
@@ -5420,7 +5461,7 @@ Use mic.capture(seconds).tempo() to look at what was heard.
 
 - `ValueError`: always, with a message that points to capture().
 
-See also: `capture`.
+See also: [`capture`](#cls-Microphone-capture).
 
 <a id="cls-Microphone-tonic"></a>
 #### `Microphone.tonic`
@@ -5443,7 +5484,7 @@ if sa:
     print(f.frequency_to_note(sa))
 ```
 
-See also: `swara_histogram`, `pitch`, [`match_ragas`](#fn-match_ragas).
+See also: [`swara_histogram`](#cls-Microphone-swara_histogram), [`pitch`](#cls-Microphone-pitch), [`match_ragas`](#fn-match_ragas).
 
 <a id="cls-Picture"></a>
 ### `Picture`
@@ -5498,7 +5539,7 @@ h = g.copy()
 h.background("black")    # g is not changed
 ```
 
-See also: `resize`, `mask`.
+See also: [`resize`](#cls-Picture-resize), [`mask`](#cls-Picture-mask).
 
 <a id="cls-Picture-from_pixels"></a>
 #### `Picture.from_pixels`
@@ -5523,7 +5564,7 @@ f.load_image() uses it. You do not need to call it.
 
 - `RuntimeError`: if bgra is not the right length for the size.
 
-See also: `copy`.
+See also: [`copy`](#cls-Picture-copy).
 
 <a id="cls-Picture-image"></a>
 #### `Picture.image`
@@ -5557,7 +5598,7 @@ stamp.circle(10, 10, 18)
 g.image(stamp, 50, 50)
 ```
 
-See also: `copy`, [`save`](#fn-save).
+See also: [`copy`](#cls-Picture-copy), [`save`](#cls-Picture-save).
 
 <a id="cls-Picture-mask"></a>
 #### `Picture.mask`
@@ -5586,7 +5627,7 @@ stencil.circle(photo.width / 2, photo.height / 2, photo.width)
 photo.mask(stencil)                         # now it is a circle
 ```
 
-See also: `copy`, [`image`](#fn-image).
+See also: [`copy`](#cls-Picture-copy), [`image`](#cls-Picture-image).
 
 <a id="cls-Picture-pixels"></a>
 #### `Picture.pixels`
@@ -5610,7 +5651,7 @@ g.pixels[0] = 0       # no red in the first pixel
 g.update_pixels()
 ```
 
-See also: `copy`, `mask`.
+See also: [`copy`](#cls-Picture-copy), [`mask`](#cls-Picture-mask).
 
 <a id="cls-Picture-resize"></a>
 #### `Picture.resize`
@@ -5637,7 +5678,7 @@ photo = f.load_image("photo.png")    # your own file
 photo.resize(200, 0)                 # 200 wide, with the height to match
 ```
 
-See also: `copy`, `mask`.
+See also: [`copy`](#cls-Picture-copy), [`mask`](#cls-Picture-mask).
 
 <a id="cls-Picture-save"></a>
 #### `Picture.save`
@@ -5664,7 +5705,7 @@ g.circle(100, 100, 150)
 g.save("circle.png")    # writes a new file
 ```
 
-See also: `copy`, [`image`](#fn-image).
+See also: [`copy`](#cls-Picture-copy), [`image`](#cls-Picture-image).
 
 <a id="cls-Vector"></a>
 ### `Vector`
@@ -5721,7 +5762,7 @@ velocity = f.Vector(2, 1)
 position.add(velocity)
 ```
 
-See also: `sub`, `mult`.
+See also: [`sub`](#cls-Vector-sub), [`mult`](#cls-Vector-mult).
 
 <a id="cls-Vector-angle_between"></a>
 #### `Vector.angle_between`
@@ -5746,7 +5787,7 @@ The angle that turns this vector's direction onto another's.
 print(f.Vector(1, 0).angle_between(f.Vector(0, 1)))    # 90.0
 ```
 
-See also: `heading`, `dot`, `cross`.
+See also: [`heading`](#cls-Vector-heading), [`dot`](#cls-Vector-dot), [`cross`](#cls-Vector-cross).
 
 <a id="cls-Vector-copy"></a>
 #### `Vector.copy`
@@ -5767,7 +5808,7 @@ b = a.copy()
 b.add(5, 5)       # a is still (1, 2)
 ```
 
-See also: [`set`](#fn-set).
+See also: [`set`](#cls-Vector-set).
 
 <a id="cls-Vector-cross"></a>
 #### `Vector.cross`
@@ -5790,7 +5831,7 @@ It is positive when the other vector is clockwise from this one on the screen.
 print(f.Vector(1, 0).cross(f.Vector(0, 1)))    # 1.0
 ```
 
-See also: `dot`, `angle_between`.
+See also: [`dot`](#cls-Vector-dot), [`angle_between`](#cls-Vector-angle_between).
 
 <a id="cls-Vector-dist"></a>
 #### `Vector.dist`
@@ -5812,7 +5853,7 @@ if position.dist(target) < 5:
     print("arrived")
 ```
 
-See also: [`mag`](#fn-mag), `sub`.
+See also: [`mag`](#cls-Vector-mag), [`sub`](#cls-Vector-sub).
 
 <a id="cls-Vector-div"></a>
 #### `Vector.div`
@@ -5837,7 +5878,7 @@ Divide both parts by a number, in place.
 v = f.Vector(10, 20).div(2)    # (5, 10)
 ```
 
-See also: `mult`.
+See also: [`mult`](#cls-Vector-mult).
 
 <a id="cls-Vector-dot"></a>
 #### `Vector.dot`
@@ -5860,7 +5901,7 @@ It is x * other.x + y * other.y. It is 0 when the two are at right angles.
 print(f.Vector(1, 0).dot(f.Vector(0, 1)))    # 0.0
 ```
 
-See also: `cross`, `angle_between`.
+See also: [`cross`](#cls-Vector-cross), [`angle_between`](#cls-Vector-angle_between).
 
 <a id="cls-Vector-from_angle"></a>
 #### `Vector.from_angle`
@@ -5884,7 +5925,7 @@ Make a vector that points at an angle.
 v = f.Vector.from_angle(90, 10)    # (0, 10): ten pixels down
 ```
 
-See also: `heading`, `random_2d`.
+See also: [`heading`](#cls-Vector-heading), [`random_2d`](#cls-Vector-random_2d).
 
 <a id="cls-Vector-heading"></a>
 #### `Vector.heading`
@@ -5901,7 +5942,7 @@ The direction the vector points in.
 print(f.Vector(0, 1).heading())    # 90.0
 ```
 
-See also: `set_heading`, `angle_between`, `from_angle`.
+See also: [`set_heading`](#cls-Vector-set_heading), [`angle_between`](#cls-Vector-angle_between), [`from_angle`](#cls-Vector-from_angle).
 
 <a id="cls-Vector-lerp"></a>
 #### `Vector.lerp`
@@ -5923,7 +5964,7 @@ Move part of the way towards another vector, in place.
 position.lerp(f.Vector(f.mouse_x, f.mouse_y), 0.1)    # follow the mouse
 ```
 
-See also: `add`, `dist`.
+See also: [`add`](#cls-Vector-add), [`dist`](#cls-Vector-dist).
 
 <a id="cls-Vector-limit"></a>
 #### `Vector.limit`
@@ -5946,7 +5987,7 @@ A vector that is already short enough is not changed.
 velocity.add(acceleration).limit(8)
 ```
 
-See also: `set_mag`, `normalize`.
+See also: [`set_mag`](#cls-Vector-set_mag), [`normalize`](#cls-Vector-normalize).
 
 <a id="cls-Vector-mag"></a>
 #### `Vector.mag`
@@ -5963,7 +6004,7 @@ The length of the vector.
 print(f.Vector(3, 4).mag())    # 5.0
 ```
 
-See also: `mag_sq`, `set_mag`, `normalize`.
+See also: [`mag_sq`](#cls-Vector-mag_sq), [`set_mag`](#cls-Vector-set_mag), [`normalize`](#cls-Vector-normalize).
 
 <a id="cls-Vector-mag_sq"></a>
 #### `Vector.mag_sq`
@@ -5982,7 +6023,7 @@ It is quicker than mag(), because it needs no square root. Use it to compare len
 print(f.Vector(3, 4).mag_sq())    # 25.0
 ```
 
-See also: [`mag`](#fn-mag).
+See also: [`mag`](#cls-Vector-mag).
 
 <a id="cls-Vector-mult"></a>
 #### `Vector.mult`
@@ -6003,7 +6044,7 @@ Multiply both parts by a number, in place.
 velocity.mult(0.99)    # slow down a little
 ```
 
-See also: `div`, `set_mag`, `limit`.
+See also: [`div`](#cls-Vector-div), [`set_mag`](#cls-Vector-set_mag), [`limit`](#cls-Vector-limit).
 
 <a id="cls-Vector-normalize"></a>
 #### `Vector.normalize`
@@ -6022,7 +6063,7 @@ A zero vector stays zero.
 direction = f.Vector(3, 4).normalize()    # (0.6, 0.8)
 ```
 
-See also: `set_mag`, `limit`, [`mag`](#fn-mag).
+See also: [`set_mag`](#cls-Vector-set_mag), [`limit`](#cls-Vector-limit), [`mag`](#cls-Vector-mag).
 
 <a id="cls-Vector-random_2d"></a>
 #### `Vector.random_2d`
@@ -6041,7 +6082,7 @@ f.random_seed() makes the choice repeatable.
 push = f.Vector.random_2d().mult(5)
 ```
 
-See also: `from_angle`, `set_mag`.
+See also: [`from_angle`](#cls-Vector-from_angle), [`set_mag`](#cls-Vector-set_mag).
 
 <a id="cls-Vector-rotate"></a>
 #### `Vector.rotate`
@@ -6064,7 +6105,7 @@ A positive angle turns clockwise on the screen, like f.rotate().
 v = f.Vector(1, 0).rotate(90)    # about (0, 1)
 ```
 
-See also: `set_heading`, `heading`.
+See also: [`set_heading`](#cls-Vector-set_heading), [`heading`](#cls-Vector-heading).
 
 <a id="cls-Vector-set"></a>
 #### `Vector.set`
@@ -6091,7 +6132,7 @@ v.set(10, 20)
 v.set((3, 4))
 ```
 
-See also: `copy`, `add`.
+See also: [`copy`](#cls-Vector-copy), [`add`](#cls-Vector-add).
 
 <a id="cls-Vector-set_heading"></a>
 #### `Vector.set_heading`
@@ -6112,7 +6153,7 @@ Turn the vector to point at an angle, in place, keeping its length.
 v = f.Vector(5, 0).set_heading(90)    # about (0, 5)
 ```
 
-See also: `heading`, [`rotate`](#fn-rotate).
+See also: [`heading`](#cls-Vector-heading), [`rotate`](#cls-Vector-rotate).
 
 <a id="cls-Vector-set_mag"></a>
 #### `Vector.set_mag`
@@ -6135,7 +6176,7 @@ A zero vector stays zero, because it has no direction.
 v = f.Vector(3, 4).set_mag(10)    # (6, 8)
 ```
 
-See also: [`mag`](#fn-mag), `normalize`, `limit`.
+See also: [`mag`](#cls-Vector-mag), [`normalize`](#cls-Vector-normalize), [`limit`](#cls-Vector-limit).
 
 <a id="cls-Vector-sub"></a>
 #### `Vector.sub`
@@ -6160,7 +6201,7 @@ Take away from the vector, in place.
 to_mouse = f.Vector(f.mouse_x, f.mouse_y).sub(position)
 ```
 
-See also: `add`, `dist`.
+See also: [`add`](#cls-Vector-add), [`dist`](#cls-Vector-dist).
 
 <a id="cls-FormattedString"></a>
 ### `FormattedString`
@@ -6223,7 +6264,7 @@ line = f.FormattedString()
 line.append("Hello ", size=40).append("world", style="bold", color="navy")
 ```
 
-See also: `runs`, [`text`](#fn-text).
+See also: [`runs`](#cls-FormattedString-runs), [`text`](#fn-text).
 
 <a id="cls-FormattedString-lines"></a>
 #### `FormattedString.lines`
@@ -6238,7 +6279,7 @@ funground uses it when it draws text. You do not need to call it.
 
 **Returns.** a list of lines. Each line is a list of (text, run index) pieces.
 
-See also: `wrap`.
+See also: [`wrap`](#cls-FormattedString-wrap).
 
 <a id="cls-FormattedString-runs"></a>
 #### `FormattedString.runs`
@@ -6256,7 +6297,7 @@ line = f.FormattedString().append("a").append("b", size=30)
 print(len(line.runs))    # 2
 ```
 
-See also: `append`.
+See also: [`append`](#cls-FormattedString-append).
 
 <a id="cls-FormattedString-wrap"></a>
 #### `FormattedString.wrap`
@@ -6276,7 +6317,7 @@ the box is broken between letters. A blank line keeps one empty piece, so that i
 
 **Returns.** (lines, starts). lines is a list of lines, each a list of (text, run index) pieces. starts[i] is the character where line i begins.
 
-See also: `lines`.
+See also: [`lines`](#cls-FormattedString-lines).
 
 <a id="cls-Run"></a>
 ### `Run`
@@ -6314,7 +6355,7 @@ funground uses it when it draws formatted text. You do not need to call it.
 
 **Returns.** a drawing state: the one you gave, with this run's own settings put on top.
 
-See also: `with_text`.
+See also: [`with_text`](#cls-Run-with_text).
 
 <a id="cls-Run-with_text"></a>
 #### `Run.with_text`
@@ -6333,7 +6374,7 @@ funground uses it when it breaks text into lines. You do not need to call it.
 
 **Returns.** a new Run.
 
-See also: `apply`.
+See also: [`apply`](#cls-Run-apply).
 
 <a id="cls-PathBuilder"></a>
 ### `PathBuilder`
@@ -6378,7 +6419,7 @@ The box that exactly holds the path.
 x, y, w, h = f.path().circle(50, 50, 60).bounds()
 ```
 
-See also: `contains`.
+See also: [`contains`](#cls-PathBuilder-contains).
 
 <a id="cls-PathBuilder-circle"></a>
 #### `PathBuilder.circle`
@@ -6400,7 +6441,7 @@ Add a circle as a closed part of the path.
 p = f.path().circle(50, 50, 60)
 ```
 
-See also: [`ellipse`](#fn-ellipse), [`rect`](#fn-rect).
+See also: [`ellipse`](#cls-PathBuilder-ellipse), [`rect`](#cls-PathBuilder-rect).
 
 <a id="cls-PathBuilder-close"></a>
 #### `PathBuilder.close`
@@ -6423,7 +6464,7 @@ Only closed paths are filled.
 p = f.path().move_to(10, 10).line_to(90, 10).line_to(50, 80).close()
 ```
 
-See also: `move_to`, `line_to`, `is_closed`.
+See also: [`move_to`](#cls-PathBuilder-move_to), [`line_to`](#cls-PathBuilder-line_to), [`is_closed`](#cls-PathBuilder-is_closed).
 
 <a id="cls-PathBuilder-contains"></a>
 #### `PathBuilder.contains`
@@ -6446,7 +6487,7 @@ if button.contains(f.mouse_x, f.mouse_y):
     f.fill("gold")
 ```
 
-See also: `bounds`.
+See also: [`bounds`](#cls-PathBuilder-bounds).
 
 <a id="cls-PathBuilder-copy"></a>
 #### `PathBuilder.copy`
@@ -6466,7 +6507,7 @@ a = f.path().move_to(0, 0).line_to(50, 0)
 b = a.copy().line_to(50, 50)    # a is not changed
 ```
 
-See also: [`translate`](#fn-translate).
+See also: [`translate`](#cls-PathBuilder-translate).
 
 <a id="cls-PathBuilder-curve_to"></a>
 #### `PathBuilder.curve_to`
@@ -6495,7 +6536,7 @@ The two control points pull the curve towards them.
 p = f.path().move_to(10, 90).curve_to(10, 10, 90, 10, 90, 90)
 ```
 
-See also: `quad_to`, `line_to`.
+See also: [`quad_to`](#cls-PathBuilder-quad_to), [`line_to`](#cls-PathBuilder-line_to).
 
 <a id="cls-PathBuilder-difference"></a>
 #### `PathBuilder.difference`
@@ -6520,7 +6561,7 @@ Make a new path of what this path covers, minus what another path covers.
 ring = f.path().circle(50, 50, 80).difference(f.path().circle(50, 50, 40))
 ```
 
-See also: `union`, `intersection`, `xor`.
+See also: [`union`](#cls-PathBuilder-union), [`intersection`](#cls-PathBuilder-intersection), [`xor`](#cls-PathBuilder-xor).
 
 <a id="cls-PathBuilder-ellipse"></a>
 #### `PathBuilder.ellipse`
@@ -6542,7 +6583,7 @@ Add an ellipse as a closed part of the path.
 p = f.path().ellipse(50, 50, 80, 40)
 ```
 
-See also: [`circle`](#fn-circle), [`rect`](#fn-rect).
+See also: [`circle`](#cls-PathBuilder-circle), [`rect`](#cls-PathBuilder-rect).
 
 <a id="cls-PathBuilder-expand_stroke"></a>
 #### `PathBuilder.expand_stroke`
@@ -6574,7 +6615,7 @@ line = f.path().move_to(10, 50).line_to(90, 50)
 outline = line.expand_stroke(8, cap="butt", dash=[10, 5])
 ```
 
-See also: `remove_overlap`, `contains`.
+See also: [`remove_overlap`](#cls-PathBuilder-remove_overlap), [`contains`](#cls-PathBuilder-contains).
 
 <a id="cls-PathBuilder-geometry"></a>
 #### `PathBuilder.geometry`
@@ -6589,7 +6630,7 @@ It cannot be changed. It is what funground draws.
 
 **Returns.** a Path (from funground.geometry).
 
-See also: `is_empty`, `is_closed`.
+See also: [`is_empty`](#cls-PathBuilder-is_empty), [`is_closed`](#cls-PathBuilder-is_closed).
 
 <a id="cls-PathBuilder-intersection"></a>
 #### `PathBuilder.intersection`
@@ -6614,7 +6655,7 @@ Make a new path of only what both paths cover.
 lens = f.path().circle(40, 50, 60).intersection(f.path().circle(70, 50, 60))
 ```
 
-See also: `union`, `difference`, `xor`.
+See also: [`union`](#cls-PathBuilder-union), [`difference`](#cls-PathBuilder-difference), [`xor`](#cls-PathBuilder-xor).
 
 <a id="cls-PathBuilder-is_closed"></a>
 #### `PathBuilder.is_closed`
@@ -6633,7 +6674,7 @@ Only closed paths are filled. Open ones are stroked.
 print(f.path().circle(50, 50, 60).is_closed)    # True
 ```
 
-See also: `close`, `is_empty`.
+See also: [`close`](#cls-PathBuilder-close), [`is_empty`](#cls-PathBuilder-is_empty).
 
 <a id="cls-PathBuilder-is_empty"></a>
 #### `PathBuilder.is_empty`
@@ -6650,7 +6691,7 @@ Whether nothing has been added to the path.
 print(f.path().is_empty)    # True
 ```
 
-See also: `is_closed`.
+See also: [`is_closed`](#cls-PathBuilder-is_closed).
 
 <a id="cls-PathBuilder-line_to"></a>
 #### `PathBuilder.line_to`
@@ -6675,7 +6716,7 @@ Add a straight line from the current point to a new point.
 p = f.path().move_to(10, 10).line_to(90, 10).line_to(50, 80).close()
 ```
 
-See also: `move_to`, `curve_to`, `close`.
+See also: [`move_to`](#cls-PathBuilder-move_to), [`curve_to`](#cls-PathBuilder-curve_to), [`close`](#cls-PathBuilder-close).
 
 <a id="cls-PathBuilder-move_to"></a>
 #### `PathBuilder.move_to`
@@ -6696,7 +6737,7 @@ Start a new part of the path at a point, without drawing.
 p = f.path().move_to(10, 10).line_to(90, 10)
 ```
 
-See also: `line_to`, `close`.
+See also: [`line_to`](#cls-PathBuilder-line_to), [`close`](#cls-PathBuilder-close).
 
 <a id="cls-PathBuilder-polygon"></a>
 #### `PathBuilder.polygon`
@@ -6721,7 +6762,7 @@ Add a closed shape through a list of corners.
 p = f.path().polygon([(50, 10), (90, 80), (10, 80)])
 ```
 
-See also: [`rect`](#fn-rect), `line_to`.
+See also: [`rect`](#cls-PathBuilder-rect), [`line_to`](#cls-PathBuilder-line_to).
 
 <a id="cls-PathBuilder-quad_to"></a>
 #### `PathBuilder.quad_to`
@@ -6747,7 +6788,7 @@ Add a curve from the current point to a new point, pulled towards one control po
 p = f.path().move_to(10, 90).quad_to(50, 10, 90, 90)
 ```
 
-See also: `curve_to`, `line_to`.
+See also: [`curve_to`](#cls-PathBuilder-curve_to), [`line_to`](#cls-PathBuilder-line_to).
 
 <a id="cls-PathBuilder-rect"></a>
 #### `PathBuilder.rect`
@@ -6774,7 +6815,7 @@ Add a rectangle as a closed part of the path.
 p = f.path().rect(10, 10, 80, 50, 8)
 ```
 
-See also: [`ellipse`](#fn-ellipse), [`circle`](#fn-circle), [`polygon`](#fn-polygon).
+See also: [`ellipse`](#cls-PathBuilder-ellipse), [`circle`](#cls-PathBuilder-circle), [`polygon`](#cls-PathBuilder-polygon).
 
 <a id="cls-PathBuilder-remove_overlap"></a>
 #### `PathBuilder.remove_overlap`
@@ -6791,7 +6832,7 @@ Make a new path that fills the same area, drawn as one clean outline with no ove
 clean = f.path().circle(40, 50, 60).circle(70, 50, 60).remove_overlap()
 ```
 
-See also: `union`, `expand_stroke`.
+See also: [`union`](#cls-PathBuilder-union), [`expand_stroke`](#cls-PathBuilder-expand_stroke).
 
 <a id="cls-PathBuilder-rotate"></a>
 #### `PathBuilder.rotate`
@@ -6813,7 +6854,7 @@ Make a new path that is this path turned about a point.
 bar = f.path().rect(-40, -5, 80, 10).rotate(45)
 ```
 
-See also: [`translate`](#fn-translate), [`scale`](#fn-scale).
+See also: [`translate`](#cls-PathBuilder-translate), [`scale`](#cls-PathBuilder-scale).
 
 <a id="cls-PathBuilder-scale"></a>
 #### `PathBuilder.scale`
@@ -6835,7 +6876,7 @@ Make a new path that is this path scaled about the point (0, 0).
 big = f.path().circle(0, 0, 40).scale(2)
 ```
 
-See also: [`translate`](#fn-translate), [`rotate`](#fn-rotate).
+See also: [`translate`](#cls-PathBuilder-translate), [`rotate`](#cls-PathBuilder-rotate).
 
 <a id="cls-PathBuilder-translate"></a>
 #### `PathBuilder.translate`
@@ -6856,7 +6897,7 @@ Make a new path that is this path moved.
 moved = f.path().circle(0, 0, 40).translate(100, 100)
 ```
 
-See also: [`scale`](#fn-scale), [`rotate`](#fn-rotate).
+See also: [`scale`](#cls-PathBuilder-scale), [`rotate`](#cls-PathBuilder-rotate).
 
 <a id="cls-PathBuilder-union"></a>
 #### `PathBuilder.union`
@@ -6881,7 +6922,7 @@ Make a new path of everything that either path covers.
 both = f.path().circle(40, 50, 60).union(f.path().circle(70, 50, 60))
 ```
 
-See also: `intersection`, `difference`, `xor`.
+See also: [`intersection`](#cls-PathBuilder-intersection), [`difference`](#cls-PathBuilder-difference), [`xor`](#cls-PathBuilder-xor).
 
 <a id="cls-PathBuilder-xor"></a>
 #### `PathBuilder.xor`
@@ -6906,7 +6947,7 @@ Make a new path of what exactly one of the two paths covers.
 p = f.path().circle(40, 50, 60).xor(f.path().circle(70, 50, 60))
 ```
 
-See also: `union`, `intersection`, `difference`.
+See also: [`union`](#cls-PathBuilder-union), [`intersection`](#cls-PathBuilder-intersection), [`difference`](#cls-PathBuilder-difference).
 
 <a id="cls-Mark"></a>
 ### `Mark`
@@ -6966,7 +7007,7 @@ and y are often negative.
 x, y, w, h = flower.bounds()
 ```
 
-See also: `width`, `height`, `is_empty`, `place`.
+See also: [`width`](#cls-Mark-width), [`height`](#cls-Mark-height), [`is_empty`](#cls-Mark-is_empty), [`place`](#cls-Mark-place).
 
 <a id="cls-Mark-height"></a>
 #### `Mark.height`
@@ -6985,7 +7026,7 @@ The height of the area the mark covers, from bounds(); 0 for an empty mark.
 f.size(400, int(flower.height) + 20)
 ```
 
-See also: `width`, `bounds`.
+See also: [`width`](#cls-Mark-width), [`bounds`](#cls-Mark-bounds).
 
 <a id="cls-Mark-is_empty"></a>
 #### `Mark.is_empty`
@@ -7007,7 +7048,7 @@ if not flower.is_empty:
     flower.place(100, 100)
 ```
 
-See also: `bounds`.
+See also: [`bounds`](#cls-Mark-bounds).
 
 <a id="cls-Mark-place"></a>
 #### `Mark.place`
@@ -7050,7 +7091,7 @@ f.fill("black")
 flower.place(300, 200, style="current")
 ```
 
-See also: [`mark`](#fn-mark), `bounds`, [`saved_state`](#fn-saved_state).
+See also: [`mark`](#fn-mark), [`bounds`](#cls-Mark-bounds), [`saved_state`](#fn-saved_state).
 
 <a id="cls-Mark-width"></a>
 #### `Mark.width`
@@ -7069,7 +7110,683 @@ The width of the area the mark covers, from bounds(); 0 for an empty mark.
 gap = flower.width + 10
 ```
 
-See also: `height`, `bounds`.
+See also: [`height`](#cls-Mark-height), [`bounds`](#cls-Mark-bounds).
+
+<a id="cls-Area"></a>
+### `Area`
+
+```py
+Area(left: 'float', top: 'float', width: 'float', height: 'float') -> 'None'
+```
+
+A rectangle on the canvas, kept as a value.
+
+An area has a left edge, a top edge, a width and a height, in canvas units. It also gives its right and bottom edges and its centre. Make one with f.area(x, y, w, h). f.ground, f.ground.content and every cell of a grid are areas too, so anything that takes an area takes them.
+
+An area never changes. inset() and grid() give new values. An area may be 0 wide or 0 high, but never less.
+
+```py
+panel = f.area(40, 40, 300, 200)
+f.rect(panel.left, panel.top, panel.width, panel.height)
+f.circle(panel.cx, panel.cy, 20)
+```
+
+<a id="cls-Area-bottom"></a>
+#### `Area.bottom`
+
+```py
+Area.bottom  # property
+```
+
+The y of the area's bottom edge: top + height.
+
+<a id="cls-Area-cx"></a>
+#### `Area.cx`
+
+```py
+Area.cx  # property
+```
+
+The x of the area's centre.
+
+<a id="cls-Area-cy"></a>
+#### `Area.cy`
+
+```py
+Area.cy  # property
+```
+
+The y of the area's centre.
+
+<a id="cls-Area-grid"></a>
+#### `Area.grid`
+
+```py
+Area.grid(cols: 'int', rows: 'int', *, gutter: 'float | tuple' = 0) -> "'Grid'"
+```
+
+Return a grid of equal cells over this area.
+
+It is the same as f.grid(cols, rows, gutter=gutter, area=this_area). A cell is an area too, so a cell can hold a grid of its own.
+
+| Argument | Meaning |
+|---|---|
+| `cols` | how many columns. A whole number above 0. |
+| `rows` | how many rows. A whole number above 0. |
+| `gutter` | the gap between cells. One number is used both across and down. A tuple (column_gutter, row_gutter) sets them apart. The default is 0. |
+
+**Returns.** A Grid. It goes row by row, left to right, like a list of cells.
+
+**Raises.**
+
+- `TypeError`: cols or rows is not a whole number, or a gutter is not a number.
+- `ValueError`: cols or rows is 0 or less, a gutter is negative, or the gutters leave no room for the cells.
+
+```py
+for cell in f.ground.content.grid(4, 3, gutter=8):
+    f.circle(cell.cx, cell.cy, cell.width * 0.5)
+```
+
+See also: [`inset`](#cls-Area-inset), [`area`](#fn-area).
+
+<a id="cls-Area-height"></a>
+#### `Area.height`
+
+```py
+Area.height  # property
+```
+
+How high the area is: 0 or more.
+
+<a id="cls-Area-inset"></a>
+#### `Area.inset`
+
+```py
+Area.inset(all: 'float | None' = None, *, top: 'float | None' = None, right: 'float | None' = None, bottom: 'float | None' = None, left: 'float | None' = None) -> "'Area'"
+```
+
+Return a smaller area inside this one.
+
+One number moves every edge in by that much. top=, right=, bottom= and left= move one edge each, and a side you name wins over the one number. A side you leave out does not move. A negative number moves that edge out instead, which makes the area bigger, as for a bleed around a page. The area itself does not change.
+
+| Argument | Meaning |
+|---|---|
+| `all` | how far to move every edge in. The default None moves none of them. |
+| `top` | how far to move the top edge down. The default None uses all. |
+| `right` | how far to move the right edge left. The default None uses all. |
+| `bottom` | how far to move the bottom edge up. The default None uses all. |
+| `left` | how far to move the left edge right. The default None uses all. |
+
+**Returns.** A new Area. It may be 0 wide or 0 high.
+
+**Raises.**
+
+- `TypeError`: a side is not a number.
+- `ValueError`: the insets are more than the width or the height, which would leave a negative size.
+
+```py
+page = f.ground.inset(20)
+header = page.inset(bottom=page.height - 60)
+```
+
+See also: [`grid`](#cls-Area-grid), [`area`](#fn-area).
+
+<a id="cls-Area-left"></a>
+#### `Area.left`
+
+```py
+Area.left  # property
+```
+
+The x of the area's left edge.
+
+<a id="cls-Area-right"></a>
+#### `Area.right`
+
+```py
+Area.right  # property
+```
+
+The x of the area's right edge: left + width.
+
+<a id="cls-Area-top"></a>
+#### `Area.top`
+
+```py
+Area.top  # property
+```
+
+The y of the area's top edge.
+
+<a id="cls-Area-width"></a>
+#### `Area.width`
+
+```py
+Area.width  # property
+```
+
+How wide the area is: 0 or more.
+
+<a id="cls-Ground"></a>
+### `Ground`
+
+```py
+Ground(left: 'float', top: 'float', width: 'float', height: 'float', margin: 'tuple' = (0, 0, 0, 0)) -> 'None'
+```
+
+The canvas as an area, with its margins.
+
+f.ground is the whole canvas and f.ground.content is the part inside the margins. Both are areas, so they have left, top, right, bottom, width, height, cx and cy, and inset() and grid(). f.ground is made fresh each time you read it, so it always matches the canvas. You do not make a Ground yourself: set the margins with f.size(..., margin=...).
+
+```py
+f.size("A5", margin=f.mm(12))
+f.background("linen")
+c = f.ground.content
+f.rect(c.left, c.top, c.width, c.height)
+```
+
+<a id="cls-Ground-bottom"></a>
+#### `Ground.bottom`
+
+```py
+Ground.bottom  # property
+```
+
+The y of the area's bottom edge: top + height.
+
+<a id="cls-Ground-content"></a>
+#### `Ground.content`
+
+```py
+Ground.content  # property
+```
+
+The area inside the margins. With no margin it is this same object, and its own margin is (0, 0, 0, 0).
+
+<a id="cls-Ground-cx"></a>
+#### `Ground.cx`
+
+```py
+Ground.cx  # property
+```
+
+The x of the area's centre.
+
+<a id="cls-Ground-cy"></a>
+#### `Ground.cy`
+
+```py
+Ground.cy  # property
+```
+
+The y of the area's centre.
+
+<a id="cls-Ground-grid"></a>
+#### `Ground.grid`
+
+```py
+Ground.grid(cols: 'int', rows: 'int', *, gutter: 'float | tuple' = 0) -> "'Grid'"
+```
+
+Return a grid of equal cells over this area.
+
+It is the same as f.grid(cols, rows, gutter=gutter, area=this_area). A cell is an area too, so a cell can hold a grid of its own.
+
+| Argument | Meaning |
+|---|---|
+| `cols` | how many columns. A whole number above 0. |
+| `rows` | how many rows. A whole number above 0. |
+| `gutter` | the gap between cells. One number is used both across and down. A tuple (column_gutter, row_gutter) sets them apart. The default is 0. |
+
+**Returns.** A Grid. It goes row by row, left to right, like a list of cells.
+
+**Raises.**
+
+- `TypeError`: cols or rows is not a whole number, or a gutter is not a number.
+- `ValueError`: cols or rows is 0 or less, a gutter is negative, or the gutters leave no room for the cells.
+
+```py
+for cell in f.ground.content.grid(4, 3, gutter=8):
+    f.circle(cell.cx, cell.cy, cell.width * 0.5)
+```
+
+See also: [`inset`](#cls-Ground-inset), [`area`](#fn-area).
+
+<a id="cls-Ground-height"></a>
+#### `Ground.height`
+
+```py
+Ground.height  # property
+```
+
+How high the area is: 0 or more.
+
+<a id="cls-Ground-inset"></a>
+#### `Ground.inset`
+
+```py
+Ground.inset(all: 'float | None' = None, *, top: 'float | None' = None, right: 'float | None' = None, bottom: 'float | None' = None, left: 'float | None' = None) -> "'Area'"
+```
+
+Return a smaller area inside this one.
+
+One number moves every edge in by that much. top=, right=, bottom= and left= move one edge each, and a side you name wins over the one number. A side you leave out does not move. A negative number moves that edge out instead, which makes the area bigger, as for a bleed around a page. The area itself does not change.
+
+| Argument | Meaning |
+|---|---|
+| `all` | how far to move every edge in. The default None moves none of them. |
+| `top` | how far to move the top edge down. The default None uses all. |
+| `right` | how far to move the right edge left. The default None uses all. |
+| `bottom` | how far to move the bottom edge up. The default None uses all. |
+| `left` | how far to move the left edge right. The default None uses all. |
+
+**Returns.** A new Area. It may be 0 wide or 0 high.
+
+**Raises.**
+
+- `TypeError`: a side is not a number.
+- `ValueError`: the insets are more than the width or the height, which would leave a negative size.
+
+```py
+page = f.ground.inset(20)
+header = page.inset(bottom=page.height - 60)
+```
+
+See also: [`grid`](#cls-Ground-grid), [`area`](#fn-area).
+
+<a id="cls-Ground-left"></a>
+#### `Ground.left`
+
+```py
+Ground.left  # property
+```
+
+The x of the area's left edge.
+
+<a id="cls-Ground-margin"></a>
+#### `Ground.margin`
+
+```py
+Ground.margin  # property
+```
+
+The margins as (top, right, bottom, left). (0, 0, 0, 0) when there are none.
+
+<a id="cls-Ground-right"></a>
+#### `Ground.right`
+
+```py
+Ground.right  # property
+```
+
+The x of the area's right edge: left + width.
+
+<a id="cls-Ground-top"></a>
+#### `Ground.top`
+
+```py
+Ground.top  # property
+```
+
+The y of the area's top edge.
+
+<a id="cls-Ground-width"></a>
+#### `Ground.width`
+
+```py
+Ground.width  # property
+```
+
+How wide the area is: 0 or more.
+
+<a id="cls-Cell"></a>
+### `Cell`
+
+```py
+Cell(left: 'float', top: 'float', width: 'float', height: 'float', col: 'int', row: 'int', index: 'int') -> 'None'
+```
+
+One cell of a grid: an area that knows its column, row and place in the grid.
+
+A cell has everything an area has (left, top, width, height, cx, cy and so on), plus col, row and index, all counted from 0. A cell can be the area of another grid, so grids nest.
+
+```py
+for cell in f.grid(3, 2, gutter=10):
+    if cell.row == 0:
+        f.circle(cell.cx, cell.cy, cell.width * 0.5)
+```
+
+<a id="cls-Cell-bottom"></a>
+#### `Cell.bottom`
+
+```py
+Cell.bottom  # property
+```
+
+The y of the area's bottom edge: top + height.
+
+<a id="cls-Cell-col"></a>
+#### `Cell.col`
+
+```py
+Cell.col  # property
+```
+
+The cell's column, counted from 0 at the left.
+
+<a id="cls-Cell-cx"></a>
+#### `Cell.cx`
+
+```py
+Cell.cx  # property
+```
+
+The x of the area's centre.
+
+<a id="cls-Cell-cy"></a>
+#### `Cell.cy`
+
+```py
+Cell.cy  # property
+```
+
+The y of the area's centre.
+
+<a id="cls-Cell-grid"></a>
+#### `Cell.grid`
+
+```py
+Cell.grid(cols: 'int', rows: 'int', *, gutter: 'float | tuple' = 0) -> "'Grid'"
+```
+
+Return a grid of equal cells over this area.
+
+It is the same as f.grid(cols, rows, gutter=gutter, area=this_area). A cell is an area too, so a cell can hold a grid of its own.
+
+| Argument | Meaning |
+|---|---|
+| `cols` | how many columns. A whole number above 0. |
+| `rows` | how many rows. A whole number above 0. |
+| `gutter` | the gap between cells. One number is used both across and down. A tuple (column_gutter, row_gutter) sets them apart. The default is 0. |
+
+**Returns.** A Grid. It goes row by row, left to right, like a list of cells.
+
+**Raises.**
+
+- `TypeError`: cols or rows is not a whole number, or a gutter is not a number.
+- `ValueError`: cols or rows is 0 or less, a gutter is negative, or the gutters leave no room for the cells.
+
+```py
+for cell in f.ground.content.grid(4, 3, gutter=8):
+    f.circle(cell.cx, cell.cy, cell.width * 0.5)
+```
+
+See also: [`inset`](#cls-Cell-inset), [`area`](#fn-area).
+
+<a id="cls-Cell-height"></a>
+#### `Cell.height`
+
+```py
+Cell.height  # property
+```
+
+How high the area is: 0 or more.
+
+<a id="cls-Cell-index"></a>
+#### `Cell.index`
+
+```py
+Cell.index  # property
+```
+
+The cell's place in the grid, counted from 0, row by row: row * column_count + col.
+
+<a id="cls-Cell-inset"></a>
+#### `Cell.inset`
+
+```py
+Cell.inset(all: 'float | None' = None, *, top: 'float | None' = None, right: 'float | None' = None, bottom: 'float | None' = None, left: 'float | None' = None) -> "'Area'"
+```
+
+Return a smaller area inside this one.
+
+One number moves every edge in by that much. top=, right=, bottom= and left= move one edge each, and a side you name wins over the one number. A side you leave out does not move. A negative number moves that edge out instead, which makes the area bigger, as for a bleed around a page. The area itself does not change.
+
+| Argument | Meaning |
+|---|---|
+| `all` | how far to move every edge in. The default None moves none of them. |
+| `top` | how far to move the top edge down. The default None uses all. |
+| `right` | how far to move the right edge left. The default None uses all. |
+| `bottom` | how far to move the bottom edge up. The default None uses all. |
+| `left` | how far to move the left edge right. The default None uses all. |
+
+**Returns.** A new Area. It may be 0 wide or 0 high.
+
+**Raises.**
+
+- `TypeError`: a side is not a number.
+- `ValueError`: the insets are more than the width or the height, which would leave a negative size.
+
+```py
+page = f.ground.inset(20)
+header = page.inset(bottom=page.height - 60)
+```
+
+See also: [`grid`](#cls-Cell-grid), [`area`](#fn-area).
+
+<a id="cls-Cell-left"></a>
+#### `Cell.left`
+
+```py
+Cell.left  # property
+```
+
+The x of the area's left edge.
+
+<a id="cls-Cell-right"></a>
+#### `Cell.right`
+
+```py
+Cell.right  # property
+```
+
+The x of the area's right edge: left + width.
+
+<a id="cls-Cell-row"></a>
+#### `Cell.row`
+
+```py
+Cell.row  # property
+```
+
+The cell's row, counted from 0 at the top.
+
+<a id="cls-Cell-top"></a>
+#### `Cell.top`
+
+```py
+Cell.top  # property
+```
+
+The y of the area's top edge.
+
+<a id="cls-Cell-width"></a>
+#### `Cell.width`
+
+```py
+Cell.width  # property
+```
+
+How wide the area is: 0 or more.
+
+<a id="cls-Grid"></a>
+### `Grid`
+
+```py
+Grid(area, cols: 'int', rows: 'int', gutter: 'float | tuple' = 0) -> 'None'
+```
+
+An area divided into equal cells, with gutters between them.
+
+f.grid() and area.grid() make one. A grid works like a list of its cells, row by row, left to right: a for loop goes through them, len() counts them, g[0] is the top-left cell and g[-1] the last one, and g[2:5] gives a list. It also finds cells by column and row, joins cells into larger areas, and draws guide lines to help you see the layout.
+
+A grid never changes. Columns, rows and cells are all counted from 0.
+
+```py
+g = f.grid(4, 3, gutter=10)
+for cell in g:
+    f.circle(cell.cx, cell.cy, cell.width * 0.6)
+banner = g.span(0, 0, cols=4)
+g.show()
+```
+
+<a id="cls-Grid-area"></a>
+#### `Grid.area`
+
+```py
+Grid.area  # property
+```
+
+The area the grid divides.
+
+<a id="cls-Grid-cell"></a>
+#### `Grid.cell`
+
+```py
+Grid.cell(col: 'int', row: 'int') -> 'Cell'
+```
+
+Return the cell at a column and a row.
+
+Both count from 0, so g.cell(0, 0) is the top-left cell. It is the same cell as g[row * g.column_count + col].
+
+| Argument | Meaning |
+|---|---|
+| `col` | the column, from 0 at the left. |
+| `row` | the row, from 0 at the top. |
+
+**Returns.** The Cell.
+
+**Raises.**
+
+- `TypeError`: col or row is not a whole number.
+- `IndexError`: there is no such column or row. The message says which ones there are.
+
+```py
+corner = f.grid(3, 3).cell(2, 0)
+f.rect(corner.left, corner.top, corner.width, corner.height)
+```
+
+See also: [`span`](#cls-Grid-span), [`columns`](#cls-Grid-columns), [`rows`](#cls-Grid-rows).
+
+<a id="cls-Grid-column_count"></a>
+#### `Grid.column_count`
+
+```py
+Grid.column_count  # property
+```
+
+How many columns the grid has.
+
+<a id="cls-Grid-columns"></a>
+#### `Grid.columns`
+
+```py
+Grid.columns  # property
+```
+
+The columns as a list of areas, left to right, each as high as the whole grid.
+
+<a id="cls-Grid-gutter"></a>
+#### `Grid.gutter`
+
+```py
+Grid.gutter  # property
+```
+
+The gaps between cells, as (column_gutter, row_gutter).
+
+<a id="cls-Grid-row_count"></a>
+#### `Grid.row_count`
+
+```py
+Grid.row_count  # property
+```
+
+How many rows the grid has.
+
+<a id="cls-Grid-rows"></a>
+#### `Grid.rows`
+
+```py
+Grid.rows  # property
+```
+
+The rows as a list of areas, top to bottom, each as wide as the whole grid.
+
+<a id="cls-Grid-show"></a>
+#### `Grid.show`
+
+```py
+Grid.show(*, color='#1e90ff', in_files: 'bool' = False) -> 'None'
+```
+
+Draw thin guide lines that show the grid: the outline of its area and of every cell.
+
+Guides help you see a layout while you work. They are drawn over everything else in the window, and they are not part of the picture: they are left out of every saved file (PNG, PDF, SVG, f.keep(), save_frames(), GIFs and movies), and get() and pixels do not see them. Give in_files=True to make them ordinary drawing instead, so they are saved too; then later drawing can cover them.
+
+The lines are 1 unit wide and follow the current transform. show() does not change the fill, stroke, transform, clip or anything else. In an animated sketch the guides last one frame, so call show() in draw().
+
+| Argument | Meaning |
+|---|---|
+| `color` | the colour of the lines. The default is a clear blue. |
+| `in_files` | True draws the guides as ordinary drawing, so saved files have them. The default False shows them only in the window. |
+
+**Raises.**
+
+- `RuntimeError`: it is used inside a ``with f.mark()`` block without in_files=True, or before f.size().
+
+```py
+g = f.grid(4, 3, gutter=10)
+g.show()
+g.show(color="red", in_files=True)
+```
+
+See also: [`cell`](#cls-Grid-cell), [`span`](#cls-Grid-span).
+
+<a id="cls-Grid-span"></a>
+#### `Grid.span`
+
+```py
+Grid.span(col: 'int', row: 'int', cols: 'int' = 1, rows: 'int' = 1) -> 'Area'
+```
+
+Return one area that covers several cells, with the gutters between them.
+
+The area starts at the cell (col, row) and is cols cells wide and rows cells high. The gutters inside it are part of it, so its edges line up with the cells around it.
+
+| Argument | Meaning |
+|---|---|
+| `col` | the column of the top-left cell, from 0. |
+| `row` | the row of the top-left cell, from 0. |
+| `cols` | how many columns it covers. The default is 1. |
+| `rows` | how many rows it covers. The default is 1. |
+
+**Returns.** A new Area.
+
+**Raises.**
+
+- `TypeError`: a value is not a whole number.
+- `ValueError`: cols or rows is less than 1.
+- `IndexError`: the cells it would cover are not all in the grid. The message says which ones there are.
+
+```py
+g = f.grid(4, 3, gutter=10)
+title = g.span(0, 0, cols=4)
+f.rect(title.left, title.top, title.width, title.height)
+```
+
+See also: [`cell`](#cls-Grid-cell), [`columns`](#cls-Grid-columns), [`rows`](#cls-Grid-rows).
 
 <a id="cls-Path"></a>
 ### `Path`
@@ -7114,7 +7831,7 @@ move if the path is empty.
 
 **Returns.** a new Path.
 
-See also: [`ellipse`](#fn-ellipse), `line_to`.
+See also: [`ellipse`](#cls-Path-ellipse), [`line_to`](#cls-Path-line_to).
 
 <a id="cls-Path-bounds"></a>
 #### `Path.bounds`
@@ -7130,7 +7847,7 @@ gives the exact one.
 
 **Returns.** (min_x, min_y, max_x, max_y), or None for an empty path.
 
-See also: `points`.
+See also: [`points`](#cls-Path-points).
 
 <a id="cls-Path-close"></a>
 #### `Path.close`
@@ -7143,7 +7860,7 @@ Make a new path with the current part closed.
 
 **Returns.** a new Path.
 
-See also: `move_to`, `is_closed`.
+See also: [`move_to`](#cls-Path-move_to), [`is_closed`](#cls-Path-is_closed).
 
 <a id="cls-Path-cubic_to"></a>
 #### `Path.cubic_to`
@@ -7162,7 +7879,7 @@ Make a new path with a cubic Bezier curve added.
 
 **Returns.** a new Path.
 
-See also: `quad_to`, `line_to`.
+See also: [`quad_to`](#cls-Path-quad_to), [`line_to`](#cls-Path-line_to).
 
 <a id="cls-Path-current_point"></a>
 #### `Path.current_point`
@@ -7179,7 +7896,7 @@ The point where the path now ends.
 
 - `ValueError`: if the path is empty, so it has no current point.
 
-See also: `move_to`, `points`.
+See also: [`move_to`](#cls-Path-move_to), [`points`](#cls-Path-points).
 
 <a id="cls-Path-ellipse"></a>
 #### `Path.ellipse`
@@ -7199,7 +7916,7 @@ It is built from four curves, and is within about 0.03 per cent of a true ellips
 
 **Returns.** a new Path.
 
-See also: [`rect`](#fn-rect).
+See also: [`rect`](#cls-Path-rect).
 
 <a id="cls-Path-is_closed"></a>
 #### `Path.is_closed`
@@ -7214,7 +7931,7 @@ Only closed shapes are filled. A move at the end on its own draws nothing, and d
 
 **Returns.** True when the path is closed. An empty path is not closed.
 
-See also: `close`, `is_empty`.
+See also: [`close`](#cls-Path-close), [`is_empty`](#cls-Path-is_empty).
 
 <a id="cls-Path-is_empty"></a>
 #### `Path.is_empty`
@@ -7227,7 +7944,7 @@ Whether the path has no parts.
 
 **Returns.** True when there are no parts, otherwise False.
 
-See also: `is_closed`.
+See also: [`is_closed`](#cls-Path-is_closed).
 
 <a id="cls-Path-line_to"></a>
 #### `Path.line_to`
@@ -7244,7 +7961,7 @@ Make a new path with a straight line added.
 
 **Returns.** a new Path.
 
-See also: `move_to`, `cubic_to`.
+See also: [`move_to`](#cls-Path-move_to), [`cubic_to`](#cls-Path-cubic_to).
 
 <a id="cls-Path-move_to"></a>
 #### `Path.move_to`
@@ -7261,7 +7978,7 @@ Make a new path with a new part started at a point.
 
 **Returns.** a new Path.
 
-See also: `line_to`, `close`.
+See also: [`line_to`](#cls-Path-line_to), [`close`](#cls-Path-close).
 
 <a id="cls-Path-points"></a>
 #### `Path.points`
@@ -7274,7 +7991,7 @@ Every point in the path, including curve control points, in order.
 
 **Returns.** an iterator of (x, y) pairs.
 
-See also: `bounds`, `current_point`.
+See also: [`bounds`](#cls-Path-bounds), [`current_point`](#cls-Path-current_point).
 
 <a id="cls-Path-quad_to"></a>
 #### `Path.quad_to`
@@ -7298,7 +8015,7 @@ It is stored as the same curve written as a cubic, so a path only needs one kind
 
 - `ValueError`: if the path has no current point.
 
-See also: `cubic_to`.
+See also: [`cubic_to`](#cls-Path-cubic_to).
 
 <a id="cls-Path-rect"></a>
 #### `Path.rect`
@@ -7316,7 +8033,7 @@ Make a new path that is one closed rectangle.
 
 **Returns.** a new Path.
 
-See also: `rounded_rect`, [`ellipse`](#fn-ellipse).
+See also: [`rounded_rect`](#cls-Path-rounded_rect), [`ellipse`](#cls-Path-ellipse).
 
 <a id="cls-Path-rounded_rect"></a>
 #### `Path.rounded_rect`
@@ -7335,7 +8052,7 @@ Make a new path that is one closed rectangle with rounded corners.
 
 **Returns.** a new Path.
 
-See also: [`rect`](#fn-rect).
+See also: [`rect`](#cls-Path-rect).
 
 <a id="cls-Path-transformed"></a>
 #### `Path.transformed`
@@ -7352,7 +8069,7 @@ Make a new path with every point moved by a transform.
 
 **Returns.** a new Path. It is this path itself when the transform changes nothing.
 
-See also: `bounds`.
+See also: [`bounds`](#cls-Path-bounds).
 
 <a id="cls-Font"></a>
 ### `Font`
@@ -7398,7 +8115,7 @@ if not f.current_font().contains("hello"):
     print("some letters are missing")
 ```
 
-See also: `features`, `family`.
+See also: [`features`](#cls-Font-features), [`family`](#cls-Font-family).
 
 <a id="cls-Font-family"></a>
 #### `Font.family`
@@ -7415,7 +8132,7 @@ The family name of the font, as written in the font file.
 print(f.current_font().family())
 ```
 
-See also: `style`, [`variations`](#fn-variations), `features`.
+See also: [`style`](#cls-Font-style), [`variations`](#cls-Font-variations), [`features`](#cls-Font-features).
 
 <a id="cls-Font-features"></a>
 #### `Font.features`
@@ -7434,7 +8151,7 @@ Use f.text_features() to turn one on or off.
 print(f.current_font().features())
 ```
 
-See also: [`variations`](#fn-variations), `contains`.
+See also: [`variations`](#cls-Font-variations), [`contains`](#cls-Font-contains).
 
 <a id="cls-Font-style"></a>
 #### `Font.style`
@@ -7451,7 +8168,7 @@ The style name of the font, as written in the font file.
 print(f.current_font().style())
 ```
 
-See also: `family`.
+See also: [`family`](#cls-Font-family).
 
 <a id="cls-Font-variations"></a>
 #### `Font.variations`
@@ -7471,7 +8188,7 @@ for tag, (low, normal, high) in f.current_font().variations().items():
     print(tag, low, normal, high)
 ```
 
-See also: `features`, `family`.
+See also: [`features`](#cls-Font-features), [`family`](#cls-Font-family).
 
 <a id="cls-Control"></a>
 ### `Control`
@@ -7563,7 +8280,7 @@ The largest value the slider can have.
 
 **Returns.** the high end, as given.
 
-See also: `low`, `step`.
+See also: [`low`](#cls-Slider-low), [`step`](#cls-Slider-step).
 
 <a id="cls-Slider-label"></a>
 #### `Slider.label`
@@ -7594,7 +8311,7 @@ The smallest value the slider can have.
 
 **Returns.** the low end, as given.
 
-See also: `high`, `step`.
+See also: [`high`](#cls-Slider-high), [`step`](#cls-Slider-step).
 
 <a id="cls-Slider-step"></a>
 #### `Slider.step`
@@ -7607,7 +8324,7 @@ The size of each jump of the slider.
 
 **Returns.** the step as given, or None when the slider moves smoothly.
 
-See also: `low`, `high`.
+See also: [`low`](#cls-Slider-low), [`high`](#cls-Slider-high).
 
 <a id="cls-Slider-text"></a>
 #### `Slider.text`
@@ -7625,7 +8342,7 @@ s = f.create_slider(0, 1, 0.5, 0.1)
 print(s.text())    # 0.5
 ```
 
-See also: `value`.
+See also: [`value`](#cls-Slider-value).
 
 <a id="cls-Slider-value"></a>
 #### `Slider.value`
@@ -7656,7 +8373,7 @@ print(s.value())    # 0.5
 s.value(0.8)
 ```
 
-See also: [`text`](#fn-text), `low`, `high`.
+See also: [`text`](#cls-Slider-text), [`low`](#cls-Slider-low), [`high`](#cls-Slider-high).
 
 <a id="cls-Slider-visible"></a>
 #### `Slider.visible`
@@ -7683,7 +8400,7 @@ size.visible(False)
 print(size.visible())    # False
 ```
 
-See also: `value`, `checked`, [`create_slider`](#fn-create_slider).
+See also: [`value`](#cls-Slider-value), `checked`, [`create_slider`](#fn-create_slider).
 
 <a id="cls-Checkbox"></a>
 ### `Checkbox`
@@ -7771,7 +8488,7 @@ size.visible(False)
 print(size.visible())    # False
 ```
 
-See also: `value`, `checked`, [`create_slider`](#fn-create_slider).
+See also: `value`, [`checked`](#cls-Checkbox-checked), [`create_slider`](#fn-create_slider).
 
 <a id="cls-Button"></a>
 ### `Button`
@@ -7896,7 +8613,7 @@ How solid the colour is.
 print(f.color(255, 0, 0, 128).alpha)    # 128
 ```
 
-See also: `rgba`.
+See also: [`rgba`](#cls-Color-rgba).
 
 <a id="cls-Color-blue"></a>
 #### `Color.blue`
@@ -7913,7 +8630,7 @@ How much blue the colour has.
 print(f.color("tomato").blue)
 ```
 
-See also: `red`, `green`.
+See also: [`red`](#cls-Color-red), [`green`](#cls-Color-green).
 
 <a id="cls-Color-brightness"></a>
 #### `Color.brightness`
@@ -7930,7 +8647,7 @@ How bright the colour is, in the HSB way of measuring.
 print(f.color("red").brightness)    # 100.0
 ```
 
-See also: `hue`, `saturation`, `lightness`.
+See also: [`hue`](#cls-Color-hue), [`saturation`](#cls-Color-saturation), [`lightness`](#cls-Color-lightness).
 
 <a id="cls-Color-from_hsb"></a>
 #### `Color.from_hsb`
@@ -7956,7 +8673,7 @@ f.hsb() does the same, and is the one to use in a sketch.
 
 - `ValueError`: if a value is not a number.
 
-See also: `from_hsl`, `hue`.
+See also: [`from_hsl`](#cls-Color-from_hsl), [`hue`](#cls-Color-hue).
 
 <a id="cls-Color-from_hsl"></a>
 #### `Color.from_hsl`
@@ -7982,7 +8699,7 @@ f.hsl() does the same, and is the one to use in a sketch.
 
 - `ValueError`: if a value is not a number.
 
-See also: `from_hsb`, `lightness`.
+See also: [`from_hsb`](#cls-Color-from_hsb), [`lightness`](#cls-Color-lightness).
 
 <a id="cls-Color-green"></a>
 #### `Color.green`
@@ -7999,7 +8716,7 @@ How much green the colour has.
 print(f.color("tomato").green)
 ```
 
-See also: `red`, `blue`.
+See also: [`red`](#cls-Color-red), [`blue`](#cls-Color-blue).
 
 <a id="cls-Color-hue"></a>
 #### `Color.hue`
@@ -8016,7 +8733,7 @@ The hue of the colour: its place on the colour wheel.
 print(f.color("blue").hue)    # 240.0
 ```
 
-See also: `saturation`, `brightness`, `lightness`.
+See also: [`saturation`](#cls-Color-saturation), [`brightness`](#cls-Color-brightness), [`lightness`](#cls-Color-lightness).
 
 <a id="cls-Color-lerp"></a>
 #### `Color.lerp`
@@ -8040,7 +8757,7 @@ f.lerp_color() does the same. It mixes red, green, blue and alpha.
 mid = f.color("red").lerp(f.color("blue"), 0.5)
 ```
 
-See also: `from_hsb`.
+See also: [`from_hsb`](#cls-Color-from_hsb).
 
 <a id="cls-Color-lightness"></a>
 #### `Color.lightness`
@@ -8057,7 +8774,7 @@ How light the colour is, in the HSL way of measuring.
 print(f.color("red").lightness)    # 50.0
 ```
 
-See also: `brightness`, `hue`.
+See also: [`brightness`](#cls-Color-brightness), [`hue`](#cls-Color-hue).
 
 <a id="cls-Color-parse"></a>
 #### `Color.parse`
@@ -8081,7 +8798,7 @@ Every command that takes a colour uses it. You do not need to call it.
 - `ValueError`: if the colour is not understood, or a part is not from 0 to 255.
 - `TypeError`: if the value is True or False.
 
-See also: `from_hsb`, `from_hsl`.
+See also: [`from_hsb`](#cls-Color-from_hsb), [`from_hsl`](#cls-Color-from_hsl).
 
 <a id="cls-Color-red"></a>
 #### `Color.red`
@@ -8098,7 +8815,7 @@ How much red the colour has.
 print(f.color("tomato").red)
 ```
 
-See also: `green`, `blue`.
+See also: [`green`](#cls-Color-green), [`blue`](#cls-Color-blue).
 
 <a id="cls-Color-rgb"></a>
 #### `Color.rgb`
@@ -8115,7 +8832,7 @@ The red, green and blue parts together.
 r, g, b = f.color("tomato").rgb
 ```
 
-See also: `rgba`.
+See also: [`rgba`](#cls-Color-rgba).
 
 <a id="cls-Color-rgba"></a>
 #### `Color.rgba`
@@ -8132,7 +8849,7 @@ The red, green, blue and alpha parts together.
 print(f.color("tomato").rgba)    # (255, 99, 71, 255)
 ```
 
-See also: `rgb`.
+See also: [`rgb`](#cls-Color-rgb).
 
 <a id="cls-Color-saturation"></a>
 #### `Color.saturation`
@@ -8149,7 +8866,7 @@ How strong the colour is, in the HSB way of measuring.
 print(f.color("red").saturation)    # 100.0
 ```
 
-See also: `hue`, `brightness`.
+See also: [`hue`](#cls-Color-hue), [`brightness`](#cls-Color-brightness).
 
 <a id="cls-Gradient"></a>
 ### `Gradient`

@@ -77,6 +77,8 @@ REFUSED: dict[str, str] = {
     "f.get()": _PIXELS, "f.set()": _PIXELS, "f.load_pixels()": _PIXELS, "f.update_pixels()": _PIXELS,
     "f.filter()": _PIXELS,
     "f.background()": _WHOLE, "f.clear()": _WHOLE,
+    "grid.show()": "guides help you see a layout in the window and are not part of a mark. Call show() after "
+                   "the block ends, or give in_files=True to record the guide lines in the mark as ordinary drawing.",
 }
 
 # The mark blocks open now, innermost last.
