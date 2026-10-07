@@ -1,8 +1,8 @@
 # Studio vocabulary: Ground, Mark, Rules, Play
 
-**Status:** approved for release 0.1 (D-069, D-070, D-071). Ground, Mark and Play are in 0.1. Play is
-prototyped first; its names, form and behaviour are agreed with the maintainer before they are pinned. Player and
-`mark.outline()` are deferred. A second AI reviewer's conditions, accepted by the maintainer, are folded in.
+**Status:** approved for release 0.1 (D-069, D-070, D-071, D-073). Ground, Mark and Play are in 0.1. Play was
+prototyped first; its shape was agreed in D-073 and is pinned as contract rows E1 and E2. Area and Grid are pinned
+in G1 and guides in G2. Player and `mark.outline()` are deferred. A second AI reviewer's conditions, accepted by the maintainer, are folded in.
 
 **Why.** The 64-studio atlas teaches creativity: make, vary, notice, choose, explain. Inspired by John
 Maeda's *Design By Numbers* (Paper, Pen, Line, Repeat), the maintainer proposed four terms that make
@@ -30,7 +30,7 @@ f.background("paper")
 f.ground.width, f.ground.height     # the whole surface (full-bleed backgrounds)
 f.ground.content.left                # the area inside the margins
 for cell in f.grid(3, 4, gutter=f.mm(4)):
-    f.circle(cell.cx, cell.cy, cell.w * 0.6)
+    f.circle(cell.cx, cell.cy, cell.width * 0.6)
 ```
 
 - **`f.size(width, height, ..., margin=0)`** also accepts a page name, as in `f.size("A4")` and
@@ -41,8 +41,9 @@ for cell in f.grid(3, 4, gutter=f.mm(4)):
 - **`f.ground.content`** is the area inside the margins, with the same fields. Full-bleed work uses
   `f.ground`, and margin-based composition uses `f.ground.content`. Without a margin the two are the same.
 - **Margins are a guide, not a clip.** Drawing outside the ground is allowed.
-- **`f.grid(cols, rows, gutter=0, area=None)`** returns cells over `f.ground.content`, or over `area`. Each cell
-  has `x`, `y`, `w`, `h`, `cx`, `cy`, `col`, `row` and `index`. It is a list, so the loop is the learner's own.
+- **`f.grid(cols, rows, gutter=0, area=None)`** returns a Grid of cells over `f.ground.content`, or over `area`.
+  Each cell is an Area with `col`, `row` and `index`. The Grid iterates and indexes like a list, so the loop is
+  the learner's own. (As first built it was a list, and cells also had `x`, `y`, `w` and `h`; D-073 replaced both.)
 - **`f.mm(n)` and `f.inch(n)`** convert to funground units: 1 unit = 1 point in a PDF, 72 to the inch.
 - **Unchanged:** the origin stays top-left and y points down (contract C1).
 
@@ -180,7 +181,7 @@ change.
 - Giving one of them scales the mark uniformly to that size, from its bounds.
 - Giving both fits it inside the box, keeping its proportions and centring it.
 - Using either with `scale=` raises an error.
-- Typical use is a grid cell: `flower.place(cell.cx, cell.cy, anchor="center", width=cell.w * 0.8)`.
+- Typical use is a grid cell: `flower.place(cell.cx, cell.cy, anchor="center", width=cell.width * 0.8)`.
 
 **From an SVG file.** `f.mark("leaf.svg")` is the analogue of `loadShape`.
 - It makes a finished mark from the file's shapes, colours and groups, as vectors.
@@ -264,14 +265,16 @@ f.keep("gap 35 reads as a rhythm")             # keeps this version, reproducibl
   file; image and data files the sketch read, by name and size; and the Python and platform versions.
   Source, seed and settings reproduce a picture only while those stay the same.
 - **Every run gets a seed.** When the learner has not called `random_seed()`, funground picks one at
-  the start and records it, so every kept version can be reproduced with `f.random_seed(n)`.
+  the start and records it, so `f.random_seed(n)` gives the same random numbers again. A recorded seed makes
+  funground's randomness repeatable; it does not make every sketch reproducible.
 
-## Contract rows, to add once approved
+## Contract rows (all now in `Semantic_Contract.md`)
 
 - **G1 Ground:** page names in `size`, `margin`, `f.ground`, `f.grid`, `mm`/`inch`.
 - **K1 Mark recording:** what is kept, the style, transform and state rules, and the errors.
 - **K2 Mark placement:** local origin, anchors, transform order, group opacity, nesting.
 - **K3 Mark in files:** vector replay in PDF and SVG, live text, pictures inside marks.
+- **G2 Grid guides** (D-073).
 - **E1 Variations.**
 - **E2 Keep and the automatic seed.**
 
@@ -331,3 +334,15 @@ what it added to exploration, and where the existing API remains the better choi
   - Random and noise seeds are both recorded. Explicit seeds are kept as given, with no range limit.
 - **A recorded seed makes funground's randomness repeatable; it does not make every sketch reproducible.**
   The record's dependency list and its "not captured" list say so.
+
+### As built (S-132 part 4)
+
+- **Area.** Zero width or height is allowed: a degenerate area, such as a line. A negative inset moves the edge
+  out, so `f.ground.inset(-f.mm(3))` is a bleed. Cells lost their `x`, `y`, `w`, `h` duplicates.
+- **Grid.** Slices give lists. `cell()` refuses negative columns and rows; `g[i]` accepts negative indexes like a
+  list.
+- **Guides.** Built, not deferred. The window draws a separate guide list over the finished frame, so no file,
+  `keep`, `get()` or pixels see them, with no change to the IR or the renderer. `in_files=True` draws ordinary lines.
+- **Variations' row rule.** One row while every picture is at least 100 units wide and every label fits on one
+  line under it. `columns=` with two parameters is an error.
+- **Keep in an animated sketch.** Everything is written at the end of the next drawn frame, from that frame.

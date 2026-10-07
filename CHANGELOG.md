@@ -29,8 +29,17 @@ pygame-ce that was never published.
 ### Added
 - **Ground** (S-132, D-069): `f.size()` takes a page name (`f.size("A4", landscape=True)`) and
   `margin=`. `f.ground` and `f.ground.content` give the canvas and the area inside the margins.
-  `f.grid(cols, rows, gutter=0, area=None)` makes a list of cells, and `f.mm()` and `f.inch()`
+  `f.grid(cols, rows, gutter=0, area=None)` divides an area into cells, and `f.mm()` and `f.inch()`
   convert to funground units.
+- **Areas and grids** (S-132 part 4, contract G1, D-073):
+  - `f.area(x, y, w, h)` makes an area, a rectangle kept as a value, with `left`, `top`, `right`, `bottom`, `width`, `height`, `cx` and `cy`. `area.inset(...)` gives a smaller one (a negative inset a bigger one), and `area.grid(...)` divides it. `f.ground`, `f.ground.content` and every grid cell are areas.
+  - **Changed: `f.grid()` returns a Grid, not a list.** A Grid still works like the list did: `for`, `len()`, `g[0]`, `g[-1]` and slices (which give a list). It adds `g.cell(col, row)` (from 0), `g.span(col, row, cols, rows)` (one area over several cells, gutters included), `g.column_count`, `g.row_count`, `g.columns`, `g.rows`, `g.area` and `g.gutter`. Wrong cells and spans are errors that name the valid range.
+  - **Changed: a cell no longer has `x`, `y`, `w` and `h`.** Use `left`, `top`, `width` and `height`, the same names as every area.
+  - `g.show()` draws thin guide lines for the grid in the window only. They are left out of saved files, `f.keep()` and pixels, and the drawing state does not change. `g.show(in_files=True)` draws them as ordinary lines (contract G2).
+- **Play** (S-132 parts 3 and 4, contracts E1 and E2, D-071, D-073): exploring and keeping versions.
+  - `f.variations(fn, gap=[...])` draws a labelled contact sheet of a drawing for each value, or each pair of values. One parameter makes a row while every picture stays readable, otherwise a grid; `columns=` chooses. Every cell has the same scale, the same random seed and its own clean style. It returns the versions as `(values, mark)` pairs.
+  - `f.keep(note, pdf=False, **settings)` saves the picture, a copy of the sketch and a JSON record (the note, the settings, the controls, the random and noise seeds, the fonts and files used) in a numbered `studio` folder. In an animated sketch it keeps the next frame drawn, and the record is that frame's.
+  - Every run records a random seed, and a noise seed when noise is used. A seed you give is kept exactly. A recorded seed makes funground's randomness repeatable; it does not make every sketch reproducible.
 - **Marks:** a drawing kept as a value, to place as often as you like (S-132, contract K1–K3, D-069, D-070).
   - `with f.mark() as m:` records the drawing in the block instead of drawing it. Each part keeps its own style. The block starts from the current style and no transform, and leaves the transform, style and clip exactly as they were, even after an error. A layer, controls, saving and pixel calls inside the block are errors.
   - `f.mark(path, fill=..., stroke=..., stroke_width=...)` makes a mark from a path, and `f.mark("file.svg")` from an SVG file's shapes, with the file's colours.

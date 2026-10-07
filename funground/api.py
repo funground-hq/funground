@@ -18,6 +18,7 @@ from .paths import PathBuilder
 from .typography import Font
 from .picture import Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
 from .sketch import DEFAULT_SHADOW_COLOR, Sketch
+from .surface import Area, Grid  # noqa: F401  (S-132 part 4: returned by f.area and f.grid, contract G1)
 from .formatted import FormattedString  # noqa: F401  (public: f.FormattedString, S-091)
 from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
 
@@ -126,9 +127,9 @@ LIVE_DOCS: dict[str, str] = {
     Example:
         x += 120 * f.delta_time
     """,
-    "ground": """The canvas as a rectangle, with its margins.
+    "ground": """The canvas as an area, with its margins.
 
-    It is a read-only value, always up to date, like width. It has left, top, right, bottom, width, height, cx and cy (the centre), and margin, a tuple (top, right, bottom, left) from size(). It starts at (0, 0), so left and top are 0, and right and bottom are the canvas width and height. Its content is the area inside the margins: a value of the same kind, whose own margin is (0, 0, 0, 0) and whose own content is itself. With no margin, ground.content is ground. It follows size(), resize_canvas() and new_page(). The margin stays when the canvas changes size. Margins are a guide: drawing outside them is allowed. Inside a ``with f.layer(...)`` block it is still the canvas.
+    It is a read-only value, always up to date, like width. It is an Area, so it has left, top, right, bottom, width, height, cx and cy (the centre), and inset() and grid(). It also has margin, a tuple (top, right, bottom, left) from size(). It starts at (0, 0), so left and top are 0, and right and bottom are the canvas width and height. Its content is the area inside the margins: a value of the same kind, whose own margin is (0, 0, 0, 0) and whose own content is itself. With no margin, ground.content is ground. It follows size(), resize_canvas() and new_page(). The margin stays when the canvas changes size. Margins are a guide: drawing outside them is allowed. Inside a ``with f.layer(...)`` block it is still the canvas.
 
     Example:
         f.size(400, 300, margin=20)
@@ -379,28 +380,62 @@ def page_size(name: str, landscape: bool = False) -> tuple[int, int]:
     return _page_size(name, landscape)
 
 
-def grid(cols: int, rows: int, *, gutter: float | tuple = 0, area: object = None) -> list:
+def area(x: float, y: float, w: float, h: float) -> Area:
+    """Make an area: a rectangle kept as a value.
+
+    An area has left, top, right, bottom, width, height, cx and cy (its centre). inset() gives a smaller area inside it, and grid() divides it into cells. f.ground, f.ground.content and every grid cell are areas too. An area may be 0 wide or 0 high, but not less. It draws nothing by itself.
+
+    Arguments:
+        x: the left edge.
+        y: the top edge.
+        w: the width, 0 or more.
+        h: the height, 0 or more.
+
+    Returns:
+        A new Area.
+
+    Raises:
+        TypeError: a value is not a number.
+        ValueError: w or h is negative, or a value is not finite.
+
+    Example:
+        panel = f.area(40, 40, 320, 200)
+        f.rect(panel.left, panel.top, panel.width, panel.height)
+        for cell in panel.inset(10).grid(4, 2, gutter=6):
+            f.circle(cell.cx, cell.cy, 20)
+
+    See also: grid, ground
+    """
+    return Area(x, y, w, h)
+
+
+def grid(cols: int, rows: int, *, gutter: float | tuple = 0, area: object = None) -> Grid:
     """Divide an area into a grid of equal cells.
 
-    The cells cover f.ground.content (the canvas inside the margins), or the area you give. The list goes row by row, left to right, so the first cell is top left. Each cell has x, y (its top left corner), w, h (its size), cx, cy (its centre), col, row and index (0 for the first cell). It also has left, top, right, bottom, width and height, so a cell can be the area of another grid.
+    The cells cover f.ground.content (the canvas inside the margins), or the area you give. The grid works like a list of its cells, row by row, left to right: a for loop goes through them, len() counts them, g[0] is the top-left cell, g[-1] the last, and g[1:3] gives a list. Each cell is an area (left, top, right, bottom, width, height, cx, cy) with col, row and index, all counted from 0, so a cell can be the area of another grid.
+
+    The grid also has g.cell(col, row), g.span(col, row, cols, rows) for one area over several cells and the gutters between them, g.column_count and g.row_count, g.columns and g.rows as lists of areas, and g.show() to draw guide lines in the window.
 
     Arguments:
         cols: how many columns. A whole number above 0.
         rows: how many rows. A whole number above 0.
         gutter: the gap between cells. One number is used both across and down. A tuple (column_gutter, row_gutter) sets them apart. The default is 0.
-        area: what to divide. It is any object with left, top, width and height, such as f.ground or a cell. The default None is f.ground.content.
+        area: what to divide: an area such as f.ground, a cell or f.area(...), or any object with left, top, width and height. The default None is f.ground.content.
 
     Returns:
-        A list of cols times rows cells.
+        A Grid of cols times rows cells.
 
     Raises:
+        TypeError: cols or rows is not a whole number, a gutter is not a number, or area has no edges.
         ValueError: cols or rows is 0 or less, a gutter is negative, or the gutters leave no room for the cells.
 
     Example:
-        for cell in f.grid(3, 2, gutter=10):
-            f.circle(cell.cx, cell.cy, cell.w * 0.8)
+        g = f.grid(3, 2, gutter=10)
+        for cell in g:
+            f.circle(cell.cx, cell.cy, cell.width * 0.8)
+        g.show()
 
-    See also: ground, size, mm
+    See also: area, ground, size, mm
     """
     from .surface import make_grid
 
@@ -3381,10 +3416,12 @@ def random(low: float = 1.0, high: float | None = None) -> float:
 def random_seed(seed: int | None = None) -> None:
     """Make random() repeatable.
 
-    The same seed gives the same sequence. It also covers random_gaussian(), random_choice() and the random parts of sounds.
+    The same seed gives the same sequence. It also covers random_gaussian(), random_choice() and the random parts of sounds. Any whole number works, however large or negative, and f.keep() records it exactly as you gave it.
+
+    When you do not call random_seed(), funground picks a seed at the start of the run (a number below 1,000,000) and f.keep() records it, so f.random_seed(that number) gives the same random numbers again. A recorded seed makes funground's randomness repeatable; it does not make every sketch reproducible, because a sketch can also depend on the mouse, the clock, files or Python's own random module.
 
     Arguments:
-        seed: a whole number. The default None starts from a different, unpredictable place each time.
+        seed: a whole number. The default None starts from a different, unpredictable place each time, and records where.
 
     Example:
         f.random_seed(7)
@@ -3418,7 +3455,7 @@ def noise(x: float, y: float = 0.0, z: float = 0.0) -> float:
 def noise_seed(seed: int) -> None:
     """Make noise() repeatable.
 
-    The same seed gives the same values as p5.js's noiseSeed.
+    The same seed gives the same values as p5.js's noiseSeed. Any whole number works, and f.keep() records it exactly as you gave it. Without noise_seed(), funground picks one the first time noise() is used, and f.keep() records that.
 
     Arguments:
         seed: a whole number.
@@ -3708,26 +3745,29 @@ def mark(path: PathBuilder | str | None = None, *, fill: Color | None = NOT_GIVE
     return mark_from_path(path, fill, stroke, stroke_width)
 
 
-# ---- play: variations and keep (S-132 part 3, a prototype for D-071; both forms until the review)
-def variations(fn, **values) -> list:
+# ---- play: variations and keep (S-132 parts 3 and 4, contracts E1 and E2, D-071, D-073)
+def variations(fn, *, columns: int | None = None, **values) -> list:
     """Draw several versions of a drawing side by side, as a labelled contact sheet.
 
-    Write the drawing as a function with a parameter, then give a list of values to try. variations() calls the function once for each value, and draws each result in its own cell over f.ground.content, with a thin frame and a label such as "gap = 35". With two parameters it tries every pair: one row for each value of the first, one column for each value of the second. With one parameter it chooses a row or a grid, whichever makes the cells largest.
+    Write the drawing as a function with a parameter, then give a list of values to try. variations() calls the function once for each value, and draws each result in its own cell over f.ground.content, with a thin frame and a label such as "gap = 35".
 
-    Each version is drawn as if on the whole canvas, then made smaller to fit its cell. Every cell is made smaller by the same amount, so the cells can be compared. A cell shows only what is inside the canvas. Each version starts from the style you have when you call variations() and no transform, so one version's fill() cannot change the next. Each version also starts from the same random seed, so the versions differ only in the parameter. background() in the function paints that version's whole picture.
+    With one parameter the versions go in one row while every cell stays readable: each picture at least 100 units wide, with its label fitting on one line under it. When they do not fit, they wrap into the grid that makes the cells largest (near-square on a square canvas). columns= chooses the number of columns yourself. With two parameters it tries every pair: one row for each value of the first, one column for each value of the second, so columns= is not allowed.
+
+    Each version is drawn as if on the whole canvas, then made smaller to fit its cell. Every cell is made smaller by the same amount and keeps the canvas's coordinates, so a change of size or position shows. Each cell shows only the canvas's rectangle: drawing outside the canvas is cut off in the sheet, but kept in the returned mark. Each version starts from the style you have when you call variations() and no transform, so one version's fill() cannot change the next. Each version also starts from the same random seed, so the versions differ only in the parameter. background() in the function paints only that version's cell; in the returned mark it is a rectangle the size of the canvas.
 
     It works in a script, in setup(), and in draw(), where it draws the sheet again every frame.
 
     Arguments:
         fn: the function that draws one version. It is called with the parameters by name, such as fn(gap=35).
+        columns: with one parameter, how many columns the sheet has, a whole number above 0. The default None chooses: one row while it stays readable, otherwise a grid. A parameter of your function cannot be called columns.
         **values: one or two parameters, each with a list of values to try, such as gap=[10, 20, 35].
 
     Returns:
-        A list with one (values, mark) pair for each cell, in order. values is a dictionary such as {"gap": 35}; mark is that version as a Mark, so chosen.place(0, 0) draws it full size.
+        A list with one (values, mark) pair for each version, in order. values is a dictionary such as {"gap": 35}; mark is that version as a Mark, without its frame or label, so chosen.place(0, 0) draws it full size.
 
     Raises:
-        TypeError: fn cannot be called, or a parameter is given one value instead of a list.
-        ValueError: there is no parameter, more than two, a list is empty, or the cells do not fit in the canvas.
+        TypeError: fn cannot be called, a parameter is given one value instead of a list, or columns is not a whole number.
+        ValueError: there is no parameter, more than two, a list is empty, columns is 0 or less or given with two parameters, or the cells do not fit in the canvas.
 
     Example:
         def study(gap):
@@ -3736,17 +3776,19 @@ def variations(fn, **values) -> list:
 
         f.variations(study, gap=[10, 20, 35, 60])
 
-    See also: keep, mark, random_seed, play
+    See also: keep, mark, random_seed
     """
-    return _exploring.variations(fn, values)
+    return _exploring.variations(fn, values, columns)
 
 
 def keep(note: str = "", *, pdf: bool = False, **settings) -> str:
     """Save this version of your picture in a studio folder, with what made it.
 
-    The files go in a folder called studio next to your sketch file (or in the current folder when there is no file). They are numbered in order, after any already there: 001.png, 002.png and so on. Each kept version has a picture (.png), a copy of your sketch (.py), and a record (.json). The record holds your note, the settings you give, every control's value, the random seed, the size and margin, the page or frame, the date, the versions of funground and Python, the fonts used and the files read. It also lists what it could not keep, such as fonts installed on this computer. It prints one line saying where it saved.
+    The files go in a folder called studio next to your sketch file (or in the current folder when there is no file). They are numbered in order, after any already there: 001.png, 002.png and so on. Each kept version has a picture (.png), a copy of your sketch (.py), and a record (.json). The record holds your note, the settings you give, every control's value, the random and noise seeds, the size and margin, the page or frame, the date, the versions of funground and Python, the fonts used and the files read. It also lists what it could not keep, such as fonts installed on this computer. It prints one line saying where it saved. Grid guides from show() are not in the picture.
 
-    In a script it keeps the canvas as drawn so far. In an animated sketch it keeps the current frame, written when the frame is complete. Calling it from key_pressed() keeps a version each time you press a key.
+    In a script it keeps the canvas as drawn so far, at once. In an animated sketch it keeps the next frame that is drawn: the frame being drawn when you call it from draw(), or the next one when you call it from key_pressed() or another event. The picture, the copy and the record are all written when that frame is complete, so the frame number, the controls, the seeds and the fonts in the record are that frame's. If no frame is drawn (after no_loop()), it keeps the frame on the screen.
+
+    The seeds make funground's random() and noise() repeatable: f.random_seed(n) and f.noise_seed(n) with the recorded numbers give the same values again. A recorded seed makes funground's randomness repeatable; it does not make every sketch reproducible. The record's lists of fonts, files read and what it could not keep say what else the picture depends on.
 
     Arguments:
         note: a few words about this version, such as "gap 35 reads as a rhythm".
@@ -3754,7 +3796,7 @@ def keep(note: str = "", *, pdf: bool = False, **settings) -> str:
         **settings: any values you want to remember with it, such as gap=35.
 
     Returns:
-        The path of the files without their ending, such as "studio/007".
+        The path of the files without their ending, such as "studio/007". In an animated sketch the files appear there when the frame is complete.
 
     Raises:
         RuntimeError: it is used inside a ``with f.mark()`` block, or before f.size().
@@ -3764,27 +3806,6 @@ def keep(note: str = "", *, pdf: bool = False, **settings) -> str:
         f.keep("gap 35 reads as a rhythm", gap=35)
         f.keep("for printing", pdf=True)
 
-    See also: variations, save, random_seed, play
+    See also: variations, save, random_seed
     """
     return _exploring.keep(note, pdf, settings, inspect.currentframe().f_back)
-
-
-class Play:
-    """Exploring: variations side by side, and keeping the versions you like.
-
-    f.play holds the same two functions as f.variations and f.keep, under one name: f.play.variations(study, gap=[10, 20]) and f.play.keep("note"). This is a prototype: one of the two ways of writing them will be removed.
-
-    Example:
-        f.play.variations(study, gap=[10, 20, 35])
-        f.play.keep("gap 20 is calm")
-    """
-
-    __slots__ = ()
-    variations = staticmethod(variations)
-    keep = staticmethod(keep)
-
-    def __repr__(self) -> str:
-        return "<f.play: variations, keep>"
-
-
-play = Play()

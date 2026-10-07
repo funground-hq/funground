@@ -170,15 +170,21 @@ else:
 f.circle(f.mouse_x, f.mouse_y, 40)
 ```
 
-**Ground: page names, margins, grids and units**
+**Ground: page names, margins, areas, grids and units**
 
 | Call | What it does | Example |
 |---|---|---|
 | `f.size("A4", landscape=True)` | A page name instead of numbers (the names of `f.page_size`). | `f.size("A5")` |
 | `f.size(w, h, margin=m)` | Keep a margin free: one number, or `(top, right, bottom, left)`. It is a guide, not a clip, and it stays across pages and resizes. | `f.size(600, 400, margin=30)` |
-| `f.ground` | The whole canvas: `left`, `top`, `right`, `bottom`, `width`, `height`, `cx`, `cy`, `margin`. Read-only and always up to date. | `f.rect(f.ground.left, f.ground.top, f.ground.width, 20)` |
+| `f.ground` | The whole canvas as an area: `left`, `top`, `right`, `bottom`, `width`, `height`, `cx`, `cy`, plus `margin`. Read-only and always up to date. | `f.rect(f.ground.left, f.ground.top, f.ground.width, 20)` |
 | `f.ground.content` | The area inside the margins, with the same fields. With no margin it is `f.ground`. | `f.ground.content.left` |
-| `f.grid(cols, rows, gutter=0, area=None)` | A list of cells, row by row, left to right. Each cell has `x`, `y`, `w`, `h`, `cx`, `cy`, `col`, `row`, `index`. `area` can be a cell, so grids nest. | `for c in f.grid(3, 2, gutter=10): f.circle(c.cx, c.cy, c.w)` |
+| `f.area(x, y, w, h)` | A rectangle kept as a value, with the same fields as `f.ground`. It never changes, and draws nothing by itself. `w` and `h` can be 0 but not negative. | `panel = f.area(40, 40, 300, 200)` |
+| `a.inset(n)`, `a.inset(top=, right=, bottom=, left=)` | A new area with the edges moved in. A named side wins over `n`. A negative number moves the edge out, as for a bleed. Too much is a `ValueError`. | `page = f.ground.inset(f.mm(10))` |
+| `f.grid(cols, rows, gutter=0, area=None)`, `a.grid(cols, rows, gutter=0)` | A grid of equal cells over `f.ground.content`, or over the area. It works like a list, row by row, left to right: `for`, `len(g)`, `g[0]`, `g[-1]`, `g[1:3]`. Each cell is an area with `col`, `row` and `index`, all from 0, so grids nest. `gutter` is one number or `(across, down)`. | `for c in f.grid(3, 2, gutter=10): f.circle(c.cx, c.cy, c.width)` |
+| `g.cell(col, row)` | The cell at that column and row, counted from 0. | `g.cell(2, 0)` |
+| `g.span(col, row, cols=1, rows=1)` | One area over several cells, with the gutters between them, so it lines up with the cells around it. | `title = g.span(0, 0, cols=3)` |
+| `g.column_count`, `g.row_count`, `g.columns`, `g.rows` | How many columns and rows, and each column (full height) and row (full width) as an area. | `for col in g.columns: f.line(col.left, 0, col.left, f.height)` |
+| `g.show(color=..., in_files=False)` | Thin guide lines: the outline of the area and of every cell. They show in the window only, over everything, and are left out of saved files, `f.keep()` and pixels. `in_files=True` draws them as ordinary lines, so files have them. Nothing about the drawing state changes. In `draw()` they last one frame. | `g.show()` |
 | `f.mm(n)`, `f.inch(n)` | Millimetres and inches as funground units (72 to the inch). | `f.size("A4", margin=f.mm(15))` |
 
 ---
@@ -850,13 +856,17 @@ A finished mark never changes, and placing it never changes it. For a variation,
 example in a function that returns one. Make marks in `setup()` (or at the top) and place them in
 `draw()`.
 
-**Play (a prototype: the names and form are still to be agreed)**
+**Play: exploring and keeping versions**
 
 | Call | What it does | Example |
 |---|---|---|
-| `f.variations(fn, name=[...])` | call `fn` once for each value and draw the results side by side, each in a labelled cell over `f.ground.content`. Two parameters give a grid: rows for the first, columns for the second. Each version starts from the style at the call, no transform and the same random seed. Returns a list of `(values, mark)` pairs. | `f.variations(study, gap=[10, 20, 35, 60])` |
-| `f.keep(note, pdf=False, **settings)` | save the picture as it is now in a `studio` folder next to the sketch, numbered `001`, `002`, …: a `.png`, a copy of the sketch (`.py`) and a record (`.json`) of the note, settings, controls, seed, size, fonts and files read. `pdf=True` adds a `.pdf`. | `f.keep("gap 35 reads as a rhythm", gap=35)` |
-| `f.play.variations(...)`, `f.play.keep(...)` | the same two functions under one name. | `f.play.keep("calm")` |
+| `f.variations(fn, name=[...])` | call `fn` once for each value and draw the results side by side, each in a labelled cell over `f.ground.content`. One parameter: one row while every picture is at least 100 units wide and its label fits, otherwise a grid. Two parameters: rows for the first, columns for the second. Every cell has the same scale and the canvas's coordinates. Each version starts from the style at the call, no transform and the same random seed; `background()` in it paints only its cell. Returns a list of `(values, mark)` pairs; the labels are not in the marks. | `f.variations(study, gap=[10, 20, 35, 60])` |
+| `f.variations(fn, columns=n, name=[...])` | the same, with `n` columns (one parameter only). | `f.variations(study, columns=2, gap=[10, 20, 35, 60])` |
+| `f.keep(note, pdf=False, **settings)` | save the picture in a `studio` folder next to the sketch, numbered `001`, `002`, …: a `.png`, a copy of the sketch (`.py`) and a record (`.json`) of the note, settings, controls, random and noise seeds, size, fonts and files read. `pdf=True` adds a `.pdf`. In a script it keeps the canvas now; in an animated sketch it keeps the next frame drawn, and the record is that frame's. | `f.keep("gap 35 reads as a rhythm", gap=35)` |
+
+A recorded seed makes funground's `random()` and `noise()` repeatable: `f.random_seed(n)` and `f.noise_seed(n)`
+with the recorded numbers give the same values. It does not make every sketch reproducible: the mouse, the clock,
+files and Python's own `random` are not covered.
 
 **Off-screen pictures**
 

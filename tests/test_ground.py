@@ -1,4 +1,6 @@
-"""Ground (S-132 part 1, contract G1): page names and margins in size(), f.ground, f.grid, f.mm, f.inch."""
+"""Ground (S-132 part 1, contract G1): page names and margins in size(), f.ground, f.grid, f.mm, f.inch.
+
+Area and Grid themselves (S-132 part 4) are in tests/test_areas.py."""
 from __future__ import annotations
 
 
@@ -173,7 +175,7 @@ def test_grid_order_and_cells():
     assert len(cells) == 6
     assert [(c.col, c.row, c.index) for c in cells] == [(0, 0, 0), (1, 0, 1), (2, 0, 2), (0, 1, 3), (1, 1, 4), (2, 1, 5)]
     c = cells[4]
-    assert (c.x, c.y, c.w, c.h) == (100, 100, 100, 100)
+    assert (c.left, c.top, c.width, c.height) == (100, 100, 100, 100)
     assert (c.cx, c.cy) == (150, 150)
     assert (c.left, c.top, c.right, c.bottom, c.width, c.height) == (100, 100, 200, 200, 100, 100)
 
@@ -181,17 +183,17 @@ def test_grid_order_and_cells():
 def test_grid_uses_the_content_area():
     f.size(300, 200, margin=(10, 20, 30, 40))
     cells = f.grid(2, 1)
-    assert (cells[0].x, cells[0].y, cells[0].w, cells[0].h) == (40, 10, 120, 160)
+    assert (cells[0].left, cells[0].top, cells[0].width, cells[0].height) == (40, 10, 120, 160)
     assert cells[1].right == 280
 
 
 def test_grid_gutter_one_number():
     f.size(300, 200)
     cells = f.grid(3, 2, gutter=10)
-    assert cells[0].w == pytest.approx((300 - 20) / 3)
-    assert cells[0].h == pytest.approx((200 - 10) / 2)
-    assert cells[1].x == pytest.approx(cells[0].right + 10)
-    assert cells[3].y == pytest.approx(cells[0].bottom + 10)
+    assert cells[0].width == pytest.approx((300 - 20) / 3)
+    assert cells[0].height == pytest.approx((200 - 10) / 2)
+    assert cells[1].left == pytest.approx(cells[0].right + 10)
+    assert cells[3].top == pytest.approx(cells[0].bottom + 10)
     assert cells[2].right == pytest.approx(300)
     assert cells[5].bottom == pytest.approx(200)
 
@@ -199,16 +201,16 @@ def test_grid_gutter_one_number():
 def test_grid_gutter_two_numbers():
     f.size(300, 200)
     cells = f.grid(2, 2, gutter=(20, 0))
-    assert cells[0].w == 140
-    assert cells[1].x == 160
-    assert cells[0].h == 100 and cells[2].y == 100
+    assert cells[0].width == 140
+    assert cells[1].left == 160
+    assert cells[0].height == 100 and cells[2].top == 100
 
 
 def test_grid_in_an_area_nests():
     f.size(300, 200)
     outer = f.grid(2, 1)
     inner = f.grid(2, 2, area=outer[1])
-    assert (inner[0].x, inner[0].y, inner[0].w, inner[0].h) == (150, 0, 75, 100)
+    assert (inner[0].left, inner[0].top, inner[0].width, inner[0].height) == (150, 0, 75, 100)
     assert inner[3].right == 300 and inner[3].bottom == 200
     assert len(f.grid(1, 1, area=f.ground)) == 1
 
@@ -218,7 +220,7 @@ def test_grid_area_can_be_any_object_with_edges():
         left, top, width, height = 10, 20, 100, 50
 
     cell = f.grid(1, 1, area=Box())[0]
-    assert (cell.x, cell.y, cell.w, cell.h) == (10, 20, 100, 50)
+    assert (cell.left, cell.top, cell.width, cell.height) == (10, 20, 100, 50)
 
 
 def test_grid_errors():
