@@ -200,6 +200,9 @@ idea of": we do not claim a particular author's sketch was the model, because it
 | `music/09_compose_and_save.py` | The grid or step sequencer, and the pentatonic scale | [Step sequencer](https://en.wikipedia.org/wiki/Music_sequencer); [Pentatonic scale](https://en.wikipedia.org/wiki/Pentatonic_scale) |
 | `music/10_ear_training.py` | Ear training: naming the interval between two notes, and in swara mode the swara above Sa | [Ear training](https://en.wikipedia.org/wiki/Ear_training) |
 | `music/11_piano_roll.py` | The piano roll: notes as bars, time across and pitch up, as in music software | [Piano roll](https://en.wikipedia.org/wiki/Piano_roll) |
+| Studios (`studios/`, guide chapter 19) | The four studio words (Ground, Mark, Rules, Play) build on the idea of John Maeda's *Design By Numbers* (MIT Press), which taught programming to designers with paper, pen, line and repeat | [Design By Numbers](https://en.wikipedia.org/wiki/Design_By_Numbers_(programming_language)) |
+| `studios/01_placement.py`, `studios/02_proximity.py` | Composing on a grid with margins and gutters, in the tradition of Swiss graphic design, as in Josef Müller-Brockmann's *Grid Systems in Graphic Design* (1981) | [Josef Müller-Brockmann](https://en.wikipedia.org/wiki/Josef_M%C3%BCller-Brockmann) |
+| `studios/02_proximity.py` | The Gestalt principle of proximity: things close together are seen as a group | [Principles of grouping](https://en.wikipedia.org/wiki/Principles_of_grouping) |
 
 **The code of every example was written for funground and is CC0;
 [Example_Provenance](docs/qa/Example_Provenance.md) shows how originality was checked.** The check

@@ -2598,3 +2598,172 @@ Hundreds of tiny walkers cross the page, and each one leaves a thin line. A hidd
 </details>
 
 Source: [`examples/gallery/projects/08_flow_field_print.py`](../../examples/gallery/projects/08_flow_field_print.py)
+
+## Studios
+
+### Placement: one mark in nine places (studio 1)
+
+![Placement: one mark in nine places (studio 1)](images/studios-01_placement.png)
+
+Where a shape sits in its frame changes how it feels: tucked into a corner, resting on the floor, or floating in the middle. Nine frames on an A5 page hold the same small drawing, each one placed at a different point of its frame. The same picture is written without the studio words in examples/studios/01_placement_before.py.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.size("A5", margin=f.mm(12)) makes a canvas the size of an A5 page, with a 12 mm margin. f.ground.content is the area inside the margin.
+- f.grid(3, 3, gutter=f.mm(6)) divides that area into nine cells. Each cell knows its col and row.
+- with f.mark() as pebble: records the drawing once, around its own (0, 0), and draws nothing yet.
+- cell.inset() gives a smaller area inside the cell. pebble.place() draws the pebble at a point of it, and anchor= says which point of the pebble lands there: "top-left", "center", and so on.
+- grid.show() draws thin guide lines in the window only. They are not in saved files.
+
+**Make it yours**
+
+- Change the pebble: draw a different shape inside the with f.mark() block.
+- Change f.mm(4) in cell.inset() to f.mm(0), so the pebble touches the frame.
+- Use rotate=30 or scale=1.5 in pebble.place(). The anchor point stays where it is.
+- Try f.size("A4", landscape=True, margin=f.mm(12)): the grid follows the page.
+
+</details>
+
+Source: [`examples/gallery/studios/01_placement.py`](../../examples/gallery/studios/01_placement.py)
+
+### Proximity: 36 dots, four groupings (studio 2)
+
+![Proximity: 36 dots, four groupings (studio 2)](images/studios-02_proximity.png)
+
+Things that are close together look as if they belong together. Each panel holds the same 36 dots of the same size. Only the spaces between them change, and the eye reads an even field, rows, columns or clusters. The same picture is written without the studio words in examples/studios/02_proximity_before.py.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.size(f.inch(8), f.inch(8), margin=f.inch(0.5)) makes an 8 inch square page with a half-inch margin. f.inch() turns inches into funground's units, 72 to the inch.
+- f.grid(2, 2, gutter=f.inch(0.4)) makes the four panels. Each panel is an area, and panel.inset(bottom=28) keeps a strip under it for the caption.
+- Grids nest: area.grid() divides the panel into groups, and each group into the dots' cells. The gutter of the outer grid is the space that separates the groups.
+- The loops are ordinary Python. Each dot is an f.circle() at the centre of its cell, cell.cx and cell.cy.
+
+**Make it yours**
+
+- Change DOT to 18 or 6. When do the groups stop reading as groups?
+- Change GAP, the space between groups, to f.inch(0.1).
+- Add a fifth grouping to GROUPINGS, such as (2, 3, 3, 2), and make the page grid 3 by 2.
+- Colour one group differently: use group.index inside the loop.
+
+</details>
+
+Source: [`examples/gallery/studios/02_proximity.py`](../../examples/gallery/studios/02_proximity.py)
+
+### Rhythm: five ways to repeat one beat (studio 3)
+
+![Rhythm: five ways to repeat one beat (studio 3)](images/studios-03_rhythm.png)
+
+A rhythm is a repeat with a pattern in its spacing or its size. Each row repeats the same beat, a stem with a round head: evenly, faster and faster, long and short, with an accent on every fourth, and in groups of three and two. The same picture is written without the studio words in examples/studios/03_rhythm_before.py.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.size("A4", landscape=True, margin=f.mm(15)) makes a landscape A4 page with a margin.
+- f.grid(1, 5, gutter=f.mm(4)) gives five rows. row.inset(left=LABEL) leaves room for the name.
+- with f.mark() as beat: records the beat once. Its head is at its own (0, 0) and its stem hangs down from it.
+- beat.place(x, y, anchor="bottom", scale=s) stands the beat on the line at y: the bottom of the stem lands there, and scaling grows it upwards from that point.
+- The rhythms themselves are lists of gaps and sizes, made by small Python functions.
+
+**Make it yours**
+
+- Change the gaps in long_short() to 70 and 14. When does it stop sounding even?
+- Add an accent to grouped(): make the first beat of each group bigger.
+- Draw the beat differently, for example a diamond head, inside the with f.mark() block.
+- Turn every beat with rotate=10 in beat.place().
+
+</details>
+
+Source: [`examples/gallery/studios/03_rhythm.py`](../../examples/gallery/studios/03_rhythm.py)
+
+### Boolean shapes: two shapes, four new ones (studio 4)
+
+![Boolean shapes: two shapes, four new ones (studio 4)](images/studios-04_boolean_shapes.png)
+
+A circle and a square overlap. Joined, cut and crossed, they make four new shapes: the union, the intersection, the difference and the xor. The top row shows the pair; the row below shows the four results at the same size and in the same place, so they can be compared. The same picture is written without the studio words in examples/studios/04_boolean_shapes_before.py.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.path().circle() and f.path().rect() make the two shapes as paths, around (0, 0).
+- The operators | & - and ^ are union, intersection, difference and xor. Each gives a new path.
+- f.mark(path, fill=..., stroke=None) turns a path into a mark: a shape with its own colour.
+- f.grid(4, 2) divides the page. grid.span(0, 0, cols=4) is one area over the whole top row, and grid.cell(i, 1) is one cell of the second row.
+- pair.place(..., anchor="center", height=...) fits the pair into the top row. The results are placed by their (0, 0) with one shared scale, worked out from union.width.
+
+**Make it yours**
+
+- Move the square: change -25 in f.path().rect() and watch all four results change.
+- Swap the difference: square - circle is not circle - square.
+- Use a third shape, such as a smaller circle, and cut it out of every result.
+- Place the results with anchor="center" instead, and see what is lost.
+
+</details>
+
+Source: [`examples/gallery/studios/04_boolean_shapes.py`](../../examples/gallery/studios/04_boolean_shapes.py)
+
+### Text as geometry: one word, three ways (studio 5)
+
+![Text as geometry: one word, three ways (studio 5)](images/studios-05_text_as_geometry.png)
+
+Letters are shapes. Turned into a path, a word can be cut into stripes, traced with dots and crossed with a circle, like any other shape. Each version is fitted to the width of the page. The same picture is written without the studio words in examples/studios/05_text_as_geometry_before.py.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.text_path("FUN", 0, 0) gives the outlines of the word as a path, in the current font and size.
+- word - stripes cuts bands out of it, and word ^ ring swaps inside and outside where a circle crosses it. Both are path booleans.
+- f.text_to_points() gives points along the outlines. The dots are drawn inside with f.mark(), so they become one drawing with one size.
+- f.grid(1, 3) makes three rows. mark.place(row.cx, row.cy, anchor="center", width=..., height=...) makes each version as large as fits in its row, and centres it there.
+
+**Make it yours**
+
+- Change "FUN" to your own word, or f.text_style("bold") to "normal".
+- Change the stripes: more of them, or thicker, in the loop that builds them.
+- Change the spacing in f.text_to_points() from 4 to 2 or 8.
+- Fit with width= only, and see which versions grow out of their rows.
+
+</details>
+
+Source: [`examples/gallery/studios/05_text_as_geometry.py`](../../examples/gallery/studios/05_text_as_geometry.py)
+
+### A poster series: four events, one design (studio 6)
+
+![A poster series: four events, one design (studio 6)](images/studios-06_poster_series.png)
+
+One function draws a poster for any event, so the posters look like a family. f.variations() draws all four side by side on one sheet, to compare them. Press K to keep the sheet: a numbered picture, a copy of this file and a record of the seed go into a folder called studio. The same picture is written without the studio words in examples/studios/06_poster_series_before.py.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- poster(event) draws one poster on the whole A4 page, as if it were alone: a grid of spots, the title, and the date on a band. f.grid(4, 6) and grid.span() give its cells and its text areas.
+- The band runs to the edges of the page, past the margin: f.area() makes it from f.ground, the whole page.
+- spot(colour) is a function that returns a mark, so every event gets its own colour of spot. place(..., anchor="center", width=...) sizes each spot to its cell.
+- f.variations(poster, columns=2, event=[...]) calls poster() once for each event and shrinks each poster into a labelled cell. Every cell starts from the same random seed, so the spots fall in the same cells on every poster.
+- f.random_seed(2026) fixes that seed, so the sheet is the same every time.
+- f.keep() saves the sheet with a note and the settings given, in the studio folder.
+
+**Make it yours**
+
+- Add a fifth event to EVENTS. The sheet makes room for it.
+- Change 0.55 in poster() to make the spots thicker or thinner on the ground.
+- Change the seed in f.random_seed() to scatter the spots differently.
+- Change the second argument of f.grid() in poster() and see the whole series change.
+
+</details>
+
+Source: [`examples/gallery/studios/06_poster_series.py`](../../examples/gallery/studios/06_poster_series.py)

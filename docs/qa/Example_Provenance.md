@@ -139,6 +139,14 @@ ideas (top-left anchors, translated origins, slow change).
   `08_flow_field_print.py`) were checked on their own against the same corpora. Nothing was flagged.
   The highest combined scores were 0.19 (05, against a p5.js `@example`), 0.16 (06, against the
   p5.js-website `Springs.js`), 0.16 (07) and 0.19 (08).
+- **S-132, 7 October 2026.** The six studios in `examples/gallery/studios/` and their six versions
+  without the studio words in `examples/studios/` (also printed in `docs/guide/19_studios.md`) were
+  checked on their own against the same corpora. Nothing was flagged. The highest combined scores
+  were 0.19 (`03_rhythm_before.py`, against a p5.js-website example) and 0.17
+  (`06_poster_series_before.py`); the rest scored 0.12 to 0.16, with no shared calls and at most 0.04
+  shared numbers. They were written from the studio list in `docs/design/Studio_Vocabulary_Note.md`;
+  the ideas they build on (Design By Numbers, the typographic grid, Gestalt proximity) are credited
+  in CREDITS.md.
 
 ## Limits, stated honestly
 

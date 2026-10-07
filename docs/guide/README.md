@@ -73,6 +73,15 @@ After this part you have seen whole programs built from the pieces above.
 |---|---|
 | 18 | [Projects](18_projects.md) |
 
+### Studios
+
+After this part you can set up a page with margins and a grid, keep a drawing as a mark and place
+it, and compare and keep versions of your work.
+
+| # | Chapter |
+|---|---|
+| 19 | [Studios: the same picture, twice](19_studios.md) |
+
 ### Coming from p5 or DrawBot
 
 After this part you can port a sketch you already know, and you know where funground differs on
@@ -118,6 +127,7 @@ After this part you can find any function, understand any message and look up an
 | 16 | [Sound](16_sound.md) |
 | 17 | [Ragas and talas](17_ragas_and_talas.md) |
 | 18 | [Projects](18_projects.md) |
+| 19 | [Studios: the same picture, twice](19_studios.md) |
 
 **Using the code.** Every code example in this guide is free to copy, change and use in any way,
 with no conditions ([CC0](../../examples/LICENSE)).
