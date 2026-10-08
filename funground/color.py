@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import colorsys
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Any
 
 from ._colornames import NAMED_COLORS
@@ -308,21 +309,30 @@ class Color:
 
     @classmethod
     def _parse_str(cls, text: str) -> "Color":
-        key = text.strip().lower().replace(" ", "")
-        if key in NAMED_COLORS:
-            return cls(*NAMED_COLORS[key])
-        digits = None
-        if key.startswith("#"):
-            digits = key[1:]
-        elif key.startswith("0x"):
-            digits = key[2:]
-        if digits is not None and len(digits) in (6, 8) and all(c in "0123456789abcdef" for c in digits):
-            parts = [int(digits[i : i + 2], 16) for i in range(0, len(digits), 2)]
-            return cls(*parts)
-        raise ValueError(
-            f"unknown colour {text!r}. Use a name like 'tomato', a tuple like (255, 99, 71) "
-            "or a hex string like '#FF6347'."
-        )
+        return _parse_color_string(text)
+
+
+# A sketch uses a handful of colour strings but fills and strokes with them on every frame, so a
+# string is parsed once and the Color reused (S-145). That is safe because a Color cannot be changed.
+# 512 is far more distinct colour strings than any sketch uses; the cache cannot grow past it.
+# lru_cache does not store a call that raises, so a bad string raises the same ValueError every time.
+@lru_cache(maxsize=512)
+def _parse_color_string(text: str) -> Color:
+    key = text.strip().lower().replace(" ", "")
+    if key in NAMED_COLORS:
+        return Color(*NAMED_COLORS[key])
+    digits = None
+    if key.startswith("#"):
+        digits = key[1:]
+    elif key.startswith("0x"):
+        digits = key[2:]
+    if digits is not None and len(digits) in (6, 8) and all(c in "0123456789abcdef" for c in digits):
+        parts = [int(digits[i : i + 2], 16) for i in range(0, len(digits), 2)]
+        return Color(*parts)
+    raise ValueError(
+        f"unknown colour {text!r}. Use a name like 'tomato', a tuple like (255, 99, 71) "
+        "or a hex string like '#FF6347'."
+    )
 
 
 def _component(c: object) -> int:
