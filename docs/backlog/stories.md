@@ -129,6 +129,25 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-065 | E-31 | Browser export: PNG download; IR→SVG writer | directional |
 | S-066 | E-31 | Classroom page: editor + canvas + share-by-URL | directional |
 
+### Release 0.2 — funground on the web (E-31 brought forward?) — candidates, no commitment
+
+Options study: `docs/design/Web_Target_Options.md` (8 Oct 2026). Nothing below is scheduled. Whether E-31
+moves into 0.2 at all supersedes D-014 and is the maintainer's decision (the note's Q1–Q10). The spikes
+come first: S-133 to S-135 decide the renderer (Canvas 2D, Cairo in wasm, or both); S-136 to S-140 de-risk
+the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once the spikes report.
+
+| ID | Epic | Story | Status |
+|---|---|---|---|
+| S-133 | E-31 | Spike: uharfbuzz as a Pyodide (`pyemscripten`) wheel; text outlines identical to native (fallback: a harfbuzzjs shim) | candidate |
+| S-134 | E-31 | Spike: pycairo (cairo, pixman) for Pyodide; goldens byte-identical; frame time at DPR 2; wheel sizes | candidate |
+| S-135 | E-31 | Spike: Canvas 2D renderer over all 20 IR op types; goldens within tolerance in Chrome, Firefox, Safari | candidate |
+| S-136 | E-31 | Spike: inverted loop (`start/step/finish`) with Python in a module worker, rAF-driven, Stop by `terminate()`, no COOP/COEP | candidate |
+| S-137 | E-31 | Spike: made sounds via Web Audio and the microphone via AudioWorklet, from a worker | candidate |
+| S-138 | E-31 | Spike: PNG/PDF/SVG/GIF from Pyodide equal to desktop files; MP4 via WebCodecs | candidate |
+| S-139 | E-31 | Spike: first-load time and download budget on a real page | candidate |
+| S-140 | E-31 | Spike: gallery examples as share links (compressed code in the URL fragment) | candidate |
+| S-141 | E-22 | The gallery online as static pages (architecture A): picture, code, explanation per example, on GitHub Pages | candidate |
+
 ## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
 
 | ID | Epic | Story | Sprint |

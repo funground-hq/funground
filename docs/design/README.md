@@ -41,6 +41,7 @@ rewritten after acceptance.
 | [Music_Analysis_Note.md](Music_Analysis_Note.md) | Onsets, tempo, beats, chroma, chords and key. | You touch `analysis.py` or the rhythm and harmony methods. |
 | [Ragas_Note.md](Ragas_Note.md) | Ragas and talas: sources, methods and limits. | You touch `hindustani.py` or `data/ragas.json`, or add a raga. |
 | [Browser_Mode_Note.md](Browser_Mode_Note.md) | Research: funground in a web browser. Directional, not in 0.1. | Someone asks for a browser version. |
+| [Web_Target_Options.md](Web_Target_Options.md) | Options study for 0.2 on the web: inventory, five architectures, spikes, open decisions. Nothing decided. | You plan web work for 0.2. |
 
 ## Research and history
 
