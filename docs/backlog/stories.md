@@ -146,7 +146,7 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-138 | E-31 | Spike: PNG/PDF/SVG/GIF from Pyodide equal to desktop files; MP4 via WebCodecs | candidate |
 | S-139 | E-31 | Spike: first-load time and download budget on a real page | candidate |
 | S-140 | E-31 | Spike: gallery examples as share links (compressed code in the URL fragment) | candidate |
-| S-141 | E-22 | The gallery online as static pages (architecture A): picture, code, explanation per example, on GitHub Pages | candidate |
+| S-141 | E-22 | The gallery online as static pages (architecture A): picture, code, explanation per example, on GitHub Pages | Sprint 19 (with S-150) |
 | S-142 | E-31 | Spike: Cairo-in-wasm and Canvas 2D timed in Chrome on the same cases (draw, frame copy, end to end, 1x and 2x) | done (Sprint 18) |
 | S-143 | E-31 | Spike: profile heavy frames (Python, IR, shaping, encoding, transfer, drawing) native and in Pyodide; prototype fixes | done (Sprint 18, native half) |
 | S-144 | E-31 | Style calls without copying the whole graphics state via `dataclasses.replace` | Sprint 19 |
@@ -154,6 +154,9 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-146 | E-31 | Plain int/float accepted without the `numbers.Real` ABC check (Vector and peers) | Sprint 19 |
 | S-147 | E-31 | Text outlines scaled once per glyph and size, then placed | Sprint 19 |
 | S-148 | E-31 | Re-measure both web routes in Chrome after S-144–S-147; redo the D-075 matrix | Sprint 19 |
+| S-149 | E-31 | Public `Path.translated(dx, dy)` (D-076) | done (Sprint 19) |
+| S-150 | E-22 | The website: MkDocs Material site at funground-hq.github.io (home, guide, reference) built in Actions from `funground` (D-077) | Sprint 19 |
+| S-151 | E-31 | The site's Play page: the browser editor (H1) once D-075 and the runner are ready | candidate |
 
 ## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
 

@@ -17,6 +17,8 @@ design changes. No tricks only a profiler could justify.
 | S-146 | `Vector` (and the same number checks elsewhere) accept plain int and float without the ABC check | done |
 | S-147 | Text outlines are scaled once per glyph and size, then only placed | done |
 | S-149 | Public `Path.translated(dx, dy)` (D-076); `PathBuilder.translate` and text outlines use it | done |
+| S-150 | The website at funground-hq.github.io: home, guide, reference (D-077) | in progress |
+| S-141 | Gallery pages on the website, one per example | in progress |
 | S-148 | Re-run the S-142 cases in Chrome on both routes with S-144–S-147; profile Pyodide phases; redo the D-075 matrix | planned |
 
 Acceptance for S-144–S-147: the full suite green; no golden or snapshot changes; a before/after timing
@@ -28,4 +30,6 @@ on the S-143 examples it targets; the code reads as plainly as what it replaces.
 - [x] S-146
 - [x] S-147
 - [x] S-149
+- [ ] S-150
+- [ ] S-141
 - [ ] S-148
