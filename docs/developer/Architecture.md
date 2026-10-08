@@ -87,6 +87,8 @@ Read it top to bottom for one drawing call:
 | `funground/platform/base.py` | The `Platform` protocol and the small data types (`InputEvent`, `InputState`, `Pixels`). |
 | `funground/platform/pygame_platform.py` | `PygamePlatform`: window, events, mouse and keys, frame pacing, HiDPI detection, cursors. |
 | `funground/platform/headless.py` | `HeadlessPlatform`: no window, no waiting, input always idle. Chosen by `FUNGROUND_HEADLESS=1`. Used by the tests and by the gallery tools. |
+| `funground/platform/browser.py` | `BrowserPlatform`: for a host that owns the window (a web page). Headless plus the host's clock (`tick` never waits), pushed input and a frame callback; Escape does not quit. Not selectable by environment variable: `funground.web.Session` builds it (S-152, contract W1). |
+| `funground/web.py` | `Session`, the host API (not learner API): `start(source)`, `step(now)`, `push_event`, `stop`. While a Session runs, `f.run()` returns after `setup()` and `f.show()` returns after presenting. |
 | `funground/export/__init__.py` | `save_pixels`, `save_frame`, `save_document`, `save_picture`. Replays ops onto Cairo PDF and SVG surfaces, then hands the file to `pdf_text.py`, `svg_text.py` and `layers.py`. |
 | `funground/export/pdf_text.py` | Real, searchable text in PDFs (T15, D-043). Swaps marker groups for text with an embedded font subset, using pypdf. Also holds the marker geometry that `svg_text.py` and `layers.py` share. |
 | `funground/export/svg_text.py` | Live, editable `<text>` in SVG files (T19, D-059). |

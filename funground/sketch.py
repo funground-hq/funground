@@ -462,8 +462,8 @@ class Sketch:
         if not self._script:
             raise RuntimeError("No drawing window yet. Call f.size(...) first.")
         self._flush_pixel_patch()
-        if isinstance(self._platform, HeadlessPlatform):
-            return
+        if isinstance(self._platform, HeadlessPlatform) and not self._host_driven:
+            return                              # no window: nothing to show
         platform = self._platform
         renderer = default_renderer()
         if self._pages:
@@ -482,6 +482,8 @@ class Sketch:
             platform.set_cursor(self._cursor)
             pixels = renderer.pixels()
             platform.present(pixels)
+            if self._host_driven:                  # a host has the picture now; show() does not wait
+                return
             while platform.poll():
                 platform.present(pixels)           # keeps the picture up if the window is uncovered
                 platform.tick(30)
@@ -510,6 +512,10 @@ class Sketch:
                 platform.present(shown)
                 return shown
 
+            if self._host_driven:                  # a host gets every page, the current page last
+                for number in range(total):
+                    open_page(number)
+                return
             shown = open_page(index)
             platform.start()
             platform.set_cursor(self._cursor)
@@ -526,6 +532,14 @@ class Sketch:
                 platform.tick(30)
         finally:
             platform.close()
+
+    @property
+    def _host_driven(self) -> bool:
+        """True when a host (a web page, funground.web.Session) steps the loop instead of this sketch.
+
+        The platform says so: it is the host's platform (platform/browser.py) and the only thing that
+        differs from the desktop. f.run() then returns after setup() and f.show() after presenting."""
+        return getattr(self._platform, "host_driven", False)
 
     def _attach(self, pw: int, ph: int) -> None:
         self._renderer.attach(pw, ph, self._platform.backing_scale)
@@ -1096,7 +1110,7 @@ class Sketch:
                     f"f.save({path!r}): every page of a {kind.upper()} must be the same size. "
                     f"Page 1 is {first[0]} x {first[1]} but page {number} is {w} x {h}."
                 )
-        motion.require_encoder(kind)
+        self._require_encoder(kind)
         self._script_flush()
         frames = []
         scale = self._script_scale
@@ -1131,7 +1145,7 @@ class Sketch:
         if self._motion is not None:
             raise RuntimeError(f"f.{name}() was called while another recording is still running. "
                                "Wait until it has finished.")
-        motion.require_encoder(kind)
+        self._require_encoder(kind)
         frames = max(1, round(seconds * self.fps))
         # Called from draw(), this frame is already being drawn: the recording starts with the next one.
         self._motion = [path, kind, frames, [], None, bool(self._in_draw)]
@@ -1381,7 +1395,20 @@ class Sketch:
         """A font installed on this computer, found by its family name (contract T18)."""
         from .typography import system_font as _system_font
 
+        self._refuse_in_browser("f.system_font()", "Use the built-in font, or f.load_font() with a font file.")
         return _system_font(name)
+
+    def _refuse_in_browser(self, what: str, instead: str) -> None:
+        """Contract W1: a feature that needs the desktop says so, and what to do instead."""
+        if self._host_driven:
+            raise RuntimeError(f"{what} does not work in the browser. {instead}")
+
+    def _require_encoder(self, kind: str) -> None:
+        from .export import motion
+
+        if kind == "mp4":
+            self._refuse_in_browser("An MP4 movie", "Save a GIF with f.save_gif() or f.save(\"x.gif\") instead.")
+        motion.require_encoder(kind)
 
     def text_style(self, style: str) -> None:
         """Use one of the four built-in styles for later text (ignored once a font is loaded)."""
@@ -2127,6 +2154,8 @@ class Sketch:
         The loop is start(), then step() until it returns False, then finish() (S-136, D-074).
         A host that must keep control between frames (a browser page) calls the three itself."""
         self.start(namespace, fps=fps, max_frames=max_frames)
+        if self._host_driven:
+            return                                  # the host calls step() and finish() (funground.web)
         try:
             while self.step():
                 pass

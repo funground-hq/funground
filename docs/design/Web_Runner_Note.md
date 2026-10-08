@@ -1,6 +1,6 @@
 # Design note: the web runner (0.2)
 
-**Status:** design for Sprint 20 (S-152, S-153, S-137, S-151), 9 October 2026. Decisions behind it: D-074
+**Status:** design for Sprint 20 (S-152, S-153, S-137, S-151), 9 October 2026. The funground side is implemented in S-152 (`platform/browser.py`, `web.py`, contract W1, `tests/test_web_session.py`); the browser side is S-153. Decisions behind it: D-074
 (target W2, Chrome first, L1 loop, editor H1, GitHub Pages), D-075 (Cairo draws in the browser), D-077
 (website), D-078 (preview origin). Evidence: Sprints 17–19 and `funground-web` `spikes/`.
 
@@ -23,6 +23,7 @@ page (site or preview origin)                         module worker
   `tick()` never sleeps: it returns the seconds since the previous step, from the host's clock
   (`Loop_Inversion_Note.md`). `present()` hands the finished Cairo surface's bytes to a host callback.
   Escape does not stop the sketch (the page has a Stop button).
+  The platform says `host_driven = True`; `Sketch` reads that one flag (see the `web.py` docstring).
 - **`funground/web.py`, `Session`: the host API** (not learner API; learners never import it).
   `Session(width, height, scale, on_frame, on_sound, ...)`; `start(source, filename)` executes the
   learner's file; `step(now) -> bool`; `push_event(...)`; `stop()`. While a session is active, `f.run()`

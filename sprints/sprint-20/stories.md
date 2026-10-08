@@ -6,7 +6,7 @@ browser, and edits and shares sketches in a sandboxed editor. Design: `docs/desi
 
 | Story | Value | Status |
 |---|---|---|
-| S-152 | funground's own browser entry point: `BrowserPlatform` and the `funground.web.Session` host API; `f.run()`/`f.show()` under a host; web contract row W1 | planned |
+| S-152 | funground's own browser entry point: `BrowserPlatform` and the `funground.web.Session` host API; `f.run()`/`f.show()` under a host; web contract row W1 | done |
 | S-153 | Loading: Pyodide, the funground wheel, the three C-extension wheels from a release, fonts; first-load budget (S-139) | planned |
 | S-137 | Sound through Web Audio and the microphone through an AudioWorklet, from the worker | planned |
 | S-154 | Numeric colours (`fill(r, g, b)`, greys, tuples) parsed once: the largest clean hotspot left (S-148) | planned |
@@ -16,7 +16,7 @@ Acceptance: full suite green; no golden or snapshot changes; the runner passes t
 (Cairo byte-identical in Chrome); the Play page works on the live site; the editor's previews run on the
 second origin.
 
-- [ ] S-152
+- [x] S-152
 - [ ] S-153
 - [ ] S-137
 - [ ] S-154
