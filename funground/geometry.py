@@ -405,6 +405,26 @@ class Path:
             out.append((seg[0], *(t.apply(*pt) for pt in seg[1:])))
         return Path(tuple(out))
 
+    def translated(self, dx: float, dy: float) -> "Path":
+        """Make a new path with every point moved across and down.
+
+        It gives the same points as transformed(Transform.translation(dx, dy)), but it is simpler and quicker,
+        because no transform is built.
+
+        Arguments:
+            dx, dy: how far to move it across and down.
+
+        Returns:
+            a new Path. This one is not changed.
+
+        Example:
+            p = f.path().circle(0, 0, 40).geometry
+            moved = p.translated(100, 50)
+
+        See also: transformed
+        """
+        return Path(tuple((seg[0], *((x + dx, y + dy) for x, y in seg[1:])) for seg in self.segments))
+
 
 def rect_radii(radii: tuple, w: float, h: float, name: str = "rect") -> tuple[float, float, float, float]:
     """Four corner radii (top-left, top-right, bottom-right, bottom-left) from 0, 1 or 4 numbers.

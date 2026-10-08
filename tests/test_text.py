@@ -80,9 +80,9 @@ def test_scaled_outline_cache_is_bounded_and_drops_the_least_recently_used(monke
     assert (gid, (), 11) not in f._scaled and (gid, (), 10) in f._scaled
 
 
-def test_translated_matches_a_translation_transform():
+def test_path_translated_matches_a_translation_transform_on_a_glyph():
     path = FontResource(DEFAULT_FONT).outline(FontResource(DEFAULT_FONT).shape("g", 20).glyphs[0].gid)
-    assert typography._translated(path, 3.5, -2.25) == path.transformed(Transform.translation(3.5, -2.25))
+    assert path.translated(3.5, -2.25) == path.transformed(Transform.translation(3.5, -2.25))
 
 
 @pytest.mark.parametrize("text,size,tracking", [("Hello, Playground!", 24, 0.0), ("fi AVA", 13.7, 1.5), ("Qg", 100, 0.0)])
