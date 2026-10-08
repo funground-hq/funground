@@ -147,6 +147,8 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-139 | E-31 | Spike: first-load time and download budget on a real page | candidate |
 | S-140 | E-31 | Spike: gallery examples as share links (compressed code in the URL fragment) | candidate |
 | S-141 | E-22 | The gallery online as static pages (architecture A): picture, code, explanation per example, on GitHub Pages | candidate |
+| S-142 | E-31 | Spike: Cairo-in-wasm and Canvas 2D timed in Chrome on the same cases (draw, frame copy, end to end, 1x and 2x) | Sprint 18 |
+| S-143 | E-31 | Spike: profile heavy frames (Python, IR, shaping, encoding, transfer, drawing) native and in Pyodide; prototype fixes | Sprint 18 |
 
 ## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
 
