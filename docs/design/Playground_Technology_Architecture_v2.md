@@ -106,6 +106,12 @@ once per loop iteration, after `draw()` and before `present()`: `renderer.render
   the error and its message are unchanged. `Color.parse("tomato")` 1.3 to 0.29 us, `"#336699"`
   2.6 to 0.29 us; `fill()` 4.7 to 3.2 us; whole `draw()` is 13 % faster on gaussian_and_choice
   and unchanged where the sketch parses few colour strings (noise, text_dots).
+- **Plain numbers skip the ABC check** (S-146). `Vector` validates every number it is given, and
+  `isinstance(v, numbers.Real)` goes through the ABC machinery. `vector._is_number` now tests the
+  exact types `int` and `float` first and only then falls back to the `Real` check, so a `bool`
+  is still refused and Fractions behave as before; the same helper serves `*` and `/`. Messages
+  are unchanged. `Vector(1.5, 2.5)` 1.2 to 0.29 us; whole `draw()` 25 % faster on kinetic_type and
+  15 % on flow_field_print.
 - **Internal capability first, public API later** (`PROCESS.md`). `Save/Restore/Concat/ClipPath/
   FillPath/StrokePath` exist in the IR now so the vector renderer and the text subsystem can use
   them; `p.translate()`, `p.path()`, `with p.saved_state()` arrive in Phase 2 as thin emitters.

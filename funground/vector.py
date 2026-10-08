@@ -22,8 +22,17 @@ def _pair(a, b=None, what: str = "vector") -> tuple[float, float]:
     raise TypeError(f"{what} needs a Vector, an (x, y) pair, or two numbers, not {a!r}")
 
 
+def _is_number(v) -> bool:
+    """True for an int, a float, or any other real number; False for a bool."""
+    # Plain int and float come first by exact type: isinstance against the Real ABC is slow, and
+    # nearly every number here is one of the two. A bool is neither, so it falls through and is refused.
+    if type(v) is float or type(v) is int:
+        return True
+    return isinstance(v, Real) and not isinstance(v, bool)
+
+
 def _number(v, what: str) -> float:
-    if isinstance(v, bool) or not isinstance(v, Real):
+    if not _is_number(v):
         raise TypeError(f"{what} needs numbers, not {v!r}")
     return float(v)
 
@@ -476,14 +485,14 @@ class Vector:
         return self.copy().sub(other)
 
     def __mul__(self, n) -> Vector:
-        if not isinstance(n, Real) or isinstance(n, bool):
+        if not _is_number(n):
             return NotImplemented
         return self.copy().mult(n)
 
     __rmul__ = __mul__
 
     def __truediv__(self, n) -> Vector:
-        if not isinstance(n, Real) or isinstance(n, bool):
+        if not _is_number(n):
             return NotImplemented
         return self.copy().div(n)
 
