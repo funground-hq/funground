@@ -99,6 +99,13 @@ once per loop iteration, after `draw()` and before `present()`: `renderer.render
   state is immutable), and otherwise builds the copy positionally from field names computed once,
   rather than through `dataclasses.replace`, which re-inspects the fields on every call. An unknown
   field still raises `TypeError`. Draw time in the heaviest sketches fell by 16-29 %.
+- **A colour string is parsed once** (S-145). `Color` is frozen and hashable, so
+  `Color._parse_str` hands the work to `_parse_color_string`, an `lru_cache(maxsize=512)` function
+  keyed on the string as given; every later `fill("tomato")` reuses the same `Color`. The bound is
+  far above the distinct colour strings a sketch uses. A bad string raises and is never cached, so
+  the error and its message are unchanged. `Color.parse("tomato")` 1.3 to 0.29 us, `"#336699"`
+  2.6 to 0.29 us; `fill()` 4.7 to 3.2 us; whole `draw()` is 13 % faster on gaussian_and_choice
+  and unchanged where the sketch parses few colour strings (noise, text_dots).
 - **Internal capability first, public API later** (`PROCESS.md`). `Save/Restore/Concat/ClipPath/
   FillPath/StrokePath` exist in the IR now so the vector renderer and the text subsystem can use
   them; `p.translate()`, `p.path()`, `with p.saved_state()` arrive in Phase 2 as thin emitters.

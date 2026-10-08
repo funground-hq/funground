@@ -88,3 +88,31 @@ def test_fractional_components_are_truncated_like_v05(value, expected):
     """v0.5 passed tuples to pygame-ce, which truncates; computed colours must keep working."""
     pygame = pytest.importorskip("pygame")
     assert Color.parse(value).rgba == expected == tuple(pygame.Color(value))
+
+
+def test_a_colour_string_is_parsed_once_and_the_colour_reused():
+    """S-145: the same string gives the same (immutable) Color object, from the cache."""
+    assert Color.parse("tomato") == Color(255, 99, 71)
+    assert Color.parse("tomato") is Color.parse("tomato")
+    assert Color.parse("#336699") is Color.parse("#336699")
+
+
+@pytest.mark.parametrize("variant", ["Tomato", "  TOMATO ", "to mato"])
+def test_name_variants_still_parse_to_the_same_colour(variant):
+    assert Color.parse(variant) == Color.parse("tomato") == Color(255, 99, 71)
+
+
+@pytest.mark.parametrize("variant", ["#336699", "#336699FF", "0x336699", " #3366 99 "])
+def test_hex_variants_still_parse_to_the_same_colour(variant):
+    assert Color.parse(variant) == Color(0x33, 0x66, 0x99)
+
+
+def test_an_unknown_string_raises_the_same_error_every_time():
+    """A failed parse is not cached, so the error is not lost or changed on the second call."""
+    messages = []
+    for _ in range(2):
+        with pytest.raises(ValueError) as e:
+            Color.parse("banana")
+        messages.append(str(e.value))
+    assert messages[0] == messages[1]
+    assert messages[0].startswith("unknown colour 'banana'. Use a name like 'tomato'")

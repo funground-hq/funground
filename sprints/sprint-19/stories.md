@@ -13,7 +13,7 @@ design changes. No tricks only a profiler could justify.
 |---|---|---|
 | S-060 | Run loop as start/step/finish (L1, D-074). Merged from the S-136 spike after review; full suite was green (3620) | done |
 | S-144 | Style calls stop copying the whole graphics state through `dataclasses.replace` | done |
-| S-145 | A colour string is parsed once, through a named, bounded cache | planned |
+| S-145 | A colour string is parsed once, through a named, bounded cache | done |
 | S-146 | `Vector` (and the same number checks elsewhere) accept plain int and float without the ABC check | planned |
 | S-147 | Text outlines are scaled once per glyph and size, then only placed | planned |
 | S-148 | Re-run the S-142 cases in Chrome on both routes with S-144–S-147; profile Pyodide phases; redo the D-075 matrix | planned |
@@ -23,7 +23,7 @@ on the S-143 examples it targets; the code reads as plainly as what it replaces.
 
 - [x] S-060
 - [x] S-144
-- [ ] S-145
+- [x] S-145
 - [ ] S-146
 - [ ] S-147
 - [ ] S-148
