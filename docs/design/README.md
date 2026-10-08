@@ -43,6 +43,7 @@ rewritten after acceptance.
 | [Browser_Mode_Note.md](Browser_Mode_Note.md) | Research: funground in a web browser. Directional, not in 0.1. | Someone asks for a browser version. |
 | [Web_Target_Options.md](Web_Target_Options.md) | Options study for 0.2 on the web: inventory, five architectures, spikes, open decisions. Nothing decided. | You plan web work for 0.2. |
 | [Loop_Inversion_Note.md](Loop_Inversion_Note.md) | The run loop as start/step/finish, so a browser page can drive it (S-060, D-074). | You touch `Sketch.run_namespace`, `start`, `step` or `finish`, or a platform's `tick()`. |
+| [Web_Runner_Note.md](Web_Runner_Note.md) | The 0.2 web runner: BrowserPlatform, the `funground.web` host API, the worker, origins and safety. | You touch `funground/web.py`, `platform/browser.py` or the browser runner. |
 
 ## Research and history
 

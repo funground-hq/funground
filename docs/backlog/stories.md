@@ -142,7 +142,7 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-134 | E-31 | Spike: pycairo (cairo, pixman) for Pyodide; goldens byte-identical; frame time at DPR 2; wheel sizes | done (Sprint 17) |
 | S-135 | E-31 | Spike: Canvas 2D renderer over all 20 IR op types; goldens within tolerance in Chrome, Firefox, Safari | done (Sprint 17) |
 | S-136 | E-31 | Spike: inverted loop (`start/step/finish`) with Python in a module worker, rAF-driven, Stop by `terminate()`, no COOP/COEP | done (Sprint 17) |
-| S-137 | E-31 | Spike: made sounds via Web Audio and the microphone via AudioWorklet, from a worker | candidate |
+| S-137 | E-31 | Spike: made sounds via Web Audio and the microphone via AudioWorklet, from a worker | Sprint 20 (as a story) |
 | S-138 | E-31 | Spike: PNG/PDF/SVG/GIF from Pyodide equal to desktop files; MP4 via WebCodecs | candidate |
 | S-139 | E-31 | Spike: first-load time and download budget on a real page | candidate |
 | S-140 | E-31 | Spike: gallery examples as share links (compressed code in the URL fragment) | candidate |
@@ -156,7 +156,10 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-148 | E-31 | Re-measure both web routes in Chrome after S-144–S-147; redo the D-075 matrix | done (Sprint 19) |
 | S-149 | E-31 | Public `Path.translated(dx, dy)` (D-076) | done (Sprint 19) |
 | S-150 | E-22 | The website: MkDocs Material site at funground-hq.github.io (home, guide, reference) built in Actions from `funground` (D-077) | done (Sprint 19) |
-| S-151 | E-31 | The site's Play page: the browser editor (H1) once D-075 and the runner are ready | candidate |
+| S-151 | E-31 | The site's Play page: the browser editor (H1) once D-075 and the runner are ready | Sprint 20 (parts 1 and 2) |
+| S-152 | E-31 | Browser entry point: `BrowserPlatform`, `funground.web.Session`, `f.run`/`f.show` under a host, contract row W1 | Sprint 20 |
+| S-153 | E-31 | Loading Pyodide, the wheels and fonts; first-load budget | Sprint 20 |
+| S-154 | E-31 | Numeric colours parsed once | Sprint 20 |
 
 ## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
 
