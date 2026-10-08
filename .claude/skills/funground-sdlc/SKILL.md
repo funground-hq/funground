@@ -113,6 +113,11 @@ recommendation not yet accepted is never applied to code.
 - Learner-facing text is plain English: short sentences, British spelling in prose, American in API
   names (`color=`).
 - No personal data (emails, names beyond the maintainer's chosen credit) in documents.
+- **Clean code over clever code** (maintainer, 8 Oct 2026). Good programming practice and aesthetics
+  are valued: a fix, especially a performance fix, is designed, not patched in. Prototype with
+  monkeypatches in a spike if useful, but the product version is a clear, idiomatic change with a
+  reason a reader can see (a named cache with a stated bound, a simpler data structure), its tests,
+  and a note when it changes a design. No tricks that only the profiler can justify.
 
 ## 8. Where the session runs
 
