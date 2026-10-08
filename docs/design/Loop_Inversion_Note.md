@@ -1,7 +1,7 @@
 # Design note: the inverted run loop (start / step / finish)
 
-**Status:** draft from spike S-136, 8 October 2026, branch `spike/s136-loop`. It carries out the maintainer's
-choice L1 in D-074 (Q8): invert the loop in the desktop code, desktop behaviour unchanged. Not merged.
+**Status:** accepted with D-074 (L1); merged into `release-0.2-web` as S-060 on 8 October 2026 (prototyped in spike S-136). It carries out the maintainer's
+choice L1 in D-074 (Q8): invert the loop in the desktop code, desktop behaviour unchanged.
 The browser half of the evidence is in `funground-web/spikes/S-136_RESULTS.md`.
 
 ## Problem

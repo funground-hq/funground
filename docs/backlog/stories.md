@@ -121,7 +121,7 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | ID | Epic | Story | Status |
 |---|---|---|---|
 | S-059 | E-31 | Spike 08 — Pyodide feasibility (core in wasm, IR frame timings, Canvas 2D page over IR snapshots) | done (Sprint 4 lane; results in `spikes/RESULTS.md` §8) |
-| S-060 | E-31 | Loop inversion: `Sketch.start()/step()/finish()`; desktop `run()` loops over `step()` | directional |
+| S-060 | E-31 | Loop inversion: `Sketch.start()/step()/finish()`; desktop `run()` loops over `step()` | done (Sprint 19) |
 | S-061 | E-31 | `BrowserPlatform`: rAF-driven, DOM input, `devicePixelRatio` scale | directional |
 | S-062 | E-31 | `Canvas2DRenderer`: every IR op → Canvas 2D | directional |
 | S-063 | E-31 | Browser text: uharfbuzz-for-Pyodide vs harfbuzzjs vs fontTools-only | directional |
@@ -147,8 +147,13 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-139 | E-31 | Spike: first-load time and download budget on a real page | candidate |
 | S-140 | E-31 | Spike: gallery examples as share links (compressed code in the URL fragment) | candidate |
 | S-141 | E-22 | The gallery online as static pages (architecture A): picture, code, explanation per example, on GitHub Pages | candidate |
-| S-142 | E-31 | Spike: Cairo-in-wasm and Canvas 2D timed in Chrome on the same cases (draw, frame copy, end to end, 1x and 2x) | Sprint 18 |
-| S-143 | E-31 | Spike: profile heavy frames (Python, IR, shaping, encoding, transfer, drawing) native and in Pyodide; prototype fixes | Sprint 18 |
+| S-142 | E-31 | Spike: Cairo-in-wasm and Canvas 2D timed in Chrome on the same cases (draw, frame copy, end to end, 1x and 2x) | done (Sprint 18) |
+| S-143 | E-31 | Spike: profile heavy frames (Python, IR, shaping, encoding, transfer, drawing) native and in Pyodide; prototype fixes | done (Sprint 18, native half) |
+| S-144 | E-31 | Style calls without copying the whole graphics state via `dataclasses.replace` | Sprint 19 |
+| S-145 | E-31 | Colour strings parsed once (named, bounded cache) | Sprint 19 |
+| S-146 | E-31 | Plain int/float accepted without the `numbers.Real` ABC check (Vector and peers) | Sprint 19 |
+| S-147 | E-31 | Text outlines scaled once per glyph and size, then placed | Sprint 19 |
+| S-148 | E-31 | Re-measure both web routes in Chrome after S-144–S-147; redo the D-075 matrix | Sprint 19 |
 
 ## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
 
