@@ -423,7 +423,9 @@ class Path:
 
         See also: transformed
         """
-        dx, dy = float(dx), float(dy)   # points come out as floats, as from transformed()
+        # Adding 0.0 makes the points floats, as transformed() gives; a non-number still raises TypeError
+        # (float() would quietly accept a string such as "5").
+        dx, dy = dx + 0.0, dy + 0.0
         return Path(tuple((seg[0], *((x + dx, y + dy) for x, y in seg[1:])) for seg in self.segments))
 
 
