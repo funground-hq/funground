@@ -138,10 +138,10 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 
 | ID | Epic | Story | Status |
 |---|---|---|---|
-| S-133 | E-31 | Spike: uharfbuzz as a Pyodide (`pyemscripten`) wheel; text outlines identical to native (fallback: a harfbuzzjs shim) | candidate |
-| S-134 | E-31 | Spike: pycairo (cairo, pixman) for Pyodide; goldens byte-identical; frame time at DPR 2; wheel sizes | candidate |
-| S-135 | E-31 | Spike: Canvas 2D renderer over all 20 IR op types; goldens within tolerance in Chrome, Firefox, Safari | candidate |
-| S-136 | E-31 | Spike: inverted loop (`start/step/finish`) with Python in a module worker, rAF-driven, Stop by `terminate()`, no COOP/COEP | candidate |
+| S-133 | E-31 | Spike: uharfbuzz as a Pyodide (`pyemscripten`) wheel; text outlines identical to native (fallback: a harfbuzzjs shim) | done (Sprint 17) |
+| S-134 | E-31 | Spike: pycairo (cairo, pixman) for Pyodide; goldens byte-identical; frame time at DPR 2; wheel sizes | done (Sprint 17) |
+| S-135 | E-31 | Spike: Canvas 2D renderer over all 20 IR op types; goldens within tolerance in Chrome, Firefox, Safari | done (Sprint 17) |
+| S-136 | E-31 | Spike: inverted loop (`start/step/finish`) with Python in a module worker, rAF-driven, Stop by `terminate()`, no COOP/COEP | done (Sprint 17) |
 | S-137 | E-31 | Spike: made sounds via Web Audio and the microphone via AudioWorklet, from a worker | candidate |
 | S-138 | E-31 | Spike: PNG/PDF/SVG/GIF from Pyodide equal to desktop files; MP4 via WebCodecs | candidate |
 | S-139 | E-31 | Spike: first-load time and download budget on a real page | candidate |
