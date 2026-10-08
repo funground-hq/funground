@@ -112,6 +112,14 @@ once per loop iteration, after `draw()` and before `present()`: `renderer.render
   is still refused and Fractions behave as before; the same helper serves `*` and `/`. Messages
   are unchanged. `Vector(1.5, 2.5)` 1.2 to 0.29 us; whole `draw()` 25 % faster on kinetic_type and
   15 % on flow_field_print.
+- **Text outlines are scaled once per glyph and size** (S-147). `TextRun.outline_ops` used to scale,
+  flip and place every glyph's outline on every frame, point by point in Python. `FontResource.scaled_outline`
+  now keeps the scaled, y-down outline per `(glyph, variation, size)` in a per-font LRU of at most 2048
+  entries (a sketch that changes its text size every frame cannot grow it), and `outline_ops` only adds the
+  pen position to each point. A `Path` cannot be changed, so the cached outline is shared safely. The ops are
+  equal, float for float, to the old ones: no snapshot or golden changed. Cairo time per frame, min of 5
+  rounds: poster_series 10.6 to 8.2 ms, paths-06 outlines 4.2 to 3.3, text_dots 5.4 to 4.6, Session 1
+  05_text 1.7 to 1.1; `draw()` unchanged.
 - **Internal capability first, public API later** (`PROCESS.md`). `Save/Restore/Concat/ClipPath/
   FillPath/StrokePath` exist in the IR now so the vector renderer and the text subsystem can use
   them; `p.translate()`, `p.path()`, `with p.saved_state()` arrive in Phase 2 as thin emitters.

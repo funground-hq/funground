@@ -15,6 +15,7 @@ import bisect
 import os
 import re
 import unicodedata
+from collections import OrderedDict
 from dataclasses import dataclass
 
 import uharfbuzz as hb
@@ -27,6 +28,10 @@ from .geometry import Path, Transform
 
 FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 DEFAULT_FONT = os.path.join(FONT_DIR, "DejaVuSans.ttf")
+
+# Scaled glyph outlines kept per font (`FontResource.scaled_outline`): room for a few sizes of a full
+# alphabet, plus accents, and about a megabyte or two of tuples at most.
+SCALED_OUTLINE_CACHE_SIZE = 2048
 
 # T12 (D-022 = A): the built-in family is four real bundled files, one per style.
 STYLE_FILES = {
@@ -60,6 +65,12 @@ class Glyph:
     cluster: int = 0                      # S-094: HarfBuzz cluster (index into the run's text), for PDF text
 
 
+def _translated(path: Path, dx: float, dy: float) -> Path:
+    """*path* moved by (dx, dy): the points of `path.transformed(Transform.translation(dx, dy))`, with no
+    transform built. Kept here, not on `Path`, so the public API does not grow (S-147)."""
+    return Path(tuple((seg[0], *((x + dx, y + dy) for x, y in seg[1:])) for seg in path.segments))
+
+
 class FontResource:
     """One loaded font: HarfBuzz font + fontTools glyph set + outline cache."""
 
@@ -81,6 +92,7 @@ class FontResource:
             {a.axisTag: (a.minValue, a.maxValue) for a in self._tt["fvar"].axes} if "fvar" in self._tt else {}
         )
         self._outlines: dict[tuple, Path] = {}
+        self._scaled: OrderedDict[tuple, Path] = OrderedDict()   # least recently used first
         self._located: dict[tuple, tuple] = {}      # location -> (hb font, glyph set), built once each
         self._cmap = self._tt.getBestCmap()
         # T18: a symbol or emoji font never supplies spaces, punctuation or plain letters; set for the
@@ -155,6 +167,26 @@ class FontResource:
             p = self._outlines[key] = pen.path
         return p
 
+    def scaled_outline(self, gid: int, location: tuple, size: float) -> Path:
+        """Glyph outline at *size* pixels, y-down, with its origin at (0, 0): ready to be moved to a pen
+        position with `_translated`. Cached, so a glyph is scaled once per size and not once per frame.
+        A Path cannot be changed, so every caller can share the cached one.
+
+        The cache holds at most `SCALED_OUTLINE_CACHE_SIZE` outlines, least recently used dropped first:
+        a sketch that changes its text size every frame would otherwise add outlines without end."""
+        key = (gid, location, size)
+        cache = self._scaled
+        path = cache.get(key)
+        if path is None:
+            s = size / self.units_per_em
+            path = self.outline(gid, location).transformed(Transform.scaling(s, -s))
+            cache[key] = path
+            if len(cache) > SCALED_OUTLINE_CACHE_SIZE:
+                cache.popitem(last=False)
+        else:
+            cache.move_to_end(key)
+        return path
+
     def shape(self, text: str, size: float, tracking: float = 0.0, features: tuple = (),
               variations: tuple = (), fallback: tuple | None = None) -> "TextRun | ShapedLine":
         """Shape *text*. *tracking* (pixels, after every glyph), *features* ((tag, bool) pairs) and
@@ -223,12 +255,9 @@ class TextRun:
         pen_x = x
         ops: list[ir.FillPath] = []
         for g in self.glyphs:
-            outline = self.font.outline(g.gid, self.location)
+            outline = self.font.scaled_outline(g.gid, self.location, self.size)
             if not outline.is_empty:
-                t = Transform.scaling(s, -s).then(
-                    Transform.translation(pen_x + g.x_offset * s, baseline - g.y_offset * s)
-                )
-                ops.append(ir.FillPath(outline.transformed(t), color))
+                ops.append(ir.FillPath(_translated(outline, pen_x + g.x_offset * s, baseline - g.y_offset * s), color))
             pen_x += g.x_advance * s + self.tracking
         return ops
 

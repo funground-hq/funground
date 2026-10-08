@@ -66,7 +66,11 @@ A test font with a `wght` axis that changes both box width and advance is genera
 It gains the font key or style name away from the default, and `(tracking, features,
 variations)` only when one is set. So the old key, and the tests that pin it, did not change.
 `attach()` clears it. Outlines are cached separately on `FontResource` and live for the process.
-`outline_ops` still transforms every glyph each time it is called.
+Each font also keeps the outlines already scaled and flipped for a size (S-147): `scaled_outline(gid,
+location, size)`, an LRU capped at `SCALED_OUTLINE_CACHE_SIZE` (2048) so a text size that changes every
+frame cannot grow it. `outline_ops` only moves each cached outline to its pen position (adding the
+offset to every point), which gives the same floats as the old scale-then-translate transform. A `Path`
+is immutable, so sharing the cached one is safe.
 
 ## Layout: `text_box`, alignment and leading (T7, T9, T10)
 

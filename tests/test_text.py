@@ -8,6 +8,8 @@ import pytest
 
 from funground import ir
 from funground.color import BLACK
+from funground import typography
+from funground.geometry import Transform
 from funground.typography import DEFAULT_FONT, FontResource, TextRun, default_font
 
 
@@ -39,6 +41,63 @@ def test_outline_cache_is_per_glyph():
     f = FontResource(DEFAULT_FONT)
     f.shape("aaa", 12).outline_ops(0, 0, BLACK)
     assert len(f._outlines) == 1
+
+
+def reference_ops(run, x, y, color):
+    """What `outline_ops` produced before S-147: transform each unscaled outline, glyph by glyph."""
+    s = run.scale
+    baseline = y + run.font.ascent * s
+    pen_x = x
+    ops = []
+    for g in run.glyphs:
+        outline = run.font.outline(g.gid, run.location)
+        if not outline.is_empty:
+            t = Transform.scaling(s, -s).then(Transform.translation(pen_x + g.x_offset * s, baseline - g.y_offset * s))
+            ops.append(ir.FillPath(outline.transformed(t), color))
+        pen_x += g.x_advance * s + run.tracking
+    return ops
+
+
+def test_scaled_outline_is_cached_per_glyph_location_and_size():
+    f = FontResource(DEFAULT_FONT)
+    gid = f.shape("a", 20).glyphs[0].gid
+    first = f.scaled_outline(gid, (), 20)
+    assert f.scaled_outline(gid, (), 20) is first
+    assert f.scaled_outline(gid, (), 21) is not first
+    assert f.scaled_outline(gid, (("wght", 700.0),), 20) is not first
+
+
+def test_scaled_outline_cache_is_bounded_and_drops_the_least_recently_used(monkeypatch):
+    monkeypatch.setattr(typography, "SCALED_OUTLINE_CACHE_SIZE", 3)
+    f = FontResource(DEFAULT_FONT)
+    gid = f.shape("a", 20).glyphs[0].gid
+    kept = f.scaled_outline(gid, (), 10)
+    for size in (11, 12):
+        f.scaled_outline(gid, (), size)
+    assert f.scaled_outline(gid, (), 10) is kept            # touched: now the most recent
+    f.scaled_outline(gid, (), 13)                           # over the limit: size 11 goes
+    assert len(f._scaled) == 3
+    assert (gid, (), 11) not in f._scaled and (gid, (), 10) in f._scaled
+
+
+def test_translated_matches_a_translation_transform():
+    path = FontResource(DEFAULT_FONT).outline(FontResource(DEFAULT_FONT).shape("g", 20).glyphs[0].gid)
+    assert typography._translated(path, 3.5, -2.25) == path.transformed(Transform.translation(3.5, -2.25))
+
+
+@pytest.mark.parametrize("text,size,tracking", [("Hello, Playground!", 24, 0.0), ("fi AVA", 13.7, 1.5), ("Qg", 100, 0.0)])
+def test_outline_ops_equal_the_old_per_glyph_transform(text, size, tracking):
+    run = default_font().shape(text, size, tracking=tracking)
+    assert run.outline_ops(5.25, 7.5, BLACK) == reference_ops(run, 5.25, 7.5, BLACK)
+
+
+def test_outline_ops_equal_the_old_transform_at_a_variation(tmp_path):
+    from fontmaker import make_variable_font
+    f = FontResource(make_variable_font(tmp_path))
+    for wght in (100, 500, 900):
+        run = f.shape("A", 40, variations=(("wght", wght),))
+        assert run.location
+        assert run.outline_ops(3, 4, BLACK) == reference_ops(run, 3, 4, BLACK)
 
 
 def test_outlines_are_deterministic_across_runs():

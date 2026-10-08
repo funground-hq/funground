@@ -15,7 +15,7 @@ design changes. No tricks only a profiler could justify.
 | S-144 | Style calls stop copying the whole graphics state through `dataclasses.replace` | done |
 | S-145 | A colour string is parsed once, through a named, bounded cache | done |
 | S-146 | `Vector` (and the same number checks elsewhere) accept plain int and float without the ABC check | done |
-| S-147 | Text outlines are scaled once per glyph and size, then only placed | planned |
+| S-147 | Text outlines are scaled once per glyph and size, then only placed | done |
 | S-148 | Re-run the S-142 cases in Chrome on both routes with S-144–S-147; profile Pyodide phases; redo the D-075 matrix | planned |
 
 Acceptance for S-144–S-147: the full suite green; no golden or snapshot changes; a before/after timing
@@ -25,5 +25,5 @@ on the S-143 examples it targets; the code reads as plainly as what it replaces.
 - [x] S-144
 - [x] S-145
 - [x] S-146
-- [ ] S-147
+- [x] S-147
 - [ ] S-148
