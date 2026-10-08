@@ -187,6 +187,10 @@ class Sketch:
         # animated sketch), each called with drawn=True after the frame is drawn, or drawn=False when the
         # loop drew no frame this time (no_loop()), so it uses the frame on screen.
         self._frame_end: list[Callable[[bool], None]] = []
+        # S-136: the loop is split into start()/step()/finish(); these carry what the loop body needs between steps.
+        self._draw_fn: Callable[[], None] | None = None
+        self._iterations = 0
+        self._max_frames: int | None = None
 
     # ------------------------------------------------------------ state
     @property
@@ -2118,7 +2122,23 @@ class Sketch:
     def run_namespace(
         self, namespace: Namespace, *, fps: int | None = None, max_frames: int | None = None
     ) -> None:
-        """Run the setup()/draw() found in *namespace* (the sketch's globals)."""
+        """Run the setup()/draw() found in *namespace* (the sketch's globals) until it stops.
+
+        The loop is start(), then step() until it returns False, then finish() (S-136, D-074).
+        A host that must keep control between frames (a browser page) calls the three itself."""
+        self.start(namespace, fps=fps, max_frames=max_frames)
+        try:
+            while self.step():
+                pass
+        finally:
+            self.finish()
+
+    def start(
+        self, namespace: Namespace, *, fps: int | None = None, max_frames: int | None = None
+    ) -> None:
+        """Open the window and run setup(). The caller must then call step() and, always, finish().
+
+        If start() raises, nothing was opened that needs finish(), as before the loop was split."""
         global _run_started
         was_script = self._script                 # only f.size() so far: its pictures belong to this run
         if self._script:
@@ -2132,7 +2152,7 @@ class Sketch:
             self._has_window = False
             self._renderer.attach(0, 0)
         _run_started = True
-        setup, draw = _sketch_functions(namespace)
+        setup, self._draw_fn = _sketch_functions(namespace)
         self._callbacks = _event_callbacks(namespace)
         if max_frames is not None and max_frames <= 0:
             raise ValueError("max_frames must be positive")
@@ -2157,7 +2177,8 @@ class Sketch:
         self._redraw_pending = False
         self._start_time = time.perf_counter()
         self._fps_measured = 0.0
-        iterations = 0          # run(max_frames=n) counts loop iterations, so no_loop() sketches end too
+        self._iterations = 0    # run(max_frames=n) counts loop iterations, so no_loop() sketches end too
+        self._max_frames = max_frames
         if fps is not None:
             self.fps = int(fps)
 
@@ -2167,58 +2188,68 @@ class Sketch:
         if not self._has_window:
             self.size(self.width, self.height, title=self.title, fps=self.fps)
 
-        try:
-            while self.running:
-                if not self._platform.poll():
-                    self.running = False
+    def step(self) -> bool:
+        """Run one iteration of the loop: input, events, draw(), render, then the platform's tick().
 
-                self.pmouse_x, self.pmouse_y = self.mouse_x, self.mouse_y
-                inp = self._platform.input_state()
-                self.mouse_x, self.mouse_y = inp.mouse_x, inp.mouse_y
-                self.is_mouse_pressed, self.is_key_pressed = inp.mouse_pressed, inp.key_pressed
-                self._dispatch_events()
-                self._refresh_panel()                  # a click on a control shows even when draw() does not run
-
-                # draw() runs every frame while looping, once after redraw(), and always on
-                # the first frame - even after no_loop() in setup(), as in p5.
-                if self._looping or self._redraw_pending or self.frame_count == 0:
-                    self._redraw_pending = False
-                    if not self._smooth:
-                        self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
-                    self._in_draw = True
-                    try:
-                        draw()
-                    finally:
-                        self._in_draw = False
-                    self._end_draw()  # unbalanced push()es never leak into the next frame
-                    self.last_ops = self.frame.ops  # what the latest drawn frame asked for (IR snapshot)
-                    self._render()   # draws, presents, flushes f.save()
-                    self.frame_count += 1
-                if self._frame_end:                    # no frame was drawn (no_loop()): keep the one on screen
-                    self._run_frame_end(False)
-
-                iterations += 1
-                if max_frames is not None and iterations >= max_frames:
-                    self.last_frame = self._platform.capture()
-                    self.running = False
-                self.delta_time = self._platform.tick(self.fps)
-                if self.delta_time > 0:
-                    now = 1.0 / self.delta_time
-                    self._fps_measured = now if self._fps_measured == 0 else self._fps_measured * 0.9 + now * 0.1
-        finally:
+        Returns True while the sketch should go on. Call it only between start() and finish().
+        The tick is the frame's wait on the desktop (it sleeps to the frame rate). A platform that
+        is driven by a host (the browser) returns the seconds since the last step without sleeping,
+        and that is delta_time."""
+        if not self.running:
+            return False
+        if not self._platform.poll():
             self.running = False
-            self.frame.clear()
-            self._reset_pixel_state()
-            self._drop_layers()
-            self._pending_saves.clear()
-            self._frame_end.clear()                  # a keep the sketch did not live to finish is dropped
-            self._guides = []
-            self._frame_sequence = None
-            self._motion = None                      # a recording the sketch did not live to finish is dropped
-            self._renderer.attach(0, 0)
-            self._platform.close()
-            self._end_panel()
-            self._has_window = False
+
+        self.pmouse_x, self.pmouse_y = self.mouse_x, self.mouse_y
+        inp = self._platform.input_state()
+        self.mouse_x, self.mouse_y = inp.mouse_x, inp.mouse_y
+        self.is_mouse_pressed, self.is_key_pressed = inp.mouse_pressed, inp.key_pressed
+        self._dispatch_events()
+        self._refresh_panel()                  # a click on a control shows even when draw() does not run
+
+        # draw() runs every frame while looping, once after redraw(), and always on
+        # the first frame - even after no_loop() in setup(), as in p5.
+        if self._looping or self._redraw_pending or self.frame_count == 0:
+            self._redraw_pending = False
+            if not self._smooth:
+                self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
+            self._in_draw = True
+            try:
+                self._draw_fn()
+            finally:
+                self._in_draw = False
+            self._end_draw()  # unbalanced push()es never leak into the next frame
+            self.last_ops = self.frame.ops  # what the latest drawn frame asked for (IR snapshot)
+            self._render()   # draws, presents, flushes f.save()
+            self.frame_count += 1
+        if self._frame_end:                    # no frame was drawn (no_loop()): keep the one on screen
+            self._run_frame_end(False)
+
+        self._iterations += 1
+        if self._max_frames is not None and self._iterations >= self._max_frames:
+            self.last_frame = self._platform.capture()
+            self.running = False
+        self.delta_time = self._platform.tick(self.fps)
+        if self.delta_time > 0:
+            now = 1.0 / self.delta_time
+            self._fps_measured = now if self._fps_measured == 0 else self._fps_measured * 0.9 + now * 0.1
+        return self.running
+
+    def finish(self) -> None:
+        """End the run: drop what the sketch did not finish and close the platform. Safe to call after an error."""
+        self.running = False
+        self.frame.clear()
+        self._reset_pixel_state()
+        self._drop_layers()
+        self._pending_saves.clear()
+        self._frame_end.clear()                  # a keep the sketch did not live to finish is dropped
+        self._guides = []
+        self._frame_sequence = None
+        self._motion = None                      # a recording the sketch did not live to finish is dropped
+        self._renderer.attach(0, 0)
+        self._platform.close()
+        self._end_panel()
+        self._has_window = False
 
 
 def _is_positive_whole(n: object) -> bool:
