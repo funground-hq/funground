@@ -8,6 +8,8 @@ and the maintainer has to make that call (section 7). Spikes are proposed in sec
 candidate stories in `docs/backlog/stories.md` (E-31). All web facts were checked on 8 October 2026 and
 are cited in section 8. Anything that could not be checked is marked **unverified**.
 
+**Decided since (D-074, 8 October 2026):** W2 is the 0.2 target; the browser comes into 0.2 (supersedes D-014 for E-31); B or C are both acceptable (a tolerance is fine), with a lean to a web renderer (B) and C prototyped; Chrome only is acceptable for 0.2 (Edge, Firefox, Brave and Safari kept in view); editor H1; GitHub Pages. Still open: Q4, Q7, Q8, Q10.
+
 ## 0. Summary
 
 - **The IR is the right seam, but it is not the only thing the browser has to replace.** Cairo is
