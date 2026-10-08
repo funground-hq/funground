@@ -87,3 +87,36 @@ def test_clock_helpers_follow_the_local_clock():
     assert p.year() in (now.year, now.year + 1)
     assert 1 <= p.month() <= 12 and 1 <= p.day() <= 31
     assert 0 <= p.hour() <= 23 and 0 <= p.minute() <= 59 and 0 <= p.second() <= 59
+
+
+# ---- start()/step()/finish() (S-136, D-074): a host drives the frames
+
+def test_step_runs_one_frame_and_finish_closes():
+    calls = []
+    s = api.use_sketch(Sketch(platform=HeadlessPlatform()))
+    ns = {"setup": lambda: p.size(50, 50), "draw": lambda: calls.append(p.frame_count)}
+    s.start(ns, max_frames=3)
+    assert s.running and calls == []              # setup ran, no frame yet
+    assert s.step() is True and calls == [0]
+    assert s.step() is True and calls == [0, 1]
+    assert s.step() is False and calls == [0, 1, 2]   # max_frames reached
+    assert s.step() is False and calls == [0, 1, 2]   # a finished sketch draws nothing more
+    s.finish()
+    assert not s.running and not s._has_window
+
+
+def test_finish_is_safe_after_an_error_in_draw():
+    s = api.use_sketch(Sketch(platform=HeadlessPlatform()))
+
+    def draw():
+        if p.frame_count == 1:
+            raise ValueError("boom")
+
+    s.start({"setup": lambda: p.size(50, 50), "draw": draw})
+    assert s.step() is True
+    try:
+        s.step()
+    except ValueError:
+        pass
+    s.finish()
+    assert not s.running
