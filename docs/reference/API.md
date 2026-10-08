@@ -8071,6 +8071,31 @@ Make a new path with every point moved by a transform.
 
 See also: [`bounds`](#cls-Path-bounds).
 
+<a id="cls-Path-translated"></a>
+#### `Path.translated`
+
+```py
+Path.translated(dx: 'float', dy: 'float') -> "'Path'"
+```
+
+Make a new path with every point moved across and down.
+
+It gives the same points as transformed(Transform.translation(dx, dy)), but it is simpler and quicker,
+because no transform is built.
+
+| Argument | Meaning |
+|---|---|
+| `dx`, `dy` | how far to move it across and down. |
+
+**Returns.** a new Path. This one is not changed.
+
+```py
+p = f.path().circle(0, 0, 40).geometry
+moved = p.translated(100, 50)
+```
+
+See also: [`transformed`](#cls-Path-transformed).
+
 <a id="cls-Font"></a>
 ### `Font`
 

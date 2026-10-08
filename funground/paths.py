@@ -416,7 +416,7 @@ class PathBuilder:
 
         See also: scale, rotate
         """
-        return PathBuilder(self._path.transformed(Transform.translation(dx, dy)))
+        return PathBuilder(self._path.translated(dx, dy))
 
     def scale(self, sx: float, sy: float | None = None) -> "PathBuilder":
         """Make a new path that is this path scaled about the point (0, 0).

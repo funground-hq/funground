@@ -65,12 +65,6 @@ class Glyph:
     cluster: int = 0                      # S-094: HarfBuzz cluster (index into the run's text), for PDF text
 
 
-def _translated(path: Path, dx: float, dy: float) -> Path:
-    """*path* moved by (dx, dy): the points of `path.transformed(Transform.translation(dx, dy))`, with no
-    transform built. Kept here, not on `Path`, so the public API does not grow (S-147)."""
-    return Path(tuple((seg[0], *((x + dx, y + dy) for x, y in seg[1:])) for seg in path.segments))
-
-
 class FontResource:
     """One loaded font: HarfBuzz font + fontTools glyph set + outline cache."""
 
@@ -169,7 +163,7 @@ class FontResource:
 
     def scaled_outline(self, gid: int, location: tuple, size: float) -> Path:
         """Glyph outline at *size* pixels, y-down, with its origin at (0, 0): ready to be moved to a pen
-        position with `_translated`. Cached, so a glyph is scaled once per size and not once per frame.
+        position with `Path.translated`. Cached, so a glyph is scaled once per size and not once per frame.
         A Path cannot be changed, so every caller can share the cached one.
 
         The cache holds at most `SCALED_OUTLINE_CACHE_SIZE` outlines, least recently used dropped first:
@@ -257,7 +251,7 @@ class TextRun:
         for g in self.glyphs:
             outline = self.font.scaled_outline(g.gid, self.location, self.size)
             if not outline.is_empty:
-                ops.append(ir.FillPath(_translated(outline, pen_x + g.x_offset * s, baseline - g.y_offset * s), color))
+                ops.append(ir.FillPath(outline.translated(pen_x + g.x_offset * s, baseline - g.y_offset * s), color))
             pen_x += g.x_advance * s + self.tracking
         return ops
 

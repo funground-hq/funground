@@ -68,8 +68,8 @@ variations)` only when one is set. So the old key, and the tests that pin it, di
 `attach()` clears it. Outlines are cached separately on `FontResource` and live for the process.
 Each font also keeps the outlines already scaled and flipped for a size (S-147): `scaled_outline(gid,
 location, size)`, an LRU capped at `SCALED_OUTLINE_CACHE_SIZE` (2048) so a text size that changes every
-frame cannot grow it. `outline_ops` only moves each cached outline to its pen position (adding the
-offset to every point), which gives the same floats as the old scale-then-translate transform. A `Path`
+frame cannot grow it. `outline_ops` only moves each cached outline to its pen position with `Path.translated` (adding the
+offset to every point, D-076), which gives the same floats as the old scale-then-translate transform. A `Path`
 is immutable, so sharing the cached one is safe.
 
 ## Layout: `text_box`, alignment and leading (T7, T9, T10)

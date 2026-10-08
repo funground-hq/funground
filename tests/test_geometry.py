@@ -93,5 +93,32 @@ def test_transformed_applies_to_every_point():
     assert Path.rect(0, 0, 1, 1).transformed(Transform()) is not None
 
 
+def test_translated_moves_every_point():
+    p = Path().move_to(0, 0).cubic_to(1, 2, 3, 4, 5, 6).line_to(7, 8).close()
+    moved = p.translated(10, -1)
+    assert moved.segments == (
+        ("move", (10, -1)), ("cubic", (11, 1), (13, 3), (15, 5)), ("line", (17, 7)), ("close",))
+
+
+def test_translated_returns_a_new_path_and_leaves_the_original():
+    p = Path.rect(0, 0, 10, 10)
+    before = p.segments
+    moved = p.translated(5, 5)
+    assert moved is not p
+    assert p.segments == before
+    assert Path().translated(3, 4) == Path()
+
+
+@pytest.mark.parametrize("dx,dy", [(5, 5), (3.5, -2.25), (0, 0), (0.1, 0.7)])
+def test_translated_equals_transformed_by_a_translation(dx, dy):
+    p = Path().move_to(0.3, 1.7).cubic_to(2.1, 3.3, -4.4, 5.5, 6.6, -7.7).close()
+    assert p.translated(dx, dy) == p.transformed(Transform.translation(dx, dy))
+
+
+def test_translated_refuses_a_non_number():
+    with pytest.raises(TypeError):
+        Path.rect(0, 0, 1, 1).translated("5", 0)
+
+
 def test_path_is_hashable():
     assert hash(Path.rect(0, 0, 1, 1)) == hash(Path.rect(0, 0, 1, 1))
