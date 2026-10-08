@@ -423,6 +423,7 @@ class Path:
 
         See also: transformed
         """
+        dx, dy = float(dx), float(dy)   # points come out as floats, as from transformed()
         return Path(tuple((seg[0], *((x + dx, y + dy) for x, y in seg[1:])) for seg in self.segments))
 
 
