@@ -6,7 +6,8 @@ exception-safe.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, fields
+from operator import attrgetter
 
 from .color import BLACK, DEFAULT_COLOR_RANGES, WHITE, Color
 
@@ -63,7 +64,31 @@ class GraphicsState:
     erasing: tuple | None = None
 
     def with_(self, **changes) -> "GraphicsState":
-        return replace(self, **changes)
+        """A copy with ``changes`` applied; ``self`` itself when nothing would change.
+
+        Every fill/stroke/width call lands here, so it is kept cheap. ``dataclasses.replace``
+        re-inspects all the fields on each call; this reads the field names once (below), takes
+        the current values with one ``attrgetter`` call and builds the copy positionally.
+        The state is immutable, so returning ``self`` for an unchanged value is safe.
+        """
+        unknown = changes.keys() - _FIELD_INDEX.keys()
+        if unknown:
+            raise TypeError(f"GraphicsState has no field {', '.join(sorted(unknown))!r}")
+        for name, value in changes.items():
+            old = getattr(self, name)
+            # Same type as well as equal, so that 1 / 1.0 / True do not stand in for each other.
+            if old is not value and (type(old) is not type(value) or old != value):
+                break
+        else:
+            return self
+        values = list(_GET_ALL_FIELDS(self))
+        for name, value in changes.items():
+            values[_FIELD_INDEX[name]] = value
+        return GraphicsState(*values)
+
+
+_FIELD_INDEX = {f.name: i for i, f in enumerate(fields(GraphicsState))}
+_GET_ALL_FIELDS = attrgetter(*_FIELD_INDEX)
 
 
 class StateStack:

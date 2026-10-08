@@ -12,7 +12,7 @@ design changes. No tricks only a profiler could justify.
 | Story | Value | Status |
 |---|---|---|
 | S-060 | Run loop as start/step/finish (L1, D-074). Merged from the S-136 spike after review; full suite was green (3620) | done |
-| S-144 | Style calls stop copying the whole graphics state through `dataclasses.replace` | planned |
+| S-144 | Style calls stop copying the whole graphics state through `dataclasses.replace` | done |
 | S-145 | A colour string is parsed once, through a named, bounded cache | planned |
 | S-146 | `Vector` (and the same number checks elsewhere) accept plain int and float without the ABC check | planned |
 | S-147 | Text outlines are scaled once per glyph and size, then only placed | planned |
@@ -22,7 +22,7 @@ Acceptance for S-144–S-147: the full suite green; no golden or snapshot change
 on the S-143 examples it targets; the code reads as plainly as what it replaces.
 
 - [x] S-060
-- [ ] S-144
+- [x] S-144
 - [ ] S-145
 - [ ] S-146
 - [ ] S-147

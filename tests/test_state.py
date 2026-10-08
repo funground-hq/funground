@@ -49,3 +49,25 @@ def test_unwind_restores_the_bottom_state_and_reports_the_count():
     assert st.unwind() == 2
     assert st.current == base and st.depth == 0
     assert st.unwind() == 0 and st.current == base   # nothing open: a no-op
+
+
+def test_with_unchanged_values_returns_same_object():
+    s = GraphicsState().with_(fill=Color(255, 99, 71), stroke_width=2)
+    assert s.with_(fill=Color(255, 99, 71), stroke_width=2) is s
+    assert s.with_() is s
+    assert s.with_(stroke_width=2.0) is not s  # equal but a different type is still a change
+
+
+def test_with_change_copies_only_that_field():
+    from dataclasses import fields
+    s = GraphicsState().with_(fill=Color(1, 2, 3), dash=(4.0, 2.0))
+    t = s.with_(stroke_width=7)
+    assert t is not s and t.stroke_width == 7
+    for f in fields(GraphicsState):
+        if f.name != "stroke_width":
+            assert getattr(t, f.name) == getattr(s, f.name)
+
+
+def test_with_unknown_field_raises_type_error():
+    with pytest.raises(TypeError, match="no field 'bogus'"):
+        GraphicsState().with_(bogus=1)

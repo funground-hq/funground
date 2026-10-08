@@ -93,6 +93,12 @@ once per loop iteration, after `draw()` and before `present()`: `renderer.render
 
 - **Ops are plain data**: frozen dataclasses, hashable, serialisable. Ops that draw carry the
   `GraphicsState` snapshot they were issued under (free, because state is immutable).
+- **Style calls copy cheaply** (S-144). `GraphicsState` has about thirty fields and every
+  `fill`/`stroke`/`stroke_width` call makes a new one through `with_`. `with_` returns the same
+  object when every given value is already current (equal and of the same type; safe because the
+  state is immutable), and otherwise builds the copy positionally from field names computed once,
+  rather than through `dataclasses.replace`, which re-inspects the fields on every call. An unknown
+  field still raises `TypeError`. Draw time in the heaviest sketches fell by 16-29 %.
 - **Internal capability first, public API later** (`PROCESS.md`). `Save/Restore/Concat/ClipPath/
   FillPath/StrokePath` exist in the IR now so the vector renderer and the text subsystem can use
   them; `p.translate()`, `p.path()`, `with p.saved_state()` arrive in Phase 2 as thin emitters.
