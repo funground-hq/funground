@@ -570,5 +570,5 @@ Bundled in the package:
   [Ragas_Note.md](../design/Ragas_Note.md));
 - the gallery examples and pictures (CC0 code, `examples/LICENSE`).
 
-The library itself is `LGPL-2.1-or-later`. Example code is CC0 (D-026). DejaVu Sans Mono sits in the
+The library itself is `LGPL-2.1-only` (D-084). Example code is CC0 (D-026). DejaVu Sans Mono sits in the
 repository beside one example and is not in the installed package.

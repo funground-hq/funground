@@ -2,8 +2,8 @@
 
 Where each piece of software, method, data set, font and idea comes from is in [CREDITS.md](CREDITS.md). This page is about licences.
 
-funground itself is licensed under the **GNU Lesser General Public License, version 2.1 or (at
-your option) any later version** (`LGPL-2.1-or-later`); see [LICENSE](LICENSE). The software it
+funground itself is licensed under the **GNU Lesser General Public License, version 2.1 only**
+(`LGPL-2.1-only`; no later version applies); see [LICENSE](LICENSE). The software it
 builds on keeps its own licence, listed here. Where the two differ, each component's own licence
 governs that component.
 
