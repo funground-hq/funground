@@ -120,6 +120,18 @@ once per loop iteration, after `draw()` and before `present()`: `renderer.render
   equal, float for float, to the old ones: no snapshot or golden changed. Cairo time per frame, min of 5
   rounds: poster_series 10.6 to 8.2 ms, paths-06 outlines 4.2 to 3.3, text_dots 5.4 to 4.6, Session 1
   05_text 1.7 to 1.1; `draw()` unchanged.
+- **Numeric colours are made once** (S-154). `fill(200, 100, 50)`, `fill(grey)` and `stroke((r, g, b, a))`
+  used to build and validate a new `Color` on every call (profile of kinetic_type, text_dots, noise:
+  `Color.parse`, `_component` and `Color.__post_init__` were most of the colour time). `Color.parse` now
+  turns each number into an int with `_component` (floats truncate, NaN and `True` still raise there) and
+  then asks `color._color_from_ints(r, g, b, a)`, an `lru_cache` of 512 entries like the string cache of S-145.
+  211.8 and 211 reach the same entry; a call that raises is never stored, so the messages are unchanged.
+  A `Color` is a frozen dataclass, so sharing one is safe. A tuple or list is tested first in `parse`
+  (before the `.r/.g/.b` duck-typing, which a plain tuple never satisfies) and `_component` returns an
+  int at once. Colour modes other than the default rgb never reach this cache. Fixed numbers are cached;
+  a colour that changes every call (a float from noise) still builds a Color. Measured, min of 20
+  rounds, interleaved with the old code: `fill(200, 100, 50)` 7.2 to 4.6 us, `fill(128)` 4.6 to 3.0,
+  `Color.parse((200, 100, 50))` 3.0 to 1.0.
 - **Internal capability first, public API later** (`PROCESS.md`). `Save/Restore/Concat/ClipPath/
   FillPath/StrokePath` exist in the IR now so the vector renderer and the text subsystem can use
   them; `p.translate()`, `p.path()`, `with p.saved_state()` arrive in Phase 2 as thin emitters.

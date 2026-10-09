@@ -284,7 +284,9 @@ class Color:
             raise TypeError(f"{value!r} is not a colour: True and False are not numbers here")
         if isinstance(value, (int, float)):
             grey = _component(value)         # one number is a grey, as in p5 (S16)
-            return cls(grey, grey, grey)
+            return _color_from_ints(grey, grey, grey, 255)
+        if type(value) in (tuple, list):     # the common form; a plain tuple or list has no .r, .g, .b
+            return _color_from_numbers(value)
         if all(hasattr(value, c) for c in "rgb"):
             # Any object exposing r/g/b[/a] - covers pygame.Color without importing pygame.
             return cls(
@@ -292,16 +294,7 @@ class Color:
                 _component(getattr(value, "a", 255)),
             )
         if isinstance(value, (tuple, list)):
-            if len(value) == 2:              # grey and alpha (S16)
-                grey, alpha = (_component(c) for c in value)
-                return cls(grey, grey, grey, alpha)
-            if len(value) == 3:
-                return cls(*(_component(c) for c in value))
-            if len(value) == 4:
-                return cls(*(_component(c) for c in value))
-            raise ValueError(
-                f"a colour tuple needs 2, 3 or 4 numbers (grey, alpha or red, green, blue[, alpha]), got {len(value)}"
-            )
+            return _color_from_numbers(value)
         raise ValueError(
             f"{value!r} is not a colour. Use a name like 'tomato', a tuple like (255, 99, 71) "
             "or a hex string like '#FF6347'."
@@ -335,12 +328,39 @@ def _parse_color_string(text: str) -> Color:
     )
 
 
+def _color_from_numbers(value: tuple | list) -> Color:
+    """A tuple or list of 2, 3 or 4 numbers: grey and alpha, or red, green, blue and optional alpha."""
+    if len(value) == 2:                      # grey and alpha (S16)
+        grey, alpha = map(_component, value)
+        return _color_from_ints(grey, grey, grey, alpha)
+    if len(value) == 3:
+        return _color_from_ints(*map(_component, value), 255)
+    if len(value) == 4:
+        return _color_from_ints(*map(_component, value))
+    raise ValueError(
+        f"a colour tuple needs 2, 3 or 4 numbers (grey, alpha or red, green, blue[, alpha]), got {len(value)}"
+    )
+
+
+# Numbers are the other colour form a sketch repeats on every frame: fill(200, 100, 50) or
+# fill(grey). Once _component has truncated each number to an int (and refused NaN and True), the
+# Color depends on those four ints alone, so it is made once and reused (S-154), as the strings
+# above are. 211.8 and 211 reach the same entry because both are 211 by then. The cache is
+# bounded; a sketch that draws a different colour every call just recycles it. A call that raises
+# is not stored, so an out-of-range number raises the same ValueError every time.
+@lru_cache(maxsize=512)
+def _color_from_ints(r: int, g: int, b: int, a: int) -> Color:
+    return Color(r, g, b, a)
+
+
 def _component(c: object) -> int:
     """v0.5 behaviour (pygame-ce): a number is truncated toward zero, then must be 0..255.
 
     So 211.8 -> 211 and -0.5 -> 0 are accepted, as v0.5 accepted them; NaN is not.
     Computed colours such as f.map_range(...) results therefore just work.
     """
+    if type(c) is int:                       # already whole: the usual case
+        return c
     if isinstance(c, bool) or not isinstance(c, (int, float)):
         raise ValueError(f"colour component {c!r} must be a number from 0 to 255")
     if isinstance(c, float):

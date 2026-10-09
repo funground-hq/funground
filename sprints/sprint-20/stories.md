@@ -9,7 +9,7 @@ browser, and edits and shares sketches in a sandboxed editor. Design: `docs/desi
 | S-152 | funground's own browser entry point: `BrowserPlatform` and the `funground.web.Session` host API; `f.run()`/`f.show()` under a host; web contract row W1 | done |
 | S-153 | Loading: Pyodide, the funground wheel, the three C-extension wheels from a release, fonts; first-load budget (S-139) | built (`funground-web` `feature/runner` 0468793); golden comparison and first-load timing to finish |
 | S-137 | Sound through Web Audio and the microphone through an AudioWorklet, from the worker | planned |
-| S-154 | Numeric colours (`fill(r, g, b)`, greys, tuples) parsed once: the largest clean hotspot left (S-148) | planned |
+| S-154 | Numeric colours (`fill(r, g, b)`, greys, tuples) parsed once: the largest clean hotspot left (S-148) | done |
 | S-151 | The Play page: part 1 runs gallery examples on the site; part 2 the editor (H1: CodeMirror, Run/Stop, output, share by link in the URL fragment) with previews on `funground-run.github.io` (D-078) | planned |
 
 Acceptance: full suite green; no golden or snapshot changes; the runner passes the S-148 pixel checks
@@ -19,6 +19,6 @@ second origin.
 - [x] S-152
 - [ ] S-153
 - [ ] S-137
-- [ ] S-154
+- [x] S-154
 - [ ] S-151 part 1
 - [ ] S-151 part 2
