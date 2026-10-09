@@ -161,7 +161,9 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-153 | E-31 | Loading Pyodide, the wheels and fonts; first-load budget | Sprint 20 |
 | S-154 | E-31 | Numeric colours parsed once | Sprint 20 |
 | S-155 | E-31 | The sketchbook: template repo `funground-hq/sketchbook`; learners edit and save in github.dev and see the sketch render on the same page (D-079 = C; how: S-156); desktop use from the same repo (Editor_Note.md) | Sprint 20 |
-| S-156 | E-31 | Spike: funground preview beside github.dev: framing check, and a VS Code web extension whose webview runs the runner with live update, data files, sound (Editor_Note.md Q1-Q6) | Sprint 20 |
+| S-156 | E-31 | Spike: funground preview beside github.dev: framing check, and a VS Code web extension whose webview runs the runner with live update, data files, sound (Editor_Note.md Q1-Q6) | Sprint 20 (done) |
+| S-157 | E-31 | A second `Session` in the same Python draws exactly what a fresh one draws; say what is not reset (the test D-083 asks for before the runner reuses its Python) | Sprint 20 |
+| S-158 | E-31 | The funground extension for github.dev from the S-156 spike: runner reuse (D-083, after S-157), runtime from the site in versioned folders (D-081), `'unsafe-eval'` in the panel only (D-080), a microphone message that fits a panel | Sprint 20 |
 
 ## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
 
