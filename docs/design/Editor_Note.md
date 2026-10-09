@@ -113,5 +113,14 @@ current network (the same block as GitHub). The spike suits a Claude cloud sessi
 `@vscode/test-web` and Chromium there and drive vscode.dev-like hosting headlessly; the final check in
 real github.dev is the maintainer's, on a network that reaches GitHub.
 
+**Outcome (S-156, 10 October 2026).** Way 1 works: a VS Code web extension's panel runs the unchanged runner
+beside the editor (VS Code for the web 1.141 and 1.91, headless Chromium), frames byte-identical to the goldens,
+a re-run about 0.4 s after typing stops (the 400 ms pause included) and within 0.1 s of a save, errors underlined
+at their line, sound playing, `data/` WAV files read from the workspace. Way 2 is out: github.dev redirects to
+`vscode.dev/github/`, which sends `frame-ancestors 'none'` (checked by the maintainer's machine, 10 October).
+Limits: no microphone (VS Code does not let a panel ask for it; listening sketches stay on the website and the
+desktop), and pictures wait for D-080. Not yet tried in real github.dev. Decisions D-080 to D-083. Results:
+`funground-web` branch `claude/spike-s156-github-dev-x5szgv`, `spikes/S-156_RESULTS.md`.
+
 If both ways fail, the fallback is the one-page editor of S-151 part 2 with "Open in github.dev" for
 saving (two tabs) and Share links.
