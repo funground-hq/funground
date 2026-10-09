@@ -10,8 +10,8 @@ browser, and edits and shares sketches in a sandboxed editor. Design: `docs/desi
 | S-153 | Loading: Pyodide, the funground wheel, the three C-extension wheels from a release, fonts; first-load budget (S-139) | done (`funground-web` `feature/runner` 6f70ecd): 14/15 goldens exact, JPEG decoding differs (decision), first-load budget not met yet |
 | S-137 | Sound through Web Audio and the microphone through an AudioWorklet, from the worker | done (sound and mic in the runner; listening check by the maintainer) |
 | S-154 | Numeric colours (`fill(r, g, b)`, greys, tuples) parsed once: the largest clean hotspot left (S-148) | done |
-| S-151 | The Play page: part 1 runs gallery examples on the site; part 2 the editor (H1: CodeMirror, Run/Stop, output, share by link in the URL fragment) with previews on `funground-run.github.io` (D-078) | planned |
-| S-156 | Spike: the sketch rendered beside github.dev (a VS Code web extension, or framing); `Editor_Note.md` Q1-Q6 | planned |
+| S-151 | The Play page: part 1 runs gallery examples on the site; part 2 the editor (H1: CodeMirror, Run/Stop, output, share by link in the URL fragment) with previews on `funground-run.github.io` (D-078) | part 1 built (`funground-hq.github.io` `feature/play` 8788b5a, checked in headless Chrome); live after funground-web `feature/runner` is merged to main and the site PR is merged; part 2 planned |
+| S-156 | Spike: the sketch rendered beside github.dev (a VS Code web extension, or framing); `Editor_Note.md` Q1-Q6 | planned: a Claude cloud session in funground-web, prompt in `S-156_cloud_prompt.md`. Q1 first look: vscode.dev sends `frame-ancestors 'none'`; github.dev redirects |
 | S-155 | The sketchbook: template repo; edit and save in github.dev, render on the same page (D-079 = C) | planned (after S-156) |
 
 Acceptance: full suite green; no golden or snapshot changes; the runner passes the S-148 pixel checks
