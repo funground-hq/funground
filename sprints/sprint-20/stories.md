@@ -11,6 +11,8 @@ browser, and edits and shares sketches in a sandboxed editor. Design: `docs/desi
 | S-137 | Sound through Web Audio and the microphone through an AudioWorklet, from the worker | done (sound and mic in the runner; listening check by the maintainer) |
 | S-154 | Numeric colours (`fill(r, g, b)`, greys, tuples) parsed once: the largest clean hotspot left (S-148) | done |
 | S-151 | The Play page: part 1 runs gallery examples on the site; part 2 the editor (H1: CodeMirror, Run/Stop, output, share by link in the URL fragment) with previews on `funground-run.github.io` (D-078) | planned |
+| S-156 | Spike: the sketch rendered beside github.dev (a VS Code web extension, or framing); `Editor_Note.md` Q1-Q6 | planned |
+| S-155 | The sketchbook: template repo; edit and save in github.dev, render on the same page (D-079 = C) | planned (after S-156) |
 
 Acceptance: full suite green; no golden or snapshot changes; the runner passes the S-148 pixel checks
 (Cairo byte-identical in Chrome); the Play page works on the live site; the editor's previews run on the
@@ -22,3 +24,5 @@ second origin.
 - [x] S-154
 - [ ] S-151 part 1
 - [ ] S-151 part 2
+- [ ] S-156
+- [ ] S-155

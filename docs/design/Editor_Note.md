@@ -1,6 +1,6 @@
 # Design note: the editor and the learner's sketchbook (0.2)
 
-**Status:** draft for the maintainer, 9 October 2026. Elaborates S-151 part 2 (the editor) and S-155 (the
+**Status:** draft, 9 October 2026. **Update (D-079 accepted as C):** learners edit and save in **github.dev**, GitHub's own web editor, and the sketch renders on the same page; spike S-156 finds out how (see the last section). Elaborates S-151 part 2 (the editor) and S-155 (the
 sketchbook on GitHub). Builds on D-074 (H1 editor), D-077 (website), D-078 (preview origin) and
 `Web_Runner_Note.md`. One decision is open: **D-079**, how the editor gets permission to save to a learner's
 repository.
@@ -75,3 +75,43 @@ Acceptance for both: a learner with a fresh GitHub account makes a sketchbook fr
 in the editor, edits and runs a sketch, saves it (a commit appears in their repository), shares a link that
 runs for someone else, and runs the same file on the desktop. The editor origin never executes sketch
 code (checked by a test that a sketch cannot read the editor's storage).
+
+## github.dev as the editor (D-079 = C): what spike S-156 must find out
+
+The maintainer prefers GitHub's own editor to ours: editing and saving (committing) are then GitHub's, with
+no token and no server of ours, and the sketch renders beside the code on the same page. Two ways, in order:
+
+1. **A funground extension for github.dev / vscode.dev (VS Code for the web).** A *web extension* adds a
+   "funground: Run" command and a preview panel (a webview) beside the editor. The panel runs the S-153
+   runner (Pyodide, Cairo, sound) and re-runs the sketch as the learner types or saves; `data/` files come
+   from the repository through the extension's file-system API. Saving is GitHub's commit button. The
+   sketchbook template recommends the extension (`.vscode/extensions.json`), so github.dev offers it on
+   opening. The webview has its own sandboxed origin, so the sketch never runs with the editor's rights.
+2. **github.dev framed inside our page** (our page = github.dev on the left, our runner on the right).
+   Likely refused: GitHub's pages usually forbid being framed. The spike checks it in minutes; if it is
+   refused, option 1 is the way.
+
+Questions and pass criteria for S-156 (time-boxed, about 3 days):
+- Q1: can github.dev or vscode.dev be framed by another site? (Pass: yes, or a clear no with the header that
+  forbids it.)
+- Q2: can a VS Code web extension's webview run the funground runner: Pyodide in a worker, the Cairo/
+  uharfbuzz/skia-pathops wheels, a canvas, Web Audio and the microphone, under the webview's Content
+  Security Policy? (Pass: a Session-1 sketch and a sound example run in the panel in vscode.dev with
+  github.dev parity; frames byte-identical to the goldens as in S-153.)
+- Q3: live update: the panel re-runs on edit (debounced) and on save, using the active file's text, and
+  shows output and errors with line numbers. (Pass: under 1 s from a pause in typing to a new run, after
+  the first load.)
+- Q4: data files: a sketch loading `data/photo.png` and a WAV works from the repository. (Pass: yes.)
+- Q5: install path: sideload for testing ("Install Extension from Location"), and what publishing needs
+  for learners (Visual Studio Marketplace and/or Open VSX publisher accounts; the maintainer's act). How
+  the template's recommendation appears to a learner opening their sketchbook in github.dev.
+- Q6: size and load: the extension's own size, whether the runtime loads from our site (CORS) or ships in
+  the extension, first-run time.
+
+Where to run it: github.dev, vscode.dev and Open VSX are unreachable from the maintainer's machine on its
+current network (the same block as GitHub). The spike suits a Claude cloud session: it can install
+`@vscode/test-web` and Chromium there and drive vscode.dev-like hosting headlessly; the final check in
+real github.dev is the maintainer's, on a network that reaches GitHub.
+
+If both ways fail, the fallback is the one-page editor of S-151 part 2 with "Open in github.dev" for
+saving (two tabs) and Share links.
