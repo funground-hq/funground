@@ -30,10 +30,28 @@ MAX_BANDS = 256
 
 _audible = True              # False once opening a real sound device has failed
 _mixer_ready = False
+_host_mixer = None           # the host's mixer while a web Session runs (platform/browser_audio.py), else None
 
 
 def _is_headless() -> bool:
     return os.environ.get("FUNGROUND_HEADLESS", "").lower() in ("1", "true", "yes")
+
+
+def use_host_mixer(mixer) -> None:
+    """Play through a host's mixer (the web runner, Web_Runner_Note.md) instead of pygame's, or with None back to pygame.
+
+    The mixer offers the few calls this module makes on pygame.mixer (see platform/browser_audio.HostMixer), so
+    nothing else in this module knows about the host, and pygame is not imported."""
+    global _host_mixer
+    _host_mixer = mixer
+
+
+def _open_output(who: str):
+    """The mixer sounds are made for, and whether they play silently: (mixer, silent)."""
+    if _host_mixer is not None:
+        return _host_mixer, False
+    headless = _is_headless()
+    return _open_mixer(headless, who), headless or not _audible
 
 
 def _open_mixer(headless: bool, who: str = "f.load_sound()"):
@@ -82,13 +100,12 @@ def load(path: str, base_dir: str | None, frame_source=None) -> "Sound":
     """Find, open and decode a sound file (contract A1). *frame_source* is a function giving
     the sketch's frame number, used to analyse at most once per frame."""
     resolved = _resolve_path(path, base_dir, "f.load_sound()", "sound")
-    headless = _is_headless()
-    mixer = _open_mixer(headless)
+    mixer, silent = _open_output("f.load_sound()")
     try:
         device_sound = mixer.Sound(resolved)
     except Exception as exc:
         raise ValueError(f"f.load_sound(): {path!r} is not a sound funground can read ({exc})") from exc
-    return Sound(device_sound, mixer, silent=headless or not _audible, frame_source=frame_source)
+    return Sound(device_sound, mixer, silent=silent, frame_source=frame_source)
 
 
 def create(samples, rate: int = 44100, frame_source=None, who: str = "f.create_sound()") -> "Sound":
@@ -112,8 +129,7 @@ def _from_samples(values: list[float], rate: int, frame_source, who: str) -> "So
     """Build a playable sound from clipped mono samples at *rate*."""
     if max(values) > 1.0 or min(values) < -1.0:         # a filter can overshoot a little
         values = [-1.0 if v < -1.0 else 1.0 if v > 1.0 else v for v in values]
-    headless = _is_headless()
-    mixer = _open_mixer(headless, who)
+    mixer, silent = _open_output(who)
     mixer_rate, _, channels = mixer.get_init()
     data = synth.resample(values, rate, mixer_rate) if mixer_rate != rate else values
     mono = array("h", [int(round(v * 32767)) for v in data])
@@ -124,7 +140,7 @@ def _from_samples(values: list[float], rate: int, frame_source, who: str) -> "So
         for c in range(channels):
             pcm[c::channels] = mono
     device_sound = mixer.Sound(buffer=pcm.tobytes())
-    return Sound(device_sound, mixer, silent=headless or not _audible, frame_source=frame_source,
+    return Sound(device_sound, mixer, silent=silent, frame_source=frame_source,
                  made=(values, rate, pcm))
 
 

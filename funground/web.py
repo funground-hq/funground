@@ -16,9 +16,10 @@ absent, so the desktop paths run exactly as before (contract W1).
 """
 from __future__ import annotations
 
-from . import api
+from . import api, microphone_input, sound
 from .platform.base import InputEvent
 from .platform.browser import BrowserPlatform, FrameCallback
+from .platform.browser_audio import MicrophoneCallback, SoundCallback
 from .sketch import Sketch
 
 
@@ -27,10 +28,18 @@ class Session:
 
     `width` and `height` are the host's canvas in logical pixels (what f.full_screen() fills);
     `scale` is the backing scale (physical pixels per logical pixel); `on_frame(data, width, height,
-    stride)` receives each finished frame as BGRA bytes (see platform.browser)."""
+    stride)` receives each finished frame as BGRA bytes (see platform.browser).
 
-    def __init__(self, width: int, height: int, scale: float = 1.0, on_frame: FrameCallback | None = None) -> None:
-        self._platform = BrowserPlatform(width, height, scale, on_frame)
+    Sound and the microphone go through the host too (S-137): `on_sound(command, voice, fields, samples)`
+    plays what the sketch makes, `on_microphone(command)` is asked to start and stop the input, and
+    `push_microphone(samples)` delivers what it heard (platform.browser_audio has the commands). Without
+    these callbacks sounds play silently and keep time, and the microphone hears nothing."""
+
+    def __init__(self, width: int, height: int, scale: float = 1.0, on_frame: FrameCallback | None = None,
+                 on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None) -> None:
+        self._platform = BrowserPlatform(width, height, scale, on_frame, on_sound, on_microphone)
+        sound.use_host_mixer(self._platform.mixer)
+        microphone_input.use_host_input(self._platform.microphone)
         self._sketch = api.use_sketch(Sketch(platform=self._platform))
         self._stopped = False
 
@@ -80,12 +89,18 @@ class Session:
             self.stop()
         return going
 
+    def push_microphone(self, samples) -> None:
+        """Mono samples from -1 to 1 at 44 100 Hz that the host's microphone heard. Used while the sketch listens."""
+        self._platform.push_microphone(samples)
+
     def stop(self) -> None:
-        """End the run: the sketch's finish() runs, once. Safe to call again."""
+        """End the run: the sketch's finish() runs, once; sounds stop and the microphone is let go. Safe to call again."""
         if self._stopped:
             return
         self._stopped = True
         try:
             self._sketch.finish()
         finally:
+            sound.use_host_mixer(None)
+            microphone_input.use_host_input(None)
             api.use_sketch(None)

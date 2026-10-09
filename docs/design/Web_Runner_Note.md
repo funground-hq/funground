@@ -40,7 +40,45 @@ page (site or preview origin)                         module worker
 - `runner/page.js`: a small API for the site and the editor: `run(source, canvas)`, `stop()`, an output
   panel for `print` and tracebacks.
 - Sound (S-137): synthesis stays in Python; buffers go to Web Audio on the page after a first click; the
-  microphone is an AudioWorklet posting chunks to the worker.
+  microphone is an AudioWorklet posting chunks to the worker (see Sound and microphone, below).
+
+## Sound and microphone (S-137)
+
+**Playback.** funground makes every sound in Python and keeps its own clock (contract A1 to A3), as on the
+desktop. `sound.py` talks to a device through a few calls on `pygame.mixer` (open it, make a sound from samples
+or a file, play with loops, stop, pause and unpause a channel, set volumes). Those calls are the seam:
+`sound.use_host_mixer(mixer)` replaces pygame's mixer with `HostMixer` (`platform/browser_audio.py`), which answers
+the same calls and hands each to the host as a command. `Session` installs it, `BrowserPlatform` owns it and
+`Session.stop()` removes it. Nothing else in `sound.py` changed; with no Session the desktop path is as before.
+pygame is not imported (a test checks it), so the runner no longer loads pygame-ce for a sketch that only
+plays sound: 1.53 MB less to download for it (RESULTS.md of the runner).
+
+The host callback is `on_sound(command, voice, fields, samples)`. A sound's samples (32-bit floats, stereo
+interleaved, 44 100 Hz, exactly the 16-bit samples pygame would get divided by 32768) go once, with the first
+play, as `load`; then `play {loops, volume, left, right}`, `pause`, `resume`, `volume`, `pan`, `stop`, `free` (the
+sound was dropped) and `stop_all` (the run ended). Pan is two gains, funground's own balance law, which the page
+applies with a splitter and two gain nodes, not a `StereoPannerNode`. The page never has to tell Python that a
+sound ended: Python's clock knows (A2).
+
+In the browser the worker posts these as `sound` messages (the samples' buffer transferred) and `runner/audio.js`
+plays them with Web Audio after a first click or key (Run counts). A sound asked for before then is skipped with
+one line of output. A paused sound resumes at the position the page measured. Contract rows: W1.
+
+**Microphone.** The reverse direction, into the ring buffer the desktop code fills. `microphone_input` already
+had one function that opens a device and returns `(device, rate)`; under a host it returns a `HostMicrophone`
+device (`microphone_input.use_host_input`). `mic.start()` makes the host a `microphone start` request; the page
+opens `getUserMedia` (echo cancellation, noise suppression and gain off, as the desktop applies none), runs an
+`AudioWorklet` (`runner/microphone-worklet.js`) that posts 1024-sample mono chunks, and the worker passes each to
+`Session.push_microphone(samples)`. Nothing after the ring buffer changed, so `level()`, `pitch()`, `is_onset()`,
+`capture()` and the rest read as on the desktop (tests compare them with the desktop path on the same samples).
+Until permission is granted the ring buffer is empty, which reads as the not-listening values. A refusal is one
+line of output. The microphone is never played back (its path to the speakers has a gain of 0, only so the
+browser keeps the worklet running).
+
+**Limits, proposed for W1.** WAV (16-bit) is the only file `f.load_sound()` reads; a sound started before the
+first gesture is not started later; a refused microphone does not raise at `start()`; choosing an input by name is
+desktop-only (`f.microphone("name")` raises, `f.microphones()` is `[]`). Tests: `tests/test_web_sound.py`
+(here) and `tools/test_sound.py` (`funground-web`, headless Chrome with a fake microphone).
 
 ## Origins and safety (D-078)
 
@@ -53,4 +91,4 @@ page (site or preview origin)                         module worker
 ## Limits in 0.2
 
 Chrome first. Desktop-only, each with a clear message: `system_font()`, `input()`, MP4 (GIF works),
-choosing a microphone by name before permission, the gallery app's subprocess runner.
+choosing a microphone by name, the gallery app's subprocess runner.
