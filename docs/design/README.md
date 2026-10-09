@@ -44,6 +44,7 @@ rewritten after acceptance.
 | [Web_Target_Options.md](Web_Target_Options.md) | Options study for 0.2 on the web: inventory, five architectures, spikes, open decisions. Nothing decided. | You plan web work for 0.2. |
 | [Loop_Inversion_Note.md](Loop_Inversion_Note.md) | The run loop as start/step/finish, so a browser page can drive it (S-060, D-074). | You touch `Sketch.run_namespace`, `start`, `step` or `finish`, or a platform's `tick()`. |
 | [Web_Runner_Note.md](Web_Runner_Note.md) | The 0.2 web runner: BrowserPlatform, the `funground.web` host API, the worker, origins and safety. | You touch `funground/web.py`, `platform/browser.py` or the browser runner. |
+| [Editor_Note.md](Editor_Note.md) | The one-page editor and the learner's GitHub sketchbook: experience, security, save permission (D-079). | You build the Play page, the editor or the sketchbook template. |
 
 ## Research and history
 

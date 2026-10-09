@@ -160,6 +160,7 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-152 | E-31 | Browser entry point: `BrowserPlatform`, `funground.web.Session`, `f.run`/`f.show` under a host, contract row W1 | Sprint 20 |
 | S-153 | E-31 | Loading Pyodide, the wheels and fonts; first-load budget | Sprint 20 |
 | S-154 | E-31 | Numeric colours parsed once | Sprint 20 |
+| S-155 | E-31 | The sketchbook: template repo `funground-hq/sketchbook`; the editor opens, saves (commits) and shares sketches in the learner's own GitHub repo, p5-editor style on one page (Editor_Note.md; D-079) | candidate |
 
 ## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
 
