@@ -1,6 +1,8 @@
 """Contract row S1: every colour form the Quick Reference documents parses to the same RGBA."""
 from __future__ import annotations
 
+import dataclasses
+
 import pytest
 
 from funground._colornames import NAMED_COLORS
@@ -116,3 +118,66 @@ def test_an_unknown_string_raises_the_same_error_every_time():
         messages.append(str(e.value))
     assert messages[0] == messages[1]
     assert messages[0].startswith("unknown colour 'banana'. Use a name like 'tomato'")
+
+
+# ---- numeric colours are made once and reused (S-154) ----------------------------------------
+
+@pytest.mark.parametrize("value", [(200, 100, 50), [200, 100, 50], (200, 100, 50, 255), (200.9, 100.2, 50.5)])
+def test_a_numeric_colour_is_the_same_object_each_time(value):
+    first = Color.parse(value)
+    assert first == Color(200, 100, 50)
+    assert Color.parse(value) is first
+    assert Color.parse((200, 100, 50)) is first          # every spelling shares one entry
+
+
+def test_a_grey_number_and_a_grey_pair_are_cached_too():
+    assert Color.parse(128) is Color.parse(128.9) is Color.parse((128, 128, 128))
+    assert Color.parse((128, 64)) is Color.parse((128.2, 64.7))
+    assert Color.parse((128, 64)) == Color(128, 128, 128, 64)
+
+
+def test_floats_still_truncate_toward_zero():
+    assert Color.parse((211.8, -0.5, 0.99)) == Color(211, 0, 0)
+    assert Color.parse(211.8) == Color(211, 211, 211)
+
+
+def test_a_cached_colour_cannot_be_changed():
+    c = Color.parse((10, 20, 30))
+    with pytest.raises(dataclasses.FrozenInstanceError):
+        c.r = 99
+    assert Color.parse((10, 20, 30)) == Color(10, 20, 30)
+
+
+@pytest.mark.parametrize(
+    "bad, message",
+    [
+        ((float("nan"), 0, 0), "colour component nan must be a number from 0 to 255"),
+        ((True, 0, 0), "colour component True must be a number from 0 to 255"),
+        ((256, 0, 0), "colour component r=256 must be an integer from 0 to 255"),
+        ((0, 0, 0, -1), "colour component a=-1 must be an integer from 0 to 255"),
+        ((1, 2, 3, 4, 5), "a colour tuple needs 2, 3 or 4 numbers"),
+        (float("nan"), "colour component nan must be a number from 0 to 255"),
+        (999, "colour component r=999 must be an integer from 0 to 255"),
+    ],
+)
+def test_a_bad_number_raises_the_same_error_twice_even_after_a_good_one(bad, message):
+    Color.parse((1, 0, 0))                                # a good colour in the cache changes nothing
+    for _ in range(2):
+        with pytest.raises(ValueError) as e:
+            Color.parse(bad)
+        assert str(e.value).startswith(message)
+    with pytest.raises(TypeError):
+        Color.parse(True)
+
+
+def test_one_into_a_tuple_is_not_confused_with_true():
+    assert Color.parse((1, 0, 0)) == Color(1, 0, 0)
+    with pytest.raises(ValueError):
+        Color.parse((True, 0, 0))
+    assert Color.parse((1.0, 0, 0)) == Color(1, 0, 0)
+
+
+def test_an_object_with_rgb_still_parses():
+    class Rgb:
+        r, g, b = 1, 2, 3
+    assert Color.parse(Rgb()) == Color(1, 2, 3)
