@@ -13,10 +13,22 @@ How "a host is active" works. A Session builds the sketch with a BrowserPlatform
 `f.run()` calls `Sketch.start()` and returns, and `f.show()` presents the drawing and returns. The
 Session then calls `Sketch.step()` itself. Nothing else differs, and with no Session the flag is
 absent, so the desktop paths run exactly as before (contract W1).
+
+Running again in the same Python (D-083). A host may run the next file in the same interpreter, with a
+new Session each time. A new Session starts afresh: the sketch and its namespace, random and noise,
+sound, the microphone, fonts loaded from files, and modules imported from the sketch's own folder (an
+edited helper is read again). It shares what cannot be reset cheaply, or need not be:
+the deterministic caches (colours, tables, shaped text, bundled fonts); the standard library's own
+state, such as the `random` module when a sketch uses it directly; third-party modules once imported;
+anything a sketch changes in a module it imported (for example replacing a funground function); and
+files written to disk.
 """
 from __future__ import annotations
 
-from . import api, microphone_input, sound
+import sys
+from pathlib import Path
+
+from . import api, microphone_input, sound, typography
 from .platform.base import InputEvent
 from .platform.browser import BrowserPlatform, FrameCallback
 from .platform.browser_audio import MicrophoneCallback, SoundCallback
@@ -42,6 +54,9 @@ class Session:
         microphone_input.use_host_input(self._platform.microphone)
         self._sketch = api.use_sketch(Sketch(platform=self._platform))
         self._stopped = False
+        self._font_mark = typography.file_font_mark()
+        self._folder: Path | None = None            # the sketch's folder, known once start() is called
+        self._modules_before: set[str] = set()
 
     @property
     def canvas_size(self) -> tuple[int, int]:
@@ -59,6 +74,9 @@ class Session:
         A file that ends with f.run() is left with setup() done and no frame drawn: call step(). A
         script (ends with f.show()) has presented its drawing(s) and is finished."""
         namespace = {"__name__": "__main__", "__file__": filename}
+        self._font_mark = typography.file_font_mark()
+        self._folder = Path(filename).resolve().parent
+        self._modules_before = set(sys.modules)
         try:
             exec(compile(source, filename, "exec"), namespace)
         except BaseException:
@@ -104,3 +122,15 @@ class Session:
             sound.use_host_mixer(None)
             microphone_input.use_host_input(None)
             api.use_sketch(None)
+            typography.forget_file_fonts(self._font_mark)
+            self._forget_sketch_modules()
+
+    def _forget_sketch_modules(self) -> None:
+        """Drop the modules the run imported from the sketch's folder, so the next run reads them again.
+        funground's own modules stay, even when the sketch sits beside the package."""
+        if self._folder is None:
+            return
+        for name in set(sys.modules) - self._modules_before:
+            path = getattr(sys.modules[name], "__file__", None)
+            if path and name.partition(".")[0] != "funground" and Path(path).resolve().is_relative_to(self._folder):
+                del sys.modules[name]

@@ -518,6 +518,18 @@ _registry: dict[str, FontResource] = {}
 _path_to_key: dict[str, str] = {}
 
 
+def file_font_mark() -> int:
+    """How many font files have been loaded so far. Pass it to `forget_file_fonts()` later (S-157)."""
+    return len(_path_to_key)
+
+
+def forget_file_fonts(mark: int) -> None:
+    """Forget the fonts that `load_font()` loaded after *mark* (from `file_font_mark()`), so the next
+    run reads those files again and gives their names afresh. The bundled fonts stay (S-157, D-083)."""
+    for cache_key in list(_path_to_key)[mark:]:
+        _registry.pop(_path_to_key.pop(cache_key), None)
+
+
 class Font:
     """A font that you can pass to f.text_font(), or ask questions about.
 
