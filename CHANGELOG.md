@@ -177,7 +177,7 @@ pygame-ce that was never published.
   Reference.
 
 ### Licence
-- funground is LGPL-2.1-or-later (D-025). Example code is CC0 (D-026). Dependencies keep their own
+- funground is LGPL-2.1-only (D-025, D-084). Example code is CC0 (D-026). Dependencies keep their own
   licences; see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
 
 ### Still to come before 0.1
