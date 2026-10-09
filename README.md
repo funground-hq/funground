@@ -74,8 +74,8 @@ To contribute, start with the [developer documentation](docs/developer/README.md
 
 ## Licence
 
-funground is licensed under the **GNU Lesser General Public License, version 2.1 or later**
-(`LGPL-2.1-or-later`), the same family as p5.js, Processing's core library and pygame-ce. See
+funground is licensed under the **GNU Lesser General Public License, version 2.1 only**
+(`LGPL-2.1-only`), the same family as p5.js, Processing's core library and pygame-ce. See
 [LICENSE](LICENSE). In short: you may use funground in any project, under any licence. If you
 change funground itself and share the result, share those changes under the LGPL too.
 

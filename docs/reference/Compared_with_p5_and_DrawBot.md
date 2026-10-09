@@ -178,7 +178,7 @@ unless a row says Processing.
 | UI controls | `create_slider`, `create_checkbox`, `create_button`, in a panel below the canvas (row U1) | `createSlider` and friends, as page elements | `Variable([...])` builds a panel and runs the script again on every change |
 | The web and sharing | No browser mode. You share the `.py` file, and the PDF, SVG, PNG, GIF or MP4 it makes | A sketch is a web page. Easy to share by link. This is p5's great strength | You share the script and the files. The app is macOS only |
 | Gallery and teaching material | A guide of 18 chapters, a Quick Reference, an error page, a glossary, a gallery of 87 examples, and eight project pages. A teacher can run the gallery with `python -m funground.gallery` (row R18) | A large reference, many tutorials, books and examples, and a wide community of teachers | Documentation, examples and a courseware page |
-| Licence | Library: LGPL-2.1-or-later. Examples and guide code: CC0 (decisions D-025, D-026) | p5.js: LGPL-2.1. Processing: see its own site | BSD |
+| Licence | Library: LGPL-2.1-only. Examples and guide code: CC0 (decisions D-025, D-026, D-084) | p5.js: LGPL-2.1. Processing: see its own site | BSD |
 | Maturity and community | **First release (0.1).** A small project with a small team and no wider community yet | Many years old, many contributors, a large community | Many years old, a loyal community of type designers |
 
 ---
