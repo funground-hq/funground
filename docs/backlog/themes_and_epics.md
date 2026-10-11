@@ -59,6 +59,7 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-17 Sound API | Simple `p.sound()` over pygame mixer | 3 | planned for 0.1 (D-027) |
 | E-18 Document / page / frame model | Multi-page documents, frame sequences | 3 | planned for 0.1 (D-027) |
 | E-19 Video export | frame sequences (Phase 2), GIF and mp4 via ffmpeg (Phase 3) | 2–3 | planned for 0.1 (D-027) |
+| E-33 Camera input | `f.camera()`: the camera's latest frame used like a picture, still photos, short recorded clips; desktop (pygame-ce) and browser (getUserMedia); design `docs/design/Camera_Note.md` | 0.2+ | draft design, for review (D-089) |
 | E-30 Controls | sliders/toggles bound to sketch variables (DrawBot `Variable`) | 3 | planned for 0.1 (D-027) |
 
 ## TH-5 Beyond 1.0: GPU, 3D and the web *(directional, D-014)*

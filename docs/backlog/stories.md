@@ -256,3 +256,10 @@ gaps are line breaking (justification, hyphenation), type on a path, fitting a h
 | S-169 | E-32 | Later: dictionary hyphenation (`f.hyphenation(True, language=...)`), e.g. with `pyphen`; deferred by D-085 | backlog |
 | S-168 | E-22 | Later: the browser editor's polish (toolbar buttons sized for the page; Reset shown only when the code differs), found in the live check of S-151 part 2 | backlog |
 
+## E-33 Camera input (11 October 2026)
+
+| Story | Epic | Value · tasks · acceptance | Sprint |
+|---|---|---|---|
+| S-172 | E-33 | Camera input, `f.camera()`, desktop and browser, still image and short clips. Tasks per `docs/design/Camera_Note.md` (draft, decisions D-089): `camera_input.py` with a replaceable device (as the microphone), pygame-ce capture on Windows and Linux, `Session.push_camera` and the runner's getUserMedia frames, Play page `allow="camera"`, the github.dev panel's one-line refusal, `picture()`, `save()`, `record()` clips to GIF (and MP4 with the `video` extra), contract rows, Quick Reference, a guide section, two gallery examples with a fallback picture. Acceptance: a fake camera's frames are drawn, saved and recorded on the desktop and in headless Chrome; refusal leaves a black picture and one line of output | after 21 (D-089) |
+| S-173 | E-22 | Gallery example and project "Blow the letters away": rings of letters around the mouth on the live camera picture, scattered by breath (`mic.level()`), faded, re-formed; saved as a GIF. **Depends on S-172 (camera)**; until then the idea is parked (11 Oct 2026, from an animated GIF the maintainer shared) | parked |
+
