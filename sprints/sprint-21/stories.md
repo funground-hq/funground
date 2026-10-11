@@ -1,25 +1,20 @@
 # Sprint 21 — typographic, print-ready posters
 
 **Dates:** planned 11 October 2026; starts when the maintainer has signed off Sprint 20. On `release-0.2-web`
-(a library feature; it ships with 0.2 unless D-086 says otherwise). Epic **E-32**.
+(a library feature; it ships with 0.2, D-086). Epic **E-32**.
 
 **Goal:** a learner can set a typographic poster in funground (justified and hyphenated text, type on a
 curve, a headline fitted to its width) and hand a print shop an A-size PDF with bleed and crop marks, or a
 300 dpi PNG. Gaps found in the 11 October review of poster support.
 
-**Decisions this sprint needs:**
-- **D-085** (maintainer): hyphenation dictionaries. *a* soft hyphens only (U+00AD typed by the learner, no
-  dependency); *b* add `pyphen` (pure Python, dictionaries for about 70 languages, licence GPL/LGPL/MPL
-  tri-licensed, so usable under LGPL-2.1) as a base dependency; *c* `pyphen` as an optional extra.
-  Recommendation: *b*, with *a* working too (a learner's soft hyphen always wins).
-- **D-086** (maintainer): which release carries the poster features: 0.2 (with the web work) or a 0.3.
-  Recommendation: 0.2; they are additive and work in the browser too.
-- API names follow D-034 (DrawBot's model where it fits, decided in each story and recorded as contract rows).
+**Decisions:** D-085 = soft hyphens only for now (no dependency); D-086 = released with 0.2 (both accepted
+11 October 2026). API names follow D-034 (DrawBot's model where it fits, decided in each story and recorded as
+contract rows).
 
 | Story | Value | Status |
 |---|---|---|
 | S-159 | Justified text: `f.text_align("justify")` in `text_box` (the last line of a paragraph stays left), for strings and FormattedStrings | planned |
-| S-160 | Hyphenation: `text_box` breaks at soft hyphens; `f.hyphenation(True, language="en")` hyphenates with a dictionary (D-085) | planned |
+| S-160 | Hyphenation by soft hyphens: `text_box` may break a word where the learner typed a soft hyphen (U+00AD, or `"­"` in Python), showing a hyphen there and nothing elsewhere; works with justify (D-085 = a) | planned |
 | S-161 | Type on a path: `f.text_on_path(message, path, offset=0)` sets letters along any path (a circle, a wave), each turned to the curve; live text in PDF and SVG | planned |
 | S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | planned |
 | S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi is 3508 × 4961 px), in scripts and animated sketches, on the desktop and in the browser | planned |
