@@ -42,6 +42,10 @@ STYLE_FILES = {
 }
 TEXT_STYLES = tuple(STYLE_FILES)
 
+# T23 (S-160): a place where a word may break. It is never drawn and has no width, except where a line
+# breaks at it: there the line ends with a hyphen.
+SOFT_HYPHEN = "\u00ad"
+
 
 class _PathPen(BasePen):
     def __init__(self, glyph_set) -> None:
@@ -182,26 +186,33 @@ class FontResource:
         return path
 
     def shape(self, text: str, size: float, tracking: float = 0.0, features: tuple = (),
-              variations: tuple = (), fallback: tuple | None = None) -> "TextRun | ShapedLine":
+              variations: tuple = (), fallback: tuple | None = None,
+              word_spacing: float = 0.0) -> "TextRun | ShapedLine":
         """Shape *text*. *tracking* (pixels, after every glyph), *features* ((tag, bool) pairs) and
-        *variations* ((tag, number) pairs) are the T13 settings.
+        *variations* ((tag, number) pairs) are the T13 settings. *word_spacing* (T22, pixels) is added
+        after every space, which is how a justified line is stretched. Soft hyphens (T23) are left out of
+        the text: they have no glyph and no width.
 
         *fallback* is the T18 setting: None (the default here) shapes with this font alone. A tuple
         (the keys of the learner's fallback fonts, () for none) lets other fonts supply the characters
         this font lacks. When this font has every character and the text has no emoji, the result is
         the plain `TextRun`, exactly as without fallback; otherwise a `ShapedLine` of several runs."""
+        text = text.replace(SOFT_HYPHEN, "")
         if fallback is None or (self.has_text(text) and not has_emoji(text)):
-            return self._shape_one(text, size, tracking, features, variations)
+            return self._shape_one(text, size, tracking, features, variations, word_spacing)
         items = _itemise(text, self, fallback)
         if len(items) == 1 and items[0][0] is self:
-            return self._shape_one(text, size, tracking, features, variations)
-        runs = tuple(font._shape_one(text[a:b], size, tracking, features, variations) for font, a, b in items)
+            return self._shape_one(text, size, tracking, features, variations, word_spacing)
+        runs = tuple(font._shape_one(text[a:b], size, tracking, features, variations, word_spacing)
+                     for font, a, b in items)
         return ShapedLine(self, text, size, runs, tuple(a for _, a, _ in items))
 
     def _shape_one(self, text: str, size: float, tracking: float = 0.0, features: tuple = (),
-                   variations: tuple = ()) -> "TextRun":
+                   variations: tuple = (), word_spacing: float = 0.0) -> "TextRun":
         """Shape *text* with this font alone."""
         location = self.location(variations)
+        if not text:                                  # HarfBuzz gives no glyph list for an empty text
+            return TextRun(self, text, size, (), float(tracking), location, float(word_spacing))
         buf = hb.Buffer()
         buf.add_str(text)
         buf.guess_segment_properties()
@@ -210,7 +221,7 @@ class FontResource:
             Glyph(i.codepoint, p.x_advance, p.x_offset, p.y_offset, i.cluster)
             for i, p in zip(buf.glyph_infos, buf.glyph_positions)
         )
-        return TextRun(self, text, size, glyphs, float(tracking), location)
+        return TextRun(self, text, size, glyphs, float(tracking), location, float(word_spacing))
 
 
 @dataclass(frozen=True, slots=True)
@@ -221,6 +232,7 @@ class TextRun:
     glyphs: tuple[Glyph, ...]
     tracking: float = 0.0                 # S-090: pixels added after every glyph (T13)
     location: tuple = ()                  # S-090: the variation the outlines are drawn at
+    word_spacing: float = 0.0             # S-159: pixels added after every space (T22)
 
     @property
     def scale(self) -> float:
@@ -228,7 +240,23 @@ class TextRun:
 
     @property
     def advance(self) -> float:
-        return sum(g.x_advance for g in self.glyphs) * self.scale + self.tracking * len(self.glyphs)
+        total = sum(g.x_advance for g in self.glyphs) * self.scale + self.tracking * len(self.glyphs)
+        return total + self.word_spacing * self.spaces
+
+    @property
+    def spaces(self) -> int:
+        """How many glyphs are spaces, the ones `word_spacing` widens (0 when it is not set)."""
+        if not self.word_spacing:
+            return 0
+        return sum(1 for g in self.glyphs if self.text[g.cluster] == " ")
+
+    def _step(self, g: Glyph, s: float) -> float:
+        """How far the pen moves after glyph *g* at scale *s*: its advance, the tracking, and the word
+        spacing when it is a space."""
+        step = g.x_advance * s + self.tracking
+        if self.word_spacing and self.text[g.cluster] == " ":
+            step += self.word_spacing
+        return step
 
     def placements(self, x: float, y: float) -> list[tuple[Glyph, float, float]]:
         """Each glyph with its origin on the baseline, anchored top-left at (x, y): exactly where
@@ -239,7 +267,7 @@ class TextRun:
         out = []
         for g in self.glyphs:
             out.append((g, pen_x + g.x_offset * s, baseline - g.y_offset * s))
-            pen_x += g.x_advance * s + self.tracking
+            pen_x += self._step(g, s)
         return out
 
     def outline_ops(self, x: float, y: float, color: Color) -> list[ir.FillPath]:
@@ -252,7 +280,7 @@ class TextRun:
             outline = self.font.scaled_outline(g.gid, self.location, self.size)
             if not outline.is_empty:
                 ops.append(ir.FillPath(outline.translated(pen_x + g.x_offset * s, baseline - g.y_offset * s), color))
-            pen_x += g.x_advance * s + self.tracking
+            pen_x += self._step(g, s)
         return ops
 
 
@@ -460,13 +488,39 @@ def text_settings(state) -> dict:
             "variations": state.font_variations, "fallback": state.text_fallback}
 
 
+def soft_hyphen_cuts(word: str) -> list[int]:
+    """Where *word* may break at a soft hyphen (T23): the position of each U+00AD that has letters
+    on both sides, the last one first, so a caller tries the longest first part first."""
+    return [i for i in reversed(range(len(word)))
+            if word[i] == SOFT_HYPHEN and word[:i].replace(SOFT_HYPHEN, "") and word[i + 1:].replace(SOFT_HYPHEN, "")]
+
+
+def paragraph_ends(text: str, starts: list[int]) -> list[bool]:
+    """For each line of *text*, whether it is the last line of its paragraph (T22): the last line of all, or
+    one that the next line follows with a new line. *starts[i]* is where line i begins in *text*. A justified
+    line is stretched unless it ends its paragraph."""
+    return [i + 1 == len(starts) or text[starts[i + 1] - 1] == "\n" for i in range(len(starts))]
+
+
+def word_gap(line: str, width: float, size: float, font: FontResource | None = None, **settings) -> float:
+    """The pixels to add after each space of *line* so that it is *width* wide (T22), by the settings
+    of `text_width`. 0 when the line has no space, or is already as wide as *width*."""
+    spaces = line.count(" ")
+    if not spaces:
+        return 0.0
+    return max(0.0, (width - text_width(line, size, font, **settings)) / spaces)
+
+
 def wrap_lines(text: str, width: float, size: float, font: FontResource | None = None,
                **settings) -> tuple[list[str], list[str]]:
-    """Break *text* into lines no wider than *width* at *size* in *font* (contract T10).
+    """Break *text* into lines no wider than *width* at *size* in *font* (contract T10, T23).
 
     Returns (lines, rests): rests[i] is the text from the start of line i onward, so a caller that
     shows only the first n lines can hand back rests[n] as the overflow. Lines break at spaces;
-    a word wider than the box is broken between letters; '\\n' always breaks.
+    '\\n' always breaks. A word that does not fit in the rest of the line is broken at a soft hyphen
+    (U+00AD), the last one that lets the first part and a hyphen fit, and the line ends with the hyphen.
+    A word with no such place that is wider than the box is broken between letters. A soft hyphen where
+    no break is made stays in the line: it has no width.
     """
     font = font or default_font()
     lines: list[str] = []
@@ -485,19 +539,26 @@ def wrap_lines(text: str, width: float, size: float, font: FontResource | None =
         start: int | None = None
         for m in re.finditer(r"[^ ]+", paragraph):
             word, at = m.group(), offset + m.start()
-            if fits(" ".join(words + [word])):
-                words.append(word)
-                start = at if start is None else start
-                continue
-            if words:
-                emit(" ".join(words), start)
-            while len(word) > 1 and not fits(word):        # a word wider than the box
-                cut = len(word) - 1
-                while cut > 1 and not fits(word[:cut]):
-                    cut -= 1
-                emit(word[:cut], at)
-                word, at = word[cut:], at + cut
-            words, start = [word], at
+            while not fits(" ".join(words + [word])):
+                first = start if words else at
+                cut = next((i for i in soft_hyphen_cuts(word) if fits(" ".join(words + [word[:i]]) + "-")), None)
+                if cut is not None:                                  # a soft hyphen: break there
+                    emit(" ".join(words + [word[:cut]]) + "-", first)
+                    word, at = word[cut + 1:], at + cut + 1
+                    words, start = [], None
+                elif words:                                          # the word goes to the next line
+                    emit(" ".join(words), first)
+                    words, start = [], None
+                elif len(word) > 1:                                  # a word wider than the box
+                    cut = len(word) - 1
+                    while cut > 1 and not fits(word[:cut]):
+                        cut -= 1
+                    emit(word[:cut], at)
+                    word, at = word[cut:], at + cut
+                else:
+                    break
+            words.append(word)
+            start = at if start is None else start
         emit(" ".join(words), offset if start is None else start)
         offset += len(paragraph) + 1
     return lines, rests

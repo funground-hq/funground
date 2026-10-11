@@ -75,10 +75,11 @@ is immutable, so sharing the cached one is safe.
 ## Layout: `text_box`, alignment and leading (T7, T9, T10)
 
 One layout serves `text`, `text_box` and `text_path` (F13): `Sketch._line_layout` yields
-`(line, left, top)`. The Sketch resolves alignment first, so an `ir.Text` op's (x, y) is always
+`(line, left, top, index)`. The Sketch resolves alignment first, so an `ir.Text` op's (x, y) is always
 its top-left. Each line is its own op.
 
-- `typography.wrap_lines` breaks at spaces and breaks a long word between letters. It returns the
+- `typography.wrap_lines` breaks at spaces, at soft hyphens (T23) and, for a long word, between
+  letters. It returns the
   lines and `rests[i]`, the text from line i on, so the overflow is `rests[fitting]`.
 - A line fits while `fitting * leading + ascent + descent <= height`. Automatic leading is
   `1.25 * text_size` (p5).
@@ -158,6 +159,43 @@ Bundled: Noto Emoji (static instance at weight 400 of the variable font, 0.89 MB
 
 **Tests.** `tests/test_fallback.py`.
 
+## Justified text and soft hyphens (T22, T23; S-159, S-160; D-085)
+
+Both change where a `text_box` puts words and letters, and neither changes how a glyph is drawn.
+
+**Soft hyphens leave at the shaper.** `FontResource.shape` removes U+00AD from the text before
+HarfBuzz sees it. So every caller (drawing, `text_width`, `text_path`, `text_to_points`, the cached
+runs, the PDF and SVG text steps, which write `run.text`) sees a text with no such character, and
+there is no second place that has to remember it. An empty text (only soft hyphens) shapes to a run
+with no glyphs: HarfBuzz gives no glyph list for it.
+
+**The line breaker** (`wrap_lines`, and `FormattedString.wrap`, which keeps the same shape over
+character indexes) loops while the word does not fit the line so far: (1) the last soft hyphen
+(`soft_hyphen_cuts` lists the places with a letter on each side) after which the line, the part
+and a `-` fit; the line is emitted with the hyphen and the word goes on after the soft hyphen;
+(2) otherwise the line so far is emitted and the word starts the next line; (3) otherwise, a word
+wider than the box is broken between letters, as before. A soft hyphen, then, is used when a word
+does not fit the *rest* of a line, which fills the line as far as it can (a word that would fit
+the next line whole is also broken: this is what word processors do, and it gives justified
+columns even spaces). Lines keep the soft hyphens they did not break at: they have no width.
+The overflow (`rests[i]`, `FormattedString.wrap`'s `starts[i]`) starts after the soft hyphen.
+In a `FormattedString` the hyphen is a piece in the run that owns the soft hyphen.
+
+**Justify** is decided in `Sketch.text_box`, from `typography.paragraph_ends(text, starts)` (a line
+ends its paragraph when the next one follows a new line, or there is none) and
+`typography.word_gap` (`(width - natural) / spaces`, never below 0; a line without a space gets 0). The
+distance goes into the op: `ir.Text.word_spacing`, pixels after every space, omitted from snapshots
+when 0. `TextRun` has the same field and uses it in `advance`, `placements` and `outline_ops` (it
+counts the glyphs whose cluster is a space), so the window, PNG, PDF and SVG all place the same
+glyphs. A `FormattedString` line is made of one op per piece: each piece gets the line's gap, and
+the pen moves by the piece's width plus the gap for each of its spaces. Alignment `"justify"` is left
+alignment for `text`, `text_path` (the layout helpers test for `center` and `right`).
+
+Rejected: putting the soft hyphens in the line text and removing them in each exporter (five
+places to forget); a separate Text op per word (copying a PDF then needs a space between ops, and
+viewers differ); treating the last visible line of a short box as a paragraph end (a box that
+cuts a paragraph would show a ragged line in the middle of the paragraph).
+
 ## Alternatives rejected
 
 - **A markup string** for mixed text (D-044): DrawBot's `FormattedString` was chosen instead.
@@ -183,4 +221,5 @@ Bundled: Noto Emoji (static instance at weight 400 of the variable font, 0.89 MB
 ## Tests
 
 `tests/test_fonts.py` (T11, T12), `test_text_layout.py` (T7 to T10, including `text_box`), `test_text.py` (T6, outline and
-run caches), `test_text_settings.py` (T13), `test_formatted.py` (T14), `test_text_path.py` (F13).
+run caches), `test_text_settings.py` (T13), `test_formatted.py` (T14), `test_text_path.py` (F13), `test_justify.py` (T22),
+`test_soft_hyphens.py` (T23), `test_poster_text_files.py` (T22, T23 in PDF and SVG).

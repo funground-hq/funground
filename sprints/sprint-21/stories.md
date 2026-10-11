@@ -13,8 +13,8 @@ contract rows).
 
 | Story | Value | Status |
 |---|---|---|
-| S-159 | Justified text: `f.text_align("justify")` in `text_box` (the last line of a paragraph stays left), for strings and FormattedStrings | planned |
-| S-160 | Hyphenation by soft hyphens: `text_box` may break a word where the learner typed a soft hyphen (U+00AD, or `"\u00ad"` in Python), showing a hyphen there and nothing elsewhere; works with justify (D-085 = a) | planned |
+| S-159 | Justified text: `f.text_align("justify")` in `text_box` (the last line of a paragraph stays left), for strings and FormattedStrings | done: `"justify"` in `text_align` (T22); a stretched line is a `Text` op with `word_spacing`; example `text-12_justified_columns` |
+| S-160 | Hyphenation by soft hyphens: `text_box` may break a word where the learner typed a soft hyphen (U+00AD, or `"\u00ad"` in Python), showing a hyphen there and nothing elsewhere; works with justify (D-085 = a) | done (T23): the shaper drops U+00AD, `text_box` breaks at the last soft hyphen that fits; same example |
 | S-161 | Type on a path: `f.text_on_path(message, path, offset=0)` sets letters along any path (a circle, a wave), each turned to the curve; live text in PDF and SVG | planned |
 | S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | done: `f.fit_text_size(message, width, height=None)` (T21), example `text-11_fitted_headline` |
 | S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi), in scripts and animated sketches, on the desktop and in the browser | done (D3): redrawn at dpi/72, pHYs written, 120-megapixel limit; funground's A3 is 842 x 1191 pt, so 3508 x 4963 px (true A3 would be 4961) |
@@ -32,8 +32,8 @@ examples run in the browser editor too.
 Order: S-162 and S-164 first (small, no dependency, immediately useful), then S-159 and S-160 (line
 breaking), S-161, S-163, S-166 last; S-165 runs alongside (a spike, no product code).
 
-- [ ] S-159
-- [ ] S-160
+- [x] S-159
+- [x] S-160
 - [ ] S-161
 - [x] S-162
 - [x] S-163

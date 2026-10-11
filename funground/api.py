@@ -1084,7 +1084,7 @@ def clear() -> None:
 def text(message: object, x: float, y: float, color: Color | None = None) -> None:
     """Draw text.
 
-    By default (x, y) is the top-left corner of the text; text_align() can change that. The text uses the fill colour. If there is no fill it uses the stroke colour, and if there is neither it is white. A new line in the message starts a new line of text. The default size is 20 (see text_size).
+    By default (x, y) is the top-left corner of the text; text_align() can change that. Soft hyphens (U+00AD) in the message are not drawn. The text uses the fill colour. If there is no fill it uses the stroke colour, and if there is neither it is white. A new line in the message starts a new line of text. The default size is 20 (see text_size).
 
     Arguments:
         message: what to write. Any value works: str() is applied. A FormattedString gives each part its own look.
@@ -1168,8 +1168,10 @@ def text_align(horizontal: str, vertical: str | None = None) -> None:
 
     The default is left and top. The choice is saved by push() and brought back by pop().
 
+    "justify" is for text_box(): each line is stretched to the width of the box by making the spaces between the words wider, except the last line of a paragraph and a line of one word, which stay on the left. In text() there is no box, so "justify" sets the text on the left.
+
     Arguments:
-        horizontal: "left" (the default), "center" or "right".
+        horizontal: "left" (the default), "center", "right" or "justify".
         vertical: "top" (the default), "center", "baseline" or "bottom". Leave it out to keep the current choice.
 
     Raises:
@@ -1179,7 +1181,7 @@ def text_align(horizontal: str, vertical: str | None = None) -> None:
         f.text_align("center", "center")
         f.text("Middle", f.width / 2, f.height / 2)
 
-    See also: text, text_width
+    See also: text, text_box, text_width
     """
     active_sketch().text_align(horizontal, vertical)
 
@@ -1229,6 +1231,8 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
 
     Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn. Give the returned text to another box to flow a story across columns.
 
+    With f.text_align("justify") each line is stretched to the width of the box, except the last line of each paragraph. A soft hyphen, the character U+00AD (written "\\u00ad" in Python), marks a place where a long word may break: when a word does not fit in the rest of a line, it is broken at the last soft hyphen that fits, and a hyphen is drawn there. A soft hyphen that is not used is not drawn and has no width.
+
     Arguments:
         message: the text, a string or a FormattedString.
         x, y: the top-left corner of the box.
@@ -1245,7 +1249,7 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
     Example:
         rest = f.text_box("A long story that wraps inside a box.", 20, 60, 280, 100)
 
-    See also: text, text_width, text_leading, FormattedString
+    See also: text, text_align, text_width, text_leading, FormattedString
     """
     return active_sketch().text_box(message, x, y, width, height, color)
 
@@ -1253,7 +1257,7 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
 def text_width(message: object) -> float:
     """Return how wide some text will be, in pixels.
 
-    It is measured at the current text size and font, and it is the exact distance text() advances. Use it to centre or right-align text.
+    It is measured at the current text size and font, and it is the exact distance text() advances. Use it to centre or right-align text. Soft hyphens (U+00AD) have no width.
 
     Arguments:
         message: what to measure. Any value works, or a FormattedString.

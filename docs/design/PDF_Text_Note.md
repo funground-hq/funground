@@ -125,6 +125,15 @@ opacity and blend mode.
   installed font (T19, D-059): see [Text_In_Files_Note.md](Text_In_Files_Note.md).
 - **Silent fallback could hide a regression.** The tests assert that fonts are present.
 
+## Justified text and soft hyphens (T22, T23)
+
+Nothing changes in the exporter. A justified line is a run whose glyph positions already include
+the stretched spaces (`TextRun.placements`), and the exporter writes every glyph at its position, so
+the stretched spaces are *positions*, not extra space characters: a copy gives the words with their
+single spaces. A soft hyphen never reaches the exporter (shaping removes it), so `run.text` and the
+ToUnicode map hold none, and a hyphen drawn at a line end is an ordinary "-" that copies as one
+(pdfium reports it as its own hyphen mark). Tests: `tests/test_poster_text_files.py`.
+
 ## Tests
 
 `tests/test_pdf_text.py` (29 tests):
