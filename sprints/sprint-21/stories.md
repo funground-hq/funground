@@ -20,6 +20,7 @@ contract rows).
 | S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi), in scripts and animated sketches, on the desktop and in the browser | done (D3): redrawn at dpi/72, pHYs written, 120-megapixel limit; funground's A3 is 842 x 1191 pt, so 3508 x 4963 px (true A3 would be 4961) |
 | S-164 | Print-ready PDF: `f.save("poster.pdf", bleed=f.mm(3), marks=True)` adds the bleed, crop marks and the PDF's TrimBox and BleedBox; `f.mm()` and `f.inch()` give lengths in points | done (D2): bleed, crop marks (RGB black until S-170), TrimBox and BleedBox; `f.mm`/`f.inch` already existed |
 | S-165 | Spike: CMYK and PDF/X for print shops. Can funground write CMYK (or a PDF/X file a print shop accepts) without a heavy dependency? Criteria set before the work; a recommendation | done (`spikes/11_cmyk/RESULTS.md`): RGB to CMYK by pypdf rewrite works but is not colour-managed; Pillow's littleCMS works on the desktop, not in Pyodide; no CMYK profile can be bundled; sRGB tagging plus an output intent is safe. Decision D-087 proposed |
+| S-171 | Fractional text sizes: `f.text_size(143.7)` keeps the fraction (the `int()` is a pygame-era leftover), so fitted headlines are exact and animated type grows smoothly; the outline cache keyed so many distinct sizes stay fast (measured before and after); affected references regenerated on purpose | planned (after S-159, S-160) |
 | S-170 | CMYK colour model (D-087): `f.cmyk(c, m, y, k)` and `f.color_mode("cmyk")` in percentages; PDFs carry exact DeviceCMYK for those colours (fills, strokes, text, gradients, opacity); screen, PNG and SVG show an approximation; RGB colours tagged as sRGB with an output intent; crop marks in registration colour | planned |
 | S-166 | Teaching: guide sections (justified columns, type on a path, fitted headlines, preparing a file for print), four gallery examples, and the "Event poster series" project made print-ready | planned |
 
@@ -38,5 +39,6 @@ breaking), S-161, S-163, S-166 last; S-165 runs alongside (a spike, no product c
 - [x] S-163
 - [x] S-164
 - [x] S-165
+- [ ] S-171
 - [ ] S-170
 - [ ] S-166
