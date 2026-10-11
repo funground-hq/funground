@@ -1,0 +1,45 @@
+# Sprint 21 — typographic, print-ready posters
+
+**Dates:** planned 11 October 2026; starts when the maintainer has signed off Sprint 20. On `release-0.2-web`
+(a library feature; it ships with 0.2 unless D-086 says otherwise). Epic **E-32**.
+
+**Goal:** a learner can set a typographic poster in funground (justified and hyphenated text, type on a
+curve, a headline fitted to its width) and hand a print shop an A-size PDF with bleed and crop marks, or a
+300 dpi PNG. Gaps found in the 11 October review of poster support.
+
+**Decisions this sprint needs:**
+- **D-085** (maintainer): hyphenation dictionaries. *a* soft hyphens only (U+00AD typed by the learner, no
+  dependency); *b* add `pyphen` (pure Python, dictionaries for about 70 languages, licence GPL/LGPL/MPL
+  tri-licensed, so usable under LGPL-2.1) as a base dependency; *c* `pyphen` as an optional extra.
+  Recommendation: *b*, with *a* working too (a learner's soft hyphen always wins).
+- **D-086** (maintainer): which release carries the poster features: 0.2 (with the web work) or a 0.3.
+  Recommendation: 0.2; they are additive and work in the browser too.
+- API names follow D-034 (DrawBot's model where it fits, decided in each story and recorded as contract rows).
+
+| Story | Value | Status |
+|---|---|---|
+| S-159 | Justified text: `f.text_align("justify")` in `text_box` (the last line of a paragraph stays left), for strings and FormattedStrings | planned |
+| S-160 | Hyphenation: `text_box` breaks at soft hyphens; `f.hyphenation(True, language="en")` hyphenates with a dictionary (D-085) | planned |
+| S-161 | Type on a path: `f.text_on_path(message, path, offset=0)` sets letters along any path (a circle, a wave), each turned to the curve; live text in PDF and SVG | planned |
+| S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | planned |
+| S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi is 3508 × 4961 px), in scripts and animated sketches, on the desktop and in the browser | planned |
+| S-164 | Print-ready PDF: `f.save("poster.pdf", bleed=f.mm(3), marks=True)` adds the bleed, crop marks and the PDF's TrimBox and BleedBox; `f.mm()` and `f.inch()` give lengths in points | planned |
+| S-165 | Spike: CMYK and PDF/X for print shops. Can funground write CMYK (or a PDF/X file a print shop accepts) without a heavy dependency? Criteria set before the work; a recommendation | planned |
+| S-166 | Teaching: guide sections (justified columns, type on a path, fitted headlines, preparing a file for print), four gallery examples, and the "Event poster series" project made print-ready | planned |
+
+Acceptance for the sprint: the full suite green; each story's contract row(s) pinned; goldens added for the
+new drawing (justified box, hyphenated box, text on a circle); a 300 dpi A3 PNG and a bleed-and-marks PDF
+checked by test (sizes, boxes, marks); every new function in the Quick Reference and the guide; the new
+examples run in the browser editor too.
+
+Order: S-162 and S-164 first (small, no dependency, immediately useful), then S-159 and S-160 (line
+breaking), S-161, S-163, S-166 last; S-165 runs alongside (a spike, no product code).
+
+- [ ] S-159
+- [ ] S-160
+- [ ] S-161
+- [ ] S-162
+- [ ] S-163
+- [ ] S-164
+- [ ] S-165
+- [ ] S-166

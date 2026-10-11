@@ -40,6 +40,7 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-13 HiDPI-correct rendering | Logical coordinates, physical-resolution rendering; crisp on scaled displays (Windows verified; macOS/Linux follow-up) | 1 | done (Sprint 3) |
 | E-12 Export and headless mode | `p.save()` PNG/PDF/SVG through Cairo surfaces; run a sketch to files without a window; later: embedded-font PDF text (S-032) | 1 (basic) / 3 (embedded fonts) | basic done (Sprint 3) |
 | E-10 Transforms and state stack | Internal `Transform` + state ops in the IR (Phase 1); public `translate/rotate/scale`, `push/pop`, `with p.saved_state()` (Phase 2) | 1 → 2 | ready |
+| E-32 Typographic, print-ready posters | Justified and hyphenated text, type on a path, fitted headlines; 300 dpi PNG and PDF with bleed, crop marks and trim/bleed boxes; a CMYK spike; teaching (11 Oct 2026 poster review) | 0.2 | planned (Sprint 21) |
 | E-11 Path API | Internal `Path` in the IR (Phase 1); public `p.path()` and clip (Phase 2) | 1 → 2 | ready |
 
 | E-24 Drawing vocabulary completeness | `square`, `triangle`, `quad`, `arc`, `polygon`; stroke cap/join/dash/miter; anti-alias opt-out; revisit rect/ellipse modes | 2 | ready (Feature_Map §2) |

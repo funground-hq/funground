@@ -233,3 +233,23 @@ the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once t
 | S-124 | E-22 | Poster designer: a visible way to edit the headline (an on-screen "type to edit" hint or a text field control); a multi-page PDF from an animated sketch (library: pages outside scripts) | later |
 | S-130 | E-23 | Typing for editors and AI tools: a `py.typed` marker; the live values (`width`, `mouse_x`, …) declared with their types under `if TYPE_CHECKING:` in `__init__.py`; a test that every public function is fully and correctly annotated (e.g. `stroke_width` takes fractions). No separate `.pyi` (from an outside AI review, 6 Oct) | later |
 | S-131 | E-21 | `f.describe()`: the canvas described in words for learners debugging, screen-reader users and AI assistants (like p5's `describe()`/`textOutput()`): a short summary by default, the full op list as JSON on request via the IR. New public API: needs a contract row and the maintainer's decision (from an outside AI review, 6 Oct) | later |
+
+## E-32 Typographic, print-ready posters (11 October 2026) — Sprint 21
+
+From the review of poster support: funground's typography, shapes, layout and vector export are strong; the
+gaps are line breaking (justification, hyphenation), type on a path, fitting a headline, and print handoff
+(resolution, bleed and marks, CMYK). Plan: `sprints/sprint-21/stories.md`.
+
+| Story | Epic | Value · tasks · acceptance | Sprint |
+|---|---|---|---|
+| S-159 | E-32 | Justified text. Tasks: `"justify"` in `text_align` for `text_box` (strings, FormattedStrings), word spaces stretched, last line and lines ending a paragraph left-aligned; contract row; golden. Acceptance: a justified box's lines (but the last) end exactly at the box's right edge | 21 |
+| S-160 | E-32 | Hyphenation. Tasks: soft hyphens (U+00AD) as break points shown as a hyphen when used; `f.hyphenation(on, language)` with a dictionary (D-085); minimum word and fragment lengths; works with justify; contract row; golden. Acceptance: a narrow box of long words breaks inside words at correct points, in English and one other language | 21 |
+| S-161 | E-32 | Type on a path. Tasks: `f.text_on_path(message, path, offset=0)` places shaped glyphs along a `Path` by arc length, each rotated to the tangent; alignment along the path; overflow beyond the path's end dropped and returned; live text in PDF/SVG; contract row; golden. Acceptance: text around a circle reads correctly and its PDF text is selectable | 21 |
+| S-162 | E-32 | Fitted headline. Tasks: `f.fit_text_size(message, width, height=None)` with the current font, features, variations and tracking; contract row; tests. Acceptance: text set at the returned size measures the width within 0.5 pt | 21 |
+| S-163 | E-32 | Print resolution. Tasks: `dpi=` on `f.save(".png")` (scripts, pages, animated sketches), memory check for A2 at 300 dpi; desktop and browser; contract row. Acceptance: an A3 page saves as a 3508 x 4961 PNG matching the vector drawing | 21 |
+| S-164 | E-32 | Print-ready PDF. Tasks: `bleed=` and `marks=` on `f.save(".pdf")`; MediaBox grown by bleed and slug, TrimBox and BleedBox set, crop marks in registration black outside the bleed; `f.mm()`, `f.inch()`; contract row; tests read the boxes back with pypdf. Acceptance: an A4 PDF with 3 mm bleed has TrimBox 595 x 842 pt and crop marks at the trim corners | 21 |
+| S-165 | E-32 | Spike: CMYK / PDF/X. Question: can funground produce a file a print shop accepts as CMYK (or PDF/X) without a heavy dependency, on Windows, macOS, Linux and in the browser? Criteria before work; options measured (e.g. a converter tool, colour-managed export); recommendation. No product code | 21 |
+| S-166 | E-32 | Teaching. Tasks: guide sections (justified columns, hyphenation, type on a path, fitted headlines, preparing a file for print), four gallery examples, "Event poster series" project print-ready; Quick Reference rows. Acceptance: examples run on the desktop and in the browser editor; links checked | 21 |
+| S-167 | E-32 | Later: baseline grid (text boxes snapping lines to a grid's baseline), optical margin alignment and hanging punctuation | backlog |
+| S-168 | E-22 | Later: the browser editor's polish (toolbar buttons sized for the page; Reset shown only when the code differs), found in the live check of S-151 part 2 | backlog |
+
