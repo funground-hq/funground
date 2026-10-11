@@ -31,6 +31,7 @@ rewritten after acceptance.
 | [Typography_Note.md](Typography_Note.md) | Fonts, styles, tracking, OpenType features, variations, mixed text. | You change text settings or `FormattedString`. |
 | [PDF_Text_Note.md](PDF_Text_Note.md) | Real, searchable text in PDFs, by marker groups and pypdf. | You touch `export/pdf_text.py` or a PDF text bug. |
 | [Text_In_Files_Note.md](Text_In_Files_Note.md) | Live, editable `<text>` in SVG files, with font names and embedded subsets. | You touch `export/svg_text.py` or hand files to Illustrator or Inkscape. |
+| [Colour_For_Print_Note.md](Colour_For_Print_Note.md) | `f.cmyk()` colours as exact CMYK in PDFs, by stand-in colours and pypdf; RGB tagged as sRGB. | You touch `export/cmyk.py`, `export/pdf_colour.py` or colour in PDFs. |
 | [Layers_Note.md](Layers_Note.md) | `f.layer()` as pictures on screen and as real layers in PDF and SVG. | You touch layers, `active_sketch()` or `export/layers.py`. |
 | [Compositing_Note.md](Compositing_Note.md) | Colour modes, gradients, blend modes, opacity and shadows. | You touch colour, paint or compositing. |
 | [Paths_Note.md](Paths_Note.md) | Paths, drawing modes, booleans, rounded corners. | You touch `geometry.py`, `paths.py` or `pathops.py`. |

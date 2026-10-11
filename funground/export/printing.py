@@ -14,6 +14,8 @@ The mechanism is small. For each page the exporter
    the slug, the strip outside the bleed that holds the marks (`CairoRenderer.clip_box`),
 4. draws the crop marks in the slug (`PrintSetup.draw_marks`), and
 5. once the file is written, sets each page's TrimBox and BleedBox (`write_print_boxes`).
+
+The marks are in registration colour: cyan, magenta, yellow and black all at 100 %.
 """
 from __future__ import annotations
 
@@ -24,11 +26,13 @@ import cairo
 from pypdf import PdfReader, PdfWriter
 from pypdf.generic import RectangleObject
 
+from ..color import Color
 from ..surface import mm
 
 MARK_WIDTH = 0.25                    # points: a hairline, as printers use
 MARK_LENGTH = mm(5)                  # each crop mark is 5 mm long
 MARK_GAP = mm(1)                     # and starts 1 mm beyond the bleed, so it never touches the bleed
+REGISTRATION = Color.from_cmyk(100, 100, 100, 100)    # S-170 (D5): marks print on every plate, as printers expect
 
 
 class PrintSetup:
@@ -64,15 +68,18 @@ class PrintSetup:
         ctx.rectangle(*renderer.clip_box)
         ctx.clip()
 
-    def draw_marks(self, ctx: cairo.Context, width: float, height: float) -> None:
-        """Draw a crop mark along each edge at each trim corner, in the slug. Call after the page is drawn."""
+    def draw_marks(self, renderer, ctx: cairo.Context, width: float, height: float) -> None:
+        """Draw a crop mark along each edge at each trim corner, in the slug. Call after the page is drawn.
+
+        The marks are in registration colour (contract D5): all four inks at 100 %, so that they print on
+        every plate and a misaligned plate shows. In the PDF that is a CMYK colour."""
         if not self.marks:
             return
         near = self.bleed + MARK_GAP                      # from the trim edge to where a mark starts
         far = near + MARK_LENGTH
         ctx.save()
         ctx.reset_clip()
-        ctx.set_source_rgb(0, 0, 0)                       # black: PDF here is RGB, so this is not yet true registration colour
+        ctx.set_source_rgb(*renderer.rgb_of(REGISTRATION))
         ctx.set_line_width(MARK_WIDTH)
         ctx.set_line_cap(cairo.LINE_CAP_BUTT)
         for x, step_x in ((0, -1), (width, 1)):
@@ -104,7 +111,9 @@ def write_print_boxes(path: str, setup: PrintSetup) -> None:
     if not setup.active:
         return
     with open(path, "rb") as file:
-        writer = PdfWriter(clone_from=PdfReader(io.BytesIO(file.read())))
+        reader = PdfReader(io.BytesIO(file.read()))
+    writer = PdfWriter(clone_from=reader)
+    writer.pdf_header = reader.pdf_header.encode()            # keep the version the earlier steps needed (S-170)
     margin, bleed = setup.margin, setup.bleed
     for page in writer.pages:
         media = page.mediabox

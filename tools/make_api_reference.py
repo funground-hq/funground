@@ -51,7 +51,7 @@ GROUPS: dict[str, list[str]] = {
     "Curves and custom shapes": ["bezier", "bezier_point", "bezier_tangent", "curve", "curve_point", "curve_tangent",
                                  "curve_tightness", "begin_shape", "end_shape", "vertex", "bezier_vertex",
                                  "quadratic_vertex", "curve_vertex", "begin_contour", "end_contour"],
-    "Colour": ["background", "clear", "color", "color_mode", "hsb", "hsl", "lerp_color", "linear_gradient",
+    "Colour": ["background", "clear", "color", "color_mode", "hsb", "hsl", "cmyk", "lerp_color", "linear_gradient",
                "radial_gradient"],
     "Fill and stroke": ["fill", "no_fill", "stroke", "no_stroke", "stroke_width", "stroke_cap", "stroke_join",
                         "miter_limit", "stroke_dash", "no_dash", "shadow", "no_shadow", "opacity", "blend_mode",

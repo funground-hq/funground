@@ -647,7 +647,9 @@ def save(path: str, *, text: str = "live", bleed: float = 0, marks: bool = False
 
     A PNG is written at the screen's real resolution, so on a 2x display a 640 by 400 window gives a 1280 by 800 file. To choose the resolution for printing, give dpi. The page is then drawn again at that many dots per inch (a point is 1/72 inch, so the scale is dpi / 72), not stretched from the screen picture. A4 at dpi=300 is 2479 by 3508 pixels. The file says "300 dpi", so print software sizes it right. A page of more than 120 million pixels is refused; save a PDF instead. In an animated sketch, a PNG with dpi holds what this frame drew, as a PDF does, and not what earlier frames left on the canvas.
 
-    For a print shop, a PDF can have a bleed and crop marks. The bleed is extra picture beyond the edges of the page, so that no white line shows when the printer cuts the paper. Draw past the edges (at negative numbers, and beyond width and height) and that drawing appears in the bleed. A background() fills the bleed too. The page of your canvas stays the finished size: the PDF records it as its TrimBox, and the page grown by the bleed as its BleedBox. Crop marks are thin black lines outside the bleed at the four corners, 5 mm long, to show where to cut. Every page of a document of several pages gets the same bleed and marks.
+    For a print shop, a PDF can have a bleed and crop marks. The bleed is extra picture beyond the edges of the page, so that no white line shows when the printer cuts the paper. Draw past the edges (at negative numbers, and beyond width and height) and that drawing appears in the bleed. A background() fills the bleed too. The page of your canvas stays the finished size: the PDF records it as its TrimBox, and the page grown by the bleed as its BleedBox. Crop marks are thin lines in registration colour (all four inks at 100 percent, so they print on every plate) outside the bleed at the four corners, 5 mm long, to show where to cut. Every page of a document of several pages gets the same bleed and marks.
+
+    A PDF holds colours made by cmyk() as exact CMYK inks. Every other colour is RGB, tagged as sRGB.
 
     Arguments:
         path: the file name. Its ending decides the kind: ".png", ".pdf" or ".svg".
@@ -1408,6 +1410,35 @@ def hsl(hue: float, saturation: float, lightness: float, alpha: float = 255):
     from .color import Color as _Color
 
     return _Color.from_hsl(hue, saturation, lightness, alpha)
+
+
+def cmyk(cyan: float, magenta: float, yellow: float, black: float, alpha: float = 255):
+    """Make a colour from printing inks: cyan, magenta, yellow and black.
+
+    Use it where you want an exact print colour. A PDF you save holds exactly these ink amounts, so a print shop gets your numbers, not a guess. On the screen, in a PNG and in an SVG the colour is shown as the nearest red, green and blue. That is an approximation: a screen cannot show ink. The ranges are always these, whatever the colour mode is.
+
+    Arguments:
+        cyan: the cyan ink, 0 to 100.
+        magenta: the magenta ink, 0 to 100.
+        yellow: the yellow ink, 0 to 100.
+        black: the black ink, 0 to 100.
+        alpha: the opacity, 0 (invisible) to 255 (solid). The default is 255.
+
+    Returns:
+        A colour, as from color(). Its .cmyk part holds the four ink amounts.
+
+    Raises:
+        ValueError: an ink is not a number from 0 to 100, or the alpha is not from 0 to 255.
+
+    Example:
+        f.fill(f.cmyk(0, 80, 100, 0))
+        f.save("poster.pdf")
+
+    See also: hsb, color, save, lerp_color
+    """
+    from .color import Color as _Color
+
+    return _Color.from_cmyk(cyan, magenta, yellow, black, alpha)
 
 
 def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors, stops=None):

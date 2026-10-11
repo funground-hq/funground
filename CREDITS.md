@@ -167,6 +167,7 @@ funground and its examples bundle very little. Each file, and where it came from
 | `examples/gallery/images/data/badge.svg` | Written by hand for the gallery (its first lines say so). CC0. |
 | `examples/gallery/sound/data/tune.wav` | **Made by Python.** `make_tune.py`, beside it, computes three seconds of sound from note frequencies and writes the WAV. CC0. |
 | `funground/data/ragas.json` | The raga and tala table, described above. |
+| `funground/data/sRGB.icc` | **Made by littleCMS.** `tools/make_srgb_profile.py` asks Pillow's `ImageCms.createProfile("sRGB")` (littleCMS, MIT licence) for the standard sRGB profile and saves its bytes. The profile says "No copyright, use freely". Every PDF carries it to say what its RGB colours mean. |
 | The pictures in `docs/gallery/images/` and `docs/reference/images/` | Pictures of the examples and reference sketches, saved by funground itself (`tools/make_gallery.py`, `tools/make_reference_images.py`). |
 | Sounds in the examples (chimes, drones, tunes) | Made on the spot by funground's own synthesiser. No recorded sound is bundled. |
 

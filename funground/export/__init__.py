@@ -9,6 +9,8 @@
   family, with a subset of each font embedded for browsers (S-097, contract T19: see `svg_text`).
   Layers (S-095) become real file layers: optional content groups in PDF, Inkscape layer groups in SVG (S-096, contract F16: see
   `layers`).
+  Colours (S-170, contract D4): a colour made by `f.cmyk()` is exact DeviceCMYK in a PDF, and every other RGB colour is tagged as
+  sRGB (see `cmyk` and `pdf_colour`).
 - **`save_picture`** (S-052): the same idea for a Picture's own `g.save(path)` - PNG is its
   pixels, PDF/SVG replay its history when one is available, or embed its pixels when it is
   not (contract P2/P3). Cairo stays behind this provider, per funground's boundary rule: a
@@ -28,7 +30,9 @@ from ..ir import Frame
 from ..platform.base import Pixels
 from ..renderers.cairo2d import CairoRenderer, paint_picture_pixels
 from ..surface import POINTS_PER_INCH
+from .cmyk import CmykStandins
 from .layers import LayerMarkers
+from .pdf_colour import finish_colour
 from .pdf_text import PdfTextCollector
 from .printing import PrintSetup, write_print_boxes
 from .svg_text import SvgTextCollector
@@ -107,12 +111,17 @@ def _write_pdf(path: str, draw, text_mode: str = "live", setup: PrintSetup = NO_
     without it: text as glyph outlines (exactly what funground wrote before T15), layers as plain
     drawing with hidden layers left out (exactly what S-095 wrote). A save never fails because of them.
 
+    Then the colour step (S-170, contract D4) swaps each cmyk() stand-in for its exact inks and tags every other
+    RGB colour as sRGB. For a file with cmyk() colours it is not optional: should it fail, there is no file
+    (`ColourError`), never a wrong one. For a file without, a failure leaves the file as drawn.
+
     With a print *setup* (S-164, contract D2) a last step sets each page's TrimBox and BleedBox. It is
     not optional: a file asked to be print-ready that is not would be worse than an error.
     """
     text, layers = text_mode == "live", True        # T20: "shapes" = never set up the text collector
     while True:
         renderer = CairoRenderer()
+        renderer.cmyk_standins = CmykStandins()
         if text:
             renderer.pdf_text = PdfTextCollector()
         if layers:
@@ -133,6 +142,7 @@ def _write_pdf(path: str, draw, text_mode: str = "live", setup: PrintSetup = NO_
             layers = False
             continue
         break
+    finish_colour(path, renderer.cmyk_standins)
     write_print_boxes(path, setup)
 
 
@@ -217,7 +227,7 @@ def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 
             ctx = renderer.context_for(surface, 1.0)
             setup.begin_page(renderer, ctx, width, height)
             renderer.draw(ctx, frame)
-            setup.draw_marks(ctx, width, height)
+            setup.draw_marks(renderer, ctx, width, height)
             surface.finish()
 
         if fmt == "pdf":
@@ -245,7 +255,7 @@ def save_document(pages: list, path: str, text: str = "live", setup: PrintSetup 
             ctx = renderer.context_for(surface, 1.0)
             setup.begin_page(renderer, ctx, width, height)
             renderer.draw(ctx, frame)
-            setup.draw_marks(ctx, width, height)
+            setup.draw_marks(renderer, ctx, width, height)
             surface.show_page()
         surface.finish()
 

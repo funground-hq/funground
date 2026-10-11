@@ -97,8 +97,8 @@ is kept per page in `_pages_full`.
   renderer goes back to this box, not to the whole sheet (`CairoRenderer.clip_box`, `_reset_clip`).
 - **Marks.** Eight lines of 0.25 pt, 5 mm long, drawn after the page, outside the clip. Each starts 1 mm
   beyond the bleed edge, so it never touches the bleed. The slug (1 mm + 5 mm) is added to the margin
-  only when `marks=True`. The marks are black. This PDF is RGB, so they are not true registration colour
-  (all inks); that needs CMYK output (the spike in `spikes/11_cmyk`).
+  only when `marks=True`. The marks are in registration colour, `cmyk(100, 100, 100, 100)`
+  (S-170, contract D5), so a PDF holds them as `1 1 1 1 K`; see `Colour_For_Print_Note.md`.
 - **The boxes come last.** Cairo has no TrimBox call, so the file is rewritten with pypdf after the text
   and layer steps (`write_print_boxes`): MediaBox = the sheet (already set by the surface), TrimBox = the
   canvas, BleedBox = the trim grown by the bleed. Those steps clone the page dictionaries, so they would
