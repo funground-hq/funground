@@ -36,7 +36,7 @@ V05_FUNCTIONS = {
 ADDED_FUNCTIONS = {
     "random_seed": "(seed: 'int | None' = None) -> 'None'",
     "run": "(*, fps: 'int | None' = None, max_frames: 'int | None' = None) -> 'None'",
-    "save": "(path: 'str', *, text: 'str' = 'live') -> 'None'",
+    "save": "(path: 'str', *, text: 'str' = 'live', bleed: 'float' = 0, marks: 'bool' = False, dpi: 'float | None' = None) -> 'None'",
     # Sprint 4, S-027: transforms and the state stack (contract F1/F2).
     "translate": "(dx: 'float', dy: 'float') -> 'None'",
     "rotate": "(degrees: 'float') -> 'None'",
@@ -246,6 +246,8 @@ ADDED_FUNCTIONS = {
     # S-132 Play (contracts E1, E2; D-071, D-073: flat names, no f.play namespace)
     "variations": "(fn, *, columns: 'int | None' = None, **values) -> 'list'",
     "keep": "(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'",
+    # S-162 a headline that fits (contract T21)
+    "fit_text_size": "(message: 'object', width: 'float', height: 'float | None' = None) -> 'float'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
