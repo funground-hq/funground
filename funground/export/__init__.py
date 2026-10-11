@@ -16,15 +16,21 @@
 """
 from __future__ import annotations
 
+import io
+import math
 import os
+import struct
+import zlib
 
 import cairo
 
 from ..ir import Frame
 from ..platform.base import Pixels
 from ..renderers.cairo2d import CairoRenderer, paint_picture_pixels
+from ..surface import POINTS_PER_INCH
 from .layers import LayerMarkers
 from .pdf_text import PdfTextCollector
+from .printing import PrintSetup, write_print_boxes
 from .svg_text import SvgTextCollector
 
 FORMATS = ("png", "pdf", "svg")
@@ -38,6 +44,48 @@ def check_text_mode(text) -> str:
     return text
 
 
+# S-163 (D3): a PNG at a stated resolution is drawn afresh, and Cairo needs 4 bytes for each pixel. 120 million
+# pixels is 480 MB: A1 at 300 dpi (70 million) fits; A0 (139 million) does not, and a PDF suits it better.
+MAX_PNG_PIXELS = 120_000_000
+
+
+def check_dpi(dpi: object, name: str = "f.save()") -> float | None:
+    """Validate a ``dpi=`` choice (contract D3): None, or a number of dots per inch above 0."""
+    if dpi is None:
+        return None
+    if isinstance(dpi, bool) or not isinstance(dpi, (int, float)):
+        raise TypeError(f"{name}: dpi must be a number of dots per inch, such as 300, not {dpi!r}")
+    if not (math.isfinite(dpi) and dpi > 0):
+        raise ValueError(f"{name}: dpi must be above 0, such as 300, not {dpi!r}")
+    return float(dpi)
+
+
+def pixel_size(width: float, height: float, dpi: float) -> tuple[int, int]:
+    """The pixels of a *width* x *height* page (points) at *dpi*: each side is points x dpi / 72, rounded
+    to the nearest whole pixel, a half going up (contract D3)."""
+    return (math.floor(width * dpi / POINTS_PER_INCH + 0.5), math.floor(height * dpi / POINTS_PER_INCH + 0.5))
+
+
+def check_png_size(width: float, height: float, dpi: float, path: str) -> tuple[int, int]:
+    """The pixel size of the page at *dpi*, or a ValueError when it is over MAX_PNG_PIXELS. Nothing is allocated."""
+    pw, ph = pixel_size(width, height, dpi)
+    if pw * ph > MAX_PNG_PIXELS:
+        raise ValueError(
+            f"f.save({path!r}): at {dpi:g} dpi a {width:g} x {height:g} page is {pw} x {ph} pixels, "
+            f"{pw * ph / 1e6:.0f} million. The limit is {MAX_PNG_PIXELS // 1_000_000} million. "
+            "Use a lower dpi, or save a PDF, which has no resolution and prints sharp at any size.")
+    return pw, ph
+
+
+def _png_with_resolution(png: bytes, dpi: float) -> bytes:
+    """*png* with a pHYs chunk stating *dpi* (pixels per metre), placed straight after the header chunk."""
+    per_metre = round(dpi / 0.0254)
+    body = b"pHYs" + struct.pack(">IIB", per_metre, per_metre, 1)
+    chunk = struct.pack(">I", len(body) - 4) + body + struct.pack(">I", zlib.crc32(body))
+    header_end = 8 + 12 + 13                       # the signature, then IHDR: length, type, 13 bytes, crc
+    return png[:header_end] + chunk + png[header_end:]
+
+
 def format_of(path: str) -> str:
     ext = os.path.splitext(path)[1].lower().lstrip(".")
     if ext not in FORMATS:
@@ -45,7 +93,10 @@ def format_of(path: str) -> str:
     return ext
 
 
-def _write_pdf(path: str, draw, text_mode: str = "live") -> None:
+NO_PRINT_SETUP = PrintSetup()           # no bleed and no marks: the page is the canvas (contract D2)
+
+
+def _write_pdf(path: str, draw, text_mode: str = "live", setup: PrintSetup = NO_PRINT_SETUP) -> None:
     """Write a PDF with real text (S-094, contract T15) and real layers (S-096, contract F16).
 
     ``draw(renderer)`` writes the whole document to *path* with *renderer* and finishes the
@@ -55,6 +106,9 @@ def _write_pdf(path: str, draw, text_mode: str = "live") -> None:
     markers alone (they use different marker grids). Should a step fail, the document is drawn again
     without it: text as glyph outlines (exactly what funground wrote before T15), layers as plain
     drawing with hidden layers left out (exactly what S-095 wrote). A save never fails because of them.
+
+    With a print *setup* (S-164, contract D2) a last step sets each page's TrimBox and BleedBox. It is
+    not optional: a file asked to be print-ready that is not would be worse than an error.
     """
     text, layers = text_mode == "live", True        # T20: "shapes" = never set up the text collector
     while True:
@@ -65,7 +119,7 @@ def _write_pdf(path: str, draw, text_mode: str = "live") -> None:
             renderer.file_layers = LayerMarkers()
         draw(renderer)
         if not (text or layers):
-            return
+            break
         try:
             if text:
                 renderer.pdf_text.finish(path)
@@ -78,7 +132,8 @@ def _write_pdf(path: str, draw, text_mode: str = "live") -> None:
         except Exception:
             layers = False
             continue
-        return
+        break
+    write_print_boxes(path, setup)
 
 
 def _write_svg(path: str, draw, text_mode: str = "live") -> None:
@@ -126,42 +181,57 @@ def save_pixels(pixels: Pixels, path: str) -> None:
     surface.finish()
 
 
-def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 1.0, text: str = "live") -> str:
+def save_frame(frame: Frame, path: str, width: int, height: int, scale: float = 1.0, text: str = "live",
+               setup: PrintSetup = NO_PRINT_SETUP, dpi: float | None = None) -> str:
     """Replay *frame* (logical width x height) to *path*; return the format used.
 
-    *text* is "live" or "shapes" (contract T20); it only matters for PDF and SVG."""
+    *text* is "live" or "shapes" (contract T20); it only matters for PDF and SVG. *setup* is the bleed
+    and crop marks of a PDF (contract D2). *dpi* is for a PNG: the frame is drawn at dpi / 72 pixels to
+    the logical pixel (*scale* is then not used) and the file states that resolution (contract D3)."""
     fmt = format_of(path)
     check_text_mode(text)
     renderer = CairoRenderer()
     if fmt == "png":
-        pw, ph = round(width * scale), round(height * scale)
+        if dpi is None:
+            pw, ph = round(width * scale), round(height * scale)
+        else:
+            pw, ph = check_png_size(width, height, dpi, path)
+            scale = dpi / POINTS_PER_INCH
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, pw, ph)
         ctx = renderer.context_for(surface, scale)
         renderer.draw(ctx, frame)
         surface.flush()
-        surface.write_to_png(path)
+        if dpi is None:
+            surface.write_to_png(path)
+        else:
+            png = io.BytesIO()
+            surface.write_to_png(png)
+            with open(path, "wb") as file:
+                file.write(_png_with_resolution(png.getvalue(), dpi))
         surface.finish()
     else:
         cls = cairo.PDFSurface if fmt == "pdf" else cairo.SVGSurface
 
         def draw(renderer: CairoRenderer) -> None:
-            surface = cls(path, width, height)      # document units == logical pixels (points)
+            surface = cls(path, *setup.page_size(width, height))     # document units == logical pixels (points)
             ctx = renderer.context_for(surface, 1.0)
+            setup.begin_page(renderer, ctx, width, height)
             renderer.draw(ctx, frame)
+            setup.draw_marks(ctx, width, height)
             surface.finish()
 
         if fmt == "pdf":
-            _write_pdf(path, draw, text)
+            _write_pdf(path, draw, text, setup)
         else:
             _write_svg(path, draw, text)
     return fmt
 
 
-def save_document(pages: list, path: str, text: str = "live") -> None:
+def save_document(pages: list, path: str, text: str = "live", setup: PrintSetup = NO_PRINT_SETUP) -> None:
     """Write several pages, each ``(width, height, Frame)``, into one multi-page PDF (contract R17).
 
     Each page is replayed as vectors at its own size (points = logical pixels); rasters embed as
-    they do on any PDF surface (contract P3, P7).
+    they do on any PDF surface (contract P3, P7). Every page gets the same bleed and marks (*setup*, D2).
     """
     check_text_mode(text)
     if format_of(path) != "pdf":
@@ -169,15 +239,17 @@ def save_document(pages: list, path: str, text: str = "live") -> None:
     first_width, first_height, _ = pages[0]
 
     def draw(renderer: CairoRenderer) -> None:
-        surface = cairo.PDFSurface(path, first_width, first_height)
+        surface = cairo.PDFSurface(path, *setup.page_size(first_width, first_height))
         for width, height, frame in pages:
-            surface.set_size(width, height)           # takes effect for the page about to be drawn
+            surface.set_size(*setup.page_size(width, height))   # takes effect for the page about to be drawn
             ctx = renderer.context_for(surface, 1.0)
+            setup.begin_page(renderer, ctx, width, height)
             renderer.draw(ctx, frame)
+            setup.draw_marks(ctx, width, height)
             surface.show_page()
         surface.finish()
 
-    _write_pdf(path, draw, text)                      # one font subset per document, shared by pages
+    _write_pdf(path, draw, text, setup)                      # one font subset per document, shared by pages
 
 
 def save_picture(pixels: Pixels, history: tuple | None, logical_width: int, logical_height: int, path: str,

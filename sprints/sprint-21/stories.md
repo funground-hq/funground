@@ -16,9 +16,9 @@ contract rows).
 | S-159 | Justified text: `f.text_align("justify")` in `text_box` (the last line of a paragraph stays left), for strings and FormattedStrings | planned |
 | S-160 | Hyphenation by soft hyphens: `text_box` may break a word where the learner typed a soft hyphen (U+00AD, or `"\u00ad"` in Python), showing a hyphen there and nothing elsewhere; works with justify (D-085 = a) | planned |
 | S-161 | Type on a path: `f.text_on_path(message, path, offset=0)` sets letters along any path (a circle, a wave), each turned to the curve; live text in PDF and SVG | planned |
-| S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | planned |
-| S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi is 3508 × 4961 px), in scripts and animated sketches, on the desktop and in the browser | planned |
-| S-164 | Print-ready PDF: `f.save("poster.pdf", bleed=f.mm(3), marks=True)` adds the bleed, crop marks and the PDF's TrimBox and BleedBox; `f.mm()` and `f.inch()` give lengths in points | planned |
+| S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | done: `f.fit_text_size(message, width, height=None)` (T21), example `text-11_fitted_headline` |
+| S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi), in scripts and animated sketches, on the desktop and in the browser | done (D3): redrawn at dpi/72, pHYs written, 120-megapixel limit; funground's A3 is 842 x 1191 pt, so 3508 x 4963 px (true A3 would be 4961) |
+| S-164 | Print-ready PDF: `f.save("poster.pdf", bleed=f.mm(3), marks=True)` adds the bleed, crop marks and the PDF's TrimBox and BleedBox; `f.mm()` and `f.inch()` give lengths in points | done (D2): bleed, crop marks (RGB black until S-170), TrimBox and BleedBox; `f.mm`/`f.inch` already existed |
 | S-165 | Spike: CMYK and PDF/X for print shops. Can funground write CMYK (or a PDF/X file a print shop accepts) without a heavy dependency? Criteria set before the work; a recommendation | done (`spikes/11_cmyk/RESULTS.md`): RGB to CMYK by pypdf rewrite works but is not colour-managed; Pillow's littleCMS works on the desktop, not in Pyodide; no CMYK profile can be bundled; sRGB tagging plus an output intent is safe. Decision D-087 proposed |
 | S-170 | CMYK colour model (D-087): `f.cmyk(c, m, y, k)` and `f.color_mode("cmyk")` in percentages; PDFs carry exact DeviceCMYK for those colours (fills, strokes, text, gradients, opacity); screen, PNG and SVG show an approximation; RGB colours tagged as sRGB with an output intent; crop marks in registration colour | planned |
 | S-166 | Teaching: guide sections (justified columns, type on a path, fitted headlines, preparing a file for print), four gallery examples, and the "Event poster series" project made print-ready | planned |
@@ -34,9 +34,9 @@ breaking), S-161, S-163, S-166 last; S-165 runs alongside (a spike, no product c
 - [ ] S-159
 - [ ] S-160
 - [ ] S-161
-- [ ] S-162
-- [ ] S-163
-- [ ] S-164
+- [x] S-162
+- [x] S-163
+- [x] S-164
 - [x] S-165
 - [ ] S-170
 - [ ] S-166

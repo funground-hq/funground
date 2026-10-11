@@ -66,6 +66,9 @@ class CairoRenderer:
         # layer is drawn inside a marker group that the exporter turns into a real file layer, and
         # hidden layers are drawn too (switched off in the file). Never set for the window or PNG.
         self.file_layers = None
+        # S-164 (D2): set only by the PDF exporter when a page has a bleed: the (x, y, width, height) the
+        # drawing may reach, in the page's own units. Clearing the clip goes back to it, not to the whole sheet.
+        self.clip_box: tuple[float, float, float, float] | None = None
         # S-132 (K2): the BeginGroup ops whose EndGroup has not come yet (a mark's placement nests them).
         self._groups: list[ir.BeginGroup] = []
 
@@ -169,6 +172,17 @@ class CairoRenderer:
         finally:
             ctx.restore()
 
+    def _reset_clip(self, ctx: cairo.Context) -> None:
+        """Lift the clip the drawing made. A PDF page with a bleed keeps its clip box (S-164)."""
+        ctx.reset_clip()
+        if self.clip_box is not None:
+            ctx.save()
+            ctx.set_matrix(self._base_matrix)
+            ctx.new_path()
+            ctx.rectangle(*self.clip_box)
+            ctx.restore()                         # the path outlives the restore; the clip would not
+            ctx.clip()
+
     def _draw_ops(self, ctx: cairo.Context, frame: ir.Frame, depth: int) -> int:
         for op in frame:
             t = type(op)
@@ -176,7 +190,7 @@ class CairoRenderer:
             if composite is not None:
                 self._begin_composite(ctx, op, composite)
             if t is ir.Clear:
-                ctx.save(); ctx.reset_clip(); self._source(ctx, op.color)
+                ctx.save(); self._reset_clip(ctx); self._source(ctx, op.color)
                 ctx.set_operator(cairo.OPERATOR_SOURCE); ctx.paint(); ctx.restore()
             elif t is ir.Save:
                 ctx.save(); depth += 1
@@ -190,7 +204,7 @@ class CairoRenderer:
             elif t is ir.ClipPath:
                 self._path(ctx, op.path); ctx.clip()
             elif t is ir.ResetClip:
-                ctx.reset_clip()
+                self._reset_clip(ctx)
             elif t is ir.ResetMatrix:
                 ctx.set_matrix(self._base_matrix)
             elif t is ir.FillPath:
@@ -409,7 +423,7 @@ class CairoRenderer:
             y0 = round(m.y0) if abs(m.y0 - round(m.y0)) < 1e-6 else m.y0
             m = cairo.Matrix(1, 0, 0, 1, x0, y0)
         ctx.save()
-        ctx.reset_clip()
+        self._reset_clip(ctx)
         ctx.set_matrix(m)
         ctx.set_source_surface(image, 0, 0)
         ctx.get_source().set_filter(cairo.FILTER_NEAREST)

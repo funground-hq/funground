@@ -864,6 +864,34 @@ No font has every letter. When the font you use lacks one, funground draws it fr
 
 Source: [`examples/gallery/text/10_fallback.py`](../../examples/gallery/text/10_fallback.py)
 
+### A headline that fills its width
+
+![A headline that fills its width](images/text-11_fitted_headline.png)
+
+Each word of this poster fills the column, as big as its band of the page allows. f.fit_text_size() works out the size that makes a text a given width, with the font, style and tracking you have set, and keeps it within a height if you give one.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.fit_text_size(word, width) returns a text size. Setting f.text_size() to it makes the word that wide.
+- Long words are limited by the width, so SOMETHING spans the column.
+- Short words would grow taller than the page, so each word also gets a height: its share of the page, BAND. f.fit_text_size(word, width, BAND) picks the largest size that respects both.
+- The size depends on the font and style: the words are bold, the tagline uses a wide tracking.
+- The thin lines show the column's edges.
+
+**Make it yours**
+
+- Change the words in WORDS, or add more.
+- Change MARGIN to make the column narrower or wider, or BAND to give the words more height.
+- Try f.text_style("italic") or a font of your own with f.load_font() before fitting.
+- Change f.text_tracking(6) on the last line and see the size change to keep the width.
+
+</details>
+
+Source: [`examples/gallery/text/11_fitted_headline.py`](../../examples/gallery/text/11_fitted_headline.py)
+
 ## Animation and time
 
 ### Bounce

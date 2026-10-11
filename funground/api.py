@@ -640,28 +640,36 @@ def year() -> int:
     return Sketch.year()
 
 
-def save(path: str, *, text: str = "live") -> None:
+def save(path: str, *, text: str = "live", bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None:
     """Save this frame to a picture or document file.
 
     The file is written when the frame is complete, and it holds everything that frame drew, including what comes after the call. In a script, it writes at once. A .png holds pixels. A .pdf or .svg holds a true vector drawing. A .gif or .mp4 records an animation (see save_gif and save_movie). Any other extension is an error that names the choices. In a document of several pages, a PDF holds every page.
 
-    A PNG is written at the screen's real resolution, so on a 2x display a 640 by 400 window gives a 1280 by 800 file.
+    A PNG is written at the screen's real resolution, so on a 2x display a 640 by 400 window gives a 1280 by 800 file. To choose the resolution for printing, give dpi. The page is then drawn again at that many dots per inch (a point is 1/72 inch, so the scale is dpi / 72), not stretched from the screen picture. A4 at dpi=300 is 2479 by 3508 pixels. The file says "300 dpi", so print software sizes it right. A page of more than 120 million pixels is refused; save a PDF instead. In an animated sketch, a PNG with dpi holds what this frame drew, as a PDF does, and not what earlier frames left on the canvas.
+
+    For a print shop, a PDF can have a bleed and crop marks. The bleed is extra picture beyond the edges of the page, so that no white line shows when the printer cuts the paper. Draw past the edges (at negative numbers, and beyond width and height) and that drawing appears in the bleed. A background() fills the bleed too. The page of your canvas stays the finished size: the PDF records it as its TrimBox, and the page grown by the bleed as its BleedBox. Crop marks are thin black lines outside the bleed at the four corners, 5 mm long, to show where to cut. Every page of a document of several pages gets the same bleed and marks.
 
     Arguments:
         path: the file name. Its ending decides the kind: ".png", ".pdf" or ".svg".
         text: for a PDF or SVG only. "live" (the default) keeps text real and editable. "shapes" draws every letter as a shape, so the file looks right without the font. A PNG ignores it.
+        bleed: for a PDF only. How far to extend the page on each side, in points. Use mm() to say it in millimetres: bleed=f.mm(3). The start is 0.
+        marks: for a PDF only. True adds crop marks outside the bleed. The start is False.
+        dpi: for a PNG only. The resolution in dots per inch, above 0, such as 300. Each side is its size in points times dpi / 72, rounded to the nearest pixel. Leave it out for the screen's resolution.
 
     Raises:
-        ValueError: the file ending is not one that save() knows, or text is not "live" or "shapes".
+        ValueError: the file ending is not one that save() knows, text is not "live" or "shapes", the bleed is below 0, dpi is 0 or less, bleed or marks is used for a file that is not a PDF, dpi is used for a file that is not a PNG, or the picture would be more than 120 million pixels.
+        TypeError: the bleed or dpi is not a number, or marks is not True or False.
 
     Example:
         if f.key_down("s"):
             f.save("my_sketch.png")
+        f.save("poster.pdf", bleed=f.mm(3), marks=True)
+        f.save("poster.png", dpi=300)
 
-    See also: save_frames, save_gif, save_movie, new_page
+    See also: save_frames, save_gif, save_movie, new_page, mm
     """
     refuse_in_mark("f.save()")
-    canvas_sketch().save(path, text=text)
+    canvas_sketch().save(path, text=text, bleed=bleed, marks=marks, dpi=dpi)
 
 
 def resize_canvas(width: int, height: int) -> None:
@@ -1260,6 +1268,33 @@ def text_width(message: object) -> float:
     See also: text, text_size, text_align
     """
     return active_sketch().text_width(message)
+
+
+def fit_text_size(message: object, width: float, height: float | None = None) -> float:
+    """Return the text size at which a message is exactly as wide as you want.
+
+    It sets the message in the current font, style, features, variations and tracking, and finds the size that makes its widest line `width` pixels wide. With a `height`, it finds the largest size that also keeps all the lines, spaced by the current leading, inside that height. The answer is correct to 0.01 of a pixel. Tracking is a fixed space in pixels, so it does not grow with the size: it is allowed for. Use the answer in text_size() before you draw. Note that text_size() cuts a fraction to a whole number, so the text then fits to within about one pixel of size.
+
+    Arguments:
+        message: the text to fit. A message of several lines is fitted by its widest line. A FormattedString is not allowed yet.
+        width: how wide the widest line should be, in pixels, above 0.
+        height: the most the lines may take up, in pixels, above 0. Leave it out to fit the width only.
+
+    Returns:
+        The text size in pixels, as a number with a fraction.
+
+    Raises:
+        ValueError: the width or height is not above 0, the text is empty, or no size fits.
+        TypeError: the message is a FormattedString, or the width or height is not a number.
+
+    Example:
+        headline = "SPRING FAIR"
+        f.text_size(f.fit_text_size(headline, f.width - 80))
+        f.text(headline, 40, 60)
+
+    See also: text_width, text_size, text_tracking, text_leading
+    """
+    return active_sketch().fit_text_size(message, width, height)
 
 
 # ---- style

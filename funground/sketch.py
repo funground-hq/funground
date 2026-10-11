@@ -33,6 +33,7 @@ from .platform.base import CURSOR_KINDS, KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
 
+_PendingSave = namedtuple("_PendingSave", "path text setup dpi")     # a save() waiting for the end of the frame
 _Piece = namedtuple("_Piece", "text ri size ascent descent width")   # one measured piece of a line (T14)
 
 DEFAULT_SHADOW_COLOR = (0, 0, 0, 128)       # not read through the colour mode (S15)
@@ -91,7 +92,7 @@ class Sketch:
         self._states = StateStack()
         # Ops recorded since the last render; consumed once per loop iteration.
         self.frame = ir.Frame()
-        self._pending_saves: list[tuple[str, str]] = []     # (path, text mode)
+        self._pending_saves: list[_PendingSave] = []
         self._frame_sequence: list | None = None      # S-056: [pattern, next number, last number]
         self._cursor: str | None = "arrow"              # S-057: applied whenever a window opens
         # no_smooth() is a sketch setting, re-applied at the start of every frame (S-042).
@@ -1020,12 +1021,26 @@ class Sketch:
         self._append(self._renderer.pixels_op(out, 0, 0, w, h))
 
     # ------------------------------------------------------------ export
-    def save(self, path: str, *, text: str = "live") -> None:
+    def save(self, path: str, *, text: str = "live", bleed: float = 0, marks: bool = False,
+             dpi: float | None = None) -> None:
         """Write this frame to a .png, .pdf or .svg file when the frame is complete.
 
-        *text* is "live" or "shapes" (contract T20): how a PDF or SVG holds its letters."""
-        from .export import check_text_mode, format_of
+        *text* is "live" or "shapes" (contract T20): how a PDF or SVG holds its letters. *bleed* and
+        *marks* make a PDF print-ready (contract D2). *dpi* sets a PNG's resolution (contract D3)."""
+        import os
+
+        from .export import check_dpi, check_png_size, check_text_mode, format_of
+        from .export.printing import check_print_options
         check_text_mode(text)
+        setup = check_print_options(bleed, marks)
+        dpi = check_dpi(dpi)
+        kind = os.path.splitext(str(path))[1].lower()
+        if setup.active and kind != ".pdf":
+            raise ValueError(f"f.save({path!r}): bleed and marks are for a PDF, which has a trim size to cut to. "
+                             "Save a .pdf for the printer. For a PNG, dpi= sets the resolution.")
+        if dpi is not None and kind != ".png":
+            raise ValueError(f"f.save({path!r}): dpi is for a PNG. A PDF or SVG is vector: it has no resolution "
+                             "and prints sharp at any size. Save a .png to choose a resolution.")
         from .export.motion import MOTION_FORMATS
 
         if isinstance(path, str) and "." in path and path.lower().rsplit(".", 1)[-1] in MOTION_FORMATS:
@@ -1033,27 +1048,32 @@ class Sketch:
             return
         format_of(path)  # validate early so the learner sees the error at the call site
         self._require_window()
+        if dpi is not None:                  # refuse a page too big for memory now, at the call
+            for width, height in [(self.width, self.height), *((w, h) for w, h, _, _ in self._pages)]:
+                check_png_size(width, height, dpi, path)
         if self._script:                     # contract R14: a script's save writes at once
-            self._save_script(path, text)
+            self._save_script(path, text, setup, dpi)
             return
-        self._pending_saves.append((path, text))
+        self._pending_saves.append(_PendingSave(path, text, setup, dpi))
 
-    def _save_script(self, path: str, text: str = "live") -> None:
+    def _save_script(self, path: str, text: str, setup, dpi: float | None) -> None:
         from .export import format_of, save_frame, save_pixels
 
         self._flush_pixel_patch()
         fmt = format_of(path)
         if self._pages:                                  # contract R17: several pages
-            self._save_pages(path, fmt, text)
+            self._save_pages(path, fmt, text, setup, dpi)
             return
-        if fmt == "png":
+        if fmt == "png" and dpi is not None:             # drawn afresh at the resolution (contract D3)
+            save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, dpi=dpi)
+        elif fmt == "png":
             self._script_flush()
             save_pixels(self._view_pixels(), path)
         else:
             save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, self._script_scale,
-                       text)
+                       text, setup)
 
-    def _save_pages(self, path: str, fmt: str, text: str = "live") -> None:
+    def _save_pages(self, path: str, fmt: str, text: str, setup, dpi: float | None) -> None:
         import os
 
         from .export import save_document, save_frame, save_pixels
@@ -1061,14 +1081,16 @@ class Sketch:
 
         pages = self._document_pages()
         if fmt == "pdf":
-            save_document([(w, h, ir.Frame(list(ops))) for w, h, ops, _ in pages], path, text)
+            save_document([(w, h, ir.Frame(list(ops))) for w, h, ops, _ in pages], path, text, setup)
             return
         self._script_flush()
         stem, ext = os.path.splitext(path)
         scale = self._script_scale
         for number, (w, h, ops, pixels) in enumerate(pages, 1):
             numbered = f"{stem}_{number}{ext}"
-            if fmt == "png":
+            if fmt == "png" and dpi is not None:
+                save_frame(ir.Frame(list(ops)), numbered, w, h, dpi=dpi)
+            elif fmt == "png":
                 shown = self._view_pixels() if pixels is None else Pixels(
                     pixels, round(w * scale), round(h * scale), "BGRA")
                 save_pixels(shown, numbered)
@@ -1198,12 +1220,14 @@ class Sketch:
         import os
         import re
 
+        from .export import NO_PRINT_SETUP
+
         pattern, number, last = seq
         path = re.sub(r"#+", lambda m: str(number).zfill(len(m.group())), pattern)
         folder = os.path.dirname(path)
         if folder:
             os.makedirs(folder, exist_ok=True)
-        self._pending_saves.append((path, "live"))
+        self._pending_saves.append(_PendingSave(path, "live", NO_PRINT_SETUP, None))
         seq[1] += 1
         if seq[1] > last:
             self._frame_sequence = None
@@ -1213,13 +1237,15 @@ class Sketch:
             return
         from .export import format_of, save_frame, save_pixels
 
-        paths, self._pending_saves = self._pending_saves, []
-        for path, text in paths:
-            if format_of(path) == "png":
+        waiting, self._pending_saves = self._pending_saves, []
+        for path, text, setup, dpi in waiting:
+            if format_of(path) == "png" and dpi is not None:    # this frame, drawn afresh at the resolution (D3)
+                save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, dpi=dpi)
+            elif format_of(path) == "png":
                 save_pixels(self._view_pixels(), path)      # what is on screen
             else:
                 save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height,
-                           self._platform.backing_scale, text)
+                           self._platform.backing_scale, text, setup)
 
     # ------------------------------------------------------------ style
     def read_color(self, value: ColorLike, *more: float) -> Color:
@@ -1843,6 +1869,52 @@ class Sketch:
         font = effective_font(self.style)
         settings = text_settings(self.style)
         return max(text_width(line, self.style.text_size, font, **settings) for line in str(message).split("\n"))
+
+    def fit_text_size(self, message: object, width: float, height: float | None = None) -> float:
+        """The largest text size at which *message* is no wider than *width* (and, with *height*, no taller),
+        found by a bracketed search to within 0.01 pixels (contract T21)."""
+        from .typography import effective_font, text_metrics, text_settings, text_width
+
+        if isinstance(message, FormattedString):
+            raise TypeError("f.fit_text_size() fits one text in the current font: give a string. "
+                            "A FormattedString has a size of its own in each run, so it cannot be fitted yet.")
+        given = {"width": width} if height is None else {"width": width, "height": height}
+        for name, value in given.items():
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise TypeError(f"f.fit_text_size() needs the {name} as a number of pixels, not {value!r}")
+            if not 0 < value < float("inf"):
+                raise ValueError(f"f.fit_text_size() needs a {name} above 0 pixels, not {value!r}")
+        lines = str(message).split("\n")
+        style = self.style
+        font = effective_font(style)
+        settings = text_settings(style)
+        if max(text_width(line, 100.0, font, **settings) for line in lines) <= 0:
+            raise ValueError("f.fit_text_size() needs some text to measure, but this message has no letters")
+
+        def fits(size: float) -> bool:
+            if max(text_width(line, size, font, **settings) for line in lines) > width:
+                return False
+            if height is None:
+                return True
+            ascent, descent = text_metrics(size, font)
+            leading = style.text_leading if style.text_leading is not None else size * 1.25
+            return ascent + descent + leading * (len(lines) - 1) <= height
+
+        low = 0.01
+        if not fits(low):
+            raise ValueError("f.fit_text_size(): the text does not fit in that space at any size. "
+                             "Its tracking, or its fixed leading, is already too much: give more room, "
+                             "or reduce f.text_tracking() or f.text_leading().")
+        high = max(low * 2, 1.0)
+        while fits(high):
+            low, high = high, high * 2
+            if high > 1e6:
+                raise ValueError(f"f.fit_text_size(): a text size above 1 000 000 would still fit {width:g} pixels. "
+                                 "Is the width in the right units?")
+        while high - low > 0.001:
+            middle = (low + high) / 2
+            low, high = (middle, high) if fits(middle) else (low, middle)
+        return low
 
     # ------------------------------------------------------------ shapes, paths, clipping (S-028)
     def begin_shape(self) -> None:
