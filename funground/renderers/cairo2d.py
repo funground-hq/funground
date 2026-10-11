@@ -783,9 +783,11 @@ class CairoRenderer:
             key += (style.text_tracking, style.text_features, style.font_variations)    # S-090 (T13)
         if style.text_fallback != ():
             key += ("fallback", style.text_fallback)           # S-102 (T18): the chain changes the runs
+        if op.word_spacing:
+            key += ("word_spacing", op.word_spacing)           # S-159 (T22): a justified line is stretched
         run = self._text_runs.get(key)
         if run is None:
-            run = effective_font(op.style).shape(op.text, op.style.text_size, **settings)
+            run = effective_font(op.style).shape(op.text, op.style.text_size, word_spacing=op.word_spacing, **settings)
             self._text_runs[key] = run
             while len(self._text_runs) > TEXT_RUN_CACHE_SIZE:
                 self._text_runs.popitem(last=False)       # evict least recently used

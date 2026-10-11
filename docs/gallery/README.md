@@ -892,6 +892,35 @@ Each word of this poster fills the column, as big as its band of the page allows
 
 Source: [`examples/gallery/text/11_fitted_headline.py`](../../examples/gallery/text/11_fitted_headline.py)
 
+### Justified columns with hyphens
+
+![Justified columns with hyphens](images/text-12_justified_columns.png)
+
+A poster column with two straight edges. f.text_align("justify") stretches the spaces of each line so that the words reach both sides, and soft hyphens let long words break at the end of a line.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.text_align("justify") works in f.text_box(). Every line is stretched to the box's width by making the spaces between words wider. The letters are never changed.
+- The last line of a paragraph stays on the left, and so does a line with one word in it.
+- A soft hyphen is a character you cannot see: "\u00ad" in Python. A long word may break there, and a hyphen is drawn only at the end of a line that breaks there. Where the word is not broken, nothing shows.
+- This sketch writes the soft hyphens as "|" in the story, to make it easy to read, and swaps every "|" for a soft hyphen before it draws.
+- A line breaks at a space whenever it can. It uses a soft hyphen when a word does not fit in the rest of the line.
+- f.text_box() hands back the words that did not fit, so the story flows from the first column into the second. The thin lines show the columns.
+
+**Make it yours**
+
+- Change COLUMN_WIDTH, or the text size in f.text_size(), and watch the breaks move.
+- Take out the "|" marks from a word and see it move to the next line, leaving a big gap.
+- Change f.text_align("justify") to "left" to see the ragged edge it replaces.
+- Write your own story in STORY. Put a "|" inside every long word where it may break.
+
+</details>
+
+Source: [`examples/gallery/text/12_justified_columns.py`](../../examples/gallery/text/12_justified_columns.py)
+
 ## Animation and time
 
 ### Bounce
