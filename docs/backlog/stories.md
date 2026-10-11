@@ -261,6 +261,7 @@ gaps are line breaking (justification, hyphenation), type on a path, fitting a h
 | Story | Epic | Value · tasks · acceptance | Sprint |
 |---|---|---|---|
 | S-174 | E-23 | Named constants for every option word (D-090): flat capitals holding the words (`CENTER`, `BASELINE`, `BOLD`, `MULTIPLY`, `LEFT`, key names, cap/join, blend modes, text modes, page sizes...), exported and documented; `Literal[...]` types on every function that takes an option word (with S-130's `py.typed`); `f.colors` with the named colours as constants; contract rows; Quick Reference and guide use the constants; a test that every option word has its constant and every constant is accepted. Acceptance: `f.text_align(f.CENTRE)` is a NameError an editor underlines; `f.text_align("centre")` is underlined by a type-checking editor; all existing sketches unchanged | next |
+| S-175 | E-23 | Spike for D-088 (less verbose sketches), per `Sketch_Style_Note.md`: ten gallery examples rewritten in the proposed style, prototypes of the safe `*` and the live-value refresh on a branch, `run()` behaviour in IDLE, Thonny, VS Code, the terminal, the website editor and github.dev; criteria set first; recommendation. No product code on the release branch | proposed |
 
 ## E-33 Camera input (11 October 2026)
 
