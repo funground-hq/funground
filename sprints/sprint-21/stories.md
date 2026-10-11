@@ -19,7 +19,7 @@ contract rows).
 | S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | planned |
 | S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi is 3508 × 4961 px), in scripts and animated sketches, on the desktop and in the browser | planned |
 | S-164 | Print-ready PDF: `f.save("poster.pdf", bleed=f.mm(3), marks=True)` adds the bleed, crop marks and the PDF's TrimBox and BleedBox; `f.mm()` and `f.inch()` give lengths in points | planned |
-| S-165 | Spike: CMYK and PDF/X for print shops. Can funground write CMYK (or a PDF/X file a print shop accepts) without a heavy dependency? Criteria set before the work; a recommendation | planned |
+| S-165 | Spike: CMYK and PDF/X for print shops. Can funground write CMYK (or a PDF/X file a print shop accepts) without a heavy dependency? Criteria set before the work; a recommendation | done (`spikes/11_cmyk/RESULTS.md`): RGB to CMYK by pypdf rewrite works but is not colour-managed; Pillow's littleCMS works on the desktop, not in Pyodide; no CMYK profile can be bundled; sRGB tagging plus an output intent is safe. Decision D-087 proposed |
 | S-166 | Teaching: guide sections (justified columns, type on a path, fitted headlines, preparing a file for print), four gallery examples, and the "Event poster series" project made print-ready | planned |
 
 Acceptance for the sprint: the full suite green; each story's contract row(s) pinned; goldens added for the
@@ -36,5 +36,5 @@ breaking), S-161, S-163, S-166 last; S-165 runs alongside (a spike, no product c
 - [ ] S-162
 - [ ] S-163
 - [ ] S-164
-- [ ] S-165
+- [x] S-165
 - [ ] S-166
