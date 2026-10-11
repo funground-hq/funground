@@ -13,7 +13,7 @@ In the examples, `import funground as f` is understood.
 - [Curves and custom shapes](#curves-and-custom-shapes): [`bezier`](#fn-bezier), [`bezier_point`](#fn-bezier_point), [`bezier_tangent`](#fn-bezier_tangent), [`curve`](#fn-curve), [`curve_point`](#fn-curve_point), [`curve_tangent`](#fn-curve_tangent), [`curve_tightness`](#fn-curve_tightness), [`begin_shape`](#fn-begin_shape), [`end_shape`](#fn-end_shape), [`vertex`](#fn-vertex), [`bezier_vertex`](#fn-bezier_vertex), [`quadratic_vertex`](#fn-quadratic_vertex), [`curve_vertex`](#fn-curve_vertex), [`begin_contour`](#fn-begin_contour), [`end_contour`](#fn-end_contour)
 - [Colour](#colour): [`background`](#fn-background), [`clear`](#fn-clear), [`color`](#fn-color), [`color_mode`](#fn-color_mode), [`hsb`](#fn-hsb), [`hsl`](#fn-hsl), [`lerp_color`](#fn-lerp_color), [`linear_gradient`](#fn-linear_gradient), [`radial_gradient`](#fn-radial_gradient)
 - [Fill and stroke](#fill-and-stroke): [`fill`](#fn-fill), [`no_fill`](#fn-no_fill), [`stroke`](#fn-stroke), [`no_stroke`](#fn-no_stroke), [`stroke_width`](#fn-stroke_width), [`stroke_cap`](#fn-stroke_cap), [`stroke_join`](#fn-stroke_join), [`miter_limit`](#fn-miter_limit), [`stroke_dash`](#fn-stroke_dash), [`no_dash`](#fn-no_dash), [`shadow`](#fn-shadow), [`no_shadow`](#fn-no_shadow), [`opacity`](#fn-opacity), [`blend_mode`](#fn-blend_mode), [`erase`](#fn-erase), [`no_erase`](#fn-no_erase), [`tint`](#fn-tint), [`no_tint`](#fn-no_tint)
-- [Text and fonts](#text-and-fonts): [`text`](#fn-text), [`text_align`](#fn-text_align), [`text_ascent`](#fn-text_ascent), [`text_descent`](#fn-text_descent), [`text_leading`](#fn-text_leading), [`text_box`](#fn-text_box), [`text_path`](#fn-text_path), [`text_to_points`](#fn-text_to_points), [`current_font`](#fn-current_font), [`text_size`](#fn-text_size), [`text_style`](#fn-text_style), [`text_tracking`](#fn-text_tracking), [`text_fallback`](#fn-text_fallback), [`system_font`](#fn-system_font), [`text_features`](#fn-text_features), [`font_variations`](#fn-font_variations), [`text_width`](#fn-text_width), [`fit_text_size`](#fn-fit_text_size), [`text_font`](#fn-text_font), [`load_font`](#fn-load_font)
+- [Text and fonts](#text-and-fonts): [`text`](#fn-text), [`text_align`](#fn-text_align), [`text_ascent`](#fn-text_ascent), [`text_descent`](#fn-text_descent), [`text_leading`](#fn-text_leading), [`text_box`](#fn-text_box), [`text_path`](#fn-text_path), [`text_to_points`](#fn-text_to_points), [`current_font`](#fn-current_font), [`text_size`](#fn-text_size), [`text_style`](#fn-text_style), [`text_tracking`](#fn-text_tracking), [`text_fallback`](#fn-text_fallback), [`system_font`](#fn-system_font), [`text_features`](#fn-text_features), [`font_variations`](#fn-font_variations), [`text_width`](#fn-text_width), [`fit_text_size`](#fn-fit_text_size), [`text_on_path`](#fn-text_on_path), [`text_font`](#fn-text_font), [`load_font`](#fn-load_font)
 - [Transforms and the state stack](#transforms-and-the-state-stack): [`translate`](#fn-translate), [`rotate`](#fn-rotate), [`scale`](#fn-scale), [`shear_x`](#fn-shear_x), [`shear_y`](#fn-shear_y), [`apply_matrix`](#fn-apply_matrix), [`reset_matrix`](#fn-reset_matrix), [`push`](#fn-push), [`pop`](#fn-pop), [`saved_state`](#fn-saved_state)
 - [Paths and clipping](#paths-and-clipping): [`path`](#fn-path), [`draw_path`](#fn-draw_path), [`clip`](#fn-clip), [`no_clip`](#fn-no_clip)
 - [Marks](#marks): [`mark`](#fn-mark)
@@ -1981,6 +1981,42 @@ f.text(headline, 40, 60)
 ```
 
 See also: [`text_width`](#fn-text_width), [`text_size`](#fn-text_size), [`text_tracking`](#fn-text_tracking), [`text_leading`](#fn-text_leading).
+
+<a id="fn-text_on_path"></a>
+### `f.text_on_path`
+
+```py
+f.text_on_path(message: 'object', path: 'PathBuilder', offset: 'float' = 0) -> 'str'
+```
+
+Draw text along a path, and return the part that did not fit.
+
+The text is set in the current font, style, size, tracking and features, with the current fill, so ligatures and kerning are kept. Each letter stands with its middle on the path, turned to face the way the path goes there. On a path drawn from left to right, the text reads from left to right. A circle from path().circle() runs clockwise, so its text stands on the outside. For text on the inside, use a path that runs the other way, such as the circle flipped with .scale(-1, 1).translate(2 * x, 0).
+
+text_align() works along the path. "left" starts the text at the start of the path, "center" puts the middle of the text at the middle of the path, and "right" ends the text at the end. The second value says which part of the letters touches the path. With the default, "top", the letters hang below the path. Use "baseline" to stand them on it. A circle starts at its right-hand side, so to put the middle of the text at the top, use "center" and an offset of 0.785 times the diameter.
+
+A closed path, such as a circle, carries on past its end, so text can start anywhere on it. On any path, letters that would pass the end are not drawn. If the path has more than one part, only the first part is used. Letters that join their neighbours, as in Arabic, are set one by one and do not join. In a PDF or SVG file each letter is live text.
+
+| Argument | Meaning |
+|---|---|
+| `message` | what to write, on one line. Any value works: str() is applied. |
+| `path` | a path made with path(), such as path().circle(x, y, d) or a curve made with curve_to(). |
+| `offset` | how far to move the text along the path, in pixels, after text_align() has placed it. The default is 0. A negative number moves it back. |
+
+**Returns.** The text that did not fit, as a string. It is "" when everything fitted.
+
+**Raises.**
+
+- `ValueError`: the path has no length, the message has a new line in it, or the offset is not a finite number.
+- `TypeError`: path is not a path, the message is a FormattedString, or the offset is not a number.
+
+```py
+f.text_align("center", "baseline")
+wave = f.path().move_to(40, 200).curve_to(140, 100, 240, 300, 340, 200)
+f.text_on_path("Follow the wave", wave)
+```
+
+See also: [`text`](#fn-text), [`text_path`](#fn-text_path), [`text_align`](#fn-text_align), [`text_width`](#fn-text_width), [`path`](#fn-path).
 
 <a id="fn-text_font"></a>
 ### `f.text_font`
