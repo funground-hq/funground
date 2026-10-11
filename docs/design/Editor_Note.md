@@ -76,6 +76,41 @@ in the editor, edits and runs a sketch, saves it (a commit appears in their repo
 runs for someone else, and runs the same file on the desktop. The editor origin never executes sketch
 code (checked by a test that a sketch cannot read the editor's storage).
 
+## Design of the web editor (S-151 part 2, 11 October 2026)
+
+With D-079 = C, saving to GitHub belongs to github.dev and the funground extension (`Extension_Note.md`).
+The web editor is for learners **without GitHub**: open the website, write, run, share a link. No account,
+no token, no server of ours.
+
+**One page.** The Play page (`funground-hq.github.io/play/`) becomes the editor: an example list, a code
+editor (CodeMirror 6, Python colours), Run / Stop / Auto-run (re-run 400 ms after typing stops, as the
+extension), output under the picture, Share. `?example=<id>` opens an example (the gallery's "Run it here"
+links keep working). The page that only ran our examples (part 1) is replaced, not kept beside it.
+
+**Every run in the preview origin (D-078).** The editor never runs Python. It sends the code (and an
+example's data files) by `postMessage` to an iframe from `funground-run.github.io/preview.html`, sandboxed
+(`allow-scripts`, plus `allow-same-origin` only if the runtime needs it, decided by the tests: the origin is
+separate either way) with `allow="autoplay; microphone"`. The preview answers with `ready`, `output`,
+`error` (the traceback), `started`, `finished` and its canvas size. Both sides check the other's origin;
+the preview accepts runs only from the editor's origin.
+
+**The preview holds no build.** `preview.html` loads the runner, Pyodide and the wheels from the website
+(`funground-hq.github.io/play/runner/`, served with CORS; the runner starts its worker from a `blob:` URL
+when its files are on another origin), so the editor and the preview always run the same funground. The
+`funground-run.github.io` repository is a few static files.
+
+**Share.** A link carries the code in the URL fragment, compressed (`#code=` + base64url of deflate-raw):
+never sent to a server, works for anyone. Opening it shows the code and waits for Run (a shared sketch is
+someone else's code: the learner chooses to run it, and it runs in the preview origin anyway).
+
+**Drafts.** Unsaved changes are kept in the browser (`localStorage` on the website's origin, per example or
+scratch sketch), offered back on return; "Reset" restores the example.
+
+**Errors.** The traceback's line in the sketch is highlighted in the editor, as the extension underlines it.
+
+**Not in part 2:** saving to GitHub (github.dev's job), uploading the learner's own pictures (later: a file
+picker that sends files with the run), several files per sketch.
+
 ## github.dev as the editor (D-079 = C): what spike S-156 must find out
 
 The maintainer prefers GitHub's own editor to ours: editing and saving (committing) are then GitHub's, with
