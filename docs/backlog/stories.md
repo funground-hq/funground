@@ -256,6 +256,12 @@ gaps are line breaking (justification, hyphenation), type on a path, fitting a h
 | S-169 | E-32 | Later: dictionary hyphenation (`f.hyphenation(True, language=...)`), e.g. with `pyphen`; deferred by D-085 | backlog |
 | S-168 | E-22 | Later: the browser editor's polish (toolbar buttons sized for the page; Reset shown only when the code differs), found in the live check of S-151 part 2 | backlog |
 
+## Option constants (D-090, 11 October 2026)
+
+| Story | Epic | Value · tasks · acceptance | Sprint |
+|---|---|---|---|
+| S-174 | E-23 | Named constants for every option word (D-090): flat capitals holding the words (`CENTER`, `BASELINE`, `BOLD`, `MULTIPLY`, `LEFT`, key names, cap/join, blend modes, text modes, page sizes...), exported and documented; `Literal[...]` types on every function that takes an option word (with S-130's `py.typed`); `f.colors` with the named colours as constants; contract rows; Quick Reference and guide use the constants; a test that every option word has its constant and every constant is accepted. Acceptance: `f.text_align(f.CENTRE)` is a NameError an editor underlines; `f.text_align("centre")` is underlined by a type-checking editor; all existing sketches unchanged | next |
+
 ## E-33 Camera input (11 October 2026)
 
 | Story | Epic | Value · tasks · acceptance | Sprint |
