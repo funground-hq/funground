@@ -84,9 +84,12 @@ desktop-only (`f.microphone("name")` raises, `f.microphones()` is `[]`). Tests: 
 
 - The site (`funground-hq.github.io`) runs **our** code: gallery examples and guide sketches.
 - The editor runs **anyone's** code from a shared link, so the sketch runs in an iframe on a separate
-  origin, `funground-run.github.io` (a second GitHub organisation), sandboxed with `allow-scripts` and
-  without `allow-same-origin`, talking to the editor only by `postMessage`. Pyodide can reach any browser
-  API, so the origin is the boundary, not the worker.
+  origin, `funground-run.github.io` (a second GitHub organisation), sandboxed with
+  `allow-scripts allow-same-origin`, talking to the editor only by `postMessage`. Pyodide can reach any
+  browser API, so the origin is the boundary, not the worker. (`allow-same-origin` is needed, S-151 part 2:
+  without it the frame has no origin and Chrome will not start the runner's worker from a `blob:` URL. It
+  gives the frame its own origin back, not the editor's, so the sandbox still holds: no windows, forms,
+  downloads or navigation of the page.)
 
 ## Limits in 0.2
 

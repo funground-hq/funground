@@ -89,8 +89,8 @@ links keep working). The page that only ran our examples (part 1) is replaced, n
 
 **Every run in the preview origin (D-078).** The editor never runs Python. It sends the code (and an
 example's data files) by `postMessage` to an iframe from `funground-run.github.io/preview.html`, sandboxed
-(`allow-scripts`, plus `allow-same-origin` only if the runtime needs it, decided by the tests: the origin is
-separate either way) with `allow="autoplay; microphone"`. The preview answers with `ready`, `output`,
+(`allow-scripts allow-same-origin`: the tests showed the runner's worker does not start without
+`allow-same-origin`; the frame then has its own origin, separate from the editor's) with `allow="autoplay; microphone"`. The preview answers with `ready`, `output`,
 `error` (the traceback), `started`, `finished` and its canvas size. Both sides check the other's origin;
 the preview accepts runs only from the editor's origin.
 
