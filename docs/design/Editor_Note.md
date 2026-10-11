@@ -122,5 +122,7 @@ Limits: no microphone (VS Code does not let a panel ask for it; listening sketch
 desktop), and pictures wait for D-080. Not yet tried in real github.dev. Decisions D-080 to D-083. Results:
 `funground-web` branch `claude/spike-s156-github-dev-x5szgv`, `spikes/S-156_RESULTS.md`.
 
+**How the extension is designed and built:** `Extension_Note.md`.
+
 If both ways fail, the fallback is the one-page editor of S-151 part 2 with "Open in github.dev" for
 saving (two tabs) and Share links.
