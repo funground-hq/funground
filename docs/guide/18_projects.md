@@ -25,7 +25,7 @@ You do not have to do the projects in order. Pick the one that sounds like fun.
 
 | # | Project | What you make | Main skills | Level |
 |---|---|---|---|---|
-| 1 | [Event poster series](projects/01_event_posters.md) | A poster designer: flip through events, type a headline, save layered PDF and SVG files | layers, text, gradients, booleans, saving | Beginner+ |
+| 1 | [Event poster series](projects/01_event_posters.md) | A poster designer: flip through events, type a headline, save layered PDF and SVG files, then make an A3 print-ready PDF (a fourth stage) | layers, text, gradients, booleans, saving, `fit_text_size`, bleed and marks | Beginner+ |
 | 2 | [Rangoli and mandala generator](projects/02_rangoli.md) | A symmetric festival pattern with sliders, saved as SVG for printing | transforms, booleans, `color_mode("hsb")`, controls | Beginner+ |
 | 3 | [Raga explorer](projects/03_raga_explorer.md) | Hear a raga over a drone, watch each swara light up, then sing it back | `raga`, `melody`, `drone`, microphone | Beginner+ |
 | 4 | [Voice-controlled game](projects/04_voice_game.md) | A bird that flies through gates as you use your voice | microphone, collisions, sound effects | Beginner+ |

@@ -28,7 +28,7 @@ f.run()
 |---|---|
 | `f.text(message, x, y)` | Draws `message` with its **top-left** corner at `(x, y)`. Numbers and other values are turned into text. |
 | `f.text(..., color=...)` | A colour for this text only; otherwise the fill colour is used (or the stroke if there is no fill). |
-| `f.text_size(n)` | The size of later text, in pixels. |
+| `f.text_size(n)` | The size of later text, in pixels. A fraction such as `20.5` is kept. |
 | `f.text_width(message)` | How wide `message` will be at the current size — use it to centre or right-align text. |
 
 funground draws text with its own built-in font (DejaVu Sans), so text looks the same on every
@@ -84,7 +84,8 @@ rest = f.text_box(rest, 340, 140, 260, 220)     # the rest carries on here
 ```
 
 `f.text_align()` works inside the box: `"center"` centres each line in the box's width, and
-`"bottom"` sits the text on the box's bottom edge.
+`"bottom"` sits the text on the box's bottom edge. `"justify"` stretches every line to
+the box's width: see "Justified text and soft hyphens" below.
 
 ![Text in boxes and columns](../gallery/images/text-03_text_box.png)
 
@@ -275,6 +276,208 @@ as before.
 | `f.FormattedString()` | An empty formatted text. |
 | `fs.append(text, font=None, size=None, style=None, color=None, tracking=None, features=None, variations=None)` | Add a run with the settings you give. Returns `fs`. `features` and `variations` are dicts, like `{"liga": False}`. |
 | `str(fs)`, `len(fs)`, `fs + other` | The plain text, its length, and two joined. |
+
+## A headline that fills its width
+
+A poster headline looks best when it fills the page from edge to edge. You could guess a size, run
+the sketch, and guess again. `f.fit_text_size(message, width)` does the guessing for you. It gives
+back the text size that makes `message` exactly `width` pixels wide, in the font, style and
+tracking you have set now.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 320)
+
+
+def draw():
+    f.background("ivory")
+    f.fill("navy")
+    f.text_style("bold")
+    width = f.width - 80                        # 40 pixels of margin on each side
+
+    f.text_size(f.fit_text_size("SPRING FAIR", width))
+    f.text("SPRING FAIR", 40, 30)
+
+    f.text_size(f.fit_text_size("MELA", width, 90))     # also at most 90 pixels tall
+    f.text("MELA", 40, 190)
+
+
+f.run()
+```
+
+The first line is as wide as the margins allow. The second word is short, so at that width it
+would be far too tall. With a third number, `f.fit_text_size("MELA", width, 90)` returns the
+biggest size that is within the width **and** within the height. Whichever limit is reached first
+wins. With several lines of text (a `"\n"` in the message), the height counts all the lines, using the
+current `f.text_leading()`.
+
+Set the font, the style and the tracking **before** you ask. A bold word is wider than the same
+word in normal style, so it needs a smaller size to fill the same width. `f.fit_text_size()` only
+measures. It changes nothing, so you set the size yourself with `f.text_size()`.
+
+The answer is usually not a whole number, such as `143.7`. That is fine. `f.text_size(143.7)` keeps
+the fraction, so the text fits to within half a pixel. Fractions are also why a word that grows a
+little every frame moves smoothly and does not jump.
+
+An empty message, or a message that cannot fit at any size, is a `ValueError`. A `FormattedString`
+cannot be fitted yet, because each of its runs has a size of its own.
+
+![A headline that fills its width](../gallery/images/text-11_fitted_headline.png)
+
+The gallery has a whole poster built this way: [A headline that fills its width](../gallery/README.md#text).
+
+| Function | What it does |
+|---|---|
+| `f.fit_text_size(message, width, height=None)` | The text size that makes `message` `width` pixels wide. With `height`, the biggest size that also fits that height. |
+
+## Justified text and soft hyphens
+
+In **justified** text, every line is as wide as the box. The left and the right edge are both
+straight, like a newspaper column. Switch it on with `f.text_align("justify")` and use
+`f.text_box()`. funground makes the spaces between the words a little wider on each line. It never
+changes the letters.
+
+```python
+import funground as f
+
+SOFT = "­"                               # an invisible "you may break here" mark
+STORY = (
+    "A poster is read from across a room. Its words must be easy to find.\n"
+    "An ex|traor|di|nary amount of care goes into a para|graph: the space "
+    "be|tween the words and the length of the lines."
+).replace("|", SOFT)
+
+
+def setup():
+    f.size(640, 230)
+
+
+def draw():
+    f.background("ivory")
+    f.no_fill()
+    f.stroke("lightgray")
+    f.rect(40, 40, 260, 150)                  # the edges of the two columns
+    f.rect(340, 40, 260, 150)
+    f.no_stroke()
+    f.fill("black")
+    f.text_size(18)
+
+    f.text_align("justify")
+    rest = f.text_box(STORY, 40, 40, 260, 150)         # left column
+    f.text_box(rest, 340, 40, 260, 150)                # what did not fit goes here
+
+
+f.run()
+```
+
+Two kinds of line are **not** stretched. The last line of a paragraph stays on the left, because
+nothing comes after it to line up with. A line with one word on it stays on the left too, because
+it has no space to widen. A `"\n"` ends a paragraph. `f.text()` has no box to fill, so `"justify"`
+there is the same as `"left"`.
+
+Justified lines can have big gaps when a long word does not fit and moves to the next line. A
+**soft hyphen** helps. It is a letter you cannot see, written `"­"` in Python. It says that a
+word **may** break here. When a word is too long for the rest of the line, `f.text_box()` breaks it
+at the last soft hyphen that fits and draws a hyphen `-` there. Where no line breaks, the soft
+hyphen draws nothing and takes no room, and `f.text_width()` ignores it.
+
+The example above writes `|` in the story to make it easy to read, then swaps each `|` for a soft
+hyphen. You can do the same, or type `­` straight into your strings.
+
+When should you use soft hyphens? Add them to long words in narrow, justified columns. Leave them
+out of headlines and of wide columns, where there is room. Break a word only where it sounds right:
+`co-op-er-a-tion`, not `coo-peration`. A PDF copies a hyphenated word back as one word, with no
+hyphen in it.
+
+![Justified columns with hyphens](../gallery/images/text-12_justified_columns.png)
+
+The gallery has two full columns: [Justified columns with hyphens](../gallery/README.md#text).
+
+| Function | What it does |
+|---|---|
+| `f.text_align("justify")` | In `f.text_box()`, stretch each line to the box's width, except the last line of a paragraph and lines of one word. |
+| `"­"` (soft hyphen) | Inside a word: a place where `f.text_box()` may break it. |
+
+## Type on a path
+
+`f.text_on_path(message, path, offset=0)` sets text along a path. Each letter stands on the path and
+turns to face the way the path goes. Make the path with `f.path()`, like the paths in chapter 9.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 320)
+
+
+def draw():
+    f.background("ivory")
+    f.fill("navy")
+    f.text_size(26)
+    f.text_style("bold")
+    f.text_align("center", "baseline")      # the middle of the text; letters stand on the path
+
+    ring = f.path().circle(170, 160, 220)               # 220 pixels across
+    f.text_on_path("ROUND AND ROUND AND ROUND", ring, offset=0.785 * 220)   # middle at the top
+
+    f.fill("tomato")
+    f.text_align("left", "baseline")
+    wave = f.path().move_to(340, 200).curve_to(400, 80, 480, 320, 600, 150)
+    rest = f.text_on_path("Up and down and along the wave", wave)
+    f.fill("black")
+    f.text_size(16)
+    f.text_align("left", "top")
+    f.text("left over: " + rest, 340, 260)
+
+
+f.run()
+```
+
+**Where the text starts.** `f.text_align()` works along the path. `"left"` starts the text at the
+start of the path. `"center"` puts the middle of the text at the middle of the path. `"right"` ends
+it at the end of the path. `offset` then moves the text further along the path, or back if it is
+negative. A circle starts at its right-hand side and runs clockwise. So on a circle, centred text
+with an `offset` of `0.785` times the width of the circle puts the middle of the text at the top.
+
+**Which side the letters are on.** The second word of `f.text_align()` decides how the letters
+touch the path. The default, `"top"`, hangs the letters below the path, like washing on a line.
+`"baseline"` stands them **on** the path. This is what you want for a headline on a curve.
+
+**Inside or outside a ring.** Letters stand on the left of the way the path goes. A circle from
+`f.path().circle()` runs clockwise, so the text stands on the outside. To put text inside a ring,
+use a circle that runs the other way. Flip it with `.scale(-1, 1)` and move it back with
+`.translate()`:
+
+```py
+x, y, size = 170, 160, 220                       # the centre and the width of the ring
+inside = f.path().circle(x, y, size).scale(-1, 1).translate(2 * x, 0)
+f.text_on_path("INSIDE THE RING", inside)
+```
+
+The words still read from left to right. The gallery's stamp uses this for the words at the
+bottom, so they are the right way up.
+
+**When the text is too long.** A letter is drawn only if all of it lies on the path. On an open
+path, the first letter that goes past the end, and every letter after it, is not drawn.
+`f.text_on_path()` **returns** those letters as a string, the way `f.text_box()` does. It is `""`
+when everything fitted. On a closed path, such as a circle, the text stops before it would meet its
+own start.
+
+Some things to know. The text is one line, so a `"\n"` is an error. A `FormattedString` does not
+work yet. Letters are placed one by one, so scripts whose letters join, such as Arabic, are not
+joined. In a PDF or SVG file each letter is real text.
+
+![Type on a path](../gallery/images/text-13_text_on_a_path.png)
+
+The gallery has a stamp and a wave: [Type on a path](../gallery/README.md#text).
+
+| Function | What it does |
+|---|---|
+| `f.text_on_path(message, path, offset=0)` | Draws `message` along `path` and returns the text that did not fit. `offset` moves it along the path. |
 
 ## Letters as shapes
 
@@ -499,5 +702,8 @@ goes with your sketch. A PDF or SVG you save usually carries the letters it need
 1. Write your name in the middle of the canvas. Hint: `f.text_align("center", "center")`.
 2. Pour a paragraph into two columns with two calls to `f.text_box()`. Pass what the first one returns to the second.
 3. Make your name out of dots with `f.text_to_points()`. Change `spacing` to see what it does.
+4. Fill the width of the canvas with your name using `f.fit_text_size()`. Then make it bold and fit it again.
+5. Put a long sentence in a justified box. Add soft hyphens to the longest word and watch it break.
+6. Set your name round a circle with `f.text_on_path()`. Move it to the top with `offset`.
 
 **Next:** [7. Animation and time](07_animation_and_time.md)

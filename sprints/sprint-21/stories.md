@@ -22,7 +22,7 @@ contract rows).
 | S-165 | Spike: CMYK and PDF/X for print shops. Can funground write CMYK (or a PDF/X file a print shop accepts) without a heavy dependency? Criteria set before the work; a recommendation | done (`spikes/11_cmyk/RESULTS.md`): RGB to CMYK by pypdf rewrite works but is not colour-managed; Pillow's littleCMS works on the desktop, not in Pyodide; no CMYK profile can be bundled; sRGB tagging plus an output intent is safe. Decision D-087 proposed |
 | S-171 | Fractional text sizes: `f.text_size(143.7)` keeps the fraction (the `int()` is a pygame-era leftover), so fitted headlines are exact and animated type grows smoothly; the outline cache keyed so many distinct sizes stay fast (measured before and after); affected references regenerated on purpose | done: sizes keep fractions (T3, T21); shaping cached once per text and rescaled per size, no size in the run-cache key; benchmark (400 letters, 120 frames) whole 2.4-2.7 s, fractional 2.4-2.6 s (was 5.1 s); regenerated: text-11_fitted_headline (golden, snapshot), projects-05_typographic_portrait (golden) |
 | S-170 | CMYK colour model (D-087): `f.cmyk(c, m, y, k)` in percentages (no colour mode: D-017); PDFs carry exact DeviceCMYK for those colours (fills, strokes, text, gradients, opacity); screen, PNG and SVG show an approximation; RGB colours tagged as sRGB with an output intent; crop marks in registration colour | done (S17, D4, D5): `f.cmyk()`; exact DeviceCMYK in PDFs via stand-in colours swapped after Cairo, checked by a read-back scan (a failed rewrite deletes the file and raises); RGB tagged sRGB with an output intent (a generated 588-byte profile); marks in registration; example `colour-05_cmyk_poster` |
-| S-166 | Teaching: guide sections (justified columns, type on a path, fitted headlines, preparing a file for print), four gallery examples, and the "Event poster series" project made print-ready | planned |
+| S-166 | Teaching: guide sections (justified columns, type on a path, fitted headlines, preparing a file for print), four gallery examples, and the "Event poster series" project made print-ready | done: chapter 6 (fitted headlines, justified text and soft hyphens, type on a path), chapter 13 "Preparing a file for print", Event posters stage 4 (print-ready A3), glossary entries; the four gallery examples came with their stories |
 
 Acceptance for the sprint: the full suite green; each story's contract row(s) pinned; goldens added for the
 new drawing (justified box, hyphenated box, text on a circle); a 300 dpi A3 PNG and a bleed-and-marks PDF
@@ -41,4 +41,4 @@ breaking), S-161, S-163, S-166 last; S-165 runs alongside (a spike, no product c
 - [x] S-165
 - [x] S-171
 - [x] S-170
-- [ ] S-166
+- [x] S-166
