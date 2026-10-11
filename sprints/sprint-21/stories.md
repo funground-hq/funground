@@ -1,6 +1,6 @@
 # Sprint 21 — typographic, print-ready posters
 
-**Dates:** planned 11 October 2026; starts when the maintainer has signed off Sprint 20. On `release-0.2-web`
+**Dates:** started 11 October 2026 (the maintainer chose to start before Sprint 20 is signed off; its review follows). On `release-0.2-web`
 (a library feature; it ships with 0.2, D-086). Epic **E-32**.
 
 **Goal:** a learner can set a typographic poster in funground (justified and hyphenated text, type on a
