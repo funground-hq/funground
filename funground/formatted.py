@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from numbers import Real
 
 from .color import Color
-from .typography import soft_hyphen_cuts
+from .typography import soft_hyphen_cuts, text_size_value
 
 
 @dataclass(frozen=True, slots=True)
@@ -34,7 +34,7 @@ class Run:
 
     text: str
     font: str | None = None            # the font registry key (T11)
-    size: int | None = None
+    size: float | None = None
     style: str | None = None
     color: Color | None = None
     tracking: float | None = None
@@ -174,9 +174,7 @@ class FormattedString:
         if size is not None:
             if isinstance(size, bool) or not isinstance(size, Real):
                 raise TypeError(f"FormattedString.append() takes a number for size, not {type(size).__name__}")
-            if size <= 0:
-                raise ValueError("text size must be positive")
-            size = int(size)
+            size = text_size_value(size, "FormattedString.append()")
         if style is not None and style not in TEXT_STYLES:
             raise ValueError(
                 f"FormattedString.append() takes a style of {', '.join(map(repr, TEXT_STYLES))}, not {style!r}")

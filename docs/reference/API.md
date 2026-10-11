@@ -1760,7 +1760,7 @@ See also: [`text_font`](#fn-text_font), [`load_font`](#fn-load_font), [`system_f
 ### `f.text_size`
 
 ```py
-f.text_size(size: 'int') -> 'None'
+f.text_size(size: 'float') -> 'None'
 ```
 
 Set the size of text.
@@ -1769,11 +1769,12 @@ The size is an em of that many pixels, as in CSS. Capital letters come out about
 
 | Argument | Meaning |
 |---|---|
-| `size` | the size in pixels, above 0. A fraction is cut to a whole number. |
+| `size` | the size in pixels, any number above 0. A fraction is kept, so 20.5 is a little bigger than 20. |
 
 **Raises.**
 
 - `ValueError`: size is 0 or less.
+- `TypeError`: size is not a number.
 
 ```py
 f.text_size(28)
@@ -1958,7 +1959,7 @@ f.fit_text_size(message: 'object', width: 'float', height: 'float | None' = None
 
 Return the text size at which a message is exactly as wide as you want.
 
-It sets the message in the current font, style, features, variations and tracking, and finds the size that makes its widest line `width` pixels wide. With a `height`, it finds the largest size that also keeps all the lines, spaced by the current leading, inside that height. The answer is correct to 0.01 of a pixel. Tracking is a fixed space in pixels, so it does not grow with the size: it is allowed for. Use the answer in text_size() before you draw. Note that text_size() cuts a fraction to a whole number, so the text then fits to within about one pixel of size.
+It sets the message in the current font, style, features, variations and tracking, and finds the size that makes its widest line `width` pixels wide. With a `height`, it finds the largest size that also keeps all the lines, spaced by the current leading, inside that height. The answer is correct to 0.01 of a pixel. Tracking is a fixed space in pixels, so it does not grow with the size: it is allowed for. Use the answer in text_size() before you draw. The answer is a fraction, and text_size() keeps it, so the text fits to within half a pixel.
 
 | Argument | Meaning |
 |---|---|
@@ -6370,7 +6371,7 @@ See also: [`lines`](#cls-FormattedString-lines).
 ### `Run`
 
 ```py
-Run(text: 'str', font: 'str | None' = None, size: 'int | None' = None, style: 'str | None' = None, color: 'Color | None' = None, tracking: 'float | None' = None, features: 'tuple | None' = None, variations: 'tuple | None' = None) -> None
+Run(text: 'str', font: 'str | None' = None, size: 'float | None' = None, style: 'str | None' = None, color: 'Color | None' = None, tracking: 'float | None' = None, features: 'tuple | None' = None, variations: 'tuple | None' = None) -> None
 ```
 
 One piece of a FormattedString: some text and the settings that were given for it.

@@ -17,7 +17,7 @@ class GraphicsState:
     fill: Color | None = WHITE
     stroke: Color | None = BLACK
     stroke_width: int = 1
-    text_size: int = 20
+    text_size: float = 20             # whole sizes are kept as ints (S-171)
     # S-042 stroke styles (contract S11). Defaults are the Sprint-3 look (D-004): round/round.
     stroke_cap: str = "round"
     stroke_join: str = "round"

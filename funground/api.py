@@ -1277,7 +1277,7 @@ def text_width(message: object) -> float:
 def fit_text_size(message: object, width: float, height: float | None = None) -> float:
     """Return the text size at which a message is exactly as wide as you want.
 
-    It sets the message in the current font, style, features, variations and tracking, and finds the size that makes its widest line `width` pixels wide. With a `height`, it finds the largest size that also keeps all the lines, spaced by the current leading, inside that height. The answer is correct to 0.01 of a pixel. Tracking is a fixed space in pixels, so it does not grow with the size: it is allowed for. Use the answer in text_size() before you draw. Note that text_size() cuts a fraction to a whole number, so the text then fits to within about one pixel of size.
+    It sets the message in the current font, style, features, variations and tracking, and finds the size that makes its widest line `width` pixels wide. With a `height`, it finds the largest size that also keeps all the lines, spaced by the current leading, inside that height. The answer is correct to 0.01 of a pixel. Tracking is a fixed space in pixels, so it does not grow with the size: it is allowed for. Use the answer in text_size() before you draw. The answer is a fraction, and text_size() keeps it, so the text fits to within half a pixel.
 
     Arguments:
         message: the text to fit. A message of several lines is fitted by its widest line. A FormattedString is not allowed yet.
@@ -1736,16 +1736,17 @@ def smooth() -> None:
     active_sketch().smooth()
 
 
-def text_size(size: int) -> None:
+def text_size(size: float) -> None:
     """Set the size of text.
 
     The size is an em of that many pixels, as in CSS. Capital letters come out about three-quarters of it. The start is 20. The choice is saved by push() and brought back by pop().
 
     Arguments:
-        size: the size in pixels, above 0. A fraction is cut to a whole number.
+        size: the size in pixels, any number above 0. A fraction is kept, so 20.5 is a little bigger than 20.
 
     Raises:
         ValueError: size is 0 or less.
+        TypeError: size is not a number.
 
     Example:
         f.text_size(28)

@@ -24,7 +24,7 @@
     255
    ],
    "stroke_width": 1,
-   "text_size": 14,
+   "text_size": 14.578125,
    "text_valign": "baseline"
   },
   "x1": 60,
@@ -48,7 +48,7 @@
     255
    ],
    "stroke_width": 1,
-   "text_size": 14,
+   "text_size": 14.578125,
    "text_valign": "baseline"
   },
   "x1": 580,
@@ -73,7 +73,7 @@
    ],
    "stroke": null,
    "stroke_width": 1,
-   "text_size": 79,
+   "text_size": 79.033203125,
    "text_style": "bold",
    "text_valign": "baseline"
   },
@@ -98,13 +98,13 @@
    ],
    "stroke": null,
    "stroke_width": 1,
-   "text_size": 76,
+   "text_size": 76.5,
    "text_style": "bold",
    "text_valign": "baseline"
   },
   "text": "SOMETHING",
   "x": 60,
-  "y": 127.9609375
+  "y": 127.99958801269531
  },
  {
   "color": [
@@ -123,13 +123,13 @@
    ],
    "stroke": null,
    "stroke_width": 1,
-   "text_size": 79,
+   "text_size": 79.033203125,
    "text_style": "bold",
    "text_valign": "baseline"
   },
   "text": "LOUD",
   "x": 60,
-  "y": 222.4296875
+  "y": 223.0503692626953
  },
  {
   "color": [
@@ -148,12 +148,12 @@
    ],
    "stroke": null,
    "stroke_width": 1,
-   "text_size": 14,
+   "text_size": 14.578125,
    "text_tracking": 6.0,
    "text_valign": "baseline"
   },
   "text": "Saturday 12 October, at the old station",
   "x": 60,
-  "y": 357.0048828125
+  "y": 356.46825408935547
  }
 ]

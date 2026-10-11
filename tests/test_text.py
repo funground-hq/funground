@@ -58,26 +58,33 @@ def reference_ops(run, x, y, color):
     return ops
 
 
-def test_scaled_outline_is_cached_per_glyph_location_and_size():
+def test_shaped_glyphs_are_kept_whatever_the_size():
     f = FontResource(DEFAULT_FONT)
-    gid = f.shape("a", 20).glyphs[0].gid
-    first = f.scaled_outline(gid, (), 20)
-    assert f.scaled_outline(gid, (), 20) is first
-    assert f.scaled_outline(gid, (), 21) is not first
-    assert f.scaled_outline(gid, (("wght", 700.0),), 20) is not first
+    first = f.shape("Spring", 20)
+    assert f.shape("Spring", 20.5).glyphs is first.glyphs         # S-171: one shaping serves every size
+    assert f.shape("Spring", 20, variations=(("wght", 700),)).glyphs is first.glyphs   # a static font has no axes
+    assert f.shape("Spring", 20, features=(("liga", False),)).glyphs is not first.glyphs
 
 
-def test_scaled_outline_cache_is_bounded_and_drops_the_least_recently_used(monkeypatch):
-    monkeypatch.setattr(typography, "SCALED_OUTLINE_CACHE_SIZE", 3)
+def test_shape_cache_is_bounded_and_drops_the_least_recently_used(monkeypatch):
+    monkeypatch.setattr(typography, "SHAPE_CACHE_SIZE", 3)
     f = FontResource(DEFAULT_FONT)
-    gid = f.shape("a", 20).glyphs[0].gid
-    kept = f.scaled_outline(gid, (), 10)
-    for size in (11, 12):
-        f.scaled_outline(gid, (), size)
-    assert f.scaled_outline(gid, (), 10) is kept            # touched: now the most recent
-    f.scaled_outline(gid, (), 13)                           # over the limit: size 11 goes
-    assert len(f._scaled) == 3
-    assert (gid, (), 11) not in f._scaled and (gid, (), 10) in f._scaled
+    kept = f.shape("a", 10).glyphs
+    for text in ("b", "c"):
+        f.shape(text, 10)
+    assert f.shape("a", 11).glyphs is kept                  # touched: now the most recent
+    f.shape("d", 10)                                        # over the limit: "b" goes
+    assert len(f._shaped) == 3
+    assert ("b", (), ()) not in f._shaped and ("a", (), ()) in f._shaped
+
+
+def test_many_distinct_sizes_give_each_size_its_own_correct_outline():
+    f = FontResource(DEFAULT_FONT)
+    for size in [0.5 + 0.37 * i for i in range(300)] + [20, 20.5, 20]:
+        run = f.shape("Hg", size)
+        assert run.outline_ops(3, 4, BLACK) == reference_ops(run, 3, 4, BLACK)
+    small, big = (f.shape("H", s).outline_ops(0, 0, BLACK)[0].path.bounds() for s in (20, 40))
+    assert big[2] - big[0] == pytest.approx(2 * (small[2] - small[0]))
 
 
 def test_path_translated_matches_a_translation_transform_on_a_glyph():
@@ -133,7 +140,7 @@ def test_renderer_text_run_cache_is_an_lru_capped_at_256():
         assert len(r._text_runs) <= 256
     assert len(r._text_runs) == 256
     # The most recent runs survive, the oldest were evicted.
-    assert ("999", 20) in r._text_runs and ("0", 20) not in r._text_runs
+    assert ("999",) in r._text_runs and ("0",) not in r._text_runs
 
 
 def test_text_run_cache_evicts_least_recently_used_not_oldest_inserted():
@@ -147,7 +154,26 @@ def test_text_run_cache_evicts_least_recently_used_not_oldest_inserted():
         r.render(ir.Frame([ir.Text(str(i), 0, 0, BLACK, style)]))
     r.render(ir.Frame([ir.Text("0", 0, 0, BLACK, style)]))       # touch "0": now most recently used
     r.render(ir.Frame([ir.Text("new", 0, 0, BLACK, style)]))     # evicts "1", not "0"
-    assert ("0", 20) in r._text_runs and ("1", 20) not in r._text_runs and len(r._text_runs) == 256
+    assert ("0",) in r._text_runs and ("1",) not in r._text_runs and len(r._text_runs) == 256
+
+
+def test_one_cached_run_serves_every_size_and_draws_as_the_uncached_path_does():
+    """S-171: the size is not in the key, so text that changes size every frame is shaped once."""
+    from funground.renderers.cairo2d import CairoRenderer
+    from funground.state import GraphicsState
+
+    r = CairoRenderer()
+    r.attach(200, 100)
+    for size in (12, 20.5, 33.25, 12):
+        style = GraphicsState(text_size=size)
+        op = ir.Text("Hello", 4, 6, BLACK, style)
+        run = r._text_run(op)
+        assert run.size == size
+        assert run.outline_ops(4, 6, BLACK) == default_font().shape("Hello", size).outline_ops(4, 6, BLACK)
+    assert len(r._text_runs) == 1
+    for i in range(1000):
+        r._text_run(ir.Text(str(i), 0, 0, BLACK, GraphicsState(text_size=10 + i / 7)))
+    assert len(r._text_runs) == 256                           # still bounded
 
 
 def test_text_width_is_the_shaped_advance_in_logical_pixels():

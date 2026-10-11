@@ -62,15 +62,32 @@ A test font with a `wght` axis that changes both box width and advance is genera
 ## The shaped-run cache
 
 `CairoRenderer._text_runs` is an LRU of `TextRun`, capped at `TEXT_RUN_CACHE_SIZE` (256) so
-`f.text(f.frame_count, ...)` cannot grow it. The key is `(text, size)` for the plain default.
+`f.text(f.frame_count, ...)` cannot grow it. The key is `(text,)` for the plain default (the size is not in it, S-171).
 It gains the font key or style name away from the default, and `(tracking, features,
 variations)` only when one is set. So the old key, and the tests that pin it, did not change.
 `attach()` clears it. Outlines are cached separately on `FontResource` and live for the process.
-Each font also keeps the outlines already scaled and flipped for a size (S-147): `scaled_outline(gid,
-location, size)`, an LRU capped at `SCALED_OUTLINE_CACHE_SIZE` (2048) so a text size that changes every
-frame cannot grow it. `outline_ops` only moves each cached outline to its pen position with `Path.translated` (adding the
-offset to every point, D-076), which gives the same floats as the old scale-then-translate transform. A `Path`
-is immutable, so sharing the cached one is safe.
+
+### Fractional sizes keep the caches fast (S-171)
+
+`text_size(20.5)` keeps the fraction (`text_size_value` in `typography`: any finite number above 0; a
+whole size is still stored as an `int`, so state, the IR and every snapshot of whole sizes read as
+before). A sketch that sizes letters by brightness, or grows a word, then asks for a new size on every
+letter. Nothing that costs time may therefore be keyed by size.
+
+- **Outlines.** S-147 cached each outline already scaled, per `(glyph, variation, size)`. That worked
+  while a sketch used a few hundred whole sizes and missed every time with fractions (400 letters a
+  frame, 120 frames: 5.1 s against 2.1 s). The scaled cache is gone. `FontResource.outline(gid,
+  location)` (font units, y up, once per glyph and variation) is the only outline cache, and
+  `outline_ops` places a glyph with one pass, `_placed(outline, scale, x, y)`: `x * scale + pen_x`,
+  `y * -scale + pen_y`. These are the floats that scaling and then moving gave, so whole-size
+  drawings are byte for byte as before. The one pass costs about what `Path.translated` cost.
+- **Shaping.** HarfBuzz shapes in font units, so the glyphs of a text do not depend on the size.
+  `FontResource._glyphs(text, features, location)` keeps them in an LRU of `SHAPE_CACHE_SIZE` (2048)
+  and `TextRun` only adds the size.
+- **The renderer's run cache** no longer has the size in its key: `(text,)` for the plain default, then
+  the font or style name, and the other settings as before. A hit returns `run.at_size(size)` (the same
+  glyphs, a new size). A sketch with continuously varying sizes therefore hits every time. With the
+  benchmark above, whole and fractional sizes both take about 2.2 s.
 
 ## Layout: `text_box`, alignment and leading (T7, T9, T10)
 

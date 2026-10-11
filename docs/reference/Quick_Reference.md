@@ -332,7 +332,7 @@ f.run()
 
 | Call | What it does | Example |
 |---|---|---|
-| `f.text_size(size)` | Set the size used by later text: **an em of `size` pixels** (default 20). | `f.text_size(28)` |
+| `f.text_size(size)` | Set the size used by later text: **an em of `size` pixels** (default 20). Any number above 0; a fraction such as `20.5` is kept. | `f.text_size(28)` |
 | `f.text(message, x, y)` | Draw text with its top-left corner at (x, y). Any object: `str()` is applied. | `f.text("Hello", 30, 40)` |
 | `f.text(..., color=...)` | Choose a colour just for this text. Otherwise text uses the fill, then the stroke, then white. | `f.text(f.frame_count, 30, 80, color="navy")` |
 | `f.text_width(message)` | how wide `message` will be at the current size, in pixels — to centre or right-align it. | `f.text(msg, (f.width - f.text_width(msg)) / 2, y)` |
