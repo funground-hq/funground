@@ -11,7 +11,7 @@ In the examples, `import funground as f` is understood.
 - [Sketch and loop](#sketch-and-loop): [`size`](#fn-size), [`resize_canvas`](#fn-resize_canvas), [`full_screen`](#fn-full_screen), [`run`](#fn-run), [`loop`](#fn-loop), [`no_loop`](#fn-no_loop), [`redraw`](#fn-redraw), [`is_looping`](#fn-is_looping), [`exit`](#fn-exit), [`stop`](#fn-stop), [`frame_rate`](#fn-frame_rate), [`show`](#fn-show), [`smooth`](#fn-smooth), [`no_smooth`](#fn-no_smooth)
 - [Shapes](#shapes): [`point`](#fn-point), [`line`](#fn-line), [`rect`](#fn-rect), [`square`](#fn-square), [`ellipse`](#fn-ellipse), [`circle`](#fn-circle), [`triangle`](#fn-triangle), [`quad`](#fn-quad), [`polygon`](#fn-polygon), [`arc`](#fn-arc), [`rect_mode`](#fn-rect_mode), [`ellipse_mode`](#fn-ellipse_mode)
 - [Curves and custom shapes](#curves-and-custom-shapes): [`bezier`](#fn-bezier), [`bezier_point`](#fn-bezier_point), [`bezier_tangent`](#fn-bezier_tangent), [`curve`](#fn-curve), [`curve_point`](#fn-curve_point), [`curve_tangent`](#fn-curve_tangent), [`curve_tightness`](#fn-curve_tightness), [`begin_shape`](#fn-begin_shape), [`end_shape`](#fn-end_shape), [`vertex`](#fn-vertex), [`bezier_vertex`](#fn-bezier_vertex), [`quadratic_vertex`](#fn-quadratic_vertex), [`curve_vertex`](#fn-curve_vertex), [`begin_contour`](#fn-begin_contour), [`end_contour`](#fn-end_contour)
-- [Colour](#colour): [`background`](#fn-background), [`clear`](#fn-clear), [`color`](#fn-color), [`color_mode`](#fn-color_mode), [`hsb`](#fn-hsb), [`hsl`](#fn-hsl), [`lerp_color`](#fn-lerp_color), [`linear_gradient`](#fn-linear_gradient), [`radial_gradient`](#fn-radial_gradient)
+- [Colour](#colour): [`background`](#fn-background), [`clear`](#fn-clear), [`color`](#fn-color), [`color_mode`](#fn-color_mode), [`hsb`](#fn-hsb), [`hsl`](#fn-hsl), [`cmyk`](#fn-cmyk), [`lerp_color`](#fn-lerp_color), [`linear_gradient`](#fn-linear_gradient), [`radial_gradient`](#fn-radial_gradient)
 - [Fill and stroke](#fill-and-stroke): [`fill`](#fn-fill), [`no_fill`](#fn-no_fill), [`stroke`](#fn-stroke), [`no_stroke`](#fn-no_stroke), [`stroke_width`](#fn-stroke_width), [`stroke_cap`](#fn-stroke_cap), [`stroke_join`](#fn-stroke_join), [`miter_limit`](#fn-miter_limit), [`stroke_dash`](#fn-stroke_dash), [`no_dash`](#fn-no_dash), [`shadow`](#fn-shadow), [`no_shadow`](#fn-no_shadow), [`opacity`](#fn-opacity), [`blend_mode`](#fn-blend_mode), [`erase`](#fn-erase), [`no_erase`](#fn-no_erase), [`tint`](#fn-tint), [`no_tint`](#fn-no_tint)
 - [Text and fonts](#text-and-fonts): [`text`](#fn-text), [`text_align`](#fn-text_align), [`text_ascent`](#fn-text_ascent), [`text_descent`](#fn-text_descent), [`text_leading`](#fn-text_leading), [`text_box`](#fn-text_box), [`text_path`](#fn-text_path), [`text_to_points`](#fn-text_to_points), [`current_font`](#fn-current_font), [`text_size`](#fn-text_size), [`text_style`](#fn-text_style), [`text_tracking`](#fn-text_tracking), [`text_fallback`](#fn-text_fallback), [`system_font`](#fn-system_font), [`text_features`](#fn-text_features), [`font_variations`](#fn-font_variations), [`text_width`](#fn-text_width), [`fit_text_size`](#fn-fit_text_size), [`text_on_path`](#fn-text_on_path), [`text_font`](#fn-text_font), [`load_font`](#fn-load_font)
 - [Transforms and the state stack](#transforms-and-the-state-stack): [`translate`](#fn-translate), [`rotate`](#fn-rotate), [`scale`](#fn-scale), [`shear_x`](#fn-shear_x), [`shear_y`](#fn-shear_y), [`apply_matrix`](#fn-apply_matrix), [`reset_matrix`](#fn-reset_matrix), [`push`](#fn-push), [`pop`](#fn-pop), [`saved_state`](#fn-saved_state)
@@ -1075,6 +1075,38 @@ f.fill(f.hsl(30, 90, 60))
 ```
 
 See also: [`hsb`](#fn-hsb), [`color`](#fn-color), [`color_mode`](#fn-color_mode).
+
+<a id="fn-cmyk"></a>
+### `f.cmyk`
+
+```py
+f.cmyk(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255)
+```
+
+Make a colour from printing inks: cyan, magenta, yellow and black.
+
+Use it where you want an exact print colour. A PDF you save holds exactly these ink amounts, so a print shop gets your numbers, not a guess. On the screen, in a PNG and in an SVG the colour is shown as the nearest red, green and blue. That is an approximation: a screen cannot show ink. The ranges are always these, whatever the colour mode is.
+
+| Argument | Meaning |
+|---|---|
+| `cyan` | the cyan ink, 0 to 100. |
+| `magenta` | the magenta ink, 0 to 100. |
+| `yellow` | the yellow ink, 0 to 100. |
+| `black` | the black ink, 0 to 100. |
+| `alpha` | the opacity, 0 (invisible) to 255 (solid). The default is 255. |
+
+**Returns.** A colour, as from color(). Its .cmyk part holds the four ink amounts.
+
+**Raises.**
+
+- `ValueError`: an ink is not a number from 0 to 100, or the alpha is not from 0 to 255.
+
+```py
+f.fill(f.cmyk(0, 80, 100, 0))
+f.save("poster.pdf")
+```
+
+See also: [`hsb`](#fn-hsb), [`color`](#fn-color), [`save`](#fn-save), [`lerp_color`](#fn-lerp_color).
 
 <a id="fn-lerp_color"></a>
 ### `f.lerp_color`
@@ -3463,7 +3495,9 @@ The file is written when the frame is complete, and it holds everything that fra
 
 A PNG is written at the screen's real resolution, so on a 2x display a 640 by 400 window gives a 1280 by 800 file. To choose the resolution for printing, give dpi. The page is then drawn again at that many dots per inch (a point is 1/72 inch, so the scale is dpi / 72), not stretched from the screen picture. A4 at dpi=300 is 2479 by 3508 pixels. The file says "300 dpi", so print software sizes it right. A page of more than 120 million pixels is refused; save a PDF instead. In an animated sketch, a PNG with dpi holds what this frame drew, as a PDF does, and not what earlier frames left on the canvas.
 
-For a print shop, a PDF can have a bleed and crop marks. The bleed is extra picture beyond the edges of the page, so that no white line shows when the printer cuts the paper. Draw past the edges (at negative numbers, and beyond width and height) and that drawing appears in the bleed. A background() fills the bleed too. The page of your canvas stays the finished size: the PDF records it as its TrimBox, and the page grown by the bleed as its BleedBox. Crop marks are thin black lines outside the bleed at the four corners, 5 mm long, to show where to cut. Every page of a document of several pages gets the same bleed and marks.
+For a print shop, a PDF can have a bleed and crop marks. The bleed is extra picture beyond the edges of the page, so that no white line shows when the printer cuts the paper. Draw past the edges (at negative numbers, and beyond width and height) and that drawing appears in the bleed. A background() fills the bleed too. The page of your canvas stays the finished size: the PDF records it as its TrimBox, and the page grown by the bleed as its BleedBox. Crop marks are thin lines in registration colour (all four inks at 100 percent, so they print on every plate) outside the bleed at the four corners, 5 mm long, to show where to cut. Every page of a document of several pages gets the same bleed and marks.
+
+A PDF holds colours made by cmyk() as exact CMYK inks. Every other colour is RGB, tagged as sRGB.
 
 | Argument | Meaning |
 |---|---|
@@ -8688,7 +8722,7 @@ See also: `value`, `checked`, [`create_slider`](#fn-create_slider).
 ### `Color`
 
 ```py
-Color(r: 'int', g: 'int', b: 'int', a: 'int' = 255) -> None
+Color(r: 'int', g: 'int', b: 'int', a: 'int' = 255, cmyk: 'tuple[float, float, float, float] | None' = None) -> None
 ```
 
 A colour, as red, green, blue and alpha numbers.
@@ -8700,6 +8734,9 @@ changed.
 Read its parts as c.red, c.green, c.blue and c.alpha (each a whole number from 0 to 255), c.hue (0 to
 360) and c.saturation, c.brightness and c.lightness (each 0 to 100). The short names c.r, c.g, c.b and
 c.a are the same as red, green, blue and alpha.
+
+A colour made by f.cmyk() also remembers its ink amounts, in c.cmyk. A PDF then holds exactly those
+amounts. Everywhere else the colour shows as the red, green and blue that match them.
 
 ```py
 c = f.color("tomato")
@@ -8757,6 +8794,33 @@ print(f.color("red").brightness)    # 100.0
 ```
 
 See also: [`hue`](#cls-Color-hue), [`saturation`](#cls-Color-saturation), [`lightness`](#cls-Color-lightness).
+
+<a id="cls-Color-from_cmyk"></a>
+#### `Color.from_cmyk`
+
+```py
+Color.from_cmyk(c: 'float', m: 'float', y: 'float', k: 'float', a: 'float' = 255) -> "'Color'"
+```
+
+Make a colour from ink amounts: cyan, magenta, yellow and black.
+
+f.cmyk() does the same, and is the one to use in a sketch.
+
+| Argument | Meaning |
+|---|---|
+| `c` | the cyan ink, from 0 to 100. |
+| `m` | the magenta ink, from 0 to 100. |
+| `y` | the yellow ink, from 0 to 100. |
+| `k` | the black ink, from 0 to 100. |
+| `a` | the alpha, from 0 to 255. It is 255 at first. |
+
+**Returns.** a new Color that remembers the ink amounts in its cmyk part. Its red, green and blue are the simple match: red = 255 x (1 - cyan) x (1 - black), and the same for green and blue.
+
+**Raises.**
+
+- `ValueError`: if an ink amount is not a number from 0 to 100, or the alpha is not from 0 to 255.
+
+See also: [`from_hsb`](#cls-Color-from_hsb), [`cmyk`](#fn-cmyk).
 
 <a id="cls-Color-from_hsb"></a>
 #### `Color.from_hsb`
@@ -8860,7 +8924,7 @@ f.lerp_color() does the same. It mixes red, green, blue and alpha.
 | `other` | the Color to mix towards. |
 | `amount` | how much of the way to go, from 0 (this colour) to 1 (the other). Numbers outside are cut off. |
 
-**Returns.** a new Color.
+**Returns.** a new Color. If both colours came from f.cmyk(), the result is a cmyk colour too, with mixed inks.
 
 ```py
 mid = f.color("red").lerp(f.color("blue"), 0.5)

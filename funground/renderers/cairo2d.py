@@ -66,6 +66,10 @@ class CairoRenderer:
         # layer is drawn inside a marker group that the exporter turns into a real file layer, and
         # hidden layers are drawn too (switched off in the file). Never set for the window or PNG.
         self.file_layers = None
+        # S-170 (S17, D4): set only by the PDF exporter (funground.export.cmyk). When set, a colour made by
+        # f.cmyk() is drawn in a stand-in RGB value that the exporter swaps for exact inks after the file is
+        # written. Never set for the window, PNG or SVG: they show the colour's own red, green and blue.
+        self.cmyk_standins = None
         # S-164 (D2): set only by the PDF exporter when a page has a bleed: the (x, y, width, height) the
         # drawing may reach, in the page's own units. Clearing the clip goes back to it, not to the whole sheet.
         self.clip_box: tuple[float, float, float, float] | None = None
@@ -384,7 +388,7 @@ class CairoRenderer:
             grow = (blur * (n - k + 1) / n) * per_px if blur > 0 else 0.0
             layer_alpha = (total / n) / (1 - total * (k - 1) / n)
             ctx.push_group()
-            ctx.set_source_rgb(color.r / 255, color.g / 255, color.b / 255)
+            ctx.set_source_rgb(*self.rgb_of(color))
             for make, filled, width in parts:
                 make()
                 if filled:
@@ -627,10 +631,16 @@ class CairoRenderer:
                 x, y, r = c.points
                 pattern = cairo.RadialGradient(x, y, 0.0, x, y, r)
             for offset, stop in c.stops:
-                pattern.add_color_stop_rgba(offset, stop.r / 255, stop.g / 255, stop.b / 255, stop.a / 255 * k)
+                pattern.add_color_stop_rgba(offset, *self.rgb_of(stop), stop.a / 255 * k)
             ctx.set_source(pattern)
             return
-        ctx.set_source_rgba(c.r / 255, c.g / 255, c.b / 255, c.a / 255 * k)
+        ctx.set_source_rgba(*self.rgb_of(c), c.a / 255 * k)
+
+    def rgb_of(self, c: Color) -> tuple[float, float, float]:
+        """The red, green and blue to draw *c* with, each 0 to 1. A PDF draws a cmyk() colour in its stand-in (S17)."""
+        if c.cmyk is not None and self.cmyk_standins is not None:
+            return self.cmyk_standins.rgb_for(c.cmyk)
+        return c.r / 255, c.g / 255, c.b / 255
 
     @staticmethod
     def _path(ctx, p: Path) -> None:

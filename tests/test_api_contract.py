@@ -118,6 +118,7 @@ ADDED_FUNCTIONS = {
     "color": "(*values)",
     "hsb": "(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255)",
     "hsl": "(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255)",
+    "cmyk": "(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255)",   # S-170, contract S17
     "lerp_color": "(c1: 'Color', c2: 'Color', amount: 'float')",
     # S-055 Vector
     "Vector": "(x: 'float' = 0.0, y: 'float' = 0.0) -> 'None'",
