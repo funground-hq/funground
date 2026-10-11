@@ -14,7 +14,7 @@ contract rows).
 | Story | Value | Status |
 |---|---|---|
 | S-159 | Justified text: `f.text_align("justify")` in `text_box` (the last line of a paragraph stays left), for strings and FormattedStrings | planned |
-| S-160 | Hyphenation by soft hyphens: `text_box` may break a word where the learner typed a soft hyphen (U+00AD, or `"­"` in Python), showing a hyphen there and nothing elsewhere; works with justify (D-085 = a) | planned |
+| S-160 | Hyphenation by soft hyphens: `text_box` may break a word where the learner typed a soft hyphen (U+00AD, or `"\u00ad"` in Python), showing a hyphen there and nothing elsewhere; works with justify (D-085 = a) | planned |
 | S-161 | Type on a path: `f.text_on_path(message, path, offset=0)` sets letters along any path (a circle, a wave), each turned to the curve; live text in PDF and SVG | planned |
 | S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | planned |
 | S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi is 3508 × 4961 px), in scripts and animated sketches, on the desktop and in the browser | planned |
