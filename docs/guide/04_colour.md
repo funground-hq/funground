@@ -156,7 +156,7 @@ f.stroke(f.cmyk(0, 0, 0, 100))      # pure black ink
 
 Use it anywhere a colour goes: fill, stroke, background, text, gradients, shadows. Save a PDF and the file holds exactly your four numbers, so the print shop gets your ink and not a guess.
 
-A screen cannot show ink. On the screen, in a PNG and in an SVG, a CMYK colour is drawn as the nearest red, green and blue, by a simple sum: red is 255 x (1 - cyan) x (1 - black), and the same for green and blue. It is an approximation. A press mixes ink in its own way, so the screen will not match the print exactly. Ask your print shop which numbers they want.
+A screen cannot show ink. On the screen, in a PNG and in an SVG, a CMYK colour is drawn as the nearest red, green and blue, by a simple sum: red is 255 x (1 - cyan) x (1 - black), and the same for green and blue. It is an approximation. A press mixes ink in its own way, so the screen will not match the print exactly. Ask your print shop which numbers they want. Chapter 13 says what to ask, and how to add a bleed and crop marks: [Preparing a file for print](13_saving_your_work.md#preparing-a-file-for-print). Most print shops are happy with RGB, so use `f.cmyk()` when a shop asks for CMYK.
 
 Pictures stay RGB. A picture is pixels, and funground does not turn pixels into ink. A PDF also tags every RGB colour as sRGB, so the file says what its red, green and blue mean.
 
