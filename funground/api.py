@@ -253,6 +253,28 @@ sys.excepthook = _note_crash
 atexit.register(exit_hint)
 
 
+def start_unstarted_sketch() -> None:
+    """Proposal 3 (S-175): run a sketch that defines draw() but never called run(), when its file ends.
+
+    It runs by itself when the program ends, with the same conditions as exit_hint(): a program run from a
+    terminal that ended without an error, not an interactive session. Most learners never call this."""
+    from . import sketch as _sketch_module
+
+    if _crashed or _sketch_module._run_started or hasattr(sys, "ps1") or sys.flags.interactive:
+        return
+    if _active is not None and _active._script:
+        return
+    main = sys.modules.get("__main__")
+    if callable(getattr(main, "draw", None)):
+        try:
+            canvas_sketch().run_namespace(vars(main))
+        except BaseException:                  # Python would print "Exception ignored in atexit callback"; show the usual error
+            sys.excepthook(*sys.exc_info())
+
+
+atexit.register(start_unstarted_sketch)       # registered last, so it runs first and exit_hint() then stays quiet
+
+
 # ---- window / lifecycle
 def size(width: int | str, height: int | None = None, *, title: str = "funground", fps: int = 60,
          margin: float | tuple = 0, landscape: bool = False) -> None:

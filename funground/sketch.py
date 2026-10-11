@@ -125,6 +125,8 @@ class Sketch:
         self.key_code: int | None = None
         self.is_key_pressed = False
         self._callbacks: dict[str, Callable] = {}
+        self._namespace: Namespace = {}
+        self._shared_names: tuple[str, ...] = ()
         self.frame_count = 0
         self.delta_time = 0.0
         self.running = False
@@ -549,6 +551,7 @@ class Sketch:
         self._guides = []
         self._has_window = True
         self._platform.set_cursor(self._cursor)
+        self._publish_live_values()            # width and height changed: size(), resize_canvas(), full_screen()
 
     # ---- window control (S-057, contract R12)
     def resize_canvas(self, width: int, height: int) -> None:
@@ -2189,10 +2192,26 @@ class Sketch:
         fn = self._callbacks.get(name)
         if fn is None:
             return
+        self._publish_live_values()
         if name == "mouse_wheel" and _takes_an_argument(fn):
             fn(ev.delta)
         else:
             fn()
+
+    @property
+    def started(self) -> bool:
+        """True once run() (or a host) has started this sketch."""
+        return self._draw_fn is not None
+
+    def _publish_live_values(self) -> None:
+        """Global style (S-175): copy the live values into the sketch's own globals.
+
+        A sketch that did ``from funground import *`` holds copies of width, mouse_x and the rest, taken at
+        import time. Before setup(), draw() and every event callback they are written again, so
+        the sketch reads current values. A sketch that did ``import funground as f`` is not touched."""
+        namespace = self._namespace
+        for name in self._shared_names:
+            namespace[name] = getattr(self, name)
 
     # ---- loop control and clock (S-048, contract R10)
     def exit(self) -> None:
@@ -2282,6 +2301,8 @@ class Sketch:
         _run_started = True
         setup, self._draw_fn = _sketch_functions(namespace)
         self._callbacks = _event_callbacks(namespace)
+        self._shared_names = _live_names_in(namespace)
+        self._namespace = namespace
         if max_frames is not None and max_frames <= 0:
             raise ValueError("max_frames must be positive")
         if fps is not None and fps <= 0:
@@ -2311,6 +2332,7 @@ class Sketch:
             self.fps = int(fps)
 
         # setup() usually calls size(). A default canvas keeps setup() optional.
+        self._publish_live_values()
         if setup is not None:
             setup()
         if not self._has_window:
@@ -2342,6 +2364,7 @@ class Sketch:
             if not self._smooth:
                 self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
             self._in_draw = True
+            self._publish_live_values()
             try:
                 self._draw_fn()
             finally:
@@ -2407,6 +2430,21 @@ def _event_callbacks(namespace: Namespace) -> dict[str, Callable]:
             raise TypeError(f"{name} must be a function (it is called when that input happens)")
         found[name] = fn
     return found
+
+
+def _live_names_in(namespace: Namespace) -> tuple[str, ...]:
+    """The live names (width, mouse_x, ...) the sketch's globals hold from ``from funground import *``.
+
+    A sketch counts as using the global style when its globals hold any of funground's own functions (so a
+    sketch that defines its own circle() is still recognised). A variable called width in an
+    ``import funground as f`` sketch is then never overwritten."""
+    import funground
+    from .api import LIVE_NAMES
+
+    functions = {id(getattr(funground, name)) for name in funground.__all__ if name not in LIVE_NAMES}
+    if not any(id(value) in functions for value in namespace.values()):
+        return ()
+    return tuple(name for name in sorted(LIVE_NAMES) if name in namespace)
 
 
 def _takes_an_argument(fn: Callable) -> bool:

@@ -79,6 +79,8 @@ class Session:
         self._modules_before = set(sys.modules)
         try:
             exec(compile(source, filename, "exec"), namespace)
+            if not self._sketch.started and callable(namespace.get("draw")):
+                self._sketch.run_namespace(namespace)       # S-175: a file that defines draw() and never called run()
         except BaseException:
             self.stop()
             raise

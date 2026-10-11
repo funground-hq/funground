@@ -19,6 +19,8 @@ Typical use::
 """
 
 from . import api as _api
+from .constants import OPTION_WORDS, colors
+from .constants import *  # noqa: F403  (the capitals; the list is OPTION_WORDS)
 from .api import (
     FormattedString,
     Vector,
@@ -209,7 +211,7 @@ from .api import (
 
 __version__ = "0.1.0.dev0"
 
-__all__ = [
+_NAMES = [
     "FormattedString",
     "Vector",
     "apply_matrix",
@@ -411,6 +413,12 @@ __all__ = [
     "pixels",
     "ground",
 ]
+
+
+# What ``from funground import *`` brings in (S-175). Four names would hide Python's own: set, filter and exit
+# are built-ins, and random is the standard-library module. They stay as f.set, f.filter, f.exit and f.random.
+STAR_LEAVES_OUT = ("exit", "filter", "random", "set")
+__all__ = [name for name in _NAMES if name not in STAR_LEAVES_OUT] + list(OPTION_WORDS) + ["colors"]
 
 
 # D-016: v0.5's live value mouse_pressed became is_mouse_pressed, because mouse_pressed() is

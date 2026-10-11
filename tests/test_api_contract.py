@@ -279,7 +279,11 @@ def test_run_keeps_v05_call_forms():
 
 
 def test_public_all_is_exactly_the_contract():
-    assert set(p.__all__) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES
+    """``from funground import *`` brings the contract, less the four names that hide Python's own (S-175),
+    plus the option words and ``colors`` (D-090 prototype)."""
+    names = set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES
+    assert set(p.__all__) == (names - set(p.STAR_LEAVES_OUT)) | set(p.OPTION_WORDS) | {"colors"}
+    assert all(callable(getattr(p, name)) for name in p.STAR_LEAVES_OUT)     # still there as f.set, f.random...
 
 
 def test_live_values_are_dynamic_module_attributes():
