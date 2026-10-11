@@ -278,6 +278,21 @@ class TextRun:
             pen_x += self._step(g, s)
         return out
 
+    def cluster_spans(self) -> list[tuple[int, int, float]]:
+        """The letters of the run as they are drawn, left to right (S-161, text on a path): for each HarfBuzz
+        cluster, (start, end, advance), the part of `text` it stands for and how far the pen moves over it.
+        A ligature is one cluster; so is a letter with its accent."""
+        s = self.scale
+        starts = sorted({g.cluster for g in self.glyphs})
+        ends = {c: (starts[i + 1] if i + 1 < len(starts) else len(self.text)) for i, c in enumerate(starts)}
+        spans: list[list] = []
+        for g in self.glyphs:
+            if spans and spans[-1][0] == g.cluster:
+                spans[-1][2] += self._step(g, s)
+            else:
+                spans.append([g.cluster, ends[g.cluster], self._step(g, s)])
+        return [(start, end, advance) for start, end, advance in spans]
+
     def outline_ops(self, x: float, y: float, color: Color) -> list[ir.FillPath]:
         """Materialise as FillPath ops anchored top-left at (x, y)."""
         s = self.scale
@@ -336,6 +351,11 @@ class ShapedLine:
     def placements(self, x: float, y: float) -> list[tuple[Glyph, float, float]]:
         """Every glyph of every run with its origin on the shared baseline (as `TextRun.placements`)."""
         return [item for run, rx, ry in self.parts(x, y) for item in run.placements(rx, ry)]
+
+    def cluster_spans(self) -> list[tuple[int, int, float]]:
+        """(start, end, advance) of each letter of every run, left to right, in the line's own text (as `TextRun.cluster_spans`)."""
+        return [(start + a, end + a, advance)
+                for run, a in zip(self.runs, self.spans) for start, end, advance in run.cluster_spans()]
 
     def outline_ops(self, x: float, y: float, color: Color) -> list[ir.FillPath]:
         """Materialise as FillPath ops anchored top-left at (x, y)."""

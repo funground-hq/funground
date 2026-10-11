@@ -248,6 +248,8 @@ ADDED_FUNCTIONS = {
     "keep": "(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'",
     # S-162 a headline that fits (contract T21)
     "fit_text_size": "(message: 'object', width: 'float', height: 'float | None' = None) -> 'float'",
+    # S-161 type on a path (contract T24)
+    "text_on_path": "(message: 'object', path: 'PathBuilder', offset: 'float' = 0) -> 'str'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);

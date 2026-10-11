@@ -1147,6 +1147,37 @@ def text_to_points(message: object, x: float, y: float, spacing: float = 5) -> l
     return canvas_sketch().text_to_points(message, x, y, spacing)
 
 
+def text_on_path(message: object, path: PathBuilder, offset: float = 0) -> str:
+    """Draw text along a path, and return the part that did not fit.
+
+    The text is set in the current font, style, size, tracking and features, with the current fill, so ligatures and kerning are kept. Each letter stands with its middle on the path, turned to face the way the path goes there. On a path drawn from left to right, the text reads from left to right. A circle from path().circle() runs clockwise, so its text stands on the outside. For text on the inside, use a path that runs the other way, such as the circle flipped with .scale(-1, 1).translate(2 * x, 0).
+
+    text_align() works along the path. "left" starts the text at the start of the path, "center" puts the middle of the text at the middle of the path, and "right" ends the text at the end. The second value says which part of the letters touches the path. With the default, "top", the letters hang below the path. Use "baseline" to stand them on it. A circle starts at its right-hand side, so to put the middle of the text at the top, use "center" and an offset of 0.785 times the diameter.
+
+    A closed path, such as a circle, carries on past its end, so text can start anywhere on it. On any path, letters that would pass the end are not drawn. If the path has more than one part, only the first part is used. Letters that join their neighbours, as in Arabic, are set one by one and do not join. In a PDF or SVG file each letter is live text.
+
+    Arguments:
+        message: what to write, on one line. Any value works: str() is applied.
+        path: a path made with path(), such as path().circle(x, y, d) or a curve made with curve_to().
+        offset: how far to move the text along the path, in pixels, after text_align() has placed it. The default is 0. A negative number moves it back.
+
+    Returns:
+        The text that did not fit, as a string. It is "" when everything fitted.
+
+    Raises:
+        ValueError: the path has no length, the message has a new line in it, or the offset is not a finite number.
+        TypeError: path is not a path, the message is a FormattedString, or the offset is not a number.
+
+    Example:
+        f.text_align("center", "baseline")
+        wave = f.path().move_to(40, 200).curve_to(140, 100, 240, 300, 340, 200)
+        f.text_on_path("Follow the wave", wave)
+
+    See also: text, text_path, text_align, text_width, path
+    """
+    return active_sketch().text_on_path(message, path, offset)
+
+
 def current_font() -> Font:
     """Return the font that text is set in now.
 

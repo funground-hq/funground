@@ -213,6 +213,45 @@ places to forget); a separate Text op per word (copying a PDF then needs a space
 viewers differ); treating the last visible line of a short box as a paragraph end (a box that
 cuts a paragraph would show a ragged line in the middle of the paragraph).
 
+## Type on a path (T24; S-161)
+
+`f.text_on_path(message, path, offset=0)` sets one line of text along a path. It is `Sketch.text_on_path`,
+with the measuring in `geometry.PathMeasure` and the letters in `TextRun.cluster_spans`.
+
+```text
+ message ──► font.shape (once, as `text`)  ──► cluster_spans(): (start, end, advance) per letter
+ path    ──► PathMeasure: pieces within 0.1 px, cumulative length, angle of the curve itself
+ each letter: Save · Concat(turn to the tangent, move to the path point) · Text(letter) · Restore
+```
+
+- **A letter is a HarfBuzz cluster**, so a ligature stays one letter and a letter with its accent too. Its
+  advance (pen movement, with kerning and tracking) comes from the whole line's shaping, so the spacing
+  is `text`'s. A space is not drawn: it rides with the letter before it, in that letter's `Text`, so a
+  PDF or SVG copy keeps the spaces. Each letter's `Text` is then shaped again by the renderer on its own;
+  that gives the same glyphs for Latin, Devanagari conjuncts and emoji, but not for Arabic, whose
+  letters change shape with their neighbours. That is the known limit (an outline fallback was not built).
+- **One transform per letter, not rotated outlines.** The IR already has `Save`, `Concat` and `Text`, and
+  the PDF and SVG writers already read a rotation back from the text marker (T15, T19), so every letter
+  is live text with no new op, no new writer code and no new renderer branch. The cost is four ops a
+  letter; a few hundred letters a frame is nothing. A straight path gives exactly the pixels of `text`
+  (a test). A gradient fill is moved into each letter's frame (`Sketch._paint_seen_from`), because a
+  gradient is read in the drawing space of the moment it is painted.
+- **Measuring.** `contours()` (T16) gives only points, and a letter's angle needs the curve's own direction,
+  so `PathMeasure` cuts curves itself (`_cubic_steps` is shared with `_flatten_cubic`), keeps the angle at
+  each end of every piece, and interpolates it. At 0.1 px a circle of radius 100 has pieces about 5 degrees
+  long; the angle of the chord would be up to 2.5 degrees out, the interpolated one is within 0.1. A
+  piece's length is its chord times `(turn/2) / sin(turn/2)`, exact for a circle, so a ring of text can
+  fill the circle to its end. `point_at` finds the piece with `bisect`; the cost per letter is a
+  binary search, the cost per call one flattening of the path.
+- **Alignment is T7's, along the path.** `offset` is added after alignment, so `"center"` with `offset=0`
+  is centred and the call needs no length from the learner for the common case. A closed path wraps: the
+  learner starts text at the top of a circle with `offset`, and a ring of text can carry on past the start
+  of the path. Open paths cut instead; the overflow is returned, as `text_box` returns its overflow.
+- **Rejected:** a `side="outside"/"inside"` argument (the signature was fixed; flipping the path says it);
+  placing letters by outline `FillPath` (the PDF would hold no text); a new `TextOnPath` op (every
+  renderer and writer would need it); a gap-filling of Arabic joining (needs the whole run's glyphs, one
+  outline each).
+
 ## Alternatives rejected
 
 - **A markup string** for mixed text (D-044): DrawBot's `FormattedString` was chosen instead.
@@ -239,4 +278,4 @@ cuts a paragraph would show a ragged line in the middle of the paragraph).
 
 `tests/test_fonts.py` (T11, T12), `test_text_layout.py` (T7 to T10, including `text_box`), `test_text.py` (T6, outline and
 run caches), `test_text_settings.py` (T13), `test_formatted.py` (T14), `test_text_path.py` (F13), `test_justify.py` (T22),
-`test_soft_hyphens.py` (T23), `test_poster_text_files.py` (T22, T23 in PDF and SVG).
+`test_soft_hyphens.py` (T23), `test_poster_text_files.py` (T22, T23 in PDF and SVG), `test_text_on_path.py` (T24).

@@ -15,7 +15,7 @@ contract rows).
 |---|---|---|
 | S-159 | Justified text: `f.text_align("justify")` in `text_box` (the last line of a paragraph stays left), for strings and FormattedStrings | done: `"justify"` in `text_align` (T22); a stretched line is a `Text` op with `word_spacing`; example `text-12_justified_columns` |
 | S-160 | Hyphenation by soft hyphens: `text_box` may break a word where the learner typed a soft hyphen (U+00AD, or `"\u00ad"` in Python), showing a hyphen there and nothing elsewhere; works with justify (D-085 = a) | done (T23): the shaper drops U+00AD, `text_box` breaks at the last soft hyphen that fits; same example |
-| S-161 | Type on a path: `f.text_on_path(message, path, offset=0)` sets letters along any path (a circle, a wave), each turned to the curve; live text in PDF and SVG | planned |
+| S-161 | Type on a path: `f.text_on_path(message, path, offset=0)` sets letters along any path (a circle, a wave), each turned to the curve; live text in PDF and SVG | done (T24): letters centred on the path by arc length, turned to the tangent, current vertical alignment applied across it; overflow returned; live text per letter in PDF and SVG; example `text-13_text_on_a_path` |
 | S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | done: `f.fit_text_size(message, width, height=None)` (T21), example `text-11_fitted_headline` |
 | S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi), in scripts and animated sketches, on the desktop and in the browser | done (D3): redrawn at dpi/72, pHYs written, 120-megapixel limit; funground's A3 is 842 x 1191 pt, so 3508 x 4963 px (true A3 would be 4961) |
 | S-164 | Print-ready PDF: `f.save("poster.pdf", bleed=f.mm(3), marks=True)` adds the bleed, crop marks and the PDF's TrimBox and BleedBox; `f.mm()` and `f.inch()` give lengths in points | done (D2): bleed, crop marks (RGB black until S-170), TrimBox and BleedBox; `f.mm`/`f.inch` already existed |
@@ -34,7 +34,7 @@ breaking), S-161, S-163, S-166 last; S-165 runs alongside (a spike, no product c
 
 - [x] S-159
 - [x] S-160
-- [ ] S-161
+- [x] S-161
 - [x] S-162
 - [x] S-163
 - [x] S-164

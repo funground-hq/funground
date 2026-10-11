@@ -9,6 +9,7 @@ wrappers over the active Sketch.
 from __future__ import annotations
 
 import contextlib
+import dataclasses
 from collections import namedtuple
 import datetime
 import math
@@ -1875,6 +1876,83 @@ class Sketch:
         if not spacing > 0:
             raise ValueError(f"f.text_to_points() needs a spacing above 0 pixels, not {spacing!r}")
         return [(float(px), float(py)) for px, py in sample_path(self.text_path(message, x, y).geometry, float(spacing))]
+
+    def text_on_path(self, message: object, path: PathBuilder | Path, offset: float = 0) -> str:
+        """Draw *message* along *path*, one Text op for each letter, and return the text that did not fit
+        (contract T24). The message is shaped once, as `text` shapes it; each letter (a HarfBuzz cluster)
+        is then drawn upright on the path in a transform of its own: its middle on the path, turned to the
+        path's direction there. So PDF and SVG keep each letter as live text, and the letters' look is the
+        one `text` gives."""
+        from .geometry import PathMeasure
+        from .typography import SOFT_HYPHEN, effective_font, text_metrics, text_settings
+
+        geometry = _geometry_of(path, "text_on_path")
+        if isinstance(message, FormattedString):
+            raise TypeError("f.text_on_path() sets one text in the current font: give a string. "
+                            "A FormattedString cannot be set on a path yet.")
+        if isinstance(offset, bool) or not isinstance(offset, (int, float)):
+            raise TypeError(f"f.text_on_path() needs the offset as a number of pixels, not {offset!r}")
+        if not math.isfinite(offset):
+            raise ValueError(f"f.text_on_path() needs a finite offset, not {offset!r}")
+        text = str(message).replace(SOFT_HYPHEN, "")
+        if "\n" in text:
+            raise ValueError("f.text_on_path() sets one line of text, but this message has a new line in it. "
+                             "Make one call for each line.")
+        route = PathMeasure(geometry)
+        if not route.length > 0:
+            raise ValueError("f.text_on_path() needs a path with some length to follow, but this path has none. "
+                             "Draw a line or a curve with f.path() first.")
+        self._require_window()
+        style = self.style
+        font = effective_font(style)
+        spans = font.shape(text, style.text_size, **text_settings(style)).cluster_spans()
+        ascent, descent = text_metrics(style.text_size, font)
+        # Where the text starts: the alignment decides, then the offset moves it along (T24).
+        start = {"center": (route.length - sum(s[2] for s in spans)) / 2,
+                 "right": route.length - sum(s[2] for s in spans)}.get(style.text_align, 0.0) + offset
+        # The vertical alignment is the one `text` uses (T7): the path is the point (x, y) of the letters.
+        top = {"top": 0.0, "baseline": -ascent, "center": -(ascent + descent) / 2, "bottom": -(ascent + descent)}[
+            style.text_valign]
+        first, last = (start, start + route.length) if route.closed else (0.0, route.length)
+        pieces: list[list] = []            # [text, middle, advance] of each piece to draw
+        cut: list[tuple[int, int]] = []    # the letters past the end
+        pen, joins = start, False          # joins: the letter before was drawn, so a space after it may ride along
+        for begin, end, advance in spans:
+            near, far = pen, pen + advance
+            pen = far
+            if far > last + 1e-6:
+                cut.append((begin, end))
+                joins = False
+            elif near < first - 1e-6:
+                joins = False
+            elif text[begin:end].isspace():
+                if joins:
+                    pieces[-1][0] += text[begin:end]
+            else:
+                pieces.append([text[begin:end], (near + far) / 2, advance])
+                joins = True
+        paint = self._text_color(None, style)
+        for piece, middle, advance in pieces:
+            x, y, degrees = route.point_at(middle)
+            frame = Transform.rotation(degrees).then(Transform.translation(x, y))
+            self._emit(ir.Save())
+            self._emit(ir.Concat(frame))
+            self._emit(ir.Text(piece, -advance / 2, top, self._paint_seen_from(paint, frame), style))
+            self._emit(ir.Restore())
+        return "".join(text[begin:end] for begin, end in sorted(cut))
+
+    @staticmethod
+    def _paint_seen_from(paint, frame: Transform):
+        """*paint* as it must be given inside a drawing moved by *frame* (a turn and a move): a gradient
+        stays where the sketch put it, instead of following the frame."""
+        if not isinstance(paint, Gradient):
+            return paint
+        back = frame.invert()
+        if paint.kind == "linear":
+            points = (*back.apply(*paint.points[:2]), *back.apply(*paint.points[2:]))
+        else:
+            points = (*back.apply(*paint.points[:2]), paint.points[2])
+        return dataclasses.replace(paint, points=points)
 
     def current_font(self):
         """The font text is set in now, as a font object, the built-in font too (contract T17)."""

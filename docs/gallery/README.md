@@ -921,6 +921,34 @@ A poster column with two straight edges. f.text_align("justify") stretches the s
 
 Source: [`examples/gallery/text/12_justified_columns.py`](../../examples/gallery/text/12_justified_columns.py)
 
+### Type on a path
+
+![Type on a path](images/text-13_text_on_a_path.png)
+
+A round stamp with words running round its rim, upright at the top and at the bottom, and a line of text that rides a wave. f.text_on_path() stands each letter on a path and turns it to face along the path.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.text_on_path(message, path, offset) sets the message along a path made with f.path(). The message is shaped as a whole first, so ligatures and kerning stay. Then every letter is set on the path.
+- A circle from f.path().circle() runs clockwise, so text on it stands on the outside. The words at the bottom use the same circle flipped with .scale(-1, 1) and .translate(), which runs the other way. Its text stands on the inside and still reads from left to right.
+- f.text_align("center", "baseline") puts the middle of the text at the middle of the path, with the letters standing on it. A circle starts at its right-hand side, so an offset of 0.785 times the diameter moves the middle of the text up to the top.
+- Text that is too long for the path is not drawn. f.text_on_path() returns what did not fit, and the sketch writes it under the wave.
+- The thin rings are ordinary lines. The letters are real text, so a PDF of this stamp can be selected and searched.
+
+**Make it yours**
+
+- Change TOP_WORDS and BOTTOM_WORDS, and the text size, to fill the rim differently.
+- Change the offset in the first f.text_on_path() call to turn the words round the badge.
+- Draw the wave again with other numbers in f.path().curve_to(), or use a circle, and watch the words follow.
+- Try f.text_style("italic") or f.text_tracking(4) before the calls to change the look of the letters.
+
+</details>
+
+Source: [`examples/gallery/text/13_text_on_a_path.py`](../../examples/gallery/text/13_text_on_a_path.py)
+
 ## Animation and time
 
 ### Bounce
