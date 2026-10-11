@@ -1,6 +1,6 @@
 # Design note: the funground extension for github.dev, vscode.dev and VS Code (0.2)
 
-**Status:** describes what is built, 11 October 2026 (stories S-156 spike, S-158, S-155; decisions D-079 to
+**Status:** describes what is built, 11 October 2026; a formatted copy with diagrams is shared as a page (stories S-156 spike, S-158, S-155; decisions D-079 to
 D-084). Code: `funground-hq/funground-web`, folder `vscode-extension/` (developer README there), using the
 browser runner in `runner/` (`Web_Runner_Note.md`). Measurements: `vscode-extension/RESULTS.md` and
 `spikes/S-156_RESULTS.md` in funground-web.
@@ -119,7 +119,7 @@ Tried in the real github.dev and vscode.dev (10 and 11 October):
 | Carried by the sketchbook template in `.vscode/extensions/` | Offered and installed, but its code cannot be loaded from the repository's virtual file system ("Failed to fetch") |
 | *Install Extension from Location* with an address on our site | Refused: vscode.dev's own policy downloads extensions only from the Marketplace's servers and `localhost` |
 | *Install Extension from Location* from `localhost` (`serve.py`) | Works: installs, loads Python from the site, draws (headers needed: CORS, and `Cross-Origin-Resource-Policy` because the panel is cross-origin isolated). For testers |
-| **Visual Studio Marketplace**, publisher `funground-hq` | The route for learners: Extensions view, search, Install; and the template's `.vscode/extensions.json` recommendation makes github.dev offer it when a sketchbook is opened |
+| **Visual Studio Marketplace**, publisher `funground-hq` | **Live** (0.1.0, 11 October). The route for learners: Extensions view, search, Install, and once "Trust Publisher & Install" (an unverified publisher). The sketchbook's `.vscode/extensions.json` makes github.dev offer it. Checked in the real vscode.dev: installed from the Marketplace, loaded Python from the website, ran a sketch |
 
 ## Testing
 
@@ -144,8 +144,8 @@ Tried in the real github.dev and vscode.dev (10 and 11 October):
 
 Roughly in order of value for learners:
 
-1. **Publish and recommend** (next): the Marketplace listing, the template's recommendation, the sketchbook
-   README reduced to "press Install".
+1. ~~Publish and recommend~~: done 11 October (Marketplace listing, the sketchbook's recommendation and
+   "press Install" README).
 2. **Keep old runtime versions on the site** (`runtime/0.2-dev/`, later `0.2.0/` ...), so an installed
    extension keeps working when funground moves on; the site build then publishes a list of versions.
 3. **Help while typing**: completion and hover documentation for `f.` functions, by shipping funground's
