@@ -336,8 +336,8 @@ def test_a_cached_run_is_not_reused_across_settings(canvas):
     canvas._pixels()
     runs = {key: run for key, run in r._text_runs.items()}
     assert sorted(run.tracking for run in runs.values()) == [0.0, 10.0]
-    # the plain key is exactly the one the S-037 cache tests pin
-    assert ("Hi", 20) in runs
+    # the plain key is the text alone: no size (S-171), so any size reuses the run
+    assert ("Hi",) in runs
 
 
 def test_the_cache_key_includes_features_and_variations(canvas, variable_font):

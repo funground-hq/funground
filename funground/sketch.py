@@ -24,7 +24,7 @@ from .controls import Button, Checkbox, ControlPanel, Slider, panel_ops
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
 from .paint import Gradient, parse_paint
 from .formatted import FormattedString
-from .typography import TEXT_STYLES
+from .typography import TEXT_STYLES, text_size_value
 from .geometry import Path, Transform, rect_radii
 from .paths import PathBuilder
 from .noise import Noise
@@ -1362,10 +1362,8 @@ class Sketch:
         if self._has_window:
             self._append(ir.SetAntialias(True))
 
-    def text_size(self, size: int) -> None:
-        if size <= 0:
-            raise ValueError("text size must be positive")
-        self._states.update(text_size=int(size))
+    def text_size(self, size: float) -> None:
+        self._states.update(text_size=text_size_value(size, "f.text_size()"))
 
     # ---- fonts and styles (S-054, contract T11/T12)
     TEXT_STYLES = TEXT_STYLES          # one list, in typography (contract T12)
@@ -1392,7 +1390,7 @@ class Sketch:
             )
         changes = {"font": key}
         if size is not None:
-            changes["text_size"] = int(size)
+            changes["text_size"] = text_size_value(size, "f.text_font()")
         self._states.update(**changes)
 
     def text_fallback(self, *fonts) -> None:

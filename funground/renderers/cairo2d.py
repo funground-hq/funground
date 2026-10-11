@@ -53,7 +53,7 @@ class CairoRenderer:
         self._surface: cairo.ImageSurface | None = None
         self._ctx: cairo.Context | None = None
         self._scale = 1.0
-        self._text_runs: OrderedDict[tuple[str, int], TextRun] = OrderedDict()
+        self._text_runs: OrderedDict[tuple, TextRun] = OrderedDict()
         # S-094 (T15): set only by the PDF exporters (funground.export.pdf_text). When set, text
         # is drawn as marker groups that the exporter swaps for real PDF text after the file is
         # written. Never set for the window, PNG or SVG.
@@ -772,12 +772,13 @@ class CairoRenderer:
         from ..typography import effective_font, text_settings
 
         style = op.style
-        # S-054: the cache key gains the effective font only away from the plain default, so the
-        # default (text, size) key - and the S-037 cache tests that pin it - stay unchanged.
+        # The key has no size (S-171): the shaped glyphs are the same at every size, so a text whose size
+        # changes every frame reuses its run, and `at_size` gives it the size asked for. The key gains the
+        # effective font only away from the plain default (S-054).
         if style.font is None and style.text_style == "normal":
-            key = (op.text, style.text_size)
+            key = (op.text,)
         else:
-            key = (op.text, style.text_size, style.font if style.font is not None else style.text_style)
+            key = (op.text, style.font if style.font is not None else style.text_style)
         settings = text_settings(style)
         if style.text_tracking or style.text_features or style.font_variations:
             key += (style.text_tracking, style.text_features, style.font_variations)    # S-090 (T13)
@@ -793,7 +794,7 @@ class CairoRenderer:
                 self._text_runs.popitem(last=False)       # evict least recently used
         else:
             self._text_runs.move_to_end(key)              # mark as most recently used
-        return run
+        return run.at_size(style.text_size)
 
 
 def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: int,

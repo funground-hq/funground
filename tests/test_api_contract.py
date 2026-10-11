@@ -28,7 +28,7 @@ V05_FUNCTIONS = {
     "stroke": "(color: 'Color', *more: 'float') -> 'None'",
     "stroke_width": "(pixels: 'int') -> 'None'",
     "text": "(message: 'object', x: 'float', y: 'float', color: 'Color | None' = None) -> 'None'",
-    "text_size": "(size: 'int') -> 'None'",
+    "text_size": "(size: 'float') -> 'None'",
 }
 
 # Additive since v0.5 (Phase 0). Listed separately so the v0.5 set above stays

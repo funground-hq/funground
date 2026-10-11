@@ -16,7 +16,8 @@ import os
 import re
 import unicodedata
 from collections import OrderedDict
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from numbers import Real
 
 import uharfbuzz as hb
 from fontTools.pens.basePen import BasePen
@@ -24,14 +25,14 @@ from fontTools.ttLib import TTFont
 
 from . import ir
 from .color import Color
-from .geometry import Path, Transform
+from .geometry import Path
 
 FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 DEFAULT_FONT = os.path.join(FONT_DIR, "DejaVuSans.ttf")
 
-# Scaled glyph outlines kept per font (`FontResource.scaled_outline`): room for a few sizes of a full
-# alphabet, plus accents, and about a megabyte or two of tuples at most.
-SCALED_OUTLINE_CACHE_SIZE = 2048
+# Shaped texts kept per font (`FontResource._shape_one`): the glyphs of a text do not depend on the size,
+# so a text whose size changes every frame is shaped once. Room for a page of words, and little memory.
+SHAPE_CACHE_SIZE = 2048
 
 # T12 (D-022 = A): the built-in family is four real bundled files, one per style.
 STYLE_FILES = {
@@ -90,7 +91,7 @@ class FontResource:
             {a.axisTag: (a.minValue, a.maxValue) for a in self._tt["fvar"].axes} if "fvar" in self._tt else {}
         )
         self._outlines: dict[tuple, Path] = {}
-        self._scaled: OrderedDict[tuple, Path] = OrderedDict()   # least recently used first
+        self._shaped: OrderedDict[tuple, tuple] = OrderedDict()  # (text, features, location) -> glyphs; least recently used first
         self._located: dict[tuple, tuple] = {}      # location -> (hb font, glyph set), built once each
         self._cmap = self._tt.getBestCmap()
         # T18: a symbol or emoji font never supplies spaces, punctuation or plain letters; set for the
@@ -165,26 +166,6 @@ class FontResource:
             p = self._outlines[key] = pen.path
         return p
 
-    def scaled_outline(self, gid: int, location: tuple, size: float) -> Path:
-        """Glyph outline at *size* pixels, y-down, with its origin at (0, 0): ready to be moved to a pen
-        position with `Path.translated`. Cached, so a glyph is scaled once per size and not once per frame.
-        A Path cannot be changed, so every caller can share the cached one.
-
-        The cache holds at most `SCALED_OUTLINE_CACHE_SIZE` outlines, least recently used dropped first:
-        a sketch that changes its text size every frame would otherwise add outlines without end."""
-        key = (gid, location, size)
-        cache = self._scaled
-        path = cache.get(key)
-        if path is None:
-            s = size / self.units_per_em
-            path = self.outline(gid, location).transformed(Transform.scaling(s, -s))
-            cache[key] = path
-            if len(cache) > SCALED_OUTLINE_CACHE_SIZE:
-                cache.popitem(last=False)
-        else:
-            cache.move_to_end(key)
-        return path
-
     def shape(self, text: str, size: float, tracking: float = 0.0, features: tuple = (),
               variations: tuple = (), fallback: tuple | None = None,
               word_spacing: float = 0.0) -> "TextRun | ShapedLine":
@@ -213,15 +194,38 @@ class FontResource:
         location = self.location(variations)
         if not text:                                  # HarfBuzz gives no glyph list for an empty text
             return TextRun(self, text, size, (), float(tracking), location, float(word_spacing))
-        buf = hb.Buffer()
-        buf.add_str(text)
-        buf.guess_segment_properties()
-        hb.shape(self._at(location)[0], buf, {"kern": True, "liga": True, **dict(features)})
-        glyphs = tuple(
-            Glyph(i.codepoint, p.x_advance, p.x_offset, p.y_offset, i.cluster)
-            for i, p in zip(buf.glyph_infos, buf.glyph_positions)
-        )
-        return TextRun(self, text, size, glyphs, float(tracking), location, float(word_spacing))
+        return TextRun(self, text, size, self._glyphs(text, features, location), float(tracking), location,
+                       float(word_spacing))
+
+    def _glyphs(self, text: str, features: tuple, location: tuple) -> tuple[Glyph, ...]:
+        """The shaped glyphs of *text*, in font units. They do not depend on the size, so they are kept
+        (least recently used dropped first, `SHAPE_CACHE_SIZE`) and a text that grows is shaped once (S-171)."""
+        key = (text, features, location)
+        cache = self._shaped
+        glyphs = cache.get(key)
+        if glyphs is None:
+            buf = hb.Buffer()
+            buf.add_str(text)
+            buf.guess_segment_properties()
+            hb.shape(self._at(location)[0], buf, {"kern": True, "liga": True, **dict(features)})
+            glyphs = tuple(
+                Glyph(i.codepoint, p.x_advance, p.x_offset, p.y_offset, i.cluster)
+                for i, p in zip(buf.glyph_infos, buf.glyph_positions)
+            )
+            cache[key] = glyphs
+            if len(cache) > SHAPE_CACHE_SIZE:
+                cache.popitem(last=False)
+        else:
+            cache.move_to_end(key)
+        return glyphs
+
+
+def _placed(outline: Path, scale: float, x: float, y: float) -> Path:
+    """A glyph *outline* (font units, y up) at *scale*, flipped to y down, with its origin at (x, y).
+    One pass, whatever the size: a text size never needs an outline of its own (S-171). The floats are
+    those of scaling and then moving the outline."""
+    flip = -scale
+    return Path(tuple((seg[0], *((px * scale + x, py * flip + y) for px, py in seg[1:])) for seg in outline.segments))
 
 
 @dataclass(frozen=True, slots=True)
@@ -237,6 +241,10 @@ class TextRun:
     @property
     def scale(self) -> float:
         return self.size / self.font.units_per_em
+
+    def at_size(self, size: float) -> "TextRun":
+        """The same shaped run at another *size* (S-171): the glyphs are in font units, so only the size changes."""
+        return self if size == self.size else replace(self, size=size)
 
     @property
     def advance(self) -> float:
@@ -277,9 +285,9 @@ class TextRun:
         pen_x = x
         ops: list[ir.FillPath] = []
         for g in self.glyphs:
-            outline = self.font.scaled_outline(g.gid, self.location, self.size)
+            outline = self.font.outline(g.gid, self.location)
             if not outline.is_empty:
-                ops.append(ir.FillPath(outline.translated(pen_x + g.x_offset * s, baseline - g.y_offset * s), color))
+                ops.append(ir.FillPath(_placed(outline, s, pen_x + g.x_offset * s, baseline - g.y_offset * s), color))
             pen_x += self._step(g, s)
         return ops
 
@@ -299,6 +307,12 @@ class ShapedLine:
     @property
     def scale(self) -> float:
         return self.size / self.font.units_per_em
+
+    def at_size(self, size: float) -> "ShapedLine":
+        """The same line at another *size* (S-171), every run in it too."""
+        if size == self.size:
+            return self
+        return replace(self, size=size, runs=tuple(r.at_size(size) for r in self.runs))
 
     @property
     def advance(self) -> float:
@@ -472,6 +486,16 @@ def _itemise(text: str, primary: FontResource, learner: tuple) -> tuple:
         _ITEMISE_CACHE.clear()
     _ITEMISE_CACHE[key] = result
     return result
+
+
+def text_size_value(size: object, who: str) -> int | float:
+    """A text size checked and ready to keep (T3, S-171): any finite number above 0. A whole size is kept as
+    an int, so state, caches and snapshots read as they always did; a fraction is kept as a float."""
+    if isinstance(size, bool) or not isinstance(size, Real):
+        raise TypeError(f"{who} needs the text size as a number of pixels, not {size!r}")
+    if not 0 < size < float("inf"):
+        raise ValueError(f"{who} needs a text size above 0 pixels, not {size!r}")
+    return int(size) if size == int(size) else float(size)
 
 
 def text_metrics(size: float, font: FontResource | None = None) -> tuple[float, float]:
