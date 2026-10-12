@@ -126,6 +126,7 @@ class Sketch:
         self.key_code: int | None = None
         self.is_key_pressed = False
         self._callbacks: dict[str, Callable] = {}
+        self._script_looked_at = False               # a script's drawing was shown or saved (S-180)
         self._namespace: Namespace | None = None    # the sketch's globals, once run() or a script's size() names them
         self._shared_names: tuple[str, ...] = ()    # live names kept current there (global style, D-088)
         self.frame_count = 0
@@ -356,9 +357,15 @@ class Sketch:
         return Ground(0, 0, self.width, self.height, self._margin)
 
     # ---- scripts (S-076, contract R13-R15)
+    @property
+    def unseen_drawing(self) -> bool:
+        """True when this is a script that has drawn something and has neither shown nor saved it (S-180)."""
+        return self._script and bool(self.frame or self._pages) and not self._script_looked_at
+
     def _begin_script(self) -> None:
         """A top-level f.size(): a blank canvas with no window (contract R14)."""
         self._start_page()
+        self._script_looked_at = False
         self._graphics_counter, self._graphics_before_run = self._graphics_before_run, 0
         self._start_time = time.perf_counter()
 
@@ -465,6 +472,7 @@ class Sketch:
             )
         if not self._script:
             raise RuntimeError("No drawing window yet. Call f.size(...) first.")
+        self._script_looked_at = True
         self._flush_pixel_patch()
         if isinstance(self._platform, HeadlessPlatform) and not self._host_driven:
             return                              # no window: nothing to show
@@ -1062,6 +1070,7 @@ class Sketch:
     def _save_script(self, path: str, text: str, setup, dpi: float | None) -> None:
         from .export import format_of, save_frame, save_pixels
 
+        self._script_looked_at = True
         self._flush_pixel_patch()
         fmt = format_of(path)
         if self._pages:                                  # contract R17: several pages
@@ -1589,9 +1598,9 @@ class Sketch:
         ascent, descent = text_metrics(style.text_size, font)
         leading = self._leading(style)
         fitting = len(lines)
-        if height is not None:
+        if height is not None:                 # each line takes one leading, as in DrawBot and InDesign (D-093)
             fitting = 0
-            while fitting < len(lines) and fitting * leading + ascent + descent <= height + 1e-9:
+            while fitting < len(lines) and (fitting + 1) * leading <= height + 1e-9:
                 fitting += 1
         shown = lines[:fitting]
         if shown:
@@ -1641,7 +1650,7 @@ class Sketch:
     def _fs_metrics(self, measured: list, style):
         """For each measured line: its ascent and descent (the tallest piece's), and the distance of its
         baseline from the first line's. The step to a line is its leading: 1.25 x its largest size,
-        unless text_leading is set."""
+        unless text_leading is set. Also each line's leading (D-093: a text box gives each line one leading)."""
         ascents = [max((p.ascent for p in line), default=0.0) for line in measured]
         descents = [max((p.descent for p in line), default=0.0) for line in measured]
         leadings = [style.text_leading if style.text_leading is not None
@@ -1653,7 +1662,7 @@ class Sketch:
             for lead in leadings[1:]:
                 total += lead
                 offsets.append(total)
-        return ascents, descents, offsets
+        return ascents, descents, offsets, leadings
 
     def _fs_layout(self, lines: list, x: float, y: float, style, resolved: dict, top: float | None = None,
                    gaps: list[float] | None = None):
@@ -1662,7 +1671,7 @@ class Sketch:
         T14). The pieces of a line share one baseline, which comes from the tallest ascent on the line.
         *gaps*, when given, is the extra pixels to add after each space of each line (justified, T22)."""
         measured = [self._fs_pieces(line, resolved) for line in lines]
-        ascents, descents, offsets = self._fs_metrics(measured, style)
+        ascents, descents, offsets, _ = self._fs_metrics(measured, style)
         if top is None:
             block = ascents[0] + descents[-1] + offsets[-1]
             shift = {"top": 0, "baseline": ascents[0], "bottom": block, "center": block / 2}[style.text_valign]
@@ -1693,11 +1702,11 @@ class Sketch:
 
         lines, starts = fs.wrap(fits)
         measured = [self._fs_pieces(line, resolved) for line in lines]
-        ascents, descents, offsets = self._fs_metrics(measured, style)
+        ascents, descents, offsets, leadings = self._fs_metrics(measured, style)
         fitting = len(lines)
-        if height is not None:
+        if height is not None:                 # the lines' leadings, first to this one, within the height (D-093)
             fitting = 0
-            while fitting < len(lines) and offsets[fitting] + ascents[0] + descents[fitting] <= height + 1e-9:
+            while fitting < len(lines) and offsets[fitting] + leadings[0] <= height + 1e-9:
                 fitting += 1
         if fitting:
             block = ascents[0] + descents[fitting - 1] + offsets[fitting - 1]

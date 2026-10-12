@@ -266,6 +266,26 @@ def _note_crash(exc_type, exc, tb) -> None:
 sys.excepthook = _note_crash
 atexit.register(exit_hint)
 
+SCRIPT_HINT = "Your script drew something but never showed it. Add f.show() as the last line to see it."
+
+
+def script_hint() -> None:
+    """Tell a learner whose script drew but never called show() or save() why nothing appeared (S-180).
+
+    It runs by itself when the program ends, under the same conditions as exit_hint(): a program run from a
+    terminal that ended without an error, not an interactive session, a notebook or ``python -m``. It speaks only
+    for the script in the program's own file. Most learners never call this."""
+    if _crashed or hasattr(sys, "ps1") or sys.flags.interactive or "ipykernel" in sys.modules:
+        return
+    main = sys.modules.get("__main__")
+    if main is None or getattr(main, "__spec__", None) is not None or _active is None:
+        return
+    if _active._namespace is vars(main) and _active.unseen_drawing:
+        print(SCRIPT_HINT, file=sys.stderr)
+
+
+atexit.register(script_hint)
+
 
 def start_forgotten_sketch() -> None:
     """Start a sketch that defines draw() but never called run(), when its file ends (D-088, S-176).
@@ -1314,7 +1334,7 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
              color: Color | None = None) -> str | FormattedString:
     """Draw text wrapped inside a box, and return whatever did not fit.
 
-    Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn. Give the returned text to another box to flow a story across columns.
+    Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn: each line takes one leading (text_leading(), automatically 1.25 times the text size), so three lines with a leading of 100 fit a box 300 high, as in DrawBot and InDesign. Give the returned text to another box to flow a story across columns.
 
     With f.text_align("justify") each line is stretched to the width of the box, except the last line of each paragraph. A soft hyphen, the character U+00AD (written "\\u00ad" in Python), marks a place where a long word may break: when a word does not fit in the rest of a line, it is broken at the last soft hyphen that fits, and a hyphen is drawn there. A soft hyphen that is not used is not drawn and has no width.
 

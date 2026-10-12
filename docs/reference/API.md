@@ -1746,7 +1746,7 @@ f.text_box(message: 'object', x: 'float', y: 'float', width: 'float', height: 'f
 
 Draw text wrapped inside a box, and return whatever did not fit.
 
-Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn. Give the returned text to another box to flow a story across columns.
+Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn: each line takes one leading (text_leading(), automatically 1.25 times the text size), so three lines with a leading of 100 fit a box 300 high, as in DrawBot and InDesign. Give the returned text to another box to flow a story across columns.
 
 With f.text_align("justify") each line is stretched to the width of the box, except the last line of each paragraph. A soft hyphen, the character U+00AD (written "\u00ad" in Python), marks a place where a long word may break: when a word does not fit in the rest of a line, it is broken at the last soft hyphen that fits, and a hyphen is drawn there. A soft hyphen that is not used is not drawn and has no width.
 

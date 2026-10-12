@@ -109,6 +109,24 @@ def test_show_presents_once_and_returns():
     session.stop()
 
 
+def test_a_script_without_show_is_presented_when_it_ends():
+    """S-180: on the Play page a script that never called f.show() is shown anyway, once."""
+    got = Frames()
+    session = Session(640, 480, on_frame=got)
+    session.start("import funground as f\nf.size(40, 30)\nf.background('blue')\n", "sketch.py")
+    assert len(got.calls) == 1 and got.calls[0][1:3] == (40, 30)
+    session.stop()
+
+
+def test_a_script_with_show_is_presented_only_once():
+    got = Frames()
+    session = Session(640, 480, on_frame=got)
+    session.start("import funground as f\nf.size(40, 30)\nf.background('blue')\nf.show()\nf.circle(5, 5, 4)\n",
+                  "sketch.py")
+    assert len(got.calls) == 1                     # drawing after show() is not shown again by itself
+    session.stop()
+
+
 def test_show_presents_every_page_with_the_current_page_last():
     got = Frames()
     session = Session(640, 480, on_frame=got)
