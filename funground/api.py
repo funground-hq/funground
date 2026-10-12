@@ -1570,7 +1570,7 @@ def color_mode(mode: str, max1: float | None = None, max2: float | None = None,
 def blend_mode(mode: str) -> None:
     """Choose how what you draw next mixes with what is already there.
 
-    The choice is saved by push() and brought back by pop().
+    "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights, and so on: the table below says what each word does. The mode applies to shapes, lines, text and pictures drawn after it, until you choose another. The choice is saved by push() and brought back by pop(). The names are the usual ones in drawing programs (Photoshop, Illustrator, DrawBot's blendMode()); DrawBot's "colorDodge", "colorBurn", "softLight" and "hardLight" are "dodge", "burn", "soft_light" and "hard_light" here, and its "plusLighter" is "add".
 
     Arguments:
         mode: "normal" (the default), "multiply", "screen", "overlay", "darken", "lighten", "add", "difference", "exclusion", "dodge", "burn", "hard_light", "soft_light", "hue", "saturation", "color" or "luminosity".
@@ -1938,7 +1938,7 @@ def text_style(style: str) -> None:
     It is ignored once you have chosen a font with text_font(), but remembered for when you go back to the built-in one.
 
     Arguments:
-        style: "normal", "bold", "italic" or "bold_italic".
+        style: "normal" (the default), "bold", "italic" or "bold_italic".
 
     Raises:
         ValueError: the style is not one of those words.
@@ -3569,7 +3569,7 @@ def key_down(key: str | int) -> bool:
     Escape also closes the sketch. With no window, no key is ever down.
 
     Arguments:
-        key: "left", "right", "up", "down", "space", "enter", "escape", or a single character such as "a" or "7". Capitals do not matter.
+        key: "left", "right", "up", "down", "space", "enter", "escape", or a single character such as "a" or "7". Capitals do not matter. A whole number is passed to the window system as its own key code, for keys with no name here.
 
     Returns:
         True while the key is held.

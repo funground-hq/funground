@@ -37,6 +37,19 @@ from .paths import PathBuilder
 from .state import StateStack
 
 # Where each anchor sits on the mark's bounds, as fractions of its width and height.
+# Each anchor and the point of the mark it names (D-092); same words as ANCHORS below.
+ANCHOR_MEANINGS = {
+    "origin": "The mark's own (0, 0): the point it was drawn around. The default.",
+    "center": "The middle of the mark's bounds().",
+    "top-left": "The top-left corner of the bounds.",
+    "top": "The middle of the top edge.",
+    "top-right": "The top-right corner.",
+    "left": "The middle of the left edge.",
+    "right": "The middle of the right edge.",
+    "bottom-left": "The bottom-left corner.",
+    "bottom": "The middle of the bottom edge.",
+    "bottom-right": "The bottom-right corner.",
+}
 ANCHORS: dict[str, tuple[float, float] | None] = {
     "origin": None,
     "center": (0.5, 0.5),

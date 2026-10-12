@@ -42,6 +42,12 @@ STYLE_FILES = {
     "bold_italic": "DejaVuSans-BoldOblique.ttf",
 }
 TEXT_STYLES = tuple(STYLE_FILES)
+STYLE_MEANINGS = {      # each style and what it looks like (D-092); same words as STYLE_FILES
+    "normal": "Upright letters of the usual weight. The default.",
+    "bold": "Thicker, heavier letters, for emphasis and headlines.",
+    "italic": "Letters slanted to the right (the built-in font's oblique).",
+    "bold_italic": "Bold and slanted.",
+}
 
 # T23 (S-160): a place where a word may break. It is never drawn and has no width, except where a line
 # breaks at it: there the line ends with a hyphen.

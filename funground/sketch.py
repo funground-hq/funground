@@ -1325,8 +1325,19 @@ class Sketch:
         self._states.update(stroke_width=int(pixels) if pixels == int(pixels) else float(pixels))
 
     # ---- stroke styles and smoothing (S-042, contract S11/C6)
-    STROKE_CAPS = ("round", "square", "butt")
-    STROKE_JOINS = ("round", "miter", "bevel")
+    # Each word and what it does (D-092); the API reference prints the meanings.
+    STROKE_CAPS = {
+        "round": "Each end of a line is a half circle, so the line reaches half its width past its end points. "
+                 "The default.",
+        "square": "Each end is squared off half the line's width past its end point.",
+        "butt": "Each end is cut off flat exactly at its end point.",
+    }
+    STROKE_JOINS = {
+        "round": "Corners are rounded. The default.",
+        "miter": "Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not "
+                 "shoot far out.",
+        "bevel": "Corners are cut off flat.",
+    }
 
     def stroke_cap(self, cap: str) -> None:
         if cap not in self.STROKE_CAPS:
@@ -1482,8 +1493,21 @@ class Sketch:
         self._states.update(font_variations=tuple(sorted(merged.items())))
 
     # ---- text alignment and metrics (S-049, contract T7/T8)
-    TEXT_ALIGNS = ("left", "center", "right", "justify")
-    TEXT_VALIGNS = ("top", "center", "baseline", "bottom")
+    # Each word and what it does (D-092); the API reference prints the meanings.
+    TEXT_ALIGNS = {
+        "left": "x is where the text starts; it runs to the right. The default.",
+        "center": "x is the middle of the text.",
+        "right": "x is where the text ends.",
+        "justify": "In text_box(), each line is stretched to the box's width by widening the spaces, except the "
+                   "last line of a paragraph and a line of one word. In text() the same as left.",
+    }
+    TEXT_VALIGNS = {
+        "top": "y is the top of the text: the tallest letters' height (the font's ascent). The default.",
+        "center": "y is halfway between the top and the bottom.",
+        "baseline": "y is the line the letters stand on; the tails of g, p and y hang below it. Lines of text "
+                    "in different sizes line up on their baselines.",
+        "bottom": "y is the bottom of the text: below the tails of g, p and y (the font's descent).",
+    }
 
     def text_align(self, horizontal: str, vertical: str | None = None) -> None:
         if horizontal not in self.TEXT_ALIGNS:
@@ -2128,9 +2152,39 @@ class Sketch:
                              None if style.erasing is None else style.erasing[1])
 
     # ---- compositing (S-051, contract S14)
-    BLEND_MODES = ("normal", "multiply", "screen", "overlay", "darken", "lighten", "add", "difference",
-                   "exclusion", "dodge", "burn", "hard_light", "soft_light", "hue", "saturation", "color",
-                   "luminosity")
+    # Each word and what it does (D-092): blend_mode() accepts the keys, the API reference prints the meanings.
+    # "New" is the colour being drawn, "old" the colour already on the canvas under it.
+    BLEND_MODES = {
+        "normal": "The new colour covers the old one (see-through only as far as its alpha or opacity() says).",
+        "multiply": "Multiplies the colours, so the result is always darker: like overlapping inks or "
+                    "colour filters. White leaves the old colour unchanged; black gives black.",
+        "screen": "The opposite of multiply: the result is always lighter, like two slide projectors on one "
+                  "screen. Black leaves the old colour unchanged; white gives white.",
+        "overlay": "Multiply where the old colour is dark, screen where it is light: more contrast, keeping "
+                   "the old picture's highlights and shadows.",
+        "darken": "Keeps the darker of the two colours, channel by channel (red, green and blue separately).",
+        "lighten": "Keeps the lighter of the two colours, channel by channel.",
+        "add": "Adds the colours, so overlaps glow and turn white quickly: light added to light.",
+        "difference": "The difference between the colours: the same colours give black, white turns the old "
+                      "colour into its opposite (a negative).",
+        "exclusion": "Like difference, with less contrast: white still inverts, mid-grey gives grey.",
+        "dodge": "Brightens the old colour by the new one; bright new colours burn out to white "
+                 "(color dodge). Black changes nothing.",
+        "burn": "Darkens the old colour by the new one, with more contrast (color burn). White changes "
+                "nothing.",
+        "hard_light": "Multiply where the new colour is dark, screen where it is light: like a harsh "
+                      "spotlight of the new colour.",
+        "soft_light": "A gentler hard_light: like a soft, diffused light of the new colour. Mid-grey changes "
+                      "nothing.",
+        "hue": "The new colour's hue with the old colour's saturation and lightness: recolours the old "
+               "picture.",
+        "saturation": "The new colour's saturation with the old colour's hue and lightness: makes the old "
+                      "picture more vivid or greyer.",
+        "color": "The new colour's hue and saturation with the old colour's lightness: tints the old picture "
+                 "while keeping its shading.",
+        "luminosity": "The new colour's lightness with the old colour's hue and saturation: the opposite of "
+                      "color.",
+    }
 
     def blend_mode(self, mode: str) -> None:
         if mode not in self.BLEND_MODES:

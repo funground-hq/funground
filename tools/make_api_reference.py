@@ -29,7 +29,7 @@ sys.path.insert(0, str(ROOT))
 
 import funground as f  # noqa: E402
 from funground import _colornames, api as _api, pages, synth  # noqa: E402
-from funground import analysis, typography  # noqa: E402
+from funground import analysis, marks, typography  # noqa: E402
 _color = sys.modules["funground.color"]  # f.color (the function) hides the module as an attribute
 from funground.export import FORMATS, TEXT_MODES  # noqa: E402
 from funground.export.motion import MOTION_FORMATS  # noqa: E402
@@ -91,6 +91,26 @@ def slug_of(title: str) -> str:
 
 
 # ---------------------------------------------------------------- docstring parsing
+# Option words with their meanings, printed under the function that takes them (D-092). Each table lives in the
+# code that checks the word, so a word cannot be accepted without being explained (tests/test_api_docs.py).
+WORD_MEANINGS: dict[str, list[tuple[str, dict[str, str]]]] = {
+    "f.blend_mode": [("mode", Sketch.BLEND_MODES)],
+    "f.stroke_cap": [("cap", Sketch.STROKE_CAPS)],
+    "f.stroke_join": [("join", Sketch.STROKE_JOINS)],
+    "PathBuilder.expand_stroke": [("cap", Sketch.STROKE_CAPS), ("join", Sketch.STROKE_JOINS)],
+    "f.text_align": [("horizontal", Sketch.TEXT_ALIGNS), ("vertical", Sketch.TEXT_VALIGNS)],
+    "f.text_style": [("style", typography.STYLE_MEANINGS)],
+    "FormattedString.append": [("style", typography.STYLE_MEANINGS)],
+    "f.filter": [("kind", FILTER_KINDS)],
+    "f.apply_filter": [("kind", FILTER_KINDS)],
+    "f.cursor": [("kind", CURSOR_KINDS)],
+    "f.key_down": [("key", KEY_NAMES)],
+    "f.tone": [("wave", synth.WAVES)],
+    "f.note": [("wave", synth.WAVES)],
+    "f.melody": [("wave", synth.WAVES)],
+    "Mark.place": [("anchor", marks.ANCHOR_MEANINGS)],
+}
+
 HEADER = re.compile(r"^(Arguments|Returns|Raises|Example):\s*$")
 SEE_ALSO = re.compile(r"^See also:\s*(.*)$")
 
@@ -254,6 +274,11 @@ def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | Non
         page.add("| Argument | Meaning |", "|---|---|")
         for names, text in parse_arguments(d["Arguments"]):
             page.add(f"| {', '.join('`' + n + '`' for n in names)} | {esc(text)} |")
+        page.add("")
+    for argument, meanings in WORD_MEANINGS.get(heading.strip("`"), []):
+        page.add(f"**The words for `{argument}`.**", "", "| Word | What it does |", "|---|---|")
+        for word, meaning in meanings.items():
+            page.add(f'| `"{word}"` | {esc(meaning)} |')
         page.add("")
     if d["Returns"]:
         page.add("**Returns.** " + " ".join(d["Returns"].split()), "")

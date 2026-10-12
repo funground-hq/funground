@@ -131,6 +131,8 @@ f.saved_state():` does exactly the same job, alongside `f.push()`/`f.pop()`.
 |---|---|
 | `font(name, size=None)` | `f.text_font(font, size=None)` — funground loads a font *file* with `f.load_font(path)` first; DrawBot names an installed font by its PostScript name |
 | `fontSize(n)` | `f.text_size(n)` |
+| `lineHeight(value)` | `f.text_leading(value)`: the distance from one line's baseline to the next, for lines broken with `"\n"` and in `f.text_box()`. Pixels here are points in a PDF, so `lineHeight(100)` is `f.text_leading(100)` |
+| `lineHeight(None)` | `f.text_leading(None)`: automatic again, 1.25 times the text size (DrawBot uses the font's own line spacing, so automatic lines can differ slightly) |
 | `text(str, (x, y))` | `f.text(message, x, y)` |
 | `textBox(str, (x, y, w, h))` | `f.text_box(message, x, y, w, h)` |
 
@@ -195,7 +197,9 @@ circles.
 
 Both have `blendMode(mode)`/`f.blend_mode(mode)` for the same idea — how new drawing mixes with
 what's underneath — though the two libraries don't spell every mode name the same way (DrawBot's
-`colorDodge`/`colorBurn` are funground's `dodge`/`burn`).
+`colorDodge`, `colorBurn`, `softLight`, `hardLight` and `plusLighter` are funground's `dodge`,
+`burn`, `soft_light`, `hard_light` and `add`; `screen` is the same). The API reference explains
+what each mode does under [`f.blend_mode`](../reference/API.md#fn-blend_mode).
 
 DrawBot's `opacity(value)` (0.0–1.0) is a single, global setting. funground's `f.opacity(0–255)`
 multiplies the alpha of fill and stroke **separately**, so a stroke drawn over its
