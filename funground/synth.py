@@ -17,7 +17,14 @@ import re
 from operator import add, mul
 
 RATE = 44100
-WAVES = ("sine", "square", "saw", "triangle", "soft", "noise")
+WAVES = {               # each wave and how it sounds (D-092); the API reference prints the meanings
+    "sine": "A pure, smooth tone with no overtones, like a tuning fork or a whistle.",
+    "square": "Hollow and buzzy, like an old video game or a clarinet's low notes.",
+    "saw": "Bright and brassy, the richest in overtones: a classic synthesiser sound.",
+    "triangle": "Between sine and square: soft but a little reedy, like a flute.",
+    "soft": "A sine with a few gentle overtones: warm and round, good for melodies.",
+    "noise": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored.",
+}
 
 # ---- notes and sargam
 _SEMITONES = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}

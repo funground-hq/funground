@@ -1316,6 +1316,14 @@ Choose how the ends of lines look.
 |---|---|
 | `cap` | "round" (the default), "square" (extends past the end by half the width) or "butt" (stops flat at the end). |
 
+**The words for `cap`.**
+
+| Word | What it does |
+|---|---|
+| `"round"` | Each end of a line is a half circle, so the line reaches half its width past its end points. The default. |
+| `"square"` | Each end is squared off half the line's width past its end point. |
+| `"butt"` | Each end is cut off flat exactly at its end point. |
+
 **Raises.**
 
 - `ValueError`: the cap is not one of those words.
@@ -1338,6 +1346,14 @@ Choose how corners of outlines look.
 | Argument | Meaning |
 |---|---|
 | `join` | "round" (the default), "miter" (sharp) or "bevel" (cut off). |
+
+**The words for `join`.**
+
+| Word | What it does |
+|---|---|
+| `"round"` | Corners are rounded. The default. |
+| `"miter"` | Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not shoot far out. |
+| `"bevel"` | Corners are cut off flat. |
 
 **Raises.**
 
@@ -1484,11 +1500,33 @@ f.blend_mode(mode: 'str') -> 'None'
 
 Choose how what you draw next mixes with what is already there.
 
-The choice is saved by push() and brought back by pop().
+"multiply" darkens like overlapping inks, "screen" lightens like overlapping lights, and so on: the table below says what each word does. The mode applies to shapes, lines, text and pictures drawn after it, until you choose another. The choice is saved by push() and brought back by pop(). The names are the usual ones in drawing programs (Photoshop, Illustrator, DrawBot's blendMode()); DrawBot's "colorDodge", "colorBurn", "softLight" and "hardLight" are "dodge", "burn", "soft_light" and "hard_light" here, and its "plusLighter" is "add".
 
 | Argument | Meaning |
 |---|---|
 | `mode` | "normal" (the default), "multiply", "screen", "overlay", "darken", "lighten", "add", "difference", "exclusion", "dodge", "burn", "hard_light", "soft_light", "hue", "saturation", "color" or "luminosity". |
+
+**The words for `mode`.**
+
+| Word | What it does |
+|---|---|
+| `"normal"` | The new colour covers the old one (see-through only as far as its alpha or opacity() says). |
+| `"multiply"` | Multiplies the colours, so the result is always darker: like overlapping inks or colour filters. White leaves the old colour unchanged; black gives black. |
+| `"screen"` | The opposite of multiply: the result is always lighter, like two slide projectors on one screen. Black leaves the old colour unchanged; white gives white. |
+| `"overlay"` | Multiply where the old colour is dark, screen where it is light: more contrast, keeping the old picture's highlights and shadows. |
+| `"darken"` | Keeps the darker of the two colours, channel by channel (red, green and blue separately). |
+| `"lighten"` | Keeps the lighter of the two colours, channel by channel. |
+| `"add"` | Adds the colours, so overlaps glow and turn white quickly: light added to light. |
+| `"difference"` | The difference between the colours: the same colours give black, white turns the old colour into its opposite (a negative). |
+| `"exclusion"` | Like difference, with less contrast: white still inverts, mid-grey gives grey. |
+| `"dodge"` | Brightens the old colour by the new one; bright new colours burn out to white (color dodge). Black changes nothing. |
+| `"burn"` | Darkens the old colour by the new one, with more contrast (color burn). White changes nothing. |
+| `"hard_light"` | Multiply where the new colour is dark, screen where it is light: like a harsh spotlight of the new colour. |
+| `"soft_light"` | A gentler hard_light: like a soft, diffused light of the new colour. Mid-grey changes nothing. |
+| `"hue"` | The new colour's hue with the old colour's saturation and lightness: recolours the old picture. |
+| `"saturation"` | The new colour's saturation with the old colour's hue and lightness: makes the old picture more vivid or greyer. |
+| `"color"` | The new colour's hue and saturation with the old colour's lightness: tints the old picture while keeping its shading. |
+| `"luminosity"` | The new colour's lightness with the old colour's hue and saturation: the opposite of color. |
 
 **Raises.**
 
@@ -1618,6 +1656,24 @@ The default is left and top. The choice is saved by push() and brought back by p
 |---|---|
 | `horizontal` | "left" (the default), "center", "right" or "justify". |
 | `vertical` | "top" (the default), "center", "baseline" or "bottom". Leave it out to keep the current choice. |
+
+**The words for `horizontal`.**
+
+| Word | What it does |
+|---|---|
+| `"left"` | x is where the text starts; it runs to the right. The default. |
+| `"center"` | x is the middle of the text. |
+| `"right"` | x is where the text ends. |
+| `"justify"` | In text_box(), each line is stretched to the box's width by widening the spaces, except the last line of a paragraph and a line of one word. In text() the same as left. |
+
+**The words for `vertical`.**
+
+| Word | What it does |
+|---|---|
+| `"top"` | y is the top of the text: the tallest letters' height (the font's ascent). The default. |
+| `"center"` | y is halfway between the top and the bottom. |
+| `"baseline"` | y is the line the letters stand on; the tails of g, p and y hang below it. Lines of text in different sizes line up on their baselines. |
+| `"bottom"` | y is the bottom of the text: below the tails of g, p and y (the font's descent). |
 
 **Raises.**
 
@@ -1827,7 +1883,16 @@ It is ignored once you have chosen a font with text_font(), but remembered for w
 
 | Argument | Meaning |
 |---|---|
-| `style` | "normal", "bold", "italic" or "bold_italic". |
+| `style` | "normal" (the default), "bold", "italic" or "bold_italic". |
+
+**The words for `style`.**
+
+| Word | What it does |
+|---|---|
+| `"normal"` | Upright letters of the usual weight. The default. |
+| `"bold"` | Thicker, heavier letters, for emphasis and headlines. |
+| `"italic"` | Letters slanted to the right (the built-in font's oblique). |
+| `"bold_italic"` | Bold and slanted. |
 
 **Raises.**
 
@@ -2880,6 +2945,19 @@ Alpha is kept, except by "opaque". "posterize", "erode" and "dilate" are faster 
 | `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate". |
 | `value` | for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none. |
 
+**The words for `kind`.**
+
+| Word | What it does |
+|---|---|
+| `"threshold"` | Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5). |
+| `"gray"` | Every pixel becomes the grey of its brightness: a black-and-white picture. |
+| `"opaque"` | Makes every pixel fully opaque, removing any see-through parts. |
+| `"invert"` | Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan. |
+| `"blur"` | Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier. |
+| `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
+| `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
+| `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
+
 **Raises.**
 
 - `ValueError`: the kind is unknown, or the value is out of range.
@@ -2905,6 +2983,19 @@ This name also works after from funground import *, where filter is Python's own
 |---|---|
 | `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate". |
 | `value` | for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none. |
+
+**The words for `kind`.**
+
+| Word | What it does |
+|---|---|
+| `"threshold"` | Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5). |
+| `"gray"` | Every pixel becomes the grey of its brightness: a black-and-white picture. |
+| `"opaque"` | Makes every pixel fully opaque, removing any see-through parts. |
+| `"invert"` | Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan. |
+| `"blur"` | Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier. |
+| `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
+| `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
+| `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
 
 **Raises.**
 
@@ -3419,7 +3510,19 @@ Escape also closes the sketch. With no window, no key is ever down.
 
 | Argument | Meaning |
 |---|---|
-| `key` | "left", "right", "up", "down", "space", "enter", "escape", or a single character such as "a" or "7". Capitals do not matter. |
+| `key` | "left", "right", "up", "down", "space", "enter", "escape", or a single character such as "a" or "7". Capitals do not matter. A whole number is passed to the window system as its own key code, for keys with no name here. |
+
+**The words for `key`.**
+
+| Word | What it does |
+|---|---|
+| `"left"` | The left arrow key. |
+| `"right"` | The right arrow key. |
+| `"up"` | The up arrow key. |
+| `"down"` | The down arrow key. |
+| `"space"` | The space bar. |
+| `"enter"` | The Enter (Return) key. |
+| `"escape"` | The Esc key. On the desktop it also closes the sketch's window. |
 
 **Returns.** True while the key is held.
 
@@ -3446,6 +3549,17 @@ Choose the shape of the mouse pointer over the canvas.
 | Argument | Meaning |
 |---|---|
 | `kind` | "arrow" (the default), "cross", "hand", "move", "text" or "wait". |
+
+**The words for `kind`.**
+
+| Word | What it does |
+|---|---|
+| `"arrow"` | The usual pointer. The default. |
+| `"cross"` | A thin cross, for aiming at a point. |
+| `"hand"` | A pointing hand, as over a link: something can be clicked. |
+| `"move"` | Four arrows: something can be dragged. |
+| `"text"` | The I-beam: text can be typed or selected. |
+| `"wait"` | The busy pointer (an hourglass or a spinning circle). |
 
 **Raises.**
 
@@ -3981,6 +4095,17 @@ The loudness follows an envelope. It rises to full over the attack, falls to the
 | `decay` | seconds to fall to the sustain level. The default is 0.15. |
 | `sustain` | the level held after the decay, 0 to 1. The default is 0.7. |
 
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
+
 **Returns.** A Sound: play(), loop(), stop(), level() and so on.
 
 ```py
@@ -4010,6 +4135,17 @@ It takes the same options as tone().
 | `release` | seconds to fade out at the end. The default is 0.15. |
 | `decay` | seconds to fall to the sustain level. The default is 0.15. |
 | `sustain` | the level held after the decay, 0 to 1. The default is 0.7. |
+
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
 
 **Returns.** A Sound: play(), loop(), stop(), level() and so on.
 
@@ -4067,6 +4203,17 @@ Separate the tokens with spaces. A token is a note name, "-" for a rest, or "[C4
 | `sa` | a note name such as "C4" that makes the notes sargam, with that note as Sa. The default None reads note names. |
 | `tuning` | "equal" (the default) or "just". "just" uses just-intonation ratios from Sa, and needs sa. |
 | `volume` | from 0 to 1. The default is 0.5. |
+
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
 
 **Returns.** A Sound: play(), loop(), stop() and so on.
 
@@ -6440,6 +6587,15 @@ the text is drawn. Numbers for the colour are read in the colour mode of the mom
 | `features` | a dictionary of OpenType features to turn on or off, like {"liga": False}. |
 | `variations` | a dictionary of axes of a variable font, like {"wght": 700}. |
 
+**The words for `style`.**
+
+| Word | What it does |
+|---|---|
+| `"normal"` | Upright letters of the usual weight. The default. |
+| `"bold"` | Thicker, heavier letters, for emphasis and headlines. |
+| `"italic"` | Letters slanted to the right (the built-in font's oblique). |
+| `"bold_italic"` | Bold and slanted. |
+
 **Returns.** this same FormattedString, so calls can chain.
 
 **Raises.**
@@ -6794,6 +6950,22 @@ Open parts of the path are included. Overlaps are removed.
 | `join` | the corners: "round", "miter" or "bevel". It is "round" at first. |
 | `miter_limit` | how long a pointed corner may get, at least 1. It is 10 at first. |
 | `dash` | None for a solid line, or a length, or a list of lengths for dashes and gaps, such as [10, 5]. It is None at first. |
+
+**The words for `cap`.**
+
+| Word | What it does |
+|---|---|
+| `"round"` | Each end of a line is a half circle, so the line reaches half its width past its end points. The default. |
+| `"square"` | Each end is squared off half the line's width past its end point. |
+| `"butt"` | Each end is cut off flat exactly at its end point. |
+
+**The words for `join`.**
+
+| Word | What it does |
+|---|---|
+| `"round"` | Corners are rounded. The default. |
+| `"miter"` | Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not shoot far out. |
+| `"bevel"` | Corners are cut off flat. |
 
 **Returns.** a new closed PathBuilder.
 
@@ -7267,6 +7439,21 @@ style="own" (the default) draws every part with the style it was recorded with. 
 | `anchor` | which point of the mark lands on (x, y). "origin" (the default) is the mark's own (0, 0). The others use bounds(): "center", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom" and "bottom-right". |
 | `width`, `height` | the size to make the mark, in pixels, keeping its proportions (see above). They cannot be used with scale. |
 | `style` | "own" (the default) or "current" (see above). |
+
+**The words for `anchor`.**
+
+| Word | What it does |
+|---|---|
+| `"origin"` | The mark's own (0, 0): the point it was drawn around. The default. |
+| `"center"` | The middle of the mark's bounds(). |
+| `"top-left"` | The top-left corner of the bounds. |
+| `"top"` | The middle of the top edge. |
+| `"top-right"` | The top-right corner. |
+| `"left"` | The middle of the left edge. |
+| `"right"` | The middle of the right edge. |
+| `"bottom-left"` | The bottom-left corner. |
+| `"bottom"` | The middle of the bottom edge. |
+| `"bottom-right"` | The bottom-right corner. |
 
 **Raises.**
 
