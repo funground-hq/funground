@@ -4,9 +4,10 @@ What changed in funground, newest first. Release numbers follow the
 [roadmap](docs/Roadmap.md). Decisions are cited as D-nnn from the
 [decision log](docs/design/Decision_Log.md).
 
-## Unreleased — will become 0.1
+## 0.1.0a1 — 12 October 2026 (alpha)
 
-The first public release. It starts from *playground* v0.5, a small teaching wrapper around
+The first public release, as an **alpha**: the known problems and the parts not yet tried by hand
+are listed in the [release notes](docs/releases/0.1.0a1.md) (D-094). It starts from *playground* v0.5, a small teaching wrapper around
 pygame-ce that was never published.
 
 ### Renamed
@@ -176,10 +177,32 @@ pygame-ce that was never published.
   [Examples Gallery](docs/gallery/README.md) with an example for every function, and a Quick
   Reference.
 
+### Added: the browser, print and the shorter style
+- **funground in the browser** (S-136, S-137, S-152, S-156, S-157): the same sketches run on the
+  website's Play page and beside github.dev, with sound and the microphone. `funground.web.Session`
+  is the host API.
+- **Print-ready output** (S-162 to S-166, S-170): `f.save("poster.pdf", bleed=f.mm(3), marks=True)`
+  adds a bleed and crop marks; `f.save("poster.png", dpi=300)` draws at print resolution;
+  `f.cmyk(c, m, y, k)` gives colours that a PDF keeps as exact printing inks, and RGB in a PDF is
+  tagged as sRGB.
+- **Typography** (S-159 to S-162, S-171, S-181): justified text boxes and hyphenation at soft hyphens;
+  `f.text_on_path()`; `f.fit_text_size()` for headlines that fill a width or a box; fractional text
+  sizes. A text box fits its lines by leading, as DrawBot and InDesign do.
+- **Writing without `f.`** (S-176, D-088): `from funground import *` gives every name without the
+  prefix; `width`, `mouse_x` and the other live values stay current; a file with `draw()` and no
+  `run()` runs anyway. `set`, `filter`, `exit` and `random` are left out of the star import, so
+  Python's own stay; use `set_pixel`, `apply_filter`, `stop` and `random_number`.
+- **A script that never shows its drawing says so** (S-180), and the API reference explains every
+  option word, such as each blend mode (S-179).
+- **Guide project 9, generative posters** (S-182): the design ideas behind a poster series, built
+  on an A3 page in four stages.
+- Faster drawing of styles, colours, vectors and glyphs (S-144 to S-147, S-154).
+
 ### Licence
 - funground is LGPL-2.1-only (D-025, D-084). Example code is CC0 (D-026). Dependencies keep their own
   licences; see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
 
-### Still to come before 0.1
-- Images, pages and multi-page documents, more path tools, richer typography, SVG import, sound,
-  GIF and video export, and controls (Phase 3, D-027).
+### Known problems and untested parts
+- See the [release notes](docs/releases/0.1.0a1.md): the automatic tests are not all green on
+  GitHub's computers, and macOS and Linux desktops, SVG text in Illustrator and Inkscape and the
+  raga data have not been checked by hand.
