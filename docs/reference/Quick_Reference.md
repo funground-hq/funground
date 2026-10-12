@@ -1,7 +1,7 @@
 # funground Quick Reference
 
-**Version 0.1.0.dev0** — a small visual-programming library. `import funground as f; print(f.__version__)`
-prints `0.1.0.dev0`.
+**Version 0.1.0a1** — a small visual-programming library. `import funground as f; print(f.__version__)`
+prints `0.1.0a1`.
 
 This reference lists every public name in funground. For exact arguments, results and an example of each name, see the [API reference](API.md). Every function has a
 one-line description; every section ends with one complete sketch, and the picture above that sketch
@@ -1134,7 +1134,7 @@ The public student-facing API. Everything is reached as `f.<name>`.
 
 | METADATA | |
 |---|---|
-| `f.__version__` | `"0.1.0.dev0"`. |
+| `f.__version__` | `"0.1.0a1"`. |
 
 **Remember:** use `f.` before funground functions and live values: `f.circle(...)`, `f.width`,
 `f.mouse_x`, `f.run()`. Python variables such as `x` remain ordinary Python variables.
@@ -1173,7 +1173,7 @@ appendix still works and renders the same on every platform and renderer. Capita
 **Constants and live values.** There are no uppercase constants such as `RED`, `LEFT` or `CENTER`.
 Colours and keys are strings. These module values are live state, not constants: `f.width`,
 `f.height`, `f.mouse_x`, `f.mouse_y`, `f.is_mouse_pressed`, `f.pmouse_x`, `f.pmouse_y`, `f.mouse_button`, `f.key`, `f.key_code`, `f.is_key_pressed`, `f.frame_count`, `f.delta_time`.
-`f.__version__` reports `"0.1.0.dev0"`.
+`f.__version__` reports `"0.1.0a1"`.
 
 **Fixed key-name strings.** `f.key_down(...)` recognises `"left"`, `"right"`, `"up"`, `"down"`,
 `"space"`, `"enter"`, `"escape"`, and any single-character key such as `"a"` or `"7"`.
@@ -1190,7 +1190,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 
 | Area | Playground 0.5 | funground 0.1 |
 |---|---|---|
-| Version | `f.__version__ == "0.5.0"` | `"0.1.0.dev0"` |
+| Version | `f.__version__ == "0.5.0"` | `"0.1.0a1"` |
 | Edges | Coordinates rounded to whole pixels | Fractional coordinates honoured; edges anti-aliased |
 | Alpha | Fourth colour value silently dropped | Honoured: translucent fills and strokes |
 | Strokes | Painted inside the shape's edge | Centred on the edge |
