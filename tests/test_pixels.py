@@ -459,7 +459,7 @@ def test_update_pixels_checks_the_buffer():
 
 def test_pixels_is_a_live_value():
     script()
-    assert "pixels" in p.__all__
+    assert "pixels" in p._PUBLIC_NAMES
     assert "pixels" not in vars(p)
     p.load_pixels()
     first = p.pixels

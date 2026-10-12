@@ -104,13 +104,17 @@ def test_example_ops_match_snapshot(path: Path):
 def _names_used() -> set[str]:
     used = set()
     for path in EXAMPLES:
-        used |= set(re.findall(r"\bf\.([A-Za-z_]+)\b", path.read_text(encoding="utf-8")))
+        source = path.read_text(encoding="utf-8")
+        used |= set(re.findall(r"\bf\.([A-Za-z_]+)\b", source))
+        if "from funground import *" in source:          # the global style (D-088): names without f.
+            code = source.split('"""', 2)[-1]              # not the docstring's mentions
+            used |= set(re.findall(r"\b([a-z_]+)\b", code)) & set(funground.__all__)
     return used
 
 
 def test_every_public_name_is_shown_by_an_example():
     """D-015, D-019: release 0.1 ships a gallery that highlights every feature."""
-    public = set(funground.__all__)
+    public = set(funground._PUBLIC_NAMES)
     uncovered = public - _names_used()
     unexpected = uncovered - NOT_YET_IN_GALLERY
     assert not unexpected, f"public names with no gallery example: {sorted(unexpected)}"

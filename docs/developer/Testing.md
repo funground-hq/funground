@@ -29,7 +29,7 @@ video and audio drivers before pygame is imported.
 | Motion export | GIF and MP4 files, with Pillow and with a fake ffmpeg | `tests/test_motion.py` | all |
 | Text and layers in files | PDF text and SVG text read back; layers as optional content groups and Inkscape groups, drawn again with pdfium | `tests/test_pdf_text.py`, `tests/test_svg_text.py`, `tests/test_layer_files.py`, `tests/test_layers.py` | all (`pypdfium2` from the `dev` extra) |
 | Quick Reference | Every public name appears in the reference; each reference sketch is embedded verbatim | `tests/test_reference.py` | all |
-| Coverage of public names | `__all__` equals the contract; every name has a gallery example and a reference entry | `test_api_contract.py`, `test_gallery.py`, `test_reference.py` | all |
+| Coverage of public names | `_PUBLIC_NAMES` equals the contract; every name has a gallery example and a reference entry | `test_api_contract.py`, `test_gallery.py`, `test_reference.py` | all |
 | Boundaries | Backend libraries are imported only by their provider | `tests/test_boundaries.py` | all |
 | Tools | The originality checker and the gallery browser (`funground/gallery.py`) | `test_check_originality.py`, `test_gallery_browser.py` | all |
 | Gallery in the package | The examples, data, pictures and CC0 licence are in the wheel; the locator works from a checkout and an installed layout; Copy never overwrites | `test_gallery_package.py` (builds a wheel, about 10 s, needs the `build` package from the `dev` extra) | all |
@@ -106,7 +106,7 @@ behaviour.
 ### The public API contract
 
 For a new public name, add its signature to `ADDED_FUNCTIONS` in `tests/test_api_contract.py`.
-`__all__` in `funground/__init__.py` must match the contract exactly, or
+`_PUBLIC_NAMES` in `funground/__init__.py` must match the contract exactly, or
 `test_public_all_is_exactly_the_contract` fails.
 
 ### A golden and an IR snapshot (gallery examples)

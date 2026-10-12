@@ -30,9 +30,9 @@ Your sketch has a draw() function but never started. Add f.run() as the last lin
 ```
 
 An animated sketch needs `f.run()` as its **last line**. Without it, Python reads the file, defines
-your functions and stops. funground prints the message above when you run the file from a terminal.
-In IDLE or Thonny you may see nothing at all. A script (no `draw()`) needs `f.show()` instead if you
-want to look at it.
+your functions and stops. From a terminal, in VS Code or on the website funground starts the sketch
+for you when the file ends; in a notebook it prints the message above instead. In IDLE or Thonny you
+may see nothing at all. A script (no `draw()`) needs `f.show()` instead if you want to look at it.
 
 ```py
 def draw():
@@ -40,6 +40,22 @@ def draw():
 
 f.run()          # the last line
 ```
+
+### "'int' object is not callable" and "hides funground's"
+
+```
+TypeError: 'int' object is not callable
+Your sketch has a variable called size, which hides funground's size(). Give the variable another
+name (for example my_size).
+```
+
+With `from funground import *` (see [Writing without `f.`](02_the_sketch.md#writing-without-f)),
+your own variable with the same name as a funground function replaces that function in your file.
+Rename the variable (`size` becomes `ball_size`). With `import funground as f` this cannot happen.
+
+The same style leaves out `random`, `set`, `filter` and `exit`, so `random(10)` fails with
+"name 'random' is not defined" and a sentence saying to write `random_number(10)`. The others are
+`set_pixel()`, `apply_filter()` and `stop()`.
 
 ### The window opens and closes at once
 

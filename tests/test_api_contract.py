@@ -35,6 +35,8 @@ V05_FUNCTIONS = {
 # an exact record of what Session 1 learners were given.
 ADDED_FUNCTIONS = {
     "random_seed": "(seed: 'int | None' = None) -> 'None'",
+    "random_number": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
+    "random_number": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "run": "(*, fps: 'int | None' = None, max_frames: 'int | None' = None) -> 'None'",
     "save": "(path: 'str', *, text: 'str' = 'live', bleed: 'float' = 0, marks: 'bool' = False, dpi: 'float | None' = None) -> 'None'",
     # Sprint 4, S-027: transforms and the state stack (contract F1/F2).
@@ -238,10 +240,12 @@ ADDED_FUNCTIONS = {
     # S-079 pixels
     "get": "(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None)",
     "set": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",
+    "set_pixel": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",
     "load_pixels": "() -> 'None'",
     "update_pixels": "() -> 'None'",
     # S-080 copy, resize, mask, filters (the picture methods copy/resize/mask/filter are in test_filters.py)
     "filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
+    "apply_filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
     # S-132 marks (contract K1-K3, D-069, D-070)
     "mark": "(path: 'PathBuilder | str | None' = None, *, fill: 'Color | None' = <not given>, stroke: 'Color | None' = <not given>, stroke_width: 'float | None' = None) -> 'Mark'",
     # S-132 Play (contracts E1, E2; D-071, D-073: flat names, no f.play namespace)
@@ -282,7 +286,7 @@ def test_run_keeps_v05_call_forms():
 
 
 def test_public_all_is_exactly_the_contract():
-    assert set(p.__all__) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES
+    assert set(p._PUBLIC_NAMES) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES
 
 
 def test_live_values_are_dynamic_module_attributes():

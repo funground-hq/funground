@@ -530,7 +530,7 @@ def test_show_of_one_page_keeps_its_title(monkeypatch):
 # ---------------------------------------------------------------- public names
 def test_pages_are_public_module_functions_only():
     for name in ("new_page", "page_count", "page_size"):
-        assert name in p.__all__ and callable(getattr(p, name))
+        assert name in p._PUBLIC_NAMES and callable(getattr(p, name))
     script()
     p.size(10, 10)
     pic = p.create_graphics(5, 5)

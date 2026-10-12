@@ -126,6 +126,8 @@ class Sketch:
         self.key_code: int | None = None
         self.is_key_pressed = False
         self._callbacks: dict[str, Callable] = {}
+        self._namespace: Namespace | None = None    # the sketch's globals, once run() or a script's size() names them
+        self._shared_names: tuple[str, ...] = ()    # live names kept current there (global style, D-088)
         self.frame_count = 0
         self.delta_time = 0.0
         self.running = False
@@ -2265,10 +2267,50 @@ class Sketch:
         fn = self._callbacks.get(name)
         if fn is None:
             return
-        if name == "mouse_wheel" and _takes_an_argument(fn):
-            fn(ev.delta)
-        else:
-            fn()
+        self.publish_live_values()
+        with self._explaining_name_clashes():
+            if name == "mouse_wheel" and _takes_an_argument(fn):
+                fn(ev.delta)
+            else:
+                fn()
+
+    # ---- the global style (D-088, S-176; funground/global_style.py)
+    @property
+    def started(self) -> bool:
+        """True once run() (or a host) has started this sketch."""
+        return self._draw_fn is not None
+
+    def share_globals(self, namespace: Namespace) -> None:
+        """Keep the live values current in *namespace* if it is a ``from funground import *`` sketch."""
+        from . import global_style
+
+        self._namespace = namespace
+        self._shared_names = global_style.live_names_in(namespace)
+
+    def adopt_globals(self, namespace: Namespace) -> None:
+        """A script's first size() (or full_screen(), ...) names its file's globals; run() names them otherwise."""
+        if self._namespace is None:
+            self.share_globals(namespace)
+
+    def publish_live_values(self) -> None:
+        """Write width, mouse_x and the other live values into the sketch's globals (global style only)."""
+        if self._shared_names:
+            from . import global_style
+
+            global_style.publish(self._namespace, self._shared_names)
+
+    @contextlib.contextmanager
+    def _explaining_name_clashes(self):
+        """Around the sketch's own functions: "'int' object is not callable" gets a sentence naming the variable,
+        and "name 'random' is not defined" one pointing to funground.random()."""
+        try:
+            yield
+        except (TypeError, NameError) as error:
+            if self._shared_names:
+                from . import global_style
+
+                global_style.explain_clash(error, self._namespace)
+            raise
 
     # ---- loop control and clock (S-048, contract R10)
     def exit(self) -> None:
@@ -2358,6 +2400,7 @@ class Sketch:
         _run_started = True
         setup, self._draw_fn = _sketch_functions(namespace)
         self._callbacks = _event_callbacks(namespace)
+        self.share_globals(namespace)
         if max_frames is not None and max_frames <= 0:
             raise ValueError("max_frames must be positive")
         if fps is not None and fps <= 0:
@@ -2387,8 +2430,10 @@ class Sketch:
             self.fps = int(fps)
 
         # setup() usually calls size(). A default canvas keeps setup() optional.
+        self.publish_live_values()
         if setup is not None:
-            setup()
+            with self._explaining_name_clashes():
+                setup()
         if not self._has_window:
             self.size(self.width, self.height, title=self.title, fps=self.fps)
 
@@ -2418,8 +2463,10 @@ class Sketch:
             if not self._smooth:
                 self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
             self._in_draw = True
+            self.publish_live_values()
             try:
-                self._draw_fn()
+                with self._explaining_name_clashes():
+                    self._draw_fn()
             finally:
                 self._in_draw = False
             self._end_draw()  # unbalanced push()es never leak into the next frame

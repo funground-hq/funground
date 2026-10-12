@@ -573,8 +573,18 @@ def _run_program(tmp_path, source: str):
                           cwd=tmp_path, timeout=60)
 
 
-def test_a_real_program_that_forgot_run_gets_the_hint(tmp_path):
-    done = _run_program(tmp_path, "import funground as f\n\ndef draw():\n    f.background('white')\n")
+def test_a_real_program_that_forgot_run_starts_when_the_file_ends(tmp_path):
+    """D-088: from a terminal, run() is a safety net: the sketch starts and no hint is printed."""
+    done = _run_program(tmp_path, "import funground as f\n\ndef draw():\n    f.background('white')\n"
+                                  "    if f.frame_count == 2:\n        f.save('last.png')\n        f.stop()\n")
+    assert done.returncode == 0 and done.stderr == ""
+    assert (tmp_path / "last.png").exists()
+
+
+def test_a_notebook_that_forgot_run_gets_the_hint_instead(tmp_path):
+    """In a notebook (ipykernel loaded) nothing starts at exit; the hint says what to add."""
+    done = _run_program(tmp_path, "import sys, types\nsys.modules['ipykernel'] = types.ModuleType('ipykernel')\n"
+                                  "import funground as f\n\ndef draw():\n    f.background('white')\n")
     assert done.returncode == 0
     assert done.stderr.strip() == "Your sketch has a draw() function but never started. Add f.run() as the last line."
 
@@ -590,7 +600,7 @@ def test_real_programs_that_are_fine_stay_quiet(tmp_path):
 
 # ---------------------------------------------------------------- the public surface
 def test_show_is_public():
-    assert "show" in p.__all__ and callable(p.show)
+    assert "show" in p._PUBLIC_NAMES and callable(p.show)
 
 
 def test_exit_hint_stays_quiet_after_a_crash(tmp_path):

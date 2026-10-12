@@ -42,7 +42,7 @@ CLASS_LIST = ROOT / "docs" / "reference" / "api_classes.txt"
 
 SECTIONS = ("Arguments", "Returns", "Raises", "Example")
 
-# Every name in funground.__all__ must be in exactly one group (live values are documented in their own section).
+# Every name in funground._PUBLIC_NAMES must be in exactly one group (live values are documented in their own section).
 GROUPS: dict[str, list[str]] = {
     "Sketch and loop": ["size", "resize_canvas", "full_screen", "run", "loop", "no_loop", "redraw", "is_looping",
                         "exit", "stop", "frame_rate", "show", "smooth", "no_smooth"],
@@ -67,8 +67,8 @@ GROUPS: dict[str, list[str]] = {
     "Play": ["variations", "keep"],
     "Pictures and layers": ["create_graphics", "layer", "hide_layer", "show_layer"],
     "Images and SVG": ["image", "image_mode", "load_image", "load_svg", "svg_paths"],
-    "Pixels and filters": ["get", "set", "load_pixels", "update_pixels", "filter"],
-    "Randomness and noise": ["random", "random_choice", "random_gaussian", "random_seed", "noise", "noise_detail",
+    "Pixels and filters": ["get", "set", "set_pixel", "load_pixels", "update_pixels", "filter", "apply_filter"],
+    "Randomness and noise": ["random", "random_number", "random_choice", "random_gaussian", "random_seed", "noise", "noise_detail",
                              "noise_seed"],
     "Maths": ["constrain", "distance", "lerp", "map_range", "mag", "norm", "degrees", "radians"],
     "Time": ["year", "month", "day", "hour", "minute", "second", "millis"],
@@ -165,7 +165,7 @@ def resolve_class(entry: str):
 
 
 def all_classes() -> list[tuple[str, type]]:
-    """(name, class) for every class in api_classes.txt, then any class in __all__ not already there."""
+    """(name, class) for every class in api_classes.txt, then any public class not already there."""
     found: list[tuple[str, type]] = []
     seen: set[type] = set()
     for entry in class_names():
@@ -173,7 +173,7 @@ def all_classes() -> list[tuple[str, type]]:
         if cls not in seen:
             seen.add(cls)
             found.append((cls.__name__, cls))
-    for name in f.__all__:
+    for name in f._PUBLIC_NAMES:
         obj = getattr(f, name, None) if name not in _api.LIVE_NAMES else None
         if inspect.isclass(obj) and obj not in seen:
             seen.add(obj)
@@ -389,7 +389,7 @@ def reference_tables(page: Page) -> None:
 
 
 def check_groups() -> None:
-    all_names = list(f.__all__)
+    all_names = list(f._PUBLIC_NAMES)
     live = set(_api.LIVE_NAMES)
     grouped = [n for names in GROUPS.values() for n in names]
     errors = []
@@ -398,10 +398,10 @@ def check_groups() -> None:
         errors.append(f"in more than one group: {dup}")
     missing = sorted(set(all_names) - set(grouped) - live)
     if missing:
-        errors.append(f"in funground.__all__ but in no group (add them to GROUPS): {missing}")
+        errors.append(f"in funground._PUBLIC_NAMES but in no group (add them to GROUPS): {missing}")
     extra = sorted(set(grouped) - set(all_names))
     if extra:
-        errors.append(f"in a group but not in funground.__all__: {extra}")
+        errors.append(f"in a group but not in funground._PUBLIC_NAMES: {extra}")
     if errors:
         raise SystemExit("make_api_reference: " + "; ".join(errors))
 
