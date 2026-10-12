@@ -589,6 +589,27 @@ def test_a_notebook_that_forgot_run_gets_the_hint_instead(tmp_path):
     assert done.stderr.strip() == "Your sketch has a draw() function but never started. Add f.run() as the last line."
 
 
+SCRIPT_HINT = "Your script drew something but never showed it. Add f.show() as the last line to see it."
+
+
+def test_a_script_that_never_shows_its_drawing_gets_the_hint(tmp_path):
+    """S-180: a blank result with no message is the worst outcome; one line says what to add."""
+    done = _run_program(tmp_path, "import funground as f\nf.size(20, 20)\nf.circle(10, 10, 8)\n")
+    assert done.returncode == 0
+    assert done.stderr.strip() == SCRIPT_HINT
+
+
+def test_the_script_hint_stays_quiet_when_it_should(tmp_path):
+    saved = _run_program(tmp_path, "import funground as f\nf.size(20, 20)\nf.circle(10, 10, 8)\nf.save('a.png')\n")
+    empty = _run_program(tmp_path, "import funground as f\nf.size(20, 20)\n")
+    crashed = _run_program(tmp_path, "import funground as f\nf.size(20, 20)\nf.circle(10, 10, 8)\n1 / 0\n")
+    redrawn = _run_program(tmp_path, "import funground as f\nf.size(20, 20)\nf.circle(10, 10, 8)\nf.save('b.png')\n"
+                                     "f.size(20, 20)\nf.circle(5, 5, 4)\n")
+    assert saved.stderr == "" and empty.stderr == ""
+    assert "ZeroDivisionError" in crashed.stderr and SCRIPT_HINT not in crashed.stderr
+    assert redrawn.stderr.strip() == SCRIPT_HINT     # the new canvas was drawn on and never shown or saved
+
+
 def test_real_programs_that_are_fine_stay_quiet(tmp_path):
     animated = _run_program(
         tmp_path, "import funground as f\n\ndef draw():\n    f.background('white')\n\nf.run(max_frames=1)\n")

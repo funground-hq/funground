@@ -81,6 +81,8 @@ class Session:
             exec(compile(source, filename, "exec"), namespace)
             if callable(namespace.get("draw")) and not (self._sketch.started or self._sketch._script):
                 self._sketch.run_namespace(namespace)     # a file that defines draw() and never called run() (D-088)
+            elif self._sketch.unseen_drawing:
+                self._sketch.show()                       # a script that never called f.show() (S-180)
         except BaseException as error:
             global_style.explain_clash(error, namespace)  # a global-style script's error at the top level
             self.stop()

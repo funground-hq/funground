@@ -134,7 +134,7 @@ f.saved_state():` does exactly the same job, alongside `f.push()`/`f.pop()`.
 | `lineHeight(value)` | `f.text_leading(value)`: the distance from one line's baseline to the next, for lines broken with `"\n"` and in `f.text_box()`. Pixels here are points in a PDF, so `lineHeight(100)` is `f.text_leading(100)` |
 | `lineHeight(None)` | `f.text_leading(None)`: automatic again, 1.25 times the text size (DrawBot uses the font's own line spacing, so automatic lines can differ slightly) |
 | `text(str, (x, y))` | `f.text(message, x, y)` |
-| `textBox(str, (x, y, w, h))` | `f.text_box(message, x, y, w, h)` |
+| `textBox(str, (x, y, w, h))` | `f.text_box(message, x, y, w, h)`: the same lines fit, since each line takes one leading in both (three lines of `lineHeight(100)` fit a box 300 high). Remember that funground's `y` is the box's top, measured down |
 
 Spacing, features and variable fonts. Checked in DrawBot's source:
 `drawBot/drawBotDrawingTools.py` (`tracking`, `openTypeFeatures`, `fontVariations`) and

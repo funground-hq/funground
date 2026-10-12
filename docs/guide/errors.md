@@ -62,7 +62,9 @@ The same style leaves out `random`, `set`, `filter` and `exit`, so `random(10)` 
 Usually one of these:
 
 - The file is a **script** (no `draw()`) and has no `f.show()` at the end. It draws, saves, and ends.
-  Add `f.show()` as the last line to keep the window open.
+  Add `f.show()` as the last line to keep the window open. If it never saves either, funground says
+  so when the program ends: "Your script drew something but never showed it. Add f.show() as the
+  last line to see it." (On the website the drawing is shown anyway.)
 - `draw()` stops itself with `f.stop()` or `f.exit()`, or the sketch has `f.run(max_frames=...)`.
 - An error happened. Look in the terminal for a message: the window closes when the sketch stops.
 - You ran it from an editor that shows only a short flash of output. Run it from a terminal with
