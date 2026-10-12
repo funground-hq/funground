@@ -1,6 +1,8 @@
 # Design note: a less verbose sketch style (D-088, revised proposals)
 
-**Status:** proposals for the maintainer, 11 October 2026. Nothing is built. Constants are decided
+**Status:** decided 12 October 2026 (D-088), after spike S-175 (`spikes/12_sketch_style/RESULTS.md`, on the
+`spike/s175-sketch-style` branch): proposal 1 adopted as a second supported style, proposal 3 as a safety net
+that is not taught, proposal 2 dropped. Built in S-176 (contract R13, R19). Constants are decided
 (D-090: capitals holding the words, story S-174) and are used below.
 
 ## The complaint

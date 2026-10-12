@@ -221,6 +221,16 @@ def live_value(name: str) -> object:
 HINT = "Your sketch has a draw() function but never started. Add f.run() as the last line."
 
 
+def _forgotten_sketch():
+    """The program's file, if it is a learner's file that defines draw(); None otherwise.
+
+    A module run with ``python -m`` (funground.gallery, a tool) is a program of its own, never a forgotten sketch."""
+    main = sys.modules.get("__main__")
+    if main is None or getattr(main, "__spec__", None) is not None:
+        return None
+    return main if callable(getattr(main, "draw", None)) else None
+
+
 def exit_hint() -> None:
     """Remind a learner who wrote draw() but forgot f.run().
 
@@ -232,8 +242,7 @@ def exit_hint() -> None:
         return
     if _active is not None and _active._script:
         return
-    main = sys.modules.get("__main__")
-    if callable(getattr(main, "draw", None)):
+    if _forgotten_sketch() is not None:
         print(HINT, file=sys.stderr)
 
 
@@ -246,11 +255,50 @@ def _note_crash(exc_type, exc, tb) -> None:
     the thing to fix, and a hint about f.run() below it would point the wrong way."""
     global _crashed
     _crashed = True
+    main = sys.modules.get("__main__")
+    if exc is not None and main is not None:          # a global-style script's error at the top level (D-088)
+        from . import global_style
+
+        global_style.explain_clash(exc, vars(main))
     _previous_excepthook(exc_type, exc, tb)
 
 
 sys.excepthook = _note_crash
 atexit.register(exit_hint)
+
+
+def start_forgotten_sketch() -> None:
+    """Start a sketch that defines draw() but never called run(), when its file ends (D-088, S-176).
+
+    It runs by itself when the program ends, under the same conditions as exit_hint(): a program run from a
+    terminal that ended without an error, not an interactive session (IDLE and Thonny keep Python running, so
+    there run() is still needed) and not a notebook. An error in the sketch is shown as usual, but the program's
+    exit code stays 0: Python ignores errors raised while it is ending. Most learners never call this."""
+    from . import sketch as _sketch_module
+
+    if _crashed or _sketch_module._run_started or hasattr(sys, "ps1") or sys.flags.interactive:
+        return
+    if "ipykernel" in sys.modules or (_active is not None and _active._script):
+        return
+    main = _forgotten_sketch()
+    if main is not None:
+        try:
+            canvas_sketch().run_namespace(vars(main))
+        except BaseException:                  # Python would print "Exception ignored in atexit callback"
+            sys.excepthook(*sys.exc_info())
+
+
+atexit.register(start_forgotten_sketch)      # registered last, so it runs first; exit_hint() then stays quiet
+
+
+def _share_with_caller() -> None:
+    """After a call that changes width, height, ground or pixels: refresh a global-style sketch's copies.
+
+    A script names its globals here (its first size()); an animated sketch named them in run()."""
+    caller = inspect.currentframe().f_back.f_back
+    sketch = canvas_sketch()
+    sketch.adopt_globals(caller.f_globals)
+    sketch.publish_live_values()
 
 
 # ---- window / lifecycle
@@ -278,6 +326,7 @@ def size(width: int | str, height: int | None = None, *, title: str = "funground
     """
     refuse_in_mark("f.size()")
     canvas_sketch().size(width, height, title=title, fps=fps, margin=margin, landscape=landscape)
+    _share_with_caller()
 
 
 def run(*, fps: int | None = None, max_frames: int | None = None) -> None:
@@ -339,6 +388,7 @@ def new_page(width: int | str | None = None, height: int | None = None) -> None:
     """
     refuse_in_mark("f.new_page()")
     canvas_sketch().new_page(width, height)
+    _share_with_caller()
 
 
 def page_count() -> int:
@@ -688,6 +738,7 @@ def resize_canvas(width: int, height: int) -> None:
     See also: size, full_screen
     """
     canvas_sketch().resize_canvas(width, height)
+    _share_with_caller()
 
 
 def full_screen() -> None:
@@ -702,6 +753,7 @@ def full_screen() -> None:
     See also: size, resize_canvas
     """
     canvas_sketch().full_screen()
+    _share_with_caller()
 
 
 def cursor(kind: str = "arrow") -> None:
@@ -3418,6 +3470,25 @@ def set(x: float, y: float, color, *more: float) -> None:  # noqa: A001  (p5's n
     active_sketch().set(x, y, color, *more)
 
 
+def set_pixel(x: float, y: float, color, *more: float) -> None:
+    """Make one pixel exactly one colour: the same as set().
+
+    This name also works after from funground import *, where set is Python's own set() (D-088). Fill, stroke, transform, clip, tint, opacity and blend mode do not apply. Outside the canvas, nothing happens.
+
+    Arguments:
+        x, y: the pixel.
+        color: any colour that fill() takes.
+        *more: extra numbers, as for fill().
+
+    Example:
+        f.set_pixel(10, 20, "red")
+
+    See also: set, get, update_pixels
+    """
+    refuse_in_mark("f.set_pixel()")
+    active_sketch().set(x, y, color, *more)
+
+
 def load_pixels() -> None:
     """Copy the canvas into f.pixels.
 
@@ -3432,6 +3503,7 @@ def load_pixels() -> None:
     """
     refuse_in_mark("f.load_pixels()")
     active_sketch().load_pixels()
+    _share_with_caller()
 
 
 def update_pixels() -> None:
@@ -3466,6 +3538,27 @@ def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's 
     See also: get, create_graphics
     """
     refuse_in_mark("f.filter()")
+    active_sketch().filter(kind, value)
+
+
+def apply_filter(kind: str, value: float | None = None) -> None:
+    """Change everything drawn so far, in place: the same as filter().
+
+    This name also works after from funground import *, where filter is Python's own filter() (D-088). Alpha is kept, except by "opaque".
+
+    Arguments:
+        kind: "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate".
+        value: for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none.
+
+    Raises:
+        ValueError: the kind is unknown, or the value is out of range.
+
+    Example:
+        f.apply_filter("blur", 3)
+
+    See also: filter, get, create_graphics
+    """
+    refuse_in_mark("f.apply_filter()")
     active_sketch().filter(kind, value)
 
 
@@ -3511,6 +3604,26 @@ def random(low: float = 1.0, high: float | None = None) -> float:
         d = f.random(10, 40)
 
     See also: random_seed, random_choice, random_gaussian, noise
+    """
+    return canvas_sketch().random(low, high)
+
+
+def random_number(low: float = 1.0, high: float | None = None) -> float:
+    """Return a random number: the same as random().
+
+    This name also works after from funground import *, where random is Python's random module (D-088). random_number(10) gives a number from 0 up to 10. random_number(5, 10) gives a number from 5 up to 10. random_number() gives a number from 0 up to 1. random_seed() makes it repeatable.
+
+    Arguments:
+        low: with one argument, the top of the range (it starts at 0). With high as well, the bottom.
+        high: the top of the range. The default None means low is the top.
+
+    Returns:
+        A floating-point number.
+
+    Example:
+        x = f.random_number(f.width)
+
+    See also: random, random_seed, random_choice, random_gaussian
     """
     return canvas_sketch().random(low, high)
 

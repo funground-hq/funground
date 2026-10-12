@@ -28,7 +28,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from . import api, microphone_input, sound, typography
+from . import api, global_style, microphone_input, sound, typography
 from .platform.base import InputEvent
 from .platform.browser import BrowserPlatform, FrameCallback
 from .platform.browser_audio import MicrophoneCallback, SoundCallback
@@ -79,7 +79,10 @@ class Session:
         self._modules_before = set(sys.modules)
         try:
             exec(compile(source, filename, "exec"), namespace)
-        except BaseException:
+            if callable(namespace.get("draw")) and not (self._sketch.started or self._sketch._script):
+                self._sketch.run_namespace(namespace)     # a file that defines draw() and never called run() (D-088)
+        except BaseException as error:
+            global_style.explain_clash(error, namespace)  # a global-style script's error at the top level
             self.stop()
             raise
 

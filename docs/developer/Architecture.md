@@ -17,7 +17,7 @@ draw-op IR is the contract. Cairo draws. pygame-ce runs the window. Learners nev
  learner code           import funground as f ;  f.circle(100, 100, 50)
         |
         v
- +------------------+   funground/__init__.py   the public names, __all__, live values
+ +------------------+   funground/__init__.py   public names, __all__, live values
  |  public facade   |   funground/api.py        one function per name; drawing talks to active_sketch(),
  +--------+---------+                           everything else to canvas_sketch() (section 5)
           |
@@ -77,7 +77,7 @@ Read it top to bottom for one drawing call:
 
 | Module | What it does |
 |---|---|
-| `funground/__init__.py` | The public names and `__all__`. A module `__getattr__` serves the live values (`f.width`, `f.mouse_x` and so on) so they are never stale copies. |
+| `funground/__init__.py` | The public names (`_PUBLIC_NAMES`) and `__all__` (the same less `STAR_LEAVES_OUT`, for `from funground import *`, D-088). A module `__getattr__` serves the live values (`f.width`, `f.mouse_x` and so on) so they are never stale copies. |
 | `funground/api.py` | The facade. One thin function per public name. Holds `canvas_sketch()` and `active_sketch()` (the layers rule, section 5), `use_sketch()` (for tests), the exit hint for a forgotten `f.run()`, and `LIVE_NAMES`. Imports no backend. The sound, music and drawing-sound modules are imported lazily inside the functions that need them. |
 | `funground/sketch.py` | The `Sketch` class. It owns the platform, the renderer, the `StateStack`, the `Frame`, the random generators, loop control, pages and saving. `run_namespace()` is the callback loop. Choosing the platform and renderer happens here (`default_platform()`, `default_renderer()`). |
 | `funground/state.py` | `GraphicsState` (frozen: fill, stroke, widths, text settings, blend mode, modes and so on) and `StateStack` (`save`, `restore`, `unwind`). |
@@ -483,7 +483,7 @@ points (`pages.py`) and why a saved PDF has no scale factor to explain.
 
 The v0.5 public names and signatures are an executable contract in
 [`tests/test_api_contract.py`](../../tests/test_api_contract.py) (`V05_FUNCTIONS`). Anything added
-since is in `ADDED_FUNCTIONS`, and `test_public_all_is_exactly_the_contract` fails if `__all__`
+since is in `ADDED_FUNCTIONS`, and `test_public_all_is_exactly_the_contract` fails if `_PUBLIC_NAMES`
 differs from the two lists plus the live values.
 
 - **Adding** a name is allowed. It needs a contract row and an entry in `ADDED_FUNCTIONS`.
@@ -502,7 +502,7 @@ function), Python sets `funground.ragas` to the **module**. That replaces the fu
 the learner's next `f.ragas()` fails with "module is not callable". This happened twice in Sprint 14,
 with `ragas` and `microphone`. The modules were renamed `hindustani.py` and `microphone_input.py`.
 
-Before you add a module, check its name against `__all__`. `sound.py` is safe only because there is no
+Before you add a module, check its name against `_PUBLIC_NAMES`. `sound.py` is safe only because there is no
 public function `f.sound`. When in doubt, give the file a longer name.
 
 ### The layers rule: drawing uses `active_sketch()`, everything else `canvas_sketch()`

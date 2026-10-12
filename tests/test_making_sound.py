@@ -690,7 +690,7 @@ def test_reverb_of_five_seconds_is_quick():
 def test_public_names_exist():
     for name in ("create_sound", "tone", "note", "pluck", "melody", "sequence", "mix",
                  "note_to_frequency", "frequency_to_note"):
-        assert name in f.__all__ and callable(getattr(f, name))
+        assert name in f._PUBLIC_NAMES and callable(getattr(f, name))
 
 
 def test_three_second_tone_is_quick():

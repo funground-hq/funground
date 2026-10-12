@@ -30,7 +30,7 @@ def test_map_range_does_not_shadow_builtins():
 
     import funground
 
-    assert "map" not in funground.__all__ and builtins.map is map
+    assert "map" not in funground._PUBLIC_NAMES and builtins.map is map
 
 
 def test_random_gaussian_and_choice_are_repeatable_with_the_seed():

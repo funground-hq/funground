@@ -43,11 +43,11 @@ decision (for example "S-092, D-041"). Tests and code follow the row, never the 
   `active_sketch()`, so it lands in an open `with f.layer(...)` block. Every other function (size,
   save, input, time, randomness, loop control) calls `canvas_sketch()`.
 - **Name the module carefully.** A new submodule must not share a name with a public function (the
-  naming trap in Architecture). Check the name against `__all__` first.
+  naming trap in Architecture). Check the name against `_PUBLIC_NAMES` first.
 
 ## 3. Make the name public
 
-1. Import the name from `.api` and list it in `__all__` in `funground/__init__.py`.
+1. Import the name from `.api` and list it in `_PUBLIC_NAMES` in `funground/__init__.py` (`__all__`, what `from funground import *` brings in, follows it; a name that is a Python built-in or standard-library module must also go in `STAR_LEAVES_OUT`, D-088).
 2. Add its exact signature to `ADDED_FUNCTIONS` in `tests/test_api_contract.py`.
 
 `test_public_all_is_exactly_the_contract` fails until both are done. A live value (such as
@@ -79,7 +79,7 @@ Make it yours:
 ```
 
 A bullet may carry on over the next lines, indented. Every `f.<name>` in the docstring must be a real
-name in `funground.__all__`, and every `sound.<name>`, `picture.<name>`, `path.<name>` or
+name in `funground._PUBLIC_NAMES`, and every `sound.<name>`, `picture.<name>`, `path.<name>` or
 `microphone.<name>` must be a real method of that kind of object. Write it in plain English. The
 gallery browser and `docs/gallery/README.md` show these parts, so a missing part fails the test.
 
@@ -167,7 +167,7 @@ in prose, American spelling in names.
 
 Add a row to `docs/reference/Quick_Reference.md`: the call, one plain sentence of what it does,
 and an example call. Mark it **New:** for a name added since v0.5. `tests/test_reference.py` checks
-that `f.<name>` appears for every name in `__all__`. If you add a reference sketch under
+that `f.<name>` appears for every name in `_PUBLIC_NAMES`. If you add a reference sketch under
 `examples/reference/`, embed its source word for word in the Quick Reference, and make its picture
 with `tools/make_reference_images.py` (or `... 05_text` for one).
 
@@ -205,7 +205,7 @@ When several builders work at the same time:
   example, "builder A: `music/01` to `music/03`; builder B: `music/04` to `music/06`".
 - **Builders in the same folder never overlap on files.** Work that might overlap goes to a worktree.
 - **Scratch scripts get unique names**, so a builder never runs another's stale helper.
-- **Shared files are merged by the main session**: `funground/__init__.py` (`__all__`),
+- **Shared files are merged by the main session**: `funground/__init__.py` (`_PUBLIC_NAMES`),
   `funground/api.py`, `tests/test_api_contract.py`, the Quick Reference, the CHANGELOG and `AREAS`.
   To merge a worktree, take its new files as they are and merge the shared files by hand. Then run
   the gallery tests twice and `tools/make_gallery.py`. A golden written in a worktree is new evidence:
@@ -222,7 +222,7 @@ over, and expect it afterwards.
   New golden and snapshot files exist only for new gallery examples.
 - [ ] New fields are in `OMIT_WHEN_DEFAULT`; every old snapshot is untouched.
 - [ ] Backend imports are only in their provider; `tests/test_boundaries.py` passes.
-- [ ] `__all__` and `tests/test_api_contract.py` agree.
+- [ ] `_PUBLIC_NAMES` and `tests/test_api_contract.py` agree; `tests/test_global_style.py` passes (no built-in in `__all__`).
 - [ ] Unit tests cover each clause of the contract row, including errors.
 - [ ] The gallery example is original, CC0, and has a golden and a snapshot. Its docstring follows
   the standard (`tests/test_example_docs.py`). The originality check

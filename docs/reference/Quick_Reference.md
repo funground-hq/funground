@@ -20,6 +20,8 @@ The example code is free to copy and use in any way, with no conditions (CC0, `e
 ## 1. The basic idea
 
 Import funground as `f`, define a one-time `setup()`, define a repeating `draw()`, then call `f.run()`.
+(Or start with `from funground import *` and leave out `f.`: every name except `set`, `filter`, `exit` and
+`random`, which are `set_pixel()`, `apply_filter()`, `stop()` and `random_number()` there; see the guide, [Writing without `f.`](../guide/02_the_sketch.md#writing-without-f).)
 
 ![Your first sketch](images/01_first_sketch.png)
 
@@ -585,7 +587,8 @@ f.run()
 |---|---|---|
 | `f.random(high)` | Random floating-point number from 0 up to `high`. | `x = f.random(f.width)` |
 | `f.random(low, high)` | Random floating-point number between `low` and `high`. | `d = f.random(10, 40)` |
-| `f.random_seed(seed)` | make `f.random()` repeatable — the same seed gives the same sequence. Never touches Python's own `random` module. | `f.random_seed(7)` |
+| `f.random_number(high)`, `f.random_number(low, high)` | the same as `f.random()`, under a name that also works after `from funground import *` (where `random` is Python's module). | `x = random_number(width)` |
+| `f.random_seed(seed)` | `f.random()` repeatable — the same seed gives the same sequence. Never touches Python's own `random` module. | `f.random_seed(7)` |
 | `f.constrain(value, low, high)` | Keep a value inside a minimum and maximum. | `x = f.constrain(x, 20, f.width - 20)` |
 | `f.distance(x1, y1, x2, y2)` | Straight-line distance between two points. | `d = f.distance(x, y, f.mouse_x, f.mouse_y)` |
 | `f.map_range(v, a1, b1, a2, b2, clamp=False)` | Re-scale `v` from one range to another. | `f.map_range(f.mouse_x, 0, f.width, 0, 255)` |
@@ -890,6 +893,7 @@ files and Python's own `random` are not covered.
 | `f.get(x, y)` | the colour at one pixel, as a colour object (`.red`, `.green`, `.blue`, `.alpha`), as drawn so far, this frame included. Outside the canvas: transparent black. `x`, `y` are rounded down. On a high-resolution screen it reads the top-left real pixel of a logical one. | `c = f.get(10, 20)` |
 | `f.get(x, y, w, h)` | a new picture copied from that rectangle of the canvas (parts outside are see-through). A picture has `g.get(...)` too. | `part = f.get(0, 0, 50, 50)` |
 | `f.set(x, y, color)` | make one pixel exactly that colour. Any colour form `f.fill()` takes. Ignores fill, stroke, transform, clip, tint, opacity and blend mode. Outside the canvas: nothing. A picture has `g.set(...)` too. | `f.set(10, 20, "red")` |
+| `f.set_pixel(x, y, color)` | the same as `f.set()`, under a name that also works after `from funground import *` (where `set` is Python's own). | `set_pixel(10, 20, "red")` |
 | `f.load_pixels()` | copy the canvas into `f.pixels`. | `f.load_pixels()` |
 | `f.pixels` | a `bytearray` with red, green, blue, alpha (0 to 255, not premultiplied) for every pixel, row by row from the top left. The pixel at (`x`, `y`) starts at index `(y * f.width + x) * 4`. `None` before `f.load_pixels()`. Change the numbers in place; a Python loop over a whole 640 x 400 canvas takes seconds. | `f.pixels[(y * f.width + x) * 4] = 255` |
 | `f.update_pixels()` | write `f.pixels` back onto the canvas, like a `f.set()` of every pixel. An error before `f.load_pixels()`. A picture has `g.load_pixels()`, `g.pixels` and `g.update_pixels()`. | `f.update_pixels()` |
@@ -897,6 +901,7 @@ files and Python's own `random` are not covered.
 | `g.resize(w, h)` | change the picture to `w` x `h` pixels, in place, scaled smoothly. A 0 for one side keeps the shape; both 0, or a negative number, is an error. The drawing history is dropped. | `small.resize(100, 0)` |
 | `g.mask(other)` | multiply the picture's alpha by the alpha of picture `other` (scaled to this size first). The history is dropped. | `photo.mask(hole)` |
 | `f.filter(kind, value=None)` | change everything drawn so far, in place. Kinds: `"threshold"` (0 to 1, default 0.5), `"gray"`, `"opaque"`, `"invert"`, `"blur"` (radius in pixels, default 1), `"posterize"` (2 to 255 levels, required), `"erode"`, `"dilate"`. Alpha is kept, except by `"opaque"`. An unknown kind or a value out of range is a `ValueError`. A picture has `g.filter(...)` too. `"posterize"`, `"erode"` and `"dilate"` are faster with `pip install funground[extras]`; the result is the same. | `f.filter("blur", 3)` |
+| `f.apply_filter(kind, value=None)` | the same as `f.filter()`, under a name that also works after `from funground import *` (where `filter` is Python's own). | `apply_filter("blur", 3)` |
 
 **Rules worth knowing**
 

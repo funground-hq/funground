@@ -20,8 +20,8 @@ In the examples, `import funground as f` is understood.
 - [Play](#play): [`variations`](#fn-variations), [`keep`](#fn-keep)
 - [Pictures and layers](#pictures-and-layers): [`create_graphics`](#fn-create_graphics), [`layer`](#fn-layer), [`hide_layer`](#fn-hide_layer), [`show_layer`](#fn-show_layer)
 - [Images and SVG](#images-and-svg): [`image`](#fn-image), [`image_mode`](#fn-image_mode), [`load_image`](#fn-load_image), [`load_svg`](#fn-load_svg), [`svg_paths`](#fn-svg_paths)
-- [Pixels and filters](#pixels-and-filters): [`get`](#fn-get), [`set`](#fn-set), [`load_pixels`](#fn-load_pixels), [`update_pixels`](#fn-update_pixels), [`filter`](#fn-filter)
-- [Randomness and noise](#randomness-and-noise): [`random`](#fn-random), [`random_choice`](#fn-random_choice), [`random_gaussian`](#fn-random_gaussian), [`random_seed`](#fn-random_seed), [`noise`](#fn-noise), [`noise_detail`](#fn-noise_detail), [`noise_seed`](#fn-noise_seed)
+- [Pixels and filters](#pixels-and-filters): [`get`](#fn-get), [`set`](#fn-set), [`set_pixel`](#fn-set_pixel), [`load_pixels`](#fn-load_pixels), [`update_pixels`](#fn-update_pixels), [`filter`](#fn-filter), [`apply_filter`](#fn-apply_filter)
+- [Randomness and noise](#randomness-and-noise): [`random`](#fn-random), [`random_number`](#fn-random_number), [`random_choice`](#fn-random_choice), [`random_gaussian`](#fn-random_gaussian), [`random_seed`](#fn-random_seed), [`noise`](#fn-noise), [`noise_detail`](#fn-noise_detail), [`noise_seed`](#fn-noise_seed)
 - [Maths](#maths): [`constrain`](#fn-constrain), [`distance`](#fn-distance), [`lerp`](#fn-lerp), [`map_range`](#fn-map_range), [`mag`](#fn-mag), [`norm`](#fn-norm), [`degrees`](#fn-degrees), [`radians`](#fn-radians)
 - [Time](#time): [`year`](#fn-year), [`month`](#fn-month), [`day`](#fn-day), [`hour`](#fn-hour), [`minute`](#fn-minute), [`second`](#fn-second), [`millis`](#fn-millis)
 - [Interaction and controls](#interaction-and-controls): [`key_down`](#fn-key_down), [`cursor`](#fn-cursor), [`no_cursor`](#fn-no_cursor), [`create_button`](#fn-create_button), [`create_checkbox`](#fn-create_checkbox), [`create_slider`](#fn-create_slider)
@@ -2805,6 +2805,29 @@ f.set(10, 20, "red")
 
 See also: [`get`](#fn-get), [`update_pixels`](#fn-update_pixels).
 
+<a id="fn-set_pixel"></a>
+### `f.set_pixel`
+
+```py
+f.set_pixel(x: 'float', y: 'float', color, *more: 'float') -> 'None'
+```
+
+Make one pixel exactly one colour: the same as set().
+
+This name also works after from funground import *, where set is Python's own set() (D-088). Fill, stroke, transform, clip, tint, opacity and blend mode do not apply. Outside the canvas, nothing happens.
+
+| Argument | Meaning |
+|---|---|
+| `x`, `y` | the pixel. |
+| `color` | any colour that fill() takes. |
+| `more` | extra numbers, as for fill(). |
+
+```py
+f.set_pixel(10, 20, "red")
+```
+
+See also: [`set`](#fn-set), [`get`](#fn-get), [`update_pixels`](#fn-update_pixels).
+
 <a id="fn-load_pixels"></a>
 ### `f.load_pixels`
 
@@ -2867,6 +2890,32 @@ f.filter("blur", 3)
 
 See also: [`get`](#fn-get), [`create_graphics`](#fn-create_graphics).
 
+<a id="fn-apply_filter"></a>
+### `f.apply_filter`
+
+```py
+f.apply_filter(kind: 'str', value: 'float | None' = None) -> 'None'
+```
+
+Change everything drawn so far, in place: the same as filter().
+
+This name also works after from funground import *, where filter is Python's own filter() (D-088). Alpha is kept, except by "opaque".
+
+| Argument | Meaning |
+|---|---|
+| `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate". |
+| `value` | for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none. |
+
+**Raises.**
+
+- `ValueError`: the kind is unknown, or the value is out of range.
+
+```py
+f.apply_filter("blur", 3)
+```
+
+See also: [`filter`](#fn-filter), [`get`](#fn-get), [`create_graphics`](#fn-create_graphics).
+
 <a id="randomness-and-noise"></a>
 ## Randomness and noise
 
@@ -2894,6 +2943,30 @@ d = f.random(10, 40)
 ```
 
 See also: [`random_seed`](#fn-random_seed), [`random_choice`](#fn-random_choice), [`random_gaussian`](#fn-random_gaussian), [`noise`](#fn-noise).
+
+<a id="fn-random_number"></a>
+### `f.random_number`
+
+```py
+f.random_number(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'
+```
+
+Return a random number: the same as random().
+
+This name also works after from funground import *, where random is Python's random module (D-088). random_number(10) gives a number from 0 up to 10. random_number(5, 10) gives a number from 5 up to 10. random_number() gives a number from 0 up to 1. random_seed() makes it repeatable.
+
+| Argument | Meaning |
+|---|---|
+| `low` | with one argument, the top of the range (it starts at 0). With high as well, the bottom. |
+| `high` | the top of the range. The default None means low is the top. |
+
+**Returns.** A floating-point number.
+
+```py
+x = f.random_number(f.width)
+```
+
+See also: [`random`](#fn-random), [`random_seed`](#fn-random_seed), [`random_choice`](#fn-random_choice), [`random_gaussian`](#fn-random_gaussian).
 
 <a id="fn-random_choice"></a>
 ### `f.random_choice`
