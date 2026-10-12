@@ -282,8 +282,8 @@ def test_a_finished_mark_cannot_be_changed_and_placing_never_changes_it():
         m.anything = 1
     with pytest.raises(AttributeError):
         del m._ops
-    with pytest.raises(dataclasses.FrozenInstanceError):
-        ops[0].x = 5
+    with pytest.raises(dataclasses.FrozenInstanceError):            # a field of the op, so every Python says so
+        setattr(ops[0], dataclasses.fields(ops[0])[0].name, 5)     # (3.11 and 3.12 raise TypeError for a new name)
     assert isinstance(ops, tuple)
     for i in range(5):
         m.place(20 * i, 30, scale=i + 1, rotate=10 * i, opacity=0.5, anchor="center")
@@ -744,7 +744,7 @@ def test_the_module_never_hides_the_function():
     import funground.marks  # noqa: F401
     assert callable(f.mark) and f.mark is api.mark
     assert marks_module is not f.mark and f.marks is marks_module
-    assert "marks" not in f.__all__ and "mark" in f.__all__
+    assert "marks" not in f._PUBLIC_NAMES and "mark" in f._PUBLIC_NAMES
 
 
 # ================================================================= IR
