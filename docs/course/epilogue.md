@@ -55,7 +55,7 @@ The [Projects](../guide/18_projects.md) are longer guided builds. Try one when y
 
 ## Further material
 
-These sources offer other ways into creative coding and visual design. They are prompts for further study, not templates for the course assignments.
+The course's sequence, explanations, assignments and example code were developed independently for Funground. These optional resources offer other perspectives on art, design and creative coding. Reading or watching them is not required to complete the course.
 
 ### Books and longer reading
 

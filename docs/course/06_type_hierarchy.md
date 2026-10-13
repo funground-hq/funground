@@ -179,7 +179,7 @@ the [API reference](../reference/API.md).
 For further looking, compare a newspaper heading, a book page and an event invitation.
 Describe their type hierarchy and spacing before comparing typefaces.
 [Foundations of Digital Art and Design](https://learning.oreilly.com/library/view/foundations-of-digital/9780135711965/)
-is an optional broader design reference.
+is optional further reading on digital design.
 
 ---
 

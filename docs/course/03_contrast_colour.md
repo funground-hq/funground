@@ -184,7 +184,7 @@ small text needs stronger separation from the background.
 
 Use [Colour](../guide/04_colour.md), [Text](../guide/06_text.md) and the
 [API reference](../reference/API.md) for exact calls. The
-[course epilogue](epilogue.md#further-material) lists the broader reading sources.
+[course epilogue](epilogue.md#further-material) lists optional further reading.
 
 For further practice, collect three limited palettes from daily life. Record the *roles*
 of their colours, not just the colours themselves.
