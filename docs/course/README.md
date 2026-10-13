@@ -1,4 +1,4 @@
-# Creative Thinking Course
+# Creative practice with funground
 
 **Learn to see, choose and make with code.**
 

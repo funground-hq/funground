@@ -1,4 +1,4 @@
-# Creative Thinking Course: originality check
+# Creative practice with funground: originality check
 
 Checked 13 October 2026 after developing all eleven lessons. The 37 downloadable sketches and 19 fenced Python examples were compared with 2,955 corpus units. No pairs were flagged. This is a comparison sample, not proof against every book, video or website.
 
