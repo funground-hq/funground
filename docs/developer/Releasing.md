@@ -79,7 +79,7 @@ TestPyPI, not on PyPI. For another dry run, bump the dev version first (`0.1.0.d
    - `pyproject.toml`: the version without `.devN`, e.g. `0.1.0`;
    - `CHANGELOG.md`: "Unreleased" becomes `0.1.0 — <date>`;
    - `README.md`: the install line is `pip install funground`, and image links are absolute, so they show on PyPI.
-4. **CI:** green on all 12 cells for that commit.
+4. **CI:** green on a release run for that commit (Actions → ci → Run workflow, scope *release*; see [CI_Guidance.md](CI_Guidance.md)).
 5. **Dry run:** "Run workflow" on the commit, if the version was not dry-run before (see the note above).
 6. **Go-ahead:** the maintainer gives it. Then the main session tags and pushes:
    ```text
