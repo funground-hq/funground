@@ -191,7 +191,7 @@ These are not gaps. They are choices, and each one has a reason.
 
 | p5 does | funground does | Why |
 |---|---|---|
-| `camelCase`, top-level global functions | `snake_case`, called through the module: `f.circle(...)` | Python style; the import is `import funground as f` |
+| `camelCase`, top-level global functions | `snake_case`, called through the module: `f.circle(...)`, or with no prefix after `from funground import *` ([Writing without `f.`](02_the_sketch.md#writing-without-f)) | Python style; the guide uses `import funground as f`, the shorter style is yours to choose |
 | `createCanvas(w, h)` opens the window | `f.size(w, h)` | Same idea, funground's name |
 | `map(v, a1, b1, a2, b2)` | `f.map_range(v, a1, b1, a2, b2)` | `map` is a Python built-in; a helper called `map` would hide it |
 | `mouseIsPressed` is the live value; `mousePressed()` is the callback (p5 has to use two different names because JavaScript cannot tell a field from a method with the same name) | `f.is_mouse_pressed` is the live value; `f.mouse_pressed()` is the callback | Same split, `is_` prefix for the boolean |

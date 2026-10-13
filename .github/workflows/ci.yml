@@ -1,31 +1,96 @@
+# CI, spent wisely (D-095, docs/developer/CI_Guidance.md). The full suite runs on the maintainer's
+# machine before every push; GitHub adds only what that machine cannot.
+#
+#   a push or pull request that changes code   Windows, Python 3.11: one job
+#   a push of records or prose                 nothing (the path filters below)
+#   Run workflow, as chosen                    the ticked systems, with the Python versions given
+#   Run workflow, release ticked               the release run: Windows 3.11-3.14, then Linux 3.11-3.14,
+#                                              then macOS 3.11 and 3.14, each after the one before passed
+#
+# Release tags are not tested again here: the tagged commit was tested first, and release.yml
+# smoke-tests the built package on the three systems.
+
 name: ci
 
-on: [push, pull_request]
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "funground/**"
+      - "tests/**"
+      - "examples/**"
+      - "tools/**"
+      - "docs/guide/**"
+      - "docs/reference/**"
+      - "docs/gallery/**"
+      - "pyproject.toml"
+      - ".github/workflows/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "funground/**"
+      - "tests/**"
+      - "examples/**"
+      - "tools/**"
+      - "docs/guide/**"
+      - "docs/reference/**"
+      - "docs/gallery/**"
+      - "pyproject.toml"
+      - ".github/workflows/**"
+  workflow_dispatch:
+    inputs:
+      windows:
+        description: Windows
+        type: boolean
+        default: true
+      linux:
+        description: Linux
+        type: boolean
+        default: false
+      macos:
+        description: macOS (its minutes cost about 10 times Linux's)
+        type: boolean
+        default: false
+      pythons:
+        description: 'Python versions, as a list: ["3.11"] or ["3.11", "3.14"]'
+        type: string
+        default: '["3.11"]'
+      release:
+        description: Release run (every system, one after another; the choices above are ignored)
+        type: boolean
+        default: false
+
+concurrency:                              # a newer push cancels the older run
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        python: ["3.11", "3.12", "3.13", "3.14"]
-    env:
-      SDL_VIDEODRIVER: dummy
-      SDL_AUDIODRIVER: dummy
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python }}
-      - run: sudo apt-get update && sudo apt-get install -y libcairo2-dev pkg-config python3-dev
-        if: runner.os == 'Linux'
-      - run: python -m venv .venv
-      - run: .venv/bin/python -m pip install -e ".[dev]"
-        if: runner.os != 'Windows'
-      - run: .venv/Scripts/python -m pip install -e ".[dev]"
-        if: runner.os == 'Windows'
-      - run: .venv/bin/python -m pytest
-        if: runner.os != 'Windows'
-      - run: .venv/Scripts/python -m pytest
-        if: runner.os == 'Windows'
+  windows:
+    if: github.event_name != 'workflow_dispatch' || inputs.release || inputs.windows
+    uses: ./.github/workflows/tests.yml
+    with:
+      os: windows-latest
+      pythons: >-
+        ${{ inputs.release && '["3.11", "3.12", "3.13", "3.14"]'
+            || github.event_name == 'workflow_dispatch' && inputs.pythons
+            || '["3.11"]' }}
+
+  linux:
+    needs: windows
+    if: >-
+      !cancelled() && !failure() && github.event_name == 'workflow_dispatch'
+      && (inputs.release || inputs.linux)
+    uses: ./.github/workflows/tests.yml
+    with:
+      os: ubuntu-latest
+      pythons: ${{ inputs.release && '["3.11", "3.12", "3.13", "3.14"]' || inputs.pythons }}
+
+  macos:
+    needs: [windows, linux]
+    if: >-
+      !cancelled() && !failure() && github.event_name == 'workflow_dispatch'
+      && (inputs.release || inputs.macos)
+    uses: ./.github/workflows/tests.yml
+    with:
+      os: macos-latest
+      pythons: ${{ inputs.release && '["3.11", "3.14"]' || inputs.pythons }}

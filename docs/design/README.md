@@ -31,6 +31,7 @@ rewritten after acceptance.
 | [Typography_Note.md](Typography_Note.md) | Fonts, styles, tracking, OpenType features, variations, mixed text. | You change text settings or `FormattedString`. |
 | [PDF_Text_Note.md](PDF_Text_Note.md) | Real, searchable text in PDFs, by marker groups and pypdf. | You touch `export/pdf_text.py` or a PDF text bug. |
 | [Text_In_Files_Note.md](Text_In_Files_Note.md) | Live, editable `<text>` in SVG files, with font names and embedded subsets. | You touch `export/svg_text.py` or hand files to Illustrator or Inkscape. |
+| [Colour_For_Print_Note.md](Colour_For_Print_Note.md) | `f.cmyk()` colours as exact CMYK in PDFs, by stand-in colours and pypdf; RGB tagged as sRGB. | You touch `export/cmyk.py`, `export/pdf_colour.py` or colour in PDFs. |
 | [Layers_Note.md](Layers_Note.md) | `f.layer()` as pictures on screen and as real layers in PDF and SVG. | You touch layers, `active_sketch()` or `export/layers.py`. |
 | [Compositing_Note.md](Compositing_Note.md) | Colour modes, gradients, blend modes, opacity and shadows. | You touch colour, paint or compositing. |
 | [Paths_Note.md](Paths_Note.md) | Paths, drawing modes, booleans, rounded corners. | You touch `geometry.py`, `paths.py` or `pathops.py`. |
@@ -41,6 +42,10 @@ rewritten after acceptance.
 | [Music_Analysis_Note.md](Music_Analysis_Note.md) | Onsets, tempo, beats, chroma, chords and key. | You touch `analysis.py` or the rhythm and harmony methods. |
 | [Ragas_Note.md](Ragas_Note.md) | Ragas and talas: sources, methods and limits. | You touch `hindustani.py` or `data/ragas.json`, or add a raga. |
 | [Browser_Mode_Note.md](Browser_Mode_Note.md) | Research: funground in a web browser. Directional, not in 0.1. | Someone asks for a browser version. |
+| [Web_Target_Options.md](Web_Target_Options.md) | Options study for 0.2 on the web: inventory, five architectures, spikes, open decisions. Nothing decided. | You plan web work for 0.2. |
+| [Loop_Inversion_Note.md](Loop_Inversion_Note.md) | The run loop as start/step/finish, so a browser page can drive it (S-060, D-074). | You touch `Sketch.run_namespace`, `start`, `step` or `finish`, or a platform's `tick()`. |
+| [Web_Runner_Note.md](Web_Runner_Note.md) | The 0.2 web runner: BrowserPlatform, the `funground.web` host API, the worker, origins and safety. | You touch `funground/web.py`, `platform/browser.py` or the browser runner. |
+| [Editor_Note.md](Editor_Note.md) | The one-page editor and the learner's GitHub sketchbook: experience, security, save permission (D-079). | You build the Play page, the editor or the sketchbook template. |
 
 ## Research and history
 

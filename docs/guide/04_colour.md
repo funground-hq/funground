@@ -145,6 +145,21 @@ A single number is a grey, and two numbers are a grey and its opacity. They are 
 range of the mode, so `f.fill(128)` is mid grey in the default mode, and in `"hsb"` mode it is a
 brightness of 128 out of 100, which is white. Ranges must be above 0, or you get an error.
 
+## Colour for print: CMYK
+
+A printer mixes cyan, magenta, yellow and black ink. `f.cmyk(c, m, y, k)` makes a colour from those four inks, each from 0 to 100 percent:
+
+```py
+f.fill(f.cmyk(0, 80, 100, 0))       # an orange-red
+f.stroke(f.cmyk(0, 0, 0, 100))      # pure black ink
+```
+
+Use it anywhere a colour goes: fill, stroke, background, text, gradients, shadows. Save a PDF and the file holds exactly your four numbers, so the print shop gets your ink and not a guess.
+
+A screen cannot show ink. On the screen, in a PNG and in an SVG, a CMYK colour is drawn as the nearest red, green and blue, by a simple sum: red is 255 x (1 - cyan) x (1 - black), and the same for green and blue. It is an approximation. A press mixes ink in its own way, so the screen will not match the print exactly. Ask your print shop which numbers they want. Chapter 13 says what to ask, and how to add a bleed and crop marks: [Preparing a file for print](13_saving_your_work.md#preparing-a-file-for-print). Most print shops are happy with RGB, so use `f.cmyk()` when a shop asks for CMYK.
+
+Pictures stay RGB. A picture is pixels, and funground does not turn pixels into ink. A PDF also tags every RGB colour as sRGB, so the file says what its red, green and blue mean.
+
 ## Gradients
 
 A gradient blends colours smoothly. Make one, then use it anywhere a colour goes: in

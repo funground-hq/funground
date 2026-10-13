@@ -1,0 +1,22 @@
+# Once a week: the test suite with the newest library versions inside pyproject.toml's bounds, which is what a
+# learner installing funground today gets (D-100). CI's other runs use the pinned versions in tests/constraints.txt,
+# so this is the run that finds a library's breaking release before learners do. When it fails, look at which
+# version moved (the install step prints them all), then fix funground or lower the bound, and update the pins.
+#
+# One Windows job on the newest Python: about 8 minutes, about $0.35 a month at list price (CI_Guidance.md).
+# GitHub runs a schedule from the default branch only, and emails the person who last changed this file when it fails.
+
+name: newest versions
+
+on:
+  schedule:
+    - cron: "23 4 * * 1"          # Mondays at 04:23 UTC
+  workflow_dispatch:
+
+jobs:
+  windows:
+    uses: ./.github/workflows/tests.yml
+    with:
+      os: windows-latest
+      pythons: '["3.14"]'
+      newest: true

@@ -29,7 +29,7 @@ video and audio drivers before pygame is imported.
 | Motion export | GIF and MP4 files, with Pillow and with a fake ffmpeg | `tests/test_motion.py` | all |
 | Text and layers in files | PDF text and SVG text read back; layers as optional content groups and Inkscape groups, drawn again with pdfium | `tests/test_pdf_text.py`, `tests/test_svg_text.py`, `tests/test_layer_files.py`, `tests/test_layers.py` | all (`pypdfium2` from the `dev` extra) |
 | Quick Reference | Every public name appears in the reference; each reference sketch is embedded verbatim | `tests/test_reference.py` | all |
-| Coverage of public names | `__all__` equals the contract; every name has a gallery example and a reference entry | `test_api_contract.py`, `test_gallery.py`, `test_reference.py` | all |
+| Coverage of public names | `_PUBLIC_NAMES` equals the contract; every name has a gallery example and a reference entry | `test_api_contract.py`, `test_gallery.py`, `test_reference.py` | all |
 | Boundaries | Backend libraries are imported only by their provider | `tests/test_boundaries.py` | all |
 | Tools | The originality checker and the gallery browser (`funground/gallery.py`) | `test_check_originality.py`, `test_gallery_browser.py` | all |
 | Gallery in the package | The examples, data, pictures and CC0 licence are in the wheel; the locator works from a checkout and an installed layout; Copy never overwrites | `test_gallery_package.py` (builds a wheel, about 10 s, needs the `build` package from the `dev` extra) | all |
@@ -106,7 +106,7 @@ behaviour.
 ### The public API contract
 
 For a new public name, add its signature to `ADDED_FUNCTIONS` in `tests/test_api_contract.py`.
-`__all__` in `funground/__init__.py` must match the contract exactly, or
+`_PUBLIC_NAMES` in `funground/__init__.py` must match the contract exactly, or
 `test_public_all_is_exactly_the_contract` fails.
 
 ### A golden and an IR snapshot (gallery examples)
@@ -198,28 +198,32 @@ fragment you only want to show. The guide's contents page must list every chapte
 
 ## The CI matrix
 
-`.github/workflows/ci.yml` runs on every push and pull request:
+`.github/workflows/ci.yml` runs the suite in stages, so that GitHub's minutes go only where your own
+machine cannot reach ([CI_Guidance.md](CI_Guidance.md) has the reasons and the costs):
 
-| Axis | Values |
+| When | Jobs |
 |---|---|
-| Operating system | Windows, Ubuntu, macOS (the `windows-latest`, `ubuntu-latest` and `macos-latest` runners) |
-| Python | 3.11, 3.12, 3.13, 3.14 |
+| A push or pull request that changes code, tests, examples, tools, the guide, the reference, the gallery or a workflow | Windows, Python 3.11 |
+| A push of records or prose only | none |
+| *Run workflow*, as chosen | the ticked systems, with the Python versions given |
+| *Run workflow* with *release* ticked | Windows 3.11–3.14, then Linux 3.11–3.14, then macOS 3.11 and 3.14, each stage only after the one before has passed |
 
-That is 12 cells, with `fail-fast` off, so one failing cell does not hide the others. Each cell
-makes a virtual environment, installs `pip install -e ".[dev]"` and runs `pytest` with the SDL dummy
-drivers. Goldens are compared only on the Windows cells.
+Each job (`.github/workflows/tests.yml`) installs `pip install -e ".[dev]" -c tests/constraints.txt`
+(the pinned library versions) and runs
+`pytest --timeout=300` with the SDL dummy drivers, within 30 minutes. Goldens are compared only on
+Windows; the pictures that differ are kept for 7 days as an artifact of the run.
 
 **The Linux Cairo step.** On Ubuntu, `pycairo` has no wheel and must be built, so the Linux cells first
 run `sudo apt-get update && sudo apt-get install -y libcairo2-dev pkg-config python3-dev`. Without it
 `pip install` fails with a Cairo error. Windows and macOS need no extra step (the macOS README line
 `brew install cairo pkg-config` is for a local build only). The `dev` extra brings pytest, Pillow,
-pypdfium2, imageio-ffmpeg and build, so the PDF, GIF, MP4 and wheel tests all run in CI.
+pytest-timeout, pypdfium2, imageio-ffmpeg and build, so the PDF, GIF, MP4 and wheel tests all run in CI.
 
 The release workflow, `.github/workflows/release.yml`, is separate. It builds the package, publishes it to
 TestPyPI and runs a **smoke test** on Windows, macOS and Linux from the installed package (draw, save
 PDF, SVG and PNG, read the PDF's text, make a sargam melody, list the gallery). See
 [Releasing.md](Releasing.md).
 
-A change is done when the whole suite is green on the matrix
-([PROCESS](../PROCESS.md), "Definitions"). Locally you can only run your own cell, so keep the
+A change is done when the whole suite is green locally and on the everyday CI job, and a release
+when it is green on the release run ([PROCESS](../PROCESS.md), "Definitions"). Locally you can only run your own cell, so keep the
 code free of anything system-specific.

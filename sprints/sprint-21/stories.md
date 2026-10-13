@@ -1,0 +1,44 @@
+# Sprint 21 — typographic, print-ready posters
+
+**Dates:** started 11 October 2026 (the maintainer chose to start before Sprint 20 is signed off; its review follows). On `release-0.2-web`
+(a library feature; it ships with 0.2, D-086). Epic **E-32**.
+
+**Goal:** a learner can set a typographic poster in funground (justified and hyphenated text, type on a
+curve, a headline fitted to its width) and hand a print shop an A-size PDF with bleed and crop marks, or a
+300 dpi PNG. Gaps found in the 11 October review of poster support.
+
+**Decisions:** D-085 = soft hyphens only for now (no dependency); D-086 = released with 0.2 (both accepted
+11 October 2026). API names follow D-034 (DrawBot's model where it fits, decided in each story and recorded as
+contract rows).
+
+| Story | Value | Status |
+|---|---|---|
+| S-159 | Justified text: `f.text_align("justify")` in `text_box` (the last line of a paragraph stays left), for strings and FormattedStrings | done: `"justify"` in `text_align` (T22); a stretched line is a `Text` op with `word_spacing`; example `text-12_justified_columns` |
+| S-160 | Hyphenation by soft hyphens: `text_box` may break a word where the learner typed a soft hyphen (U+00AD, or `"\u00ad"` in Python), showing a hyphen there and nothing elsewhere; works with justify (D-085 = a) | done (T23): the shaper drops U+00AD, `text_box` breaks at the last soft hyphen that fits; same example |
+| S-161 | Type on a path: `f.text_on_path(message, path, offset=0)` sets letters along any path (a circle, a wave), each turned to the curve; live text in PDF and SVG | done (T24): letters centred on the path by arc length, turned to the tangent, current vertical alignment applied across it; overflow returned; live text per letter in PDF and SVG; example `text-13_text_on_a_path` |
+| S-162 | A headline that fits: `f.fit_text_size(message, width, height=None)` returns the size that makes the text fill the width (and fit the height) with the current font, features and tracking | done: `f.fit_text_size(message, width, height=None)` (T21), example `text-11_fitted_headline` |
+| S-163 | Print resolution: `f.save("poster.png", dpi=300)` writes a page at that resolution (A3 at 300 dpi), in scripts and animated sketches, on the desktop and in the browser | done (D3): redrawn at dpi/72, pHYs written, 120-megapixel limit; funground's A3 is 842 x 1191 pt, so 3508 x 4963 px (true A3 would be 4961) |
+| S-164 | Print-ready PDF: `f.save("poster.pdf", bleed=f.mm(3), marks=True)` adds the bleed, crop marks and the PDF's TrimBox and BleedBox; `f.mm()` and `f.inch()` give lengths in points | done (D2): bleed, crop marks (RGB black until S-170), TrimBox and BleedBox; `f.mm`/`f.inch` already existed |
+| S-165 | Spike: CMYK and PDF/X for print shops. Can funground write CMYK (or a PDF/X file a print shop accepts) without a heavy dependency? Criteria set before the work; a recommendation | done (`spikes/11_cmyk/RESULTS.md`): RGB to CMYK by pypdf rewrite works but is not colour-managed; Pillow's littleCMS works on the desktop, not in Pyodide; no CMYK profile can be bundled; sRGB tagging plus an output intent is safe. Decision D-087 proposed |
+| S-171 | Fractional text sizes: `f.text_size(143.7)` keeps the fraction (the `int()` is a pygame-era leftover), so fitted headlines are exact and animated type grows smoothly; the outline cache keyed so many distinct sizes stay fast (measured before and after); affected references regenerated on purpose | done: sizes keep fractions (T3, T21); shaping cached once per text and rescaled per size, no size in the run-cache key; benchmark (400 letters, 120 frames) whole 2.4-2.7 s, fractional 2.4-2.6 s (was 5.1 s); regenerated: text-11_fitted_headline (golden, snapshot), projects-05_typographic_portrait (golden) |
+| S-170 | CMYK colour model (D-087): `f.cmyk(c, m, y, k)` in percentages (no colour mode: D-017); PDFs carry exact DeviceCMYK for those colours (fills, strokes, text, gradients, opacity); screen, PNG and SVG show an approximation; RGB colours tagged as sRGB with an output intent; crop marks in registration colour | done (S17, D4, D5): `f.cmyk()`; exact DeviceCMYK in PDFs via stand-in colours swapped after Cairo, checked by a read-back scan (a failed rewrite deletes the file and raises); RGB tagged sRGB with an output intent (a generated 588-byte profile); marks in registration; example `colour-05_cmyk_poster` |
+| S-166 | Teaching: guide sections (justified columns, type on a path, fitted headlines, preparing a file for print), four gallery examples, and the "Event poster series" project made print-ready | done: chapter 6 (fitted headlines, justified text and soft hyphens, type on a path), chapter 13 "Preparing a file for print", Event posters stage 4 (print-ready A3), glossary entries; the four gallery examples came with their stories |
+
+Acceptance for the sprint: the full suite green; each story's contract row(s) pinned; goldens added for the
+new drawing (justified box, hyphenated box, text on a circle); a 300 dpi A3 PNG and a bleed-and-marks PDF
+checked by test (sizes, boxes, marks); every new function in the Quick Reference and the guide; the new
+examples run in the browser editor too.
+
+Order: S-162 and S-164 first (small, no dependency, immediately useful), then S-159 and S-160 (line
+breaking), S-161, S-163, S-166 last; S-165 runs alongside (a spike, no product code).
+
+- [x] S-159
+- [x] S-160
+- [x] S-161
+- [x] S-162
+- [x] S-163
+- [x] S-164
+- [x] S-165
+- [x] S-171
+- [x] S-170
+- [x] S-166

@@ -82,6 +82,61 @@ self.frame / self._renderer                          the current page, live
 1920 by 1080) and `_page_full`. No window opens. `show()` then calls `open_full_screen`. The flag
 is kept per page in `_pages_full`.
 
+## Bleed and crop marks (S-164, D2)
+
+`f.save("poster.pdf", bleed=f.mm(3), marks=True)` writes pages bigger than the canvas. The canvas is the
+*trim*, the size of the finished piece. The code is `funground/export/printing.py`.
+
+- **The mechanism: a bigger surface and an offset.** For each page, the PDF surface is `margin` larger on
+  every side (`margin` = the bleed, plus the slug when there are marks). The context is moved by
+  `(margin, margin)` before the frame is replayed. The learner's coordinates do not change, so drawing at
+  `-5` or at `width + 5` lands in the bleed. Nothing in the frame, the IR or the renderer's op code knows.
+- **The bleed box is a clip.** The drawing is clipped to the trim grown by the bleed. So `background()`
+  (a `Clear`, which paints the whole surface) fills the bleed and leaves the slug white, and a rectangle
+  drawn too far does not leak into the marks. `no_clip()` and `Clear` lift the learner's clip, so the
+  renderer goes back to this box, not to the whole sheet (`CairoRenderer.clip_box`, `_reset_clip`).
+- **Marks.** Eight lines of 0.25 pt, 5 mm long, drawn after the page, outside the clip. Each starts 1 mm
+  beyond the bleed edge, so it never touches the bleed. The slug (1 mm + 5 mm) is added to the margin
+  only when `marks=True`. The marks are in registration colour, `cmyk(100, 100, 100, 100)`
+  (S-170, contract D5), so a PDF holds them as `1 1 1 1 K`; see `Colour_For_Print_Note.md`.
+- **The boxes come last.** Cairo has no TrimBox call, so the file is rewritten with pypdf after the text
+  and layer steps (`write_print_boxes`): MediaBox = the sheet (already set by the surface), TrimBox = the
+  canvas, BleedBox = the trim grown by the bleed. Those steps clone the page dictionaries, so they would
+  keep the boxes; running it last needs no such assumption. Unlike the text and layer steps, it is never
+  skipped on failure: a file asked to be print-ready that is not would be worse than an error.
+- **Every page** of a multi-page document gets the same bleed and marks, each at its own size.
+- **PDF only.** PNG and SVG with `bleed` or `marks` is a `ValueError`. With `bleed=0, marks=False` nothing
+  changes: the code path is not entered and the file is byte-identical to before.
+- **Under a host** (the browser runner) it is the same code: pypdf and Cairo run there as on the desktop.
+- Tests: `tests/test_print_pdf.py` (boxes read back with pypdf; what is where read back with pdfium).
+
+## Print resolution (S-163, D3)
+
+`f.save("poster.png", dpi=300)` is a different mechanism from the plain PNG. A plain PNG is the pixels
+already on the canvas's surface (so it holds what earlier frames left there). A PNG with `dpi` is
+`save_frame(..., dpi=)`: the page's ops are replayed onto a new surface at `dpi / 72` pixels to the point,
+the same replay a PDF uses. So it is sharp, not an enlarged screen picture. The code is in
+`funground/export/__init__.py` (`check_dpi`, `pixel_size`, `check_png_size`, `_png_with_resolution`).
+
+- **Pixel size.** `points x dpi / 72`, rounded to the nearest pixel, a half going up (`round()` in Python
+  rounds halves to even, which would make 4962.5 and 4963.5 differ in direction). The scale stays exactly
+  `dpi / 72`; the last partial pixel is cut, not stretched. `f.page_size("A3")` (842 x 1191) is 3508 x 4963.
+- **pHYs.** Cairo cannot write the chunk, so the PNG is written to memory and a 9-byte chunk is put after
+  the header (`round(dpi / 0.0254)` pixels per metre, unit 1). 300 dpi is 11811.
+- **Memory.** Cairo needs 4 bytes a pixel. The limit is 120 million pixels (480 MB), checked from the size
+  alone, before any surface is made: when `save()` is called (the canvas, and each earlier page of a
+  document) and again inside `save_frame`. A1 at 300 dpi fits; A0 does not. The error names the size and
+  the limit and suggests a PDF.
+- **Scripts, pages, animated sketches.** A script writes at once. Several pages write numbered files, each at
+  `dpi`. An animated sketch queues the save to the end of the frame like any other (`_PendingSave`), and the
+  file holds *this frame's* ops, as a PDF does, not what earlier frames left on the canvas. A sketch that
+  never clears its canvas and builds the picture over many frames should save the plain PNG, or draw it
+  in one frame.
+- **Raster in the page.** Images, `set()` pixels, `filter()` results and layer pictures are replayed as
+  they are: they keep the resolution they were made at. Only vectors gain pixels.
+- **Under a host.** The same code runs in the browser runner, which writes into its own virtual folder.
+- Tests: `tests/test_print_resolution.py`.
+
 ## Alternatives rejected
 
 - **Setup-only sketches (D-029 A)** and **A plus scripts (B)**: option D has no setup-only form.
@@ -121,6 +176,6 @@ also keeps a full copy of its pixels.
 
 ## Tests
 
-`tests/test_script_mode.py` (R13 to R15, exit hint), `tests/test_pages.py` (R16, R17, D1, page
+`tests/test_print_pdf.py` (D2) and `tests/test_print_resolution.py` (D3), `tests/test_script_mode.py` (R13 to R15, exit hint), `tests/test_pages.py` (R16, R17, D1, page
 reading with `/MediaBox` checks), `tests/test_script_mode.py` (full screen and the memory measurement, S-085), `tests/test_window.py` (R12). Sprint 8 review:
 [sprint-08/review.md](../../sprints/sprint-08/review.md).

@@ -162,6 +162,30 @@ def surface_from_frame(frame) -> pygame.Surface:
     return pygame.image.frombuffer(data, size, "RGB")
 
 
+# The weekly run with the newest library versions (D-100, .github/workflows/newest.yml) sets this. A new Cairo can move
+# anti-aliased edges by a few steps (pycairo 1.29.2: at most 17 of 255, on 0.36% of the pixels): invisible, and not
+# what that run is for. Everywhere else a golden is exact.
+GOLDEN_TOLERANCE = os.environ.get("FUNGROUND_GOLDEN_TOLERANCE") == "1"
+TOLERANCE_STEP = 32            # largest difference in one channel, of 255 (measured: 17 on a rotated edge)
+TOLERANCE_SHARE = 0.01         # share of the pixels that may differ at all
+
+
+def golden_matches(expected: bytes, actual: bytes) -> bool:
+    """True when two RGB frames are the same picture: byte for byte, or within the tolerance above when it is on."""
+    if expected == actual:
+        return True
+    if not GOLDEN_TOLERANCE or len(expected) != len(actual):
+        return False
+    changed = 0
+    for i in range(0, len(expected), 3):
+        a, b = expected[i:i + 3], actual[i:i + 3]
+        if a != b:
+            if max(abs(x - y) for x, y in zip(a, b)) > TOLERANCE_STEP:
+                return False
+            changed += 1
+    return changed <= TOLERANCE_SHARE * len(expected) / 3
+
+
 def assert_json_documents_close(
     actual, expected, *, rel_tol: float = 1e-12, abs_tol: float = 1e-9
 ) -> None:

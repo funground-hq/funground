@@ -234,6 +234,99 @@ posters, with layers and real text), `poster.svg` (live text) and `poster_final.
 shapes). A note on the poster says where the files went. Run it, then open the files in a PDF
 viewer or in Inkscape.
 
+The designer saves files you can look at and share. To print the posters, go on to Stage 4.
+
+## Stage 4: make it print-ready
+
+You have posters on the screen and files to share. Now suppose the school wants them **printed**, on
+big A3 sheets, by a print shop. A print shop cuts the paper after printing, so it needs a little extra
+picture past the edge (a **bleed**) and lines that show where to cut (**crop marks**). Chapter 13 has
+a section, [Preparing a file for print](../13_saving_your_work.md#preparing-a-file-for-print), that
+explains both. This stage uses it.
+
+A printed series is a good job for a **script**, because a script can have many pages. This one
+draws every event on its own A3 page and saves one PDF.
+
+```python
+import os
+import tempfile
+
+import funground as f
+
+EVENTS = [
+    {"title": "BOOK FAIR", "date": "Sat 14 March, 10 am", "colour": (38, 70, 140)},
+    {"title": "MUSIC NIGHT", "date": "Fri 21 March, 7 pm", "colour": (20, 90, 90)},
+    {"title": "SPRING MELA", "date": "Sun 30 March, 11 am", "colour": (170, 40, 90)},
+]
+BLEED = f.mm(3)                         # the strip past the edge that the blade may cut into
+MARGIN = f.mm(20)                       # keep words well inside the page
+
+f.size("A3")                            # 842 x 1191 points: the finished page
+
+
+def poster(event):
+    w, h = f.width, f.height
+    f.no_stroke()
+    f.fill(f.linear_gradient(0, 0, 0, h, [event["colour"], (120, 70, 170)]))
+    f.rect(-BLEED, -BLEED, w + 2 * BLEED, h + 2 * BLEED)     # runs into the bleed
+    f.fill(255, 196, 61)
+    f.circle(w / 2, h * 0.52, w * 0.85)
+
+    f.fill(255)
+    f.text_style("bold")
+    f.text_align("left", "top")
+    width = w - 2 * MARGIN
+    f.text_size(f.fit_text_size(event["title"], width, 260))   # fills the width, up to 260 tall
+    f.text(event["title"], MARGIN, MARGIN)
+
+    f.text_style("normal")
+    f.fill(255)
+    f.text_align("center", "top")
+    f.text_size(36)
+    f.text(event["date"], w / 2, h - 2 * MARGIN)
+
+
+for number, event in enumerate(EVENTS):
+    if number:
+        f.new_page()                    # the same size again
+    poster(event)
+
+folder = tempfile.mkdtemp()
+f.save(os.path.join(folder, "events_print.pdf"), bleed=BLEED, marks=True)
+print("one PDF with", f.page_count(), "pages in", folder)
+f.show()
+```
+
+What is new:
+
+- **A3 pages.** `f.size("A3")` is the finished size, the trim. `f.new_page()` starts the next
+  poster at the same size.
+- **Bleed.** The gradient and the sun are drawn from `-BLEED`, past the page's edge. That strip is
+  not on the screen. In the PDF it is the extra picture the blade can cut into.
+- **Crop marks.** `marks=True` adds them in the corners, outside the bleed.
+- **A fitted headline.** `f.fit_text_size(title, width, 260)` makes each title fill the page's
+  width, whether it is "BOOK FAIR" or "SPRING MELA". Short words stop at 260 points tall. See chapter 6.
+- **Safe margins.** Keep words and logos inside `MARGIN`. The edge of a poster can be cut a little off.
+
+**Optional: CMYK.** Ask the print shop whether they want CMYK. If so, change the colours in the
+list to `f.cmyk()` colours, such as `f.cmyk(100, 80, 10, 10)` for a deep blue, and the sun to
+`f.cmyk(0, 25, 90, 0)`. The PDF then holds exactly your inks. (Your screen shows the nearest match.) Black words
+are best as `f.cmyk(0, 0, 0, 100)`. If they say RGB is fine, change nothing.
+
+```py
+EVENTS = [
+    {"title": "BOOK FAIR", "date": "Sat 14 March, 10 am", "colour": f.cmyk(100, 80, 10, 10)},
+    # ...
+]
+f.fill(f.cmyk(0, 25, 90, 0))        # the sun
+```
+
+A gradient between two `f.cmyk()` colours stays CMYK. A gradient that mixes one with an ordinary
+colour is turned into inks by funground, so the file is all CMYK.
+
+If the shop wants a picture and not a PDF, save a page as a PNG with `dpi=300`. A script with several
+pages writes one file for each page, numbered after your file name: `events_1.png`, `events_2.png` and so on.
+
 ## Challenge cards
 
 - **Can you** add a fourth event, with its own colours? You should only have to change the list.
@@ -241,6 +334,7 @@ viewer or in Inkscape.
 - **Can you** add a slider for the size of the confetti?
 - **Can you** add a layer called "notes" with a reminder for the person who prints the poster?
   Hide it so it is in the file but not on the page.
+- **Can you** make the print version in A4 as well as A3? Only the size in `f.size()` should change.
 - **Can you** save a landscape poster as well? A script can give `new_page` two different sizes.
 
 ## Credits and ideas

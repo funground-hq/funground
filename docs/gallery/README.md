@@ -5,8 +5,6 @@ regenerates them. Each example is a complete sketch: copy it into a file and run
 
 Browse these examples interactively: `python -m funground.gallery`
 
-Short on time? See the [showcase](SHOWCASE.md): a dozen of the best pictures on one page.
-
 ## Basics
 
 ### Your first sketch
@@ -98,6 +96,35 @@ Not every picture moves. A script has no functions: f.size() makes the canvas, t
 </details>
 
 Source: [`examples/gallery/basics/03_a_script.py`](../../examples/gallery/basics/03_a_script.py)
+
+### Writing without f.
+
+![Writing without f.](images/basics-04_without_f.png)
+
+The same kind of sketch as the others, written in the shorter style: from funground import * brings every funground name into the file, so circle() needs no f. in front. A night sky of single-pixel stars, a moon that rises frame by frame, and a soft glow over everything.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- from funground import * at the top replaces import funground as f. Then size(), circle() and the rest are written on their own, and so are width, height and frame_count, which funground keeps up to date for you.
+- Four funground names are left out, because they would hide Python's own: set, filter, exit and random. This style uses their other names, which work with f. too: set_pixel(), apply_filter(), stop() and random_number().
+- random_seed(5) in setup() makes random_number() give the same sky every time.
+- set_pixel() makes one pixel a colour: each star is one pixel.
+- apply_filter("blur", 2) softens everything drawn before it, so the moon glows. The stars come after it, so they stay sharp.
+- run() at the bottom starts the sketch, as f.run() does.
+
+**Make it yours**
+
+- Change STARS for a busier or emptier sky.
+- Change the 2 in apply_filter("blur", 2), or try apply_filter("invert").
+- Give every star a random colour: set_pixel(x, y, random_number(255), 200, 255).
+- Rewrite another gallery example in this style.
+
+</details>
+
+Source: [`examples/gallery/basics/04_without_f.py`](../../examples/gallery/basics/04_without_f.py)
 
 ## Shapes
 
@@ -334,6 +361,36 @@ f.color_mode() changes how a tuple of numbers is read as a colour. In "hsb" mode
 </details>
 
 Source: [`examples/gallery/colour/04_color_mode.py`](../../examples/gallery/colour/04_color_mode.py)
+
+### A print poster in CMYK
+
+![A print poster in CMYK](images/colour-05_cmyk_poster.png)
+
+A two-ink poster for a printer. Every colour comes from f.cmyk(), so the PDF it saves holds exactly the ink amounts written here: no red, green or blue. The picture on the screen is an approximation.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.cmyk(cyan, magenta, yellow, black) makes a colour from four inks, each from 0 to 100 percent. f.cmyk(0, 85, 100, 0) is a warm red: no cyan, a lot of magenta and yellow, no black.
+- The poster uses two inks and paper. The red ink is f.cmyk(0, 85, 100, 0). The blue ink is f.cmyk(100, 75, 0, 20). The paper is f.cmyk(0, 0, 6, 0), a little yellow. A lighter amount of an ink is a tint: f.cmyk(0, 28, 34, 0) is the red ink at about a third, and it makes the big circle.
+- f.blend_mode("multiply") lets the blue stripes darken the red ink where they cross it, as two layers of ink do on paper.
+- The band at the bottom is a gradient between the two inks. A gradient takes cmyk colours as stops, and the PDF keeps it as a CMYK gradient.
+- The headline is black ink, f.cmyk(0, 0, 0, 100), the one that text should be in print.
+- f.save("cmyk_poster.pdf", bleed=f.mm(3), marks=True) adds a 3 mm bleed and crop marks. The marks are in registration colour, all four inks at 100 percent. The save is inside if f.frame_count == 0, so it happens once.
+
+**Make it yours**
+
+- Change the red ink to f.cmyk(0, 60, 100, 0) for an orange.
+- Change the numbers in the tint, f.cmyk(0, 28, 34, 0), to make the circle paler or stronger.
+- Take out f.blend_mode("multiply") and see the stripes cover the circle instead.
+- Change the words "OPEN DAY" and "Saturday, 12 March".
+- Add a third ink, such as f.cmyk(100, 0, 100, 0), for a green leaf shape.
+
+</details>
+
+Source: [`examples/gallery/colour/05_cmyk_poster.py`](../../examples/gallery/colour/05_cmyk_poster.py)
 
 ## Blending, opacity and shadows
 
@@ -863,6 +920,91 @@ No font has every letter. When the font you use lacks one, funground draws it fr
 </details>
 
 Source: [`examples/gallery/text/10_fallback.py`](../../examples/gallery/text/10_fallback.py)
+
+### A headline that fills its width
+
+![A headline that fills its width](images/text-11_fitted_headline.png)
+
+Each word of this poster fills the column, as big as its band of the page allows. f.fit_text_size() works out the size that makes a text a given width, with the font, style and tracking you have set, and keeps it within a height if you give one.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.fit_text_size(word, width) returns a text size. Setting f.text_size() to it makes the word that wide.
+- Long words are limited by the width, so SOMETHING spans the column.
+- Short words would grow taller than the page, so each word also gets a height: its share of the page, BAND. f.fit_text_size(word, width, BAND) picks the largest size that respects both.
+- The size depends on the font and style: the words are bold, the tagline uses a wide tracking.
+- The thin lines show the column's edges.
+
+**Make it yours**
+
+- Change the words in WORDS, or add more.
+- Change MARGIN to make the column narrower or wider, or BAND to give the words more height.
+- Try f.text_style("italic") or a font of your own with f.load_font() before fitting.
+- Change f.text_tracking(6) on the last line and see the size change to keep the width.
+
+</details>
+
+Source: [`examples/gallery/text/11_fitted_headline.py`](../../examples/gallery/text/11_fitted_headline.py)
+
+### Justified columns with hyphens
+
+![Justified columns with hyphens](images/text-12_justified_columns.png)
+
+A poster column with two straight edges. f.text_align("justify") stretches the spaces of each line so that the words reach both sides, and soft hyphens let long words break at the end of a line.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.text_align("justify") works in f.text_box(). Every line is stretched to the box's width by making the spaces between words wider. The letters are never changed.
+- The last line of a paragraph stays on the left, and so does a line with one word in it.
+- A soft hyphen is a character you cannot see: "\u00ad" in Python. A long word may break there, and a hyphen is drawn only at the end of a line that breaks there. Where the word is not broken, nothing shows.
+- This sketch writes the soft hyphens as "|" in the story, to make it easy to read, and swaps every "|" for a soft hyphen before it draws.
+- A line breaks at a space whenever it can. It uses a soft hyphen when a word does not fit in the rest of the line.
+- f.text_box() hands back the words that did not fit, so the story flows from the first column into the second. The thin lines show the columns.
+
+**Make it yours**
+
+- Change COLUMN_WIDTH, or the text size in f.text_size(), and watch the breaks move.
+- Take out the "|" marks from a word and see it move to the next line, leaving a big gap.
+- Change f.text_align("justify") to "left" to see the ragged edge it replaces.
+- Write your own story in STORY. Put a "|" inside every long word where it may break.
+
+</details>
+
+Source: [`examples/gallery/text/12_justified_columns.py`](../../examples/gallery/text/12_justified_columns.py)
+
+### Type on a path
+
+![Type on a path](images/text-13_text_on_a_path.png)
+
+A round stamp with words running round its rim, upright at the top and at the bottom, and a line of text that rides a wave. f.text_on_path() stands each letter on a path and turns it to face along the path.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.text_on_path(message, path, offset) sets the message along a path made with f.path(). The message is shaped as a whole first, so ligatures and kerning stay. Then every letter is set on the path.
+- A circle from f.path().circle() runs clockwise, so text on it stands on the outside. The words at the bottom use the same circle flipped with .scale(-1, 1) and .translate(), which runs the other way. Its text stands on the inside and still reads from left to right.
+- f.text_align("center", "baseline") puts the middle of the text at the middle of the path, with the letters standing on it. A circle starts at its right-hand side, so an offset of 0.785 times the diameter moves the middle of the text up to the top.
+- Text that is too long for the path is not drawn. f.text_on_path() returns what did not fit, and the sketch writes it under the wave.
+- The thin rings are ordinary lines. The letters are real text, so a PDF of this stamp can be selected and searched.
+
+**Make it yours**
+
+- Change TOP_WORDS and BOTTOM_WORDS, and the text size, to fill the rim differently.
+- Change the offset in the first f.text_on_path() call to turn the words round the badge.
+- Draw the wave again with other numbers in f.path().curve_to(), or use a circle, and watch the words follow.
+- Try f.text_style("italic") or f.text_tracking(4) before the calls to change the look of the letters.
+
+</details>
+
+Source: [`examples/gallery/text/13_text_on_a_path.py`](../../examples/gallery/text/13_text_on_a_path.py)
 
 ## Animation and time
 

@@ -40,6 +40,7 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-13 HiDPI-correct rendering | Logical coordinates, physical-resolution rendering; crisp on scaled displays (Windows verified; macOS/Linux follow-up) | 1 | done (Sprint 3) |
 | E-12 Export and headless mode | `p.save()` PNG/PDF/SVG through Cairo surfaces; run a sketch to files without a window; later: embedded-font PDF text (S-032) | 1 (basic) / 3 (embedded fonts) | basic done (Sprint 3) |
 | E-10 Transforms and state stack | Internal `Transform` + state ops in the IR (Phase 1); public `translate/rotate/scale`, `push/pop`, `with p.saved_state()` (Phase 2) | 1 → 2 | ready |
+| E-32 Typographic, print-ready posters | Justified and hyphenated text, type on a path, fitted headlines; 300 dpi PNG and PDF with bleed, crop marks and trim/bleed boxes; a CMYK spike; teaching (11 Oct 2026 poster review) | 0.2 | planned (Sprint 21) |
 | E-11 Path API | Internal `Path` in the IR (Phase 1); public `p.path()` and clip (Phase 2) | 1 → 2 | ready |
 
 | E-24 Drawing vocabulary completeness | `square`, `triangle`, `quad`, `arc`, `polygon`; stroke cap/join/dash/miter; anti-alias opt-out; revisit rect/ellipse modes | 2 | ready (Feature_Map §2) |
@@ -58,6 +59,7 @@ Phase exit criteria come from the architecture document, sharpened by the review
 | E-17 Sound API | Simple `p.sound()` over pygame mixer | 3 | planned for 0.1 (D-027) |
 | E-18 Document / page / frame model | Multi-page documents, frame sequences | 3 | planned for 0.1 (D-027) |
 | E-19 Video export | frame sequences (Phase 2), GIF and mp4 via ffmpeg (Phase 3) | 2–3 | planned for 0.1 (D-027) |
+| E-33 Camera input | `f.camera()`: the camera's latest frame used like a picture, still photos, short recorded clips; desktop (pygame-ce) and browser (getUserMedia); design `docs/design/Camera_Note.md` | 0.2+ | draft design, for review (D-089) |
 | E-30 Controls | sliders/toggles bound to sketch variables (DrawBot `Variable`) | 3 | planned for 0.1 (D-027) |
 
 ## TH-5 Beyond 1.0: GPU, 3D and the web *(directional, D-014)*

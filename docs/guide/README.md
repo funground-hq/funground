@@ -23,8 +23,9 @@ After this part you can write a sketch, run it and draw shapes on the canvas.
 
 ### Making pictures
 
-After this part you can paint with colour, gradients, lines, text, transforms, paths, clips and
-pictures.
+After this part you can paint with colour (including CMYK inks for print), gradients, lines, text,
+transforms, paths, clips and pictures. Text covers headlines that fit their width, justified columns
+with soft hyphens, and type on a path.
 
 | # | Chapter |
 |---|---|
@@ -49,7 +50,7 @@ and use randomness, noise and a little maths.
 ### Files and print
 
 After this part you can save PNG, PDF and SVG files, make a GIF or MP4, and build a document with
-several pages.
+several pages. You can also prepare a file for a print shop: bleed, crop marks, a 300 dpi PNG and CMYK.
 
 | # | Chapter |
 |---|---|
