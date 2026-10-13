@@ -1,7 +1,11 @@
 """Generate docs/reference/API.md from the docstrings and the data tables in funground (D-066).
 
 Run:    .venv/Scripts/python tools/make_api_reference.py
-Check:  .venv/Scripts/python tools/make_api_reference.py --check     (exit 1 if API.md is out of date)
+Check:  .venv/Scripts/python tools/make_api_reference.py --check     (exit 1 if a page is out of date)
+
+It also writes the pages for AI assistants (S-129, llmstxt.org): llms.txt (the rules in
+docs/reference/llms_rules.md, then links) and llms-full.txt (the rules, then this whole reference as
+plain Markdown), each at the repository root and inside the package.
 
 The output is fully deterministic: fixed order, no dates.
 
@@ -39,6 +43,20 @@ from funground.sketch import CALLBACK_NAMES, Sketch  # noqa: E402
 
 OUT = ROOT / "docs" / "reference" / "API.md"
 CLASS_LIST = ROOT / "docs" / "reference" / "api_classes.txt"
+RULES = ROOT / "docs" / "reference" / "llms_rules.md"
+REPO_URL = "https://github.com/funground-hq/funground/blob/main/"
+LLMS_SUMMARY = ("funground is a Python library for drawing, animation, typography, print and sound, made for "
+                "learning. `import funground as f`.")
+# llms.txt's links: (title, path in the repository, when to read it).
+LLMS_LINKS = [
+    ("API reference", "docs/reference/API.md", "every public name, with its arguments and an example"),
+    ("Quick Reference", "docs/reference/Quick_Reference.md", "every function by topic, with pictures"),
+    ("funground compared with p5 and DrawBot", "docs/reference/Compared_with_p5_and_DrawBot.md",
+     "what each p5 or DrawBot name is called here"),
+    ("User Guide", "docs/guide/README.md", "chapters from a first sketch to print, sound and projects"),
+    ("When something goes wrong", "docs/guide/errors.md", "what each error message means"),
+    ("Examples Gallery", "docs/gallery/README.md", "a small, tested sketch for every feature"),
+]
 
 SECTIONS = ("Arguments", "Returns", "Raises", "Example")
 
@@ -516,19 +534,80 @@ def build() -> str:
     return p.text()
 
 
-def main(argv: list[str]) -> int:
-    text = build()
-    if "--check" in argv:
-        current = OUT.read_text(encoding="utf-8") if OUT.exists() else ""
-        if current.replace("\r\n", "\n") != text:
-            print("docs/reference/API.md is out of date. Run: .venv/Scripts/python tools/make_api_reference.py")
-            return 1
-        print("docs/reference/API.md is up to date.")
-        return 0
-    OUT.write_bytes(text.encode("utf-8"))
-    print(f"wrote {OUT.relative_to(ROOT)} ({len(text.encode('utf-8'))} bytes)")
-    return 0
+# ---- the pages for AI assistants (S-129)
 
+ANCHOR_LINE = re.compile(r'^<a id="[^"]*"></a>\n', re.M)
+LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
+
+
+def absolute_links(text: str, folder: str) -> str:
+    """Links that work outside the repository: an in-page anchor becomes plain text, a relative path an
+    address on GitHub (folder is where the text lives, such as "docs/reference")."""
+    def fix(match: re.Match) -> str:
+        label, target = match.groups()
+        if target.startswith("#"):
+            return label
+        if re.match(r"[a-z]+:", target):
+            return match.group(0)
+        path = Path(folder, target.split("#")[0]).as_posix()
+        parts: list[str] = []
+        for part in path.split("/"):
+            if part == "..":
+                parts.pop()
+            elif part not in ("", "."):
+                parts.append(part)
+        return f"[{label}]({REPO_URL}{'/'.join(parts)})"
+    return LINK.sub(fix, text)
+
+
+def rules_text() -> str:
+    """The hand-written rules, with their headings one level down, so they sit under the page's own."""
+    rules = RULES.read_text(encoding="utf-8").replace("\r\n", "\n").strip()
+    return re.sub(r"^## ", "### ", rules, flags=re.M)
+
+
+def llms_index() -> str:
+    lines = ["# funground", "", f"> {LLMS_SUMMARY}", "", rules_text(), "", "## Docs", ""]
+    lines += [f"- [{title}]({REPO_URL}{path}): {note}" for title, path, note in LLMS_LINKS]
+    lines += ["", "## Optional", "",
+              f"- [llms-full.txt]({REPO_URL}llms-full.txt): these rules and the whole API reference in one file", ""]
+    return "\n".join(lines)
+
+
+def llms_full(api: str) -> str:
+    """The rules, then API.md without its title, its anchors and its relative links, every heading one level down."""
+    body = api.split("\n", 1)[1]
+    body = absolute_links(ANCHOR_LINE.sub("", body), "docs/reference")
+    body = re.sub(r"^(#{2,5}) ", r"#\1 ", body, flags=re.M)
+    return "\n".join(["# funground", "", f"> {LLMS_SUMMARY}", "", "## Rules for writing funground code", "",
+                      rules_text(), "", "## The API reference", "", body.strip(), ""])
+
+
+def outputs() -> dict[Path, str]:
+    """Every generated page and its text. The two pages for assistants are written twice: at the root of
+    the repository and inside the package (python -m pip install funground carries them)."""
+    api = build()
+    pages = {OUT: api}
+    for name, text in (("llms.txt", llms_index()), ("llms-full.txt", llms_full(api))):
+        pages[ROOT / name] = text
+        pages[ROOT / "funground" / name] = text
+    return pages
+
+
+def main(argv: list[str]) -> int:
+    pages = outputs()
+    if "--check" in argv:
+        stale = [path for path, text in pages.items()
+                 if (path.read_text(encoding="utf-8").replace("\r\n", "\n") if path.exists() else "") != text]
+        for path in stale:
+            print(f"{path.relative_to(ROOT).as_posix()} is out of date. Run: .venv/Scripts/python tools/make_api_reference.py")
+        if not stale:
+            print("docs/reference/API.md, llms.txt and llms-full.txt are up to date.")
+        return 1 if stale else 0
+    for path, text in pages.items():
+        path.write_bytes(text.encode("utf-8"))
+        print(f"wrote {path.relative_to(ROOT).as_posix()} ({len(text.encode('utf-8'))} bytes)")
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))

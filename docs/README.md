@@ -48,6 +48,15 @@ Each line says when to read the page.
   Processing users.
 - [Coming from DrawBot](guide/15_coming_from_drawbot.md): a guide chapter for DrawBot users.
 
+## Using an AI assistant
+
+- [llms.txt](../llms.txt): give this file to an AI assistant (a chat, Copilot, Cursor, Claude) before you
+  ask it to write funground code. It holds the rules that differ from p5 and DrawBot, so the code it writes
+  is more likely to run. [llms-full.txt](../llms-full.txt) adds the whole API reference, for an assistant
+  that can read a long file. Both are installed with funground too: `python -c "import funground, pathlib;
+  print(pathlib.Path(funground.__file__).parent / 'llms.txt')"` prints where.
+- [AGENTS.md](../AGENTS.md): for AI agents that change funground itself.
+
 ## For contributors
 
 - [Developer documentation](developer/README.md): read this before you change the code. It covers the
