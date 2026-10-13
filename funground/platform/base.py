@@ -15,10 +15,25 @@ from typing import Protocol
 
 # Key names funground understands (contract row I2). Single characters and
 # backend key codes are also accepted and passed to the platform.
-KEY_NAMES = ("left", "right", "up", "down", "space", "enter", "escape")
+KEY_NAMES = {          # each name and its key (D-092); the API reference prints them
+    "left": "The left arrow key.",
+    "right": "The right arrow key.",
+    "up": "The up arrow key.",
+    "down": "The down arrow key.",
+    "space": "The space bar.",
+    "enter": "The Enter (Return) key.",
+    "escape": "The Esc key. On the desktop it also closes the sketch's window.",
+}
 
 # Mouse pointer shapes for f.cursor() (S-057): p5's ARROW, CROSS, HAND, MOVE, TEXT, WAIT.
-CURSOR_KINDS = ("arrow", "cross", "hand", "move", "text", "wait")
+CURSOR_KINDS = {        # each shape and what it looks like (D-092)
+    "arrow": "The usual pointer. The default.",
+    "cross": "A thin cross, for aiming at a point.",
+    "hand": "A pointing hand, as over a link: something can be clicked.",
+    "move": "Four arrows: something can be dragged.",
+    "text": "The I-beam: text can be typed or selected.",
+    "wait": "The busy pointer (an hourglass or a spinning circle).",
+}
 
 
 @dataclass(frozen=True, slots=True)

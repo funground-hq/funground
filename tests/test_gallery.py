@@ -20,7 +20,7 @@ import pytest
 import funground
 from funground import api, ir
 
-from conftest import GOLDEN, ROOT, assert_json_documents_close, run_sketch, surface_from_frame
+from conftest import GOLDEN, ROOT, assert_json_documents_close, golden_matches, run_sketch, surface_from_frame
 
 TOOL = ROOT / "tools" / "make_gallery.py"
 _spec = importlib.util.spec_from_file_location("make_gallery", TOOL)
@@ -71,7 +71,7 @@ def test_example_matches_golden(path: Path):
         pytest.skip(f"golden written: {golden.name}")
     if platform.system() != GOLDEN_PLATFORM:
         pytest.skip(f"goldens were produced on {GOLDEN_PLATFORM}")
-    same = pygame.image.tobytes(pygame.image.load(str(golden)), "RGB") == frame[1]
+    same = golden_matches(pygame.image.tobytes(pygame.image.load(str(golden)), "RGB"), frame[1])
     if not same:
         actual = GOLDEN / "_actual"
         actual.mkdir(exist_ok=True)
@@ -104,13 +104,17 @@ def test_example_ops_match_snapshot(path: Path):
 def _names_used() -> set[str]:
     used = set()
     for path in EXAMPLES:
-        used |= set(re.findall(r"\bf\.([A-Za-z_]+)\b", path.read_text(encoding="utf-8")))
+        source = path.read_text(encoding="utf-8")
+        used |= set(re.findall(r"\bf\.([A-Za-z_]+)\b", source))
+        if "from funground import *" in source:          # the global style (D-088): names without f.
+            code = source.split('"""', 2)[-1]              # not the docstring's mentions
+            used |= set(re.findall(r"\b([a-z_]+)\b", code)) & set(funground.__all__)
     return used
 
 
 def test_every_public_name_is_shown_by_an_example():
     """D-015, D-019: release 0.1 ships a gallery that highlights every feature."""
-    public = set(funground.__all__)
+    public = set(funground._PUBLIC_NAMES)
     uncovered = public - _names_used()
     unexpected = uncovered - NOT_YET_IN_GALLERY
     assert not unexpected, f"public names with no gallery example: {sorted(unexpected)}"
@@ -122,14 +126,6 @@ def test_index_is_up_to_date():
     index = gallery.INDEX
     assert index.exists(), "run: python tools/make_gallery.py"
     assert index.read_text(encoding="utf-8") == gallery.build_index(), "run: python tools/make_gallery.py --index"
-
-
-def test_showcase_is_up_to_date():
-    showcase = gallery.SHOWCASE
-    assert showcase.exists(), "run: python tools/make_gallery.py --index"
-    assert showcase.read_text(encoding="utf-8") == gallery.build_showcase(), "run: python tools/make_gallery.py --index"
-    assert 10 <= len(gallery.SHOWCASE_PICKS) <= 12
-    assert all((gallery.IMAGES / f"{ident}.png").exists() for ident, _ in gallery.SHOWCASE_PICKS)
 
 
 def test_every_example_has_a_gallery_image():

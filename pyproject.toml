@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "funground"
-version = "0.1.0.dev1"
+version = "0.1.0a1"
 description = "Creative coding for learners: p5.js/Processing and DrawBot-style 2D drawing in Python."
 readme = "README.md"
 license = "LGPL-2.1-only"
@@ -28,7 +28,11 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
 ]
 
-dependencies = ["pygame-ce>=2.5", "pycairo>=1.27", "fonttools>=4.55", "uharfbuzz>=0.45", "skia-pathops>=0.9", "svgelements>=1.9", "pypdf>=5"]
+# Each library from the version funground needs up to its next major version, where breaking changes usually come
+# (D-100). The exact versions CI tests are in tests/constraints.txt and are published with each release; a weekly
+# CI job tries the newest versions inside these bounds, so a breaking release is found before learners meet it.
+dependencies = ["pygame-ce>=2.5,<3", "pycairo>=1.27,<2", "fonttools>=4.55,<5", "uharfbuzz>=0.45,<1",
+                "skia-pathops>=0.9,<1", "svgelements>=1.9,<2", "pypdf>=5,<7"]
 
 [project.urls]
 Homepage = "https://github.com/funground-hq/funground"
@@ -37,9 +41,9 @@ Issues = "https://github.com/funground-hq/funground/issues"
 Changelog = "https://github.com/funground-hq/funground/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pillow>=11", "pypdfium2>=4", "imageio-ffmpeg>=0.5", "build>=1"]   # CI tests both filter paths (P10)
-extras = ["pillow>=11"]
-video = ["imageio-ffmpeg>=0.5"]        # an ffmpeg for MP4 export (D-045 = B)
+dev = ["pytest>=8", "pytest-timeout>=2.3", "pillow>=11", "pypdfium2>=4", "imageio-ffmpeg>=0.5", "build>=1"]   # CI tests both filter paths (P10)
+extras = ["pillow>=11,<13"]
+video = ["imageio-ffmpeg>=0.5,<1"]        # an ffmpeg for MP4 export (D-045 = B)
 
 [tool.setuptools]
 packages = ["funground", "funground.platform", "funground.renderers", "funground.export",
@@ -56,7 +60,7 @@ packages = ["funground", "funground.platform", "funground.renderers", "funground
 "funground.gallery_images" = "docs/gallery/images"
 
 [tool.setuptools.package-data]
-funground = ["fonts/*.ttf", "fonts/*.txt", "data/*.json"]
+funground = ["fonts/*.ttf", "fonts/*.txt", "data/*.json", "data/*.icc", "llms.txt", "llms-full.txt"]
 "funground.examples" = ["*/*.py", "*/data/*", "*/fonts/*"]
 "funground.gallery_images" = ["*.png"]
 

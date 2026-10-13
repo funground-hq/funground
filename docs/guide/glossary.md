@@ -12,6 +12,7 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 ## B
 
 - **beat**. One step of the pulse of a tune. `tempo` says how many beats come each minute. [Chapter 16](16_sound.md#beats-and-tempo)
+- **bleed**. A strip of picture past the edge of the page, so a cutting blade that is a little off does not leave white paper. Usually 3 mm. `f.save("x.pdf", bleed=f.mm(3))`. [Chapter 13](13_saving_your_work.md#preparing-a-file-for-print)
 - **blend mode**. The rule for how new drawing mixes with what is already there, such as `"multiply"`. [Chapter 5](05_fill_stroke_lines.md#mixing-see-through-and-shadows)
 - **bol**. The name of a tabla stroke, said as a syllable: Dha, Dhin, Na, Tin. A theka is a line of bols. [Chapter 17](17_ragas_and_talas.md#talas)
 - **boolean (shapes)**. Joining or cutting two paths to make a new one: union (`|`), intersection (`&`), difference (`-`) and xor (`^`). [Chapter 9](09_paths_and_clipping.md#combining-shapes)
@@ -21,12 +22,15 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 - **canvas**. The drawing area. Its size is set with `f.size()`. [Chapter 2](02_the_sketch.md)
 - **chord**. Two or more notes played together. `f.melody()` writes one as `[C4 E4 G4]`, and `sound.chord()` names the one it hears. [Chapter 16](16_sound.md#chords-and-keys)
 - **clip**. To keep drawing inside a path. Anything outside the path is not painted. [Chapter 9](09_paths_and_clipping.md#clipping)
+- **CMYK**. The four inks of a printer: cyan, magenta, yellow and black. `f.cmyk(c, m, y, k)` makes a colour from them, each from 0 to 100. [Chapter 4](04_colour.md#colour-for-print-cmyk)
 - **colour mode**. How numbers are read as a colour: `"rgb"`, `"hsb"` or `"hsl"`, and the largest value of each part. Set with `f.color_mode()`. [Chapter 4](04_colour.md#colour-mode)
 - **coordinates**. A place on the canvas as a pair of numbers, `x` across and `y` down, from the top-left corner. [Chapter 1](01_getting_started.md#where-things-are)
 
 ## D
 
+- **crop marks**. Thin lines in the corners of a printed sheet that show where to cut. `f.save("x.pdf", marks=True)`. [Chapter 13](13_saving_your_work.md#preparing-a-file-for-print)
 - **decibel (dB)**. A way to measure loudness on a scale where each step of 20 is ten times the sound level. A quiet room is about -65 dB in funground's microphone examples. [Chapter 16](16_sound.md#listening-with-the-microphone)
+- **dpi**. Dots per inch: how many pixels a picture has in an inch of paper. 300 is usual for print. `f.save("x.png", dpi=300)`. [Chapter 13](13_saving_your_work.md#a-300-dpi-png)
 - **draw**. The function `draw()` that funground calls once for every frame. [Chapter 2](02_the_sketch.md)
 - **drone / tanpura**. A steady background note, or the instrument that plays it. A tanpura sounds Sa and Pa over and over, so a singer always has Sa to hold on to. `f.drone()` makes one. [Chapter 17](17_ragas_and_talas.md#the-drone)
 
@@ -101,6 +105,7 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 - **sketch**. A funground program with `setup()` and `draw()` that ends with `f.run()`. [Chapter 1](01_getting_started.md)
 - **sound**. A made or loaded noise you can play, watch and change. In funground it is an object with `play()`, `level()`, `spectrum()` and more. [Chapter 16](16_sound.md)
 - **spectrum**. The strength of each range of pitch in a sound at this moment, from low notes to high ones. Often drawn as bars. [Chapter 16](16_sound.md#watching-the-sound)
+- **soft hyphen**. A letter you cannot see, `"­"`, that marks a place where a word may break at the end of a line. [Chapter 6](06_text.md#justified-text-and-soft-hyphens)
 - **stroke**. The outline of a shape, or a line. Set with `f.stroke()` and `f.stroke_width()`. [Chapter 5](05_fill_stroke_lines.md)
 - **SVG**. A file of shapes and text for the web and for drawing programs. [Chapter 13](13_saving_your_work.md)
 - **swara**. A note of Indian music, named from Sa: `S r R g G m M P d D n N`. Small letters are flat (komal) and `M` is sharp (tivra). [Chapter 17](17_ragas_and_talas.md)
@@ -113,6 +118,7 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 - **tempo**. The speed of the beat, in beats a minute. [Chapter 16](16_sound.md#beats-and-tempo)
 - **thaat**. The parent scale a raga belongs to, in Bhatkhande's system of ten. [Chapter 17](17_ragas_and_talas.md#the-raga-table)
 - **theka**. The pattern of bols that sets out a tala, one bol to a beat. `f.tala()` plays it. [Chapter 17](17_ragas_and_talas.md#talas)
+- **trim**. The size of a printed page after it has been cut. In funground the canvas is the trim. [Chapter 13](13_saving_your_work.md#preparing-a-file-for-print)
 - **transform**. A change that moves, turns or resizes everything drawn after it: `f.translate()`, `f.rotate()` and `f.scale()`. [Chapter 8](08_transforms.md)
 
 ## V

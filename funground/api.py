@@ -221,6 +221,16 @@ def live_value(name: str) -> object:
 HINT = "Your sketch has a draw() function but never started. Add f.run() as the last line."
 
 
+def _forgotten_sketch():
+    """The program's file, if it is a learner's file that defines draw(); None otherwise.
+
+    A module run with ``python -m`` (funground.gallery, a tool) is a program of its own, never a forgotten sketch."""
+    main = sys.modules.get("__main__")
+    if main is None or getattr(main, "__spec__", None) is not None:
+        return None
+    return main if callable(getattr(main, "draw", None)) else None
+
+
 def exit_hint() -> None:
     """Remind a learner who wrote draw() but forgot f.run().
 
@@ -232,8 +242,7 @@ def exit_hint() -> None:
         return
     if _active is not None and _active._script:
         return
-    main = sys.modules.get("__main__")
-    if callable(getattr(main, "draw", None)):
+    if _forgotten_sketch() is not None:
         print(HINT, file=sys.stderr)
 
 
@@ -246,15 +255,74 @@ def _note_crash(exc_type, exc, tb) -> None:
     the thing to fix, and a hint about f.run() below it would point the wrong way."""
     global _crashed
     _crashed = True
+    main = sys.modules.get("__main__")
+    if exc is not None and main is not None:          # a global-style script's error at the top level (D-088)
+        from . import global_style
+
+        global_style.explain_clash(exc, vars(main))
     _previous_excepthook(exc_type, exc, tb)
 
 
 sys.excepthook = _note_crash
 atexit.register(exit_hint)
 
+SCRIPT_HINT = "Your script drew something but never showed it. Add f.show() as the last line to see it."
+
+
+def script_hint() -> None:
+    """Tell a learner whose script drew but never called show() or save() why nothing appeared (S-180).
+
+    It runs by itself when the program ends, under the same conditions as exit_hint(): a program run from a
+    terminal that ended without an error, not an interactive session, a notebook or ``python -m``. It speaks only
+    for the script in the program's own file. Most learners never call this."""
+    if _crashed or hasattr(sys, "ps1") or sys.flags.interactive or "ipykernel" in sys.modules:
+        return
+    main = sys.modules.get("__main__")
+    if main is None or getattr(main, "__spec__", None) is not None or _active is None:
+        return
+    if _active._namespace is vars(main) and _active.unseen_drawing:
+        print(SCRIPT_HINT, file=sys.stderr)
+
+
+atexit.register(script_hint)
+
+
+def start_forgotten_sketch() -> None:
+    """Start a sketch that defines draw() but never called run(), when its file ends (D-088, S-176).
+
+    It runs by itself when the program ends, under the same conditions as exit_hint(): a program run from a
+    terminal that ended without an error, not an interactive session (IDLE and Thonny keep Python running, so
+    there run() is still needed) and not a notebook. An error in the sketch is shown as usual, but the program's
+    exit code stays 0: Python ignores errors raised while it is ending. Most learners never call this."""
+    from . import sketch as _sketch_module
+
+    if _crashed or _sketch_module._run_started or hasattr(sys, "ps1") or sys.flags.interactive:
+        return
+    if "ipykernel" in sys.modules or (_active is not None and _active._script):
+        return
+    main = _forgotten_sketch()
+    if main is not None:
+        try:
+            canvas_sketch().run_namespace(vars(main))
+        except BaseException:                  # Python would print "Exception ignored in atexit callback"
+            sys.excepthook(*sys.exc_info())
+
+
+atexit.register(start_forgotten_sketch)      # registered last, so it runs first; exit_hint() then stays quiet
+
+
+def _share_with_caller() -> None:
+    """After a call that changes width, height, ground or pixels: refresh a global-style sketch's copies.
+
+    A script names its globals here (its first size()); an animated sketch named them in run()."""
+    caller = inspect.currentframe().f_back.f_back
+    sketch = canvas_sketch()
+    sketch.adopt_globals(caller.f_globals)
+    sketch.publish_live_values()
+
 
 # ---- window / lifecycle
-def size(width: int | str, height: int | None = None, *, title: str = "funground", fps: int = 60,
+def size(width: int | str, height: int | None = None, *, title: str = "funground", fps: int | None = None,
          margin: float | tuple = 0, landscape: bool = False) -> None:
     """Create the canvas, or change its size.
 
@@ -264,7 +332,7 @@ def size(width: int | str, height: int | None = None, *, title: str = "funground
         width: the canvas width in pixels (above 0), or a page name such as "A4".
         height: the canvas height in pixels (above 0). Leave it out when width is a page name.
         title: the text in the window's title bar. The default is "funground".
-        fps: the target frames per second. The default is 60. It must be above 0.
+        fps: the target frames per second, above 0. The default None keeps the current rate: 60 to begin with, or the one run(fps=...) gives, which wins over this one.
         margin: the space kept free around the edge. One number is used on all four sides. A tuple of four numbers is (top, right, bottom, left). The default is 0. It stays when the canvas changes size or a new page starts.
         landscape: True turns a named page on its side, as in size("A4", landscape=True). The default is False. It only goes with a page name.
 
@@ -278,6 +346,7 @@ def size(width: int | str, height: int | None = None, *, title: str = "funground
     """
     refuse_in_mark("f.size()")
     canvas_sketch().size(width, height, title=title, fps=fps, margin=margin, landscape=landscape)
+    _share_with_caller()
 
 
 def run(*, fps: int | None = None, max_frames: int | None = None) -> None:
@@ -339,6 +408,7 @@ def new_page(width: int | str | None = None, height: int | None = None) -> None:
     """
     refuse_in_mark("f.new_page()")
     canvas_sketch().new_page(width, height)
+    _share_with_caller()
 
 
 def page_count() -> int:
@@ -640,28 +710,38 @@ def year() -> int:
     return Sketch.year()
 
 
-def save(path: str, *, text: str = "live") -> None:
+def save(path: str, *, text: str = "live", bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None:
     """Save this frame to a picture or document file.
 
     The file is written when the frame is complete, and it holds everything that frame drew, including what comes after the call. In a script, it writes at once. A .png holds pixels. A .pdf or .svg holds a true vector drawing. A .gif or .mp4 records an animation (see save_gif and save_movie). Any other extension is an error that names the choices. In a document of several pages, a PDF holds every page.
 
-    A PNG is written at the screen's real resolution, so on a 2x display a 640 by 400 window gives a 1280 by 800 file.
+    A PNG is written at the screen's real resolution, so on a 2x display a 640 by 400 window gives a 1280 by 800 file. To choose the resolution for printing, give dpi. The page is then drawn again at that many dots per inch (a point is 1/72 inch, so the scale is dpi / 72), not stretched from the screen picture. A4 at dpi=300 is 2479 by 3508 pixels. The file says "300 dpi", so print software sizes it right. A page of more than 120 million pixels is refused; save a PDF instead. In an animated sketch, a PNG with dpi holds what this frame drew, as a PDF does, and not what earlier frames left on the canvas.
+
+    For a print shop, a PDF can have a bleed and crop marks. The bleed is extra picture beyond the edges of the page, so that no white line shows when the printer cuts the paper. Draw past the edges (at negative numbers, and beyond width and height) and that drawing appears in the bleed. A background() fills the bleed too. The page of your canvas stays the finished size: the PDF records it as its TrimBox, and the page grown by the bleed as its BleedBox. Crop marks are thin lines in registration colour (all four inks at 100 percent, so they print on every plate) outside the bleed at the four corners, 5 mm long, to show where to cut. Every page of a document of several pages gets the same bleed and marks.
+
+    A PDF holds colours made by cmyk() as exact CMYK inks. Every other colour is RGB, tagged as sRGB.
 
     Arguments:
         path: the file name. Its ending decides the kind: ".png", ".pdf" or ".svg".
         text: for a PDF or SVG only. "live" (the default) keeps text real and editable. "shapes" draws every letter as a shape, so the file looks right without the font. A PNG ignores it.
+        bleed: for a PDF only. How far to extend the page on each side, in points. Use mm() to say it in millimetres: bleed=f.mm(3). The start is 0.
+        marks: for a PDF only. True adds crop marks outside the bleed. The start is False.
+        dpi: for a PNG only. The resolution in dots per inch, above 0, such as 300. Each side is its size in points times dpi / 72, rounded to the nearest pixel. Leave it out for the screen's resolution.
 
     Raises:
-        ValueError: the file ending is not one that save() knows, or text is not "live" or "shapes".
+        ValueError: the file ending is not one that save() knows, text is not "live" or "shapes", the bleed is below 0, dpi is 0 or less, bleed or marks is used for a file that is not a PDF, dpi is used for a file that is not a PNG, or the picture would be more than 120 million pixels.
+        TypeError: the bleed or dpi is not a number, or marks is not True or False.
 
     Example:
         if f.key_down("s"):
             f.save("my_sketch.png")
+        f.save("poster.pdf", bleed=f.mm(3), marks=True)
+        f.save("poster.png", dpi=300)
 
-    See also: save_frames, save_gif, save_movie, new_page
+    See also: save_frames, save_gif, save_movie, new_page, mm
     """
     refuse_in_mark("f.save()")
-    canvas_sketch().save(path, text=text)
+    canvas_sketch().save(path, text=text, bleed=bleed, marks=marks, dpi=dpi)
 
 
 def resize_canvas(width: int, height: int) -> None:
@@ -678,6 +758,7 @@ def resize_canvas(width: int, height: int) -> None:
     See also: size, full_screen
     """
     canvas_sketch().resize_canvas(width, height)
+    _share_with_caller()
 
 
 def full_screen() -> None:
@@ -692,6 +773,7 @@ def full_screen() -> None:
     See also: size, resize_canvas
     """
     canvas_sketch().full_screen()
+    _share_with_caller()
 
 
 def cursor(kind: str = "arrow") -> None:
@@ -1076,7 +1158,7 @@ def clear() -> None:
 def text(message: object, x: float, y: float, color: Color | None = None) -> None:
     """Draw text.
 
-    By default (x, y) is the top-left corner of the text; text_align() can change that. The text uses the fill colour. If there is no fill it uses the stroke colour, and if there is neither it is white. A new line in the message starts a new line of text. The default size is 20 (see text_size).
+    By default (x, y) is the top-left corner of the text; text_align() can change that. Soft hyphens (U+00AD) in the message are not drawn. The text uses the fill colour. If there is no fill it uses the stroke colour, and if there is neither it is white. A new line in the message starts a new line of text. The default size is 20 (see text_size).
 
     Arguments:
         message: what to write. Any value works: str() is applied. A FormattedString gives each part its own look.
@@ -1139,6 +1221,37 @@ def text_to_points(message: object, x: float, y: float, spacing: float = 5) -> l
     return canvas_sketch().text_to_points(message, x, y, spacing)
 
 
+def text_on_path(message: object, path: PathBuilder, offset: float = 0) -> str:
+    """Draw text along a path, and return the part that did not fit.
+
+    The text is set in the current font, style, size, tracking and features, with the current fill, so ligatures and kerning are kept. Each letter stands with its middle on the path, turned to face the way the path goes there. On a path drawn from left to right, the text reads from left to right. A circle from path().circle() runs clockwise, so its text stands on the outside. For text on the inside, use a path that runs the other way, such as the circle flipped with .scale(-1, 1).translate(2 * x, 0).
+
+    text_align() works along the path. "left" starts the text at the start of the path, "center" puts the middle of the text at the middle of the path, and "right" ends the text at the end. The second value says which part of the letters touches the path. With the default, "top", the letters hang below the path. Use "baseline" to stand them on it. A circle starts at its right-hand side, so to put the middle of the text at the top, use "center" and an offset of 0.785 times the diameter.
+
+    A closed path, such as a circle, carries on past its end, so text can start anywhere on it. On any path, letters that would pass the end are not drawn. If the path has more than one part, only the first part is used. Letters that join their neighbours, as in Arabic, are set one by one and do not join. In a PDF or SVG file each letter is live text.
+
+    Arguments:
+        message: what to write, on one line. Any value works: str() is applied.
+        path: a path made with path(), such as path().circle(x, y, d) or a curve made with curve_to().
+        offset: how far to move the text along the path, in pixels, after text_align() has placed it. The default is 0. A negative number moves it back.
+
+    Returns:
+        The text that did not fit, as a string. It is "" when everything fitted.
+
+    Raises:
+        ValueError: the path has no length, the message has a new line in it, or the offset is not a finite number.
+        TypeError: path is not a path, the message is a FormattedString, or the offset is not a number.
+
+    Example:
+        f.text_align("center", "baseline")
+        wave = f.path().move_to(40, 200).curve_to(140, 100, 240, 300, 340, 200)
+        f.text_on_path("Follow the wave", wave)
+
+    See also: text, text_path, text_align, text_width, path
+    """
+    return active_sketch().text_on_path(message, path, offset)
+
+
 def current_font() -> Font:
     """Return the font that text is set in now.
 
@@ -1160,8 +1273,10 @@ def text_align(horizontal: str, vertical: str | None = None) -> None:
 
     The default is left and top. The choice is saved by push() and brought back by pop().
 
+    "justify" is for text_box(): each line is stretched to the width of the box by making the spaces between the words wider, except the last line of a paragraph and a line of one word, which stay on the left. In text() there is no box, so "justify" sets the text on the left.
+
     Arguments:
-        horizontal: "left" (the default), "center" or "right".
+        horizontal: "left" (the default), "center", "right" or "justify".
         vertical: "top" (the default), "center", "baseline" or "bottom". Leave it out to keep the current choice.
 
     Raises:
@@ -1171,7 +1286,7 @@ def text_align(horizontal: str, vertical: str | None = None) -> None:
         f.text_align("center", "center")
         f.text("Middle", f.width / 2, f.height / 2)
 
-    See also: text, text_width
+    See also: text, text_box, text_width
     """
     active_sketch().text_align(horizontal, vertical)
 
@@ -1219,7 +1334,9 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
              color: Color | None = None) -> str | FormattedString:
     """Draw text wrapped inside a box, and return whatever did not fit.
 
-    Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn. Give the returned text to another box to flow a story across columns.
+    Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn: each line takes one leading (text_leading(), automatically 1.25 times the text size), so three lines with a leading of 100 fit a box 300 high, as in DrawBot and InDesign. Give the returned text to another box to flow a story across columns.
+
+    With f.text_align("justify") each line is stretched to the width of the box, except the last line of each paragraph. A soft hyphen, the character U+00AD (written "\\u00ad" in Python), marks a place where a long word may break: when a word does not fit in the rest of a line, it is broken at the last soft hyphen that fits, and a hyphen is drawn there. A soft hyphen that is not used is not drawn and has no width.
 
     Arguments:
         message: the text, a string or a FormattedString.
@@ -1237,7 +1354,7 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
     Example:
         rest = f.text_box("A long story that wraps inside a box.", 20, 60, 280, 100)
 
-    See also: text, text_width, text_leading, FormattedString
+    See also: text, text_align, text_width, text_leading, FormattedString
     """
     return active_sketch().text_box(message, x, y, width, height, color)
 
@@ -1245,7 +1362,7 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
 def text_width(message: object) -> float:
     """Return how wide some text will be, in pixels.
 
-    It is measured at the current text size and font, and it is the exact distance text() advances. Use it to centre or right-align text.
+    It is measured at the current text size and font, and it is the exact distance text() advances. Use it to centre or right-align text. Soft hyphens (U+00AD) have no width.
 
     Arguments:
         message: what to measure. Any value works, or a FormattedString.
@@ -1260,6 +1377,33 @@ def text_width(message: object) -> float:
     See also: text, text_size, text_align
     """
     return active_sketch().text_width(message)
+
+
+def fit_text_size(message: object, width: float, height: float | None = None) -> float:
+    """Return the text size at which a message is exactly as wide as you want.
+
+    It sets the message in the current font, style, features, variations and tracking, and finds the size that makes its widest line `width` pixels wide. With a `height`, it finds the largest size that also keeps all the lines, spaced by the current leading, inside that height. The answer is correct to 0.01 of a pixel. Tracking is a fixed space in pixels, so it does not grow with the size: it is allowed for. Use the answer in text_size() before you draw. The answer is a fraction, and text_size() keeps it, so the text fits to within half a pixel.
+
+    Arguments:
+        message: the text to fit. A message of several lines is fitted by its widest line. A FormattedString is not allowed yet.
+        width: how wide the widest line should be, in pixels, above 0.
+        height: the most the lines may take up, in pixels, above 0. Leave it out to fit the width only.
+
+    Returns:
+        The text size in pixels, as a number with a fraction.
+
+    Raises:
+        ValueError: the width or height is not above 0, the text is empty, or no size fits.
+        TypeError: the message is a FormattedString, or the width or height is not a number.
+
+    Example:
+        headline = "SPRING FAIR"
+        f.text_size(f.fit_text_size(headline, f.width - 80))
+        f.text(headline, 40, 60)
+
+    See also: text_width, text_size, text_tracking, text_leading
+    """
+    return active_sketch().fit_text_size(message, width, height)
 
 
 # ---- style
@@ -1340,6 +1484,35 @@ def hsl(hue: float, saturation: float, lightness: float, alpha: float = 255):
     return _Color.from_hsl(hue, saturation, lightness, alpha)
 
 
+def cmyk(cyan: float, magenta: float, yellow: float, black: float, alpha: float = 255):
+    """Make a colour from printing inks: cyan, magenta, yellow and black.
+
+    Use it where you want an exact print colour. A PDF you save holds exactly these ink amounts, so a print shop gets your numbers, not a guess. On the screen, in a PNG and in an SVG the colour is shown as the nearest red, green and blue. That is an approximation: a screen cannot show ink. The ranges are always these, whatever the colour mode is.
+
+    Arguments:
+        cyan: the cyan ink, 0 to 100.
+        magenta: the magenta ink, 0 to 100.
+        yellow: the yellow ink, 0 to 100.
+        black: the black ink, 0 to 100.
+        alpha: the opacity, 0 (invisible) to 255 (solid). The default is 255.
+
+    Returns:
+        A colour, as from color(). Its .cmyk part holds the four ink amounts.
+
+    Raises:
+        ValueError: an ink is not a number from 0 to 100, or the alpha is not from 0 to 255.
+
+    Example:
+        f.fill(f.cmyk(0, 80, 100, 0))
+        f.save("poster.pdf")
+
+    See also: hsb, color, save, lerp_color
+    """
+    from .color import Color as _Color
+
+    return _Color.from_cmyk(cyan, magenta, yellow, black, alpha)
+
+
 def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors, stops=None):
     """Make a gradient: colours blended along a line.
 
@@ -1417,7 +1590,7 @@ def color_mode(mode: str, max1: float | None = None, max2: float | None = None,
 def blend_mode(mode: str) -> None:
     """Choose how what you draw next mixes with what is already there.
 
-    The choice is saved by push() and brought back by pop().
+    "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights, and so on: the table below says what each word does. The mode applies to shapes, lines, text and pictures drawn after it, until you choose another. The choice is saved by push() and brought back by pop(). The names are the usual ones in drawing programs (Photoshop, Illustrator, DrawBot's blendMode()); DrawBot's "colorDodge", "colorBurn", "softLight" and "hardLight" are "dodge", "burn", "soft_light" and "hard_light" here, and its "plusLighter" is "add".
 
     Arguments:
         mode: "normal" (the default), "multiply", "screen", "overlay", "darken", "lighten", "add", "difference", "exclusion", "dodge", "burn", "hard_light", "soft_light", "hue", "saturation", "color" or "luminosity".
@@ -1697,16 +1870,17 @@ def smooth() -> None:
     active_sketch().smooth()
 
 
-def text_size(size: int) -> None:
+def text_size(size: float) -> None:
     """Set the size of text.
 
     The size is an em of that many pixels, as in CSS. Capital letters come out about three-quarters of it. The start is 20. The choice is saved by push() and brought back by pop().
 
     Arguments:
-        size: the size in pixels, above 0. A fraction is cut to a whole number.
+        size: the size in pixels, any number above 0. A fraction is kept, so 20.5 is a little bigger than 20.
 
     Raises:
         ValueError: size is 0 or less.
+        TypeError: size is not a number.
 
     Example:
         f.text_size(28)
@@ -1784,7 +1958,7 @@ def text_style(style: str) -> None:
     It is ignored once you have chosen a font with text_font(), but remembered for when you go back to the built-in one.
 
     Arguments:
-        style: "normal", "bold", "italic" or "bold_italic".
+        style: "normal" (the default), "bold", "italic" or "bold_italic".
 
     Raises:
         ValueError: the style is not one of those words.
@@ -3316,6 +3490,25 @@ def set(x: float, y: float, color, *more: float) -> None:  # noqa: A001  (p5's n
     active_sketch().set(x, y, color, *more)
 
 
+def set_pixel(x: float, y: float, color, *more: float) -> None:
+    """Make one pixel exactly one colour: the same as set().
+
+    This name also works after from funground import *, where set is Python's own set() (D-088). Fill, stroke, transform, clip, tint, opacity and blend mode do not apply. Outside the canvas, nothing happens.
+
+    Arguments:
+        x, y: the pixel.
+        color: any colour that fill() takes.
+        *more: extra numbers, as for fill().
+
+    Example:
+        f.set_pixel(10, 20, "red")
+
+    See also: set, get, update_pixels
+    """
+    refuse_in_mark("f.set_pixel()")
+    active_sketch().set(x, y, color, *more)
+
+
 def load_pixels() -> None:
     """Copy the canvas into f.pixels.
 
@@ -3330,6 +3523,7 @@ def load_pixels() -> None:
     """
     refuse_in_mark("f.load_pixels()")
     active_sketch().load_pixels()
+    _share_with_caller()
 
 
 def update_pixels() -> None:
@@ -3367,6 +3561,27 @@ def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's 
     active_sketch().filter(kind, value)
 
 
+def apply_filter(kind: str, value: float | None = None) -> None:
+    """Change everything drawn so far, in place: the same as filter().
+
+    This name also works after from funground import *, where filter is Python's own filter() (D-088). Alpha is kept, except by "opaque".
+
+    Arguments:
+        kind: "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate".
+        value: for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none.
+
+    Raises:
+        ValueError: the kind is unknown, or the value is out of range.
+
+    Example:
+        f.apply_filter("blur", 3)
+
+    See also: filter, get, create_graphics
+    """
+    refuse_in_mark("f.apply_filter()")
+    active_sketch().filter(kind, value)
+
+
 # ---- input
 def key_down(key: str | int) -> bool:
     """Return whether a key is held down right now.
@@ -3374,7 +3589,7 @@ def key_down(key: str | int) -> bool:
     Escape also closes the sketch. With no window, no key is ever down.
 
     Arguments:
-        key: "left", "right", "up", "down", "space", "enter", "escape", or a single character such as "a" or "7". Capitals do not matter.
+        key: "left", "right", "up", "down", "space", "enter", "escape", or a single character such as "a" or "7". Capitals do not matter. A whole number is passed to the window system as its own key code, for keys with no name here.
 
     Returns:
         True while the key is held.
@@ -3409,6 +3624,26 @@ def random(low: float = 1.0, high: float | None = None) -> float:
         d = f.random(10, 40)
 
     See also: random_seed, random_choice, random_gaussian, noise
+    """
+    return canvas_sketch().random(low, high)
+
+
+def random_number(low: float = 1.0, high: float | None = None) -> float:
+    """Return a random number: the same as random().
+
+    This name also works after from funground import *, where random is Python's random module (D-088). random_number(10) gives a number from 0 up to 10. random_number(5, 10) gives a number from 5 up to 10. random_number() gives a number from 0 up to 1. random_seed() makes it repeatable.
+
+    Arguments:
+        low: with one argument, the top of the range (it starts at 0). With high as well, the bottom.
+        high: the top of the range. The default None means low is the top.
+
+    Returns:
+        A floating-point number.
+
+    Example:
+        x = f.random_number(f.width)
+
+    See also: random, random_seed, random_choice, random_gaussian
     """
     return canvas_sketch().random(low, high)
 

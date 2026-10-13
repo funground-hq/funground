@@ -9,6 +9,7 @@ wrappers over the active Sketch.
 from __future__ import annotations
 
 import contextlib
+import dataclasses
 from collections import namedtuple
 import datetime
 import math
@@ -24,7 +25,7 @@ from .controls import Button, Checkbox, ControlPanel, Slider, panel_ops
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
 from .paint import Gradient, parse_paint
 from .formatted import FormattedString
-from .typography import TEXT_STYLES
+from .typography import TEXT_STYLES, text_size_value
 from .geometry import Path, Transform, rect_radii
 from .paths import PathBuilder
 from .noise import Noise
@@ -33,6 +34,7 @@ from .platform.base import CURSOR_KINDS, KEY_NAMES, Platform
 from .renderers import Renderer
 from .state import GraphicsState, StateStack
 
+_PendingSave = namedtuple("_PendingSave", "path text setup dpi")     # a save() waiting for the end of the frame
 _Piece = namedtuple("_Piece", "text ri size ascent descent width")   # one measured piece of a line (T14)
 
 DEFAULT_SHADOW_COLOR = (0, 0, 0, 128)       # not read through the colour mode (S15)
@@ -91,7 +93,7 @@ class Sketch:
         self._states = StateStack()
         # Ops recorded since the last render; consumed once per loop iteration.
         self.frame = ir.Frame()
-        self._pending_saves: list[tuple[str, str]] = []     # (path, text mode)
+        self._pending_saves: list[_PendingSave] = []
         self._frame_sequence: list | None = None      # S-056: [pattern, next number, last number]
         self._cursor: str | None = "arrow"              # S-057: applied whenever a window opens
         # no_smooth() is a sketch setting, re-applied at the start of every frame (S-042).
@@ -124,6 +126,9 @@ class Sketch:
         self.key_code: int | None = None
         self.is_key_pressed = False
         self._callbacks: dict[str, Callable] = {}
+        self._script_looked_at = False               # a script's drawing was shown or saved (S-180)
+        self._namespace: Namespace | None = None    # the sketch's globals, once run() or a script's size() names them
+        self._shared_names: tuple[str, ...] = ()    # live names kept current there (global style, D-088)
         self.frame_count = 0
         self.delta_time = 0.0
         self.running = False
@@ -187,6 +192,10 @@ class Sketch:
         # animated sketch), each called with drawn=True after the frame is drawn, or drawn=False when the
         # loop drew no frame this time (no_loop()), so it uses the frame on screen.
         self._frame_end: list[Callable[[bool], None]] = []
+        # S-136: the loop is split into start()/step()/finish(); these carry what the loop body needs between steps.
+        self._draw_fn: Callable[[], None] | None = None
+        self._iterations = 0
+        self._max_frames: int | None = None
 
     # ------------------------------------------------------------ state
     @property
@@ -302,7 +311,7 @@ class Sketch:
         return math.degrees(radians)
 
     # ------------------------------------------------------------ window
-    def size(self, width: Any, height: int | None = None, *, title: str = "funground", fps: int = 60,
+    def size(self, width: Any, height: int | None = None, *, title: str = "funground", fps: int | None = None,
              margin: Any = 0, landscape: bool = False) -> None:
         if isinstance(width, str):                      # a page name (S-132, contract G1)
             from .pages import page_size
@@ -316,7 +325,7 @@ class Sketch:
             raise ValueError("f.size() needs both width and height, or a page name such as \"A4\"")
         if width <= 0 or height <= 0:
             raise ValueError("width and height must be positive")
-        if fps <= 0:
+        if fps is not None and fps <= 0:
             raise ValueError("fps must be positive")
         from .surface import check_margin
 
@@ -324,7 +333,8 @@ class Sketch:
         self._margin = margin
         self.width = int(width)
         self.height = int(height)
-        self.fps = int(fps)
+        if fps is not None:                  # None keeps the rate: 60 to start with, or run(fps=...)'s (contract R3)
+            self.fps = int(fps)
         self.title = title
         self._check_capabilities()
         self._pages = []
@@ -348,9 +358,15 @@ class Sketch:
         return Ground(0, 0, self.width, self.height, self._margin)
 
     # ---- scripts (S-076, contract R13-R15)
+    @property
+    def unseen_drawing(self) -> bool:
+        """True when this is a script that has drawn something and has neither shown nor saved it (S-180)."""
+        return self._script and bool(self.frame or self._pages) and not self._script_looked_at
+
     def _begin_script(self) -> None:
         """A top-level f.size(): a blank canvas with no window (contract R14)."""
         self._start_page()
+        self._script_looked_at = False
         self._graphics_counter, self._graphics_before_run = self._graphics_before_run, 0
         self._start_time = time.perf_counter()
 
@@ -457,9 +473,10 @@ class Sketch:
             )
         if not self._script:
             raise RuntimeError("No drawing window yet. Call f.size(...) first.")
+        self._script_looked_at = True
         self._flush_pixel_patch()
-        if isinstance(self._platform, HeadlessPlatform):
-            return
+        if isinstance(self._platform, HeadlessPlatform) and not self._host_driven:
+            return                              # no window: nothing to show
         platform = self._platform
         renderer = default_renderer()
         if self._pages:
@@ -478,6 +495,8 @@ class Sketch:
             platform.set_cursor(self._cursor)
             pixels = renderer.pixels()
             platform.present(pixels)
+            if self._host_driven:                  # a host has the picture now; show() does not wait
+                return
             while platform.poll():
                 platform.present(pixels)           # keeps the picture up if the window is uncovered
                 platform.tick(30)
@@ -506,6 +525,10 @@ class Sketch:
                 platform.present(shown)
                 return shown
 
+            if self._host_driven:                  # a host gets every page, the current page last
+                for number in range(total):
+                    open_page(number)
+                return
             shown = open_page(index)
             platform.start()
             platform.set_cursor(self._cursor)
@@ -522,6 +545,14 @@ class Sketch:
                 platform.tick(30)
         finally:
             platform.close()
+
+    @property
+    def _host_driven(self) -> bool:
+        """True when a host (a web page, funground.web.Session) steps the loop instead of this sketch.
+
+        The platform says so: it is the host's platform (platform/browser.py) and the only thing that
+        differs from the desktop. f.run() then returns after setup() and f.show() after presenting."""
+        return getattr(self._platform, "host_driven", False)
 
     def _attach(self, pw: int, ph: int) -> None:
         self._renderer.attach(pw, ph, self._platform.backing_scale)
@@ -1002,12 +1033,26 @@ class Sketch:
         self._append(self._renderer.pixels_op(out, 0, 0, w, h))
 
     # ------------------------------------------------------------ export
-    def save(self, path: str, *, text: str = "live") -> None:
+    def save(self, path: str, *, text: str = "live", bleed: float = 0, marks: bool = False,
+             dpi: float | None = None) -> None:
         """Write this frame to a .png, .pdf or .svg file when the frame is complete.
 
-        *text* is "live" or "shapes" (contract T20): how a PDF or SVG holds its letters."""
-        from .export import check_text_mode, format_of
+        *text* is "live" or "shapes" (contract T20): how a PDF or SVG holds its letters. *bleed* and
+        *marks* make a PDF print-ready (contract D2). *dpi* sets a PNG's resolution (contract D3)."""
+        import os
+
+        from .export import check_dpi, check_png_size, check_text_mode, format_of
+        from .export.printing import check_print_options
         check_text_mode(text)
+        setup = check_print_options(bleed, marks)
+        dpi = check_dpi(dpi)
+        kind = os.path.splitext(str(path))[1].lower()
+        if setup.active and kind != ".pdf":
+            raise ValueError(f"f.save({path!r}): bleed and marks are for a PDF, which has a trim size to cut to. "
+                             "Save a .pdf for the printer. For a PNG, dpi= sets the resolution.")
+        if dpi is not None and kind != ".png":
+            raise ValueError(f"f.save({path!r}): dpi is for a PNG. A PDF or SVG is vector: it has no resolution "
+                             "and prints sharp at any size. Save a .png to choose a resolution.")
         from .export.motion import MOTION_FORMATS
 
         if isinstance(path, str) and "." in path and path.lower().rsplit(".", 1)[-1] in MOTION_FORMATS:
@@ -1015,27 +1060,33 @@ class Sketch:
             return
         format_of(path)  # validate early so the learner sees the error at the call site
         self._require_window()
+        if dpi is not None:                  # refuse a page too big for memory now, at the call
+            for width, height in [(self.width, self.height), *((w, h) for w, h, _, _ in self._pages)]:
+                check_png_size(width, height, dpi, path)
         if self._script:                     # contract R14: a script's save writes at once
-            self._save_script(path, text)
+            self._save_script(path, text, setup, dpi)
             return
-        self._pending_saves.append((path, text))
+        self._pending_saves.append(_PendingSave(path, text, setup, dpi))
 
-    def _save_script(self, path: str, text: str = "live") -> None:
+    def _save_script(self, path: str, text: str, setup, dpi: float | None) -> None:
         from .export import format_of, save_frame, save_pixels
 
+        self._script_looked_at = True
         self._flush_pixel_patch()
         fmt = format_of(path)
         if self._pages:                                  # contract R17: several pages
-            self._save_pages(path, fmt, text)
+            self._save_pages(path, fmt, text, setup, dpi)
             return
-        if fmt == "png":
+        if fmt == "png" and dpi is not None:             # drawn afresh at the resolution (contract D3)
+            save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, dpi=dpi)
+        elif fmt == "png":
             self._script_flush()
             save_pixels(self._view_pixels(), path)
         else:
             save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, self._script_scale,
-                       text)
+                       text, setup)
 
-    def _save_pages(self, path: str, fmt: str, text: str = "live") -> None:
+    def _save_pages(self, path: str, fmt: str, text: str, setup, dpi: float | None) -> None:
         import os
 
         from .export import save_document, save_frame, save_pixels
@@ -1043,14 +1094,16 @@ class Sketch:
 
         pages = self._document_pages()
         if fmt == "pdf":
-            save_document([(w, h, ir.Frame(list(ops))) for w, h, ops, _ in pages], path, text)
+            save_document([(w, h, ir.Frame(list(ops))) for w, h, ops, _ in pages], path, text, setup)
             return
         self._script_flush()
         stem, ext = os.path.splitext(path)
         scale = self._script_scale
         for number, (w, h, ops, pixels) in enumerate(pages, 1):
             numbered = f"{stem}_{number}{ext}"
-            if fmt == "png":
+            if fmt == "png" and dpi is not None:
+                save_frame(ir.Frame(list(ops)), numbered, w, h, dpi=dpi)
+            elif fmt == "png":
                 shown = self._view_pixels() if pixels is None else Pixels(
                     pixels, round(w * scale), round(h * scale), "BGRA")
                 save_pixels(shown, numbered)
@@ -1092,7 +1145,7 @@ class Sketch:
                     f"f.save({path!r}): every page of a {kind.upper()} must be the same size. "
                     f"Page 1 is {first[0]} x {first[1]} but page {number} is {w} x {h}."
                 )
-        motion.require_encoder(kind)
+        self._require_encoder(kind)
         self._script_flush()
         frames = []
         scale = self._script_scale
@@ -1127,7 +1180,7 @@ class Sketch:
         if self._motion is not None:
             raise RuntimeError(f"f.{name}() was called while another recording is still running. "
                                "Wait until it has finished.")
-        motion.require_encoder(kind)
+        self._require_encoder(kind)
         frames = max(1, round(seconds * self.fps))
         # Called from draw(), this frame is already being drawn: the recording starts with the next one.
         self._motion = [path, kind, frames, [], None, bool(self._in_draw)]
@@ -1180,12 +1233,14 @@ class Sketch:
         import os
         import re
 
+        from .export import NO_PRINT_SETUP
+
         pattern, number, last = seq
         path = re.sub(r"#+", lambda m: str(number).zfill(len(m.group())), pattern)
         folder = os.path.dirname(path)
         if folder:
             os.makedirs(folder, exist_ok=True)
-        self._pending_saves.append((path, "live"))
+        self._pending_saves.append(_PendingSave(path, "live", NO_PRINT_SETUP, None))
         seq[1] += 1
         if seq[1] > last:
             self._frame_sequence = None
@@ -1195,13 +1250,15 @@ class Sketch:
             return
         from .export import format_of, save_frame, save_pixels
 
-        paths, self._pending_saves = self._pending_saves, []
-        for path, text in paths:
-            if format_of(path) == "png":
+        waiting, self._pending_saves = self._pending_saves, []
+        for path, text, setup, dpi in waiting:
+            if format_of(path) == "png" and dpi is not None:    # this frame, drawn afresh at the resolution (D3)
+                save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height, dpi=dpi)
+            elif format_of(path) == "png":
                 save_pixels(self._view_pixels(), path)      # what is on screen
             else:
                 save_frame(self._with_layers(self.frame, files=True), path, self.width, self.height,
-                           self._platform.backing_scale, text)
+                           self._platform.backing_scale, text, setup)
 
     # ------------------------------------------------------------ style
     def read_color(self, value: ColorLike, *more: float) -> Color:
@@ -1278,8 +1335,19 @@ class Sketch:
         self._states.update(stroke_width=int(pixels) if pixels == int(pixels) else float(pixels))
 
     # ---- stroke styles and smoothing (S-042, contract S11/C6)
-    STROKE_CAPS = ("round", "square", "butt")
-    STROKE_JOINS = ("round", "miter", "bevel")
+    # Each word and what it does (D-092); the API reference prints the meanings.
+    STROKE_CAPS = {
+        "round": "Each end of a line is a half circle, so the line reaches half its width past its end points. "
+                 "The default.",
+        "square": "Each end is squared off half the line's width past its end point.",
+        "butt": "Each end is cut off flat exactly at its end point.",
+    }
+    STROKE_JOINS = {
+        "round": "Corners are rounded. The default.",
+        "miter": "Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not "
+                 "shoot far out.",
+        "bevel": "Corners are cut off flat.",
+    }
 
     def stroke_cap(self, cap: str) -> None:
         if cap not in self.STROKE_CAPS:
@@ -1318,10 +1386,8 @@ class Sketch:
         if self._has_window:
             self._append(ir.SetAntialias(True))
 
-    def text_size(self, size: int) -> None:
-        if size <= 0:
-            raise ValueError("text size must be positive")
-        self._states.update(text_size=int(size))
+    def text_size(self, size: float) -> None:
+        self._states.update(text_size=text_size_value(size, "f.text_size()"))
 
     # ---- fonts and styles (S-054, contract T11/T12)
     TEXT_STYLES = TEXT_STYLES          # one list, in typography (contract T12)
@@ -1348,7 +1414,7 @@ class Sketch:
             )
         changes = {"font": key}
         if size is not None:
-            changes["text_size"] = int(size)
+            changes["text_size"] = text_size_value(size, "f.text_font()")
         self._states.update(**changes)
 
     def text_fallback(self, *fonts) -> None:
@@ -1377,7 +1443,20 @@ class Sketch:
         """A font installed on this computer, found by its family name (contract T18)."""
         from .typography import system_font as _system_font
 
+        self._refuse_in_browser("f.system_font()", "Use the built-in font, or f.load_font() with a font file.")
         return _system_font(name)
+
+    def _refuse_in_browser(self, what: str, instead: str) -> None:
+        """Contract W1: a feature that needs the desktop says so, and what to do instead."""
+        if self._host_driven:
+            raise RuntimeError(f"{what} does not work in the browser. {instead}")
+
+    def _require_encoder(self, kind: str) -> None:
+        from .export import motion
+
+        if kind == "mp4":
+            self._refuse_in_browser("An MP4 movie", "Save a GIF with f.save_gif() or f.save(\"x.gif\") instead.")
+        motion.require_encoder(kind)
 
     def text_style(self, style: str) -> None:
         """Use one of the four built-in styles for later text (ignored once a font is loaded)."""
@@ -1424,8 +1503,21 @@ class Sketch:
         self._states.update(font_variations=tuple(sorted(merged.items())))
 
     # ---- text alignment and metrics (S-049, contract T7/T8)
-    TEXT_ALIGNS = ("left", "center", "right")
-    TEXT_VALIGNS = ("top", "center", "baseline", "bottom")
+    # Each word and what it does (D-092); the API reference prints the meanings.
+    TEXT_ALIGNS = {
+        "left": "x is where the text starts; it runs to the right. The default.",
+        "center": "x is the middle of the text.",
+        "right": "x is where the text ends.",
+        "justify": "In text_box(), each line is stretched to the box's width by widening the spaces, except the "
+                   "last line of a paragraph and a line of one word. In text() the same as left.",
+    }
+    TEXT_VALIGNS = {
+        "top": "y is the top of the text: the tallest letters' height (the font's ascent). The default.",
+        "center": "y is halfway between the top and the bottom.",
+        "baseline": "y is the line the letters stand on; the tails of g, p and y hang below it. Lines of text "
+                    "in different sizes line up on their baselines.",
+        "bottom": "y is the bottom of the text: below the tails of g, p and y (the font's descent).",
+    }
 
     def text_align(self, horizontal: str, vertical: str | None = None) -> None:
         if horizontal not in self.TEXT_ALIGNS:
@@ -1456,15 +1548,18 @@ class Sketch:
     def _leading(style) -> float:
         return style.text_leading if style.text_leading is not None else style.text_size * 1.25
 
-    def _emit_lines(self, lines: list[str], x: float, y: float, color: Color, style, top: float | None = None) -> None:
+    def _emit_lines(self, lines: list[str], x: float, y: float, color: Color, style, top: float | None = None,
+                    gaps: list[float] | None = None) -> None:
         """Emit one Text op per line, top-left anchored, so that (x, y) is the block's alignment point
-        (contract T7/T9). *top*, when given, is the block's top edge (text boxes place it themselves)."""
-        for line, left, line_top in self._line_layout(lines, x, y, style, top):
-            self._emit(ir.Text(line, left, line_top, color, style))
+        (contract T7/T9). *top*, when given, is the block's top edge (text boxes place it themselves).
+        *gaps*, when given, is the extra pixels to add after each space of each line (justified, T22)."""
+        for line, left, line_top, i in self._line_layout(lines, x, y, style, top):
+            self._emit(ir.Text(line, left, line_top, color, style, gaps[i] if gaps else 0.0))
 
     def _line_layout(self, lines: list[str], x: float, y: float, style, top: float | None = None):
-        """Yield (line, left, top) for each non-empty line: the one layout `text`, `text_box` and
-        `text_path` all share, so they cannot drift apart (contract T7/T9, F13)."""
+        """Yield (line, left, top, index) for each non-empty line: the one layout `text`, `text_box` and
+        `text_path` all share, so they cannot drift apart (contract T7/T9, F13). A justified line
+        starts at x, like a left one (T22)."""
         from .typography import effective_font, text_metrics, text_settings, text_width
 
         font = effective_font(style)
@@ -1477,11 +1572,11 @@ class Sketch:
             top = y - shift if shift else y      # untouched numbers keep old snapshots byte-identical
         for i, line in enumerate(lines):
             left = x
-            if style.text_align != "left":
+            if style.text_align in ("center", "right"):
                 w = text_width(line, style.text_size, font, **settings)
                 left -= w / 2 if style.text_align == "center" else w
             if line:
-                yield line, left, top + i * leading if i else top
+                yield line, left, top + i * leading if i else top, i
 
     def _text_color(self, color: ColorLike | None, style) -> Color:
         if color is not None:
@@ -1490,8 +1585,8 @@ class Sketch:
 
     def text_box(self, message: object, x: float, y: float, width: float, height: float | None = None,
                  color: ColorLike | None = None) -> str | FormattedString:
-        """Wrap *message* inside the box; return the text that did not fit (contract T10, T14)."""
-        from .typography import effective_font, text_metrics, text_settings, wrap_lines
+        """Wrap *message* inside the box; return the text that did not fit (contract T10, T14, T22, T23)."""
+        from .typography import effective_font, paragraph_ends, text_metrics, text_settings, word_gap, wrap_lines
 
         if not width > 0 or (height is not None and not height >= 0):
             raise ValueError("f.text_box() needs a width above 0 and a height of 0 or more (or no height)")
@@ -1499,13 +1594,14 @@ class Sketch:
             return self._fs_text_box(message, x, y, width, height, color)
         style = self.style
         font = effective_font(style)
-        lines, rests = wrap_lines(str(message), width, style.text_size, font, **text_settings(style))
+        text, settings = str(message), text_settings(style)
+        lines, rests = wrap_lines(text, width, style.text_size, font, **settings)
         ascent, descent = text_metrics(style.text_size, font)
         leading = self._leading(style)
         fitting = len(lines)
-        if height is not None:
+        if height is not None:                 # each line takes one leading, as in DrawBot and InDesign (D-093)
             fitting = 0
-            while fitting < len(lines) and fitting * leading + ascent + descent <= height + 1e-9:
+            while fitting < len(lines) and (fitting + 1) * leading <= height + 1e-9:
                 fitting += 1
         shown = lines[:fitting]
         if shown:
@@ -1513,8 +1609,13 @@ class Sketch:
             room = (height if height is not None else block) - block
             drop = {"top": 0, "baseline": 0, "center": room / 2, "bottom": room}[style.text_valign]
             top = y + drop if drop else y
-            anchor = x + {"left": 0, "center": width / 2, "right": width}[style.text_align]
-            self._emit_lines(shown, anchor, y, self._text_color(color, style), style, top=top)
+            anchor = x + {"left": 0, "center": width / 2, "right": width, "justify": 0}[style.text_align]
+            gaps = None
+            if style.text_align == "justify":                # every line but the last of a paragraph (T22)
+                ends = paragraph_ends(text, [len(text) - len(rest) for rest in rests])
+                gaps = [0.0 if end else word_gap(line, width, style.text_size, font, **settings)
+                        for line, end in zip(shown, ends)]
+            self._emit_lines(shown, anchor, y, self._text_color(color, style), style, top=top, gaps=gaps)
         return rests[fitting] if fitting < len(lines) else ""
 
     # ---- mixed styles in one text (S-091, contract T14)
@@ -1540,10 +1641,17 @@ class Sketch:
                               text_width(text, st.text_size, font, **text_settings(st))))
         return out
 
+    @staticmethod
+    def _fs_gap(pieces: list, width: float) -> float:
+        """The pixels to add after each space of a measured line so that it is *width* wide (T22); 0 when
+        the line has no space or is already as wide."""
+        spaces = sum(p.text.count(" ") for p in pieces)
+        return max(0.0, (width - sum(p.width for p in pieces)) / spaces) if spaces else 0.0
+
     def _fs_metrics(self, measured: list, style):
         """For each measured line: its ascent and descent (the tallest piece's), and the distance of its
         baseline from the first line's. The step to a line is its leading: 1.25 x its largest size,
-        unless text_leading is set."""
+        unless text_leading is set. Also each line's leading (D-093: a text box gives each line one leading)."""
         ascents = [max((p.ascent for p in line), default=0.0) for line in measured]
         descents = [max((p.descent for p in line), default=0.0) for line in measured]
         leadings = [style.text_leading if style.text_leading is not None
@@ -1555,14 +1663,16 @@ class Sketch:
             for lead in leadings[1:]:
                 total += lead
                 offsets.append(total)
-        return ascents, descents, offsets
+        return ascents, descents, offsets, leadings
 
-    def _fs_layout(self, lines: list, x: float, y: float, style, resolved: dict, top: float | None = None):
-        """Yield (text, left, top, run index) for each non-empty piece: the layout of a FormattedString,
-        shared by text, text_box and text_path as `_line_layout` is for plain text (T7, T9, T14).
-        The pieces of a line share one baseline, which comes from the tallest ascent on the line."""
+    def _fs_layout(self, lines: list, x: float, y: float, style, resolved: dict, top: float | None = None,
+                   gaps: list[float] | None = None):
+        """Yield (text, left, top, run index, word spacing) for each non-empty piece: the layout of a
+        FormattedString, shared by text, text_box and text_path as `_line_layout` is for plain text (T7, T9,
+        T14). The pieces of a line share one baseline, which comes from the tallest ascent on the line.
+        *gaps*, when given, is the extra pixels to add after each space of each line (justified, T22)."""
         measured = [self._fs_pieces(line, resolved) for line in lines]
-        ascents, descents, offsets = self._fs_metrics(measured, style)
+        ascents, descents, offsets, _ = self._fs_metrics(measured, style)
         if top is None:
             block = ascents[0] + descents[-1] + offsets[-1]
             shift = {"top": 0, "baseline": ascents[0], "bottom": block, "center": block / 2}[style.text_valign]
@@ -1571,16 +1681,20 @@ class Sketch:
             line_top = top + offsets[i] if i else top
             width = sum(p.width for p in line)
             pen = x
-            if style.text_align != "left":
+            if style.text_align in ("center", "right"):
                 pen -= width / 2 if style.text_align == "center" else width
+            gap = gaps[i] if gaps else 0.0
             for p in line:
+                spaces = p.text.count(" ")
                 if p.text:
                     delta = ascents[0] - p.ascent
-                    yield p.text, pen, line_top + delta if delta else line_top, p.ri
-                pen += p.width
+                    yield p.text, pen, line_top + delta if delta else line_top, p.ri, gap if spaces else 0.0
+                pen += p.width + gap * spaces
 
     def _fs_text_box(self, fs: FormattedString, x: float, y: float, width: float, height: float | None,
                      color: ColorLike | None) -> FormattedString:
+        from .typography import paragraph_ends
+
         style = self.style
         resolved = self._fs_resolve(fs, style, color)
 
@@ -1589,20 +1703,25 @@ class Sketch:
 
         lines, starts = fs.wrap(fits)
         measured = [self._fs_pieces(line, resolved) for line in lines]
-        ascents, descents, offsets = self._fs_metrics(measured, style)
+        ascents, descents, offsets, leadings = self._fs_metrics(measured, style)
         fitting = len(lines)
-        if height is not None:
+        if height is not None:                 # the lines' leadings, first to this one, within the height (D-093)
             fitting = 0
-            while fitting < len(lines) and offsets[fitting] + ascents[0] + descents[fitting] <= height + 1e-9:
+            while fitting < len(lines) and offsets[fitting] + leadings[0] <= height + 1e-9:
                 fitting += 1
         if fitting:
             block = ascents[0] + descents[fitting - 1] + offsets[fitting - 1]
             room = (height if height is not None else block) - block
             drop = {"top": 0, "baseline": 0, "center": room / 2, "bottom": room}[style.text_valign]
             top = y + drop if drop else y
-            anchor = x + {"left": 0, "center": width / 2, "right": width}[style.text_align]
-            for piece_text, left, piece_top, ri in self._fs_layout(lines[:fitting], anchor, y, style, resolved, top=top):
-                self._emit(ir.Text(piece_text, left, piece_top, resolved[ri][1], resolved[ri][0]))
+            anchor = x + {"left": 0, "center": width / 2, "right": width, "justify": 0}[style.text_align]
+            gaps = None
+            if style.text_align == "justify":                # every line but the last of a paragraph (T22)
+                ends = paragraph_ends(str(fs), starts)
+                gaps = [0.0 if end else self._fs_gap(line, width) for line, end in zip(measured, ends)]
+            for piece_text, left, piece_top, ri, gap in self._fs_layout(lines[:fitting], anchor, y, style, resolved,
+                                                                        top=top, gaps=gaps):
+                self._emit(ir.Text(piece_text, left, piece_top, resolved[ri][1], resolved[ri][0], gap))
         return fs._from(starts[fitting]) if fitting < len(lines) else FormattedString()
 
     # ------------------------------------------------------------ drawing
@@ -1757,7 +1876,7 @@ class Sketch:
         style = self.style
         if isinstance(message, FormattedString):
             resolved = self._fs_resolve(message, style, color)
-            for piece_text, left, top, ri in self._fs_layout(message.lines(), x, y, style, resolved):
+            for piece_text, left, top, ri, _ in self._fs_layout(message.lines(), x, y, style, resolved):
                 self._emit(ir.Text(piece_text, left, top, resolved[ri][1], resolved[ri][0]))
             return
         self._emit_lines(str(message).split("\n"), x, y, self._text_color(color, style), style)
@@ -1770,7 +1889,7 @@ class Sketch:
         if isinstance(message, FormattedString):
             resolved = self._fs_resolve(message, style, None)
             geometry = Path()
-            for piece_text, left, top, ri in self._fs_layout(message.lines(), x, y, style, resolved):
+            for piece_text, left, top, ri, _ in self._fs_layout(message.lines(), x, y, style, resolved):
                 st = resolved[ri][0]
                 shaped = effective_font(st).shape(piece_text, st.text_size, **text_settings(st))
                 for op in shaped.outline_ops(left, top, WHITE):
@@ -1779,7 +1898,7 @@ class Sketch:
         font = effective_font(style)
         settings = text_settings(style)
         geometry = Path()
-        for line, left, top in self._line_layout(str(message).split("\n"), x, y, style):
+        for line, left, top, _ in self._line_layout(str(message).split("\n"), x, y, style):
             for op in font.shape(line, style.text_size, **settings).outline_ops(left, top, WHITE):
                 geometry = Path(geometry.segments + op.path.segments)
         return PathBuilder(geometry)
@@ -1793,6 +1912,83 @@ class Sketch:
         if not spacing > 0:
             raise ValueError(f"f.text_to_points() needs a spacing above 0 pixels, not {spacing!r}")
         return [(float(px), float(py)) for px, py in sample_path(self.text_path(message, x, y).geometry, float(spacing))]
+
+    def text_on_path(self, message: object, path: PathBuilder | Path, offset: float = 0) -> str:
+        """Draw *message* along *path*, one Text op for each letter, and return the text that did not fit
+        (contract T24). The message is shaped once, as `text` shapes it; each letter (a HarfBuzz cluster)
+        is then drawn upright on the path in a transform of its own: its middle on the path, turned to the
+        path's direction there. So PDF and SVG keep each letter as live text, and the letters' look is the
+        one `text` gives."""
+        from .geometry import PathMeasure
+        from .typography import SOFT_HYPHEN, effective_font, text_metrics, text_settings
+
+        geometry = _geometry_of(path, "text_on_path")
+        if isinstance(message, FormattedString):
+            raise TypeError("f.text_on_path() sets one text in the current font: give a string. "
+                            "A FormattedString cannot be set on a path yet.")
+        if isinstance(offset, bool) or not isinstance(offset, (int, float)):
+            raise TypeError(f"f.text_on_path() needs the offset as a number of pixels, not {offset!r}")
+        if not math.isfinite(offset):
+            raise ValueError(f"f.text_on_path() needs a finite offset, not {offset!r}")
+        text = str(message).replace(SOFT_HYPHEN, "")
+        if "\n" in text:
+            raise ValueError("f.text_on_path() sets one line of text, but this message has a new line in it. "
+                             "Make one call for each line.")
+        route = PathMeasure(geometry)
+        if not route.length > 0:
+            raise ValueError("f.text_on_path() needs a path with some length to follow, but this path has none. "
+                             "Draw a line or a curve with f.path() first.")
+        self._require_window()
+        style = self.style
+        font = effective_font(style)
+        spans = font.shape(text, style.text_size, **text_settings(style)).cluster_spans()
+        ascent, descent = text_metrics(style.text_size, font)
+        # Where the text starts: the alignment decides, then the offset moves it along (T24).
+        start = {"center": (route.length - sum(s[2] for s in spans)) / 2,
+                 "right": route.length - sum(s[2] for s in spans)}.get(style.text_align, 0.0) + offset
+        # The vertical alignment is the one `text` uses (T7): the path is the point (x, y) of the letters.
+        top = {"top": 0.0, "baseline": -ascent, "center": -(ascent + descent) / 2, "bottom": -(ascent + descent)}[
+            style.text_valign]
+        first, last = (start, start + route.length) if route.closed else (0.0, route.length)
+        pieces: list[list] = []            # [text, middle, advance] of each piece to draw
+        cut: list[tuple[int, int]] = []    # the letters past the end
+        pen, joins = start, False          # joins: the letter before was drawn, so a space after it may ride along
+        for begin, end, advance in spans:
+            near, far = pen, pen + advance
+            pen = far
+            if far > last + 1e-6:
+                cut.append((begin, end))
+                joins = False
+            elif near < first - 1e-6:
+                joins = False
+            elif text[begin:end].isspace():
+                if joins:
+                    pieces[-1][0] += text[begin:end]
+            else:
+                pieces.append([text[begin:end], (near + far) / 2, advance])
+                joins = True
+        paint = self._text_color(None, style)
+        for piece, middle, advance in pieces:
+            x, y, degrees = route.point_at(middle)
+            frame = Transform.rotation(degrees).then(Transform.translation(x, y))
+            self._emit(ir.Save())
+            self._emit(ir.Concat(frame))
+            self._emit(ir.Text(piece, -advance / 2, top, self._paint_seen_from(paint, frame), style))
+            self._emit(ir.Restore())
+        return "".join(text[begin:end] for begin, end in sorted(cut))
+
+    @staticmethod
+    def _paint_seen_from(paint, frame: Transform):
+        """*paint* as it must be given inside a drawing moved by *frame* (a turn and a move): a gradient
+        stays where the sketch put it, instead of following the frame."""
+        if not isinstance(paint, Gradient):
+            return paint
+        back = frame.invert()
+        if paint.kind == "linear":
+            points = (*back.apply(*paint.points[:2]), *back.apply(*paint.points[2:]))
+        else:
+            points = (*back.apply(*paint.points[:2]), paint.points[2])
+        return dataclasses.replace(paint, points=points)
 
     def current_font(self):
         """The font text is set in now, as a font object, the built-in font too (contract T17)."""
@@ -1812,6 +2008,52 @@ class Sketch:
         font = effective_font(self.style)
         settings = text_settings(self.style)
         return max(text_width(line, self.style.text_size, font, **settings) for line in str(message).split("\n"))
+
+    def fit_text_size(self, message: object, width: float, height: float | None = None) -> float:
+        """The largest text size at which *message* is no wider than *width* (and, with *height*, no taller),
+        found by a bracketed search to within 0.01 pixels (contract T21)."""
+        from .typography import effective_font, text_metrics, text_settings, text_width
+
+        if isinstance(message, FormattedString):
+            raise TypeError("f.fit_text_size() fits one text in the current font: give a string. "
+                            "A FormattedString has a size of its own in each run, so it cannot be fitted yet.")
+        given = {"width": width} if height is None else {"width": width, "height": height}
+        for name, value in given.items():
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise TypeError(f"f.fit_text_size() needs the {name} as a number of pixels, not {value!r}")
+            if not 0 < value < float("inf"):
+                raise ValueError(f"f.fit_text_size() needs a {name} above 0 pixels, not {value!r}")
+        lines = str(message).split("\n")
+        style = self.style
+        font = effective_font(style)
+        settings = text_settings(style)
+        if max(text_width(line, 100.0, font, **settings) for line in lines) <= 0:
+            raise ValueError("f.fit_text_size() needs some text to measure, but this message has no letters")
+
+        def fits(size: float) -> bool:
+            if max(text_width(line, size, font, **settings) for line in lines) > width:
+                return False
+            if height is None:
+                return True
+            ascent, descent = text_metrics(size, font)
+            leading = style.text_leading if style.text_leading is not None else size * 1.25
+            return ascent + descent + leading * (len(lines) - 1) <= height
+
+        low = 0.01
+        if not fits(low):
+            raise ValueError("f.fit_text_size(): the text does not fit in that space at any size. "
+                             "Its tracking, or its fixed leading, is already too much: give more room, "
+                             "or reduce f.text_tracking() or f.text_leading().")
+        high = max(low * 2, 1.0)
+        while fits(high):
+            low, high = high, high * 2
+            if high > 1e6:
+                raise ValueError(f"f.fit_text_size(): a text size above 1 000 000 would still fit {width:g} pixels. "
+                                 "Is the width in the right units?")
+        while high - low > 0.001:
+            middle = (low + high) / 2
+            low, high = (middle, high) if fits(middle) else (low, middle)
+        return low
 
     # ------------------------------------------------------------ shapes, paths, clipping (S-028)
     def begin_shape(self) -> None:
@@ -1920,9 +2162,39 @@ class Sketch:
                              None if style.erasing is None else style.erasing[1])
 
     # ---- compositing (S-051, contract S14)
-    BLEND_MODES = ("normal", "multiply", "screen", "overlay", "darken", "lighten", "add", "difference",
-                   "exclusion", "dodge", "burn", "hard_light", "soft_light", "hue", "saturation", "color",
-                   "luminosity")
+    # Each word and what it does (D-092): blend_mode() accepts the keys, the API reference prints the meanings.
+    # "New" is the colour being drawn, "old" the colour already on the canvas under it.
+    BLEND_MODES = {
+        "normal": "The new colour covers the old one (see-through only as far as its alpha or opacity() says).",
+        "multiply": "Multiplies the colours, so the result is always darker: like overlapping inks or "
+                    "colour filters. White leaves the old colour unchanged; black gives black.",
+        "screen": "The opposite of multiply: the result is always lighter, like two slide projectors on one "
+                  "screen. Black leaves the old colour unchanged; white gives white.",
+        "overlay": "Multiply where the old colour is dark, screen where it is light: more contrast, keeping "
+                   "the old picture's highlights and shadows.",
+        "darken": "Keeps the darker of the two colours, channel by channel (red, green and blue separately).",
+        "lighten": "Keeps the lighter of the two colours, channel by channel.",
+        "add": "Adds the colours, so overlaps glow and turn white quickly: light added to light.",
+        "difference": "The difference between the colours: the same colours give black, white turns the old "
+                      "colour into its opposite (a negative).",
+        "exclusion": "Like difference, with less contrast: white still inverts, mid-grey gives grey.",
+        "dodge": "Brightens the old colour by the new one; bright new colours burn out to white "
+                 "(color dodge). Black changes nothing.",
+        "burn": "Darkens the old colour by the new one, with more contrast (color burn). White changes "
+                "nothing.",
+        "hard_light": "Multiply where the new colour is dark, screen where it is light: like a harsh "
+                      "spotlight of the new colour.",
+        "soft_light": "A gentler hard_light: like a soft, diffused light of the new colour. Mid-grey changes "
+                      "nothing.",
+        "hue": "The new colour's hue with the old colour's saturation and lightness: recolours the old "
+               "picture.",
+        "saturation": "The new colour's saturation with the old colour's hue and lightness: makes the old "
+                      "picture more vivid or greyer.",
+        "color": "The new colour's hue and saturation with the old colour's lightness: tints the old picture "
+                 "while keeping its shading.",
+        "luminosity": "The new colour's lightness with the old colour's hue and saturation: the opposite of "
+                      "color.",
+    }
 
     def blend_mode(self, mode: str) -> None:
         if mode not in self.BLEND_MODES:
@@ -2059,10 +2331,50 @@ class Sketch:
         fn = self._callbacks.get(name)
         if fn is None:
             return
-        if name == "mouse_wheel" and _takes_an_argument(fn):
-            fn(ev.delta)
-        else:
-            fn()
+        self.publish_live_values()
+        with self._explaining_name_clashes():
+            if name == "mouse_wheel" and _takes_an_argument(fn):
+                fn(ev.delta)
+            else:
+                fn()
+
+    # ---- the global style (D-088, S-176; funground/global_style.py)
+    @property
+    def started(self) -> bool:
+        """True once run() (or a host) has started this sketch."""
+        return self._draw_fn is not None
+
+    def share_globals(self, namespace: Namespace) -> None:
+        """Keep the live values current in *namespace* if it is a ``from funground import *`` sketch."""
+        from . import global_style
+
+        self._namespace = namespace
+        self._shared_names = global_style.live_names_in(namespace)
+
+    def adopt_globals(self, namespace: Namespace) -> None:
+        """A script's first size() (or full_screen(), ...) names its file's globals; run() names them otherwise."""
+        if self._namespace is None:
+            self.share_globals(namespace)
+
+    def publish_live_values(self) -> None:
+        """Write width, mouse_x and the other live values into the sketch's globals (global style only)."""
+        if self._shared_names:
+            from . import global_style
+
+            global_style.publish(self._namespace, self._shared_names)
+
+    @contextlib.contextmanager
+    def _explaining_name_clashes(self):
+        """Around the sketch's own functions: "'int' object is not callable" gets a sentence naming the variable,
+        and "name 'random' is not defined" one pointing to funground.random()."""
+        try:
+            yield
+        except (TypeError, NameError) as error:
+            if self._shared_names:
+                from . import global_style
+
+                global_style.explain_clash(error, self._namespace)
+            raise
 
     # ---- loop control and clock (S-048, contract R10)
     def exit(self) -> None:
@@ -2118,7 +2430,25 @@ class Sketch:
     def run_namespace(
         self, namespace: Namespace, *, fps: int | None = None, max_frames: int | None = None
     ) -> None:
-        """Run the setup()/draw() found in *namespace* (the sketch's globals)."""
+        """Run the setup()/draw() found in *namespace* (the sketch's globals) until it stops.
+
+        The loop is start(), then step() until it returns False, then finish() (S-136, D-074).
+        A host that must keep control between frames (a browser page) calls the three itself."""
+        self.start(namespace, fps=fps, max_frames=max_frames)
+        if self._host_driven:
+            return                                  # the host calls step() and finish() (funground.web)
+        try:
+            while self.step():
+                pass
+        finally:
+            self.finish()
+
+    def start(
+        self, namespace: Namespace, *, fps: int | None = None, max_frames: int | None = None
+    ) -> None:
+        """Open the window and run setup(). The caller must then call step() and, always, finish().
+
+        If start() raises, nothing was opened that needs finish(), as before the loop was split."""
         global _run_started
         was_script = self._script                 # only f.size() so far: its pictures belong to this run
         if self._script:
@@ -2132,8 +2462,9 @@ class Sketch:
             self._has_window = False
             self._renderer.attach(0, 0)
         _run_started = True
-        setup, draw = _sketch_functions(namespace)
+        setup, self._draw_fn = _sketch_functions(namespace)
         self._callbacks = _event_callbacks(namespace)
+        self.share_globals(namespace)
         if max_frames is not None and max_frames <= 0:
             raise ValueError("max_frames must be positive")
         if fps is not None and fps <= 0:
@@ -2157,68 +2488,85 @@ class Sketch:
         self._redraw_pending = False
         self._start_time = time.perf_counter()
         self._fps_measured = 0.0
-        iterations = 0          # run(max_frames=n) counts loop iterations, so no_loop() sketches end too
+        self._iterations = 0    # run(max_frames=n) counts loop iterations, so no_loop() sketches end too
+        self._max_frames = max_frames
         if fps is not None:
             self.fps = int(fps)
 
         # setup() usually calls size(). A default canvas keeps setup() optional.
+        self.publish_live_values()
         if setup is not None:
-            setup()
+            with self._explaining_name_clashes():
+                setup()
+            if fps is not None:
+                self.fps = int(fps)          # run(fps=...) replaces a rate size() was given in setup() (contract R3)
         if not self._has_window:
             self.size(self.width, self.height, title=self.title, fps=self.fps)
 
-        try:
-            while self.running:
-                if not self._platform.poll():
-                    self.running = False
+    def step(self) -> bool:
+        """Run one iteration of the loop: input, events, draw(), render, then the platform's tick().
 
-                self.pmouse_x, self.pmouse_y = self.mouse_x, self.mouse_y
-                inp = self._platform.input_state()
-                self.mouse_x, self.mouse_y = inp.mouse_x, inp.mouse_y
-                self.is_mouse_pressed, self.is_key_pressed = inp.mouse_pressed, inp.key_pressed
-                self._dispatch_events()
-                self._refresh_panel()                  # a click on a control shows even when draw() does not run
-
-                # draw() runs every frame while looping, once after redraw(), and always on
-                # the first frame - even after no_loop() in setup(), as in p5.
-                if self._looping or self._redraw_pending or self.frame_count == 0:
-                    self._redraw_pending = False
-                    if not self._smooth:
-                        self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
-                    self._in_draw = True
-                    try:
-                        draw()
-                    finally:
-                        self._in_draw = False
-                    self._end_draw()  # unbalanced push()es never leak into the next frame
-                    self.last_ops = self.frame.ops  # what the latest drawn frame asked for (IR snapshot)
-                    self._render()   # draws, presents, flushes f.save()
-                    self.frame_count += 1
-                if self._frame_end:                    # no frame was drawn (no_loop()): keep the one on screen
-                    self._run_frame_end(False)
-
-                iterations += 1
-                if max_frames is not None and iterations >= max_frames:
-                    self.last_frame = self._platform.capture()
-                    self.running = False
-                self.delta_time = self._platform.tick(self.fps)
-                if self.delta_time > 0:
-                    now = 1.0 / self.delta_time
-                    self._fps_measured = now if self._fps_measured == 0 else self._fps_measured * 0.9 + now * 0.1
-        finally:
+        Returns True while the sketch should go on. Call it only between start() and finish().
+        The tick is the frame's wait on the desktop (it sleeps to the frame rate). A platform that
+        is driven by a host (the browser) returns the seconds since the last step without sleeping,
+        and that is delta_time."""
+        if not self.running:
+            return False
+        if not self._platform.poll():
             self.running = False
-            self.frame.clear()
-            self._reset_pixel_state()
-            self._drop_layers()
-            self._pending_saves.clear()
-            self._frame_end.clear()                  # a keep the sketch did not live to finish is dropped
-            self._guides = []
-            self._frame_sequence = None
-            self._motion = None                      # a recording the sketch did not live to finish is dropped
-            self._renderer.attach(0, 0)
-            self._platform.close()
-            self._end_panel()
-            self._has_window = False
+
+        self.pmouse_x, self.pmouse_y = self.mouse_x, self.mouse_y
+        inp = self._platform.input_state()
+        self.mouse_x, self.mouse_y = inp.mouse_x, inp.mouse_y
+        self.is_mouse_pressed, self.is_key_pressed = inp.mouse_pressed, inp.key_pressed
+        self._dispatch_events()
+        self._refresh_panel()                  # a click on a control shows even when draw() does not run
+
+        # draw() runs every frame while looping, once after redraw(), and always on
+        # the first frame - even after no_loop() in setup(), as in p5.
+        if self._looping or self._redraw_pending or self.frame_count == 0:
+            self._redraw_pending = False
+            if not self._smooth:
+                self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
+            self._in_draw = True
+            self.publish_live_values()
+            try:
+                with self._explaining_name_clashes():
+                    self._draw_fn()
+            finally:
+                self._in_draw = False
+            self._end_draw()  # unbalanced push()es never leak into the next frame
+            self.last_ops = self.frame.ops  # what the latest drawn frame asked for (IR snapshot)
+            self._render()   # draws, presents, flushes f.save()
+            self.frame_count += 1
+        if self._frame_end:                    # no frame was drawn (no_loop()): keep the one on screen
+            self._run_frame_end(False)
+
+        self._iterations += 1
+        if self._max_frames is not None and self._iterations >= self._max_frames:
+            self.last_frame = self._platform.capture()
+            self.running = False
+        self.delta_time = self._platform.tick(self.fps)
+        if self.delta_time > 0:
+            now = 1.0 / self.delta_time
+            self._fps_measured = now if self._fps_measured == 0 else self._fps_measured * 0.9 + now * 0.1
+        return self.running
+
+    def finish(self) -> None:
+        """End the run: drop what the sketch did not finish and close the platform. Safe to call after an error."""
+        self.running = False
+        self.frame.clear()
+        self._reset_pixel_state()
+        self._drop_layers()
+        self._pending_saves.clear()
+        self._frame_end.clear()                  # a keep the sketch did not live to finish is dropped
+        self._guides = []
+        self._frame_sequence = None
+        self._motion = None                      # a recording the sketch did not live to finish is dropped
+        self._renderer.attach(0, 0)
+        self._platform.close()
+        self._end_panel()
+        self._has_window = False
 
 
 def _is_positive_whole(n: object) -> bool:

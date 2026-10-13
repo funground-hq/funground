@@ -78,8 +78,53 @@ an error that tells you what to change.
 
 **Why do animated sketches still end with `f.run()`?** Python cannot start a sketch by itself.
 In IDLE and Thonny, only the lines you wrote are run, so a sketch without `f.run()` would just do
-nothing. If you run a file from a terminal and forget `f.run()`, funground reminds you as the
-program ends.
+nothing. If you run a file from a terminal, in VS Code or on the website and forget `f.run()`,
+funground starts the sketch for you when the file ends. Keep `f.run()` anyway: it works everywhere.
+
+## Writing without `f.`
+
+Every example in this guide writes `import funground as f` and then `f.circle(...)`. You can also
+bring every funground name into your file and leave the `f.` out:
+
+```python
+from funground import *
+
+x = 50
+speed = 3
+
+
+def setup():
+    size(640, 400)
+
+
+def draw():
+    global x, speed
+    background("white")
+    fill("tomato")
+    circle(x, height / 2, 40)
+    x += speed
+    if x > width - 20 or x < 20:
+        speed = -speed
+
+
+run()
+```
+
+This is how Processing and p5.js read. Both styles do the same things, and you can pick either. A few
+things to know:
+
+- **`width`, `mouse_x`, `frame_count` and the other values that change are kept up to date** in your
+  file: before `setup()`, before every `draw()` and every event function, and right after `size()`,
+  `resize_canvas()`, `full_screen()`, `new_page()` and `load_pixels()`.
+- **Four names are left out**, because they would hide Python's own: `set`, `filter`, `exit` and
+  `random`. Use their other names, which work in both styles: `set_pixel(x, y, "red")`,
+  `apply_filter("blur", 2)`, `random_number(1, 6)`, and `stop()` for `exit()`. A plain `set(...)` or
+  `filter(...)` is Python's own, and fails with Python's message.
+- **Your own names win.** A variable called `size` or `fill` hides funground's function in your
+  file, so `size(640, 400)` then fails. funground's error names the variable: give it another name,
+  such as `ball_size`.
+- **Another file of yours** (a helper module) that uses `from funground import *` gets the values
+  that change only once, when it is imported. Write `f.mouse_x` and `f.width` there.
 
 ## Variables that change
 

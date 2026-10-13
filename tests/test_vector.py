@@ -94,3 +94,25 @@ def test_learner_mistakes_get_clear_errors():
         p.Vector(0, 0).angle_between(p.Vector(1, 0))
     with pytest.raises(TypeError):
         {p.Vector(1, 1): "mutable vectors are not dict keys"}
+
+
+def test_plain_numbers_take_the_fast_path_and_everything_else_is_as_before():
+    from fractions import Fraction
+
+    # int, float and Fraction are all accepted and stored as floats
+    for value in (3, 2.5, Fraction(1, 2)):
+        v = p.Vector(value, value)
+        assert type(v.x) is float and v.x == float(value)
+        assert (p.Vector(1, 1) * value).x == float(value)
+        assert (p.Vector(1, 1) / value).x == 1 / float(value)
+    # a bool is neither a number nor a fast-path type: refused with the same message, in every place
+    for bad in (True, False, "3", None):
+        with pytest.raises(TypeError, match=r"^Vector needs numbers, not "):
+            p.Vector(bad, 1)
+        with pytest.raises(TypeError, match=r"^mult needs numbers, not "):
+            p.Vector(1, 1).mult(bad)
+    # the operators hand a bool or a string back to Python, which then refuses the sum itself
+    with pytest.raises(TypeError):
+        p.Vector(1, 1) * True
+    with pytest.raises(TypeError):
+        p.Vector(1, 1) / "2"

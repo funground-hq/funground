@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import colorsys
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Any
 
 from ._colornames import NAMED_COLORS
@@ -26,23 +27,29 @@ class Color:
     360) and c.saturation, c.brightness and c.lightness (each 0 to 100). The short names c.r, c.g, c.b and
     c.a are the same as red, green, blue and alpha.
 
+    A colour made by f.cmyk() also remembers its ink amounts, in c.cmyk. A PDF then holds exactly those
+    amounts. Everywhere else the colour shows as the red, green and blue that match them.
+
     Example:
         c = f.color("tomato")
         print(c.red, c.green, c.blue)    # 255 99 71
         f.fill(c)
 
-    See also: color, hsb, hsl, lerp_color
+    See also: color, hsb, hsl, cmyk, lerp_color
     """
     r: int
     g: int
     b: int
     a: int = 255
+    cmyk: tuple[float, float, float, float] | None = None   # S-170 (S17): the ink percentages, when made by cmyk()
 
     def __post_init__(self) -> None:
         for name in ("r", "g", "b", "a"):
             v = getattr(self, name)
             if not isinstance(v, int) or not 0 <= v <= 255:
                 raise ValueError(f"colour component {name}={v!r} must be an integer from 0 to 255")
+        if self.cmyk is not None and (len(self.cmyk) != 4 or not all(0 <= v <= 100 for v in self.cmyk)):
+            raise ValueError(f"cmyk={self.cmyk!r} must be four ink amounts from 0 to 100")
 
     @property
     def rgb(self) -> tuple[int, int, int]:
@@ -237,6 +244,31 @@ class Color:
         r, g, b = colorsys.hls_to_rgb(hh, ll, ss)
         return cls(round(r * 255), round(g * 255), round(b * 255), _component(a))
 
+    @classmethod
+    def from_cmyk(cls, c: float, m: float, y: float, k: float, a: float = 255) -> "Color":
+        """Make a colour from ink amounts: cyan, magenta, yellow and black.
+
+        f.cmyk() does the same, and is the one to use in a sketch.
+
+        Arguments:
+            c: the cyan ink, from 0 to 100.
+            m: the magenta ink, from 0 to 100.
+            y: the yellow ink, from 0 to 100.
+            k: the black ink, from 0 to 100.
+            a: the alpha, from 0 to 255. It is 255 at first.
+
+        Returns:
+            a new Color that remembers the ink amounts in its cmyk part. Its red, green and blue are
+            the simple match: red = 255 x (1 - cyan) x (1 - black), and the same for green and blue.
+
+        Raises:
+            ValueError: if an ink amount is not a number from 0 to 100, or the alpha is not from 0 to 255.
+
+        See also: from_hsb, cmyk
+        """
+        inks = tuple(_ink(value, name) for value, name in ((c, "cyan"), (m, "magenta"), (y, "yellow"), (k, "black")))
+        return _color_from_cmyk(inks, _component(a))
+
     def lerp(self, other: "Color", amount: float) -> "Color":
         """Make a colour that is part of the way from this colour to another.
 
@@ -247,7 +279,7 @@ class Color:
             amount: how much of the way to go, from 0 (this colour) to 1 (the other). Numbers outside are cut off.
 
         Returns:
-            a new Color.
+            a new Color. If both colours came from f.cmyk(), the result is a cmyk colour too, with mixed inks.
 
         Example:
             mid = f.color("red").lerp(f.color("blue"), 0.5)
@@ -255,7 +287,10 @@ class Color:
         See also: from_hsb
         """
         t = max(0.0, min(1.0, float(amount)))
-        return Color(*(round(x + (y - x) * t) for x, y in zip(self.rgba, other.rgba)))
+        alpha = round(self.a + (other.a - self.a) * t)
+        if self.cmyk is not None and other.cmyk is not None:        # two inked colours mix their inks (S17)
+            return _color_from_cmyk(tuple(x + (y - x) * t for x, y in zip(self.cmyk, other.cmyk)), alpha)
+        return Color(*(round(x + (y - x) * t) for x, y in zip(self.rgb, other.rgb)), alpha)
 
     @classmethod
     def parse(cls, value: ColorLike) -> "Color":
@@ -283,7 +318,9 @@ class Color:
             raise TypeError(f"{value!r} is not a colour: True and False are not numbers here")
         if isinstance(value, (int, float)):
             grey = _component(value)         # one number is a grey, as in p5 (S16)
-            return cls(grey, grey, grey)
+            return _color_from_ints(grey, grey, grey, 255)
+        if type(value) in (tuple, list):     # the common form; a plain tuple or list has no .r, .g, .b
+            return _color_from_numbers(value)
         if all(hasattr(value, c) for c in "rgb"):
             # Any object exposing r/g/b[/a] - covers pygame.Color without importing pygame.
             return cls(
@@ -291,16 +328,7 @@ class Color:
                 _component(getattr(value, "a", 255)),
             )
         if isinstance(value, (tuple, list)):
-            if len(value) == 2:              # grey and alpha (S16)
-                grey, alpha = (_component(c) for c in value)
-                return cls(grey, grey, grey, alpha)
-            if len(value) == 3:
-                return cls(*(_component(c) for c in value))
-            if len(value) == 4:
-                return cls(*(_component(c) for c in value))
-            raise ValueError(
-                f"a colour tuple needs 2, 3 or 4 numbers (grey, alpha or red, green, blue[, alpha]), got {len(value)}"
-            )
+            return _color_from_numbers(value)
         raise ValueError(
             f"{value!r} is not a colour. Use a name like 'tomato', a tuple like (255, 99, 71) "
             "or a hex string like '#FF6347'."
@@ -308,21 +336,55 @@ class Color:
 
     @classmethod
     def _parse_str(cls, text: str) -> "Color":
-        key = text.strip().lower().replace(" ", "")
-        if key in NAMED_COLORS:
-            return cls(*NAMED_COLORS[key])
-        digits = None
-        if key.startswith("#"):
-            digits = key[1:]
-        elif key.startswith("0x"):
-            digits = key[2:]
-        if digits is not None and len(digits) in (6, 8) and all(c in "0123456789abcdef" for c in digits):
-            parts = [int(digits[i : i + 2], 16) for i in range(0, len(digits), 2)]
-            return cls(*parts)
-        raise ValueError(
-            f"unknown colour {text!r}. Use a name like 'tomato', a tuple like (255, 99, 71) "
-            "or a hex string like '#FF6347'."
-        )
+        return _parse_color_string(text)
+
+
+# A sketch uses a handful of colour strings but fills and strokes with them on every frame, so a
+# string is parsed once and the Color reused (S-145). That is safe because a Color cannot be changed.
+# 512 is far more distinct colour strings than any sketch uses; the cache cannot grow past it.
+# lru_cache does not store a call that raises, so a bad string raises the same ValueError every time.
+@lru_cache(maxsize=512)
+def _parse_color_string(text: str) -> Color:
+    key = text.strip().lower().replace(" ", "")
+    if key in NAMED_COLORS:
+        return Color(*NAMED_COLORS[key])
+    digits = None
+    if key.startswith("#"):
+        digits = key[1:]
+    elif key.startswith("0x"):
+        digits = key[2:]
+    if digits is not None and len(digits) in (6, 8) and all(c in "0123456789abcdef" for c in digits):
+        parts = [int(digits[i : i + 2], 16) for i in range(0, len(digits), 2)]
+        return Color(*parts)
+    raise ValueError(
+        f"unknown colour {text!r}. Use a name like 'tomato', a tuple like (255, 99, 71) "
+        "or a hex string like '#FF6347'."
+    )
+
+
+def _color_from_numbers(value: tuple | list) -> Color:
+    """A tuple or list of 2, 3 or 4 numbers: grey and alpha, or red, green, blue and optional alpha."""
+    if len(value) == 2:                      # grey and alpha (S16)
+        grey, alpha = map(_component, value)
+        return _color_from_ints(grey, grey, grey, alpha)
+    if len(value) == 3:
+        return _color_from_ints(*map(_component, value), 255)
+    if len(value) == 4:
+        return _color_from_ints(*map(_component, value))
+    raise ValueError(
+        f"a colour tuple needs 2, 3 or 4 numbers (grey, alpha or red, green, blue[, alpha]), got {len(value)}"
+    )
+
+
+# Numbers are the other colour form a sketch repeats on every frame: fill(200, 100, 50) or
+# fill(grey). Once _component has truncated each number to an int (and refused NaN and True), the
+# Color depends on those four ints alone, so it is made once and reused (S-154), as the strings
+# above are. 211.8 and 211 reach the same entry because both are 211 by then. The cache is
+# bounded; a sketch that draws a different colour every call just recycles it. A call that raises
+# is not stored, so an out-of-range number raises the same ValueError every time.
+@lru_cache(maxsize=512)
+def _color_from_ints(r: int, g: int, b: int, a: int) -> Color:
+    return Color(r, g, b, a)
 
 
 def _component(c: object) -> int:
@@ -331,6 +393,8 @@ def _component(c: object) -> int:
     So 211.8 -> 211 and -0.5 -> 0 are accepted, as v0.5 accepted them; NaN is not.
     Computed colours such as f.map_range(...) results therefore just work.
     """
+    if type(c) is int:                       # already whole: the usual case
+        return c
     if isinstance(c, bool) or not isinstance(c, (int, float)):
         raise ValueError(f"colour component {c!r} must be a number from 0 to 255")
     if isinstance(c, float):
@@ -346,6 +410,27 @@ def _hue_and_percents(h: float, s: float, v: float) -> tuple[float, float, float
         if isinstance(value, bool) or not isinstance(value, (int, float)) or value != value:
             raise ValueError(f"colour {name} {value!r} must be a number")
     return (h % 360) / 360, max(0.0, min(100.0, s)) / 100, max(0.0, min(100.0, v)) / 100
+
+
+def _ink(value: object, name: str) -> float:
+    """One ink amount: a real number from 0 to 100 (not True or False, not NaN)."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or value != value:
+        raise ValueError(f"the {name} ink {value!r} must be a number from 0 to 100")
+    if not 0 <= value <= 100:
+        raise ValueError(f"the {name} ink {value!r} must be from 0 to 100")
+    return float(value)
+
+
+def cmyk_to_rgb(c: float, m: float, y: float, k: float) -> tuple[int, int, int]:
+    """The screen's stand-in for inks (contract S17): R = 255 x (1 - C) x (1 - K), and the same for G and B.
+
+    It is a simple formula, not a colour-managed conversion: a screen cannot show ink."""
+    white = 1 - k / 100
+    return tuple(round(255 * (1 - ink / 100) * white) for ink in (c, m, y))
+
+
+def _color_from_cmyk(inks: tuple[float, float, float, float], alpha: int) -> Color:
+    return Color(*cmyk_to_rgb(*inks), alpha, inks)
 
 
 WHITE = Color(255, 255, 255)

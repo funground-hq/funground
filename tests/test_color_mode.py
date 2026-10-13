@@ -464,3 +464,19 @@ def test_pictures_take_separate_numbers(canvas):
     g.fill(255, 0, 0)
     g.rect(0, 0, 5, 5)
     assert g._sketch.frame.ops[-1].style.fill.rgba == (255, 0, 0, 255)
+
+
+def test_other_colour_modes_are_not_served_from_the_rgb_number_cache(canvas, sketch):
+    """S-154: (200, 100, 50) in rgb is cached; the same numbers under hsb or custom rgb ranges are not."""
+    rgb = fill_of(sketch, 200, 100, 50)
+    assert rgb == (200, 100, 50, 255)
+    p.color_mode("hsb")
+    hsb = fill_of(sketch, 200, 100, 50)
+    assert hsb == Color.from_hsb(200, 100, 50).rgba
+    assert hsb != rgb
+    p.color_mode("hsl")
+    assert fill_of(sketch, 200, 100, 50) == Color.from_hsl(200, 100, 50).rgba
+    p.color_mode("rgb", 100)
+    assert fill_of(sketch, 50, 50, 50) == (128, 128, 128, 255)
+    p.color_mode("rgb", 255)
+    assert fill_of(sketch, 200, 100, 50) == rgb

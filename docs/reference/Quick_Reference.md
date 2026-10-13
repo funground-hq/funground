@@ -1,7 +1,7 @@
 # funground Quick Reference
 
-**Version 0.1.0.dev0** — a small visual-programming library. `import funground as f; print(f.__version__)`
-prints `0.1.0.dev0`.
+**Version 0.1.0a1** — a small visual-programming library. `import funground as f; print(f.__version__)`
+prints `0.1.0a1`.
 
 This reference lists every public name in funground. For exact arguments, results and an example of each name, see the [API reference](API.md). Every function has a
 one-line description; every section ends with one complete sketch, and the picture above that sketch
@@ -20,6 +20,8 @@ The example code is free to copy and use in any way, with no conditions (CC0, `e
 ## 1. The basic idea
 
 Import funground as `f`, define a one-time `setup()`, define a repeating `draw()`, then call `f.run()`.
+(Or start with `from funground import *` and leave out `f.`: every name except `set`, `filter`, `exit` and
+`random`, which are `set_pixel()`, `apply_filter()`, `stop()` and `random_number()` there; see the guide, [Writing without `f.`](../guide/02_the_sketch.md#writing-without-f).)
 
 ![Your first sketch](images/01_first_sketch.png)
 
@@ -55,7 +57,7 @@ f.run()                              # finds setup() and draw() in this file and
 |---|---|---|
 | `f.size(width, height)` | Create or resize the window. | `f.size(640, 400)` |
 | `f.size(..., title="...")` | Set the window title. | `f.size(640, 400, title="Bounce")` |
-| `f.size(..., fps=30)` | Choose the target frames per second (default 60). | `f.size(640, 400, fps=30)` |
+| `f.size(..., fps=30)` | Choose the target frames per second (60 to start with); `f.run(fps=...)` wins over it. | `f.size(640, 400, fps=30)` |
 | `f.run()` | Run `setup()` once, then `draw()` repeatedly. | `f.run()` |
 | `f.run(fps=30)` | The same, overriding the frame rate. | `f.run(fps=30)` |
 | `f.run(max_frames=100)` | stop by itself after that many frames — for tests, scripts and headless runs. | `f.run(max_frames=100)` |
@@ -213,6 +215,7 @@ longer a colour: a single number is a grey (see below).
 |---|---|---|
 | `f.color_mode(mode, max1=None, max2=None, max3=None, max_alpha=None)` | How numbers are read as a colour: `"rgb"` (default, 255), `"hsb"` or `"hsl"` (360, 100, 100, opacity 0–1). One range sets all four; three keep the opacity range; each mode remembers its own. Names, hex and colour objects are not affected. | `f.color_mode("rgb", 1)` |
 | `f.hsb(h, s, b, a=255)` / `f.hsl(h, s, l, a=255)` | Colour by hue: hue 0–360 (wraps), the rest 0–100. Always these ranges, whatever the colour mode. | `f.fill(f.hsb(200, 80, 90))` |
+| `f.cmyk(c, m, y, k, a=255)` | Colour from printing inks, each 0–100 (alpha 0–255). A saved `.pdf` holds exactly these inks; the screen, `.png` and `.svg` show the nearest red, green and blue (an approximation: a screen cannot show ink). Use it anywhere a colour goes. `.cmyk` reads the inks back. | `f.fill(f.cmyk(0, 80, 100, 0))` |
 | `f.color(value)` / `f.color(r, g, b, a)` | A colour you can read: `.red .green .blue .alpha .hue .saturation .brightness .lightness`. | `f.color("tomato").hue` |
 | `f.lerp_color(c1, c2, t)` | Mix two colours; 0 gives c1, 1 gives c2. | `f.lerp_color("red", "blue", 0.5)` |
 | `f.linear_gradient(x1, y1, x2, y2, colors, stops=None)` | colours blended along a line; use it in `fill`, `stroke` or `background`. | `f.fill(f.linear_gradient(0, 0, 200, 0, ["red", "blue"]))` |
@@ -332,14 +335,16 @@ f.run()
 
 | Call | What it does | Example |
 |---|---|---|
-| `f.text_size(size)` | Set the size used by later text: **an em of `size` pixels** (default 20). | `f.text_size(28)` |
+| `f.text_size(size)` | Set the size used by later text: **an em of `size` pixels** (default 20). Any number above 0; a fraction such as `20.5` is kept. | `f.text_size(28)` |
 | `f.text(message, x, y)` | Draw text with its top-left corner at (x, y). Any object: `str()` is applied. | `f.text("Hello", 30, 40)` |
 | `f.text(..., color=...)` | Choose a colour just for this text. Otherwise text uses the fill, then the stroke, then white. | `f.text(f.frame_count, 30, 80, color="navy")` |
 | `f.text_width(message)` | how wide `message` will be at the current size, in pixels — to centre or right-align it. | `f.text(msg, (f.width - f.text_width(msg)) / 2, y)` |
-| `f.text_align(horizontal, vertical=None)` | which point of the text `(x, y)` is: `"left"`/`"center"`/`"right"`, then `"top"`/`"center"`/`"baseline"`/`"bottom"`. Default left, top. | `f.text_align("center", "center")` |
+| `f.fit_text_size(message, width, height=None)` | the text size at which `message` is exactly `width` pixels wide, in the current font, style, features, variations and tracking. With `height`, the largest size that also keeps all the lines (with the current leading) inside it. For a headline that fills its space. A fraction is kept by `f.text_size()`, so it fits to within half a pixel. | `f.text_size(f.fit_text_size("SPRING FAIR", f.width - 80))` |
+| `f.text_align(horizontal, vertical=None)` | which point of the text `(x, y)` is: `"left"`/`"center"`/`"right"`, then `"top"`/`"center"`/`"baseline"`/`"bottom"`. Default left, top. `"justify"` is for `f.text_box()`: each line is stretched to the box's width by wider spaces, except the last line of a paragraph and a line of one word. In `f.text()` it sets the text on the left. | `f.text_align("justify")` |
 | `f.text_ascent()` / `f.text_descent()` | how far letters reach above / below the baseline at the current size. | `f.text_ascent()` |
 | `f.text_leading(n)` | distance between lines of text, in pixels; `None` = automatic (1.25 × size). A `"\n"` in `f.text()` starts a new line. | `f.text("two\nlines", 20, 20)` |
-| `f.text_box(message, x, y, width, height=None)` | wrap text inside a box; returns the text that did not fit, to flow into the next box. | `rest = f.text_box(story, 20, 60, 280, 300)` |
+| `f.text_box(message, x, y, width, height=None)` | wrap text inside a box; returns the text that did not fit, to flow into the next box. A soft hyphen (`"\u00ad"`) in a word is a place it may break: a hyphen is drawn there only when a line breaks there; otherwise it is not drawn and has no width (`f.text_width()` ignores it). Works with `"justify"` and FormattedStrings. | `rest = f.text_box(story, 20, 60, 280, 300)` |
+| `f.text_on_path(message, path, offset=0)` | draw text along a path (`f.path()`, open or closed), each letter turned to follow it, and return the text that did not fit. `f.text_align()` works along the path: `"left"` starts at the start, `"center"` is the middle, `"right"` ends at the end. Its second value says which part of the letters touches the path: `"baseline"` stands them on it, and the default `"top"` hangs them below it. `offset` then moves the text on (or back, if negative). A clockwise circle puts the text on the outside. In a PDF or SVG every letter is live text. | `f.text_on_path("Follow me", f.path().circle(200, 200, 260))` |
 | `f.text_path(message, x, y)` | the outlines of `f.text(message, x, y)` as a new path, set with the current font, style, size, alignment and leading. Cut it, outline it, fill it or clip with it. It has no colour and is not moved by the current transform until you draw it. | `f.draw_path(f.text_path("Hi", 20, 20))` |
 | `f.text_to_points(message, x, y, spacing=5)` | a list of `(x, y)` points along the outlines of `f.text_path(message, x, y)`, one every `spacing` pixels (above 0). Each outline starts at its first point; curves are measured along the curve. An empty message gives `[]`. Draws nothing. | `for x, y in f.text_to_points("hi", 20, 20, 6): f.circle(x, y, 3)` |
 | `f.current_font()` | the font text is set in now, as a font object (the built-in font too). Ask it `font.family()`, `font.style()`, `font.variations()` (axis tag to `(minimum, default, maximum)`; `{}` if not variable), `font.features()` (sorted list of OpenType tags) and `font.contains(text)` (true when every character has a glyph; a space counts, a new line is ignored). | `f.current_font().contains("é")` |
@@ -582,7 +587,8 @@ f.run()
 |---|---|---|
 | `f.random(high)` | Random floating-point number from 0 up to `high`. | `x = f.random(f.width)` |
 | `f.random(low, high)` | Random floating-point number between `low` and `high`. | `d = f.random(10, 40)` |
-| `f.random_seed(seed)` | make `f.random()` repeatable — the same seed gives the same sequence. Never touches Python's own `random` module. | `f.random_seed(7)` |
+| `f.random_number(high)`, `f.random_number(low, high)` | the same as `f.random()`, under a name that also works after `from funground import *` (where `random` is Python's module). | `x = random_number(width)` |
+| `f.random_seed(seed)` | `f.random()` repeatable — the same seed gives the same sequence. Never touches Python's own `random` module. | `f.random_seed(7)` |
 | `f.constrain(value, low, high)` | Keep a value inside a minimum and maximum. | `x = f.constrain(x, 20, f.width - 20)` |
 | `f.distance(x1, y1, x2, y2)` | Straight-line distance between two points. | `d = f.distance(x, y, f.mouse_x, f.mouse_y)` |
 | `f.map_range(v, a1, b1, a2, b2, clamp=False)` | Re-scale `v` from one range to another. | `f.map_range(f.mouse_x, 0, f.width, 0, 255)` |
@@ -643,6 +649,9 @@ f.run()
 |---|---|---|
 | `f.save(path)` | Write the current frame to a file when the frame is complete. `.png` saves pixels; `.pdf` and `.svg` save a true vector drawing of the same frame. | `f.save("my_sketch.png")` |
 | `f.save(path, text="shapes")` | For a `.pdf` or `.svg`: `text="live"` (the start) keeps text real and editable; `"shapes"` draws every letter as a shape, so the file needs no font and cannot be edited. Applies to every page and layer. Anything else is a `ValueError`. PNG, GIF and MP4 ignore it. Save one copy of each: live to edit, shapes to hand over. | `f.save("poster_final.svg", text="shapes")` |
+| `f.save(path, bleed=0, marks=False)` | For a `.pdf` for a printer. `bleed` (points; `f.mm(3)` is 3 mm) lets drawing past the page edges show in an extra strip around the page; `background()` fills it. `marks=True` adds crop marks (thin lines in registration colour, all four inks at 100 %, 5 mm long) outside the bleed at the four corners. The PDF records the page as its TrimBox and the page plus bleed as its BleedBox. Every page gets the same. For `.png` or `.svg` it is an error. | `f.save("poster.pdf", bleed=f.mm(3), marks=True)` |
+| PDF colours | Every `.pdf` says what its RGB means: RGB colours are tagged as sRGB. A colour from `f.cmyk()` is written as exact DeviceCMYK, in fills, strokes, text, gradients and shadows; a drawing made only of `f.cmyk()` colours has no RGB left, except its pictures (pixels stay RGB). Opacity stays opacity. | `f.save("poster.pdf")` |
+| `f.save(path, dpi=300)` | For a `.png`: draw the page again at `dpi` dots per inch (a point is 1/72 inch, so a page is `points x dpi / 72` pixels, rounded to the nearest pixel) and say so in the file, so print software knows the size. It is sharp, not a stretched screen picture. A4 at 300 dpi is 2479 x 3508 pixels. More than 120 million pixels is refused: save a PDF. In an animated sketch it holds what this frame drew, as a PDF does. For `.pdf` and `.svg` it is an error (vectors have no resolution). | `f.save("poster.png", dpi=300)` |
 | `picture.save(path, text="live")` | Write a picture (`f.create_graphics()` or a layer) to a file at once. The same `text=` choice as `f.save`. | `g.save("badge.svg", text="shapes")` |
 | `f.save_gif(path, seconds)` | animated sketch: record the next `seconds` (from the next frame) into a GIF that loops; each frame lasts 1 / frame rate. `path` must end in `.gif`. Needs Pillow (`funground[extras]`) or ffmpeg. Called while recording, or in a script: an error | `f.save_gif("spin.gif", 2)` |
 | `f.save_movie(path, seconds)` | the same, into an H.264 MP4 (`.mp4`). Needs ffmpeg on the PATH; odd sizes are padded by one pixel | `f.save_movie("spin.mp4", 2)` |
@@ -884,6 +893,7 @@ files and Python's own `random` are not covered.
 | `f.get(x, y)` | the colour at one pixel, as a colour object (`.red`, `.green`, `.blue`, `.alpha`), as drawn so far, this frame included. Outside the canvas: transparent black. `x`, `y` are rounded down. On a high-resolution screen it reads the top-left real pixel of a logical one. | `c = f.get(10, 20)` |
 | `f.get(x, y, w, h)` | a new picture copied from that rectangle of the canvas (parts outside are see-through). A picture has `g.get(...)` too. | `part = f.get(0, 0, 50, 50)` |
 | `f.set(x, y, color)` | make one pixel exactly that colour. Any colour form `f.fill()` takes. Ignores fill, stroke, transform, clip, tint, opacity and blend mode. Outside the canvas: nothing. A picture has `g.set(...)` too. | `f.set(10, 20, "red")` |
+| `f.set_pixel(x, y, color)` | the same as `f.set()`, under a name that also works after `from funground import *` (where `set` is Python's own). | `set_pixel(10, 20, "red")` |
 | `f.load_pixels()` | copy the canvas into `f.pixels`. | `f.load_pixels()` |
 | `f.pixels` | a `bytearray` with red, green, blue, alpha (0 to 255, not premultiplied) for every pixel, row by row from the top left. The pixel at (`x`, `y`) starts at index `(y * f.width + x) * 4`. `None` before `f.load_pixels()`. Change the numbers in place; a Python loop over a whole 640 x 400 canvas takes seconds. | `f.pixels[(y * f.width + x) * 4] = 255` |
 | `f.update_pixels()` | write `f.pixels` back onto the canvas, like a `f.set()` of every pixel. An error before `f.load_pixels()`. A picture has `g.load_pixels()`, `g.pixels` and `g.update_pixels()`. | `f.update_pixels()` |
@@ -891,6 +901,7 @@ files and Python's own `random` are not covered.
 | `g.resize(w, h)` | change the picture to `w` x `h` pixels, in place, scaled smoothly. A 0 for one side keeps the shape; both 0, or a negative number, is an error. The drawing history is dropped. | `small.resize(100, 0)` |
 | `g.mask(other)` | multiply the picture's alpha by the alpha of picture `other` (scaled to this size first). The history is dropped. | `photo.mask(hole)` |
 | `f.filter(kind, value=None)` | change everything drawn so far, in place. Kinds: `"threshold"` (0 to 1, default 0.5), `"gray"`, `"opaque"`, `"invert"`, `"blur"` (radius in pixels, default 1), `"posterize"` (2 to 255 levels, required), `"erode"`, `"dilate"`. Alpha is kept, except by `"opaque"`. An unknown kind or a value out of range is a `ValueError`. A picture has `g.filter(...)` too. `"posterize"`, `"erode"` and `"dilate"` are faster with `pip install funground[extras]`; the result is the same. | `f.filter("blur", 3)` |
+| `f.apply_filter(kind, value=None)` | the same as `f.filter()`, under a name that also works after `from funground import *` (where `filter` is Python's own). | `apply_filter("blur", 3)` |
 
 **Rules worth knowing**
 
@@ -1123,7 +1134,7 @@ The public student-facing API. Everything is reached as `f.<name>`.
 
 | METADATA | |
 |---|---|
-| `f.__version__` | `"0.1.0.dev0"`. |
+| `f.__version__` | `"0.1.0a1"`. |
 
 **Remember:** use `f.` before funground functions and live values: `f.circle(...)`, `f.width`,
 `f.mouse_x`, `f.run()`. Python variables such as `x` remain ordinary Python variables.
@@ -1162,7 +1173,7 @@ appendix still works and renders the same on every platform and renderer. Capita
 **Constants and live values.** There are no uppercase constants such as `RED`, `LEFT` or `CENTER`.
 Colours and keys are strings. These module values are live state, not constants: `f.width`,
 `f.height`, `f.mouse_x`, `f.mouse_y`, `f.is_mouse_pressed`, `f.pmouse_x`, `f.pmouse_y`, `f.mouse_button`, `f.key`, `f.key_code`, `f.is_key_pressed`, `f.frame_count`, `f.delta_time`.
-`f.__version__` reports `"0.1.0.dev0"`.
+`f.__version__` reports `"0.1.0a1"`.
 
 **Fixed key-name strings.** `f.key_down(...)` recognises `"left"`, `"right"`, `"up"`, `"down"`,
 `"space"`, `"enter"`, `"escape"`, and any single-character key such as `"a"` or `"7"`.
@@ -1179,7 +1190,7 @@ repairs the frame and prints a `FungroundWarning` that says what it did.
 
 | Area | Playground 0.5 | funground 0.1 |
 |---|---|---|
-| Version | `f.__version__ == "0.5.0"` | `"0.1.0.dev0"` |
+| Version | `f.__version__ == "0.5.0"` | `"0.1.0a1"` |
 | Edges | Coordinates rounded to whole pixels | Fractional coordinates honoured; edges anti-aliased |
 | Alpha | Fourth colour value silently dropped | Honoured: translucent fills and strokes |
 | Strokes | Painted inside the shape's edge | Centred on the edge |

@@ -53,7 +53,7 @@ class CairoRenderer:
         self._surface: cairo.ImageSurface | None = None
         self._ctx: cairo.Context | None = None
         self._scale = 1.0
-        self._text_runs: OrderedDict[tuple[str, int], TextRun] = OrderedDict()
+        self._text_runs: OrderedDict[tuple, TextRun] = OrderedDict()
         # S-094 (T15): set only by the PDF exporters (funground.export.pdf_text). When set, text
         # is drawn as marker groups that the exporter swaps for real PDF text after the file is
         # written. Never set for the window, PNG or SVG.
@@ -66,6 +66,13 @@ class CairoRenderer:
         # layer is drawn inside a marker group that the exporter turns into a real file layer, and
         # hidden layers are drawn too (switched off in the file). Never set for the window or PNG.
         self.file_layers = None
+        # S-170 (S17, D4): set only by the PDF exporter (funground.export.cmyk). When set, a colour made by
+        # f.cmyk() is drawn in a stand-in RGB value that the exporter swaps for exact inks after the file is
+        # written. Never set for the window, PNG or SVG: they show the colour's own red, green and blue.
+        self.cmyk_standins = None
+        # S-164 (D2): set only by the PDF exporter when a page has a bleed: the (x, y, width, height) the
+        # drawing may reach, in the page's own units. Clearing the clip goes back to it, not to the whole sheet.
+        self.clip_box: tuple[float, float, float, float] | None = None
         # S-132 (K2): the BeginGroup ops whose EndGroup has not come yet (a mark's placement nests them).
         self._groups: list[ir.BeginGroup] = []
 
@@ -169,6 +176,17 @@ class CairoRenderer:
         finally:
             ctx.restore()
 
+    def _reset_clip(self, ctx: cairo.Context) -> None:
+        """Lift the clip the drawing made. A PDF page with a bleed keeps its clip box (S-164)."""
+        ctx.reset_clip()
+        if self.clip_box is not None:
+            ctx.save()
+            ctx.set_matrix(self._base_matrix)
+            ctx.new_path()
+            ctx.rectangle(*self.clip_box)
+            ctx.restore()                         # the path outlives the restore; the clip would not
+            ctx.clip()
+
     def _draw_ops(self, ctx: cairo.Context, frame: ir.Frame, depth: int) -> int:
         for op in frame:
             t = type(op)
@@ -176,7 +194,7 @@ class CairoRenderer:
             if composite is not None:
                 self._begin_composite(ctx, op, composite)
             if t is ir.Clear:
-                ctx.save(); ctx.reset_clip(); self._source(ctx, op.color)
+                ctx.save(); self._reset_clip(ctx); self._source(ctx, op.color)
                 ctx.set_operator(cairo.OPERATOR_SOURCE); ctx.paint(); ctx.restore()
             elif t is ir.Save:
                 ctx.save(); depth += 1
@@ -190,7 +208,7 @@ class CairoRenderer:
             elif t is ir.ClipPath:
                 self._path(ctx, op.path); ctx.clip()
             elif t is ir.ResetClip:
-                ctx.reset_clip()
+                self._reset_clip(ctx)
             elif t is ir.ResetMatrix:
                 ctx.set_matrix(self._base_matrix)
             elif t is ir.FillPath:
@@ -370,7 +388,7 @@ class CairoRenderer:
             grow = (blur * (n - k + 1) / n) * per_px if blur > 0 else 0.0
             layer_alpha = (total / n) / (1 - total * (k - 1) / n)
             ctx.push_group()
-            ctx.set_source_rgb(color.r / 255, color.g / 255, color.b / 255)
+            ctx.set_source_rgb(*self.rgb_of(color))
             for make, filled, width in parts:
                 make()
                 if filled:
@@ -409,7 +427,7 @@ class CairoRenderer:
             y0 = round(m.y0) if abs(m.y0 - round(m.y0)) < 1e-6 else m.y0
             m = cairo.Matrix(1, 0, 0, 1, x0, y0)
         ctx.save()
-        ctx.reset_clip()
+        self._reset_clip(ctx)
         ctx.set_matrix(m)
         ctx.set_source_surface(image, 0, 0)
         ctx.get_source().set_filter(cairo.FILTER_NEAREST)
@@ -613,10 +631,16 @@ class CairoRenderer:
                 x, y, r = c.points
                 pattern = cairo.RadialGradient(x, y, 0.0, x, y, r)
             for offset, stop in c.stops:
-                pattern.add_color_stop_rgba(offset, stop.r / 255, stop.g / 255, stop.b / 255, stop.a / 255 * k)
+                pattern.add_color_stop_rgba(offset, *self.rgb_of(stop), stop.a / 255 * k)
             ctx.set_source(pattern)
             return
-        ctx.set_source_rgba(c.r / 255, c.g / 255, c.b / 255, c.a / 255 * k)
+        ctx.set_source_rgba(*self.rgb_of(c), c.a / 255 * k)
+
+    def rgb_of(self, c: Color) -> tuple[float, float, float]:
+        """The red, green and blue to draw *c* with, each 0 to 1. A PDF draws a cmyk() colour in its stand-in (S17)."""
+        if c.cmyk is not None and self.cmyk_standins is not None:
+            return self.cmyk_standins.rgb_for(c.cmyk)
+        return c.r / 255, c.g / 255, c.b / 255
 
     @staticmethod
     def _path(ctx, p: Path) -> None:
@@ -758,26 +782,29 @@ class CairoRenderer:
         from ..typography import effective_font, text_settings
 
         style = op.style
-        # S-054: the cache key gains the effective font only away from the plain default, so the
-        # default (text, size) key - and the S-037 cache tests that pin it - stay unchanged.
+        # The key has no size (S-171): the shaped glyphs are the same at every size, so a text whose size
+        # changes every frame reuses its run, and `at_size` gives it the size asked for. The key gains the
+        # effective font only away from the plain default (S-054).
         if style.font is None and style.text_style == "normal":
-            key = (op.text, style.text_size)
+            key = (op.text,)
         else:
-            key = (op.text, style.text_size, style.font if style.font is not None else style.text_style)
+            key = (op.text, style.font if style.font is not None else style.text_style)
         settings = text_settings(style)
         if style.text_tracking or style.text_features or style.font_variations:
             key += (style.text_tracking, style.text_features, style.font_variations)    # S-090 (T13)
         if style.text_fallback != ():
             key += ("fallback", style.text_fallback)           # S-102 (T18): the chain changes the runs
+        if op.word_spacing:
+            key += ("word_spacing", op.word_spacing)           # S-159 (T22): a justified line is stretched
         run = self._text_runs.get(key)
         if run is None:
-            run = effective_font(op.style).shape(op.text, op.style.text_size, **settings)
+            run = effective_font(op.style).shape(op.text, op.style.text_size, word_spacing=op.word_spacing, **settings)
             self._text_runs[key] = run
             while len(self._text_runs) > TEXT_RUN_CACHE_SIZE:
                 self._text_runs.popitem(last=False)       # evict least recently used
         else:
             self._text_runs.move_to_end(key)              # mark as most recently used
-        return run
+        return run.at_size(style.text_size)
 
 
 def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: int,

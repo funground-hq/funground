@@ -8,6 +8,8 @@ import pytest
 
 from funground import ir
 from funground.color import BLACK
+from funground import typography
+from funground.geometry import Transform
 from funground.typography import DEFAULT_FONT, FontResource, TextRun, default_font
 
 
@@ -39,6 +41,70 @@ def test_outline_cache_is_per_glyph():
     f = FontResource(DEFAULT_FONT)
     f.shape("aaa", 12).outline_ops(0, 0, BLACK)
     assert len(f._outlines) == 1
+
+
+def reference_ops(run, x, y, color):
+    """What `outline_ops` produced before S-147: transform each unscaled outline, glyph by glyph."""
+    s = run.scale
+    baseline = y + run.font.ascent * s
+    pen_x = x
+    ops = []
+    for g in run.glyphs:
+        outline = run.font.outline(g.gid, run.location)
+        if not outline.is_empty:
+            t = Transform.scaling(s, -s).then(Transform.translation(pen_x + g.x_offset * s, baseline - g.y_offset * s))
+            ops.append(ir.FillPath(outline.transformed(t), color))
+        pen_x += g.x_advance * s + run.tracking
+    return ops
+
+
+def test_shaped_glyphs_are_kept_whatever_the_size():
+    f = FontResource(DEFAULT_FONT)
+    first = f.shape("Spring", 20)
+    assert f.shape("Spring", 20.5).glyphs is first.glyphs         # S-171: one shaping serves every size
+    assert f.shape("Spring", 20, variations=(("wght", 700),)).glyphs is first.glyphs   # a static font has no axes
+    assert f.shape("Spring", 20, features=(("liga", False),)).glyphs is not first.glyphs
+
+
+def test_shape_cache_is_bounded_and_drops_the_least_recently_used(monkeypatch):
+    monkeypatch.setattr(typography, "SHAPE_CACHE_SIZE", 3)
+    f = FontResource(DEFAULT_FONT)
+    kept = f.shape("a", 10).glyphs
+    for text in ("b", "c"):
+        f.shape(text, 10)
+    assert f.shape("a", 11).glyphs is kept                  # touched: now the most recent
+    f.shape("d", 10)                                        # over the limit: "b" goes
+    assert len(f._shaped) == 3
+    assert ("b", (), ()) not in f._shaped and ("a", (), ()) in f._shaped
+
+
+def test_many_distinct_sizes_give_each_size_its_own_correct_outline():
+    f = FontResource(DEFAULT_FONT)
+    for size in [0.5 + 0.37 * i for i in range(300)] + [20, 20.5, 20]:
+        run = f.shape("Hg", size)
+        assert run.outline_ops(3, 4, BLACK) == reference_ops(run, 3, 4, BLACK)
+    small, big = (f.shape("H", s).outline_ops(0, 0, BLACK)[0].path.bounds() for s in (20, 40))
+    assert big[2] - big[0] == pytest.approx(2 * (small[2] - small[0]))
+
+
+def test_path_translated_matches_a_translation_transform_on_a_glyph():
+    path = FontResource(DEFAULT_FONT).outline(FontResource(DEFAULT_FONT).shape("g", 20).glyphs[0].gid)
+    assert path.translated(3.5, -2.25) == path.transformed(Transform.translation(3.5, -2.25))
+
+
+@pytest.mark.parametrize("text,size,tracking", [("Hello, Playground!", 24, 0.0), ("fi AVA", 13.7, 1.5), ("Qg", 100, 0.0)])
+def test_outline_ops_equal_the_old_per_glyph_transform(text, size, tracking):
+    run = default_font().shape(text, size, tracking=tracking)
+    assert run.outline_ops(5.25, 7.5, BLACK) == reference_ops(run, 5.25, 7.5, BLACK)
+
+
+def test_outline_ops_equal_the_old_transform_at_a_variation(tmp_path):
+    from fontmaker import make_variable_font
+    f = FontResource(make_variable_font(tmp_path))
+    for wght in (100, 500, 900):
+        run = f.shape("A", 40, variations=(("wght", wght),))
+        assert run.location
+        assert run.outline_ops(3, 4, BLACK) == reference_ops(run, 3, 4, BLACK)
 
 
 def test_outlines_are_deterministic_across_runs():
@@ -74,7 +140,7 @@ def test_renderer_text_run_cache_is_an_lru_capped_at_256():
         assert len(r._text_runs) <= 256
     assert len(r._text_runs) == 256
     # The most recent runs survive, the oldest were evicted.
-    assert ("999", 20) in r._text_runs and ("0", 20) not in r._text_runs
+    assert ("999",) in r._text_runs and ("0",) not in r._text_runs
 
 
 def test_text_run_cache_evicts_least_recently_used_not_oldest_inserted():
@@ -88,7 +154,26 @@ def test_text_run_cache_evicts_least_recently_used_not_oldest_inserted():
         r.render(ir.Frame([ir.Text(str(i), 0, 0, BLACK, style)]))
     r.render(ir.Frame([ir.Text("0", 0, 0, BLACK, style)]))       # touch "0": now most recently used
     r.render(ir.Frame([ir.Text("new", 0, 0, BLACK, style)]))     # evicts "1", not "0"
-    assert ("0", 20) in r._text_runs and ("1", 20) not in r._text_runs and len(r._text_runs) == 256
+    assert ("0",) in r._text_runs and ("1",) not in r._text_runs and len(r._text_runs) == 256
+
+
+def test_one_cached_run_serves_every_size_and_draws_as_the_uncached_path_does():
+    """S-171: the size is not in the key, so text that changes size every frame is shaped once."""
+    from funground.renderers.cairo2d import CairoRenderer
+    from funground.state import GraphicsState
+
+    r = CairoRenderer()
+    r.attach(200, 100)
+    for size in (12, 20.5, 33.25, 12):
+        style = GraphicsState(text_size=size)
+        op = ir.Text("Hello", 4, 6, BLACK, style)
+        run = r._text_run(op)
+        assert run.size == size
+        assert run.outline_ops(4, 6, BLACK) == default_font().shape("Hello", size).outline_ops(4, 6, BLACK)
+    assert len(r._text_runs) == 1
+    for i in range(1000):
+        r._text_run(ir.Text(str(i), 0, 0, BLACK, GraphicsState(text_size=10 + i / 7)))
+    assert len(r._text_runs) == 256                           # still bounded
 
 
 def test_text_width_is_the_shaped_advance_in_logical_pixels():

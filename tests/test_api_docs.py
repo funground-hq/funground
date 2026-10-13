@@ -32,7 +32,7 @@ sys.modules["make_api_reference"] = tool
 _spec.loader.exec_module(tool)
 
 LIVE = set(api.LIVE_NAMES)
-FUNCTIONS = [n for n in f.__all__ if n not in LIVE and callable(getattr(f, n)) and not inspect.isclass(getattr(f, n))]
+FUNCTIONS = [n for n in f._PUBLIC_NAMES if n not in LIVE and callable(getattr(f, n)) and not inspect.isclass(getattr(f, n))]
 CLASS_ENTRIES = tool.class_names()
 
 
@@ -128,7 +128,7 @@ def test_the_generated_page_is_current():
 def test_the_page_has_an_anchor_for_every_name():
     text = (ROOT / "docs" / "reference" / "API.md").read_text(encoding="utf-8")
     anchors = set(re.findall(r'<a id="([^"]+)"></a>', text))
-    for name in f.__all__:
+    for name in f._PUBLIC_NAMES:
         if name in LIVE:
             assert f"live-{name}" in anchors
         elif inspect.isclass(getattr(f, name)):
@@ -154,3 +154,20 @@ def test_in_page_anchor_links_resolve_in_the_api_page():
     ids = set(re.findall(r'<a id="([^"]+)"></a>', text))
     for target in re.findall(r"\]\(#([^)\s]+)\)", text):
         assert target in ids, f"API.md: link to missing anchor #{target}"
+
+
+def test_every_option_word_is_explained():
+    """D-092: each table of option words gives every word a sentence, and the parallel tables name the same words
+    as the code that checks them, so a word cannot be accepted without being explained in the reference."""
+    from funground import marks, pathops, typography
+    from funground.sketch import Sketch
+
+    reference = tool
+    for name, entries in reference.WORD_MEANINGS.items():
+        for argument, meanings in entries:
+            assert meanings, (name, argument)
+            for word, meaning in meanings.items():
+                assert meaning.strip().endswith("."), f"{name}({argument}={word!r}) needs a sentence"
+    assert list(typography.STYLE_MEANINGS) == list(typography.STYLE_FILES)
+    assert list(marks.ANCHOR_MEANINGS) == list(marks.ANCHORS)
+    assert set(pathops._CAPS) == set(Sketch.STROKE_CAPS) and set(pathops._JOINS) == set(Sketch.STROKE_JOINS)
