@@ -159,8 +159,8 @@ Use [Shapes](../guide/03_shapes.md), [Transforms](../guide/08_transforms.md) and
 [Useful maths](../guide/12_useful_maths.md). The [API reference](../reference/API.md)
 lists exact calls.
 
-For a wider application of repeated rules, watch the
-[trigonometry section of the supplied p5.js video](https://www.youtube.com/watch?v=o5t7PxRJSXk&t=1697s).
+For optional further exploration of repeated rules, watch the
+[trigonometry section of this p5.js video](https://www.youtube.com/watch?v=o5t7PxRJSXk&t=1697s).
 Watch for the rule and its visual effect; invent a different mark and subject for your own work.
 
 ---

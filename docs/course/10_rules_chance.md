@@ -165,7 +165,7 @@ Use [Randomness and noise](../guide/11_randomness_and_noise.md),
 
 [Coding Art](https://learning.oreilly.com/library/view/coding-art-the/9781484262641/)
 and [Code as Creative Medium](https://mitpress.mit.edu/9780262542043/code-as-creative-medium/)
-are optional wider sources for creative-programming practice.
+offer optional further reading on creative-programming practice.
 Observe their approaches and develop your own rules and subjects.
 
 ---

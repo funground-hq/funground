@@ -204,7 +204,7 @@ Use [Animation and time](../guide/07_animation_and_time.md),
 and [Saving your work](../guide/13_saving_your_work.md).
 The [API reference](../reference/API.md) lists event names.
 
-Watch the supplied video's [kinetic typography section](https://www.youtube.com/watch?v=o5t7PxRJSXk&t=2628s).
+For optional further exploration, watch this video's [kinetic typography section](https://www.youtube.com/watch?v=o5t7PxRJSXk&t=2628s).
 Observe timing and readability; give your own subject a different movement.
 
 ---
