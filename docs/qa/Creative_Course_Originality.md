@@ -1,8 +1,8 @@
 # Creative Thinking Course: originality check
 
-Checked 13 October 2026 with tools/check_originality.py. The 12 downloadable sketches and 9 fenced Python examples were compared with 2,955 corpus units. No pairs were flagged. The corpus is a comparison sample; this does not establish originality against every book, video or website.
+Checked 13 October 2026 after developing all eleven lessons. The 37 downloadable sketches and 19 fenced Python examples were compared with 2,955 corpus units. No pairs were flagged. This is a comparison sample, not proof against every book, video or website.
 
-The new sketches were written from the visual question being taught, without copying or translating external example code. Rendered lesson illustrations come from those same sketches.
+The sketches were written from the visual questions being taught, without copying or translating external example code. The output illustrations are rendered from the linked scripts. The earlier first-two-lessons check covered 12 scripts and 9 fenced examples; the current check includes those and the completed course.
 
 ## Results
 
@@ -20,15 +20,50 @@ The new sketches were written from the visual question being taught, without cop
 | examples/course/02_size.py | p5.js/src/shape/2d_primitives.js#example3 | 0.00 | 0.00 | 2 | 0.08 | 0.09 | no |
 | examples/course/02_starter.py | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 2 | 0.00 | 0.07 | no |
 | examples/course/02_value.py | p5.js/src/shape/2d_primitives.js#example23 | 0.00 | 0.00 | 2 | 0.11 | 0.09 | no |
+| examples/course/03_palettes.py | p5.js-website/src/content/examples/en/11_3D/02_Materials/code.js | 0.00 | 0.00 | 3 | 0.02 | 0.12 | no |
+| examples/course/03_starter.py | p5.js/src/shape/2d_primitives.js#example3 | 0.00 | 0.00 | 2 | 0.06 | 0.08 | no |
+| examples/course/03_values.py | p5.js/src/shape/2d_primitives.js#example3 | 0.00 | 0.00 | 2 | 0.07 | 0.09 | no |
+| examples/course/04_ground.py | p5.js/src/math/p5.Vector.js#example46 | 0.00 | 0.00 | 3 | 0.08 | 0.12 | no |
+| examples/course/04_reduction.py | p5.js/src/shape/2d_primitives.js#example3 | 0.00 | 0.00 | 2 | 0.07 | 0.09 | no |
+| examples/course/04_small.py | p5.js/src/shape/2d_primitives.js#example3 | 0.00 | 0.00 | 2 | 0.08 | 0.09 | no |
+| examples/course/04_starter.py | processing-examples/Basics/Control/EmbeddedIteration/EmbeddedIteration.pde | 0.25 | 0.00 | 0 | 0.00 | 0.06 | no |
+| examples/course/05_patterns.py | p5.js/src/shape/2d_primitives.js#example3 | 0.00 | 0.00 | 2 | 0.07 | 0.09 | no |
+| examples/course/05_rhythms.py | p5.js/src/shape/2d_primitives.js#example3 | 0.00 | 0.00 | 2 | 0.06 | 0.08 | no |
+| examples/course/05_starter.py | p5/docs/examples/input/keyboard functions.rst#rst1 | 0.00 | 0.00 | 1 | 0.08 | 0.05 | no |
+| examples/course/06_alignment.py | p5.js/src/math/p5.Vector.js#example5 | 0.00 | 0.00 | 2 | 0.12 | 0.09 | no |
+| examples/course/06_spacing.py | p5.js/src/type/textCore.js#example22 | 0.00 | 0.00 | 2 | 0.10 | 0.09 | no |
+| examples/course/06_starter.py | p5.js/src/shape/2d_primitives.js#example23 | 0.00 | 0.00 | 2 | 0.08 | 0.09 | no |
+| examples/course/07_directions.py | p5.js/src/webgpu/shaders/functions/noise3DWGSL.js | 0.00 | 0.00 | 3 | 0.00 | 0.11 | no |
+| examples/course/07_starter.py | p5.js/visual-report.js | 0.00 | 0.00 | 3 | 0.01 | 0.11 | no |
+| examples/course/08_series.py | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 3 | 0.00 | 0.11 | no |
+| examples/course/08_starter.py | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 4 | 0.00 | 0.15 | no |
+| examples/course/09_interaction.py | p5.js/src/webgpu/shaders/functions/noise3DWGSL.js | 0.00 | 0.00 | 3 | 0.04 | 0.12 | no |
+| examples/course/09_loop.py | pygame-ce/examples/vgrade.py | 0.00 | 0.00 | 3 | 0.01 | 0.11 | no |
+| examples/course/09_starter.py | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 2 | 0.00 | 0.07 | no |
+| examples/course/09_timing.py | p5.js/src/webgl/p5.Camera.js#example7 | 0.00 | 0.00 | 3 | 0.07 | 0.12 | no |
+| examples/course/10_bounds.py | p5.js/src/webgpu/shaders/functions/noise3DWGSL.js | 0.00 | 0.00 | 3 | 0.00 | 0.11 | no |
+| examples/course/10_seeds.py | p5.js/src/webgpu/shaders/functions/noise3DWGSL.js | 0.00 | 0.00 | 3 | 0.00 | 0.11 | no |
+| examples/course/10_starter.py | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 3 | 0.00 | 0.11 | no |
+| examples/course/11_starter.py | p5.js/src/dom/p5.Element.js#example24 | 0.00 | 0.00 | 2 | 0.07 | 0.09 | no |
 | docs/course/01_look_frame_compose.md#fence1(python) | drawbot/README.md#fence1(python) | 0.00 | 0.00 | 1 | 0.00 | 0.04 | no |
 | docs/course/01_look_frame_compose.md#fence3(py) | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 2 | 0.00 | 0.07 | no |
 | docs/course/02_weight_balance_hierarchy.md#fence1(python) | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 2 | 0.00 | 0.07 | no |
 | docs/course/02_weight_balance_hierarchy.md#fence2(python) | p5.js/src/shape/curves.js#example16 | 0.00 | 0.00 | 3 | 0.03 | 0.12 | no |
-| docs/course/03_contrast_colour.md#fence1(python) | noc-examples-p5.js-archived/chp05_libraries/box2d-html5/lib/box2d-html5.js | 0.00 | 0.00 | 2 | 0.00 | 0.07 | no |
-| docs/course/04_shape_figure_ground.md#fence1(python) | processing-examples/Basics/Math/Noise2D/Noise2D.pde | 0.00 | 0.00 | 2 | 0.03 | 0.08 | no |
-| docs/course/05_rhythm_variation.md#fence1(python) | noc-examples-p5.js-archived/chp06_agents/NOC_6_04_FlowField/flowfield.js | 0.00 | 0.00 | 2 | 0.00 | 0.07 | no |
-| docs/course/06_type_hierarchy.md#fence1(python) | p5.js/src/shape/2d_primitives.js#example23 | 0.00 | 0.00 | 2 | 0.10 | 0.09 | no |
-| docs/course/10_rules_chance.md#fence1(python) | p5.js/src/webgpu/shaders/functions/noise3DWGSL.js | 0.00 | 0.00 | 3 | 0.02 | 0.11 | no |
+| docs/course/03_contrast_colour.md#fence1(python) | p5.js/src/shape/2d_primitives.js#example3 | 0.00 | 0.00 | 2 | 0.08 | 0.09 | no |
+| docs/course/04_shape_figure_ground.md#fence1(python) | processing-examples/Basics/Control/EmbeddedIteration/EmbeddedIteration.pde | 0.25 | 0.00 | 0 | 0.00 | 0.06 | no |
+| docs/course/04_shape_figure_ground.md#fence2(py) | p5.js/src/utilities/utility_functions.js#example9 | 0.00 | 0.00 | 0 | 0.04 | 0.01 | no |
+| docs/course/05_rhythm_variation.md#fence1(python) | p5.js/visual-report.js | 0.00 | 0.00 | 1 | 0.00 | 0.04 | no |
+| docs/course/05_rhythm_variation.md#fence2(py) | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 2 | 0.00 | 0.07 | no |
+| docs/course/06_type_hierarchy.md#fence1(python) | p5.js/src/shape/2d_primitives.js#example23 | 0.00 | 0.00 | 2 | 0.09 | 0.09 | no |
+| docs/course/06_type_hierarchy.md#fence2(py) | p5.js/src/color/p5.Color.js#example3 | 0.00 | 0.00 | 2 | 0.07 | 0.09 | no |
+| docs/course/07_cover.md#fence1(python) | p5.js/visual-report.js | 0.00 | 0.00 | 3 | 0.01 | 0.11 | no |
+| docs/course/08_poster_systems.md#fence1(python) | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 4 | 0.00 | 0.15 | no |
+| docs/course/09_motion_interaction.md#fence1(python) | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 2 | 0.00 | 0.07 | no |
+| docs/course/09_motion_interaction.md#fence2(python) | p5.js/src/webgpu/shaders/functions/noise3DWGSL.js | 0.00 | 0.00 | 3 | 0.05 | 0.12 | no |
+| docs/course/10_rules_chance.md#fence1(python) | p5.js/src/webgl/loading.js#example7 | 0.00 | 0.00 | 3 | 0.00 | 0.11 | no |
+| docs/course/10_rules_chance.md#fence2(py) | drawbot/DrawBot.py | 0.00 | 0.00 | 0 | 0.00 | 0.00 | no |
+| docs/course/10_rules_chance.md#fence3(py) | pygame-ce/examples/aliens.py | 0.00 | 0.00 | 3 | 0.01 | 0.11 | no |
+| docs/course/11_capstone.md#fence1(python) | p5.js/src/dom/p5.Element.js#example22 | 0.00 | 0.00 | 2 | 0.08 | 0.09 | no |
 
 ## Corpus revisions
 

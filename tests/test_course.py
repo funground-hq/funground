@@ -51,9 +51,15 @@ def test_course_local_links_and_images_resolve():
     assert not broken, "\n".join(broken)
 
 
-def test_download_bundle_matches_the_source_sketches():
-    archive = COURSE / "downloads/first_two_lessons.zip"
+@pytest.mark.parametrize("archive_name, lesson_limit", [
+    ("first_two_lessons.zip", 2),
+    ("course_sketches.zip", 11),
+])
+def test_download_bundle_matches_the_source_sketches(archive_name, lesson_limit):
+    archive = COURSE / "downloads" / archive_name
+    selected = [p for p in EXAMPLES if int(p.name[:2]) <= lesson_limit]
     with zipfile.ZipFile(archive) as bundle:
-        for script in EXAMPLES:
+        for script in selected:
             assert bundle.read(script.name) == script.read_bytes()
+        assert {name for name in bundle.namelist() if name.endswith(".py")} == {p.name for p in selected}
         assert bundle.read("LICENSE") == (ROOT / "examples/LICENSE").read_bytes()

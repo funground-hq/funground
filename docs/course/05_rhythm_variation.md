@@ -1,61 +1,168 @@
 # Lesson 5 — Repetition, rhythm and variation
-[← Shape, figure and ground](04_shape_figure_ground.md) · [Course index](README.md#the-lessons) · [Type, words and hierarchy →](06_type_hierarchy.md)
 
-**Initial lesson draft.** This page has the course's first explanation and assignment. Its worked examples and practice sequence will be expanded to the depth of Lessons 1 and 2.
+[← Lesson 4](04_shape_figure_ground.md) · [Course index](README.md#the-lessons) · [Lesson 6 →](06_type_hierarchy.md)
 
-## The idea
+**Question:** How can a repeated mark feel steady, lively or interrupted?
 
-Repetition creates order. A repeated mark can also create rhythm: the eye senses a beat, pause or acceleration as size, spacing or direction changes. **Variation** makes a pattern feel alive, but too much variation can hide the rule.
+**Allow:** 60–90 minutes, plus time to develop a pattern.
 
-A useful way to design a pattern is to choose one stable rule and one variable. For example, keep the spacing fixed and vary size; or keep size fixed and vary spacing. Code is helpful because it can repeat a mark consistently while you concentrate on the visual rule.
+You will use a loop to repeat a mark, vary the intervals and turn one mark into a surface
+pattern. The drawing task introduces loops because consistent repetition is useful here.
 
-## Experiment: change the beat
+## 1. Notice a beat
 
-Run the sketch and compare the rows. Each uses the same marks; the spacing changes.
+Look at a fence, staircase, row of windows or fabric. What repeats? What changes?
+Tap the pattern with a finger: does it have equal beats, a pause, a cluster or an accent?
+
+Repetition establishes an expectation. A change becomes noticeable partly because the
+viewer has learned what normally happens. **Rhythm** is the sense of pace created by that
+repeat and its variation. It can come from position, size, direction or lightness.
+
+## 2. Make one rule visible
+
+Download [the starter](../../examples/course/05_starter.py):
 
 ```python
 import funground as f
 
+COUNT = 6
+GAP = 60
+DIAMETER = 24
 
-def row(y, gaps, sizes, colour):
-    x = 40
-    f.no_stroke()
-    f.fill(colour)
-    for gap, size in zip(gaps, sizes):
-        x += gap
-        f.circle(x, y, size)
-        x += size / 2
-
-
-def setup():
-    f.size(640, 300)
-
-
-def draw():
-    f.background("#f3efe6")
-    row(70, [24] * 8, [18] * 8, "#264653")
-    row(145, [12, 24, 36, 48, 36, 24, 12, 24], [18] * 8, "#e76f51")
-    row(220, [24] * 8, [10, 14, 18, 26, 34, 26, 18, 14], "#2a9d8f")
-
-
-f.run()
+f.size(420, 230)
+f.background("#f3efe6")
+f.no_stroke()
+f.fill("#264653")
+for index in range(COUNT):
+    x = 50 + index * GAP
+    f.circle(x, 115, DIAMETER)
+f.save("05_starter.png")
+f.show()
 ```
 
-The first row has a steady beat. The second changes the gaps. The third changes the size. You can make the pattern regular or irregular, but decide what the change should do: build energy, make a pause, point to an accent or suggest a natural variation.
+![Six identical circles placed at equal intervals](images/05_starter.png)
 
-## Assignment
+The loop draws six circles. **range(COUNT)** supplies indices 0 through 5.
+On each pass, **50 + index * GAP** calculates the next centre: 50, 110, 170 and so on.
+Here GAP is the distance between centres, not the empty space between the circles.
 
-Design a border, textile swatch or small album artwork from one repeated mark. Make three versions: steady, gradually changing and interrupted by a deliberate accent. Save the versions together so they can be compared.
+Try these changes separately:
 
-## Look back
+1. Change COUNT to 4. Keep the other settings fixed.
+2. Restore COUNT to 6 and change GAP to 40.
+3. Restore GAP to 60 and change DIAMETER to 44.
 
-Which rule is easiest to notice? Does the accent feel intentional? If the pattern feels messy, reduce the number of things that vary.
+Which change affected the empty intervals? Both gap and diameter can do that, but in
+different ways. A centre-distance of 40 with a diameter of 44 makes neighbouring circles
+overlap.
 
-## Refer to the guide
+<details>
+<summary>If marks disappear beyond the frame</summary>
 
-[Animation and time](../guide/07_animation_and_time.md) and [Randomness and noise](../guide/11_randomness_and_noise.md) show how repetition can extend into motion and procedural variation.
+Calculate the last centre: 50 + (COUNT - 1) * GAP. Add half the diameter to find the right
+edge. If that is wider than the canvas, reduce the count or interval, or deliberately
+change the frame. Do not shrink everything until the reason for cropping is clear.
 
+</details>
+
+## 3. Experiment A: make a pause
+
+![Steady circles, a row with a longer pause, and a row whose intervals increase](images/05_rhythms.png)
+
+[Run the rhythm comparison](../../examples/course/05_rhythms.py).
+
+The mark and its diameter stay fixed. One interval rule makes a steady row; another
+introduces a gap that reads as a pause; the third increases the intervals.
+In the comparison code, the list stores interval values and the loop adds each to x.
+
+Replace the equal intervals with your own list. Begin with six values. Make one of them
+larger and keep the rest the same. Predict where a group will appear before running it.
+
+Then make a row that seems to accelerate. Should intervals shrink or grow for the reading
+you intend? Test both: a static image can suggest movement, but its reading depends on
+where the viewer begins and the direction they follow.
+
+## 4. Guided practice: create an accent
+
+Return to the starter. Keep size and spacing fixed, but change the colour of one mark:
+
+```py
+for index in range(COUNT):
+    x = 50 + index * GAP
+    f.fill("#e76f51" if index == 2 else "#264653")
+    f.circle(x, 115, DIAMETER)
+```
+
+Replace the original loop with this fragment. The condition selects the third circle,
+because counting starts at zero.
+
+Move the accent to the first, last and middle positions. How does the accent change
+where you start looking? Keep the colour change alone until you can describe its effect.
+You can later combine it with a size or spacing change deliberately.
+
+## 5. Experiment B: repeat a rule in two dimensions
+
+![A surface pattern with one direction and the same pattern with alternating directions](images/05_patterns.png)
+
+[Run the pattern comparison](../../examples/course/05_patterns.py).
+
+The two loops place rows and columns. The mark is the same small rectangle in both
+panels. The second panel alternates its direction. That one rule changes the pattern's
+reading without introducing another shape.
+
+Inside **with f.saved_state()**, the code moves the local origin to a cell, rotates the
+mark and draws it. When the block ends, the transform and style return to their previous
+state. This keeps one mark's rotation from affecting the next.
+
+You can study the loops after drawing the first row manually. The code automates placement;
+the choice of mark, spacing and variation is still yours.
+
+## 6. Make your own: one mark, three rhythms
+
+Choose a simple mark from Lesson 4 or invent a new one. Make three small studies:
+
+- a steady rhythm;
+- a gradual change;
+- a deliberate interruption.
+
+Keep one thing fixed across all three so you can compare them. Select one study and
+develop it into a border, textile swatch or small piece of album artwork.
+
+Before adding randomness, write its rule in a sentence. For example: “Every fourth mark
+turns sideways,” or “Intervals become smaller toward the right.” If you cannot describe
+the rule, reduce the number of variables.
+
+<details>
+<summary>If the pattern feels busy</summary>
+
+Remove a colour, reduce the number of directions or increase the space between marks.
+Try one change. A stronger mark often needs less repetition than a quieter mark.
+
+</details>
+
+**Optional extension:** repeat the pattern as adjacent tiles. Check whether the boundary
+creates an unintended seam or a new beat. Refine the edge rule as part of the design.
+
+## 7. Review and keep
+
+Keep the three studies and your developed pattern. Ask a viewer where the repetition
+starts, what changes and where the eye pauses. Write:
+
+> The stable rule is ____. The variable is ____. The pause or accent occurs at ____.
+> I changed ____ because ____.
+
+Continue when you can describe a repeat rule and use a loop to alter it deliberately.
+
+## Reference and further looking
+
+Use [Shapes](../guide/03_shapes.md), [Transforms](../guide/08_transforms.md) and
+[Useful maths](../guide/12_useful_maths.md). The [API reference](../reference/API.md)
+lists exact calls.
+
+For a wider application of repeated rules, watch the
+[trigonometry section of the supplied p5.js video](https://www.youtube.com/watch?v=o5t7PxRJSXk&t=1697s).
+Watch for the rule and its visual effect; invent a different mark and subject for your own work.
 
 ---
 
-[← Shape, figure and ground](04_shape_figure_ground.md) · [Course index](README.md#the-lessons) · [Type, words and hierarchy →](06_type_hierarchy.md)
+[← Lesson 4](04_shape_figure_ground.md) · [Course index](README.md#the-lessons) · [Lesson 6 →](06_type_hierarchy.md)
