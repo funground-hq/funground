@@ -10,21 +10,22 @@ Each line says when to read the page.
 - The gallery browser: after you install, run `python -m funground.gallery` to browse every feature
   in a window, with its picture and its code.
   (Inside a virtual environment this is the same command. On Windows without activating it,
-  use `.venv\Scripts\python -m funground.gallery`.)
+  use `.venv\\Scripts\\python -m funground.gallery`.)
 
 ## The guide
 
 - [The guide](guide/README.md): read this to learn step by step. It has a learning path, and every
   chapter ends with things to try.
 
-## Projects
+## Learn to think visually
 
-- [A creative curriculum](creative-curriculum.md): follow a design-led path from simple compositions
-  to covers, posters, motion, interaction and generative art.
-- [Projects](guide/18_projects.md): read this when you know the basics and want to make something
-  whole, such as a poster, a game or a raga explorer.
-- [Studios](guide/19_studios.md): read this to compose on a page with margins and a grid, place
-  marks, and compare and keep versions. Each studio is written twice, with and without these words.
+- [Creative Thinking Course](creative-curriculum.md): a guided course in visual ideas, experiments
+  and assignments. Take it before the Studio exercises; it explains how to look, make choices and
+  develop your own work.
+- [Studios](guide/19_studios.md): short, focused exercises for practising a visual relationship
+  while learning funground's studio tools.
+- [Projects](guide/18_projects.md): longer guided builds that bring several features together,
+  such as a poster, a game or a raga explorer.
 
 ## The gallery
 
@@ -59,11 +60,11 @@ Each line says when to read the page.
 - [Credits and sources](../CREDITS.md): read this to see where the sound methods, the raga data, the fonts
   and the ideas behind the examples come from.
 - [How we work](PROCESS.md): read this to learn how sprints, stories and reviews run.
-- [Quality notes](qa/Test_Strategy.md): read this for the test strategy and where each example
-  came from ([example provenance](qa/Example_Provenance.md)).
+- [Quality notes](qa/Test_Strategy.md): read this for the test strategy and where each example came
+  from ([example provenance](qa/Example_Provenance.md)).
 
 ## Project history
 
 - [Roadmap](Roadmap.md): where the project is going.
 - [Sprints](../sprints/): what was planned and done, one folder for each.
-- [Changelog](../CHANGELOG.md): what changed in each version.
+- [Changelog](../CHANGELOG.md): what changed in each release.
