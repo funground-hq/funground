@@ -84,11 +84,20 @@ Engine watch continues (S-036): if the Blend2D binding matures, re-run the Spike
 - Performance pass driven by profiling (e.g. moving hot IR walks into the renderer).
 - Error messages reviewed for learners; localisation optional.
 
+## Release 0.2 — funground in the browser (D-074, D-075, D-077)
+
+Target W2, run without installing; Chrome first. The browser runs funground's own Python in Pyodide in a
+module worker, stepped by the page (`start/step/finish`, S-060). **Cairo draws in the browser too** (D-075,
+option C: byte-identical goldens, PDF/SVG, one renderer). The website is at funground-hq.github.io
+(D-077); its Play page hosts the editor (S-151). Evidence: `sprints/sprint-17` to `sprint-19`,
+`docs/design/Web_Target_Options.md`.
+
 ## Directional — after 1.0 (D-014)
 
 | Track | Epic | State |
 |---|---|---|
-| Playground in the browser | E-31 | Feasible (Spike 08: 0.8 ms frames in wasm, Canvas 2D page over the IR verified); plan in `docs/design/Browser_Mode_Note.md` |
+| Playground in the browser | E-31 | Brought into 0.2 (D-074); see above |
+| Second web renderer: Canvas 2D (C+B) | E-31 | To revisit (D-075): the Canvas 2D IR renderer (S-135, S-148: within tolerance, 3–9× faster for light sketches at 2×) becomes a second renderer once a compact IR hand-over exists and it measures better than Cairo for the sketches people run |
 | GPU renderer | E-20 | IR consumer; Skia or a GPU engine re-evaluated when needed |
 | 3D (Processing P3D) | E-21 | Not in 1.0; 1.0 means the 2D surface |
 

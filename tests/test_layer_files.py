@@ -22,6 +22,7 @@ from pypdf import PdfReader  # noqa: E402
 import funground as f  # noqa: E402
 from funground import api, export, ir  # noqa: E402
 from funground.export import layers as file_layers  # noqa: E402
+from funground.export.pdf_colour import finish_colour  # noqa: E402
 from funground.export.pdf_text import PdfTextCollector  # noqa: E402
 from funground.export.svg_text import SvgTextCollector  # noqa: E402
 from funground.platform.headless import HeadlessPlatform  # noqa: E402
@@ -205,7 +206,8 @@ def test_pdf_looks_like_the_png_and_a_hidden_layer_is_off(tmp_path, monkeypatch)
     png = Image.open(tmp_path / "a.png").convert("RGB")
     assert mean_difference(page, png) < 0.5
     assert page.getpixel((100, 60)) == (255, 255, 255)      # pdfium keeps the OFF layer switched off
-    assert page.getpixel((60, 55)) == (255, 220, 0)
+    # the sRGB tag (S-170) lets pdfium colour-manage the fill, which can move one step of one channel
+    assert all(abs(got - want) <= 1 for got, want in zip(page.getpixel((60, 55)), (255, 220, 0)))
     assert page.getpixel((10, 10)) == (0, 0, 255)
     assert mean_difference(render(tmp_path / "a.pdf", scale=4), render(tmp_path / "plain.pdf", scale=4)) < 0.05
     assert "/OCProperties" not in PdfReader(str(tmp_path / "plain.pdf")).trailer["/Root"]
@@ -501,6 +503,7 @@ def before_s096(frame, path, w, h) -> None:
     surface.finish()
     if pdf:
         renderer.pdf_text.finish(str(path))
+        finish_colour(str(path), None)       # S-170: every PDF now has its RGB tagged as sRGB; layers still change nothing
     else:
         renderer.svg_text.finish(str(path))
 

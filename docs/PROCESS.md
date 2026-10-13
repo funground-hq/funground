@@ -70,7 +70,9 @@ Sprint length is set by the maintainer; default one week. Sprint numbering is gl
 **Ready** — a story has an epic, a one-sentence value statement, tasks, and a testable acceptance
 line. Any DECISION it depends on is named.
 
-**Done** — all tasks checked; tests added or updated and the whole suite green on the CI matrix;
+**Done** — all tasks checked; tests added or updated and the whole suite green locally and on the
+everyday CI (Windows); the three systems are run when a release is prepared
+([CI_Guidance.md](developer/CI_Guidance.md));
 `docs/design/Semantic_Contract.md` updated in the same change if a semantic moved; goldens
 regenerated only as a deliberate, reviewed act. **From Sprint 5 (D-015):** a story that adds a
 public feature also adds its Examples Gallery sketch (with golden and IR snapshot) and its User

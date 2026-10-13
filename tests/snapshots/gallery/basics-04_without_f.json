@@ -1,0 +1,44 @@
+[
+ {
+  "color": [
+   25,
+   25,
+   112,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "diameter": 90,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    255,
+    224,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 20
+  },
+  "x": 448.0,
+  "y": 224
+ },
+ {
+  "checksum": 3793766111,
+  "height": 400,
+  "op": "Pixels",
+  "width": 640,
+  "x": 0,
+  "y": 0
+ },
+ {
+  "checksum": 4059533565,
+  "height": 400,
+  "op": "Pixels",
+  "width": 640,
+  "x": 0,
+  "y": 0
+ }
+]

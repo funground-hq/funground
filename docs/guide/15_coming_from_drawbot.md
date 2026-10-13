@@ -131,8 +131,10 @@ f.saved_state():` does exactly the same job, alongside `f.push()`/`f.pop()`.
 |---|---|
 | `font(name, size=None)` | `f.text_font(font, size=None)` — funground loads a font *file* with `f.load_font(path)` first; DrawBot names an installed font by its PostScript name |
 | `fontSize(n)` | `f.text_size(n)` |
+| `lineHeight(value)` | `f.text_leading(value)`: the distance from one line's baseline to the next, for lines broken with `"\n"` and in `f.text_box()`. Pixels here are points in a PDF, so `lineHeight(100)` is `f.text_leading(100)` |
+| `lineHeight(None)` | `f.text_leading(None)`: automatic again, 1.25 times the text size (DrawBot uses the font's own line spacing, so automatic lines can differ slightly) |
 | `text(str, (x, y))` | `f.text(message, x, y)` |
-| `textBox(str, (x, y, w, h))` | `f.text_box(message, x, y, w, h)` |
+| `textBox(str, (x, y, w, h))` | `f.text_box(message, x, y, w, h)`: the same lines fit, since each line takes one leading in both (three lines of `lineHeight(100)` fit a box 300 high). Remember that funground's `y` is the box's top, measured down |
 
 Spacing, features and variable fonts. Checked in DrawBot's source:
 `drawBot/drawBotDrawingTools.py` (`tracking`, `openTypeFeatures`, `fontVariations`) and
@@ -195,7 +197,9 @@ circles.
 
 Both have `blendMode(mode)`/`f.blend_mode(mode)` for the same idea — how new drawing mixes with
 what's underneath — though the two libraries don't spell every mode name the same way (DrawBot's
-`colorDodge`/`colorBurn` are funground's `dodge`/`burn`).
+`colorDodge`, `colorBurn`, `softLight`, `hardLight` and `plusLighter` are funground's `dodge`,
+`burn`, `soft_light`, `hard_light` and `add`; `screen` is the same). The API reference explains
+what each mode does under [`f.blend_mode`](../reference/API.md#fn-blend_mode).
 
 DrawBot's `opacity(value)` (0.0–1.0) is a single, global setting. funground's `f.opacity(0–255)`
 multiplies the alpha of fill and stroke **separately**, so a stroke drawn over its
@@ -308,7 +312,7 @@ f.show()                                        # look at it; close the window t
 
 ## What is not here
 
-Some DrawBot features are not in funground. CMYK colour is left out for good. [The list of what is left out](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
+Some DrawBot features are not in funground. `f.cmyk(c, m, y, k)` is the CMYK colour (inks from 0 to 100, no `cmykFill` calls: use it in `f.fill()` and `f.stroke()`), and a saved PDF holds exactly those inks. Colour profiles and spot colours are left out. [The list of what is left out](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
 
 ## See also
 

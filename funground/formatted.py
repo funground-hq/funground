@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from numbers import Real
 
 from .color import Color
+from .typography import soft_hyphen_cuts, text_size_value
 
 
 @dataclass(frozen=True, slots=True)
@@ -33,7 +34,7 @@ class Run:
 
     text: str
     font: str | None = None            # the font registry key (T11)
-    size: int | None = None
+    size: float | None = None
     style: str | None = None
     color: Color | None = None
     tracking: float | None = None
@@ -173,9 +174,7 @@ class FormattedString:
         if size is not None:
             if isinstance(size, bool) or not isinstance(size, Real):
                 raise TypeError(f"FormattedString.append() takes a number for size, not {type(size).__name__}")
-            if size <= 0:
-                raise ValueError("text size must be positive")
-            size = int(size)
+            size = text_size_value(size, "FormattedString.append()")
         if style is not None and style not in TEXT_STYLES:
             raise ValueError(
                 f"FormattedString.append() takes a style of {', '.join(map(repr, TEXT_STYLES))}, not {style!r}")
@@ -281,8 +280,11 @@ class FormattedString:
     def wrap(self, fits) -> tuple[list[list[tuple[str, int | None]]], list[int]]:
         """Break the text into lines that fit, at spaces.
 
-        funground uses it when it draws text in a box. You do not need to call it. A word that is wider than
-        the box is broken between letters. A blank line keeps one empty piece, so that it still has a height.
+        funground uses it when it draws text in a box. You do not need to call it. A word that does not fit
+        in the rest of the line is broken at a soft hyphen (U+00AD), if it has one that lets the first part
+        and a hyphen fit; the hyphen is in the look of the run that the soft hyphen is in. A word that is
+        wider than the box is broken between letters. A blank line keeps one empty piece, so that it still
+        has a height.
 
         Arguments:
             fits: a function that takes a candidate line, a list of (text, run index) pieces, and says whether it is narrow enough. None means no wrapping, only new lines.
@@ -296,17 +298,22 @@ class FormattedString:
         lines: list[list[tuple[str, int | None]]] = []
         starts: list[int] = []
 
-        def pieces(idxs: list[int]) -> list[tuple[str, int | None]]:
+        def pieces(idxs: list[int], hyphen: int | None = None) -> list[tuple[str, int | None]]:
+            """The pieces of the characters *idxs*; with *hyphen*, a hyphen after them in the run of the
+            soft hyphen at that index (T23)."""
+            chars = [(text[i], owner[i]) for i in idxs]
+            if hyphen is not None:
+                chars.append(("-", owner[hyphen]))
             out: list[tuple[str, int | None]] = []
-            for i in idxs:
-                if out and out[-1][1] == owner[i]:
-                    out[-1] = (out[-1][0] + text[i], owner[i])
+            for char, run in chars:
+                if out and out[-1][1] == run:
+                    out[-1] = (out[-1][0] + char, run)
                 else:
-                    out.append((text[i], owner[i]))
+                    out.append((char, run))
             return out
 
-        def emit(idxs: list[int], start: int, blank_run: int | None = None) -> None:
-            lines.append(pieces(idxs) if idxs else [("", blank_run)])
+        def emit(idxs: list[int], start: int, blank_run: int | None = None, hyphen: int | None = None) -> None:
+            lines.append(pieces(idxs, hyphen) if idxs else [("", blank_run)])
             starts.append(start)
 
         def blank_owner(offset: int, length: int) -> int | None:
@@ -336,22 +343,29 @@ class FormattedString:
 
             for m in re.finditer(r"[^ ]+", paragraph):
                 at = offset + m.start()
-                word = (list(range(at, offset + m.end())), offset + prev_end)
+                letters, gap = list(range(at, offset + m.end())), offset + prev_end
                 prev_end = m.end()
-                if fits(pieces(line_of(words + [word]))):
-                    words.append(word)
-                    start = at if start is None else start
-                    continue
-                if words:
-                    emit(line_of(words), start)
-                letters = word[0]
-                while len(letters) > 1 and not fits(pieces(letters)):      # a word wider than the box
-                    cut = len(letters) - 1
-                    while cut > 1 and not fits(pieces(letters[:cut])):
-                        cut -= 1
-                    emit(letters[:cut], letters[0])
-                    letters = letters[cut:]
-                words, start = [(letters, word[1])], letters[0]
+                while not fits(pieces(line_of(words + [(letters, gap)]))):
+                    first = start if words else letters[0]
+                    cut = next((i for i in soft_hyphen_cuts("".join(text[j] for j in letters))
+                                if fits(pieces(line_of(words + [(letters[:i], gap)]), letters[i]))), None)
+                    if cut is not None:                            # a soft hyphen: break there (T23)
+                        emit(line_of(words + [(letters[:cut], gap)]), first, hyphen=letters[cut])
+                        letters = letters[cut + 1:]
+                        words, start = [], None
+                    elif words:                                    # the word goes to the next line
+                        emit(line_of(words), first)
+                        words, start = [], None
+                    elif len(letters) > 1:                         # a word wider than the box
+                        cut = len(letters) - 1
+                        while cut > 1 and not fits(pieces(letters[:cut])):
+                            cut -= 1
+                        emit(letters[:cut], letters[0])
+                        letters = letters[cut:]
+                    else:
+                        break
+                words.append((letters, gap))
+                start = letters[0] if start is None else start
             if words:
                 emit(line_of(words), start)
             else:

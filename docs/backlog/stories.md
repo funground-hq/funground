@@ -121,13 +121,49 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | ID | Epic | Story | Status |
 |---|---|---|---|
 | S-059 | E-31 | Spike 08 — Pyodide feasibility (core in wasm, IR frame timings, Canvas 2D page over IR snapshots) | done (Sprint 4 lane; results in `spikes/RESULTS.md` §8) |
-| S-060 | E-31 | Loop inversion: `Sketch.start()/step()/finish()`; desktop `run()` loops over `step()` | directional |
+| S-060 | E-31 | Loop inversion: `Sketch.start()/step()/finish()`; desktop `run()` loops over `step()` | done (Sprint 19) |
 | S-061 | E-31 | `BrowserPlatform`: rAF-driven, DOM input, `devicePixelRatio` scale | directional |
 | S-062 | E-31 | `Canvas2DRenderer`: every IR op → Canvas 2D | directional |
 | S-063 | E-31 | Browser text: uharfbuzz-for-Pyodide vs harfbuzzjs vs fontTools-only | directional |
 | S-064 | E-31 | `playground.js` loader, `<playground-run>`, GitHub launcher URL | directional |
 | S-065 | E-31 | Browser export: PNG download; IR→SVG writer | directional |
 | S-066 | E-31 | Classroom page: editor + canvas + share-by-URL | directional |
+
+### Release 0.2 — funground on the web (E-31 brought forward?) — candidates, no commitment
+
+Options study: `docs/design/Web_Target_Options.md` (8 Oct 2026). Nothing below is scheduled. Whether E-31
+moves into 0.2 at all supersedes D-014 and is the maintainer's decision (the note's Q1–Q10). The spikes
+come first: S-133 to S-135 decide the renderer (Canvas 2D, Cairo in wasm, or both); S-136 to S-140 de-risk
+the shared pieces. S-060 to S-066 above stay as the build stories, re-cut once the spikes report.
+
+| ID | Epic | Story | Status |
+|---|---|---|---|
+| S-133 | E-31 | Spike: uharfbuzz as a Pyodide (`pyemscripten`) wheel; text outlines identical to native (fallback: a harfbuzzjs shim) | done (Sprint 17) |
+| S-134 | E-31 | Spike: pycairo (cairo, pixman) for Pyodide; goldens byte-identical; frame time at DPR 2; wheel sizes | done (Sprint 17) |
+| S-135 | E-31 | Spike: Canvas 2D renderer over all 20 IR op types; goldens within tolerance in Chrome, Firefox, Safari | done (Sprint 17) |
+| S-136 | E-31 | Spike: inverted loop (`start/step/finish`) with Python in a module worker, rAF-driven, Stop by `terminate()`, no COOP/COEP | done (Sprint 17) |
+| S-137 | E-31 | Spike: made sounds via Web Audio and the microphone via AudioWorklet, from a worker | Sprint 20 (as a story) |
+| S-138 | E-31 | Spike: PNG/PDF/SVG/GIF from Pyodide equal to desktop files; MP4 via WebCodecs | candidate |
+| S-139 | E-31 | Spike: first-load time and download budget on a real page | candidate |
+| S-140 | E-31 | Spike: gallery examples as share links (compressed code in the URL fragment) | candidate |
+| S-141 | E-22 | The gallery online as static pages (architecture A): picture, code, explanation per example, on GitHub Pages | done (Sprint 19) |
+| S-142 | E-31 | Spike: Cairo-in-wasm and Canvas 2D timed in Chrome on the same cases (draw, frame copy, end to end, 1x and 2x) | done (Sprint 18) |
+| S-143 | E-31 | Spike: profile heavy frames (Python, IR, shaping, encoding, transfer, drawing) native and in Pyodide; prototype fixes | done (Sprint 18, native half) |
+| S-144 | E-31 | Style calls without copying the whole graphics state via `dataclasses.replace` | done (Sprint 19) |
+| S-145 | E-31 | Colour strings parsed once (named, bounded cache) | done (Sprint 19) |
+| S-146 | E-31 | Plain int/float accepted without the `numbers.Real` ABC check (Vector and peers) | done (Sprint 19) |
+| S-147 | E-31 | Text outlines scaled once per glyph and size, then placed | done (Sprint 19) |
+| S-148 | E-31 | Re-measure both web routes in Chrome after S-144–S-147; redo the D-075 matrix | done (Sprint 19) |
+| S-149 | E-31 | Public `Path.translated(dx, dy)` (D-076) | done (Sprint 19) |
+| S-150 | E-22 | The website: MkDocs Material site at funground-hq.github.io (home, guide, reference) built in Actions from `funground` (D-077) | done (Sprint 19) |
+| S-151 | E-31 | The site's Play page: the browser editor (H1) once D-075 and the runner are ready | Sprint 20 (parts 1 and 2) |
+| S-152 | E-31 | Browser entry point: `BrowserPlatform`, `funground.web.Session`, `f.run`/`f.show` under a host, contract row W1 | Sprint 20 |
+| S-153 | E-31 | Loading Pyodide, the wheels and fonts; first-load budget | Sprint 20 |
+| S-154 | E-31 | Numeric colours parsed once | Sprint 20 |
+| S-155 | E-31 | The sketchbook: template repo `funground-hq/sketchbook`; learners edit and save in github.dev and see the sketch render on the same page (D-079 = C; how: S-156); desktop use from the same repo (Editor_Note.md) | Sprint 20 |
+| S-156 | E-31 | Spike: funground preview beside github.dev: framing check, and a VS Code web extension whose webview runs the runner with live update, data files, sound (Editor_Note.md Q1-Q6) | Sprint 20 (done) |
+| S-157 | E-31 | A second `Session` in the same Python draws exactly what a fresh one draws; say what is not reset (the test D-083 asks for before the runner reuses its Python) | Sprint 20 |
+| S-158 | E-31 | The funground extension for github.dev from the S-156 spike: runner reuse (D-083, after S-157), runtime from the site in versioned folders (D-081), `'unsafe-eval'` in the panel only (D-080), a microphone message that fits a panel | Sprint 20 |
 
 ## Release v0.7 deliverables and Sprint 5 additions (D-015, 25 Sept 2026)
 
@@ -197,3 +233,63 @@ Other stories are cut from epics E-14 … E-21 when their phase is scheduled. No
 | S-124 | E-22 | Poster designer: a visible way to edit the headline (an on-screen "type to edit" hint or a text field control); a multi-page PDF from an animated sketch (library: pages outside scripts) | later |
 | S-130 | E-23 | Typing for editors and AI tools: a `py.typed` marker; the live values (`width`, `mouse_x`, …) declared with their types under `if TYPE_CHECKING:` in `__init__.py`; a test that every public function is fully and correctly annotated (e.g. `stroke_width` takes fractions). No separate `.pyi` (from an outside AI review, 6 Oct) | later |
 | S-131 | E-21 | `f.describe()`: the canvas described in words for learners debugging, screen-reader users and AI assistants (like p5's `describe()`/`textOutput()`): a short summary by default, the full op list as JSON on request via the IR. New public API: needs a contract row and the maintainer's decision (from an outside AI review, 6 Oct) | later |
+
+## E-32 Typographic, print-ready posters (11 October 2026) — Sprint 21
+
+From the review of poster support: funground's typography, shapes, layout and vector export are strong; the
+gaps are line breaking (justification, hyphenation), type on a path, fitting a headline, and print handoff
+(resolution, bleed and marks, CMYK). Plan: `sprints/sprint-21/stories.md`.
+
+| Story | Epic | Value · tasks · acceptance | Sprint |
+|---|---|---|---|
+| S-159 | E-32 | Justified text. Tasks: `"justify"` in `text_align` for `text_box` (strings, FormattedStrings), word spaces stretched, last line and lines ending a paragraph left-aligned; contract row; golden. Acceptance: a justified box's lines (but the last) end exactly at the box's right edge | 21 |
+| S-160 | E-32 | Hyphenation by soft hyphens (D-085 = a). Tasks: soft hyphens (U+00AD) as break points in `text_box`, a hyphen drawn only where a line breaks there, invisible elsewhere (also in `text_width`, PDF and SVG text); works with justify and FormattedStrings; contract row; golden. Acceptance: a narrow box of long words with soft hyphens breaks at them and shows hyphens only at line ends | 21 |
+| S-161 | E-32 | Type on a path. Tasks: `f.text_on_path(message, path, offset=0)` places shaped glyphs along a `Path` by arc length, each rotated to the tangent; alignment along the path; overflow beyond the path's end dropped and returned; live text in PDF/SVG; contract row; golden. Acceptance: text around a circle reads correctly and its PDF text is selectable | 21 |
+| S-162 | E-32 | Fitted headline. Tasks: `f.fit_text_size(message, width, height=None)` with the current font, features, variations and tracking; contract row; tests. Acceptance: text set at the returned size measures the width within 0.5 pt | 21 |
+| S-163 | E-32 | Print resolution. Tasks: `dpi=` on `f.save(".png")` (scripts, pages, animated sketches), memory check for A2 at 300 dpi; desktop and browser; contract row. Acceptance: an A3 page saves as a 3508 x 4961 PNG matching the vector drawing | 21 |
+| S-164 | E-32 | Print-ready PDF. Tasks: `bleed=` and `marks=` on `f.save(".pdf")`; MediaBox grown by bleed and slug, TrimBox and BleedBox set, crop marks in registration black outside the bleed; `f.mm()`, `f.inch()`; contract row; tests read the boxes back with pypdf. Acceptance: an A4 PDF with 3 mm bleed has TrimBox 595 x 842 pt and crop marks at the trim corners | 21 |
+| S-165 | E-32 | Spike: CMYK / PDF/X. Question: can funground produce a file a print shop accepts as CMYK (or PDF/X) without a heavy dependency, on Windows, macOS, Linux and in the browser? Criteria before work; options measured (e.g. a converter tool, colour-managed export); recommendation. No product code | 21 |
+| S-166 | E-32 | Teaching. Tasks: guide sections (justified columns, hyphenation, type on a path, fitted headlines, preparing a file for print), four gallery examples, "Event poster series" project print-ready; Quick Reference rows. Acceptance: examples run on the desktop and in the browser editor; links checked | 21 |
+| S-167 | E-32 | Later: baseline grid (text boxes snapping lines to a grid's baseline), optical margin alignment and hanging punctuation | backlog |
+| S-170 | E-32 | CMYK colour model (D-087). Tasks: `f.cmyk()` colour objects (0-100; no `color_mode`, D-017); the IR keeps CMYK; Cairo draws a stand-in RGB unique in the document and the PDF step rewrites it to exact `k`/`K` operators, CMYK gradient stops and transparency groups; RGB colours tagged sRGB (ICCBased) with an sRGB output intent; marks in registration (100/100/100/100); screen/PNG/SVG approximation by formula; a leftover-RGB scan in tests; design note; contract rows. Acceptance: a PDF of CMYK fills, text and a gradient holds exactly the CMYK values written (read back), and no unintended RGB | 21 |
+| S-171 | E-32 | Fractional text sizes (maintainer, 11 Oct 2026). Tasks: `text_size()` and the size in `text_font()` keep fractions (remove the pygame-era `int()`; a size of 0.5 is valid, 0 or less an error); contract T3 states it; the scaled-outline cache (S-147) reworked so continuously varying sizes stay fast (e.g. cache outlines unscaled and scale when drawing), timed before and after on a varying-size sketch; goldens and snapshots of examples with fractional sizes regenerated deliberately and listed; the typographic portrait project checked. Acceptance: `fit_text_size` then `text_size` gives text within 0.5 pt of the width; the varying-size benchmark is no slower than today | 21 |
+| S-169 | E-32 | Later: dictionary hyphenation (`f.hyphenation(True, language=...)`), e.g. with `pyphen`; deferred by D-085 | backlog |
+| S-168 | E-22 | Later: the browser editor's polish (toolbar buttons sized for the page; Reset shown only when the code differs), found in the live check of S-151 part 2 | backlog |
+
+## Option constants (D-090, 11 October 2026)
+
+| Story | Epic | Value · tasks · acceptance | Sprint |
+|---|---|---|---|
+| S-174 | E-23 | Named constants for every option word (D-090): flat capitals holding the words (`CENTER`, `BASELINE`, `BOLD`, `MULTIPLY`, `LEFT`, key names, cap/join, blend modes, text modes, page sizes...), exported and documented; `Literal[...]` types on every function that takes an option word (with S-130's `py.typed`); `f.colors` with the named colours as constants; contract rows; Quick Reference and guide use the constants; a test that every option word has its constant and every constant is accepted. Acceptance: `f.text_align(f.CENTRE)` is a NameError an editor underlines; `f.text_align("centre")` is underlined by a type-checking editor; all existing sketches unchanged | next |
+| S-175 | E-23 | Spike for D-088 (less verbose sketches), per `Sketch_Style_Note.md`: ten gallery examples rewritten in the proposed style, prototypes of the safe `*` and the live-value refresh on a branch, `run()` behaviour in IDLE, Thonny, VS Code, the terminal, the website editor and github.dev; criteria set first; recommendation. No product code on the release branch | done 11 Oct (`spikes/12_sketch_style/RESULTS.md` on `spike/s175-sketch-style`); D-088 accepted 12 Oct |
+| S-176 | E-23 | The global style and `run()` as a safety net (D-088): `from funground import *` without `set`, `filter`, `exit`, `random` (new names `set_pixel`, `apply_filter`, `random_number`; `stop`); live values refreshed in a global-style sketch's globals (callbacks, `size()`, `load_pixels()`, scripts); the friendly note for a variable that hides a funground function; a sketch that never calls `run()` starts when the file ends (terminal, VS Code, `funground.web.Session`), the hint kept for notebooks; contract R13, R19; guide chapter 2 "Writing without `f.`", errors page, chapter 14. Acceptance: `tests/test_global_style.py`; `import funground as f` sketches unchanged (full suite) | 22 |
+| S-179 | E-23 | Every option word explained in the API reference (maintainer, 12 Oct, converting a DrawBot poster: `blend_mode` named its 17 modes but never said what they do). Tasks: audit all option arguments; word -> meaning tables in the code for blend modes, stroke caps and joins, text alignment, text styles, filter kinds, cursors, key names, waves, mark anchors (D-092); the reference prints them under each function; a test that every word has a sentence; DrawBot's mode names in `blend_mode` and guide chapter 15. Acceptance: `tests/test_api_docs.py::test_every_option_word_is_explained`; API.md regenerated | 23 |
+| S-180 | E-21 | A script that never shows its drawing says so (found porting a DrawBot poster: blank Play page, no message). Tasks: on the Play page and in the VS Code panel, a script's drawing is presented when the file ends if it never called `f.show()`; on the desktop, a script that drew but never called `f.show()` or `f.save()` prints one line at exit ("Your script drew something but never showed it. Add f.show() as the last line."), not in interactive sessions, notebooks or `python -m`, nor after an error; contract R13/R14 updated. Acceptance: tests for the web Session, the desktop hint (subprocess) and its quiet cases | 23 |
+| S-181 | E-32 | Leading-based line fitting in `text_box()` (D-093): a line fits while its top + leading ≤ the box height, as in DrawBot and InDesign, so `lineHeight(100)` with three lines fits a 300-high box. Tasks: contract T10 rewritten; `text_box` and the overflow it returns follow it (strings, FormattedStrings with mixed sizes: a line's leading is its largest run's); goldens and snapshots that change regenerated deliberately and listed; the DrawBot chapter says the boxes port unchanged. Acceptance: the poster case (size 90, leading 100, three lines, height 300) shows three lines; a test per rule edge | 23 |
+| S-182 | E-32 | Teaching: a guide project on generative posters (maintainer, 12 Oct, after porting a DrawBot poster): the design principles that stay when shapes, grids and colours change (format and margin in real units, the grid, repetition with variation and seeds, a limited palette in hsb, hierarchy, space, alignment, type), four tested stages on an A3 page ending in a four-page series PDF, challenge cards for exploration. Acceptance: its code blocks run in `tests/test_guide.py`; listed in chapter 18 | 23 |
+| S-129 | E-23 | Documentation for AI assistants and agents: `llms.txt` and `llms-full.txt` (generated from `docs/reference/llms_rules.md` and the API reference, at the root and in the package) and `AGENTS.md`, so an assistant writes funground code that runs and an agent changes funground by its rules | done (Sprint 23) |
+| S-183 | E-32 | Right-to-left text that every PDF reader copies in the right order (found 13 Oct: pypdfium2 5.14 reads funground's Hebrew and Arabic in visual order, 5.13 in logical order; the PDF is the same, the readers guess). Mark each right-to-left run with its logical text (`/ActualText`) so copying, search and screen readers get it right whatever the reader; test with pypdf, pdfium 5.13 and 5.14 and one more reader; then lift the pypdfium2 pin in `tests/constraints.txt` | backlog |
+
+## E-33 Camera input (11 October 2026)
+
+| Story | Epic | Value · tasks · acceptance | Sprint |
+|---|---|---|---|
+| S-172 | E-33 | Camera input, `f.camera()`, desktop and browser, still image and short clips. Tasks per `docs/design/Camera_Note.md` (draft, decisions D-089): `camera_input.py` with a replaceable device (as the microphone), pygame-ce capture on Windows and Linux, `Session.push_camera` and the runner's getUserMedia frames, Play page `allow="camera"`, the github.dev panel's one-line refusal, `picture()`, `save()`, `record()` clips to GIF (and MP4 with the `video` extra), contract rows, Quick Reference, a guide section, two gallery examples with a fallback picture. Acceptance: a fake camera's frames are drawn, saved and recorded on the desktop and in headless Chrome; refusal leaves a black picture and one line of output | after 21 (D-089) |
+| S-173 | E-22 | Gallery example and project "Blow the letters away": rings of letters around the mouth on the live camera picture, scattered by breath (`mic.level()`), faded, re-formed; saved as a GIF. **Depends on S-172 (camera)**; until then the idea is parked (11 Oct 2026, from an animated GIF the maintainer shared) | parked |
+
+## E-34 Site identity and the Play editor (13 October 2026)
+
+A visitor sees in ten seconds what funground is for, tries it in the browser without reading instructions, and the editor uses the whole screen. The design was made in claude.ai and handed over as files on branch `design/site-identity` of funground-hq.github.io (`design/` there: DESIGN.md, PLAY_EDITOR.md, BACKLOG.md, tokens, mockups). Candidate ids SITE-C-nn are kept in each row.
+
+| Story | Epic | Value · tasks · acceptance | Sprint |
+|---|---|---|---|
+| S-184 | E-34 | (SITE-C-01) Fix the Play page's duplicate id: `# Play` gets `id="play"`, the editor's container had the same id, so `play.js` built the editor inside the heading (toolbar at twice its size, instructions below the fold). Container renamed `funground-play`; `test_editor.mjs` now has the heading and checks the editor is not inside it. Acceptance: toolbar one row under 48px at 1366 x 768; the h1 reads Play | 24 |
+| S-185 | E-34 | (SITE-C-02) The stylesheet, fonts and logo: `funground.css` (tokens, Material mapping, components), three OFL font families hosted on the site, the logo mark; every page, the guide and reference included, gets the paper look and night mode with no markdown change. Acceptance: strict build, guide chapter matches `design/mockups/guide-chapter.png`, no font from another site, contrast check passes in both schemes. Needs D-096, D-097, D-098 | 24 |
+| S-186 | E-34 | (SITE-C-03) The home page: `overrides/home.html`, the first sketch beside its picture, three reasons (browser, Windows, ragas and talas), Try it in your browser first. Acceptance: matches the home mockups at 1366 and 390, no horizontal scroll, accessibility at least 95, a colour chip changes code and circle | 24 |
+| S-187 | E-34 | (SITE-C-04) The Play layout: the editor fills the window, split with a drag handle, the picture at 1:1, console drawer, help popover, status chip, keyboard (`design/PLAY_EDITOR.md` section 3); protocol, share link and `test_editor.mjs` stay green; a design note for the layout | 24 |
+| S-188 | E-34 | (SITE-C-05) The example picker with thumbnails, search and groups, usable by keyboard; `assemble.py` adds each example's picture to `examples.json` | later |
+| S-189 | E-34 | (SITE-C-06) Play layouts (remembered) and phones: sticky picture and floating Run under 900px | later |
+| S-190 | E-34 | (SITE-C-07) The gallery index: Showcase strip, topic chips that filter, tiles with Run; changes `tools/assemble.py` | 24 |
+| S-191 | E-34 | (SITE-C-08) Sketch panels on the gallery's example pages: code beside picture, Copy and Run it here; changes `tools/assemble.py` | 24 |
+| S-192 | E-34 | (SITE-C-09) In funground: a square 600 x 600 thumbnail for every example, and a short WebM loop and poster frame for animated ones, used by the gallery index when present (candidate) | - |
+| S-193 | E-34 | (SITE-C-10) In funground: the guide's "change X to Y" experiments as `!!! tip "Try this"` notes, one in each of the first five chapters at least (candidate) | - |

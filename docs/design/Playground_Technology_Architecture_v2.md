@@ -93,6 +93,45 @@ once per loop iteration, after `draw()` and before `present()`: `renderer.render
 
 - **Ops are plain data**: frozen dataclasses, hashable, serialisable. Ops that draw carry the
   `GraphicsState` snapshot they were issued under (free, because state is immutable).
+- **Style calls copy cheaply** (S-144). `GraphicsState` has about thirty fields and every
+  `fill`/`stroke`/`stroke_width` call makes a new one through `with_`. `with_` returns the same
+  object when every given value is already current (equal and of the same type; safe because the
+  state is immutable), and otherwise builds the copy positionally from field names computed once,
+  rather than through `dataclasses.replace`, which re-inspects the fields on every call. An unknown
+  field still raises `TypeError`. Draw time in the heaviest sketches fell by 16-29 %.
+- **A colour string is parsed once** (S-145). `Color` is frozen and hashable, so
+  `Color._parse_str` hands the work to `_parse_color_string`, an `lru_cache(maxsize=512)` function
+  keyed on the string as given; every later `fill("tomato")` reuses the same `Color`. The bound is
+  far above the distinct colour strings a sketch uses. A bad string raises and is never cached, so
+  the error and its message are unchanged. `Color.parse("tomato")` 1.3 to 0.29 us, `"#336699"`
+  2.6 to 0.29 us; `fill()` 4.7 to 3.2 us; whole `draw()` is 13 % faster on gaussian_and_choice
+  and unchanged where the sketch parses few colour strings (noise, text_dots).
+- **Plain numbers skip the ABC check** (S-146). `Vector` validates every number it is given, and
+  `isinstance(v, numbers.Real)` goes through the ABC machinery. `vector._is_number` now tests the
+  exact types `int` and `float` first and only then falls back to the `Real` check, so a `bool`
+  is still refused and Fractions behave as before; the same helper serves `*` and `/`. Messages
+  are unchanged. `Vector(1.5, 2.5)` 1.2 to 0.29 us; whole `draw()` 25 % faster on kinetic_type and
+  15 % on flow_field_print.
+- **Text outlines are scaled once per glyph and size** (S-147). `TextRun.outline_ops` used to scale,
+  flip and place every glyph's outline on every frame, point by point in Python. `FontResource.scaled_outline`
+  now keeps the scaled, y-down outline per `(glyph, variation, size)` in a per-font LRU of at most 2048
+  entries (a sketch that changes its text size every frame cannot grow it), and `outline_ops` only adds the
+  pen position to each point, with the public `Path.translated` (S-149, D-076). *S-171 replaced the scaled cache: fractional text sizes would miss it every time, so outlines are now kept in font units and scaled and placed in one pass; see Typography_Note.* A `Path` cannot be changed, so the cached outline is shared safely. The ops are
+  equal, float for float, to the old ones: no snapshot or golden changed. Cairo time per frame, min of 5
+  rounds: poster_series 10.6 to 8.2 ms, paths-06 outlines 4.2 to 3.3, text_dots 5.4 to 4.6, Session 1
+  05_text 1.7 to 1.1; `draw()` unchanged.
+- **Numeric colours are made once** (S-154). `fill(200, 100, 50)`, `fill(grey)` and `stroke((r, g, b, a))`
+  used to build and validate a new `Color` on every call (profile of kinetic_type, text_dots, noise:
+  `Color.parse`, `_component` and `Color.__post_init__` were most of the colour time). `Color.parse` now
+  turns each number into an int with `_component` (floats truncate, NaN and `True` still raise there) and
+  then asks `color._color_from_ints(r, g, b, a)`, an `lru_cache` of 512 entries like the string cache of S-145.
+  211.8 and 211 reach the same entry; a call that raises is never stored, so the messages are unchanged.
+  A `Color` is a frozen dataclass, so sharing one is safe. A tuple or list is tested first in `parse`
+  (before the `.r/.g/.b` duck-typing, which a plain tuple never satisfies) and `_component` returns an
+  int at once. Colour modes other than the default rgb never reach this cache. Fixed numbers are cached;
+  a colour that changes every call (a float from noise) still builds a Color. Measured, min of 20
+  rounds, interleaved with the old code: `fill(200, 100, 50)` 7.2 to 4.6 us, `fill(128)` 4.6 to 3.0,
+  `Color.parse((200, 100, 50))` 3.0 to 1.0.
 - **Internal capability first, public API later** (`PROCESS.md`). `Save/Restore/Concat/ClipPath/
   FillPath/StrokePath` exist in the IR now so the vector renderer and the text subsystem can use
   them; `p.translate()`, `p.path()`, `with p.saved_state()` arrive in Phase 2 as thin emitters.

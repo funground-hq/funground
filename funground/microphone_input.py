@@ -31,6 +31,19 @@ def _no_device_message(extra: str = "") -> str:
               "Privacy & Security, Microphone.")
 
 
+# ---- a host's microphone (the web runner)
+_host_input = None           # the host's microphone while a web Session runs (platform/browser_audio.py), else None
+
+
+def use_host_input(host) -> None:
+    """Listen through a host's microphone (the web runner, Web_Runner_Note.md) instead of SDL's, or with None back to SDL.
+
+    The host opens the device and pushes what it hears into `host.feed(samples)`; the Microphone's ring buffer and
+    everything that reads it are unchanged. See platform/browser_audio.HostMicrophone."""
+    global _host_input
+    _host_input = host
+
+
 # ---- the one place that touches the experimental module
 def _sdl2_audio():
     try:
@@ -58,6 +71,8 @@ def _open_capture(name: str | None, callback):
     """Open an input device that calls ``callback(samples)`` with a list of floats from -1 to 1.
     Returns ``(device, rate)``. The device has ``pause(0)`` to listen, ``pause(1)`` to stop and
     ``close()``."""
+    if _host_input is not None:
+        return _host_input.open_capture(callback)
     audio = _sdl2_audio()
 
     def on_audio(device, view):
@@ -86,8 +101,8 @@ def _open_capture(name: str | None, callback):
 
 
 def microphones() -> list[str]:
-    """The names of the computer's microphones (inputs). Empty when headless."""
-    if _is_headless():
+    """The names of the computer's microphones (inputs). Empty when headless, and in the browser (it picks the input)."""
+    if _host_input is not None or _is_headless():
         return []
     return _device_names()
 
@@ -96,6 +111,11 @@ def make(name: str | None = None, frame_source=None) -> "Microphone":
     """A microphone for the default input, or the first whose name contains *name* (A4)."""
     if name is not None and (not isinstance(name, str) or not name):
         raise ValueError(f"f.microphone(): name must be text such as 'USB', not {name!r}")
+    if _host_input is not None:
+        if name is not None:
+            raise RuntimeError("f.microphone(name): choosing a microphone by name only works in the desktop version. "
+                               "In the browser, use f.microphone() and choose the input in the browser's own settings.")
+        return Microphone(None, frame_source)
     if _is_headless():
         return Microphone(None, frame_source, silent=True)
     names = _device_names()

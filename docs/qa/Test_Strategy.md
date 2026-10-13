@@ -85,5 +85,7 @@ contain test hooks.
 
 ## Definition of green
 
-All layers pass on the local machine and on every cell of the CI matrix. A skipped golden
+All layers pass on the local machine and on the everyday CI job (Windows, Python 3.11). Before a
+release they pass on every job of the release run: Windows, Linux and macOS
+([CI_Guidance.md](../developer/CI_Guidance.md)). A skipped golden
 comparison on macOS/Linux is expected; a skipped one on Windows is a bug.

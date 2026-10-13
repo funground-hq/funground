@@ -62,19 +62,41 @@ A test font with a `wght` axis that changes both box width and advance is genera
 ## The shaped-run cache
 
 `CairoRenderer._text_runs` is an LRU of `TextRun`, capped at `TEXT_RUN_CACHE_SIZE` (256) so
-`f.text(f.frame_count, ...)` cannot grow it. The key is `(text, size)` for the plain default.
+`f.text(f.frame_count, ...)` cannot grow it. The key is `(text,)` for the plain default (the size is not in it, S-171).
 It gains the font key or style name away from the default, and `(tracking, features,
 variations)` only when one is set. So the old key, and the tests that pin it, did not change.
 `attach()` clears it. Outlines are cached separately on `FontResource` and live for the process.
-`outline_ops` still transforms every glyph each time it is called.
+
+### Fractional sizes keep the caches fast (S-171)
+
+`text_size(20.5)` keeps the fraction (`text_size_value` in `typography`: any finite number above 0; a
+whole size is still stored as an `int`, so state, the IR and every snapshot of whole sizes read as
+before). A sketch that sizes letters by brightness, or grows a word, then asks for a new size on every
+letter. Nothing that costs time may therefore be keyed by size.
+
+- **Outlines.** S-147 cached each outline already scaled, per `(glyph, variation, size)`. That worked
+  while a sketch used a few hundred whole sizes and missed every time with fractions (400 letters a
+  frame, 120 frames: 5.1 s against 2.1 s). The scaled cache is gone. `FontResource.outline(gid,
+  location)` (font units, y up, once per glyph and variation) is the only outline cache, and
+  `outline_ops` places a glyph with one pass, `_placed(outline, scale, x, y)`: `x * scale + pen_x`,
+  `y * -scale + pen_y`. These are the floats that scaling and then moving gave, so whole-size
+  drawings are byte for byte as before. The one pass costs about what `Path.translated` cost.
+- **Shaping.** HarfBuzz shapes in font units, so the glyphs of a text do not depend on the size.
+  `FontResource._glyphs(text, features, location)` keeps them in an LRU of `SHAPE_CACHE_SIZE` (2048)
+  and `TextRun` only adds the size.
+- **The renderer's run cache** no longer has the size in its key: `(text,)` for the plain default, then
+  the font or style name, and the other settings as before. A hit returns `run.at_size(size)` (the same
+  glyphs, a new size). A sketch with continuously varying sizes therefore hits every time. With the
+  benchmark above, whole and fractional sizes both take about 2.2 s.
 
 ## Layout: `text_box`, alignment and leading (T7, T9, T10)
 
 One layout serves `text`, `text_box` and `text_path` (F13): `Sketch._line_layout` yields
-`(line, left, top)`. The Sketch resolves alignment first, so an `ir.Text` op's (x, y) is always
+`(line, left, top, index)`. The Sketch resolves alignment first, so an `ir.Text` op's (x, y) is always
 its top-left. Each line is its own op.
 
-- `typography.wrap_lines` breaks at spaces and breaks a long word between letters. It returns the
+- `typography.wrap_lines` breaks at spaces, at soft hyphens (T23) and, for a long word, between
+  letters. It returns the
   lines and `rests[i]`, the text from line i on, so the overflow is `rests[fitting]`.
 - A line fits while `fitting * leading + ascent + descent <= height`. Automatic leading is
   `1.25 * text_size` (p5).
@@ -154,6 +176,82 @@ Bundled: Noto Emoji (static instance at weight 400 of the variable font, 0.89 MB
 
 **Tests.** `tests/test_fallback.py`.
 
+## Justified text and soft hyphens (T22, T23; S-159, S-160; D-085)
+
+Both change where a `text_box` puts words and letters, and neither changes how a glyph is drawn.
+
+**Soft hyphens leave at the shaper.** `FontResource.shape` removes U+00AD from the text before
+HarfBuzz sees it. So every caller (drawing, `text_width`, `text_path`, `text_to_points`, the cached
+runs, the PDF and SVG text steps, which write `run.text`) sees a text with no such character, and
+there is no second place that has to remember it. An empty text (only soft hyphens) shapes to a run
+with no glyphs: HarfBuzz gives no glyph list for it.
+
+**The line breaker** (`wrap_lines`, and `FormattedString.wrap`, which keeps the same shape over
+character indexes) loops while the word does not fit the line so far: (1) the last soft hyphen
+(`soft_hyphen_cuts` lists the places with a letter on each side) after which the line, the part
+and a `-` fit; the line is emitted with the hyphen and the word goes on after the soft hyphen;
+(2) otherwise the line so far is emitted and the word starts the next line; (3) otherwise, a word
+wider than the box is broken between letters, as before. A soft hyphen, then, is used when a word
+does not fit the *rest* of a line, which fills the line as far as it can (a word that would fit
+the next line whole is also broken: this is what word processors do, and it gives justified
+columns even spaces). Lines keep the soft hyphens they did not break at: they have no width.
+The overflow (`rests[i]`, `FormattedString.wrap`'s `starts[i]`) starts after the soft hyphen.
+In a `FormattedString` the hyphen is a piece in the run that owns the soft hyphen.
+
+**Justify** is decided in `Sketch.text_box`, from `typography.paragraph_ends(text, starts)` (a line
+ends its paragraph when the next one follows a new line, or there is none) and
+`typography.word_gap` (`(width - natural) / spaces`, never below 0; a line without a space gets 0). The
+distance goes into the op: `ir.Text.word_spacing`, pixels after every space, omitted from snapshots
+when 0. `TextRun` has the same field and uses it in `advance`, `placements` and `outline_ops` (it
+counts the glyphs whose cluster is a space), so the window, PNG, PDF and SVG all place the same
+glyphs. A `FormattedString` line is made of one op per piece: each piece gets the line's gap, and
+the pen moves by the piece's width plus the gap for each of its spaces. Alignment `"justify"` is left
+alignment for `text`, `text_path` (the layout helpers test for `center` and `right`).
+
+Rejected: putting the soft hyphens in the line text and removing them in each exporter (five
+places to forget); a separate Text op per word (copying a PDF then needs a space between ops, and
+viewers differ); treating the last visible line of a short box as a paragraph end (a box that
+cuts a paragraph would show a ragged line in the middle of the paragraph).
+
+## Type on a path (T24; S-161)
+
+`f.text_on_path(message, path, offset=0)` sets one line of text along a path. It is `Sketch.text_on_path`,
+with the measuring in `geometry.PathMeasure` and the letters in `TextRun.cluster_spans`.
+
+```text
+ message ──► font.shape (once, as `text`)  ──► cluster_spans(): (start, end, advance) per letter
+ path    ──► PathMeasure: pieces within 0.1 px, cumulative length, angle of the curve itself
+ each letter: Save · Concat(turn to the tangent, move to the path point) · Text(letter) · Restore
+```
+
+- **A letter is a HarfBuzz cluster**, so a ligature stays one letter and a letter with its accent too. Its
+  advance (pen movement, with kerning and tracking) comes from the whole line's shaping, so the spacing
+  is `text`'s. A space is not drawn: it rides with the letter before it, in that letter's `Text`, so a
+  PDF or SVG copy keeps the spaces. Each letter's `Text` is then shaped again by the renderer on its own;
+  that gives the same glyphs for Latin, Devanagari conjuncts and emoji, but not for Arabic, whose
+  letters change shape with their neighbours. That is the known limit (an outline fallback was not built).
+- **One transform per letter, not rotated outlines.** The IR already has `Save`, `Concat` and `Text`, and
+  the PDF and SVG writers already read a rotation back from the text marker (T15, T19), so every letter
+  is live text with no new op, no new writer code and no new renderer branch. The cost is four ops a
+  letter; a few hundred letters a frame is nothing. A straight path gives exactly the pixels of `text`
+  (a test). A gradient fill is moved into each letter's frame (`Sketch._paint_seen_from`), because a
+  gradient is read in the drawing space of the moment it is painted.
+- **Measuring.** `contours()` (T16) gives only points, and a letter's angle needs the curve's own direction,
+  so `PathMeasure` cuts curves itself (`_cubic_steps` is shared with `_flatten_cubic`), keeps the angle at
+  each end of every piece, and interpolates it. At 0.1 px a circle of radius 100 has pieces about 5 degrees
+  long; the angle of the chord would be up to 2.5 degrees out, the interpolated one is within 0.1. A
+  piece's length is its chord times `(turn/2) / sin(turn/2)`, exact for a circle, so a ring of text can
+  fill the circle to its end. `point_at` finds the piece with `bisect`; the cost per letter is a
+  binary search, the cost per call one flattening of the path.
+- **Alignment is T7's, along the path.** `offset` is added after alignment, so `"center"` with `offset=0`
+  is centred and the call needs no length from the learner for the common case. A closed path wraps: the
+  learner starts text at the top of a circle with `offset`, and a ring of text can carry on past the start
+  of the path. Open paths cut instead; the overflow is returned, as `text_box` returns its overflow.
+- **Rejected:** a `side="outside"/"inside"` argument (the signature was fixed; flipping the path says it);
+  placing letters by outline `FillPath` (the PDF would hold no text); a new `TextOnPath` op (every
+  renderer and writer would need it); a gap-filling of Arabic joining (needs the whole run's glyphs, one
+  outline each).
+
 ## Alternatives rejected
 
 - **A markup string** for mixed text (D-044): DrawBot's `FormattedString` was chosen instead.
@@ -179,4 +277,5 @@ Bundled: Noto Emoji (static instance at weight 400 of the variable font, 0.89 MB
 ## Tests
 
 `tests/test_fonts.py` (T11, T12), `test_text_layout.py` (T7 to T10, including `text_box`), `test_text.py` (T6, outline and
-run caches), `test_text_settings.py` (T13), `test_formatted.py` (T14), `test_text_path.py` (F13).
+run caches), `test_text_settings.py` (T13), `test_formatted.py` (T14), `test_text_path.py` (F13), `test_justify.py` (T22),
+`test_soft_hyphens.py` (T23), `test_poster_text_files.py` (T22, T23 in PDF and SVG), `test_text_on_path.py` (T24).

@@ -9,6 +9,7 @@ Transform maps a point (x, y) to (a*x + c*y + e, b*x + d*y + f).
 """
 from __future__ import annotations
 
+import bisect
 import math
 from dataclasses import dataclass
 from typing import Iterator
@@ -405,6 +406,29 @@ class Path:
             out.append((seg[0], *(t.apply(*pt) for pt in seg[1:])))
         return Path(tuple(out))
 
+    def translated(self, dx: float, dy: float) -> "Path":
+        """Make a new path with every point moved across and down.
+
+        It gives the same points as transformed(Transform.translation(dx, dy)), but it is simpler and quicker,
+        because no transform is built.
+
+        Arguments:
+            dx, dy: how far to move it across and down.
+
+        Returns:
+            a new Path. This one is not changed.
+
+        Example:
+            p = f.path().circle(0, 0, 40).geometry
+            moved = p.translated(100, 50)
+
+        See also: transformed
+        """
+        # Adding 0.0 makes the points floats, as transformed() gives; a non-number still raises TypeError
+        # (float() would quietly accept a string such as "5").
+        dx, dy = dx + 0.0, dy + 0.0
+        return Path(tuple((seg[0], *((x + dx, y + dy) for x, y in seg[1:])) for seg in self.segments))
+
 
 def rect_radii(radii: tuple, w: float, h: float, name: str = "rect") -> tuple[float, float, float, float]:
     """Four corner radii (top-left, top-right, bottom-right, bottom-left) from 0, 1 or 4 numbers.
@@ -429,13 +453,18 @@ def rect_radii(radii: tuple, w: float, h: float, name: str = "rect") -> tuple[fl
 FLATNESS = 0.01      # pixels: a curve is cut into straight pieces that stay this close to it
 
 
-def _flatten_cubic(p0, c1, c2, p3, tolerance: float) -> list[Point]:
-    """Points along a cubic after its start, in equal steps of t. The step count keeps every
-    straight piece within *tolerance* of the curve (standard bound for a uniform split)."""
+def _cubic_steps(p0, c1, c2, p3, tolerance: float) -> int:
+    """How many equal steps of t cut a cubic into straight pieces that stay within *tolerance* of it
+    (the standard bound for a uniform split)."""
     ddx = max(abs(p0[0] - 2 * c1[0] + c2[0]), abs(c1[0] - 2 * c2[0] + p3[0]))
     ddy = max(abs(p0[1] - 2 * c1[1] + c2[1]), abs(c1[1] - 2 * c2[1] + p3[1]))
     dd = math.hypot(ddx, ddy)
-    n = max(1, math.ceil(math.sqrt(0.75 * dd / tolerance)))
+    return max(1, math.ceil(math.sqrt(0.75 * dd / tolerance)))
+
+
+def _flatten_cubic(p0, c1, c2, p3, tolerance: float) -> list[Point]:
+    """Points along a cubic after its start, in equal steps of t, as many as `_cubic_steps` says."""
+    n = _cubic_steps(p0, c1, c2, p3, tolerance)
     out = []
     for i in range(1, n + 1):
         t = i / n
@@ -506,3 +535,104 @@ def sample_path(path: Path, spacing: float, tolerance: float = FLATNESS) -> list
         if closed and len(out) - first > 1 and math.hypot(out[-1][0] - pts[0][0], out[-1][1] - pts[0][1]) < 1e-6 * spacing:
             out.pop()                       # the walk ended exactly on the start: do not repeat it
     return out
+
+
+# ----------------------------------------------------------------- measuring along a path (S-161, contract T24)
+MEASURE_TOLERANCE = 0.1     # pixels: a curve is measured as straight pieces this close to it
+
+
+def _cubic_angle(p0, c1, c2, p3, t: float) -> float | None:
+    """The direction (radians) in which a cubic is heading at *t*, or None where it has stopped (a
+    control point on top of an end point)."""
+    u = 1 - t
+    dx = u * u * (c1[0] - p0[0]) + 2 * u * t * (c2[0] - c1[0]) + t * t * (p3[0] - c2[0])
+    dy = u * u * (c1[1] - p0[1]) + 2 * u * t * (c2[1] - c1[1]) + t * t * (p3[1] - c2[1])
+    return math.atan2(dy, dx) if math.hypot(dx, dy) > 1e-9 else None
+
+
+def _pieces(path: Path, tolerance: float):
+    """Yield (pieces, closed) for each sub-path of *path*. A piece is a straight stretch
+    (x0, y0, x1, y1, angle at its start, angle at its end), the angles those of the curve itself
+    (radians), so a turn along a curve is smooth. Pieces of no length are left out."""
+    pieces: list[tuple] = []
+    start = here = None
+
+    def add(p, q, a0, a1) -> None:
+        if p == q:
+            return
+        chord = math.atan2(q[1] - p[1], q[0] - p[0])
+        pieces.append((p[0], p[1], q[0], q[1], chord if a0 is None else a0, chord if a1 is None else a1))
+
+    for seg in path.segments:
+        kind = seg[0]
+        if kind == "move":
+            if pieces:
+                yield pieces, False
+            pieces, start, here = [], seg[1], seg[1]
+        elif here is None:
+            continue
+        elif kind == "line":
+            add(here, seg[1], None, None)
+            here = seg[1]
+        elif kind == "cubic":
+            c1, c2, p3 = seg[1], seg[2], seg[3]
+            n = _cubic_steps(here, c1, c2, p3, tolerance)
+            before, heading = here, _cubic_angle(here, c1, c2, p3, 0.0)
+            for i in range(1, n + 1):
+                t = i / n
+                u = 1 - t
+                after = p3 if i == n else (
+                    u * u * u * here[0] + 3 * u * u * t * c1[0] + 3 * u * t * t * c2[0] + t * t * t * p3[0],
+                    u * u * u * here[1] + 3 * u * u * t * c1[1] + 3 * u * t * t * c2[1] + t * t * t * p3[1])
+                arriving = _cubic_angle(here, c1, c2, p3, t)
+                add(before, after, heading, arriving)
+                before, heading = after, arriving
+            here = p3
+        elif kind == "close":
+            add(here, start, None, None)
+            if pieces:
+                yield pieces, True
+            pieces, here = [], start
+    if pieces:
+        yield pieces, False
+
+
+class PathMeasure:
+    """A path measured along its length: where you are, and which way you face, at any distance (S-161).
+
+    It follows the first sub-path that has some length (the whole path when it has only one). Curves are
+    cut into straight pieces no further than `MEASURE_TOLERANCE` from them. A piece's length is its chord made
+    longer by how far the curve turns along it (exact for a circle), and the length is the sum of the pieces.
+    `point_at(distance)` finds the piece by bisection and gives a point on it, and the direction of
+    the curve itself there (not of the piece), so the turn along a circle is smooth.
+
+    `length` is 0 for a path with nothing to follow. `closed` is True when the sub-path was closed: a
+    distance past the end then carries on from the start.
+    """
+
+    def __init__(self, path: Path, tolerance: float = MEASURE_TOLERANCE) -> None:
+        pieces, self.closed = next(iter(_pieces(path, tolerance)), ([], False))
+        self._pieces = []
+        self._ends: list[float] = []
+        total = 0.0
+        for x0, y0, x1, y1, a0, a1 in pieces:
+            turn = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
+            length = math.hypot(x1 - x0, y1 - y0)
+            half = abs(turn) / 2
+            if 1e-9 < half < 1.0:                    # the curve is longer than its chord: exactly so for a circle
+                length *= half / math.sin(half)
+            total += length
+            self._ends.append(total)
+            self._pieces.append((x0, y0, x1 - x0, y1 - y0, a0, turn, length))
+        self.length = total
+
+    def point_at(self, distance: float) -> tuple[float, float, float]:
+        """(x, y, degrees) at *distance* along the path: the point, and the direction of travel as
+        `rotate()` reads it. On a closed path the distance wraps round; on an open one it stops at the ends."""
+        if self.closed:
+            distance %= self.length
+        i = min(bisect.bisect_left(self._ends, min(max(distance, 0.0), self.length)), len(self._pieces) - 1)
+        x0, y0, dx, dy, angle, turn, length = self._pieces[i]
+        t = (min(max(distance, 0.0), self.length) - (self._ends[i - 1] if i else 0.0)) / length
+        t = min(max(t, 0.0), 1.0)
+        return x0 + dx * t, y0 + dy * t, math.degrees(angle + turn * t)

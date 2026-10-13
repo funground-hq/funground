@@ -203,3 +203,50 @@ def test_text_box_rejects_a_box_with_no_room():
     with pytest.raises(ValueError, match="0 or more"):
         p.text_leading(-1)
     assert p.text_box("does not fit at all", 0, 0, 100, 5) == "does not fit at all"
+
+
+# ---- leading-based fitting (S-181, D-093): each line of a text box takes one leading
+def box_overflow(message, size, leading, height):
+    def draw():
+        p.text_size(size)
+        p.text_leading(leading)
+        draw.rest = p.text_box(message, 0, 0, 380, height)
+
+    ops = text_ops(draw)
+    return [op.text for op in ops], draw.rest
+
+
+def test_three_lines_of_leading_100_fit_a_box_300_high_as_in_drawbot():
+    shown, rest = box_overflow("ONE\nTWO\nSIX", 90, 100, 300)       # the poster's title: size 90, lineHeight(100)
+    assert shown == ["ONE", "TWO", "SIX"] and rest == ""
+
+
+def test_a_line_fits_only_while_its_leading_is_inside_the_box():
+    shown, rest = box_overflow("ONE\nTWO\nTHREE", 90, 100, 299.9)
+    assert shown == ["ONE", "TWO"] and rest == "THREE"
+    shown, rest = box_overflow("ONE\nTWO", 20, None, 50)           # automatic leading: 1.25 x 20 = 25
+    assert shown == ["ONE", "TWO"] and rest == ""
+    shown, rest = box_overflow("ONE\nTWO", 20, None, 49.9)
+    assert shown == ["ONE"] and rest == "TWO"
+
+
+def test_a_box_lower_than_one_leading_shows_nothing():
+    shown, rest = box_overflow("ONE", 20, None, 24.9)
+    assert shown == [] and rest == "ONE"
+
+
+def test_formatted_string_lines_each_take_their_own_leading():
+    def draw(height):
+        fs = p.FormattedString()
+        fs.append("BIG\n", size=40)        # its line's leading: 1.25 x 40 = 50
+        fs.append("small", size=20)        # 1.25 x 20 = 25
+        return str(p.text_box(fs, 0, 0, 380, height))
+
+    results = {}
+
+    def both():
+        results[75] = draw(75)
+        results[74.9] = draw(74.9)
+
+    text_ops(both)
+    assert results[75] == "" and results[74.9] == "small"

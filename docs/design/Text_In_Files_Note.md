@@ -157,6 +157,14 @@ layers stay layers. The mode is passed from `save` through `save_frame`, `save_d
 the call (`"live"` or `"shapes"`, else `ValueError`), also for PNG, GIF and MP4, which then ignore it.
 `tests/test_text_shapes.py` covers it.
 
+## Justified text and soft hyphens (T22, T23)
+
+A justified line becomes a `<text>` with `word-spacing` set to the distance funground added after each
+space (`TextRun.word_spacing`), next to `letter-spacing` for tracking; the string holds single
+spaces. The program that opens the file applies the spacing to every space it finds, as funground
+does. Soft hyphens are removed by the shaper, so no `<text>` holds U+00AD, and a hyphen at a line end
+is the character "-". Tests: `tests/test_poster_text_files.py`.
+
 ## Tests
 
 `tests/test_svg_text.py`: the string, family, weight, style, size, fill, position and plain content;

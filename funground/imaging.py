@@ -208,7 +208,20 @@ def mask_bgra(bgra: bytes, mask_alpha: bytes) -> bytes:
 
 
 # ------------------------------------------------------------------ filters (S-080, P10)
-FILTER_KINDS = ("threshold", "gray", "opaque", "invert", "blur", "posterize", "erode", "dilate")
+FILTER_KINDS = {        # each kind and what it does (D-092); the API reference prints the meanings
+    "threshold": "Every pixel becomes black or white: white where its brightness is above the value (0 to 1, "
+                 "default 0.5).",
+    "gray": "Every pixel becomes the grey of its brightness: a black-and-white picture.",
+    "opaque": "Makes every pixel fully opaque, removing any see-through parts.",
+    "invert": "Every colour becomes its opposite, like a photographic negative: black and white swap, red "
+              "becomes cyan.",
+    "blur": "Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier.",
+    "posterize": "Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of "
+                 "colour like a screen print.",
+    "erode": "Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin "
+             "lines of light vanish.",
+    "dilate": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink.",
+}
 
 
 def check_filter(kind, value):
