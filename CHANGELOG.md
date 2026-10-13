@@ -6,6 +6,11 @@ What changed in funground, newest first. Release numbers follow the
 
 ## Unreleased — will become 0.1.0
 
+### Changed
+- **Library versions have upper bounds** (D-100): each dependency may update up to its next major version,
+  where breaking changes usually come (`pycairo>=1.27,<2` and so on). Each release publishes the exact versions it
+  was tested with (`tested-versions.txt` on the GitHub Release), for a school that wants to install exactly those.
+
 ### Added
 - **Pages for AI assistants** (S-129): `llms.txt` holds the rules that differ from p5 and DrawBot, with a
   tested sketch, script and star-import example; `llms-full.txt` adds the whole API reference. Both are

@@ -31,6 +31,13 @@ about 10 times Linux's, and the versions in between are covered by Windows and L
 While a problem is being fixed, CI runs on **one system and one Python version**: the one that
 showed it. Run workflow → `ci` → tick only that system, give only that version.
 
+Once a week (`newest.yml`, Mondays): one Windows job with the **newest** library versions inside
+`pyproject.toml`'s bounds, what a learner installing that day gets (D-100). The other runs use the pinned versions
+in `tests/constraints.txt`, so this is the run that finds a library's breaking release first. The test tools stay
+pinned, and goldens allow invisible edge changes there (32 of 255 on at most 1% of the pixels;
+`FUNGROUND_GOLDEN_TOLERANCE`). About $0.35 a month at list price. When it fails: see which version moved (the
+install step lists them), fix funground or lower the bound, then update the pins on purpose.
+
 Always on:
 - **A 30-minute limit per job** and **a 5-minute limit per test** (`pytest-timeout`), so a hang
   costs half an hour and names the test that hung.

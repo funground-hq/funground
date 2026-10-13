@@ -13,6 +13,10 @@ on:
         description: the Python versions, as a JSON list
         type: string
         required: true
+      newest:
+        description: install the newest library versions inside pyproject.toml's bounds, not the pinned ones (D-100)
+        type: boolean
+        default: false
 
 jobs:
   test:
@@ -34,8 +38,18 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libcairo2-dev pkg-config python3-dev
       - name: Install, with the pinned test versions
+        if: ${{ !inputs.newest }}
         run: python -m pip install -e ".[dev]" -c tests/constraints.txt
+      - name: Install the newest versions inside the bounds (what a learner installing today gets); the test tools stay pinned
+        if: ${{ inputs.newest }}
+        shell: bash
+        run: |
+          sed -n '/^# the test tools/,$p' tests/constraints.txt > tools-constraints.txt
+          python -m pip install --upgrade -e ".[dev]" -c tools-constraints.txt
+          python -m pip freeze
       - name: Test (a test that runs 5 minutes is stopped, and says where it was)
+        env:
+          FUNGROUND_GOLDEN_TOLERANCE: ${{ inputs.newest && '1' || '' }}   # newest versions: invisible edge changes allowed
         run: python -m pytest --timeout=300
       - name: Keep the pictures that differ from their goldens
         if: failure()

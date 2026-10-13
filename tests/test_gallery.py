@@ -20,7 +20,7 @@ import pytest
 import funground
 from funground import api, ir
 
-from conftest import GOLDEN, ROOT, assert_json_documents_close, run_sketch, surface_from_frame
+from conftest import GOLDEN, ROOT, assert_json_documents_close, golden_matches, run_sketch, surface_from_frame
 
 TOOL = ROOT / "tools" / "make_gallery.py"
 _spec = importlib.util.spec_from_file_location("make_gallery", TOOL)
@@ -71,7 +71,7 @@ def test_example_matches_golden(path: Path):
         pytest.skip(f"golden written: {golden.name}")
     if platform.system() != GOLDEN_PLATFORM:
         pytest.skip(f"goldens were produced on {GOLDEN_PLATFORM}")
-    same = pygame.image.tobytes(pygame.image.load(str(golden)), "RGB") == frame[1]
+    same = golden_matches(pygame.image.tobytes(pygame.image.load(str(golden)), "RGB"), frame[1])
     if not same:
         actual = GOLDEN / "_actual"
         actual.mkdir(exist_ok=True)

@@ -88,7 +88,12 @@ TestPyPI, not on PyPI. For another dry run, bump the dev version first (`0.1.0.d
    ```
 7. **Approve:** the maintainer clicks *Approve* on the `pypi` environment. The release is then on PyPI.
 8. **Check:** in a fresh virtual environment, `pip install funground`, run the smoke test and `python -m funground.gallery`.
-9. **Open the next version:** set it to `0.2.0.dev0`, with a new "Unreleased" section in the changelog.
+9. **Publish the tested versions** (D-100): attach `tests/constraints.txt` to the GitHub Release as
+   `tested-versions.txt` (`cp tests/constraints.txt tested-versions.txt`, then `gh release upload v0.1.0 tested-versions.txt`), and say in the
+   release notes that a school or a course that wants exactly what was tested installs with
+   `pip install funground -c https://github.com/funground-hq/funground/releases/download/v0.1.0/tested-versions.txt`.
+   Learners who just `pip install funground` get the newest versions inside `pyproject.toml`'s bounds.
+10. **Open the next version:** set it to `0.2.0.dev0`, with a new "Unreleased" section in the changelog.
 
 Tagging and publishing are irreversible and public. Per `docs/PROCESS.md`, they happen only in the main session,
 after the maintainer's go-ahead.

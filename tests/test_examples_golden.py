@@ -17,7 +17,7 @@ from pathlib import Path
 import pygame
 import pytest
 
-from conftest import EXAMPLES, GOLDEN, run_sketch, surface_from_frame
+from conftest import EXAMPLES, GOLDEN, golden_matches, run_sketch, surface_from_frame
 
 SKETCHES = sorted(EXAMPLES.glob("*.py"))
 # Their output depends on wall-clock timing, so they are smoke-tested only.
@@ -54,7 +54,7 @@ def test_sketch_matches_golden(sketch: Path, tmp_path: Path):
         pytest.skip(f"goldens were produced on {GOLDEN_PLATFORM}")
 
     expected = pygame.image.load(str(golden))
-    same = pygame.image.tobytes(expected, "RGB") == frame[1]
+    same = golden_matches(pygame.image.tobytes(expected, "RGB"), frame[1])
     if not same:
         out = GOLDEN / "_actual"
         out.mkdir(exist_ok=True)
