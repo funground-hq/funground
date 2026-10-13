@@ -1,31 +1,73 @@
+# CI, spent wisely (docs/developer/CI_Guidance.md). The full suite runs on the maintainer's Windows
+# machine before every push; GitHub adds what that machine cannot.
+#
+#   a push that changes code     Windows, Python 3.11 (one job)
+#   a push of records or prose   nothing (the path filter below)
+#   a pull request to main,      Windows 3.11-3.14, then Linux 3.11-3.14, then macOS 3.11 and 3.14;
+#   or Run workflow (release)    each stage only after the one before has passed
+#
+# Release tags are not tested again here: the tagged commit was tested first, and release.yml
+# smoke-tests the built package on the three systems.
+
 name: ci
 
-on: [push, pull_request]
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "funground/**"
+      - "tests/**"
+      - "examples/**"
+      - "tools/**"
+      - "docs/guide/**"
+      - "docs/reference/**"
+      - "docs/gallery/**"
+      - "pyproject.toml"
+      - ".github/workflows/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "funground/**"
+      - "tests/**"
+      - "examples/**"
+      - "tools/**"
+      - "docs/guide/**"
+      - "docs/reference/**"
+      - "docs/gallery/**"
+      - "pyproject.toml"
+      - ".github/workflows/**"
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: "everyday: Windows 3.11 only; release: the three systems, one after another"
+        type: choice
+        options: [release, everyday]
+        default: release
+
+concurrency:                              # a newer push cancels the older run
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-        python: ["3.11", "3.12", "3.13", "3.14"]
-    env:
-      SDL_VIDEODRIVER: dummy
-      SDL_AUDIODRIVER: dummy
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python }}
-      - run: sudo apt-get update && sudo apt-get install -y libcairo2-dev pkg-config python3-dev
-        if: runner.os == 'Linux'
-      - run: python -m venv .venv
-      - run: .venv/bin/python -m pip install -e ".[dev]"
-        if: runner.os != 'Windows'
-      - run: .venv/Scripts/python -m pip install -e ".[dev]"
-        if: runner.os == 'Windows'
-      - run: .venv/bin/python -m pytest
-        if: runner.os != 'Windows'
-      - run: .venv/Scripts/python -m pytest
-        if: runner.os == 'Windows'
+  windows:
+    uses: ./.github/workflows/tests.yml
+    with:
+      os: windows-latest
+      pythons: >-
+        ${{ (github.event_name == 'pull_request' || inputs.scope == 'release')
+            && '["3.11", "3.12", "3.13", "3.14"]' || '["3.11"]' }}
+
+  linux:
+    needs: windows
+    if: github.event_name == 'pull_request' || inputs.scope == 'release'
+    uses: ./.github/workflows/tests.yml
+    with:
+      os: ubuntu-latest
+      pythons: '["3.11", "3.12", "3.13", "3.14"]'
+
+  macos:
+    needs: linux
+    uses: ./.github/workflows/tests.yml
+    with:
+      os: macos-latest
+      pythons: '["3.11", "3.14"]'          # macOS minutes cost about 10 times Linux's; the versions between are covered above

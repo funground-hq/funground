@@ -198,28 +198,30 @@ fragment you only want to show. The guide's contents page must list every chapte
 
 ## The CI matrix
 
-`.github/workflows/ci.yml` runs on every push and pull request:
+`.github/workflows/ci.yml` runs the suite in stages, so that GitHub's minutes go only where your own
+machine cannot reach ([CI_Guidance.md](CI_Guidance.md) has the reasons and the costs):
 
-| Axis | Values |
+| When | Jobs |
 |---|---|
-| Operating system | Windows, Ubuntu, macOS (the `windows-latest`, `ubuntu-latest` and `macos-latest` runners) |
-| Python | 3.11, 3.12, 3.13, 3.14 |
+| A push that changes code, tests, examples, tools, the guide, the reference, the gallery or a workflow | Windows, Python 3.11 |
+| A push of records or prose only | none |
+| A pull request to `main`, or *Run workflow* with scope *release* | Windows 3.11–3.14, then Linux 3.11–3.14, then macOS 3.11 and 3.14, each stage only after the one before has passed |
 
-That is 12 cells, with `fail-fast` off, so one failing cell does not hide the others. Each cell
-makes a virtual environment, installs `pip install -e ".[dev]"` and runs `pytest` with the SDL dummy
-drivers. Goldens are compared only on the Windows cells.
+Each job (`.github/workflows/tests.yml`) installs `pip install -e ".[dev]"` and runs
+`pytest --timeout=300` with the SDL dummy drivers, within 30 minutes. Goldens are compared only on
+Windows; the pictures that differ are kept for 7 days as an artifact of the run.
 
 **The Linux Cairo step.** On Ubuntu, `pycairo` has no wheel and must be built, so the Linux cells first
 run `sudo apt-get update && sudo apt-get install -y libcairo2-dev pkg-config python3-dev`. Without it
 `pip install` fails with a Cairo error. Windows and macOS need no extra step (the macOS README line
 `brew install cairo pkg-config` is for a local build only). The `dev` extra brings pytest, Pillow,
-pypdfium2, imageio-ffmpeg and build, so the PDF, GIF, MP4 and wheel tests all run in CI.
+pytest-timeout, pypdfium2, imageio-ffmpeg and build, so the PDF, GIF, MP4 and wheel tests all run in CI.
 
 The release workflow, `.github/workflows/release.yml`, is separate. It builds the package, publishes it to
 TestPyPI and runs a **smoke test** on Windows, macOS and Linux from the installed package (draw, save
 PDF, SVG and PNG, read the PDF's text, make a sargam melody, list the gallery). See
 [Releasing.md](Releasing.md).
 
-A change is done when the whole suite is green on the matrix
-([PROCESS](../PROCESS.md), "Definitions"). Locally you can only run your own cell, so keep the
+A change is done when the whole suite is green locally and on the everyday CI job, and a release
+when it is green on the release run ([PROCESS](../PROCESS.md), "Definitions"). Locally you can only run your own cell, so keep the
 code free of anything system-specific.
