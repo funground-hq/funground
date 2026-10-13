@@ -1,10 +1,11 @@
-# CI, spent wisely (docs/developer/CI_Guidance.md). The full suite runs on the maintainer's Windows
-# machine before every push; GitHub adds what that machine cannot.
+# CI, spent wisely (D-095, docs/developer/CI_Guidance.md). The full suite runs on the maintainer's
+# machine before every push; GitHub adds only what that machine cannot.
 #
-#   a push that changes code     Windows, Python 3.11 (one job)
-#   a push of records or prose   nothing (the path filter below)
-#   a pull request to main,      Windows 3.11-3.14, then Linux 3.11-3.14, then macOS 3.11 and 3.14;
-#   or Run workflow (release)    each stage only after the one before has passed
+#   a push or pull request that changes code   Windows, Python 3.11: one job
+#   a push of records or prose                 nothing (the path filters below)
+#   Run workflow, as chosen                    the ticked systems, with the Python versions given
+#   Run workflow, release ticked               the release run: Windows 3.11-3.14, then Linux 3.11-3.14,
+#                                              then macOS 3.11 and 3.14, each after the one before passed
 #
 # Release tags are not tested again here: the tagged commit was tested first, and release.yml
 # smoke-tests the built package on the three systems.
@@ -38,11 +39,26 @@ on:
       - ".github/workflows/**"
   workflow_dispatch:
     inputs:
-      scope:
-        description: "everyday: Windows 3.11 only; release: the three systems, one after another"
-        type: choice
-        options: [release, everyday]
-        default: release
+      windows:
+        description: Windows
+        type: boolean
+        default: true
+      linux:
+        description: Linux
+        type: boolean
+        default: false
+      macos:
+        description: macOS (its minutes cost about 10 times Linux's)
+        type: boolean
+        default: false
+      pythons:
+        description: 'Python versions, as a list: ["3.11"] or ["3.11", "3.14"]'
+        type: string
+        default: '["3.11"]'
+      release:
+        description: Release run (every system, one after another; the choices above are ignored)
+        type: boolean
+        default: false
 
 concurrency:                              # a newer push cancels the older run
   group: ci-${{ github.ref }}
@@ -50,24 +66,31 @@ concurrency:                              # a newer push cancels the older run
 
 jobs:
   windows:
+    if: github.event_name != 'workflow_dispatch' || inputs.release || inputs.windows
     uses: ./.github/workflows/tests.yml
     with:
       os: windows-latest
       pythons: >-
-        ${{ (github.event_name == 'pull_request' || inputs.scope == 'release')
-            && '["3.11", "3.12", "3.13", "3.14"]' || '["3.11"]' }}
+        ${{ inputs.release && '["3.11", "3.12", "3.13", "3.14"]'
+            || github.event_name == 'workflow_dispatch' && inputs.pythons
+            || '["3.11"]' }}
 
   linux:
     needs: windows
-    if: github.event_name == 'pull_request' || inputs.scope == 'release'
+    if: >-
+      !cancelled() && !failure() && github.event_name == 'workflow_dispatch'
+      && (inputs.release || inputs.linux)
     uses: ./.github/workflows/tests.yml
     with:
       os: ubuntu-latest
-      pythons: '["3.11", "3.12", "3.13", "3.14"]'
+      pythons: ${{ inputs.release && '["3.11", "3.12", "3.13", "3.14"]' || inputs.pythons }}
 
   macos:
-    needs: linux
+    needs: [windows, linux]
+    if: >-
+      !cancelled() && !failure() && github.event_name == 'workflow_dispatch'
+      && (inputs.release || inputs.macos)
     uses: ./.github/workflows/tests.yml
     with:
       os: macos-latest
-      pythons: '["3.11", "3.14"]'          # macOS minutes cost about 10 times Linux's; the versions between are covered above
+      pythons: ${{ inputs.release && '["3.11", "3.14"]' || inputs.pythons }}
