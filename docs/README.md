@@ -19,7 +19,7 @@ Each line says when to read the page.
 
 ## Learn to think visually
 
-- [Creative Thinking Course](course/README.md): a guided course in visual ideas, experiments
+- [Creative practice with funground](course/README.md): a guided course in visual ideas, experiments
   and assignments. Take it before the Studio exercises; it explains how to look, make choices and
   develop your own work.
 - [Studios](guide/19_studios.md): short, focused exercises for practising a visual relationship

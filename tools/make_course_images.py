@@ -45,8 +45,8 @@ def bundle(name, sketches, label):
         entry.compress_type = zipfile.ZIP_DEFLATED
         entry.external_attr = 0o644 << 16
         output.writestr(entry, (
-            f"Creative Thinking Course: {label}\n\n"
-            "Use the Python environment where Funground is installed.\n"
+            f"Creative practice with funground: {label}\n\n"
+            "Use the Python environment where funground is installed.\n"
             "Begin with each lesson's NN_starter.py. The other files are comparison studies.\n"
             "Scripts save a PNG in your current folder and show the image.\n"
             "Lesson 9's live sketches respond continuously; close the window to finish.\n"

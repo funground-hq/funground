@@ -1,7 +1,7 @@
-# Creative Thinking Course sketches
+# Creative practice with funground: the sketches
 
 These are original CC0 examples; see [the examples licence](../LICENSE).
-They support the [Creative Thinking Course](../../docs/course/README.md).
+They support the course [Creative practice with funground](../../docs/course/README.md).
 
 Download a Python file and run it in the environment where Funground is installed.
 For example, run **python 01_starter.py**. It saves a PNG in your current folder,
