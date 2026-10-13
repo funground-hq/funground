@@ -2,7 +2,7 @@
 
 **Purpose:** help programmers and visual makers become more deliberate, curious designers by making images, motion and interactive work with code.
 
-This is a sequence of studios, not a catalogue of API features. Every studio starts with a visual question, asks the learner to make and compare versions, and introduces only the code needed to explore that question. The examples and projects in the repository remain useful references; this curriculum gives them a design-led order.
+This is a design-led course map, not a second set of examples. Each unit starts with a visual question and uses the code needed to explore it. Where funground already has a suitable studio or project, the course reuses it and adds a design lens or reflection; new briefs fill gaps in the current collection.
 
 ## Who it is for
 
