@@ -10,7 +10,7 @@ Each line says when to read the page.
 - The gallery browser: after you install, run `python -m funground.gallery` to browse every feature
   in a window, with its picture and its code.
   (Inside a virtual environment this is the same command. On Windows without activating it,
-  use `.venv\Scripts\python -m funground.gallery`.)
+  use `.venv\\Scripts\\python -m funground.gallery`.)
 
 ## The guide
 
@@ -19,6 +19,8 @@ Each line says when to read the page.
 
 ## Projects
 
+- [A creative curriculum](creative-curriculum.md): follow a design-led path from simple compositions
+  to covers, posters, motion, interaction and generative art.
 - [Projects](guide/18_projects.md): read this when you know the basics and want to make something
   whole, such as a poster, a game or a raga explorer.
 - [Studios](guide/19_studios.md): read this to compose on a page with margins and a grid, place
@@ -63,5 +65,5 @@ Each line says when to read the page.
 ## Project history
 
 - [Roadmap](Roadmap.md): where the project is going.
-- [Sprints](../sprints/): what was planned and done, one folder for each sprint.
+- [Sprints](../sprints/): what was planned and done, one folder for each.
 - [Changelog](../CHANGELOG.md): what changed in each version.
