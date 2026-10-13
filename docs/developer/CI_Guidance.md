@@ -8,23 +8,28 @@ this note.
 
 ## The idea
 
-**The maintainer's Windows machine is the first CI.** The full suite runs there before every push
-(the process already requires it). GitHub adds only what that machine cannot: another Python
-version, another system, a clean install. Each system is tried only once the one before it has
-passed, and all three only when a release is being prepared.
+**The maintainer's machines are the first CI.** The full suite runs on the Windows machine before
+every push (the process already requires it), and on the maintainer's Mac before a release. GitHub
+adds only what those cannot: another Python version, Linux, a clean install. Problems are found and
+fixed locally, never by pushing to see what CI says. Each system is tried on GitHub only once the one
+before it has passed, and all three only for a release.
 
 ## What runs when
 
 | When | What runs | Jobs |
 |---|---|---|
 | A push that changes only records or prose (`sprints/`, `docs/design/`, `docs/backlog/`, `docs/developer/`, `docs/releases/`, `README.md`, `CHANGELOG.md` …) | nothing | 0 |
-| A push that changes code, tests, examples, tools, the guide, the reference, the gallery, `pyproject.toml` or a workflow | Windows, Python 3.11 (the local run covers 3.14) | 1 |
-| A pull request to `main`, or **Run workflow** with *scope = release* | Windows 3.11 to 3.14 → then Linux 3.11 to 3.14 → then macOS 3.11 and 3.14 | 10 |
+| A push or a pull request that changes code, tests, examples, tools, the guide, the reference, the gallery, `pyproject.toml` or a workflow | Windows, Python 3.11 (the local run covers 3.14) | 1 |
+| **Run workflow**, as chosen: tick the systems, list the Python versions (default: Windows, `["3.11"]`) | only those, Windows → Linux → macOS in that order | as chosen |
+| **Run workflow** with *release* ticked, for a release only | Windows 3.11 to 3.14 → then Linux 3.11 to 3.14 → then macOS 3.11 and 3.14 | 10 |
 | A release tag `v*` | no `ci` run (the tagged commit was tested before it was tagged); `release.yml` builds and smoke-tests on the three systems, about a minute each | 3 small |
 
 Each stage starts only when the stage before it has passed (`needs:`), and inside a stage the first
 failure cancels the rest (`fail-fast`). macOS gets two Python versions, not four: its minutes cost
 about 10 times Linux's, and the versions in between are covered by Windows and Linux.
+
+While a problem is being fixed, CI runs on **one system and one Python version**: the one that
+showed it. Run workflow → `ci` → tick only that system, give only that version.
 
 Always on:
 - **A 30-minute limit per job** and **a 5-minute limit per test** (`pytest-timeout`), so a hang
@@ -40,8 +45,13 @@ Always on:
 - **Do not use CI to debug.** Reproduce locally. If only GitHub's machine shows it, make the test
   say more (a message, a kept file), then run the failing cell once: **Re-run failed jobs**, never
   the whole run.
-- **Prepare a release with one full run:** *Run workflow* → `ci` → scope *release*, on the commit
-  to be tagged, or the pull request to `main`.
+- **Prepare a release with one full run:** *Run workflow* → `ci` → tick *release*, on the commit to
+  be tagged. Before it, the maintainer runs the suite on the Mac; when that passes and macOS is not
+  what changed, the release run may be a chosen run of Windows and Linux only.
+- **Pin the test libraries.** CI installs the exact versions in `tests/constraints.txt` (the
+  maintainer's machine's), so a library's new release cannot turn CI red overnight, as pypdfium2
+  5.14 and pycairo 1.29.2 did in October 2026. Learners still get the newest versions. Update the
+  pins on purpose: in one change, after the full suite passes locally with the new versions.
 - **Look at the usage once a month** (or before a busy week):
 
   ```text
@@ -63,6 +73,7 @@ Always on:
 |---|---|
 | Before (12 jobs on every push, and again on a tag) | about $3.70, about 116 runner minutes |
 | Everyday push now (1 Windows job) | about $0.08 |
+| A chosen run while fixing (1 job) | $0.08 Windows, $0.05 Linux, $0.81 macOS |
 | Release run now (10 jobs, if all pass) | about $2.10 |
 | Prose-only push now | $0 |
 

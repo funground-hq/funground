@@ -203,11 +203,13 @@ machine cannot reach ([CI_Guidance.md](CI_Guidance.md) has the reasons and the c
 
 | When | Jobs |
 |---|---|
-| A push that changes code, tests, examples, tools, the guide, the reference, the gallery or a workflow | Windows, Python 3.11 |
+| A push or pull request that changes code, tests, examples, tools, the guide, the reference, the gallery or a workflow | Windows, Python 3.11 |
 | A push of records or prose only | none |
-| A pull request to `main`, or *Run workflow* with scope *release* | Windows 3.11–3.14, then Linux 3.11–3.14, then macOS 3.11 and 3.14, each stage only after the one before has passed |
+| *Run workflow*, as chosen | the ticked systems, with the Python versions given |
+| *Run workflow* with *release* ticked | Windows 3.11–3.14, then Linux 3.11–3.14, then macOS 3.11 and 3.14, each stage only after the one before has passed |
 
-Each job (`.github/workflows/tests.yml`) installs `pip install -e ".[dev]"` and runs
+Each job (`.github/workflows/tests.yml`) installs `pip install -e ".[dev]" -c tests/constraints.txt`
+(the pinned library versions) and runs
 `pytest --timeout=300` with the SDL dummy drivers, within 30 minutes. Goldens are compared only on
 Windows; the pictures that differ are kept for 7 days as an artifact of the run.
 
