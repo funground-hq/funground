@@ -57,7 +57,7 @@ f.run()                              # finds setup() and draw() in this file and
 |---|---|---|
 | `f.size(width, height)` | Create or resize the window. | `f.size(640, 400)` |
 | `f.size(..., title="...")` | Set the window title. | `f.size(640, 400, title="Bounce")` |
-| `f.size(..., fps=30)` | Choose the target frames per second (default 60). | `f.size(640, 400, fps=30)` |
+| `f.size(..., fps=30)` | Choose the target frames per second (60 to start with); `f.run(fps=...)` wins over it. | `f.size(640, 400, fps=30)` |
 | `f.run()` | Run `setup()` once, then `draw()` repeatedly. | `f.run()` |
 | `f.run(fps=30)` | The same, overriding the frame rate. | `f.run(fps=30)` |
 | `f.run(max_frames=100)` | stop by itself after that many frames — for tests, scripts and headless runs. | `f.run(max_frames=100)` |
