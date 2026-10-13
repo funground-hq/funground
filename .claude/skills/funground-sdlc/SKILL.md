@@ -127,3 +127,22 @@ recommendation not yet accepted is never applied to code.
 - **A cloud sandbox:** installing toolchains inside the sandbox is fine. Record every tool's exact
   version in the repository (README or RESULTS.md) so the build can be reproduced, and turn a
   working recipe into a CI workflow.
+
+## 9. CI minutes (maintainer, 13 Oct 2026)
+
+GitHub's minutes are free for public repositories, but they are spent as if they were not: the aim
+is under $50 a month at list price. The full note, with the costs, is `docs/developer/CI_Guidance.md`
+in `funground-hq/funground`.
+
+- **The local machine is the first CI.** Push only after the full suite is green locally, and push in
+  groups (a finished story, a batch of records), not commit by commit.
+- **Everyday pushes run one job** (Windows), and only when code, tests, examples or tested docs
+  change; records and prose run nothing. **Linux, then macOS, run only when a release is prepared**
+  (a pull request to `main`, or *Run workflow* with scope *release*), each after the one before has
+  passed. macOS gets the fewest jobs: its minutes cost about 10 times Linux's.
+- **Every workflow has** path filters, `timeout-minutes`, a per-test timeout, and
+  `concurrency: cancel-in-progress`. A new workflow in any repository follows the same rules.
+- **Never debug by pushing.** Reproduce locally; when only GitHub shows a failure, make the test say
+  more, then *Re-run failed jobs* once.
+- Check the month's usage with `gh api organizations/funground-hq/settings/billing/usage` before a
+  busy week, and say in the sprint review what CI used.
