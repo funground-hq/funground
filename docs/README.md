@@ -10,7 +10,7 @@ Each line says when to read the page.
 - The gallery browser: after you install, run `python -m funground.gallery` to browse every feature
   in a window, with its picture and its code.
   (Inside a virtual environment this is the same command. On Windows without activating it,
-  use `.venv\Scripts\\python -m funground.gallery`.)
+  use `.venv\Scripts\python -m funground.gallery`.)
 
 ## The guide
 
