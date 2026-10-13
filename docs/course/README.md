@@ -36,9 +36,8 @@ and you do not have to make complex code to make an interesting image.
 
 ## The lessons
 
-**Course draft:** Lessons 1 and 2 have detailed walkthroughs, rendered examples, guided
-practice, hints and downloadable sketches. Lessons 3–11 each have their own page and retain
-the initial lesson material; they are awaiting the same depth of development.
+Each lesson has a guided explanation, runnable code, rendered outputs, experiments and an assignment.
+Work through the lessons in order, or revisit one when a later project exposes a question.
 
 | Lesson | Question | Page |
 |---|---|---|
@@ -57,7 +56,7 @@ the initial lesson material; they are awaiting the same depth of development.
 
 ## How to work through a lesson
 
-Allow about 60–90 minutes for each of the first two lessons, with another session if you want
+Allow about 60–90 minutes for a foundational lesson, with another session if you want
 to develop the assignment. Later projects may need several sessions. Work at a pace that
 lets you compare and revise.
 
@@ -79,9 +78,9 @@ relationship you are trying to change.
 
 ## Sketches and outputs
 
-[Download the first two lessons as a ZIP](downloads/first_two_lessons.zip), or choose an
+[Download all course sketches as a ZIP](downloads/course_sketches.zip), or choose an
 individual sketch from the [download list](../../examples/course/README.md).
-Every illustration in Lessons 1 and 2 is rendered from its linked Funground sketch.
+Every course output illustration is rendered from its linked Funground sketch.
 
 To run a downloaded file, use the same Python environment in which you installed Funground:
 
@@ -91,10 +90,10 @@ python 01_starter.py
 
 If your computer uses a different Python command or a virtual environment, use the command
 from your working first sketch. A window opens, and the script also saves a PNG in the
-folder from which you ran it. Close the window to finish. These examples use no extra
-packages beyond Funground.
+folder from which you ran it. Close the window to finish. The core examples use Funground's base install. The optional GIF exporter in Lesson 9
+requires Pillow (funground[extras]) or ffmpeg.
 
-The two learner lessons use plain drawing calls so that the visual idea is easy to isolate.
+The early lessons use plain drawing calls so that the visual idea is easy to isolate.
 Functions and loops in the comparison sketches simply arrange several studies on one sheet;
 you can study those after making the single composition.
 
