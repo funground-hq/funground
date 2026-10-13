@@ -494,6 +494,7 @@ def setup():
 
 
 def draw():
+    f.random_seed(12)  # keep this edition still; change the seed to make another
     f.background("#f3efe6")
     f.no_stroke()
 
