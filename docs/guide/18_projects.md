@@ -25,7 +25,7 @@ You do not have to do the projects in order. Pick the one that sounds like fun.
 
 | # | Project | What you make | Main skills | Level |
 |---|---|---|---|---|
-| 1 | [Event poster series](projects/01_event_posters.md) | A poster designer: flip through events, type a headline, save layered PDF and SVG files | layers, text, gradients, booleans, saving | Beginner+ |
+| 1 | [Event poster series](projects/01_event_posters.md) | A poster designer: flip through events, type a headline, save layered PDF and SVG files, then make an A3 print-ready PDF (a fourth stage) | layers, text, gradients, booleans, saving, `fit_text_size`, bleed and marks | Beginner+ |
 | 2 | [Rangoli and mandala generator](projects/02_rangoli.md) | A symmetric festival pattern with sliders, saved as SVG for printing | transforms, booleans, `color_mode("hsb")`, controls | Beginner+ |
 | 3 | [Raga explorer](projects/03_raga_explorer.md) | Hear a raga over a drone, watch each swara light up, then sing it back | `raga`, `melody`, `drone`, microphone | Beginner+ |
 | 4 | [Voice-controlled game](projects/04_voice_game.md) | A bird that flies through gates as you use your voice | microphone, collisions, sound effects | Beginner+ |
@@ -33,6 +33,7 @@ You do not have to do the projects in order. Pick the one that sounds like fun.
 | 6 | [Kinetic type](projects/06_kinetic_type.md) | A word made of dots that scatter at the mouse and come back; saved as a GIF | `text_to_points`, `Vector`, `noise`, `save_gif` | Beginner+ |
 | 7 | [Scratch card](projects/07_scratch_card.md) | Prizes under a foil layer that you scratch off with the mouse, with sounds | `layer`, `erase`, `pluck`, `tone`, mouse | Beginner |
 | 8 | [Flow-field print](projects/08_flow_field_print.md) | Thousands of noise-guided lines, saved as a vector PDF for a big print | `noise`, `Vector`, `layer`, blend, PDF | Beginner+ |
+| 9 | [Generative posters](projects/09_generative_posters.md) | An A3 poster series from a grid of glowing shapes and a fitted headline, with the design ideas behind it: format, grid, variation, palette, hierarchy, space, type | `size("A3", margin=)`, `mm`, `grid`, `color_mode("hsb")`, `blend_mode`, `fit_text_size`, `new_page`, PDF | Beginner+ |
 
 **Previous:** [17. Ragas and talas](17_ragas_and_talas.md)
 

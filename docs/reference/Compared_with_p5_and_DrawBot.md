@@ -157,7 +157,7 @@ unless a row says Processing.
 | Images and pixels | `load_image`, `get`, `set`, `pixels`, `filter`, `tint`, `mask`, `copy` and `resize`. Pixels are logical (density 1) (rows P4 to P10) | The same family of functions. `pixelDensity` is adjustable | Images, image objects and a large set of Core Image filters |
 | Paths and booleans | `f.path()` with booleans and stroke outlines | Shapes and vertices. Booleans: as far as we know, not in core | `BezierPath` with booleans |
 | Typography | Bundled fonts, `load_font`, font fallback, tracking, features, variable fonts, `FormattedString`, text boxes, text as a path or points | Fonts, text size and alignment, `textToPoints`, variable font axes in p5.js 2 | The deepest of the three: `FormattedString`, tabs, indents, baseline shift, installed fonts by name |
-| CMYK | Left out for good ([ADR-003](../design/ADR-003-out-of-scope.md)) | No | Yes |
+| CMYK | `f.cmyk(c, m, y, k)`: exact inks in a PDF, an approximation on screen. No profiles or spot colours (D-087) | No | Yes |
 | 3D and WebGL | **No** | Yes (WEBGL in p5.js; P3D in Processing) | No |
 
 ### Sound and music
@@ -200,7 +200,7 @@ Be honest about these before you choose it.
   and the Processing editor are all easier at this.
 - **Less verified on macOS and Linux.** CI runs the tests on Windows, macOS and Linux. But the
   maintainer has checked the high-resolution screen path on Windows only (Semantic Contract row C3).
-- **No CMYK or print colour management.** DrawBot has them.
+- **CMYK without colour management.** `f.cmyk()` writes exact inks to a PDF, but funground has no colour profiles, no spot colours and no conversion of RGB or pictures to ink. DrawBot has more.
 - **A smaller typography toolbox than DrawBot.** `FormattedString` takes its settings only in
   `append()`. It has no tabs, indents or baseline shift yet (guide chapter 15 lists the gaps).
 - **No live oscillators.** funground builds a sound first, then plays it. p5.sound can change a

@@ -612,7 +612,7 @@ def test_keep_records_the_automatic_seed(tmp_path):
 # ---------------------------------------------------------------- flat names only, and the naming trap
 def test_there_is_no_play_namespace():
     """D-073: Play is flat, f.variations and f.keep. "Play" stays the teaching word, not a name."""
-    assert "play" not in f.__all__ and "variations" in f.__all__ and "keep" in f.__all__
+    assert "play" not in f._PUBLIC_NAMES and "variations" in f._PUBLIC_NAMES and "keep" in f._PUBLIC_NAMES
     assert not hasattr(f, "play") and not hasattr(api, "Play")
     with pytest.raises(AttributeError):
         f.play  # noqa: B018
@@ -623,7 +623,7 @@ def test_no_submodule_hides_a_public_name():
     replace f.area. The two old clashes, color and noise, are re-bound by __init__ after their modules load."""
     modules = {m.name for m in pkgutil.iter_modules([str(PACKAGE)])}
     assert not {"play", "variations", "keep", "area", "grid"} & modules
-    assert modules & set(f.__all__) == {"color", "noise"}
+    assert modules & set(f._PUBLIC_NAMES) == {"color", "noise"}
     assert (PACKAGE / "exploring.py").exists()
     for name in sorted(modules):
         importlib.import_module(f"funground.{name}")

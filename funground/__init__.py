@@ -22,6 +22,7 @@ from . import api as _api
 from .api import (
     FormattedString,
     Vector,
+    apply_filter,
     apply_matrix,
     arc,
     background,
@@ -35,6 +36,7 @@ from .api import (
     circle,
     clear,
     clip,
+    cmyk,
     color,
     color_mode,
     constrain,
@@ -146,6 +148,7 @@ from .api import (
     radial_gradient,
     radians,
     random,
+    random_number,
     random_choice,
     random_gaussian,
     random_seed,
@@ -165,6 +168,7 @@ from .api import (
     scale,
     second,
     set,
+    set_pixel,
     shadow,
     shear_x,
     shear_y,
@@ -198,6 +202,8 @@ from .api import (
     text_features,
     font_variations,
     text_width,
+    fit_text_size,
+    text_on_path,
     tint,
     translate,
     triangle,
@@ -206,9 +212,10 @@ from .api import (
     year,
 )
 
-__version__ = "0.1.0.dev0"
+__version__ = "0.1.0a1"
 
-__all__ = [
+# The public names: the contract (tests/test_api_contract.py), the reference and the gallery cover each one.
+_PUBLIC_NAMES = [
     "FormattedString",
     "Vector",
     "apply_matrix",
@@ -224,6 +231,7 @@ __all__ = [
     "circle",
     "clear",
     "clip",
+    "cmyk",
     "color",
     "color_mode",
     "constrain",
@@ -248,6 +256,7 @@ __all__ = [
     "exit",
     "fill",
     "filter",
+    "apply_filter",
     "frame_rate",
     "full_screen",
     "get",
@@ -335,6 +344,7 @@ __all__ = [
     "radial_gradient",
     "radians",
     "random",
+    "random_number",
     "random_choice",
     "random_gaussian",
     "random_seed",
@@ -354,6 +364,7 @@ __all__ = [
     "scale",
     "second",
     "set",
+    "set_pixel",
     "shadow",
     "shear_x",
     "shear_y",
@@ -387,6 +398,8 @@ __all__ = [
     "text_features",
     "font_variations",
     "text_width",
+    "fit_text_size",
+    "text_on_path",
     "tint",
     "translate",
     "triangle",
@@ -410,6 +423,14 @@ __all__ = [
     "ground",
 ]
 
+
+# What ``from funground import *`` brings in (D-088, S-176): every public name except four that would hide Python's
+# own: set, filter and exit are built-ins, and random is the standard-library module. There they are set_pixel(),
+# apply_filter(), stop() and random_number(), the same functions under names that hide nothing (STAR_NAMES_FOR).
+# tests/test_global_style.py keeps the list free of any built-in or standard-library name.
+STAR_NAMES_FOR = {"exit": "stop", "filter": "apply_filter", "random": "random_number", "set": "set_pixel"}
+STAR_LEAVES_OUT = tuple(sorted(STAR_NAMES_FOR))
+__all__ = [name for name in _PUBLIC_NAMES if name not in STAR_LEAVES_OUT]
 
 # D-016: v0.5's live value mouse_pressed became is_mouse_pressed, because mouse_pressed() is
 # now the name of the callback (as in p5). The old name fails with a pointer to the new one.

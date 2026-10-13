@@ -83,6 +83,7 @@ class Text(Op):
     y: float
     color: Color
     style: GraphicsState
+    word_spacing: float = 0.0     # S-159 (T22): pixels added after every space, to justify a line
 
 
 # ---- vector ops (public since Sprint 4: S-027 transforms, S-028 paths)
@@ -293,7 +294,8 @@ OMIT_WHEN_DEFAULT = frozenset({"stroke_cap", "stroke_join", "miter_limit", "dash
                                "rect_mode", "ellipse_mode", "image_mode", "color_mode", "color_ranges",
                                "tint", "sx", "sy", "sw", "sh", "radii",
                                "text_tracking", "text_features", "font_variations", "text_fallback",
-                               "erasing", "erase", "layer", "layer_hidden", "layer_block", "bounds"})
+                               "erasing", "erase", "layer", "layer_hidden", "layer_block", "bounds",
+                               "word_spacing"})
 
 # S-052: a Picture's live snapshot (pixels/history) is not data a JSON round trip can carry;
 # op_to_jsonable skips it and op_from_jsonable leaves it at its dataclass default (None).
@@ -312,11 +314,25 @@ def _fields_to_jsonable(obj: Any) -> dict[str, Any]:
     return out
 
 
+def _color_to_jsonable(c: Color) -> Any:
+    """[r, g, b, a], so every RGB snapshot stays as it was; a colour made by cmyk() (S-170) keeps its inks:
+    {"cmyk": [c, m, y, k], "alpha": a}."""
+    if c.cmyk is None:
+        return list(c.rgba)
+    return {"cmyk": list(c.cmyk), "alpha": c.a}
+
+
+def _color_from_jsonable(v: Any) -> Color:
+    if isinstance(v, dict):
+        return Color.from_cmyk(*v["cmyk"], v["alpha"])
+    return Color(*v)
+
+
 def _value_to_jsonable(v: Any) -> Any:
     if isinstance(v, Color):
-        return list(v.rgba)
+        return _color_to_jsonable(v)
     if isinstance(v, Gradient):
-        return {"gradient": v.kind, "points": list(v.points), "stops": [[o, list(c.rgba)] for o, c in v.stops]}
+        return {"gradient": v.kind, "points": list(v.points), "stops": [[o, _color_to_jsonable(c)] for o, c in v.stops]}
     if isinstance(v, Transform):
         return list(v.as_tuple())
     if isinstance(v, Path):
@@ -354,9 +370,9 @@ def _extra_from_jsonable(name: str, v: Any) -> Any:
     if name == "color_ranges":
         return tuple(tuple(r) for r in v)
     if name == "shadow":
-        return None if v is None else (v[0], v[1], v[2], Color(*v[3]))
+        return None if v is None else (v[0], v[1], v[2], _color_from_jsonable(v[3]))
     if name == "tint":
-        return None if v is None else Color(*v)
+        return None if v is None else _color_from_jsonable(v)
     if name == "erasing":
         return None if v is None else tuple(v)
     if name == "text_fallback":
@@ -367,9 +383,9 @@ def _extra_from_jsonable(name: str, v: Any) -> Any:
 
 
 def _paint_from_jsonable(v: Any) -> Any:
-    if isinstance(v, dict):
-        return Gradient(v["gradient"], tuple(v["points"]), tuple((o, Color(*c)) for o, c in v["stops"]))
-    return Color(*v)
+    if isinstance(v, dict) and "gradient" in v:
+        return Gradient(v["gradient"], tuple(v["points"]), tuple((o, _color_from_jsonable(c)) for o, c in v["stops"]))
+    return _color_from_jsonable(v)
 
 
 def _path_from_jsonable(segs: list) -> Path:

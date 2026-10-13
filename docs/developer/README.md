@@ -70,6 +70,7 @@ Read the nearest one to your question. Each line says when.
 - [Adding_a_feature.md](Adding_a_feature.md): how to build a story from contract row to changelog.
 - [Testing.md](Testing.md): kinds of test, how to add them, fakes for devices, regenerating a golden, and the CI matrix.
 - [Releasing.md](Releasing.md): trusted publishing, the release workflow and how to make a release.
+- [CI_Guidance.md](CI_Guidance.md): what runs on GitHub when, what it costs, and the habits that keep it small.
 
 ### Process and direction
 

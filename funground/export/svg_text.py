@@ -321,6 +321,8 @@ class SvgTextCollector:
         tracking = parts[0].tracking
         if tracking:
             text.set("letter-spacing", _fmt(tracking))
+        if parts[0].word_spacing:
+            text.set("word-spacing", _fmt(parts[0].word_spacing))      # T22: a justified line
         if line.features:
             text.set("font-feature-settings", ", ".join(f"'{tag}' {1 if on else 0}" for tag, on in line.features))
         primary_location = next((p.location for p in parts if p.font is run.font), ())

@@ -13,7 +13,7 @@ The standard for an example's docstring:
     - 3 to 5 bullets: ideas to extend it, easiest first.
 
 A bullet may carry on over the next lines (indented). Every ``f.<name>`` written in a docstring
-must be a real name in ``funground.__all__``, and ``sound.<name>``, ``picture.<name>``,
+must be a real name in ``funground._PUBLIC_NAMES``, and ``sound.<name>``, ``picture.<name>``,
 ``path.<name>`` or ``microphone.<name>`` must be a real method of that kind of object.
 
 Every gallery example is held to the standard (``ENFORCED = ALL``); ``EXPLAINED`` keeps the four
@@ -91,8 +91,8 @@ def test_the_docstring_follows_the_standard(path: Path):
 @pytest.mark.parametrize("path", ENFORCED, ids=lambda p: f"{p.parent.name}/{p.name}")
 def test_the_names_in_the_docstring_exist(path: Path):
     module_names, pairs = names_written_in(docstring(path))
-    missing = sorted(name for name in module_names if name not in funground.__all__)
-    assert not missing, f"{path.name}: not in funground.__all__: {missing}"
+    missing = sorted(name for name in module_names if name not in funground._PUBLIC_NAMES)
+    assert not missing, f"{path.name}: not in funground._PUBLIC_NAMES: {missing}"
     bad = sorted(f"{kind}.{name}" for kind, name in pairs
                  if not any(hasattr(cls, name) for cls in OBJECTS[kind])
                  and not (kind == "picture" and name in PICTURE_METHODS))
@@ -125,5 +125,5 @@ def test_an_older_docstring_has_no_sections(tmp_path):
 
 def test_the_checker_catches_a_made_up_name():
     names, pairs = names_written_in("Use f.circle() and f.fly_to_the_moon(), then sound.reverb() and sound.nope().")
-    assert "fly_to_the_moon" in names and "fly_to_the_moon" not in funground.__all__
+    assert "fly_to_the_moon" in names and "fly_to_the_moon" not in funground._PUBLIC_NAMES
     assert ("sound", "nope") in pairs and not hasattr(Sound, "nope") and hasattr(Sound, "reverb")

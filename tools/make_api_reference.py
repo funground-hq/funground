@@ -1,7 +1,11 @@
 """Generate docs/reference/API.md from the docstrings and the data tables in funground (D-066).
 
 Run:    .venv/Scripts/python tools/make_api_reference.py
-Check:  .venv/Scripts/python tools/make_api_reference.py --check     (exit 1 if API.md is out of date)
+Check:  .venv/Scripts/python tools/make_api_reference.py --check     (exit 1 if a page is out of date)
+
+It also writes the pages for AI assistants (S-129, llmstxt.org): llms.txt (the rules in
+docs/reference/llms_rules.md, then links) and llms-full.txt (the rules, then this whole reference as
+plain Markdown), each at the repository root and inside the package.
 
 The output is fully deterministic: fixed order, no dates.
 
@@ -29,7 +33,7 @@ sys.path.insert(0, str(ROOT))
 
 import funground as f  # noqa: E402
 from funground import _colornames, api as _api, pages, synth  # noqa: E402
-from funground import analysis, typography  # noqa: E402
+from funground import analysis, marks, typography  # noqa: E402
 _color = sys.modules["funground.color"]  # f.color (the function) hides the module as an attribute
 from funground.export import FORMATS, TEXT_MODES  # noqa: E402
 from funground.export.motion import MOTION_FORMATS  # noqa: E402
@@ -39,10 +43,24 @@ from funground.sketch import CALLBACK_NAMES, Sketch  # noqa: E402
 
 OUT = ROOT / "docs" / "reference" / "API.md"
 CLASS_LIST = ROOT / "docs" / "reference" / "api_classes.txt"
+RULES = ROOT / "docs" / "reference" / "llms_rules.md"
+REPO_URL = "https://github.com/funground-hq/funground/blob/main/"
+LLMS_SUMMARY = ("funground is a Python library for drawing, animation, typography, print and sound, made for "
+                "learning. `import funground as f`.")
+# llms.txt's links: (title, path in the repository, when to read it).
+LLMS_LINKS = [
+    ("API reference", "docs/reference/API.md", "every public name, with its arguments and an example"),
+    ("Quick Reference", "docs/reference/Quick_Reference.md", "every function by topic, with pictures"),
+    ("funground compared with p5 and DrawBot", "docs/reference/Compared_with_p5_and_DrawBot.md",
+     "what each p5 or DrawBot name is called here"),
+    ("User Guide", "docs/guide/README.md", "chapters from a first sketch to print, sound and projects"),
+    ("When something goes wrong", "docs/guide/errors.md", "what each error message means"),
+    ("Examples Gallery", "docs/gallery/README.md", "a small, tested sketch for every feature"),
+]
 
 SECTIONS = ("Arguments", "Returns", "Raises", "Example")
 
-# Every name in funground.__all__ must be in exactly one group (live values are documented in their own section).
+# Every name in funground._PUBLIC_NAMES must be in exactly one group (live values are documented in their own section).
 GROUPS: dict[str, list[str]] = {
     "Sketch and loop": ["size", "resize_canvas", "full_screen", "run", "loop", "no_loop", "redraw", "is_looping",
                         "exit", "stop", "frame_rate", "show", "smooth", "no_smooth"],
@@ -51,14 +69,15 @@ GROUPS: dict[str, list[str]] = {
     "Curves and custom shapes": ["bezier", "bezier_point", "bezier_tangent", "curve", "curve_point", "curve_tangent",
                                  "curve_tightness", "begin_shape", "end_shape", "vertex", "bezier_vertex",
                                  "quadratic_vertex", "curve_vertex", "begin_contour", "end_contour"],
-    "Colour": ["background", "clear", "color", "color_mode", "hsb", "hsl", "lerp_color", "linear_gradient",
+    "Colour": ["background", "clear", "color", "color_mode", "hsb", "hsl", "cmyk", "lerp_color", "linear_gradient",
                "radial_gradient"],
     "Fill and stroke": ["fill", "no_fill", "stroke", "no_stroke", "stroke_width", "stroke_cap", "stroke_join",
                         "miter_limit", "stroke_dash", "no_dash", "shadow", "no_shadow", "opacity", "blend_mode",
                         "erase", "no_erase", "tint", "no_tint"],
     "Text and fonts": ["text", "text_align", "text_ascent", "text_descent", "text_leading", "text_box", "text_path",
                        "text_to_points", "current_font", "text_size", "text_style", "text_tracking", "text_fallback",
-                       "system_font", "text_features", "font_variations", "text_width", "text_font", "load_font"],
+                       "system_font", "text_features", "font_variations", "text_width", "fit_text_size", "text_on_path", "text_font",
+                       "load_font"],
     "Transforms and the state stack": ["translate", "rotate", "scale", "shear_x", "shear_y", "apply_matrix",
                                        "reset_matrix", "push", "pop", "saved_state"],
     "Paths and clipping": ["path", "draw_path", "clip", "no_clip"],
@@ -66,8 +85,8 @@ GROUPS: dict[str, list[str]] = {
     "Play": ["variations", "keep"],
     "Pictures and layers": ["create_graphics", "layer", "hide_layer", "show_layer"],
     "Images and SVG": ["image", "image_mode", "load_image", "load_svg", "svg_paths"],
-    "Pixels and filters": ["get", "set", "load_pixels", "update_pixels", "filter"],
-    "Randomness and noise": ["random", "random_choice", "random_gaussian", "random_seed", "noise", "noise_detail",
+    "Pixels and filters": ["get", "set", "set_pixel", "load_pixels", "update_pixels", "filter", "apply_filter"],
+    "Randomness and noise": ["random", "random_number", "random_choice", "random_gaussian", "random_seed", "noise", "noise_detail",
                              "noise_seed"],
     "Maths": ["constrain", "distance", "lerp", "map_range", "mag", "norm", "degrees", "radians"],
     "Time": ["year", "month", "day", "hour", "minute", "second", "millis"],
@@ -90,6 +109,26 @@ def slug_of(title: str) -> str:
 
 
 # ---------------------------------------------------------------- docstring parsing
+# Option words with their meanings, printed under the function that takes them (D-092). Each table lives in the
+# code that checks the word, so a word cannot be accepted without being explained (tests/test_api_docs.py).
+WORD_MEANINGS: dict[str, list[tuple[str, dict[str, str]]]] = {
+    "f.blend_mode": [("mode", Sketch.BLEND_MODES)],
+    "f.stroke_cap": [("cap", Sketch.STROKE_CAPS)],
+    "f.stroke_join": [("join", Sketch.STROKE_JOINS)],
+    "PathBuilder.expand_stroke": [("cap", Sketch.STROKE_CAPS), ("join", Sketch.STROKE_JOINS)],
+    "f.text_align": [("horizontal", Sketch.TEXT_ALIGNS), ("vertical", Sketch.TEXT_VALIGNS)],
+    "f.text_style": [("style", typography.STYLE_MEANINGS)],
+    "FormattedString.append": [("style", typography.STYLE_MEANINGS)],
+    "f.filter": [("kind", FILTER_KINDS)],
+    "f.apply_filter": [("kind", FILTER_KINDS)],
+    "f.cursor": [("kind", CURSOR_KINDS)],
+    "f.key_down": [("key", KEY_NAMES)],
+    "f.tone": [("wave", synth.WAVES)],
+    "f.note": [("wave", synth.WAVES)],
+    "f.melody": [("wave", synth.WAVES)],
+    "Mark.place": [("anchor", marks.ANCHOR_MEANINGS)],
+}
+
 HEADER = re.compile(r"^(Arguments|Returns|Raises|Example):\s*$")
 SEE_ALSO = re.compile(r"^See also:\s*(.*)$")
 
@@ -164,7 +203,7 @@ def resolve_class(entry: str):
 
 
 def all_classes() -> list[tuple[str, type]]:
-    """(name, class) for every class in api_classes.txt, then any class in __all__ not already there."""
+    """(name, class) for every class in api_classes.txt, then any public class not already there."""
     found: list[tuple[str, type]] = []
     seen: set[type] = set()
     for entry in class_names():
@@ -172,7 +211,7 @@ def all_classes() -> list[tuple[str, type]]:
         if cls not in seen:
             seen.add(cls)
             found.append((cls.__name__, cls))
-    for name in f.__all__:
+    for name in f._PUBLIC_NAMES:
         obj = getattr(f, name, None) if name not in _api.LIVE_NAMES else None
         if inspect.isclass(obj) and obj not in seen:
             seen.add(obj)
@@ -253,6 +292,11 @@ def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | Non
         page.add("| Argument | Meaning |", "|---|---|")
         for names, text in parse_arguments(d["Arguments"]):
             page.add(f"| {', '.join('`' + n + '`' for n in names)} | {esc(text)} |")
+        page.add("")
+    for argument, meanings in WORD_MEANINGS.get(heading.strip("`"), []):
+        page.add(f"**The words for `{argument}`.**", "", "| Word | What it does |", "|---|---|")
+        for word, meaning in meanings.items():
+            page.add(f'| `"{word}"` | {esc(meaning)} |')
         page.add("")
     if d["Returns"]:
         page.add("**Returns.** " + " ".join(d["Returns"].split()), "")
@@ -388,7 +432,7 @@ def reference_tables(page: Page) -> None:
 
 
 def check_groups() -> None:
-    all_names = list(f.__all__)
+    all_names = list(f._PUBLIC_NAMES)
     live = set(_api.LIVE_NAMES)
     grouped = [n for names in GROUPS.values() for n in names]
     errors = []
@@ -397,10 +441,10 @@ def check_groups() -> None:
         errors.append(f"in more than one group: {dup}")
     missing = sorted(set(all_names) - set(grouped) - live)
     if missing:
-        errors.append(f"in funground.__all__ but in no group (add them to GROUPS): {missing}")
+        errors.append(f"in funground._PUBLIC_NAMES but in no group (add them to GROUPS): {missing}")
     extra = sorted(set(grouped) - set(all_names))
     if extra:
-        errors.append(f"in a group but not in funground.__all__: {extra}")
+        errors.append(f"in a group but not in funground._PUBLIC_NAMES: {extra}")
     if errors:
         raise SystemExit("make_api_reference: " + "; ".join(errors))
 
@@ -490,19 +534,80 @@ def build() -> str:
     return p.text()
 
 
-def main(argv: list[str]) -> int:
-    text = build()
-    if "--check" in argv:
-        current = OUT.read_text(encoding="utf-8") if OUT.exists() else ""
-        if current.replace("\r\n", "\n") != text:
-            print("docs/reference/API.md is out of date. Run: .venv/Scripts/python tools/make_api_reference.py")
-            return 1
-        print("docs/reference/API.md is up to date.")
-        return 0
-    OUT.write_bytes(text.encode("utf-8"))
-    print(f"wrote {OUT.relative_to(ROOT)} ({len(text.encode('utf-8'))} bytes)")
-    return 0
+# ---- the pages for AI assistants (S-129)
 
+ANCHOR_LINE = re.compile(r'^<a id="[^"]*"></a>\n', re.M)
+LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
+
+
+def absolute_links(text: str, folder: str) -> str:
+    """Links that work outside the repository: an in-page anchor becomes plain text, a relative path an
+    address on GitHub (folder is where the text lives, such as "docs/reference")."""
+    def fix(match: re.Match) -> str:
+        label, target = match.groups()
+        if target.startswith("#"):
+            return label
+        if re.match(r"[a-z]+:", target):
+            return match.group(0)
+        path = Path(folder, target.split("#")[0]).as_posix()
+        parts: list[str] = []
+        for part in path.split("/"):
+            if part == "..":
+                parts.pop()
+            elif part not in ("", "."):
+                parts.append(part)
+        return f"[{label}]({REPO_URL}{'/'.join(parts)})"
+    return LINK.sub(fix, text)
+
+
+def rules_text() -> str:
+    """The hand-written rules, with their headings one level down, so they sit under the page's own."""
+    rules = RULES.read_text(encoding="utf-8").replace("\r\n", "\n").strip()
+    return re.sub(r"^## ", "### ", rules, flags=re.M)
+
+
+def llms_index() -> str:
+    lines = ["# funground", "", f"> {LLMS_SUMMARY}", "", rules_text(), "", "## Docs", ""]
+    lines += [f"- [{title}]({REPO_URL}{path}): {note}" for title, path, note in LLMS_LINKS]
+    lines += ["", "## Optional", "",
+              f"- [llms-full.txt]({REPO_URL}llms-full.txt): these rules and the whole API reference in one file", ""]
+    return "\n".join(lines)
+
+
+def llms_full(api: str) -> str:
+    """The rules, then API.md without its title, its anchors and its relative links, every heading one level down."""
+    body = api.split("\n", 1)[1]
+    body = absolute_links(ANCHOR_LINE.sub("", body), "docs/reference")
+    body = re.sub(r"^(#{2,5}) ", r"#\1 ", body, flags=re.M)
+    return "\n".join(["# funground", "", f"> {LLMS_SUMMARY}", "", "## Rules for writing funground code", "",
+                      rules_text(), "", "## The API reference", "", body.strip(), ""])
+
+
+def outputs() -> dict[Path, str]:
+    """Every generated page and its text. The two pages for assistants are written twice: at the root of
+    the repository and inside the package (python -m pip install funground carries them)."""
+    api = build()
+    pages = {OUT: api}
+    for name, text in (("llms.txt", llms_index()), ("llms-full.txt", llms_full(api))):
+        pages[ROOT / name] = text
+        pages[ROOT / "funground" / name] = text
+    return pages
+
+
+def main(argv: list[str]) -> int:
+    pages = outputs()
+    if "--check" in argv:
+        stale = [path for path, text in pages.items()
+                 if (path.read_text(encoding="utf-8").replace("\r\n", "\n") if path.exists() else "") != text]
+        for path in stale:
+            print(f"{path.relative_to(ROOT).as_posix()} is out of date. Run: .venv/Scripts/python tools/make_api_reference.py")
+        if not stale:
+            print("docs/reference/API.md, llms.txt and llms-full.txt are up to date.")
+        return 1 if stale else 0
+    for path, text in pages.items():
+        path.write_bytes(text.encode("utf-8"))
+        print(f"wrote {path.relative_to(ROOT).as_posix()} ({len(text.encode('utf-8'))} bytes)")
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))

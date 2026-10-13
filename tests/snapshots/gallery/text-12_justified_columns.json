@@ -1,0 +1,794 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   240,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "color": [
+   178,
+   34,
+   34,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    178,
+    34,
+    34,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 44,
+   "text_style": "bold"
+  },
+  "text": "Straight edges",
+  "x": 40,
+  "y": 36
+ },
+ {
+  "color": [
+   47,
+   79,
+   79,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    47,
+    79,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 16
+  },
+  "text": "Justified columns, broken with soft hyphens",
+  "x": 40,
+  "y": 90
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    47,
+    79,
+    79,
+    255
+   ],
+   "stroke": [
+    211,
+    211,
+    211,
+    255
+   ],
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 16
+  },
+  "x1": 40,
+  "x2": 600,
+  "y1": 112,
+  "y2": 112
+ },
+ {
+  "height": 290,
+  "op": "Rect",
+  "style": {
+   "fill": null,
+   "stroke": [
+    211,
+    211,
+    211,
+    255
+   ],
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 16
+  },
+  "width": 270,
+  "x": 40,
+  "y": 130
+ },
+ {
+  "height": 290,
+  "op": "Rect",
+  "style": {
+   "fill": null,
+   "stroke": [
+    211,
+    211,
+    211,
+    255
+   ],
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 16
+  },
+  "width": 270,
+  "x": 350,
+  "y": 130
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "A poster is read in a few seconds,",
+  "word_spacing": 2.4410574776785716,
+  "x": 40,
+  "y": 130
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "from across a room. Its words must",
+  "word_spacing": 0.836181640625,
+  "x": 40,
+  "y": 148.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "be easy to find, so the column is",
+  "word_spacing": 3.6642020089285716,
+  "x": 40,
+  "y": 167.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "set with care. An ex\u00adtraor\u00addi\u00adnary",
+  "word_spacing": 9.385986328125,
+  "x": 40,
+  "y": 186.25
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "amount of work goes into the",
+  "word_spacing": 9.68701171875,
+  "x": 40,
+  "y": 205.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "shape of a para\u00adgraph: the space",
+  "word_spacing": 5.1181640625,
+  "x": 40,
+  "y": 223.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "be\u00adtween the words, the length of",
+  "word_spacing": 4.06787109375,
+  "x": 40,
+  "y": 242.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "the lines and the way a word is bro-",
+  "word_spacing": 0.113525390625,
+  "x": 40,
+  "y": 261.25
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "ken at the edge.",
+  "x": 40,
+  "y": 280.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "A justified column has two straight",
+  "word_spacing": 1.79443359375,
+  "x": 40,
+  "y": 298.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "edges. It looks tidy, and it makes a",
+  "word_spacing": 1.07666015625,
+  "x": 40,
+  "y": 317.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "good use of the paper. The price is",
+  "word_spacing": 1.3382393973214286,
+  "x": 40,
+  "y": 336.25
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "in the spaces, which grow and",
+  "word_spacing": 8.51220703125,
+  "x": 40,
+  "y": 355.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "shrink from line to line. Hy\u00adphen-",
+  "word_spacing": 5.62060546875,
+  "x": 40,
+  "y": 373.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "ation helps: with a few well chosen",
+  "word_spacing": 1.177978515625,
+  "x": 40,
+  "y": 392.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "breaks in the long words, the",
+  "word_spacing": 10.22900390625,
+  "x": 350,
+  "y": 130
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "spaces stay even, and the co\u00adop\u00ader\u00ada-",
+  "word_spacing": 0.4013671875,
+  "x": 350,
+  "y": 148.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "tion of the type\u00adface, the page and",
+  "word_spacing": 2.176513671875,
+  "x": 350,
+  "y": 167.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "the reader is plain to see.",
+  "x": 350,
+  "y": 186.25
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "Look at the last line of each",
+  "word_spacing": 10.301513671875,
+  "x": 350,
+  "y": 205.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "paragraph. It is not stretched,",
+  "word_spacing": 11.3525390625,
+  "x": 350,
+  "y": 223.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "because there is nothing after it to",
+  "word_spacing": 1.52099609375,
+  "x": 350,
+  "y": 242.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "line up with. It is the one place",
+  "word_spacing": 5.537109375,
+  "x": 350,
+  "y": 261.25
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "where the right edge is allowed to",
+  "word_spacing": 2.19970703125,
+  "x": 350,
+  "y": 280.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "be ragged: the break tells the eye",
+  "word_spacing": 2.357177734375,
+  "x": 350,
+  "y": 298.75
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "that a new thought is about to",
+  "word_spacing": 6.905517578125,
+  "x": 350,
+  "y": 317.5
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "justify",
+   "text_size": 15
+  },
+  "text": "start.",
+  "x": 350,
+  "y": 336.25
+ }
+]

@@ -485,7 +485,7 @@ def test_it_draws_pixels(canvas):
 
 
 def test_the_formatted_string_is_public_and_state_is_untouched():
-    assert "FormattedString" in p.__all__ and p.FormattedString is api.FormattedString
+    assert "FormattedString" in p._PUBLIC_NAMES and p.FormattedString is api.FormattedString
     before = api.active_sketch().style
     p.FormattedString().append("a", size=99, style="bold", color="red", tracking=9)
     assert api.active_sketch().style == before

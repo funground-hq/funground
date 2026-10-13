@@ -434,7 +434,7 @@ def test_filter_is_a_pixels_op_in_the_ir_and_drops_a_pictures_history():
 
 
 def test_filter_is_a_public_name_and_a_picture_method():
-    assert "filter" in p.__all__
+    assert "filter" in p._PUBLIC_NAMES
     from funground.picture import ALLOWED_METHODS
     assert "filter" in ALLOWED_METHODS
     assert all(hasattr(Picture, m) for m in ("copy", "resize", "mask"))

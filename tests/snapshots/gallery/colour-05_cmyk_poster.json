@@ -1,0 +1,289 @@
+[
+ {
+  "color": {
+   "alpha": 255,
+   "cmyk": [
+    0.0,
+    0.0,
+    6.0,
+    0.0
+   ]
+  },
+  "op": "Clear"
+ },
+ {
+  "diameter": 360,
+  "op": "Circle",
+  "style": {
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     0.0,
+     28.0,
+     34.0,
+     0.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "x": 210,
+  "y": 230
+ },
+ {
+  "diameter": 250,
+  "op": "Circle",
+  "style": {
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     0.0,
+     85.0,
+     100.0,
+     0.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "x": 210,
+  "y": 230
+ },
+ {
+  "height": 330,
+  "op": "Rect",
+  "style": {
+   "blend_mode": "multiply",
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     100.0,
+     75.0,
+     0.0,
+     20.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "width": 40,
+  "x": -20,
+  "y": 120
+ },
+ {
+  "height": 330,
+  "op": "Rect",
+  "style": {
+   "blend_mode": "multiply",
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     100.0,
+     75.0,
+     0.0,
+     20.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "width": 40,
+  "x": 70,
+  "y": 120
+ },
+ {
+  "height": 330,
+  "op": "Rect",
+  "style": {
+   "blend_mode": "multiply",
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     100.0,
+     75.0,
+     0.0,
+     20.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "width": 40,
+  "x": 160,
+  "y": 120
+ },
+ {
+  "height": 330,
+  "op": "Rect",
+  "style": {
+   "blend_mode": "multiply",
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     100.0,
+     75.0,
+     0.0,
+     20.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "width": 40,
+  "x": 250,
+  "y": 120
+ },
+ {
+  "height": 330,
+  "op": "Rect",
+  "style": {
+   "blend_mode": "multiply",
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     100.0,
+     75.0,
+     0.0,
+     20.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "width": 40,
+  "x": 340,
+  "y": 120
+ },
+ {
+  "height": 24,
+  "op": "Rect",
+  "style": {
+   "fill": {
+    "gradient": "linear",
+    "points": [
+     0.0,
+     0.0,
+     420.0,
+     0.0
+    ],
+    "stops": [
+     [
+      0.0,
+      {
+       "alpha": 255,
+       "cmyk": [
+        0.0,
+        85.0,
+        100.0,
+        0.0
+       ]
+      }
+     ],
+     [
+      1.0,
+      {
+       "alpha": 255,
+       "cmyk": [
+        100.0,
+        75.0,
+        0.0,
+        20.0
+       ]
+      }
+     ]
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "width": 420,
+  "x": 0,
+  "y": 470
+ },
+ {
+  "color": {
+   "alpha": 255,
+   "cmyk": [
+    0.0,
+    0.0,
+    0.0,
+    100.0
+   ]
+  },
+  "op": "Text",
+  "style": {
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     0.0,
+     0.0,
+     0.0,
+     100.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 64,
+   "text_valign": "center"
+  },
+  "text": "OPEN DAY",
+  "x": 48.15625,
+  "y": 488.75
+ },
+ {
+  "color": {
+   "alpha": 255,
+   "cmyk": [
+    100.0,
+    75.0,
+    0.0,
+    20.0
+   ]
+  },
+  "op": "Text",
+  "style": {
+   "fill": {
+    "alpha": 255,
+    "cmyk": [
+     100.0,
+     75.0,
+     0.0,
+     20.0
+    ]
+   },
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "text": "Saturday, 12 March",
+  "x": 112.1923828125,
+  "y": 561.359375
+ }
+]

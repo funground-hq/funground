@@ -25,8 +25,8 @@ f.run(max_frames=1)
 
 | Ending | What you get |
 |---|---|
-| `.png` | A picture, at your screen's full resolution |
-| `.pdf` | A document made of shapes and text: sharp at any size, good for printing |
+| `.png` | A picture, at your screen's full resolution, or at 300 dpi for print (see "Preparing a file for print") |
+| `.pdf` | A document made of shapes and text: sharp at any size, good for printing, with bleed and crop marks if you ask |
 | `.svg` | Shapes and text for the web or for editing in a drawing program |
 
 A **PNG** holds exactly what is in the window — including everything earlier frames left there.
@@ -262,6 +262,130 @@ turn them. The window title says "page 2 of 3". Close the window or press Escape
 
 Pages belong to scripts. In an animated sketch, `f.new_page()` is an error.
 
+## Preparing a file for print
+
+A print shop does not print your screen. It prints paper, then cuts it to size. A few ideas and
+three settings make your file ready for that. Here are the words.
+
+- **Trim.** The size of the finished page after it is cut. In funground the canvas is the trim.
+- **Bleed.** A strip of picture that goes past the trim on every side. The cutting blade is never
+  exact, and without a bleed a hair's width of white paper can show at the edge. 3 mm is the usual
+  bleed. `f.mm(3)` gives 3 millimetres. (funground measures in points: 72 to the inch, so
+  `f.mm(3)` is about 8.5 points. `f.inch(1)` is 72.)
+- **Crop marks.** Thin lines in the corners that show where to cut. They sit outside the bleed.
+
+Make the picture bigger than the page by drawing past the edges. `f.background()` already fills
+the bleed. Shapes that should touch the edge must run into the bleed. They must not stop at the
+trim.
+
+```python
+import os
+import tempfile
+
+import funground as f
+
+f.size("A4")                                   # the finished page: 595 x 842 points
+f.background("navy")                           # fills the bleed too
+f.fill("gold")
+f.rect(-20, 600, f.width + 40, 120)            # a band that runs off both edges, into the bleed
+f.fill("white")
+f.text_size(f.fit_text_size("OPEN DAY", f.width - 80))
+f.text("OPEN DAY", 40, 100)
+
+folder = tempfile.mkdtemp()
+f.save(os.path.join(folder, "poster.pdf"), bleed=f.mm(3), marks=True)   # for the print shop
+f.save(os.path.join(folder, "poster.png"), dpi=300)                     # a 300 dpi picture
+print("saved in", folder)
+f.show()
+```
+
+### The PDF
+
+`f.save("poster.pdf", bleed=f.mm(3), marks=True)` makes the PDF a little bigger than your page. It
+adds the bleed and, with `marks=True`, room for the crop marks. Your coordinates do not change: `(0, 0)`
+is still the corner of the **trim**, so something drawn at `-10` lands in the bleed. The PDF also
+records where the trim and the bleed are, so a print shop's software can find them. Every page of a
+document gets the same treatment.
+
+`bleed` and `marks` are for PDFs only. Using them with a PNG or an SVG is an error.
+
+**Page sizes.** `f.size("A3")` and the other names (see "Documents and pages" above) give the page
+size in points. A3 is 842 x 1191 points. A4 is 595 x 842. To use millimetres, multiply: `f.mm(297)` is the
+width of A3. The names are whole numbers of points, so the page can be less than a millimetre
+off the paper size. That is fine for a poster. If a shop needs the exact size, ask them.
+
+### A 300 dpi PNG
+
+**dpi** means dots per inch: how many pixels fit in an inch of paper. Printers like 300. A screen
+picture has far fewer, so it looks blurry on paper. `f.save("poster.png", dpi=300)` draws the whole page
+again at that size. Shapes and text come out sharp, not stretched. A3 at 300 dpi is 3508 x 4963
+pixels. The file says "300 dpi" inside, so print programs know its size on paper.
+
+A very big picture needs a lot of memory. funground refuses a page of more than 120 million pixels
+and tells you to save a PDF or use a lower dpi. A pixel picture you drew in (a photo) keeps its own
+resolution.
+
+**PDF or PNG?** Send a **PDF** when the shop will take one. It stays sharp at any size, keeps your
+text as text, and holds the bleed and the crop marks. Send a **300 dpi PNG** when the shop asks for an
+image, for example a web form for a poster, a mug or a T-shirt. A PNG has no bleed and no marks.
+Draw past the edges and ask the shop how much they want.
+
+### Colour: RGB or CMYK?
+
+Screens make colour from red, green and blue light (**RGB**). Printers make it from cyan, magenta, yellow
+and black ink (**CMYK**). Which one should you send?
+
+- **RGB is fine for most print shops.** Many convert for you. funground now says what its RGB means:
+  every colour in a PDF is tagged **sRGB**, the common standard for screens, so the shop's software
+  knows how to read it.
+- **Use `f.cmyk()` when a shop asks for CMYK.** `f.cmyk(0, 80, 100, 0)` is 0% cyan, 80% magenta,
+  100% yellow and 0% black. Use it anywhere a colour goes. A PDF holds exactly your four numbers, so
+  the shop gets your ink and not a guess. Chapter 4 has [Colour for print: CMYK](04_colour.md#colour-for-print-cmyk). The screen and a PNG
+  can only show an approximation, because a screen cannot show ink.
+- **Photos stay RGB.** A picture is made of pixels, and funground does not turn pixels into ink. The
+  shop converts a photo.
+- **Black text** is best as black ink only: `f.cmyk(0, 0, 0, 100)`. Crop marks are already drawn
+  in all four inks, the colour that prints on every plate.
+- **Outlines count too.** Shapes have a thin black outline unless you say otherwise, and that black is
+  RGB. For a poster in ink only, use `f.no_stroke()` or give the outline an ink: `f.stroke(f.cmyk(0, 0, 0, 100))`.
+
+```python
+import os
+import tempfile
+
+import funground as f
+
+INK = f.cmyk(0, 85, 100, 0)                    # a warm red
+f.size("A4")
+f.background(f.cmyk(0, 0, 6, 0))               # paper, a little yellow
+f.no_stroke()                                   # no RGB outline: ink only
+f.fill(INK)
+f.circle(f.width / 2, 320, 400)
+f.fill(f.cmyk(0, 0, 0, 100))                   # black ink for the words
+f.text_size(60)
+f.text_align("center", "top")
+f.text("PRINT ME", f.width / 2, 700)
+
+folder = tempfile.mkdtemp()
+f.save(os.path.join(folder, "ink.pdf"), bleed=f.mm(3), marks=True)
+f.show()
+```
+
+### Ask your print shop
+
+Every shop is a little different. Before you finish, ask three questions:
+
+1. **What size is the finished page, and how much bleed do you want?** Most say 3 mm.
+2. **Do you want RGB or CMYK, and a PDF or a picture?** If it is a PDF, ask whether they want crop marks
+   (some do not, and some want them on).
+3. **Should the text be outlines?** If they ask for outlines, save with `text="shapes"`. Then every
+   letter is a shape, so it prints right even without your font. See "The golden rule of SVG handoffs".
+
+Keep one copy for yourself with live text, and hand over the other.
+
+> funground does not match a screen to a press, and its PDF is not a certified "PDF/X" file. If a shop
+> insists on PDF/X, ask whether an ordinary PDF with a bleed will do. Many shops accept it.
+
 ## Saving without a window
 
 Set the environment variable `FUNGROUND_HEADLESS=1` and funground draws without opening a
@@ -278,5 +402,7 @@ window — useful for making many pictures at once. Combine it with `f.run(max_f
 1. Save your first sketch as a PNG, then as a PDF. Zoom right in on both. What is different?
 2. Draw text on a transparent background (`f.clear()`) and save it as a PNG.
 3. Make a script with three pages (`f.new_page()`) and save it as one PDF.
+4. Save a poster as a PDF with `bleed=f.mm(3), marks=True`. Open it and look for the crop marks.
+5. Save the same poster as a PNG with `dpi=300`, and check how many pixels wide it is.
 
 **Next:** [14. Coming from p5.js and Processing](14_coming_from_p5_processing.md)

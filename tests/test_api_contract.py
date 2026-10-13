@@ -23,20 +23,22 @@ V05_FUNCTIONS = {
     "point": "(x: 'float', y: 'float') -> 'None'",
     "random": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "rect": "(x: 'float', y: 'float', width: 'float', height: 'float', *radii: 'float') -> 'None'",
-    "size": "(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int' = 60, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'",  # S-132: page names, margin
+    "size": "(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int | None' = None, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'",  # S-132: page names, margin; fps None keeps the rate, so run(fps=) wins (R3, 13 Oct)
     "stop": "() -> 'None'",
     "stroke": "(color: 'Color', *more: 'float') -> 'None'",
     "stroke_width": "(pixels: 'int') -> 'None'",
     "text": "(message: 'object', x: 'float', y: 'float', color: 'Color | None' = None) -> 'None'",
-    "text_size": "(size: 'int') -> 'None'",
+    "text_size": "(size: 'float') -> 'None'",
 }
 
 # Additive since v0.5 (Phase 0). Listed separately so the v0.5 set above stays
 # an exact record of what Session 1 learners were given.
 ADDED_FUNCTIONS = {
     "random_seed": "(seed: 'int | None' = None) -> 'None'",
+    "random_number": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
+    "random_number": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "run": "(*, fps: 'int | None' = None, max_frames: 'int | None' = None) -> 'None'",
-    "save": "(path: 'str', *, text: 'str' = 'live') -> 'None'",
+    "save": "(path: 'str', *, text: 'str' = 'live', bleed: 'float' = 0, marks: 'bool' = False, dpi: 'float | None' = None) -> 'None'",
     # Sprint 4, S-027: transforms and the state stack (contract F1/F2).
     "translate": "(dx: 'float', dy: 'float') -> 'None'",
     "rotate": "(degrees: 'float') -> 'None'",
@@ -118,6 +120,7 @@ ADDED_FUNCTIONS = {
     "color": "(*values)",
     "hsb": "(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255)",
     "hsl": "(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255)",
+    "cmyk": "(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255)",   # S-170, contract S17
     "lerp_color": "(c1: 'Color', c2: 'Color', amount: 'float')",
     # S-055 Vector
     "Vector": "(x: 'float' = 0.0, y: 'float' = 0.0) -> 'None'",
@@ -237,15 +240,21 @@ ADDED_FUNCTIONS = {
     # S-079 pixels
     "get": "(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None)",
     "set": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",
+    "set_pixel": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",
     "load_pixels": "() -> 'None'",
     "update_pixels": "() -> 'None'",
     # S-080 copy, resize, mask, filters (the picture methods copy/resize/mask/filter are in test_filters.py)
     "filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
+    "apply_filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
     # S-132 marks (contract K1-K3, D-069, D-070)
     "mark": "(path: 'PathBuilder | str | None' = None, *, fill: 'Color | None' = <not given>, stroke: 'Color | None' = <not given>, stroke_width: 'float | None' = None) -> 'Mark'",
     # S-132 Play (contracts E1, E2; D-071, D-073: flat names, no f.play namespace)
     "variations": "(fn, *, columns: 'int | None' = None, **values) -> 'list'",
     "keep": "(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'",
+    # S-162 a headline that fits (contract T21)
+    "fit_text_size": "(message: 'object', width: 'float', height: 'float | None' = None) -> 'float'",
+    # S-161 type on a path (contract T24)
+    "text_on_path": "(message: 'object', path: 'PathBuilder', offset: 'float' = 0) -> 'str'",
 }
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
@@ -277,7 +286,7 @@ def test_run_keeps_v05_call_forms():
 
 
 def test_public_all_is_exactly_the_contract():
-    assert set(p.__all__) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES
+    assert set(p._PUBLIC_NAMES) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES
 
 
 def test_live_values_are_dynamic_module_attributes():

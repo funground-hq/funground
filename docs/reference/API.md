@@ -11,17 +11,17 @@ In the examples, `import funground as f` is understood.
 - [Sketch and loop](#sketch-and-loop): [`size`](#fn-size), [`resize_canvas`](#fn-resize_canvas), [`full_screen`](#fn-full_screen), [`run`](#fn-run), [`loop`](#fn-loop), [`no_loop`](#fn-no_loop), [`redraw`](#fn-redraw), [`is_looping`](#fn-is_looping), [`exit`](#fn-exit), [`stop`](#fn-stop), [`frame_rate`](#fn-frame_rate), [`show`](#fn-show), [`smooth`](#fn-smooth), [`no_smooth`](#fn-no_smooth)
 - [Shapes](#shapes): [`point`](#fn-point), [`line`](#fn-line), [`rect`](#fn-rect), [`square`](#fn-square), [`ellipse`](#fn-ellipse), [`circle`](#fn-circle), [`triangle`](#fn-triangle), [`quad`](#fn-quad), [`polygon`](#fn-polygon), [`arc`](#fn-arc), [`rect_mode`](#fn-rect_mode), [`ellipse_mode`](#fn-ellipse_mode)
 - [Curves and custom shapes](#curves-and-custom-shapes): [`bezier`](#fn-bezier), [`bezier_point`](#fn-bezier_point), [`bezier_tangent`](#fn-bezier_tangent), [`curve`](#fn-curve), [`curve_point`](#fn-curve_point), [`curve_tangent`](#fn-curve_tangent), [`curve_tightness`](#fn-curve_tightness), [`begin_shape`](#fn-begin_shape), [`end_shape`](#fn-end_shape), [`vertex`](#fn-vertex), [`bezier_vertex`](#fn-bezier_vertex), [`quadratic_vertex`](#fn-quadratic_vertex), [`curve_vertex`](#fn-curve_vertex), [`begin_contour`](#fn-begin_contour), [`end_contour`](#fn-end_contour)
-- [Colour](#colour): [`background`](#fn-background), [`clear`](#fn-clear), [`color`](#fn-color), [`color_mode`](#fn-color_mode), [`hsb`](#fn-hsb), [`hsl`](#fn-hsl), [`lerp_color`](#fn-lerp_color), [`linear_gradient`](#fn-linear_gradient), [`radial_gradient`](#fn-radial_gradient)
+- [Colour](#colour): [`background`](#fn-background), [`clear`](#fn-clear), [`color`](#fn-color), [`color_mode`](#fn-color_mode), [`hsb`](#fn-hsb), [`hsl`](#fn-hsl), [`cmyk`](#fn-cmyk), [`lerp_color`](#fn-lerp_color), [`linear_gradient`](#fn-linear_gradient), [`radial_gradient`](#fn-radial_gradient)
 - [Fill and stroke](#fill-and-stroke): [`fill`](#fn-fill), [`no_fill`](#fn-no_fill), [`stroke`](#fn-stroke), [`no_stroke`](#fn-no_stroke), [`stroke_width`](#fn-stroke_width), [`stroke_cap`](#fn-stroke_cap), [`stroke_join`](#fn-stroke_join), [`miter_limit`](#fn-miter_limit), [`stroke_dash`](#fn-stroke_dash), [`no_dash`](#fn-no_dash), [`shadow`](#fn-shadow), [`no_shadow`](#fn-no_shadow), [`opacity`](#fn-opacity), [`blend_mode`](#fn-blend_mode), [`erase`](#fn-erase), [`no_erase`](#fn-no_erase), [`tint`](#fn-tint), [`no_tint`](#fn-no_tint)
-- [Text and fonts](#text-and-fonts): [`text`](#fn-text), [`text_align`](#fn-text_align), [`text_ascent`](#fn-text_ascent), [`text_descent`](#fn-text_descent), [`text_leading`](#fn-text_leading), [`text_box`](#fn-text_box), [`text_path`](#fn-text_path), [`text_to_points`](#fn-text_to_points), [`current_font`](#fn-current_font), [`text_size`](#fn-text_size), [`text_style`](#fn-text_style), [`text_tracking`](#fn-text_tracking), [`text_fallback`](#fn-text_fallback), [`system_font`](#fn-system_font), [`text_features`](#fn-text_features), [`font_variations`](#fn-font_variations), [`text_width`](#fn-text_width), [`text_font`](#fn-text_font), [`load_font`](#fn-load_font)
+- [Text and fonts](#text-and-fonts): [`text`](#fn-text), [`text_align`](#fn-text_align), [`text_ascent`](#fn-text_ascent), [`text_descent`](#fn-text_descent), [`text_leading`](#fn-text_leading), [`text_box`](#fn-text_box), [`text_path`](#fn-text_path), [`text_to_points`](#fn-text_to_points), [`current_font`](#fn-current_font), [`text_size`](#fn-text_size), [`text_style`](#fn-text_style), [`text_tracking`](#fn-text_tracking), [`text_fallback`](#fn-text_fallback), [`system_font`](#fn-system_font), [`text_features`](#fn-text_features), [`font_variations`](#fn-font_variations), [`text_width`](#fn-text_width), [`fit_text_size`](#fn-fit_text_size), [`text_on_path`](#fn-text_on_path), [`text_font`](#fn-text_font), [`load_font`](#fn-load_font)
 - [Transforms and the state stack](#transforms-and-the-state-stack): [`translate`](#fn-translate), [`rotate`](#fn-rotate), [`scale`](#fn-scale), [`shear_x`](#fn-shear_x), [`shear_y`](#fn-shear_y), [`apply_matrix`](#fn-apply_matrix), [`reset_matrix`](#fn-reset_matrix), [`push`](#fn-push), [`pop`](#fn-pop), [`saved_state`](#fn-saved_state)
 - [Paths and clipping](#paths-and-clipping): [`path`](#fn-path), [`draw_path`](#fn-draw_path), [`clip`](#fn-clip), [`no_clip`](#fn-no_clip)
 - [Marks](#marks): [`mark`](#fn-mark)
 - [Play](#play): [`variations`](#fn-variations), [`keep`](#fn-keep)
 - [Pictures and layers](#pictures-and-layers): [`create_graphics`](#fn-create_graphics), [`layer`](#fn-layer), [`hide_layer`](#fn-hide_layer), [`show_layer`](#fn-show_layer)
 - [Images and SVG](#images-and-svg): [`image`](#fn-image), [`image_mode`](#fn-image_mode), [`load_image`](#fn-load_image), [`load_svg`](#fn-load_svg), [`svg_paths`](#fn-svg_paths)
-- [Pixels and filters](#pixels-and-filters): [`get`](#fn-get), [`set`](#fn-set), [`load_pixels`](#fn-load_pixels), [`update_pixels`](#fn-update_pixels), [`filter`](#fn-filter)
-- [Randomness and noise](#randomness-and-noise): [`random`](#fn-random), [`random_choice`](#fn-random_choice), [`random_gaussian`](#fn-random_gaussian), [`random_seed`](#fn-random_seed), [`noise`](#fn-noise), [`noise_detail`](#fn-noise_detail), [`noise_seed`](#fn-noise_seed)
+- [Pixels and filters](#pixels-and-filters): [`get`](#fn-get), [`set`](#fn-set), [`set_pixel`](#fn-set_pixel), [`load_pixels`](#fn-load_pixels), [`update_pixels`](#fn-update_pixels), [`filter`](#fn-filter), [`apply_filter`](#fn-apply_filter)
+- [Randomness and noise](#randomness-and-noise): [`random`](#fn-random), [`random_number`](#fn-random_number), [`random_choice`](#fn-random_choice), [`random_gaussian`](#fn-random_gaussian), [`random_seed`](#fn-random_seed), [`noise`](#fn-noise), [`noise_detail`](#fn-noise_detail), [`noise_seed`](#fn-noise_seed)
 - [Maths](#maths): [`constrain`](#fn-constrain), [`distance`](#fn-distance), [`lerp`](#fn-lerp), [`map_range`](#fn-map_range), [`mag`](#fn-mag), [`norm`](#fn-norm), [`degrees`](#fn-degrees), [`radians`](#fn-radians)
 - [Time](#time): [`year`](#fn-year), [`month`](#fn-month), [`day`](#fn-day), [`hour`](#fn-hour), [`minute`](#fn-minute), [`second`](#fn-second), [`millis`](#fn-millis)
 - [Interaction and controls](#interaction-and-controls): [`key_down`](#fn-key_down), [`cursor`](#fn-cursor), [`no_cursor`](#fn-no_cursor), [`create_button`](#fn-create_button), [`create_checkbox`](#fn-create_checkbox), [`create_slider`](#fn-create_slider)
@@ -44,7 +44,7 @@ In the examples, `import funground as f` is understood.
 ### `f.size`
 
 ```py
-f.size(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int' = 60, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'
+f.size(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int | None' = None, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'
 ```
 
 Create the canvas, or change its size.
@@ -56,7 +56,7 @@ Call it once, at the start of setup(). In an animated sketch it opens the window
 | `width` | the canvas width in pixels (above 0), or a page name such as "A4". |
 | `height` | the canvas height in pixels (above 0). Leave it out when width is a page name. |
 | `title` | the text in the window's title bar. The default is "funground". |
-| `fps` | the target frames per second. The default is 60. It must be above 0. |
+| `fps` | the target frames per second, above 0. The default None keeps the current rate: 60 to begin with, or the one run(fps=...) gives, which wins over this one. |
 | `margin` | the space kept free around the edge. One number is used on all four sides. A tuple of four numbers is (top, right, bottom, left). The default is 0. It stays when the canvas changes size or a new page starts. |
 | `landscape` | True turns a named page on its side, as in size("A4", landscape=True). The default is False. It only goes with a page name. |
 
@@ -1076,6 +1076,38 @@ f.fill(f.hsl(30, 90, 60))
 
 See also: [`hsb`](#fn-hsb), [`color`](#fn-color), [`color_mode`](#fn-color_mode).
 
+<a id="fn-cmyk"></a>
+### `f.cmyk`
+
+```py
+f.cmyk(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255)
+```
+
+Make a colour from printing inks: cyan, magenta, yellow and black.
+
+Use it where you want an exact print colour. A PDF you save holds exactly these ink amounts, so a print shop gets your numbers, not a guess. On the screen, in a PNG and in an SVG the colour is shown as the nearest red, green and blue. That is an approximation: a screen cannot show ink. The ranges are always these, whatever the colour mode is.
+
+| Argument | Meaning |
+|---|---|
+| `cyan` | the cyan ink, 0 to 100. |
+| `magenta` | the magenta ink, 0 to 100. |
+| `yellow` | the yellow ink, 0 to 100. |
+| `black` | the black ink, 0 to 100. |
+| `alpha` | the opacity, 0 (invisible) to 255 (solid). The default is 255. |
+
+**Returns.** A colour, as from color(). Its .cmyk part holds the four ink amounts.
+
+**Raises.**
+
+- `ValueError`: an ink is not a number from 0 to 100, or the alpha is not from 0 to 255.
+
+```py
+f.fill(f.cmyk(0, 80, 100, 0))
+f.save("poster.pdf")
+```
+
+See also: [`hsb`](#fn-hsb), [`color`](#fn-color), [`save`](#fn-save), [`lerp_color`](#fn-lerp_color).
+
 <a id="fn-lerp_color"></a>
 ### `f.lerp_color`
 
@@ -1284,6 +1316,14 @@ Choose how the ends of lines look.
 |---|---|
 | `cap` | "round" (the default), "square" (extends past the end by half the width) or "butt" (stops flat at the end). |
 
+**The words for `cap`.**
+
+| Word | What it does |
+|---|---|
+| `"round"` | Each end of a line is a half circle, so the line reaches half its width past its end points. The default. |
+| `"square"` | Each end is squared off half the line's width past its end point. |
+| `"butt"` | Each end is cut off flat exactly at its end point. |
+
 **Raises.**
 
 - `ValueError`: the cap is not one of those words.
@@ -1306,6 +1346,14 @@ Choose how corners of outlines look.
 | Argument | Meaning |
 |---|---|
 | `join` | "round" (the default), "miter" (sharp) or "bevel" (cut off). |
+
+**The words for `join`.**
+
+| Word | What it does |
+|---|---|
+| `"round"` | Corners are rounded. The default. |
+| `"miter"` | Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not shoot far out. |
+| `"bevel"` | Corners are cut off flat. |
 
 **Raises.**
 
@@ -1452,11 +1500,33 @@ f.blend_mode(mode: 'str') -> 'None'
 
 Choose how what you draw next mixes with what is already there.
 
-The choice is saved by push() and brought back by pop().
+"multiply" darkens like overlapping inks, "screen" lightens like overlapping lights, and so on: the table below says what each word does. The mode applies to shapes, lines, text and pictures drawn after it, until you choose another. The choice is saved by push() and brought back by pop(). The names are the usual ones in drawing programs (Photoshop, Illustrator, DrawBot's blendMode()); DrawBot's "colorDodge", "colorBurn", "softLight" and "hardLight" are "dodge", "burn", "soft_light" and "hard_light" here, and its "plusLighter" is "add".
 
 | Argument | Meaning |
 |---|---|
 | `mode` | "normal" (the default), "multiply", "screen", "overlay", "darken", "lighten", "add", "difference", "exclusion", "dodge", "burn", "hard_light", "soft_light", "hue", "saturation", "color" or "luminosity". |
+
+**The words for `mode`.**
+
+| Word | What it does |
+|---|---|
+| `"normal"` | The new colour covers the old one (see-through only as far as its alpha or opacity() says). |
+| `"multiply"` | Multiplies the colours, so the result is always darker: like overlapping inks or colour filters. White leaves the old colour unchanged; black gives black. |
+| `"screen"` | The opposite of multiply: the result is always lighter, like two slide projectors on one screen. Black leaves the old colour unchanged; white gives white. |
+| `"overlay"` | Multiply where the old colour is dark, screen where it is light: more contrast, keeping the old picture's highlights and shadows. |
+| `"darken"` | Keeps the darker of the two colours, channel by channel (red, green and blue separately). |
+| `"lighten"` | Keeps the lighter of the two colours, channel by channel. |
+| `"add"` | Adds the colours, so overlaps glow and turn white quickly: light added to light. |
+| `"difference"` | The difference between the colours: the same colours give black, white turns the old colour into its opposite (a negative). |
+| `"exclusion"` | Like difference, with less contrast: white still inverts, mid-grey gives grey. |
+| `"dodge"` | Brightens the old colour by the new one; bright new colours burn out to white (color dodge). Black changes nothing. |
+| `"burn"` | Darkens the old colour by the new one, with more contrast (color burn). White changes nothing. |
+| `"hard_light"` | Multiply where the new colour is dark, screen where it is light: like a harsh spotlight of the new colour. |
+| `"soft_light"` | A gentler hard_light: like a soft, diffused light of the new colour. Mid-grey changes nothing. |
+| `"hue"` | The new colour's hue with the old colour's saturation and lightness: recolours the old picture. |
+| `"saturation"` | The new colour's saturation with the old colour's hue and lightness: makes the old picture more vivid or greyer. |
+| `"color"` | The new colour's hue and saturation with the old colour's lightness: tints the old picture while keeping its shading. |
+| `"luminosity"` | The new colour's lightness with the old colour's hue and saturation: the opposite of color. |
 
 **Raises.**
 
@@ -1553,7 +1623,7 @@ f.text(message: 'object', x: 'float', y: 'float', color: 'Color | None' = None) 
 
 Draw text.
 
-By default (x, y) is the top-left corner of the text; text_align() can change that. The text uses the fill colour. If there is no fill it uses the stroke colour, and if there is neither it is white. A new line in the message starts a new line of text. The default size is 20 (see text_size).
+By default (x, y) is the top-left corner of the text; text_align() can change that. Soft hyphens (U+00AD) in the message are not drawn. The text uses the fill colour. If there is no fill it uses the stroke colour, and if there is neither it is white. A new line in the message starts a new line of text. The default size is 20 (see text_size).
 
 | Argument | Meaning |
 |---|---|
@@ -1580,10 +1650,30 @@ Choose which point of the text (x, y) means.
 
 The default is left and top. The choice is saved by push() and brought back by pop().
 
+"justify" is for text_box(): each line is stretched to the width of the box by making the spaces between the words wider, except the last line of a paragraph and a line of one word, which stay on the left. In text() there is no box, so "justify" sets the text on the left.
+
 | Argument | Meaning |
 |---|---|
-| `horizontal` | "left" (the default), "center" or "right". |
+| `horizontal` | "left" (the default), "center", "right" or "justify". |
 | `vertical` | "top" (the default), "center", "baseline" or "bottom". Leave it out to keep the current choice. |
+
+**The words for `horizontal`.**
+
+| Word | What it does |
+|---|---|
+| `"left"` | x is where the text starts; it runs to the right. The default. |
+| `"center"` | x is the middle of the text. |
+| `"right"` | x is where the text ends. |
+| `"justify"` | In text_box(), each line is stretched to the box's width by widening the spaces, except the last line of a paragraph and a line of one word. In text() the same as left. |
+
+**The words for `vertical`.**
+
+| Word | What it does |
+|---|---|
+| `"top"` | y is the top of the text: the tallest letters' height (the font's ascent). The default. |
+| `"center"` | y is halfway between the top and the bottom. |
+| `"baseline"` | y is the line the letters stand on; the tails of g, p and y hang below it. Lines of text in different sizes line up on their baselines. |
+| `"bottom"` | y is the bottom of the text: below the tails of g, p and y (the font's descent). |
 
 **Raises.**
 
@@ -1594,7 +1684,7 @@ f.text_align("center", "center")
 f.text("Middle", f.width / 2, f.height / 2)
 ```
 
-See also: [`text`](#fn-text), [`text_width`](#fn-text_width).
+See also: [`text`](#fn-text), [`text_box`](#fn-text_box), [`text_width`](#fn-text_width).
 
 <a id="fn-text_ascent"></a>
 ### `f.text_ascent`
@@ -1656,7 +1746,9 @@ f.text_box(message: 'object', x: 'float', y: 'float', width: 'float', height: 'f
 
 Draw text wrapped inside a box, and return whatever did not fit.
 
-Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn. Give the returned text to another box to flow a story across columns.
+Words are moved to a new line when they would pass the right edge. With a height, only the lines that fit are drawn: each line takes one leading (text_leading(), automatically 1.25 times the text size), so three lines with a leading of 100 fit a box 300 high, as in DrawBot and InDesign. Give the returned text to another box to flow a story across columns.
+
+With f.text_align("justify") each line is stretched to the width of the box, except the last line of each paragraph. A soft hyphen, the character U+00AD (written "\u00ad" in Python), marks a place where a long word may break: when a word does not fit in the rest of a line, it is broken at the last soft hyphen that fits, and a hyphen is drawn there. A soft hyphen that is not used is not drawn and has no width.
 
 | Argument | Meaning |
 |---|---|
@@ -1676,7 +1768,7 @@ Words are moved to a new line when they would pass the right edge. With a height
 rest = f.text_box("A long story that wraps inside a box.", 20, 60, 280, 100)
 ```
 
-See also: [`text`](#fn-text), [`text_width`](#fn-text_width), [`text_leading`](#fn-text_leading), [`FormattedString`](#cls-FormattedString).
+See also: [`text`](#fn-text), [`text_align`](#fn-text_align), [`text_width`](#fn-text_width), [`text_leading`](#fn-text_leading), [`FormattedString`](#cls-FormattedString).
 
 <a id="fn-text_path"></a>
 ### `f.text_path`
@@ -1756,7 +1848,7 @@ See also: [`text_font`](#fn-text_font), [`load_font`](#fn-load_font), [`system_f
 ### `f.text_size`
 
 ```py
-f.text_size(size: 'int') -> 'None'
+f.text_size(size: 'float') -> 'None'
 ```
 
 Set the size of text.
@@ -1765,11 +1857,12 @@ The size is an em of that many pixels, as in CSS. Capital letters come out about
 
 | Argument | Meaning |
 |---|---|
-| `size` | the size in pixels, above 0. A fraction is cut to a whole number. |
+| `size` | the size in pixels, any number above 0. A fraction is kept, so 20.5 is a little bigger than 20. |
 
 **Raises.**
 
 - `ValueError`: size is 0 or less.
+- `TypeError`: size is not a number.
 
 ```py
 f.text_size(28)
@@ -1790,7 +1883,16 @@ It is ignored once you have chosen a font with text_font(), but remembered for w
 
 | Argument | Meaning |
 |---|---|
-| `style` | "normal", "bold", "italic" or "bold_italic". |
+| `style` | "normal" (the default), "bold", "italic" or "bold_italic". |
+
+**The words for `style`.**
+
+| Word | What it does |
+|---|---|
+| `"normal"` | Upright letters of the usual weight. The default. |
+| `"bold"` | Thicker, heavier letters, for emphasis and headlines. |
+| `"italic"` | Letters slanted to the right (the built-in font's oblique). |
+| `"bold_italic"` | Bold and slanted. |
 
 **Raises.**
 
@@ -1930,7 +2032,7 @@ f.text_width(message: 'object') -> 'float'
 
 Return how wide some text will be, in pixels.
 
-It is measured at the current text size and font, and it is the exact distance text() advances. Use it to centre or right-align text.
+It is measured at the current text size and font, and it is the exact distance text() advances. Use it to centre or right-align text. Soft hyphens (U+00AD) have no width.
 
 | Argument | Meaning |
 |---|---|
@@ -1944,6 +2046,74 @@ f.text(msg, (f.width - f.text_width(msg)) / 2, 100)
 ```
 
 See also: [`text`](#fn-text), [`text_size`](#fn-text_size), [`text_align`](#fn-text_align).
+
+<a id="fn-fit_text_size"></a>
+### `f.fit_text_size`
+
+```py
+f.fit_text_size(message: 'object', width: 'float', height: 'float | None' = None) -> 'float'
+```
+
+Return the text size at which a message is exactly as wide as you want.
+
+It sets the message in the current font, style, features, variations and tracking, and finds the size that makes its widest line `width` pixels wide. With a `height`, it finds the largest size that also keeps all the lines, spaced by the current leading, inside that height. The answer is correct to 0.01 of a pixel. Tracking is a fixed space in pixels, so it does not grow with the size: it is allowed for. Use the answer in text_size() before you draw. The answer is a fraction, and text_size() keeps it, so the text fits to within half a pixel.
+
+| Argument | Meaning |
+|---|---|
+| `message` | the text to fit. A message of several lines is fitted by its widest line. A FormattedString is not allowed yet. |
+| `width` | how wide the widest line should be, in pixels, above 0. |
+| `height` | the most the lines may take up, in pixels, above 0. Leave it out to fit the width only. |
+
+**Returns.** The text size in pixels, as a number with a fraction.
+
+**Raises.**
+
+- `ValueError`: the width or height is not above 0, the text is empty, or no size fits.
+- `TypeError`: the message is a FormattedString, or the width or height is not a number.
+
+```py
+headline = "SPRING FAIR"
+f.text_size(f.fit_text_size(headline, f.width - 80))
+f.text(headline, 40, 60)
+```
+
+See also: [`text_width`](#fn-text_width), [`text_size`](#fn-text_size), [`text_tracking`](#fn-text_tracking), [`text_leading`](#fn-text_leading).
+
+<a id="fn-text_on_path"></a>
+### `f.text_on_path`
+
+```py
+f.text_on_path(message: 'object', path: 'PathBuilder', offset: 'float' = 0) -> 'str'
+```
+
+Draw text along a path, and return the part that did not fit.
+
+The text is set in the current font, style, size, tracking and features, with the current fill, so ligatures and kerning are kept. Each letter stands with its middle on the path, turned to face the way the path goes there. On a path drawn from left to right, the text reads from left to right. A circle from path().circle() runs clockwise, so its text stands on the outside. For text on the inside, use a path that runs the other way, such as the circle flipped with .scale(-1, 1).translate(2 * x, 0).
+
+text_align() works along the path. "left" starts the text at the start of the path, "center" puts the middle of the text at the middle of the path, and "right" ends the text at the end. The second value says which part of the letters touches the path. With the default, "top", the letters hang below the path. Use "baseline" to stand them on it. A circle starts at its right-hand side, so to put the middle of the text at the top, use "center" and an offset of 0.785 times the diameter.
+
+A closed path, such as a circle, carries on past its end, so text can start anywhere on it. On any path, letters that would pass the end are not drawn. If the path has more than one part, only the first part is used. Letters that join their neighbours, as in Arabic, are set one by one and do not join. In a PDF or SVG file each letter is live text.
+
+| Argument | Meaning |
+|---|---|
+| `message` | what to write, on one line. Any value works: str() is applied. |
+| `path` | a path made with path(), such as path().circle(x, y, d) or a curve made with curve_to(). |
+| `offset` | how far to move the text along the path, in pixels, after text_align() has placed it. The default is 0. A negative number moves it back. |
+
+**Returns.** The text that did not fit, as a string. It is "" when everything fitted.
+
+**Raises.**
+
+- `ValueError`: the path has no length, the message has a new line in it, or the offset is not a finite number.
+- `TypeError`: path is not a path, the message is a FormattedString, or the offset is not a number.
+
+```py
+f.text_align("center", "baseline")
+wave = f.path().move_to(40, 200).curve_to(140, 100, 240, 300, 340, 200)
+f.text_on_path("Follow the wave", wave)
+```
+
+See also: [`text`](#fn-text), [`text_path`](#fn-text_path), [`text_align`](#fn-text_align), [`text_width`](#fn-text_width), [`path`](#fn-path).
 
 <a id="fn-text_font"></a>
 ### `f.text_font`
@@ -2700,6 +2870,29 @@ f.set(10, 20, "red")
 
 See also: [`get`](#fn-get), [`update_pixels`](#fn-update_pixels).
 
+<a id="fn-set_pixel"></a>
+### `f.set_pixel`
+
+```py
+f.set_pixel(x: 'float', y: 'float', color, *more: 'float') -> 'None'
+```
+
+Make one pixel exactly one colour: the same as set().
+
+This name also works after from funground import *, where set is Python's own set() (D-088). Fill, stroke, transform, clip, tint, opacity and blend mode do not apply. Outside the canvas, nothing happens.
+
+| Argument | Meaning |
+|---|---|
+| `x`, `y` | the pixel. |
+| `color` | any colour that fill() takes. |
+| `more` | extra numbers, as for fill(). |
+
+```py
+f.set_pixel(10, 20, "red")
+```
+
+See also: [`set`](#fn-set), [`get`](#fn-get), [`update_pixels`](#fn-update_pixels).
+
 <a id="fn-load_pixels"></a>
 ### `f.load_pixels`
 
@@ -2752,6 +2945,19 @@ Alpha is kept, except by "opaque". "posterize", "erode" and "dilate" are faster 
 | `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate". |
 | `value` | for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none. |
 
+**The words for `kind`.**
+
+| Word | What it does |
+|---|---|
+| `"threshold"` | Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5). |
+| `"gray"` | Every pixel becomes the grey of its brightness: a black-and-white picture. |
+| `"opaque"` | Makes every pixel fully opaque, removing any see-through parts. |
+| `"invert"` | Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan. |
+| `"blur"` | Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier. |
+| `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
+| `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
+| `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
+
 **Raises.**
 
 - `ValueError`: the kind is unknown, or the value is out of range.
@@ -2761,6 +2967,45 @@ f.filter("blur", 3)
 ```
 
 See also: [`get`](#fn-get), [`create_graphics`](#fn-create_graphics).
+
+<a id="fn-apply_filter"></a>
+### `f.apply_filter`
+
+```py
+f.apply_filter(kind: 'str', value: 'float | None' = None) -> 'None'
+```
+
+Change everything drawn so far, in place: the same as filter().
+
+This name also works after from funground import *, where filter is Python's own filter() (D-088). Alpha is kept, except by "opaque".
+
+| Argument | Meaning |
+|---|---|
+| `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate". |
+| `value` | for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none. |
+
+**The words for `kind`.**
+
+| Word | What it does |
+|---|---|
+| `"threshold"` | Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5). |
+| `"gray"` | Every pixel becomes the grey of its brightness: a black-and-white picture. |
+| `"opaque"` | Makes every pixel fully opaque, removing any see-through parts. |
+| `"invert"` | Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan. |
+| `"blur"` | Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier. |
+| `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
+| `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
+| `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
+
+**Raises.**
+
+- `ValueError`: the kind is unknown, or the value is out of range.
+
+```py
+f.apply_filter("blur", 3)
+```
+
+See also: [`filter`](#fn-filter), [`get`](#fn-get), [`create_graphics`](#fn-create_graphics).
 
 <a id="randomness-and-noise"></a>
 ## Randomness and noise
@@ -2789,6 +3034,30 @@ d = f.random(10, 40)
 ```
 
 See also: [`random_seed`](#fn-random_seed), [`random_choice`](#fn-random_choice), [`random_gaussian`](#fn-random_gaussian), [`noise`](#fn-noise).
+
+<a id="fn-random_number"></a>
+### `f.random_number`
+
+```py
+f.random_number(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'
+```
+
+Return a random number: the same as random().
+
+This name also works after from funground import *, where random is Python's random module (D-088). random_number(10) gives a number from 0 up to 10. random_number(5, 10) gives a number from 5 up to 10. random_number() gives a number from 0 up to 1. random_seed() makes it repeatable.
+
+| Argument | Meaning |
+|---|---|
+| `low` | with one argument, the top of the range (it starts at 0). With high as well, the bottom. |
+| `high` | the top of the range. The default None means low is the top. |
+
+**Returns.** A floating-point number.
+
+```py
+x = f.random_number(f.width)
+```
+
+See also: [`random`](#fn-random), [`random_seed`](#fn-random_seed), [`random_choice`](#fn-random_choice), [`random_gaussian`](#fn-random_gaussian).
 
 <a id="fn-random_choice"></a>
 ### `f.random_choice`
@@ -3241,7 +3510,19 @@ Escape also closes the sketch. With no window, no key is ever down.
 
 | Argument | Meaning |
 |---|---|
-| `key` | "left", "right", "up", "down", "space", "enter", "escape", or a single character such as "a" or "7". Capitals do not matter. |
+| `key` | "left", "right", "up", "down", "space", "enter", "escape", or a single character such as "a" or "7". Capitals do not matter. A whole number is passed to the window system as its own key code, for keys with no name here. |
+
+**The words for `key`.**
+
+| Word | What it does |
+|---|---|
+| `"left"` | The left arrow key. |
+| `"right"` | The right arrow key. |
+| `"up"` | The up arrow key. |
+| `"down"` | The down arrow key. |
+| `"space"` | The space bar. |
+| `"enter"` | The Enter (Return) key. |
+| `"escape"` | The Esc key. On the desktop it also closes the sketch's window. |
 
 **Returns.** True while the key is held.
 
@@ -3268,6 +3549,17 @@ Choose the shape of the mouse pointer over the canvas.
 | Argument | Meaning |
 |---|---|
 | `kind` | "arrow" (the default), "cross", "hand", "move", "text" or "wait". |
+
+**The words for `kind`.**
+
+| Word | What it does |
+|---|---|
+| `"arrow"` | The usual pointer. The default. |
+| `"cross"` | A thin cross, for aiming at a point. |
+| `"hand"` | A pointing hand, as over a link: something can be clicked. |
+| `"move"` | Four arrows: something can be dragged. |
+| `"text"` | The I-beam: text can be typed or selected. |
+| `"wait"` | The busy pointer (an hourglass or a spinning circle). |
 
 **Raises.**
 
@@ -3381,30 +3673,40 @@ See also: [`create_checkbox`](#fn-create_checkbox), [`create_button`](#fn-create
 ### `f.save`
 
 ```py
-f.save(path: 'str', *, text: 'str' = 'live') -> 'None'
+f.save(path: 'str', *, text: 'str' = 'live', bleed: 'float' = 0, marks: 'bool' = False, dpi: 'float | None' = None) -> 'None'
 ```
 
 Save this frame to a picture or document file.
 
 The file is written when the frame is complete, and it holds everything that frame drew, including what comes after the call. In a script, it writes at once. A .png holds pixels. A .pdf or .svg holds a true vector drawing. A .gif or .mp4 records an animation (see save_gif and save_movie). Any other extension is an error that names the choices. In a document of several pages, a PDF holds every page.
 
-A PNG is written at the screen's real resolution, so on a 2x display a 640 by 400 window gives a 1280 by 800 file.
+A PNG is written at the screen's real resolution, so on a 2x display a 640 by 400 window gives a 1280 by 800 file. To choose the resolution for printing, give dpi. The page is then drawn again at that many dots per inch (a point is 1/72 inch, so the scale is dpi / 72), not stretched from the screen picture. A4 at dpi=300 is 2479 by 3508 pixels. The file says "300 dpi", so print software sizes it right. A page of more than 120 million pixels is refused; save a PDF instead. In an animated sketch, a PNG with dpi holds what this frame drew, as a PDF does, and not what earlier frames left on the canvas.
+
+For a print shop, a PDF can have a bleed and crop marks. The bleed is extra picture beyond the edges of the page, so that no white line shows when the printer cuts the paper. Draw past the edges (at negative numbers, and beyond width and height) and that drawing appears in the bleed. A background() fills the bleed too. The page of your canvas stays the finished size: the PDF records it as its TrimBox, and the page grown by the bleed as its BleedBox. Crop marks are thin lines in registration colour (all four inks at 100 percent, so they print on every plate) outside the bleed at the four corners, 5 mm long, to show where to cut. Every page of a document of several pages gets the same bleed and marks.
+
+A PDF holds colours made by cmyk() as exact CMYK inks. Every other colour is RGB, tagged as sRGB.
 
 | Argument | Meaning |
 |---|---|
 | `path` | the file name. Its ending decides the kind: ".png", ".pdf" or ".svg". |
 | `text` | for a PDF or SVG only. "live" (the default) keeps text real and editable. "shapes" draws every letter as a shape, so the file looks right without the font. A PNG ignores it. |
+| `bleed` | for a PDF only. How far to extend the page on each side, in points. Use mm() to say it in millimetres: bleed=f.mm(3). The start is 0. |
+| `marks` | for a PDF only. True adds crop marks outside the bleed. The start is False. |
+| `dpi` | for a PNG only. The resolution in dots per inch, above 0, such as 300. Each side is its size in points times dpi / 72, rounded to the nearest pixel. Leave it out for the screen's resolution. |
 
 **Raises.**
 
-- `ValueError`: the file ending is not one that save() knows, or text is not "live" or "shapes".
+- `ValueError`: the file ending is not one that save() knows, text is not "live" or "shapes", the bleed is below 0, dpi is 0 or less, bleed or marks is used for a file that is not a PDF, dpi is used for a file that is not a PNG, or the picture would be more than 120 million pixels.
+- `TypeError`: the bleed or dpi is not a number, or marks is not True or False.
 
 ```py
 if f.key_down("s"):
     f.save("my_sketch.png")
+f.save("poster.pdf", bleed=f.mm(3), marks=True)
+f.save("poster.png", dpi=300)
 ```
 
-See also: [`save_frames`](#fn-save_frames), [`save_gif`](#fn-save_gif), [`save_movie`](#fn-save_movie), [`new_page`](#fn-new_page).
+See also: [`save_frames`](#fn-save_frames), [`save_gif`](#fn-save_gif), [`save_movie`](#fn-save_movie), [`new_page`](#fn-new_page), [`mm`](#fn-mm).
 
 <a id="fn-save_frames"></a>
 ### `f.save_frames`
@@ -3793,6 +4095,17 @@ The loudness follows an envelope. It rises to full over the attack, falls to the
 | `decay` | seconds to fall to the sustain level. The default is 0.15. |
 | `sustain` | the level held after the decay, 0 to 1. The default is 0.7. |
 
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
+
 **Returns.** A Sound: play(), loop(), stop(), level() and so on.
 
 ```py
@@ -3822,6 +4135,17 @@ It takes the same options as tone().
 | `release` | seconds to fade out at the end. The default is 0.15. |
 | `decay` | seconds to fall to the sustain level. The default is 0.15. |
 | `sustain` | the level held after the decay, 0 to 1. The default is 0.7. |
+
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
 
 **Returns.** A Sound: play(), loop(), stop(), level() and so on.
 
@@ -3879,6 +4203,17 @@ Separate the tokens with spaces. A token is a note name, "-" for a rest, or "[C4
 | `sa` | a note name such as "C4" that makes the notes sargam, with that note as Sa. The default None reads note names. |
 | `tuning` | "equal" (the default) or "just". "just" uses just-intonation ratios from Sa, and needs sa. |
 | `volume` | from 0 to 1. The default is 0.5. |
+
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
 
 **Returns.** A Sound: play(), loop(), stop() and so on.
 
@@ -6252,6 +6587,15 @@ the text is drawn. Numbers for the colour are read in the colour mode of the mom
 | `features` | a dictionary of OpenType features to turn on or off, like {"liga": False}. |
 | `variations` | a dictionary of axes of a variable font, like {"wght": 700}. |
 
+**The words for `style`.**
+
+| Word | What it does |
+|---|---|
+| `"normal"` | Upright letters of the usual weight. The default. |
+| `"bold"` | Thicker, heavier letters, for emphasis and headlines. |
+| `"italic"` | Letters slanted to the right (the built-in font's oblique). |
+| `"bold_italic"` | Bold and slanted. |
+
 **Returns.** this same FormattedString, so calls can chain.
 
 **Raises.**
@@ -6308,8 +6652,11 @@ FormattedString.wrap(fits) -> 'tuple[list[list[tuple[str, int | None]]], list[in
 
 Break the text into lines that fit, at spaces.
 
-funground uses it when it draws text in a box. You do not need to call it. A word that is wider than
-the box is broken between letters. A blank line keeps one empty piece, so that it still has a height.
+funground uses it when it draws text in a box. You do not need to call it. A word that does not fit
+in the rest of the line is broken at a soft hyphen (U+00AD), if it has one that lets the first part
+and a hyphen fit; the hyphen is in the look of the run that the soft hyphen is in. A word that is
+wider than the box is broken between letters. A blank line keeps one empty piece, so that it still
+has a height.
 
 | Argument | Meaning |
 |---|---|
@@ -6323,7 +6670,7 @@ See also: [`lines`](#cls-FormattedString-lines).
 ### `Run`
 
 ```py
-Run(text: 'str', font: 'str | None' = None, size: 'int | None' = None, style: 'str | None' = None, color: 'Color | None' = None, tracking: 'float | None' = None, features: 'tuple | None' = None, variations: 'tuple | None' = None) -> None
+Run(text: 'str', font: 'str | None' = None, size: 'float | None' = None, style: 'str | None' = None, color: 'Color | None' = None, tracking: 'float | None' = None, features: 'tuple | None' = None, variations: 'tuple | None' = None) -> None
 ```
 
 One piece of a FormattedString: some text and the settings that were given for it.
@@ -6603,6 +6950,22 @@ Open parts of the path are included. Overlaps are removed.
 | `join` | the corners: "round", "miter" or "bevel". It is "round" at first. |
 | `miter_limit` | how long a pointed corner may get, at least 1. It is 10 at first. |
 | `dash` | None for a solid line, or a length, or a list of lengths for dashes and gaps, such as [10, 5]. It is None at first. |
+
+**The words for `cap`.**
+
+| Word | What it does |
+|---|---|
+| `"round"` | Each end of a line is a half circle, so the line reaches half its width past its end points. The default. |
+| `"square"` | Each end is squared off half the line's width past its end point. |
+| `"butt"` | Each end is cut off flat exactly at its end point. |
+
+**The words for `join`.**
+
+| Word | What it does |
+|---|---|
+| `"round"` | Corners are rounded. The default. |
+| `"miter"` | Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not shoot far out. |
+| `"bevel"` | Corners are cut off flat. |
 
 **Returns.** a new closed PathBuilder.
 
@@ -7076,6 +7439,21 @@ style="own" (the default) draws every part with the style it was recorded with. 
 | `anchor` | which point of the mark lands on (x, y). "origin" (the default) is the mark's own (0, 0). The others use bounds(): "center", "top-left", "top", "top-right", "left", "right", "bottom-left", "bottom" and "bottom-right". |
 | `width`, `height` | the size to make the mark, in pixels, keeping its proportions (see above). They cannot be used with scale. |
 | `style` | "own" (the default) or "current" (see above). |
+
+**The words for `anchor`.**
+
+| Word | What it does |
+|---|---|
+| `"origin"` | The mark's own (0, 0): the point it was drawn around. The default. |
+| `"center"` | The middle of the mark's bounds(). |
+| `"top-left"` | The top-left corner of the bounds. |
+| `"top"` | The middle of the top edge. |
+| `"top-right"` | The top-right corner. |
+| `"left"` | The middle of the left edge. |
+| `"right"` | The middle of the right edge. |
+| `"bottom-left"` | The bottom-left corner. |
+| `"bottom"` | The middle of the bottom edge. |
+| `"bottom-right"` | The bottom-right corner. |
 
 **Raises.**
 
@@ -8071,6 +8449,31 @@ Make a new path with every point moved by a transform.
 
 See also: [`bounds`](#cls-Path-bounds).
 
+<a id="cls-Path-translated"></a>
+#### `Path.translated`
+
+```py
+Path.translated(dx: 'float', dy: 'float') -> "'Path'"
+```
+
+Make a new path with every point moved across and down.
+
+It gives the same points as transformed(Transform.translation(dx, dy)), but it is simpler and quicker,
+because no transform is built.
+
+| Argument | Meaning |
+|---|---|
+| `dx`, `dy` | how far to move it across and down. |
+
+**Returns.** a new Path. This one is not changed.
+
+```py
+p = f.path().circle(0, 0, 40).geometry
+moved = p.translated(100, 50)
+```
+
+See also: [`transformed`](#cls-Path-transformed).
+
 <a id="cls-Font"></a>
 ### `Font`
 
@@ -8579,7 +8982,7 @@ See also: `value`, `checked`, [`create_slider`](#fn-create_slider).
 ### `Color`
 
 ```py
-Color(r: 'int', g: 'int', b: 'int', a: 'int' = 255) -> None
+Color(r: 'int', g: 'int', b: 'int', a: 'int' = 255, cmyk: 'tuple[float, float, float, float] | None' = None) -> None
 ```
 
 A colour, as red, green, blue and alpha numbers.
@@ -8591,6 +8994,9 @@ changed.
 Read its parts as c.red, c.green, c.blue and c.alpha (each a whole number from 0 to 255), c.hue (0 to
 360) and c.saturation, c.brightness and c.lightness (each 0 to 100). The short names c.r, c.g, c.b and
 c.a are the same as red, green, blue and alpha.
+
+A colour made by f.cmyk() also remembers its ink amounts, in c.cmyk. A PDF then holds exactly those
+amounts. Everywhere else the colour shows as the red, green and blue that match them.
 
 ```py
 c = f.color("tomato")
@@ -8648,6 +9054,33 @@ print(f.color("red").brightness)    # 100.0
 ```
 
 See also: [`hue`](#cls-Color-hue), [`saturation`](#cls-Color-saturation), [`lightness`](#cls-Color-lightness).
+
+<a id="cls-Color-from_cmyk"></a>
+#### `Color.from_cmyk`
+
+```py
+Color.from_cmyk(c: 'float', m: 'float', y: 'float', k: 'float', a: 'float' = 255) -> "'Color'"
+```
+
+Make a colour from ink amounts: cyan, magenta, yellow and black.
+
+f.cmyk() does the same, and is the one to use in a sketch.
+
+| Argument | Meaning |
+|---|---|
+| `c` | the cyan ink, from 0 to 100. |
+| `m` | the magenta ink, from 0 to 100. |
+| `y` | the yellow ink, from 0 to 100. |
+| `k` | the black ink, from 0 to 100. |
+| `a` | the alpha, from 0 to 255. It is 255 at first. |
+
+**Returns.** a new Color that remembers the ink amounts in its cmyk part. Its red, green and blue are the simple match: red = 255 x (1 - cyan) x (1 - black), and the same for green and blue.
+
+**Raises.**
+
+- `ValueError`: if an ink amount is not a number from 0 to 100, or the alpha is not from 0 to 255.
+
+See also: [`from_hsb`](#cls-Color-from_hsb), [`cmyk`](#fn-cmyk).
 
 <a id="cls-Color-from_hsb"></a>
 #### `Color.from_hsb`
@@ -8751,7 +9184,7 @@ f.lerp_color() does the same. It mixes red, green, blue and alpha.
 | `other` | the Color to mix towards. |
 | `amount` | how much of the way to go, from 0 (this colour) to 1 (the other). Numbers outside are cut off. |
 
-**Returns.** a new Color.
+**Returns.** a new Color. If both colours came from f.cmyk(), the result is a cmyk colour too, with mixed inks.
 
 ```py
 mid = f.color("red").lerp(f.color("blue"), 0.5)
@@ -8961,7 +9394,7 @@ Every table here is generated from the funground source, so it cannot drift from
 | `f.blend_mode(mode)` | `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `add`, `difference`, `exclusion`, `dodge`, `burn`, `hard_light`, `soft_light`, `hue`, `saturation`, `color`, `luminosity` |
 | `f.stroke_cap(cap)` | `round`, `square`, `butt` |
 | `f.stroke_join(join)` | `round`, `miter`, `bevel` |
-| `f.text_align(horizontal, vertical)`, horizontal | `left`, `center`, `right` |
+| `f.text_align(horizontal, vertical)`, horizontal | `left`, `center`, `right`, `justify` |
 | `f.text_align(horizontal, vertical)`, vertical | `top`, `center`, `baseline`, `bottom` |
 | `f.text_style(style)` | `normal`, `bold`, `italic`, `bold_italic` |
 | `f.color_mode(mode)` | `rgb`, `hsb`, `hsl` |
