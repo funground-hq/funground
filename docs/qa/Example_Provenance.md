@@ -180,3 +180,7 @@ python tools/check_originality.py --report docs/qa/originality_report.md \
 The first command clones the pinned corpora (see `CORPORA` in
 `tools/check_originality.py`) outside the repository and records their commit hashes.
 The second checks every example against them and writes the results table.
+
+## Creative Thinking Course — 13 October 2026
+
+The 12 sketches in examples/course/ are original CC0 examples written to demonstrate composition, spacing, visual weight and hierarchy. The lesson images are rendered from them. The course's 9 Python code blocks and the 12 downloadable sketches were checked against 2,955 corpus units; no pairs were flagged. [Results and corpus revisions](Creative_Course_Originality.md).
