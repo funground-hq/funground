@@ -5,8 +5,6 @@ regenerates them. Each example is a complete sketch: copy it into a file and run
 
 Browse these examples interactively: `python -m funground.gallery`
 
-Short on time? See the [showcase](SHOWCASE.md): a dozen of the best pictures on one page.
-
 ## Basics
 
 ### Your first sketch

@@ -28,7 +28,6 @@ Each line says when to read the page.
 
 - [Examples Gallery](gallery/README.md): look here to see what a feature does, with a picture and a
   short sketch you can copy.
-- [Showcase](gallery/SHOWCASE.md): look here for a dozen of the best pictures on one page.
 
 ## Reference
 
