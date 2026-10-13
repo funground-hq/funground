@@ -106,8 +106,10 @@ are raised and closed.
 | D-097 | 2026-10-13 | The logo mark | a Material's default icon · b the proposed mark (a tomato disc on a ground line with a gold sun: the first sketch) · c another mark later, the word `funground` until then | b (replaceable in two files) | **pending** | | funground-hq.github.io `design/BACKLOG.md` |
 | D-098 | 2026-10-13 | Hosting fonts on the site | a system fonts only · b host the three families (about 120 KB, OFL, nothing fetched from other sites) · c host the display face only | b (hyperlegible text and code faces help beginners read code and errors) | **pending** | | funground-hq.github.io `design/BACKLOG.md` |
 | D-099 | 2026-10-13 | The site's navigation | a keep: Home, Get started, Guide, Gallery, Reference, Play, About · b Home, Learn (Get started + Guide), Gallery, Play (highlighted), Reference; About and Changelog in the footer · c b, but Get started keeps its own tab | b | **pending** | | funground-hq.github.io `design/BACKLOG.md` |
+| D-100 | 2026-10-13 | Which library versions learners get when they install funground (maintainer: why newer, untested versions?) | a keep lower bounds only (today: newest of everything) · b add upper bounds at the next major version, test the newest versions weekly in CI, publish the tested set with each release · c pin exact versions in the package | b | **pending** | | this row |
 
 ## Open
 
+- D-100 library versions for learners (bounds, weekly newest-versions check, tested set per release)
 - D-096 site identity, D-097 logo, D-098 hosted fonts, D-099 navigation (E-34; brief in funground-hq.github.io `design/`)
 - D-089 camera (with `Camera_Note.md`)
