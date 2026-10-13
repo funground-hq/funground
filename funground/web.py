@@ -103,6 +103,8 @@ class Session:
         if not self._sketch.running:
             return False
         self._platform.set_time(now)
+        if not self._platform.frame_due(self._sketch.fps):
+            return True                     # too early for the sketch's frame rate: events wait for the next frame
         try:
             going = self._sketch.step()
         except BaseException:

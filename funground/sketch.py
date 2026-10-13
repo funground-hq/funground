@@ -311,7 +311,7 @@ class Sketch:
         return math.degrees(radians)
 
     # ------------------------------------------------------------ window
-    def size(self, width: Any, height: int | None = None, *, title: str = "funground", fps: int = 60,
+    def size(self, width: Any, height: int | None = None, *, title: str = "funground", fps: int | None = None,
              margin: Any = 0, landscape: bool = False) -> None:
         if isinstance(width, str):                      # a page name (S-132, contract G1)
             from .pages import page_size
@@ -325,7 +325,7 @@ class Sketch:
             raise ValueError("f.size() needs both width and height, or a page name such as \"A4\"")
         if width <= 0 or height <= 0:
             raise ValueError("width and height must be positive")
-        if fps <= 0:
+        if fps is not None and fps <= 0:
             raise ValueError("fps must be positive")
         from .surface import check_margin
 
@@ -333,7 +333,8 @@ class Sketch:
         self._margin = margin
         self.width = int(width)
         self.height = int(height)
-        self.fps = int(fps)
+        if fps is not None:                  # None keeps the rate: 60 to start with, or run(fps=...)'s (contract R3)
+            self.fps = int(fps)
         self.title = title
         self._check_capabilities()
         self._pages = []
@@ -2497,6 +2498,8 @@ class Sketch:
         if setup is not None:
             with self._explaining_name_clashes():
                 setup()
+            if fps is not None:
+                self.fps = int(fps)          # run(fps=...) replaces a rate size() was given in setup() (contract R3)
         if not self._has_window:
             self.size(self.width, self.height, title=self.title, fps=self.fps)
 

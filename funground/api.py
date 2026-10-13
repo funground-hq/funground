@@ -322,7 +322,7 @@ def _share_with_caller() -> None:
 
 
 # ---- window / lifecycle
-def size(width: int | str, height: int | None = None, *, title: str = "funground", fps: int = 60,
+def size(width: int | str, height: int | None = None, *, title: str = "funground", fps: int | None = None,
          margin: float | tuple = 0, landscape: bool = False) -> None:
     """Create the canvas, or change its size.
 
@@ -332,7 +332,7 @@ def size(width: int | str, height: int | None = None, *, title: str = "funground
         width: the canvas width in pixels (above 0), or a page name such as "A4".
         height: the canvas height in pixels (above 0). Leave it out when width is a page name.
         title: the text in the window's title bar. The default is "funground".
-        fps: the target frames per second. The default is 60. It must be above 0.
+        fps: the target frames per second, above 0. The default None keeps the current rate: 60 to begin with, or the one run(fps=...) gives, which wins over this one.
         margin: the space kept free around the edge. One number is used on all four sides. A tuple of four numbers is (top, right, bottom, left). The default is 0. It stays when the canvas changes size or a new page starts.
         landscape: True turns a named page on its side, as in size("A4", landscape=True). The default is False. It only goes with a page name.
 

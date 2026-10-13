@@ -238,3 +238,47 @@ def test_without_a_session_nothing_is_host_driven():
     ns = {"setup": lambda: api.size(20, 20), "draw": lambda: None}
     sketch.run_namespace(ns, max_frames=3)
     assert sketch.frame_count == 3 and not sketch.running      # the loop ran to its end
+
+
+def test_the_frame_rate_holds_in_the_browser_too():
+    # The host steps on every display refresh; f.run(fps=5) must still draw 5 frames a second, as on the desktop.
+    source = (
+        "import funground as f\n"
+        "def setup():\n"
+        "    f.size(20, 20)\n"
+        "def draw():\n"
+        "    pass\n"
+        "f.run(fps=5)\n"
+    )
+    session = Session(640, 480)
+    session.start(source, "sketch.py")
+    sketch = api.canvas_sketch()
+    for refresh in range(61):                       # one second of a 60 Hz display
+        session.step(refresh / 60)
+    assert sketch.frame_count == 6                  # at 0, 0.2, 0.4, 0.6, 0.8 and 1.0 s
+    assert sketch.delta_time == pytest.approx(0.2)
+    session.stop()
+
+
+def test_thirty_frames_a_second_on_a_60_hz_display_is_every_second_refresh():
+    source = "import funground as f\ndef setup():\n    f.size(20, 20)\ndef draw():\n    pass\nf.run(fps=30)\n"
+    session = Session(640, 480)
+    session.start(source, "sketch.py")
+    sketch = api.canvas_sketch()
+    for refresh in range(60):                       # timing noise of a millisecond either way
+        session.step(refresh / 60 + (0.001 if refresh % 3 else -0.001))
+    assert sketch.frame_count == 30
+    session.stop()
+
+
+def test_run_fps_wins_over_size_in_setup_on_the_desktop_too():
+    # The maintainer's report (13 Oct): f.run(fps=5) did nothing, because setup()'s f.size() reset the rate to 60.
+    sketch = api.use_sketch(Sketch(platform=HeadlessPlatform()))
+    sketch.run_namespace({"setup": lambda: api.size(20, 20), "draw": lambda: None}, fps=5, max_frames=1)
+    assert sketch.fps == 5
+    sketch = api.use_sketch(Sketch(platform=HeadlessPlatform()))
+    sketch.run_namespace({"setup": lambda: api.size(20, 20, fps=30), "draw": lambda: None}, fps=5, max_frames=1)
+    assert sketch.fps == 5                          # contract R3: run's rate replaces the one size() was given
+    sketch = api.use_sketch(Sketch(platform=HeadlessPlatform()))
+    sketch.run_namespace({"setup": lambda: api.size(20, 20, fps=30), "draw": lambda: None}, max_frames=1)
+    assert sketch.fps == 30                         # and size()'s own rate stays when run() gives none

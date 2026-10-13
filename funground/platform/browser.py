@@ -31,6 +31,8 @@ from .headless import HeadlessPlatform
 FrameCallback = Callable[[memoryview, int, int, int], None]
 
 
+JITTER = 0.004    # seconds: a quarter of a 60 Hz refresh, the slack frame_due() allows for the host's clock
+
 class BrowserPlatform(HeadlessPlatform):
     # Read by Sketch (run_namespace, show): a host steps the loop, so f.run() returns after setup()
     # and f.show() returns after presenting. See funground.web.
@@ -83,6 +85,14 @@ class BrowserPlatform(HeadlessPlatform):
 
     def start(self) -> None:
         self._previous = None
+
+    def frame_due(self, fps: int) -> bool:
+        """Whether the sketch's next frame is due at the host's time. The host calls on every display refresh
+        (60 times a second or more); the desktop sleeps to the frame rate, so here a call that comes too early
+        draws nothing and the sketch keeps its f.run(fps=...) speed. JITTER lets a frame that is due on this
+        refresh, give or take the host's timing noise, run now rather than one refresh late (so 30 fps on a
+        60 Hz display is every second refresh, not every third)."""
+        return self._previous is None or self._now - self._previous >= 1.0 / fps - JITTER
 
     def tick(self, fps: int) -> float:
         elapsed = 1.0 / fps if self._previous is None else self._now - self._previous

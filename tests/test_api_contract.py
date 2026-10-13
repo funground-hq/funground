@@ -23,7 +23,7 @@ V05_FUNCTIONS = {
     "point": "(x: 'float', y: 'float') -> 'None'",
     "random": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "rect": "(x: 'float', y: 'float', width: 'float', height: 'float', *radii: 'float') -> 'None'",
-    "size": "(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int' = 60, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'",  # S-132: page names, margin
+    "size": "(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int | None' = None, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'",  # S-132: page names, margin; fps None keeps the rate, so run(fps=) wins (R3, 13 Oct)
     "stop": "() -> 'None'",
     "stroke": "(color: 'Color', *more: 'float') -> 'None'",
     "stroke_width": "(pixels: 'int') -> 'None'",
