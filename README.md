@@ -49,7 +49,6 @@ python -m pip install funground
 - [User Guide](https://github.com/funground-hq/funground/blob/v0.1.0a1/docs/guide/README.md): chapters from your first sketch to animation, interaction,
   text, pictures and saving your work.
 - [Examples Gallery](https://github.com/funground-hq/funground/blob/v0.1.0a1/docs/gallery/README.md): every feature shown in a small sketch, with its picture.
-- [Showcase](https://github.com/funground-hq/funground/blob/v0.1.0a1/docs/gallery/SHOWCASE.md): a dozen of the best pictures on one page.
 - See every example in a window: `python -m funground.gallery`
 - [Quick Reference](https://github.com/funground-hq/funground/blob/v0.1.0a1/docs/reference/Quick_Reference.md): every function on one page.
 - [API reference](https://github.com/funground-hq/funground/blob/v0.1.0a1/docs/reference/API.md): every name, with its arguments and an example.
