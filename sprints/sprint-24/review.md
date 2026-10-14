@@ -36,8 +36,8 @@ built site checked locally with `tools/design_shots.mjs`.
    story per commit. Keep it for S-188 to S-191.
 2. The daily site build is scheduled for 03:17 UTC but GitHub has started it 6 to 7 hours late every day this
    week (14 Oct: 08:48 UTC). A fix that must be live sooner needs a manual run.
-3. The 13 Oct scheduled build took 3 h 9 min against a usual minute: to be looked at before it costs runner
-   time again.
+3. The 13 Oct scheduled build showed 3 h 9 min, but it waited in the queue: the build job ran 29 s and the deploy
+   10 s (10:42 created, 13:40 started). Queued time is not billed; nothing to fix.
 
 ## Built by
 
