@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from numbers import Real
 
 from .color import Color
+from ._options import TextStyle
 from .typography import soft_hyphen_cuts, text_size_value
 
 
@@ -120,7 +121,7 @@ class FormattedString:
         return fs
 
     # ---- building
-    def append(self, text: object, font=None, size: float | None = None, style: str | None = None,
+    def append(self, text: object, font=None, size: float | None = None, style: TextStyle | None = None,
                color=None, tracking: float | None = None, features: dict | None = None,
                variations: dict | None = None) -> "FormattedString":
         """Add a run of text to the end.

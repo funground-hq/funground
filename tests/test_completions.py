@@ -46,7 +46,7 @@ def test_every_entry_has_a_summary_and_a_link_that_exists():
     api = (ROOT / "docs" / "reference" / "API.md").read_text(encoding="utf-8")
     anchors = set(re.findall(r'<a id="([^"]+)"></a>', api))
     for e in data()["names"]:
-        assert e["kind"] in ("function", "class", "value"), e["name"]
+        assert e["kind"] in ("function", "class", "value", "namespace"), e["name"]
         assert e["summary"].strip(), e["name"]
         assert e["signature"] and e["detail"], e["name"]
         path, _, anchor = e["url"].partition("#")
@@ -82,3 +82,31 @@ def test_colours_and_the_parameters_that_take_one():
     pairs = {(p["function"], p["parameter"]) for p in data()["color_params"]}
     assert {("fill", "color"), ("stroke", "color"), ("background", "color")} <= pairs
     assert ("circle", "x") not in pairs
+
+
+def test_colors_lists_every_named_colour_with_its_hex():
+    entry = entries()["COLORS"]
+    assert entry["kind"] == "namespace" and entry["star"] is True
+    members = entry["members"]
+    assert len(members) == len(funground.COLORS) == 665
+    tomato = next(m for m in members if m["name"] == "TOMATO")
+    assert tomato == {"name": "TOMATO", "value": "tomato", "hex": "#ff6347"}
+
+
+def test_constants_lists_each_group_with_its_words_and_the_functions_that_take_them():
+    entry = entries()["CONSTANTS"]
+    assert entry["kind"] == "namespace"
+    groups = {g["name"]: g for g in entry["members"]}
+    assert list(groups) == [name for name, _ in funground.CONSTANTS._members.items()]
+    align = groups["ALIGN"]
+    assert align["used_by"] == ["text_align"]
+    left = next(m for m in align["members"] if m["name"] == "LEFT")
+    assert left["value"] == "left" and left["meaning"].startswith("x is where the text starts")
+    assert "meaning" not in next(m for m in groups["MODE"]["members"] if m["name"] == "CENTER")
+    assert groups["KEY"]["used_by"] == ["key_down", "f.key"]
+    for group in groups.values():
+        assert group["members"] and all(m["value"] for m in group["members"])
+
+
+def test_other_entries_have_no_members():
+    assert "members" not in entries()["circle"]

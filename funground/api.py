@@ -15,6 +15,9 @@ from typing import TYPE_CHECKING, Any
 from . import exploring as _exploring  # S-132 Play: variations and keep (the Play section at the end)
 from .color import ColorLike as Color
 from .controls import Button, Checkbox, Slider  # noqa: F401  (public through f.create_slider and friends, S-101)
+from ._options import (ArcMode, BlendMode, ColorMode, CursorKind, EllipseMode, FilterKind, ImageMode, KeyName,  # noqa: F401
+                       PageName, RectMode, SaveText, StrokeCap, StrokeJoin, TextAlignX, TextAlignY, TextStyle,
+                       Tuning, Wave)   # the option words as Literal types (S-174)
 from .marks import NOT_GIVEN, Mark, mark_from_path, mark_from_svg, refuse_in_mark  # S-132: marks (the Marks section at the end)
 from .paths import PathBuilder
 from .typography import Font
@@ -330,7 +333,7 @@ def _share_with_caller() -> None:
 
 
 # ---- window / lifecycle
-def size(width: int | str, height: int | None = None, *, title: str = "funground", fps: int | None = None,
+def size(width: int | PageName | str, height: int | None = None, *, title: str = "funground", fps: int | None = None,
          margin: float | tuple = 0, landscape: bool = False) -> None:
     """Create the canvas, or change its size.
 
@@ -396,7 +399,7 @@ def show() -> None:
     canvas_sketch().show()
 
 
-def new_page(width: int | str | None = None, height: int | None = None) -> None:
+def new_page(width: int | PageName | str | None = None, height: int | None = None) -> None:
     """End this page and start a blank one.
 
     This is for scripts (a file with no draw()). Colours, text settings and other styles carry over. The transform starts afresh. After a few pages, save("x.pdf") writes every page. PNG and SVG write x_1.png, x_2.png and so on. In a window, the arrow keys turn the pages.
@@ -433,7 +436,7 @@ def page_count() -> int:
     return canvas_sketch().page_count()
 
 
-def page_size(name: str, landscape: bool = False) -> tuple[int, int]:
+def page_size(name: PageName | str, landscape: bool = False) -> tuple[int, int]:
     """Return the size of a named page, in points.
 
     Add "Landscape" to the name, or give landscape=True, to turn the page on its side.
@@ -718,7 +721,7 @@ def year() -> int:
     return Sketch.year()
 
 
-def save(path: str, *, text: str = "live", bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None:
+def save(path: str, *, text: SaveText = "live", bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None:
     """Save this frame to a picture or document file.
 
     The file is written when the frame is complete, and it holds everything that frame drew, including what comes after the call. In a script, it writes at once. A .png holds pixels. A .pdf or .svg holds a true vector drawing. A .gif or .mp4 records an animation (see save_gif and save_movie). Any other extension is an error that names the choices. In a document of several pages, a PDF holds every page.
@@ -784,7 +787,7 @@ def full_screen() -> None:
     _share_with_caller()
 
 
-def cursor(kind: str = "arrow") -> None:
+def cursor(kind: CursorKind = "arrow") -> None:
     """Choose the shape of the mouse pointer over the canvas.
 
     Arguments:
@@ -963,7 +966,7 @@ def rect(x: float, y: float, width: float, height: float, *radii: float) -> None
     active_sketch().rect(x, y, width, height, *radii)
 
 
-def rect_mode(mode: str) -> None:
+def rect_mode(mode: RectMode) -> None:
     """Choose how rect() and square() read their numbers.
 
     The choice is saved by push() and brought back by pop().
@@ -983,7 +986,7 @@ def rect_mode(mode: str) -> None:
     active_sketch().rect_mode(mode)
 
 
-def ellipse_mode(mode: str) -> None:
+def ellipse_mode(mode: EllipseMode) -> None:
     """Choose how ellipse(), circle() and arc() read their numbers.
 
     The choice is saved by push() and brought back by pop().
@@ -1003,7 +1006,7 @@ def ellipse_mode(mode: str) -> None:
     active_sketch().ellipse_mode(mode)
 
 
-def image_mode(mode: str) -> None:
+def image_mode(mode: ImageMode) -> None:
     """Choose how image() reads its numbers.
 
     The choice is saved by push() and brought back by pop().
@@ -1130,7 +1133,7 @@ def polygon(points: list[tuple[float, float]]) -> None:
     active_sketch().polygon(points)
 
 
-def arc(x: float, y: float, width: float, height: float, start: float, stop: float, mode: str = "open") -> None:
+def arc(x: float, y: float, width: float, height: float, start: float, stop: float, mode: ArcMode = "open") -> None:
     """Draw part of an ellipse.
 
     Angles are in degrees and go clockwise, starting from the right (3 o'clock). If stop is less than start, 360 is added to it. An arc is never more than one full turn. ellipse_mode() changes how x, y, width and height are read.
@@ -1276,7 +1279,7 @@ def current_font() -> Font:
     return canvas_sketch().current_font()
 
 
-def text_align(horizontal: str, vertical: str | None = None) -> None:
+def text_align(horizontal: TextAlignX, vertical: TextAlignY | None = None) -> None:
     """Choose which point of the text (x, y) means.
 
     The default is left and top. The choice is saved by push() and brought back by pop().
@@ -1570,7 +1573,7 @@ def radial_gradient(x: float, y: float, radius: float, colors: Any, stops: Any =
     return make(x, y, radius, colors, stops, canvas_sketch().read_color)
 
 
-def color_mode(mode: str, max1: float | None = None, max2: float | None = None,
+def color_mode(mode: ColorMode, max1: float | None = None, max2: float | None = None,
                max3: float | None = None, max_alpha: float | None = None) -> None:
     """Choose how numbers become a colour.
 
@@ -1595,7 +1598,7 @@ def color_mode(mode: str, max1: float | None = None, max2: float | None = None,
     active_sketch().color_mode(mode, max1, max2, max3, max_alpha)
 
 
-def blend_mode(mode: str) -> None:
+def blend_mode(mode: BlendMode) -> None:
     """Choose how what you draw next mixes with what is already there.
 
     "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights, and so on: the table below says what each word does. The mode applies to shapes, lines, text and pictures drawn after it, until you choose another. The choice is saved by push() and brought back by pop(). The names are the usual ones in drawing programs (Photoshop, Illustrator, DrawBot's blendMode()); DrawBot's "colorDodge", "colorBurn", "softLight" and "hardLight" are "dodge", "burn", "soft_light" and "hard_light" here, and its "plusLighter" is "add".
@@ -1773,7 +1776,7 @@ def stroke_width(pixels: int) -> None:
     active_sketch().stroke_width(pixels)
 
 
-def stroke_cap(cap: str) -> None:
+def stroke_cap(cap: StrokeCap) -> None:
     """Choose how the ends of lines look.
 
     Arguments:
@@ -1790,7 +1793,7 @@ def stroke_cap(cap: str) -> None:
     active_sketch().stroke_cap(cap)
 
 
-def stroke_join(join: str) -> None:
+def stroke_join(join: StrokeJoin) -> None:
     """Choose how corners of outlines look.
 
     Arguments:
@@ -1960,7 +1963,7 @@ def text_font(font: Font | str | None, size: float | None = None) -> None:
     active_sketch().text_font(font, size, base_dir=base_dir)
 
 
-def text_style(style: str) -> None:
+def text_style(style: TextStyle) -> None:
     """Choose one of the four styles of the built-in font.
 
     It is ignored once you have chosen a font with text_font(), but remembered for when you go back to the built-in one.
@@ -2839,7 +2842,7 @@ def create_sound(samples: Any, rate: int = 44100) -> Sound:
     return sound.create(samples, rate, _sound_frame)
 
 
-def tone(frequency: float, seconds: float, wave: str = "sine", volume: float = 0.5,
+def tone(frequency: float, seconds: float, wave: Wave = "sine", volume: float = 0.5,
          attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound:
     """Make a sound that is one steady tone.
 
@@ -2870,7 +2873,7 @@ def tone(frequency: float, seconds: float, wave: str = "sine", volume: float = 0
                                  decay, sustain), _sound_frame, "f.tone()")
 
 
-def note(name: str, seconds: float, wave: str = "sine", volume: float = 0.5,
+def note(name: str, seconds: float, wave: Wave = "sine", volume: float = 0.5,
          attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound:
     """Make a sound that is one named note.
 
@@ -2929,8 +2932,8 @@ def pluck(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -
     return sound.make(values, _sound_frame, "f.pluck()")
 
 
-def melody(text: str, tempo: float = 120, wave: str = "soft", sa: str | None = None,
-           tuning: str = "equal", volume: float = 0.5) -> Sound:
+def melody(text: str, tempo: float = 120, wave: Wave = "soft", sa: str | None = None,
+           tuning: Tuning = "equal", volume: float = 0.5) -> Sound:
     """Make a sound from a string of notes.
 
     Separate the tokens with spaces. A token is a note name, "-" for a rest, or "[C4 E4 G4]" for a chord. Add ":2" after a token for how many beats it lasts (1 if left off). Notes are smooth: each one fades out over 0.15 seconds while the next begins, so the sound lasts that much longer than its beats when it ends on a note. With sa given, the notes are sargam: S r R g G m M P d D n N, with ' for the octave above and a comma for the octave below. In sargam, "S~G" glides from S to G over the token's beats, and "(R)G" touches R for about 60 milliseconds and then plays G.
@@ -3548,7 +3551,7 @@ def update_pixels() -> None:
     active_sketch().update_pixels()
 
 
-def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's name)
+def filter(kind: FilterKind, value: float | None = None) -> None:  # noqa: A001  (p5's name)
     """Change everything drawn so far, in place.
 
     Alpha is kept, except by "opaque". "posterize", "erode" and "dilate" are faster with funground[extras] installed, but the result is the same.
@@ -3569,7 +3572,7 @@ def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's 
     active_sketch().filter(kind, value)
 
 
-def apply_filter(kind: str, value: float | None = None) -> None:
+def apply_filter(kind: FilterKind, value: float | None = None) -> None:
     """Change everything drawn so far, in place: the same as filter().
 
     This name also works after from funground import *, where filter is Python's own filter() (D-088). Alpha is kept, except by "opaque".
@@ -3591,7 +3594,7 @@ def apply_filter(kind: str, value: float | None = None) -> None:
 
 
 # ---- input
-def key_down(key: str | int) -> bool:
+def key_down(key: KeyName | str | int) -> bool:
     """Return whether a key is held down right now.
 
     Escape also closes the sketch. With no window, no key is ever down.

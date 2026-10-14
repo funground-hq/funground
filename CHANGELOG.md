@@ -17,6 +17,13 @@ What changed in funground, newest first. Release numbers follow the
   was tested with (`tested-versions.txt` on the GitHub Release), for a school that wants to install exactly those.
 
 ### Added
+- **`f.COLORS` and `f.CONSTANTS`** (S-174, D-103): names that an editor can list. `f.COLORS.TOMATO` is the word
+  `"tomato"`, one name for each of the 665 named colours. `f.CONSTANTS.ALIGN.CENTER` is the word `"center"`, in 18
+  groups (`ALIGN`, `BLEND`, `MODE`, `STYLE`, `CAP`, `JOIN`, `CURSOR`, `FILTER`, `WAVE`, `PAGE` and more). They are
+  the same in `from funground import *` (`COLORS.TOMATO`), read-only, and iterable (`list(f.COLORS)`), and a
+  misspelt name says "Did you mean ...?". Strings still work everywhere, so no sketch changes. The option
+  parameters (`text_align`, `blend_mode`, `rect_mode`, ...) are typed with `Literal` words, so an editor underlines
+  `f.text_align("centre")`. `completions.json` lists the members.
 - **A course: Creative practice with funground** (S-194): eleven lessons in looking and making, from
   composition, weight and colour to type, covers, poster systems, motion, interaction and generative work, ending
   in a small visual world of the learner's own; with runnable sketches, rendered pictures, assignments and

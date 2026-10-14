@@ -69,6 +69,37 @@ f.run()
 
 The alignment is part of the drawing state, so `with f.saved_state():` restores it.
 
+### Words from a list: `f.CONSTANTS`
+
+The words `"center"`, `"baseline"` and the rest can be written from a list, so your editor suggests them and
+underlines a word that does not exist. `f.CONSTANTS` holds the lists in groups named after what they choose.
+For `text_align` the group is `ALIGN`.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 200)
+
+
+def draw():
+    f.background("white")
+    f.fill("black")
+    f.text_size(36)
+    f.text_align(f.CONSTANTS.ALIGN.CENTER, f.CONSTANTS.ALIGN.CENTER)   # the same as ("center", "center")
+    f.text("Centred", f.width / 2, f.height / 2)
+
+
+f.run()
+```
+
+`f.CONSTANTS.ALIGN.CENTER` is the word `"center"`, so both ways do the same, and strings always work. Other groups
+include `BLEND` (for `blend_mode`), `MODE` (for `rect_mode`), `STYLE`, `CAP`, `JOIN`, `FILTER`, `WAVE` and `PAGE`.
+After `from funground import *` write `CONSTANTS.ALIGN.CENTER`. A variable of your own with the name `CONSTANTS` would hide it.
+The lists cannot be changed, and a misspelt group or word stops with "Did you mean ...?".
+The [reference](../reference/API.md#const-CONSTANTS) lists every group.
+
 ## Several lines and text boxes
 
 A `"\n"` inside the message starts a new line. `f.text_leading(n)` sets the distance from one

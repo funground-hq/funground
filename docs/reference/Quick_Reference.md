@@ -1170,8 +1170,14 @@ appendix still works and renders the same on every platform and renderer. Capita
 | `"#RRGGBB"` / `"#RRGGBBAA"` | HTML-style hex, with or without alpha. |
 | `"0xRRGGBB"` / `"0xRRGGBBAA"` | Alternative hex string form. |
 
-**Constants and live values.** There are no uppercase constants such as `RED`, `LEFT` or `CENTER`.
-Colours and keys are strings. These module values are live state, not constants: `f.width`,
+**Names for colours and options.** Two names are lists of words, so your editor can suggest them and a typing slip is caught. Every one is just the string it stands for, so the strings still work everywhere.
+
+| Name | What it is | Example |
+|---|---|---|
+| `f.COLORS` | one name for each of the 665 named colours, in capitals; `f.COLORS.TOMATO == "tomato"`. After `from funground import *` write `COLORS.TOMATO`. | `f.fill(f.COLORS.TOMATO)` |
+| `f.CONSTANTS` | the words that choose an option, in groups: `ALIGN`, `BLEND`, `MODE`, `STYLE`, `CAP`, `JOIN`, `CURSOR`, `FILTER`, `WAVE`, `PAGE` and more. `f.CONSTANTS.ALIGN.CENTER == "center"`. Both are read-only. | `f.text_align(f.CONSTANTS.ALIGN.CENTER)` |
+
+**Live values.** These module values are live state, not constants: `f.width`,
 `f.height`, `f.mouse_x`, `f.mouse_y`, `f.is_mouse_pressed`, `f.pmouse_x`, `f.pmouse_y`, `f.mouse_button`, `f.key`, `f.key_code`, `f.is_key_pressed`, `f.frame_count`, `f.delta_time`.
 `f.__version__` reports `"0.1.0a1"`.
 
