@@ -1,7 +1,7 @@
 # Sprint 21 review — typographic, print-ready posters (E-32)
 
 **Dates:** 11–12 October 2026, on `release-0.2-web` (merged to `main` with S-177; released in 0.1.0a1).
-**Not yet signed off.**
+**Signed off 14 October 2026.**
 
 ## Outcome
 
@@ -53,3 +53,7 @@ Not recorded at the time; the commits are the main session's.
   browser.
 - S-171 changed goldens on purpose; doing it as its own story, with the reason in
   the commit, kept the reference trustworthy.
+
+## Sign-off
+
+**Signed off by the maintainer, 14 October 2026** ("Sign off pending sprints"). Sprint closed.

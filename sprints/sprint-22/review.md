@@ -1,7 +1,7 @@
 # Sprint 22 review — less verbose sketches (E-23)
 
 **Dates:** 12 October 2026, on `release-0.2-web` (merged to `main` with S-177; released in 0.1.0a1).
-**Not yet signed off.**
+**Signed off 14 October 2026.**
 
 ## Outcome
 
@@ -39,3 +39,7 @@ The main session (not recorded at the time).
   (S-175) made the decision quick.
 - The new example used a function whose browser needs were not checked against the runner. A gallery example
   should be run in Play before its story is done.
+
+## Sign-off
+
+**Signed off by the maintainer, 14 October 2026** ("Sign off pending sprints"). Sprint closed.

@@ -1,7 +1,7 @@
 # Sprint 20 review — 0.2: the browser runner, on Cairo, and the editor
 
 **Dates:** 9–13 October 2026, on `release-0.2-web` (merged to `main` with S-177), with `funground-web`,
-`funground-hq.github.io`, `funground-run.github.io` and `funground-hq/sketchbook`. **Not yet signed off.**
+`funground-hq.github.io`, `funground-run.github.io` and `funground-hq/sketchbook`. **Signed off 14 October 2026.**
 
 ## Outcome
 
@@ -64,3 +64,9 @@ Not recorded at the time; the commits are the main session's. S-156 ran in a Cla
 - A list kept by hand in one repository (ON_DEMAND) and checked against another only by a tool someone has to
   run let a bug through. The check should run in funground-web's CI against funground `main`.
 - Who built what was not written down; from Sprint 25 each review lists it as the stories land.
+
+## Sign-off
+
+**Signed off by the maintainer, 14 October 2026** ("Sign off pending sprints"). Sprint closed.
+
+Open after sign-off: the maintainer's run-through of the sketchbook in real github.dev (S-155) and D-101 (JPEG decoding) stay open; neither blocks the close.

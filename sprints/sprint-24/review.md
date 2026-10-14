@@ -1,7 +1,7 @@
 # Sprint 24 review — the website's identity and the Play editor (E-34)
 
 **Dates:** 13 October 2026, on `funground-hq.github.io` branch `design/site-identity`, merged by site PR #7
-(`349f074`, 13 Oct) and deployed. **Not yet signed off.**
+(`349f074`, 13 Oct) and deployed. **Signed off 14 October 2026.**
 
 ## Outcome
 
@@ -52,3 +52,7 @@ S-190 and S-191 return to the backlog with S-188 and S-189, for a later site spr
 - Deciding the four identity questions (D-096 to D-099) from real previews, not mockups, made them quick.
 - The sprint grew on the day (navigation, Showcase, course card): fine for a design sprint, but the review
   only lists it afterwards; next time the additions go into the sprint table as they are agreed.
+
+## Sign-off
+
+**Signed off by the maintainer, 14 October 2026** ("Sign off pending sprints"). Sprint closed.
