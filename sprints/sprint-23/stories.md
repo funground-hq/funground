@@ -7,6 +7,8 @@ CMYK and the shorter style from `release-0.2-web`; and the documentation for AI 
 **Decisions:** D-091 = b (0.1 contains the 0.2 scope and S-129; today's `main` is pre-0.1; untested points are
 named in the release notes). Process for the release itself: `docs/developer/Releasing.md`.
 
+**Release gate (maintainer, 14 Oct 2026):** 0.1.0 is released only after the maintainer has tested it on a local Mac; Linux is tested by the release CI run on all three systems.
+
 **D-094 (12 Oct):** the maintainer chose to publish now as an alpha, **0.1.0a1**, tagged from
 `release-0.2-web`, with the known problems (CI on GitHub's runners) and the untested parts in
 `docs/releases/0.1.0a1.md`. The stories below then lead to 0.1.0.
