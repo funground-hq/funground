@@ -126,6 +126,66 @@ The same kind of sketch as the others, written in the shorter style: from fungro
 
 Source: [`examples/gallery/basics/04_without_f.py`](../../examples/gallery/basics/04_without_f.py)
 
+### Where things are: a map of the canvas
+
+![Where things are: a map of the canvas](images/basics-05_where_things_are.png)
+
+What you see: a map of the drawing area, 640 pixels wide and 400 high. A light grid has a line every 50 pixels. The numbers along the top and left edges count pixels. Marks and labels show the origin, the centre and the bottom-right corner.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.size() sets the width and the height. f.width and f.height give the two numbers back.
+- The point (0, 0), called the origin, is the top-left corner. x grows to the right. y grows down, which is the other way round from a graph in maths class.
+- The centre is (f.width / 2, f.height / 2). The bottom-right corner is (f.width, f.height).
+- f.line() draws the grid with a loop. f.text() writes the numbers and labels.
+- f.circle() marks the points. f.triangle() makes the arrow heads.
+- f.text_align() says which point of the text the position means. Here it keeps the corner label inside the window.
+
+**Make it yours**
+
+- Change 50 in the two grid loops to 25 or 100 and watch the grid change.
+- Change the numbers in f.size(). The centre and the corner labels move with it.
+- Mark the top-right corner with a circle. Its position is (f.width, 0).
+- Draw a circle at x = 100 and y = 300. Is it where you expected?
+- Change the colour of the grid with f.stroke().
+
+</details>
+
+Source: [`examples/gallery/basics/05_where_things_are.py`](../../examples/gallery/basics/05_where_things_are.py)
+
+### Read the mouse position
+
+![Read the mouse position](images/basics-06_mouse_position.png)
+
+Move the mouse over the window. A cross follows it, and a label next to it shows its x and y. Near the right or bottom edge the label moves to the other side, so you can always read it.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.mouse_x and f.mouse_y are the position of the mouse, in the same pixels as the drawing.
+- (0, 0) is the top-left corner. x grows to the right and y grows down.
+- f.line() draws the two lines of the cross, through the mouse position.
+- f.text() writes the label. The text f"x = {x}, y = {y}" puts the two numbers into it.
+- f.text_width() measures the label, so the sketch knows when it would run off the window.
+- draw() runs again and again, so the cross and the numbers keep up with the mouse.
+
+**Make it yours**
+
+- Change "x = " to something else, or round the numbers with int().
+- Change the colours of the cross and the label.
+- Draw a circle at the mouse with f.circle() instead of a cross.
+- Show the position as a fraction of the window: f.mouse_x / f.width.
+- Draw a second cross at the opposite point: f.width - f.mouse_x and f.height - f.mouse_y.
+
+</details>
+
+Source: [`examples/gallery/basics/06_mouse_position.py`](../../examples/gallery/basics/06_mouse_position.py)
+
 ## Shapes
 
 ### The basic shapes
