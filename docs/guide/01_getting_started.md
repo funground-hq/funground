@@ -16,6 +16,12 @@ python -m pip install funground
 On Linux, install the Cairo library first: `sudo apt install libcairo2-dev pkg-config python3-dev`
 (Debian or Ubuntu; other distributions have an equivalent package).
 
+## Writing in VS Code
+
+Any editor will do. In VS Code, install the **Python** extension, open your sketch folder and choose
+**Python: Select Interpreter** (press F1 and type it), then pick the `.venv` you made. Now VS Code knows
+funground: type `f.` and it lists every function, with what it takes and a sentence about it.
+
 ## Your first sketch
 
 Save this as `first.py` and run it with `python first.py`:

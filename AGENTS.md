@@ -11,8 +11,8 @@ funground is a Python library for drawing, animation, typography, print and soun
 
 ```sh
 python -m venv .venv
-.venv/Scripts/python -m pip install -e ".[dev]"      # Windows
-.venv/bin/python -m pip install -e ".[dev]"          # macOS and Linux
+.venv/Scripts/python -m pip install -e ".[dev]" --config-settings editable_mode=compat   # Windows
+.venv/bin/python -m pip install -e ".[dev]" --config-settings editable_mode=compat   # macOS and Linux
 .venv/Scripts/python -m pytest -o addopts="" -q      # the whole suite, a few minutes
 ```
 
