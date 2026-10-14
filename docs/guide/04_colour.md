@@ -41,6 +41,12 @@ After `from funground import *` write `COLORS.TOMATO` with no `f.`. Strings stil
 use `f.COLORS`. `list(f.COLORS)` is every colour name; the [named colours table](../reference/API.md#named-colours)
 shows them with their hex values.
 
+Picking at random from all 665 names gives a muddle, with many greys. For a picture that looks planned, choose a
+colour scheme: a short list of your own colours, and `f.random_choice(my_colours)` to pick from it. A colour that is
+in the list twice is picked twice as often, so it becomes the main colour. The gallery example
+[Colour schemes](../gallery/README.md#colour-schemes-random-shapes-from-your-own-colours) draws the same random shapes
+in four schemes.
+
 ```python
 import funground as f
 

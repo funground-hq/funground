@@ -37,7 +37,7 @@ GOLDEN_PLATFORM = "Windows"
 # fails if a listed name is now covered, and S-072 (release 0.1) requires it empty.
 # S-132: the six studios (examples/gallery/studios/) show Ground, Area and Grid, Mark and Play.
 # COLORS and CONSTANTS (D-103, S-174) are shown in the guide (colours chapter and text chapter), not by a gallery example.
-NOT_YET_IN_GALLERY: set[str] = {"COLORS", "CONSTANTS"}
+NOT_YET_IN_GALLERY: set[str] = {"CONSTANTS"}
 
 
 @pytest.fixture(autouse=True)
