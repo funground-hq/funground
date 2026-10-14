@@ -1,6 +1,6 @@
 # Sprint 4 review — Phase 2a: the public vocabulary on the vector model
 
-**Dates:** 25 September 2026 (draft for the maintainer — not yet signed off)
+**Dates:** 25 September 2026. **Closed 25 September 2026** (see Sign-off).
 **Goal:** expose what the IR already carries — transforms, a state stack, paths and clipping — as
 learner-facing functions with pinned semantics; polish text; add the macOS/Linux HiDPI code path;
 bring the Quick Reference up to v0.6.
