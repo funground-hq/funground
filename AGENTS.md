@@ -44,8 +44,8 @@ python -m venv .venv
 
 - **Docstrings** follow the format in `tools/make_api_reference.py` (summary sentence, prose, `Arguments:`,
   `Returns:`, `Raises:`, `Example:`, `See also:`). After changing one, run
-  `.venv/Scripts/python tools/make_api_reference.py`: it regenerates `docs/reference/API.md`, `llms.txt`
-  and `llms-full.txt` (at the root and in the package). Never edit those by hand; the rules for assistants
+  `.venv/Scripts/python tools/make_api_reference.py`: it regenerates `docs/reference/API.md`, `llms.txt`,
+  `llms-full.txt` (at the root and in the package) and `funground/completions.json` (the editors' suggestions). Never edit those by hand; the rules for assistants
   are in `docs/reference/llms_rules.md`.
 - A new public feature gets its Quick Reference row, a gallery example with its golden, and a guide
   section ([Adding_a_feature.md](docs/developer/Adding_a_feature.md)).

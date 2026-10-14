@@ -20,6 +20,7 @@ Docstring format (parsed by parse_doc below; tests/test_api_docs.py holds the ru
 from __future__ import annotations
 
 import importlib
+import ast
 import inspect
 import json
 import re
@@ -42,6 +43,7 @@ from funground.platform.base import CURSOR_KINDS, KEY_NAMES, MOUSE_BUTTONS  # no
 from funground.sketch import CALLBACK_NAMES, Sketch  # noqa: E402
 
 OUT = ROOT / "docs" / "reference" / "API.md"
+COMPLETIONS = ROOT / "funground" / "completions.json"
 CLASS_LIST = ROOT / "docs" / "reference" / "api_classes.txt"
 RULES = ROOT / "docs" / "reference" / "llms_rules.md"
 REPO_URL = "https://github.com/funground-hq/funground/blob/main/"
@@ -583,14 +585,89 @@ def llms_full(api: str) -> str:
                       rules_text(), "", "## The API reference", "", body.strip(), ""])
 
 
+# ---- the list of names an editor suggests (S-195, D-102)
+
+def first_sentence(summary: str) -> str:
+    """The summary up to its first full stop that ends a sentence."""
+    m = re.search(r"[.!?](?=\s|$)", summary)
+    return summary[:m.end()] if m else summary
+
+
+def declared_value_types() -> dict[str, str]:
+    """The type of each live value, as declared under TYPE_CHECKING in funground/__init__.py."""
+    tree = ast.parse((ROOT / "funground" / "__init__.py").read_text(encoding="utf-8"))
+    types: dict[str, str] = {}
+    for node in tree.body:
+        if isinstance(node, ast.If) and ast.unparse(node.test) == "TYPE_CHECKING":
+            for item in node.body:
+                if isinstance(item, ast.AnnAssign) and isinstance(item.target, ast.Name):
+                    types[item.target.id] = ast.unparse(item.annotation)
+    return types
+
+
+def learner_signature(name: str, obj) -> tuple[str, str, list[str]]:
+    """(what a learner reads, with types, the names of the parameters typed as a colour) for a function or class."""
+    try:
+        sig = inspect.signature(obj)
+    except (TypeError, ValueError):
+        return f"{name}(...)", "(...)", []
+    if inspect.isclass(obj):                                # a class's signature has no return type
+        sig = sig.replace(return_annotation=inspect.Signature.empty)
+    plain, colour = [], []
+    for p in sig.parameters.values():
+        star = {p.VAR_POSITIONAL: "*", p.VAR_KEYWORD: "**"}.get(p.kind, "")
+        default = "" if p.default is p.empty else "=" + re.sub(r"<object object at 0x[0-9A-Fa-f]+>", "<not given>", repr(p.default))
+        plain.append(f"{star}{p.name}{default}")
+        if isinstance(p.annotation, str) and re.search(r"\bColor\b", p.annotation):
+            colour.append(p.name)
+    detail = re.sub(r" at 0x[0-9A-Fa-f]+", "", re.sub(r"<object object at 0x[0-9A-Fa-f]+>", "<not given>", str(sig)))
+    return f"{name}({', '.join(plain)})", detail.replace("'", "").replace('"', ""), colour
+
+
+def completions_text() -> str:
+    """funground/completions.json: every public name with its signature, summary and link, the option words,
+    the named colours and the parameters that take a colour."""
+    check_groups()
+    live_docs = getattr(_api, "LIVE_DOCS", {})
+    value_types = declared_value_types()
+    star_out = set(f.STAR_LEAVES_OUT)
+    words: dict[str, dict] = {}
+    for key, tables in WORD_MEANINGS.items():
+        if key.startswith("f."):
+            words[key[2:]] = {arg: [{"word": w, "meaning": m} for w, m in table.items()] for arg, table in tables}
+    names, color_params = [], []
+    for name in f._PUBLIC_NAMES:
+        entry: dict = {"name": name}
+        if name in _api.LIVE_NAMES:
+            entry.update(kind="value", signature=name, detail=value_types[name],
+                         summary=first_sentence(parse_doc(live_docs.get(name))["summary"]), url=f"reference/API.md#live-{name}")
+        else:
+            obj = getattr(f, name)
+            is_class = inspect.isclass(obj)
+            signature, detail, colour = learner_signature(name, obj)
+            entry.update(kind="class" if is_class else "function", signature=signature, detail=detail,
+                         summary=first_sentence(parse_doc(obj.__doc__)["summary"]),
+                         url=f"reference/API.md#{'cls' if is_class else 'fn'}-{name}")
+            color_params += [{"function": name, "parameter": p} for p in colour]
+        entry["star"] = name not in star_out
+        if name in words:
+            entry["options"] = words[name]
+        names.append(entry)
+    colors = [{"name": n, "hex": hex_of(rgba)[:7]} for n, rgba in sorted(_colornames.NAMED_COLORS.items())]
+    data = {"version": f.__version__, "names": names, "colors": colors, "color_params": color_params}
+    return json.dumps(data, indent=1, ensure_ascii=False) + "\n"
+
+
 def outputs() -> dict[Path, str]:
     """Every generated page and its text. The two pages for assistants are written twice: at the root of
-    the repository and inside the package (python -m pip install funground carries them)."""
+    the repository and inside the package (python -m pip install funground carries them). The list of
+    suggestions for editors, funground/completions.json, is written with them."""
     api = build()
     pages = {OUT: api}
     for name, text in (("llms.txt", llms_index()), ("llms-full.txt", llms_full(api))):
         pages[ROOT / name] = text
         pages[ROOT / "funground" / name] = text
+    pages[COMPLETIONS] = completions_text()
     return pages
 
 
@@ -602,7 +679,7 @@ def main(argv: list[str]) -> int:
         for path in stale:
             print(f"{path.relative_to(ROOT).as_posix()} is out of date. Run: .venv/Scripts/python tools/make_api_reference.py")
         if not stale:
-            print("docs/reference/API.md, llms.txt and llms-full.txt are up to date.")
+            print("docs/reference/API.md, llms.txt, llms-full.txt and completions.json are up to date.")
         return 1 if stale else 0
     for path, text in pages.items():
         path.write_bytes(text.encode("utf-8"))
