@@ -18,7 +18,11 @@ Typical use::
     f.run()
 """
 
+from typing import TYPE_CHECKING
+
 from . import api as _api
+# exit, filter, random and set are written ``name as name``: that marks them as public for type checkers,
+# although they are not in __all__.
 from .api import (
     FormattedString,
     Vector,
@@ -58,9 +62,9 @@ from .api import (
     ellipse_mode,
     end_contour,
     end_shape,
-    exit,
+    exit as exit,
     fill,
-    filter,
+    filter as filter,
     frame_rate,
     full_screen,
     get,
@@ -147,7 +151,7 @@ from .api import (
     quadratic_vertex,
     radial_gradient,
     radians,
-    random,
+    random as random,
     random_number,
     random_choice,
     random_gaussian,
@@ -167,7 +171,7 @@ from .api import (
     saved_state,
     scale,
     second,
-    set,
+    set as set,
     set_pixel,
     shadow,
     shear_x,
@@ -214,8 +218,30 @@ from .api import (
 
 __version__ = "0.1.0a1"
 
-# The public names: the contract (tests/test_api_contract.py), the reference and the gallery cover each one.
-_PUBLIC_NAMES = [
+if TYPE_CHECKING:
+    # The live values come from __getattr__ at run time. These lines tell editors and type checkers their types.
+    from .surface import Ground
+
+    width: int
+    height: int
+    mouse_x: float
+    mouse_y: float
+    is_mouse_pressed: bool
+    pmouse_x: float
+    pmouse_y: float
+    mouse_button: str | None
+    key: str | None
+    key_code: int | None
+    is_key_pressed: bool
+    frame_count: int
+    delta_time: float
+    pixels: bytearray | None
+    ground: Ground
+
+# What ``from funground import *`` brings in (D-088, S-176) and the one hand-written list of public names
+# (the contract in tests/test_api_contract.py, the reference and the gallery cover each one). It is a literal
+# list so type checkers can read it. The four names in STAR_NAMES_FOR are left out; _PUBLIC_NAMES adds them.
+__all__ = [
     "FormattedString",
     "Vector",
     "apply_matrix",
@@ -253,9 +279,7 @@ _PUBLIC_NAMES = [
     "ellipse_mode",
     "end_contour",
     "end_shape",
-    "exit",
     "fill",
-    "filter",
     "apply_filter",
     "frame_rate",
     "full_screen",
@@ -343,7 +367,6 @@ _PUBLIC_NAMES = [
     "quadratic_vertex",
     "radial_gradient",
     "radians",
-    "random",
     "random_number",
     "random_choice",
     "random_gaussian",
@@ -363,7 +386,6 @@ _PUBLIC_NAMES = [
     "saved_state",
     "scale",
     "second",
-    "set",
     "set_pixel",
     "shadow",
     "shear_x",
@@ -424,13 +446,12 @@ _PUBLIC_NAMES = [
 ]
 
 
-# What ``from funground import *`` brings in (D-088, S-176): every public name except four that would hide Python's
-# own: set, filter and exit are built-ins, and random is the standard-library module. There they are set_pixel(),
-# apply_filter(), stop() and random_number(), the same functions under names that hide nothing (STAR_NAMES_FOR).
-# tests/test_global_style.py keeps the list free of any built-in or standard-library name.
+# The four names left out of __all__: set, filter and exit are built-ins, and random is the standard-library
+# module. There they are set_pixel(), apply_filter(), stop() and random_number(), the same functions under names that
+# hide nothing (STAR_NAMES_FOR). tests/test_global_style.py keeps __all__ free of any built-in or standard-library name.
 STAR_NAMES_FOR = {"exit": "stop", "filter": "apply_filter", "random": "random_number", "set": "set_pixel"}
 STAR_LEAVES_OUT = tuple(sorted(STAR_NAMES_FOR))
-__all__ = [name for name in _PUBLIC_NAMES if name not in STAR_LEAVES_OUT]
+_PUBLIC_NAMES = [*__all__, *STAR_LEAVES_OUT]       # every public name
 
 # D-016: v0.5's live value mouse_pressed became is_mouse_pressed, because mouse_pressed() is
 # now the name of the callback (as in p5). The old name fails with a pointer to the new one.

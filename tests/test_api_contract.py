@@ -93,7 +93,7 @@ ADDED_FUNCTIONS = {
     "curve_tangent": "(a: 'float', b: 'float', c: 'float', d: 'float', t: 'float') -> 'float'",
     # Sprint 5, S-046: mapping, interpolation and random helpers (contract H3).
     "random_gaussian": "(mean: 'float' = 0.0, sd: 'float' = 1.0) -> 'float'",
-    "random_choice": "(items)",
+    "random_choice": "(items: 'Any') -> 'Any'",
     "map_range": "(value: 'float', start1: 'float', stop1: 'float', start2: 'float', stop2: 'float', clamp: 'bool' = False) -> 'float'",
     "lerp": "(start: 'float', stop: 'float', amount: 'float') -> 'float'",
     "norm": "(value: 'float', start: 'float', stop: 'float') -> 'float'",
@@ -117,11 +117,11 @@ ADDED_FUNCTIONS = {
     "month": "() -> 'int'",
     "year": "() -> 'int'",
     # Sprint 5, S-044: colour constructors and colour objects (D-017 = C, contract S12).
-    "color": "(*values)",
-    "hsb": "(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255)",
-    "hsl": "(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255)",
-    "cmyk": "(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255)",   # S-170, contract S17
-    "lerp_color": "(c1: 'Color', c2: 'Color', amount: 'float')",
+    "color": "(*values: 'Any') -> 'Color'",
+    "hsb": "(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255) -> 'Color'",
+    "hsl": "(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255) -> 'Color'",
+    "cmyk": "(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255) -> 'Color'",
+    "lerp_color": "(c1: 'Color', c2: 'Color', amount: 'float') -> 'Color'",
     # S-055 Vector
     "Vector": "(x: 'float' = 0.0, y: 'float' = 0.0) -> 'None'",
     # S-049 text alignment and metrics
@@ -132,8 +132,8 @@ ADDED_FUNCTIONS = {
     "text_box": "(message: 'object', x: 'float', y: 'float', width: 'float', height: 'float | None' = None, color: 'Color | None' = None) -> 'str | FormattedString'",
     "text_leading": "(leading: 'float | None') -> 'None'",
     # S-050 gradients
-    "linear_gradient": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors, stops=None)",
-    "radial_gradient": "(x: 'float', y: 'float', radius: 'float', colors, stops=None)",
+    "linear_gradient": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors: 'Any', stops: 'Any' = None) -> 'Gradient'",
+    "radial_gradient": "(x: 'float', y: 'float', radius: 'float', colors: 'Any', stops: 'Any' = None) -> 'Gradient'",
     # S-051 blend modes, opacity, shadow
     "blend_mode": "(mode: 'str') -> 'None'",
     "opacity": "(amount: 'float') -> 'None'",
@@ -147,12 +147,12 @@ ADDED_FUNCTIONS = {
     "cursor": "(kind: 'str' = 'arrow') -> 'None'",
     "no_cursor": "() -> 'None'",
     # S-054 fonts and styles
-    "load_font": "(path: 'str', face: 'int | str' = 0)",
-    "text_font": "(font, size: 'float | None' = None) -> 'None'",
+    "load_font": "(path: 'str', face: 'int | str' = 0) -> 'Font'",
+    "text_font": "(font: 'Font | str | None', size: 'float | None' = None) -> 'None'",
     "text_style": "(style: 'str') -> 'None'",
     # S-052 off-screen graphics
     "create_graphics": "(width: 'int', height: 'int') -> 'Picture'",
-    "image": "(picture, x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'",
+    "image": "(picture: 'Picture', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'",
     # S-076 script mode
     "show": "() -> 'None'",
     # S-077 images
@@ -161,35 +161,35 @@ ADDED_FUNCTIONS = {
     "load_svg": "(path: 'str') -> 'Picture'",
     "svg_paths": "(path: 'str') -> 'list[PathBuilder]'",
     # S-098 sound
-    "load_sound": "(path: 'str')",
+    "load_sound": "(path: 'str') -> 'Sound'",
     # S-110 making sound
-    "create_sound": "(samples, rate: 'int' = 44100)",
-    "tone": "(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7)",
-    "note": "(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7)",
-    "pluck": "(name_or_frequency, seconds: 'float', volume: 'float' = 0.5)",
-    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'str' = 'soft', sa: 'str | None' = None, tuning: 'str' = 'equal', volume: 'float' = 0.5)",
-    "sequence": "(*sounds)",
-    "mix": "(*sounds)",
+    "create_sound": "(samples: 'Any', rate: 'int' = 44100) -> 'Sound'",
+    "tone": "(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
+    "note": "(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
+    "pluck": "(name_or_frequency: 'float | str', seconds: 'float', volume: 'float' = 0.5) -> 'Sound'",
+    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'str' = 'soft', sa: 'str | None' = None, tuning: 'str' = 'equal', volume: 'float' = 0.5) -> 'Sound'",
+    "sequence": "(*sounds: 'Sound') -> 'Sound'",
+    "mix": "(*sounds: 'Sound') -> 'Sound'",
     "note_to_frequency": "(name: 'str', sa: 'str | None' = None) -> 'float'",
     "frequency_to_note": "(hz: 'float', sa: 'str | None' = None) -> 'str'",
     # S-112/S-113
     "chord_notes": "(name: 'str') -> 'list[str]'",
     # S-108 microphone
-    "microphone": "(name: 'str | None' = None)",
+    "microphone": "(name: 'str | None' = None) -> 'Microphone'",
     "microphones": "() -> 'list[str]'",
     # S-115 ragas
     "ragas": "() -> 'list[str]'",
-    "raga": "(name: 'str')",
+    "raga": "(name: 'str') -> 'Raga'",
     "talas": "() -> 'list[str]'",
-    "tala_info": "(name: 'str')",
-    "tala": "(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1)",
-    "drone": "(sa, seconds: 'float', pattern: 'str' = \"P S' S' S\", volume: 'float' = 0.5)",
-    "match_ragas": "(histogram) -> 'list[tuple[str, float]]'",
+    "tala_info": "(name: 'str') -> 'Tala'",
+    "tala": "(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1) -> 'Sound'",
+    "drone": "(sa: 'float | str', seconds: 'float', pattern: 'str' = \"P S' S' S\", volume: 'float' = 0.5) -> 'Sound'",
+    "match_ragas": "(histogram: 'Any') -> 'list[tuple[str, float]]'",
     # S-111 drawing sound
-    "draw_wave": "(source, x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'",
-    "draw_spectrum": "(source, x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'",
-    "spectrogram": "(sound, width: 'int', height: 'int') -> 'Picture'",
-    "draw_pitch_line": "(source, x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'",
+    "draw_wave": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'",
+    "draw_spectrum": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'",
+    "spectrogram": "(sound: 'Sound', width: 'int', height: 'int') -> 'Picture'",
+    "draw_pitch_line": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'",
     # S-090 tracking, features, variations
     "text_tracking": "(pixels: 'float') -> 'None'",
     "text_features": "(**features: 'bool') -> 'None'",
@@ -202,8 +202,8 @@ ADDED_FUNCTIONS = {
     "text_to_points": "(message: 'object', x: 'float', y: 'float', spacing: 'float' = 5) -> 'list[tuple[float, float]]'",
     "current_font": "() -> 'Font'",
     # S-102 fallback
-    "text_fallback": "(*fonts) -> 'None'",
-    "system_font": "(name: 'str')",
+    "text_fallback": "(*fonts: 'Font | str') -> 'None'",
+    "system_font": "(name: 'str') -> 'Font'",
     # S-100 motion
     "save_gif": "(path: 'str', seconds: 'float') -> 'None'",
     "save_movie": "(path: 'str', seconds: 'float') -> 'None'",
@@ -232,15 +232,15 @@ ADDED_FUNCTIONS = {
     # S-082 colour mode
     "color_mode": "(mode: 'str', max1: 'float | None' = None, max2: 'float | None' = None, max3: 'float | None' = None, max_alpha: 'float | None' = None) -> 'None'",
     # S-078 tint and image parts (image's signature is under S-052)
-    "tint": "(color, *more: 'float') -> 'None'",
+    "tint": "(color: 'Any', *more: 'float') -> 'None'",
     "no_tint": "() -> 'None'",
     # S-107 erase
     "erase": "(fill_strength: 'float' = 255, stroke_strength: 'float' = 255) -> 'None'",
     "no_erase": "() -> 'None'",
     # S-079 pixels
-    "get": "(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None)",
-    "set": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",
-    "set_pixel": "(x: 'float', y: 'float', color, *more: 'float') -> 'None'",
+    "get": "(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None) -> 'Color | Picture'",
+    "set": "(x: 'float', y: 'float', color: 'Any', *more: 'float') -> 'None'",
+    "set_pixel": "(x: 'float', y: 'float', color: 'Any', *more: 'float') -> 'None'",
     "load_pixels": "() -> 'None'",
     "update_pixels": "() -> 'None'",
     # S-080 copy, resize, mask, filters (the picture methods copy/resize/mask/filter are in test_filters.py)
@@ -249,8 +249,8 @@ ADDED_FUNCTIONS = {
     # S-132 marks (contract K1-K3, D-069, D-070)
     "mark": "(path: 'PathBuilder | str | None' = None, *, fill: 'Color | None' = <not given>, stroke: 'Color | None' = <not given>, stroke_width: 'float | None' = None) -> 'Mark'",
     # S-132 Play (contracts E1, E2; D-071, D-073: flat names, no f.play namespace)
-    "variations": "(fn, *, columns: 'int | None' = None, **values) -> 'list'",
-    "keep": "(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'",
+    "variations": "(fn: 'Callable[..., Any]', *, columns: 'int | None' = None, **values: 'Any') -> 'list'",
+    "keep": "(note: 'str' = '', *, pdf: 'bool' = False, **settings: 'Any') -> 'str'",
     # S-162 a headline that fits (contract T21)
     "fit_text_size": "(message: 'object', width: 'float', height: 'float | None' = None) -> 'float'",
     # S-161 type on a path (contract T24)

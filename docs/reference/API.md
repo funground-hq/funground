@@ -970,7 +970,7 @@ See also: [`background`](#fn-background), [`erase`](#fn-erase), [`save`](#fn-sav
 ### `f.color`
 
 ```py
-f.color(*values)
+f.color(*values: 'Any') -> 'Color'
 ```
 
 Make a colour that you can read and reuse.
@@ -1028,7 +1028,7 @@ See also: [`color`](#fn-color), [`hsb`](#fn-hsb), [`hsl`](#fn-hsl), [`fill`](#fn
 ### `f.hsb`
 
 ```py
-f.hsb(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255)
+f.hsb(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255) -> 'Color'
 ```
 
 Make a colour from hue, saturation and brightness.
@@ -1054,7 +1054,7 @@ See also: [`hsl`](#fn-hsl), [`color`](#fn-color), [`color_mode`](#fn-color_mode)
 ### `f.hsl`
 
 ```py
-f.hsl(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255)
+f.hsl(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255) -> 'Color'
 ```
 
 Make a colour from hue, saturation and lightness.
@@ -1080,7 +1080,7 @@ See also: [`hsb`](#fn-hsb), [`color`](#fn-color), [`color_mode`](#fn-color_mode)
 ### `f.cmyk`
 
 ```py
-f.cmyk(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255)
+f.cmyk(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255) -> 'Color'
 ```
 
 Make a colour from printing inks: cyan, magenta, yellow and black.
@@ -1112,7 +1112,7 @@ See also: [`hsb`](#fn-hsb), [`color`](#fn-color), [`save`](#fn-save), [`lerp_col
 ### `f.lerp_color`
 
 ```py
-f.lerp_color(c1: 'Color', c2: 'Color', amount: 'float')
+f.lerp_color(c1: 'Color', c2: 'Color', amount: 'float') -> 'Color'
 ```
 
 Return a colour part of the way between two colours.
@@ -1137,7 +1137,7 @@ See also: [`color`](#fn-color), [`lerp`](#fn-lerp), [`linear_gradient`](#fn-line
 ### `f.linear_gradient`
 
 ```py
-f.linear_gradient(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors, stops=None)
+f.linear_gradient(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors: 'Any', stops: 'Any' = None) -> 'Gradient'
 ```
 
 Make a gradient: colours blended along a line.
@@ -1164,7 +1164,7 @@ See also: [`radial_gradient`](#fn-radial_gradient), [`fill`](#fn-fill), [`lerp_c
 ### `f.radial_gradient`
 
 ```py
-f.radial_gradient(x: 'float', y: 'float', radius: 'float', colors, stops=None)
+f.radial_gradient(x: 'float', y: 'float', radius: 'float', colors: 'Any', stops: 'Any' = None) -> 'Gradient'
 ```
 
 Make a gradient: colours blended outward from a point.
@@ -1581,7 +1581,7 @@ See also: [`erase`](#fn-erase).
 ### `f.tint`
 
 ```py
-f.tint(color, *more: 'float') -> 'None'
+f.tint(color: 'Any', *more: 'float') -> 'None'
 ```
 
 Colour every picture drawn with image() from now on.
@@ -1929,7 +1929,7 @@ See also: [`text_width`](#fn-text_width), [`text_size`](#fn-text_size).
 ### `f.text_fallback`
 
 ```py
-f.text_fallback(*fonts) -> 'None'
+f.text_fallback(*fonts: 'Font | str') -> 'None'
 ```
 
 Choose fonts to use for letters that the current font does not have.
@@ -1950,7 +1950,7 @@ See also: [`system_font`](#fn-system_font), [`load_font`](#fn-load_font), [`text
 ### `f.system_font`
 
 ```py
-f.system_font(name: 'str')
+f.system_font(name: 'str') -> 'Font'
 ```
 
 Find a font installed on this computer.
@@ -2119,7 +2119,7 @@ See also: [`text`](#fn-text), [`text_path`](#fn-text_path), [`text_align`](#fn-t
 ### `f.text_font`
 
 ```py
-f.text_font(font, size: 'float | None' = None) -> 'None'
+f.text_font(font: 'Font | str | None', size: 'float | None' = None) -> 'None'
 ```
 
 Choose the font for the text you draw after this.
@@ -2146,7 +2146,7 @@ See also: [`load_font`](#fn-load_font), [`system_font`](#fn-system_font), [`text
 ### `f.load_font`
 
 ```py
-f.load_font(path: 'str', face: 'int | str' = 0)
+f.load_font(path: 'str', face: 'int | str' = 0) -> 'Font'
 ```
 
 Load a font file.
@@ -2506,7 +2506,7 @@ See also: [`path`](#fn-path), [`load_svg`](#fn-load_svg), [`saved_state`](#fn-sa
 ### `f.variations`
 
 ```py
-f.variations(fn, *, columns: 'int | None' = None, **values) -> 'list'
+f.variations(fn: 'Callable[..., Any]', *, columns: 'int | None' = None, **values: 'Any') -> 'list'
 ```
 
 Draw several versions of a drawing side by side, as a labelled contact sheet.
@@ -2546,7 +2546,7 @@ See also: [`keep`](#fn-keep), [`mark`](#fn-mark), [`random_seed`](#fn-random_see
 ### `f.keep`
 
 ```py
-f.keep(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'
+f.keep(note: 'str' = '', *, pdf: 'bool' = False, **settings: 'Any') -> 'str'
 ```
 
 Save this version of your picture in a studio folder, with what made it.
@@ -2682,7 +2682,7 @@ See also: [`hide_layer`](#fn-hide_layer), [`layer`](#fn-layer).
 ### `f.image`
 
 ```py
-f.image(picture, x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'
+f.image(picture: 'Picture', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'
 ```
 
 Draw a picture.
@@ -2826,7 +2826,7 @@ See also: [`load_svg`](#fn-load_svg), [`path`](#fn-path), [`draw_path`](#fn-draw
 ### `f.get`
 
 ```py
-f.get(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None)
+f.get(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None) -> 'Color | Picture'
 ```
 
 Read a pixel, or copy a region of the canvas.
@@ -2851,7 +2851,7 @@ See also: [`set`](#fn-set), [`load_pixels`](#fn-load_pixels), [`image`](#fn-imag
 ### `f.set`
 
 ```py
-f.set(x: 'float', y: 'float', color, *more: 'float') -> 'None'
+f.set(x: 'float', y: 'float', color: 'Any', *more: 'float') -> 'None'
 ```
 
 Make one pixel exactly one colour.
@@ -2874,7 +2874,7 @@ See also: [`get`](#fn-get), [`update_pixels`](#fn-update_pixels).
 ### `f.set_pixel`
 
 ```py
-f.set_pixel(x: 'float', y: 'float', color, *more: 'float') -> 'None'
+f.set_pixel(x: 'float', y: 'float', color: 'Any', *more: 'float') -> 'None'
 ```
 
 Make one pixel exactly one colour: the same as set().
@@ -3063,7 +3063,7 @@ See also: [`random`](#fn-random), [`random_seed`](#fn-random_seed), [`random_cho
 ### `f.random_choice`
 
 ```py
-f.random_choice(items)
+f.random_choice(items: 'Any') -> 'Any'
 ```
 
 Return one item picked at random.
@@ -4018,7 +4018,7 @@ See also: [`new_page`](#fn-new_page).
 ### `f.load_sound`
 
 ```py
-f.load_sound(path: 'str')
+f.load_sound(path: 'str') -> 'Sound'
 ```
 
 Read a sound file and return a sound.
@@ -4047,7 +4047,7 @@ See also: [`create_sound`](#fn-create_sound), [`tone`](#fn-tone), [`note`](#fn-n
 ### `f.create_sound`
 
 ```py
-f.create_sound(samples, rate: 'int' = 44100)
+f.create_sound(samples: 'Any', rate: 'int' = 44100) -> 'Sound'
 ```
 
 Make a sound from a list of numbers.
@@ -4077,7 +4077,7 @@ See also: [`tone`](#fn-tone), [`load_sound`](#fn-load_sound), [`mix`](#fn-mix).
 ### `f.tone`
 
 ```py
-f.tone(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7)
+f.tone(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'
 ```
 
 Make a sound that is one steady tone.
@@ -4118,7 +4118,7 @@ See also: [`note`](#fn-note), [`pluck`](#fn-pluck), [`melody`](#fn-melody), [`cr
 ### `f.note`
 
 ```py
-f.note(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7)
+f.note(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'
 ```
 
 Make a sound that is one named note.
@@ -4163,7 +4163,7 @@ See also: [`tone`](#fn-tone), [`melody`](#fn-melody), [`note_to_frequency`](#fn-
 ### `f.pluck`
 
 ```py
-f.pluck(name_or_frequency, seconds: 'float', volume: 'float' = 0.5)
+f.pluck(name_or_frequency: 'float | str', seconds: 'float', volume: 'float' = 0.5) -> 'Sound'
 ```
 
 Make a sound like a plucked string.
@@ -4188,7 +4188,7 @@ See also: [`tone`](#fn-tone), [`note`](#fn-note), [`drone`](#fn-drone).
 ### `f.melody`
 
 ```py
-f.melody(text: 'str', tempo: 'float' = 120, wave: 'str' = 'soft', sa: 'str | None' = None, tuning: 'str' = 'equal', volume: 'float' = 0.5)
+f.melody(text: 'str', tempo: 'float' = 120, wave: 'str' = 'soft', sa: 'str | None' = None, tuning: 'str' = 'equal', volume: 'float' = 0.5) -> 'Sound'
 ```
 
 Make a sound from a string of notes.
@@ -4231,7 +4231,7 @@ See also: [`note`](#fn-note), [`sequence`](#fn-sequence), [`mix`](#fn-mix), [`ra
 ### `f.sequence`
 
 ```py
-f.sequence(*sounds)
+f.sequence(*sounds: 'Sound') -> 'Sound'
 ```
 
 Make a new sound that plays the given sounds one after another.
@@ -4252,7 +4252,7 @@ See also: [`mix`](#fn-mix), [`melody`](#fn-melody).
 ### `f.mix`
 
 ```py
-f.mix(*sounds)
+f.mix(*sounds: 'Sound') -> 'Sound'
 ```
 
 Make a new sound that plays the given sounds together.
@@ -4275,7 +4275,7 @@ See also: [`sequence`](#fn-sequence), [`chord_notes`](#fn-chord_notes).
 ### `f.drone`
 
 ```py
-f.drone(sa, seconds: 'float', pattern: 'str' = "P S' S' S", volume: 'float' = 0.5)
+f.drone(sa: 'float | str', seconds: 'float', pattern: 'str' = "P S' S' S", volume: 'float' = 0.5) -> 'Sound'
 ```
 
 Make a tanpura-like drone.
@@ -4379,7 +4379,7 @@ See also: [`mix`](#fn-mix), [`note`](#fn-note).
 ### `f.microphone`
 
 ```py
-f.microphone(name: 'str | None' = None)
+f.microphone(name: 'str | None' = None) -> 'Microphone'
 ```
 
 Make a microphone object for the computer's default input.
@@ -4427,7 +4427,7 @@ See also: [`microphone`](#fn-microphone).
 ### `f.draw_wave`
 
 ```py
-f.draw_wave(source, x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'
+f.draw_wave(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'
 ```
 
 Draw the wave of a sound, a microphone or a list of numbers.
@@ -4450,7 +4450,7 @@ See also: [`draw_spectrum`](#fn-draw_spectrum), [`spectrogram`](#fn-spectrogram)
 ### `f.draw_spectrum`
 
 ```py
-f.draw_spectrum(source, x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'
+f.draw_spectrum(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'
 ```
 
 Draw bars for a spectrum, as it is now.
@@ -4474,7 +4474,7 @@ See also: [`draw_wave`](#fn-draw_wave), [`spectrogram`](#fn-spectrogram).
 ### `f.spectrogram`
 
 ```py
-f.spectrogram(sound, width: 'int', height: 'int') -> 'Picture'
+f.spectrogram(sound: 'Sound', width: 'int', height: 'int') -> 'Picture'
 ```
 
 Make a picture of a whole sound.
@@ -4499,7 +4499,7 @@ See also: [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`
 ### `f.draw_pitch_line`
 
 ```py
-f.draw_pitch_line(source, x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'
+f.draw_pitch_line(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'
 ```
 
 Draw the pitch of a sound or microphone as a scrolling line.
@@ -4544,7 +4544,7 @@ See also: [`raga`](#fn-raga), [`match_ragas`](#fn-match_ragas), [`talas`](#fn-ta
 ### `f.raga`
 
 ```py
-f.raga(name: 'str')
+f.raga(name: 'str') -> 'Raga'
 ```
 
 Return one raga from the built-in table.
@@ -4584,7 +4584,7 @@ See also: [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`ragas`](#fn-ragas)
 ### `f.tala_info`
 
 ```py
-f.tala_info(name: 'str')
+f.tala_info(name: 'str') -> 'Tala'
 ```
 
 Return one tala from the built-in table.
@@ -4609,7 +4609,7 @@ See also: [`talas`](#fn-talas), [`tala`](#fn-tala).
 ### `f.tala`
 
 ```py
-f.tala(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1)
+f.tala(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1) -> 'Sound'
 ```
 
 Make a sound of a tala's theka played with simple drum sounds.
@@ -4638,7 +4638,7 @@ See also: [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`drone`](#fn-dron
 ### `f.match_ragas`
 
 ```py
-f.match_ragas(histogram) -> 'list[tuple[str, float]]'
+f.match_ragas(histogram: 'Any') -> 'list[tuple[str, float]]'
 ```
 
 Rank the table's ragas by how well their swaras fit a histogram.
