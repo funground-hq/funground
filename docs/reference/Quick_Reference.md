@@ -1,7 +1,7 @@
 # funground Quick Reference
 
-**Version 0.1.0** — a small visual-programming library. `import funground as f; print(f.__version__)`
-prints `0.1.0`.
+**Version 0.2.0.dev0** (in development, after 0.1.0) — a small visual-programming library. `import funground as f; print(f.__version__)`
+prints `0.2.0.dev0`.
 
 This reference lists every public name in funground. For exact arguments, results and an example of each name, see the [API reference](API.md). Every function has a
 one-line description; every section ends with one complete sketch, and the picture above that sketch
@@ -1134,7 +1134,7 @@ The public student-facing API. Everything is reached as `f.<name>`.
 
 | METADATA | |
 |---|---|
-| `f.__version__` | `"0.1.0"`. |
+| `f.__version__` | `"0.2.0.dev0"`. |
 
 **Remember:** use `f.` before funground functions and live values: `f.circle(...)`, `f.width`,
 `f.mouse_x`, `f.run()`. Python variables such as `x` remain ordinary Python variables.
@@ -1170,8 +1170,14 @@ appendix still works and renders the same on every platform and renderer. Capita
 | `"#RRGGBB"` / `"#RRGGBBAA"` | HTML-style hex, with or without alpha. |
 | `"0xRRGGBB"` / `"0xRRGGBBAA"` | Alternative hex string form. |
 
-**Constants and live values.** There are no uppercase constants such as `RED`, `LEFT` or `CENTER`.
-Colours and keys are strings. These module values are live state, not constants: `f.width`,
+**Names for colours and options.** Two names are lists of words, so your editor can suggest them and a typing slip is caught. Every one is just the string it stands for, so the strings still work everywhere.
+
+| Name | What it is | Example |
+|---|---|---|
+| `f.COLORS` | one name for each of the 665 named colours, in capitals; `f.COLORS.TOMATO == "tomato"`. After `from funground import *` write `COLORS.TOMATO`. | `f.fill(f.COLORS.TOMATO)` |
+| `f.CONSTANTS` | the words that choose an option, in groups: `ALIGN`, `BLEND`, `MODE`, `STYLE`, `CAP`, `JOIN`, `CURSOR`, `FILTER`, `WAVE`, `PAGE` and more. `f.CONSTANTS.ALIGN.CENTER == "center"`. Both are read-only. | `f.text_align(f.CONSTANTS.ALIGN.CENTER)` |
+
+**Live values.** These module values are live state, not constants: `f.width`,
 `f.height`, `f.mouse_x`, `f.mouse_y`, `f.is_mouse_pressed`, `f.pmouse_x`, `f.pmouse_y`, `f.mouse_button`, `f.key`, `f.key_code`, `f.is_key_pressed`, `f.frame_count`, `f.delta_time`.
 `f.__version__` reports `"0.1.0"`.
 

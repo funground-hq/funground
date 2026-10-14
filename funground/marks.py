@@ -30,6 +30,7 @@ import warnings
 from dataclasses import replace
 
 from . import ir
+from ._options import MarkAnchor, MarkStyle
 from .capabilities import FungroundWarning
 from .color import BLACK, WHITE
 from .geometry import Path, Transform
@@ -411,8 +412,8 @@ class Mark:
         return found
 
     def place(self, x: float, y: float, *, scale: float | tuple[float, float] | None = None, rotate: float = 0,
-              opacity: float = 1, anchor: str = "origin", width: float | None = None, height: float | None = None,
-              style: str = "own") -> None:
+              opacity: float = 1, anchor: MarkAnchor = "origin", width: float | None = None, height: float | None = None,
+              style: MarkStyle = "own") -> None:
         """Draw the mark now, with its origin at (x, y).
 
         The mark follows the current transform and clip, so it works inside saved_state() and translate(), inside a layer block, and inside another mark's block (marks can be made of marks). The mark itself never changes.

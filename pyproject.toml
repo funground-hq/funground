@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "funground"
-version = "0.1.0"
+version = "0.2.0.dev0"
 description = "Creative coding for learners: p5.js/Processing and DrawBot-style 2D drawing in Python."
 readme = "README.md"
 license = "LGPL-2.1-only"
@@ -60,7 +60,7 @@ packages = ["funground", "funground.platform", "funground.renderers", "funground
 "funground.gallery_images" = "docs/gallery/images"
 
 [tool.setuptools.package-data]
-funground = ["fonts/*.ttf", "fonts/*.txt", "data/*.json", "data/*.icc", "llms.txt", "llms-full.txt"]
+funground = ["py.typed", "fonts/*.ttf", "fonts/*.txt", "data/*.json", "data/*.icc", "llms.txt", "llms-full.txt", "completions.json"]
 "funground.examples" = ["*/*.py", "*/data/*", "*/fonts/*"]
 "funground.gallery_images" = ["*.png"]
 

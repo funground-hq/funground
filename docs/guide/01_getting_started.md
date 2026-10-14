@@ -16,6 +16,12 @@ python -m pip install funground
 On Linux, install the Cairo library first: `sudo apt install libcairo2-dev pkg-config python3-dev`
 (Debian or Ubuntu; other distributions have an equivalent package).
 
+## Writing in VS Code
+
+Any editor will do. In VS Code, install the **Python** extension, open your sketch folder and choose
+**Python: Select Interpreter** (press F1 and type it), then pick the `.venv` you made. Now VS Code knows
+funground: type `f.` and it lists every function, with what it takes and a sentence about it.
+
 ## Your first sketch
 
 Save this as `first.py` and run it with `python first.py`:
@@ -53,8 +59,28 @@ Press **Escape** or close the window to stop.
 
 ## Where things are
 
-The origin `(0, 0)` is the **top-left** corner. `x` grows to the right and `y` grows **down**.
-`f.width` and `f.height` are the size of the window, so the centre is `(f.width / 2, f.height / 2)`.
+Every position in funground is a pair of numbers, `x` and `y`, counted in pixels.
+
+![A map of the canvas: the grid, the origin, the centre and the corner](../gallery/images/basics-05_where_things_are.png)
+
+The picture shows how it works. The origin, `(0, 0)`, is the **top-left** corner. `x` grows to the
+right. `y` grows **down**. In a graph from maths class, `y` goes up, so this is the other way round.
+
+`f.size(640, 400)` sets the width and the height of the picture. `f.width` and `f.height` give the
+two numbers back. Use them instead of typing 640 and 400 again. Then your sketch keeps working if
+you change the size. The centre is `(f.width / 2, f.height / 2)`, and the bottom-right corner is
+`(f.width, f.height)`.
+
+A shape that goes past the edge of the window is cut off. A shape that is wholly outside is not
+seen. Neither one is an error.
+
+Sizes are in pixels. On a high-resolution screen, such as a Retina display or a Windows screen with
+scaling, your numbers mean the same thing and the picture looks the same, only sharper.
+
+You can try the map yourself: the code is in the
+[gallery](../gallery/README.md#where-things-are-a-map-of-the-canvas) as `05_where_things_are.py`.
+To see the numbers change as you move, run `06_mouse_position.py` from the gallery. It shows
+`f.mouse_x` and `f.mouse_y`. (How to run a gallery example is explained just below.)
 
 ## More examples
 
@@ -75,5 +101,7 @@ Files an example saves go to a temporary folder. The browser tells you where, an
 1. Change `"tomato"` to another colour name, such as `"teal"`, and run the sketch again.
 2. Move the circle to the top-left corner, then to the bottom-right corner. Use `f.width` and `f.height` for the second one.
 3. Draw a second shape after the circle with `f.rect(40, 40, 100, 60)`. What happens if you draw it *before* the circle?
+4. Put a small circle in each of the four corners. Use `0`, `f.width` and `f.height` for their positions. Half of each circle is cut off. Why?
+5. Change `f.size(640, 400)` to `f.size(300, 300)`. Does the circle in the middle stay in the middle if you use `f.width / 2` and `f.height / 2` for its position?
 
 **Next:** [2. The sketch: setup, draw and run](02_the_sketch.md)

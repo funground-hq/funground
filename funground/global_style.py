@@ -24,10 +24,12 @@ def _funground_functions() -> frozenset[int]:
     if _functions is None:
         import funground
 
+        from ._namespaces import NAMESPACE_NAMES
         from .api import LIVE_NAMES
 
+        # COLORS and CONSTANTS are lists of words, not functions: a sketch that holds only them is not in this style.
         _functions = frozenset(id(getattr(funground, name)) for name in funground._PUBLIC_NAMES
-                               if name not in LIVE_NAMES)
+                               if name not in LIVE_NAMES and name not in NAMESPACE_NAMES)
     return _functions
 
 
@@ -64,10 +66,12 @@ def clash_note(namespace: Namespace) -> str | None:
     ``size(640, 400)`` then fails with Python's cryptic message. None when nothing is hidden."""
     import funground
 
+    from ._namespaces import NAMESPACE_NAMES
+
     if not uses_global_style(namespace):
         return None
     hidden = sorted(name for name in funground.__all__
-                    if name in namespace and callable(getattr(funground, name)) and not callable(namespace[name]))
+                    if name not in NAMESPACE_NAMES and name in namespace and callable(getattr(funground, name)) and not callable(namespace[name]))
     if not hidden:
         return None
     if len(hidden) == 1:
