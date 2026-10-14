@@ -3621,7 +3621,7 @@ def key_down(key: KeyName | str | int) -> bool:
 def random(low: float = 1.0, high: float | None = None) -> float:
     """Return a random number.
 
-    random(10) gives a number from 0 up to 10. random(5, 10) gives a number from 5 up to 10. random() gives a number from 0 up to 1. It uses its own generator and never touches Python's own random module.
+    random(10) gives a number from 0 up to 10. random(5, 10) gives a number from 5 up to 10. random() gives a number from 0 up to 1. To pick one item of a list, use random_choice(). It uses its own generator and never touches Python's own random module.
 
     Arguments:
         low: with one argument, the top of the range (it starts at 0). With high as well, the bottom.
@@ -3761,7 +3761,7 @@ def random_choice(items: Any) -> Any:
     It can be repeated with random_seed().
 
     Arguments:
-        items: a list, a tuple or a string. It must not be empty.
+        items: a list, a tuple, a string, or anything else that can be listed, such as f.COLORS. It must not be empty.
 
     Returns:
         One of the items. For a string, one letter.
@@ -3771,6 +3771,7 @@ def random_choice(items: Any) -> Any:
 
     Example:
         f.fill(f.random_choice(["red", "gold", "skyblue"]))
+        f.fill(f.random_choice(f.COLORS))
 
     See also: random, random_seed
     """

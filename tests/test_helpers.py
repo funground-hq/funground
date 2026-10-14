@@ -58,3 +58,19 @@ def test_random_choice():
     assert p.random_choice((1, 2, 3)) in (1, 2, 3)
     with pytest.raises(ValueError):
         p.random_choice([])
+
+
+def test_random_choice_takes_anything_that_can_be_listed():
+    p.random_seed(3)
+    assert p.random_choice(p.COLORS) in list(p.COLORS)
+    assert p.random_choice(p.CONSTANTS.BLEND) in list(p.CONSTANTS.BLEND)
+    assert p.random_choice({"one"}) == "one"
+
+
+def test_random_with_a_list_points_to_random_choice():
+    with pytest.raises(TypeError, match="random_choice"):
+        p.random(p.COLORS)
+    with pytest.raises(TypeError, match="not f.COLORS"):
+        p.random(p.COLORS)
+    with pytest.raises(TypeError, match="takes numbers, not list"):
+        p.random(["red", "gold"])
