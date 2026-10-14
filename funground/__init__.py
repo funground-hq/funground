@@ -218,7 +218,7 @@ from .api import (
     year,
 )
 
-__version__ = "0.1.0a1"
+__version__ = "0.2.0.dev0"
 
 if TYPE_CHECKING:
     # The live values come from __getattr__ at run time. These lines tell editors and type checkers their types.
