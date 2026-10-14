@@ -22,10 +22,12 @@ You need Python 3.11 or newer and a copy of the repository.
 
    ```sh
    python -m venv .venv
-   .venv/Scripts/python -m pip install -e ".[dev]"      # Windows
-   .venv/bin/python -m pip install -e ".[dev]"          # macOS and Linux
+   .venv/Scripts/python -m pip install -e ".[dev]" --config-settings editable_mode=compat   # Windows
+   .venv/bin/python -m pip install -e ".[dev]" --config-settings editable_mode=compat   # macOS and Linux
    ```
 
+   `editable_mode=compat` keeps the install visible to editors: the default editable install hides the package
+   behind an import hook that VS Code's Pylance cannot follow, so `f.` would suggest nothing (S-198).
    `[dev]` adds pytest, Pillow, pypdfium2, imageio-ffmpeg (a real ffmpeg for the MP4 test) and build
    (for the wheel test) to funground's own dependencies. A learner who wants MP4 files installs
    `funground[video]`; one who wants fast filters and GIFs installs `funground[extras]`.

@@ -123,6 +123,10 @@ things to know:
 - **Your own names win.** A variable called `size` or `fill` hides funground's function in your
   file, so `size(640, 400)` then fails. funground's error names the variable: give it another name,
   such as `ball_size`.
+- **VS Code underlines `from funground import *`** with "Wildcard import from a library not allowed".
+  It is a style warning, not an error. To turn it off, put this in `.vscode/settings.json` in your
+  sketch folder (the [sketchbook](https://github.com/funground-hq/sketchbook) template already has it):
+  `{"python.analysis.diagnosticSeverityOverrides": {"reportWildcardImportFromLibrary": "none"}}`
 - **Another file of yours** (a helper module) that uses `from funground import *` gets the values
   that change only once, when it is imported. Write `f.mouse_x` and `f.width` there.
 

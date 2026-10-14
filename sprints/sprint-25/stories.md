@@ -17,7 +17,7 @@ D-090 (constants) is accepted, so S-174 can start.
 | S-195 | `completions.json`, generated with the API reference | done: `funground/completions.json` (about 101 KB: every public name with signature, types, summary, reference anchor, star flag and option words; 665 colours; 10 colour parameters), written by `tools/make_api_reference.py`, in the wheel, `tests/test_completions.py` |
 | S-196 | Completion in Play (after D-102) | planned |
 | S-197 | Spike: completion in github.dev and vscode.dev | planned |
-| S-198 | VS Code on the desktop: quiet star style, an editable install Pylance can follow, choosing the interpreter | planned |
+| S-198 | VS Code on the desktop: quiet star style, an editable install Pylance can follow, choosing the interpreter | done: the developer install uses `editable_mode=compat` (Pyright: no errors, was "could not be resolved"); chapter 1 "Writing in VS Code" (choose the interpreter); chapter 2 says how to silence the star-import warning; the sketchbook template sets it (sketchbook PR #1) |
 | S-199 | A gentle first chapter: where things are, with a picture, a live sketch and a gallery example | done: chapter 1 "Where things are" rewritten, examples `basics-05_where_things_are` and `basics-06_mouse_position` with goldens; originality checked |
 
 Order: S-130 first (the evidence is in E-35; small and unblocks the rest), S-198 and S-199 alongside, then S-174,
@@ -33,5 +33,5 @@ or snapshot changed except the new example's.
 - [x] S-195
 - [ ] S-196
 - [ ] S-197
-- [ ] S-198
+- [x] S-198
 - [x] S-199
