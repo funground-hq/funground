@@ -131,6 +131,8 @@ def test_the_page_has_an_anchor_for_every_name():
     for name in f._PUBLIC_NAMES:
         if name in LIVE:
             assert f"live-{name}" in anchors
+        elif name in ("COLORS", "CONSTANTS"):
+            assert f"const-{name}" in anchors
         elif inspect.isclass(getattr(f, name)):
             assert f"cls-{name}" in anchors
         else:
@@ -171,3 +173,14 @@ def test_every_option_word_is_explained():
     assert list(typography.STYLE_MEANINGS) == list(typography.STYLE_FILES)
     assert list(marks.ANCHOR_MEANINGS) == list(marks.ANCHORS)
     assert set(pathops._CAPS) == set(Sketch.STROKE_CAPS) and set(pathops._JOINS) == set(Sketch.STROKE_JOINS)
+
+
+def test_every_option_alias_is_shown_as_its_constants_group():
+    from typing import Literal
+
+    from funground import _options
+
+    aliases = {name for name, value in vars(_options).items() if getattr(value, "__origin__", None) is Literal}
+    assert aliases == set(tool.ALIAS_GROUP)
+    for alias, group in tool.ALIAS_GROUP.items():
+        assert set(getattr(_options, alias).__args__) <= set(getattr(f.CONSTANTS, group)) | {"Square"}, alias

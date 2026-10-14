@@ -120,6 +120,9 @@ f.run()
 
 ![Blend modes, opacity and shadows](../gallery/images/compositing-01_blend_opacity_shadow.png)
 
+The blend modes are also in `f.CONSTANTS.BLEND`, so `f.blend_mode(f.CONSTANTS.BLEND.MULTIPLY)` is the same as
+`f.blend_mode("multiply")`. Your editor lists the 17 modes after `f.CONSTANTS.BLEND.`.
+
 `f.background()` ignores all three, so each frame still starts clean.
 
 ## Erasing

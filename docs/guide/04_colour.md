@@ -12,6 +12,35 @@ Wherever funground wants a colour, you can give it in any of these forms:
 | Two numbers | `128, 100` or `(128, 100)` | A grey and its opacity |
 | Hex | `"#FF6347"`, `"#FF634780"` | As on web pages; the optional last pair is opacity |
 
+## Colour names from a list
+
+A typing slip in a colour name is only found when the sketch runs. `f.COLORS` gives every named colour a name
+in capitals, so your editor can list them as you type `f.COLORS.` and underline a name that does not exist.
+`f.COLORS.TOMATO` is the word `"tomato"`, so the two do the same thing.
+
+```python
+import funground as f
+
+
+def setup():
+    f.size(640, 200)
+
+
+def draw():
+    f.background(f.COLORS.LIGHTYELLOW)
+    f.fill(f.COLORS.TOMATO)       # the same as f.fill("tomato")
+    f.circle(f.width / 2, f.height / 2, 120)
+
+
+f.run()
+```
+
+If you write the name wrongly, funground helps: `f.COLORS.TOMATOE` stops with "Did you mean TOMATO?".
+The list cannot be changed. To make your own colour, use your own variable, such as `my_red = "crimson"`.
+After `from funground import *` write `COLORS.TOMATO` with no `f.`. Strings still work everywhere, so you never have to
+use `f.COLORS`. `list(f.COLORS)` is every colour name; the [named colours table](../reference/API.md#named-colours)
+shows them with their hex values.
+
 ```python
 import funground as f
 

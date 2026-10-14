@@ -16,14 +16,14 @@ V05_FUNCTIONS = {
     "distance": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float') -> 'float'",
     "ellipse": "(x: 'float', y: 'float', width: 'float', height: 'float') -> 'None'",
     "fill": "(color: 'Color', *more: 'float') -> 'None'",
-    "key_down": "(key: 'str | int') -> 'bool'",
+    "key_down": "(key: 'KeyName | str | int') -> 'bool'",
     "line": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float') -> 'None'",
     "no_fill": "() -> 'None'",
     "no_stroke": "() -> 'None'",
     "point": "(x: 'float', y: 'float') -> 'None'",
     "random": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "rect": "(x: 'float', y: 'float', width: 'float', height: 'float', *radii: 'float') -> 'None'",
-    "size": "(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int | None' = None, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'",  # S-132: page names, margin; fps None keeps the rate, so run(fps=) wins (R3, 13 Oct)
+    "size": "(width: 'int | PageName | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int | None' = None, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'",  # S-132: page names, margin; fps None keeps the rate, so run(fps=) wins (R3, 13 Oct)
     "stop": "() -> 'None'",
     "stroke": "(color: 'Color', *more: 'float') -> 'None'",
     "stroke_width": "(pixels: 'int') -> 'None'",
@@ -38,7 +38,7 @@ ADDED_FUNCTIONS = {
     "random_number": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "random_number": "(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'",
     "run": "(*, fps: 'int | None' = None, max_frames: 'int | None' = None) -> 'None'",
-    "save": "(path: 'str', *, text: 'str' = 'live', bleed: 'float' = 0, marks: 'bool' = False, dpi: 'float | None' = None) -> 'None'",
+    "save": "(path: 'str', *, text: 'SaveText' = 'live', bleed: 'float' = 0, marks: 'bool' = False, dpi: 'float | None' = None) -> 'None'",
     # Sprint 4, S-027: transforms and the state stack (contract F1/F2).
     "translate": "(dx: 'float', dy: 'float') -> 'None'",
     "rotate": "(degrees: 'float') -> 'None'",
@@ -62,12 +62,12 @@ ADDED_FUNCTIONS = {
     "triangle": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float') -> 'None'",
     "quad": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float', x4: 'float', y4: 'float') -> 'None'",
     "polygon": "(points: 'list[tuple[float, float]]') -> 'None'",
-    "arc": "(x: 'float', y: 'float', width: 'float', height: 'float', start: 'float', stop: 'float', mode: 'str' = 'open') -> 'None'",
+    "arc": "(x: 'float', y: 'float', width: 'float', height: 'float', start: 'float', stop: 'float', mode: 'ArcMode' = 'open') -> 'None'",
     "clear": "() -> 'None'",
     "no_clip": "() -> 'None'",
     # Sprint 5, S-042: stroke styles and smoothing (contract S11, C6).
-    "stroke_cap": "(cap: 'str') -> 'None'",
-    "stroke_join": "(join: 'str') -> 'None'",
+    "stroke_cap": "(cap: 'StrokeCap') -> 'None'",
+    "stroke_join": "(join: 'StrokeJoin') -> 'None'",
     "miter_limit": "(limit: 'float') -> 'None'",
     "stroke_dash": "(pattern: 'float | list[float]', offset: 'float' = 0) -> 'None'",
     "no_dash": "() -> 'None'",
@@ -125,7 +125,7 @@ ADDED_FUNCTIONS = {
     # S-055 Vector
     "Vector": "(x: 'float' = 0.0, y: 'float' = 0.0) -> 'None'",
     # S-049 text alignment and metrics
-    "text_align": "(horizontal: 'str', vertical: 'str | None' = None) -> 'None'",
+    "text_align": "(horizontal: 'TextAlignX', vertical: 'TextAlignY | None' = None) -> 'None'",
     "text_ascent": "() -> 'float'",
     "text_descent": "() -> 'float'",
     # S-053 multi-line text and text boxes
@@ -135,7 +135,7 @@ ADDED_FUNCTIONS = {
     "linear_gradient": "(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors: 'Any', stops: 'Any' = None) -> 'Gradient'",
     "radial_gradient": "(x: 'float', y: 'float', radius: 'float', colors: 'Any', stops: 'Any' = None) -> 'Gradient'",
     # S-051 blend modes, opacity, shadow
-    "blend_mode": "(mode: 'str') -> 'None'",
+    "blend_mode": "(mode: 'BlendMode') -> 'None'",
     "opacity": "(amount: 'float') -> 'None'",
     "shadow": "(x_offset: 'float', y_offset: 'float', blur: 'float' = 5, color: 'Color' = (0, 0, 0, 128)) -> 'None'",
     "no_shadow": "() -> 'None'",
@@ -144,12 +144,12 @@ ADDED_FUNCTIONS = {
     # S-057 window control
     "resize_canvas": "(width: 'int', height: 'int') -> 'None'",
     "full_screen": "() -> 'None'",
-    "cursor": "(kind: 'str' = 'arrow') -> 'None'",
+    "cursor": "(kind: 'CursorKind' = 'arrow') -> 'None'",
     "no_cursor": "() -> 'None'",
     # S-054 fonts and styles
     "load_font": "(path: 'str', face: 'int | str' = 0) -> 'Font'",
     "text_font": "(font: 'Font | str | None', size: 'float | None' = None) -> 'None'",
-    "text_style": "(style: 'str') -> 'None'",
+    "text_style": "(style: 'TextStyle') -> 'None'",
     # S-052 off-screen graphics
     "create_graphics": "(width: 'int', height: 'int') -> 'Picture'",
     "image": "(picture: 'Picture', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'",
@@ -164,10 +164,10 @@ ADDED_FUNCTIONS = {
     "load_sound": "(path: 'str') -> 'Sound'",
     # S-110 making sound
     "create_sound": "(samples: 'Any', rate: 'int' = 44100) -> 'Sound'",
-    "tone": "(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
-    "note": "(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
+    "tone": "(frequency: 'float', seconds: 'float', wave: 'Wave' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
+    "note": "(name: 'str', seconds: 'float', wave: 'Wave' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
     "pluck": "(name_or_frequency: 'float | str', seconds: 'float', volume: 'float' = 0.5) -> 'Sound'",
-    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'str' = 'soft', sa: 'str | None' = None, tuning: 'str' = 'equal', volume: 'float' = 0.5) -> 'Sound'",
+    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'Wave' = 'soft', sa: 'str | None' = None, tuning: 'Tuning' = 'equal', volume: 'float' = 0.5) -> 'Sound'",
     "sequence": "(*sounds: 'Sound') -> 'Sound'",
     "mix": "(*sounds: 'Sound') -> 'Sound'",
     "note_to_frequency": "(name: 'str', sa: 'str | None' = None) -> 'float'",
@@ -222,15 +222,15 @@ ADDED_FUNCTIONS = {
     "create_checkbox": "(label: 'str', checked: 'bool' = False) -> 'Checkbox'",
     "create_button": "(label: 'str') -> 'Button'",
     # S-084 pages
-    "new_page": "(width: 'int | str | None' = None, height: 'int | None' = None) -> 'None'",
+    "new_page": "(width: 'int | PageName | str | None' = None, height: 'int | None' = None) -> 'None'",
     "page_count": "() -> 'int'",
-    "page_size": "(name: 'str', landscape: 'bool' = False) -> 'tuple[int, int]'",
+    "page_size": "(name: 'PageName | str', landscape: 'bool' = False) -> 'tuple[int, int]'",
     # S-081 drawing modes
-    "rect_mode": "(mode: 'str') -> 'None'",
-    "ellipse_mode": "(mode: 'str') -> 'None'",
-    "image_mode": "(mode: 'str') -> 'None'",
+    "rect_mode": "(mode: 'RectMode') -> 'None'",
+    "ellipse_mode": "(mode: 'EllipseMode') -> 'None'",
+    "image_mode": "(mode: 'ImageMode') -> 'None'",
     # S-082 colour mode
-    "color_mode": "(mode: 'str', max1: 'float | None' = None, max2: 'float | None' = None, max3: 'float | None' = None, max_alpha: 'float | None' = None) -> 'None'",
+    "color_mode": "(mode: 'ColorMode', max1: 'float | None' = None, max2: 'float | None' = None, max3: 'float | None' = None, max_alpha: 'float | None' = None) -> 'None'",
     # S-078 tint and image parts (image's signature is under S-052)
     "tint": "(color: 'Any', *more: 'float') -> 'None'",
     "no_tint": "() -> 'None'",
@@ -244,8 +244,8 @@ ADDED_FUNCTIONS = {
     "load_pixels": "() -> 'None'",
     "update_pixels": "() -> 'None'",
     # S-080 copy, resize, mask, filters (the picture methods copy/resize/mask/filter are in test_filters.py)
-    "filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
-    "apply_filter": "(kind: 'str', value: 'float | None' = None) -> 'None'",
+    "filter": "(kind: 'FilterKind', value: 'float | None' = None) -> 'None'",
+    "apply_filter": "(kind: 'FilterKind', value: 'float | None' = None) -> 'None'",
     # S-132 marks (contract K1-K3, D-069, D-070)
     "mark": "(path: 'PathBuilder | str | None' = None, *, fill: 'Color | None' = <not given>, stroke: 'Color | None' = <not given>, stroke_width: 'float | None' = None) -> 'Mark'",
     # S-132 Play (contracts E1, E2; D-071, D-073: flat names, no f.play namespace)
@@ -259,6 +259,7 @@ ADDED_FUNCTIONS = {
 
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
 # S-045 added pmouse_x/y, mouse_button, key, key_code and is_key_pressed.
+NAMESPACES = {"COLORS", "CONSTANTS"}
 LIVE_VALUES = {"width", "height", "mouse_x", "mouse_y", "is_mouse_pressed", "pmouse_x", "pmouse_y",
                "mouse_button", "key", "key_code", "is_key_pressed", "frame_count", "delta_time", "pixels", "ground"}
 
@@ -286,7 +287,8 @@ def test_run_keeps_v05_call_forms():
 
 
 def test_public_all_is_exactly_the_contract():
-    assert set(p._PUBLIC_NAMES) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES
+    # COLORS and CONSTANTS (D-103, S-174) are the two names that are lists of words, not functions.
+    assert set(p._PUBLIC_NAMES) == set(V05_FUNCTIONS) | set(ADDED_FUNCTIONS) | LIVE_VALUES | NAMESPACES
 
 
 def test_live_values_are_dynamic_module_attributes():

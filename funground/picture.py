@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from . import ir
+from ._options import SaveText
 from .platform.base import InputState
 from .renderers.cairo2d import CairoRenderer
 from .sketch import Sketch
@@ -478,7 +479,7 @@ class Picture:
         draw_image(self._sketch, picture, x, y, width, height, sx, sy, sw, sh)
 
     # ------------------------------------------------------------ save() (contract P2)
-    def save(self, path: str, *, text: str = "live") -> None:
+    def save(self, path: str, *, text: SaveText = "live") -> None:
         """Write the picture to a file straight away.
 
         The file type comes from the name. A PNG file gets the picture's pixels. A PDF or SVG file replays the

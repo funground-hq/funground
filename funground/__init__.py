@@ -21,6 +21,8 @@ Typical use::
 from typing import TYPE_CHECKING
 
 from . import api as _api
+from ._color_names_class import COLORS
+from ._constants import CONSTANTS
 # exit, filter, random and set are written ``name as name``: that marks them as public for type checkers,
 # although they are not in __all__.
 from .api import (
@@ -242,6 +244,8 @@ if TYPE_CHECKING:
 # (the contract in tests/test_api_contract.py, the reference and the gallery cover each one). It is a literal
 # list so type checkers can read it. The four names in STAR_NAMES_FOR are left out; _PUBLIC_NAMES adds them.
 __all__ = [
+    "COLORS",
+    "CONSTANTS",
     "FormattedString",
     "Vector",
     "apply_matrix",

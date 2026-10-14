@@ -2,6 +2,3968 @@
  "version": "0.1.0a1",
  "names": [
   {
+   "name": "COLORS",
+   "kind": "namespace",
+   "signature": "COLORS",
+   "detail": "665 colours",
+   "summary": "Names for the named colours: ``f.COLORS.TOMATO`` is the word ``\"tomato\"``.",
+   "url": "reference/API.md#const-COLORS",
+   "members": [
+    {
+     "name": "ALICEBLUE",
+     "value": "aliceblue",
+     "hex": "#f0f8ff"
+    },
+    {
+     "name": "ANTIQUEWHITE",
+     "value": "antiquewhite",
+     "hex": "#faebd7"
+    },
+    {
+     "name": "ANTIQUEWHITE1",
+     "value": "antiquewhite1",
+     "hex": "#ffefdb"
+    },
+    {
+     "name": "ANTIQUEWHITE2",
+     "value": "antiquewhite2",
+     "hex": "#eedfcc"
+    },
+    {
+     "name": "ANTIQUEWHITE3",
+     "value": "antiquewhite3",
+     "hex": "#cdc0b0"
+    },
+    {
+     "name": "ANTIQUEWHITE4",
+     "value": "antiquewhite4",
+     "hex": "#8b8378"
+    },
+    {
+     "name": "AQUA",
+     "value": "aqua",
+     "hex": "#00ffff"
+    },
+    {
+     "name": "AQUAMARINE",
+     "value": "aquamarine",
+     "hex": "#7fffd4"
+    },
+    {
+     "name": "AQUAMARINE1",
+     "value": "aquamarine1",
+     "hex": "#7fffd4"
+    },
+    {
+     "name": "AQUAMARINE2",
+     "value": "aquamarine2",
+     "hex": "#76eec6"
+    },
+    {
+     "name": "AQUAMARINE3",
+     "value": "aquamarine3",
+     "hex": "#66cdaa"
+    },
+    {
+     "name": "AQUAMARINE4",
+     "value": "aquamarine4",
+     "hex": "#458b74"
+    },
+    {
+     "name": "AZURE",
+     "value": "azure",
+     "hex": "#f0ffff"
+    },
+    {
+     "name": "AZURE1",
+     "value": "azure1",
+     "hex": "#f0ffff"
+    },
+    {
+     "name": "AZURE2",
+     "value": "azure2",
+     "hex": "#e0eeee"
+    },
+    {
+     "name": "AZURE3",
+     "value": "azure3",
+     "hex": "#c1cdcd"
+    },
+    {
+     "name": "AZURE4",
+     "value": "azure4",
+     "hex": "#838b8b"
+    },
+    {
+     "name": "BEIGE",
+     "value": "beige",
+     "hex": "#f5f5dc"
+    },
+    {
+     "name": "BISQUE",
+     "value": "bisque",
+     "hex": "#ffe4c4"
+    },
+    {
+     "name": "BISQUE1",
+     "value": "bisque1",
+     "hex": "#ffe4c4"
+    },
+    {
+     "name": "BISQUE2",
+     "value": "bisque2",
+     "hex": "#eed5b7"
+    },
+    {
+     "name": "BISQUE3",
+     "value": "bisque3",
+     "hex": "#cdb79e"
+    },
+    {
+     "name": "BISQUE4",
+     "value": "bisque4",
+     "hex": "#8b7d6b"
+    },
+    {
+     "name": "BLACK",
+     "value": "black",
+     "hex": "#000000"
+    },
+    {
+     "name": "BLANCHEDALMOND",
+     "value": "blanchedalmond",
+     "hex": "#ffebcd"
+    },
+    {
+     "name": "BLUE",
+     "value": "blue",
+     "hex": "#0000ff"
+    },
+    {
+     "name": "BLUE1",
+     "value": "blue1",
+     "hex": "#0000ff"
+    },
+    {
+     "name": "BLUE2",
+     "value": "blue2",
+     "hex": "#0000ee"
+    },
+    {
+     "name": "BLUE3",
+     "value": "blue3",
+     "hex": "#0000cd"
+    },
+    {
+     "name": "BLUE4",
+     "value": "blue4",
+     "hex": "#00008b"
+    },
+    {
+     "name": "BLUEVIOLET",
+     "value": "blueviolet",
+     "hex": "#8a2be2"
+    },
+    {
+     "name": "BROWN",
+     "value": "brown",
+     "hex": "#a52a2a"
+    },
+    {
+     "name": "BROWN1",
+     "value": "brown1",
+     "hex": "#ff4040"
+    },
+    {
+     "name": "BROWN2",
+     "value": "brown2",
+     "hex": "#ee3b3b"
+    },
+    {
+     "name": "BROWN3",
+     "value": "brown3",
+     "hex": "#cd3333"
+    },
+    {
+     "name": "BROWN4",
+     "value": "brown4",
+     "hex": "#8b2323"
+    },
+    {
+     "name": "BURLYWOOD",
+     "value": "burlywood",
+     "hex": "#deb887"
+    },
+    {
+     "name": "BURLYWOOD1",
+     "value": "burlywood1",
+     "hex": "#ffd39b"
+    },
+    {
+     "name": "BURLYWOOD2",
+     "value": "burlywood2",
+     "hex": "#eec591"
+    },
+    {
+     "name": "BURLYWOOD3",
+     "value": "burlywood3",
+     "hex": "#cdaa7d"
+    },
+    {
+     "name": "BURLYWOOD4",
+     "value": "burlywood4",
+     "hex": "#8b7355"
+    },
+    {
+     "name": "CADETBLUE",
+     "value": "cadetblue",
+     "hex": "#5f9ea0"
+    },
+    {
+     "name": "CADETBLUE1",
+     "value": "cadetblue1",
+     "hex": "#98f5ff"
+    },
+    {
+     "name": "CADETBLUE2",
+     "value": "cadetblue2",
+     "hex": "#8ee5ee"
+    },
+    {
+     "name": "CADETBLUE3",
+     "value": "cadetblue3",
+     "hex": "#7ac5cd"
+    },
+    {
+     "name": "CADETBLUE4",
+     "value": "cadetblue4",
+     "hex": "#53868b"
+    },
+    {
+     "name": "CHARTREUSE",
+     "value": "chartreuse",
+     "hex": "#7fff00"
+    },
+    {
+     "name": "CHARTREUSE1",
+     "value": "chartreuse1",
+     "hex": "#7fff00"
+    },
+    {
+     "name": "CHARTREUSE2",
+     "value": "chartreuse2",
+     "hex": "#76ee00"
+    },
+    {
+     "name": "CHARTREUSE3",
+     "value": "chartreuse3",
+     "hex": "#66cd00"
+    },
+    {
+     "name": "CHARTREUSE4",
+     "value": "chartreuse4",
+     "hex": "#458b00"
+    },
+    {
+     "name": "CHOCOLATE",
+     "value": "chocolate",
+     "hex": "#d2691e"
+    },
+    {
+     "name": "CHOCOLATE1",
+     "value": "chocolate1",
+     "hex": "#ff7f24"
+    },
+    {
+     "name": "CHOCOLATE2",
+     "value": "chocolate2",
+     "hex": "#ee7621"
+    },
+    {
+     "name": "CHOCOLATE3",
+     "value": "chocolate3",
+     "hex": "#cd661d"
+    },
+    {
+     "name": "CHOCOLATE4",
+     "value": "chocolate4",
+     "hex": "#8b4513"
+    },
+    {
+     "name": "CORAL",
+     "value": "coral",
+     "hex": "#ff7f50"
+    },
+    {
+     "name": "CORAL1",
+     "value": "coral1",
+     "hex": "#ff7256"
+    },
+    {
+     "name": "CORAL2",
+     "value": "coral2",
+     "hex": "#ee6a50"
+    },
+    {
+     "name": "CORAL3",
+     "value": "coral3",
+     "hex": "#cd5b45"
+    },
+    {
+     "name": "CORAL4",
+     "value": "coral4",
+     "hex": "#8b3e2f"
+    },
+    {
+     "name": "CORNFLOWERBLUE",
+     "value": "cornflowerblue",
+     "hex": "#6495ed"
+    },
+    {
+     "name": "CORNSILK",
+     "value": "cornsilk",
+     "hex": "#fff8dc"
+    },
+    {
+     "name": "CORNSILK1",
+     "value": "cornsilk1",
+     "hex": "#fff8dc"
+    },
+    {
+     "name": "CORNSILK2",
+     "value": "cornsilk2",
+     "hex": "#eee8cd"
+    },
+    {
+     "name": "CORNSILK3",
+     "value": "cornsilk3",
+     "hex": "#cdc8b1"
+    },
+    {
+     "name": "CORNSILK4",
+     "value": "cornsilk4",
+     "hex": "#8b8878"
+    },
+    {
+     "name": "CRIMSON",
+     "value": "crimson",
+     "hex": "#dc143c"
+    },
+    {
+     "name": "CYAN",
+     "value": "cyan",
+     "hex": "#00ffff"
+    },
+    {
+     "name": "CYAN1",
+     "value": "cyan1",
+     "hex": "#00ffff"
+    },
+    {
+     "name": "CYAN2",
+     "value": "cyan2",
+     "hex": "#00eeee"
+    },
+    {
+     "name": "CYAN3",
+     "value": "cyan3",
+     "hex": "#00cdcd"
+    },
+    {
+     "name": "CYAN4",
+     "value": "cyan4",
+     "hex": "#008b8b"
+    },
+    {
+     "name": "DARKBLUE",
+     "value": "darkblue",
+     "hex": "#00008b"
+    },
+    {
+     "name": "DARKCYAN",
+     "value": "darkcyan",
+     "hex": "#008b8b"
+    },
+    {
+     "name": "DARKGOLDENROD",
+     "value": "darkgoldenrod",
+     "hex": "#b8860b"
+    },
+    {
+     "name": "DARKGOLDENROD1",
+     "value": "darkgoldenrod1",
+     "hex": "#ffb90f"
+    },
+    {
+     "name": "DARKGOLDENROD2",
+     "value": "darkgoldenrod2",
+     "hex": "#eead0e"
+    },
+    {
+     "name": "DARKGOLDENROD3",
+     "value": "darkgoldenrod3",
+     "hex": "#cd950c"
+    },
+    {
+     "name": "DARKGOLDENROD4",
+     "value": "darkgoldenrod4",
+     "hex": "#8b6508"
+    },
+    {
+     "name": "DARKGRAY",
+     "value": "darkgray",
+     "hex": "#a9a9a9"
+    },
+    {
+     "name": "DARKGREEN",
+     "value": "darkgreen",
+     "hex": "#006400"
+    },
+    {
+     "name": "DARKGREY",
+     "value": "darkgrey",
+     "hex": "#a9a9a9"
+    },
+    {
+     "name": "DARKKHAKI",
+     "value": "darkkhaki",
+     "hex": "#bdb76b"
+    },
+    {
+     "name": "DARKMAGENTA",
+     "value": "darkmagenta",
+     "hex": "#8b008b"
+    },
+    {
+     "name": "DARKOLIVEGREEN",
+     "value": "darkolivegreen",
+     "hex": "#556b2f"
+    },
+    {
+     "name": "DARKOLIVEGREEN1",
+     "value": "darkolivegreen1",
+     "hex": "#caff70"
+    },
+    {
+     "name": "DARKOLIVEGREEN2",
+     "value": "darkolivegreen2",
+     "hex": "#bcee68"
+    },
+    {
+     "name": "DARKOLIVEGREEN3",
+     "value": "darkolivegreen3",
+     "hex": "#a2cd5a"
+    },
+    {
+     "name": "DARKOLIVEGREEN4",
+     "value": "darkolivegreen4",
+     "hex": "#6e8b3d"
+    },
+    {
+     "name": "DARKORANGE",
+     "value": "darkorange",
+     "hex": "#ff8c00"
+    },
+    {
+     "name": "DARKORANGE1",
+     "value": "darkorange1",
+     "hex": "#ff7f00"
+    },
+    {
+     "name": "DARKORANGE2",
+     "value": "darkorange2",
+     "hex": "#ee7600"
+    },
+    {
+     "name": "DARKORANGE3",
+     "value": "darkorange3",
+     "hex": "#cd6600"
+    },
+    {
+     "name": "DARKORANGE4",
+     "value": "darkorange4",
+     "hex": "#8b4500"
+    },
+    {
+     "name": "DARKORCHID",
+     "value": "darkorchid",
+     "hex": "#9932cc"
+    },
+    {
+     "name": "DARKORCHID1",
+     "value": "darkorchid1",
+     "hex": "#bf3eff"
+    },
+    {
+     "name": "DARKORCHID2",
+     "value": "darkorchid2",
+     "hex": "#b23aee"
+    },
+    {
+     "name": "DARKORCHID3",
+     "value": "darkorchid3",
+     "hex": "#9a32cd"
+    },
+    {
+     "name": "DARKORCHID4",
+     "value": "darkorchid4",
+     "hex": "#68228b"
+    },
+    {
+     "name": "DARKRED",
+     "value": "darkred",
+     "hex": "#8b0000"
+    },
+    {
+     "name": "DARKSALMON",
+     "value": "darksalmon",
+     "hex": "#e9967a"
+    },
+    {
+     "name": "DARKSEAGREEN",
+     "value": "darkseagreen",
+     "hex": "#8fbc8f"
+    },
+    {
+     "name": "DARKSEAGREEN1",
+     "value": "darkseagreen1",
+     "hex": "#c1ffc1"
+    },
+    {
+     "name": "DARKSEAGREEN2",
+     "value": "darkseagreen2",
+     "hex": "#b4eeb4"
+    },
+    {
+     "name": "DARKSEAGREEN3",
+     "value": "darkseagreen3",
+     "hex": "#9bcd9b"
+    },
+    {
+     "name": "DARKSEAGREEN4",
+     "value": "darkseagreen4",
+     "hex": "#698b69"
+    },
+    {
+     "name": "DARKSLATEBLUE",
+     "value": "darkslateblue",
+     "hex": "#483d8b"
+    },
+    {
+     "name": "DARKSLATEGRAY",
+     "value": "darkslategray",
+     "hex": "#2f4f4f"
+    },
+    {
+     "name": "DARKSLATEGRAY1",
+     "value": "darkslategray1",
+     "hex": "#97ffff"
+    },
+    {
+     "name": "DARKSLATEGRAY2",
+     "value": "darkslategray2",
+     "hex": "#8deeee"
+    },
+    {
+     "name": "DARKSLATEGRAY3",
+     "value": "darkslategray3",
+     "hex": "#79cdcd"
+    },
+    {
+     "name": "DARKSLATEGRAY4",
+     "value": "darkslategray4",
+     "hex": "#528b8b"
+    },
+    {
+     "name": "DARKSLATEGREY",
+     "value": "darkslategrey",
+     "hex": "#2f4f4f"
+    },
+    {
+     "name": "DARKTURQUOISE",
+     "value": "darkturquoise",
+     "hex": "#00ced1"
+    },
+    {
+     "name": "DARKVIOLET",
+     "value": "darkviolet",
+     "hex": "#9400d3"
+    },
+    {
+     "name": "DEEPPINK",
+     "value": "deeppink",
+     "hex": "#ff1493"
+    },
+    {
+     "name": "DEEPPINK1",
+     "value": "deeppink1",
+     "hex": "#ff1493"
+    },
+    {
+     "name": "DEEPPINK2",
+     "value": "deeppink2",
+     "hex": "#ee1289"
+    },
+    {
+     "name": "DEEPPINK3",
+     "value": "deeppink3",
+     "hex": "#cd1076"
+    },
+    {
+     "name": "DEEPPINK4",
+     "value": "deeppink4",
+     "hex": "#8b0a50"
+    },
+    {
+     "name": "DEEPSKYBLUE",
+     "value": "deepskyblue",
+     "hex": "#00bfff"
+    },
+    {
+     "name": "DEEPSKYBLUE1",
+     "value": "deepskyblue1",
+     "hex": "#00bfff"
+    },
+    {
+     "name": "DEEPSKYBLUE2",
+     "value": "deepskyblue2",
+     "hex": "#00b2ee"
+    },
+    {
+     "name": "DEEPSKYBLUE3",
+     "value": "deepskyblue3",
+     "hex": "#009acd"
+    },
+    {
+     "name": "DEEPSKYBLUE4",
+     "value": "deepskyblue4",
+     "hex": "#00688b"
+    },
+    {
+     "name": "DIMGRAY",
+     "value": "dimgray",
+     "hex": "#696969"
+    },
+    {
+     "name": "DIMGREY",
+     "value": "dimgrey",
+     "hex": "#696969"
+    },
+    {
+     "name": "DODGERBLUE",
+     "value": "dodgerblue",
+     "hex": "#1e90ff"
+    },
+    {
+     "name": "DODGERBLUE1",
+     "value": "dodgerblue1",
+     "hex": "#1e90ff"
+    },
+    {
+     "name": "DODGERBLUE2",
+     "value": "dodgerblue2",
+     "hex": "#1c86ee"
+    },
+    {
+     "name": "DODGERBLUE3",
+     "value": "dodgerblue3",
+     "hex": "#1874cd"
+    },
+    {
+     "name": "DODGERBLUE4",
+     "value": "dodgerblue4",
+     "hex": "#104e8b"
+    },
+    {
+     "name": "FIREBRICK",
+     "value": "firebrick",
+     "hex": "#b22222"
+    },
+    {
+     "name": "FIREBRICK1",
+     "value": "firebrick1",
+     "hex": "#ff3030"
+    },
+    {
+     "name": "FIREBRICK2",
+     "value": "firebrick2",
+     "hex": "#ee2c2c"
+    },
+    {
+     "name": "FIREBRICK3",
+     "value": "firebrick3",
+     "hex": "#cd2626"
+    },
+    {
+     "name": "FIREBRICK4",
+     "value": "firebrick4",
+     "hex": "#8b1a1a"
+    },
+    {
+     "name": "FLORALWHITE",
+     "value": "floralwhite",
+     "hex": "#fffaf0"
+    },
+    {
+     "name": "FORESTGREEN",
+     "value": "forestgreen",
+     "hex": "#228b22"
+    },
+    {
+     "name": "FUCHSIA",
+     "value": "fuchsia",
+     "hex": "#ff00ff"
+    },
+    {
+     "name": "GAINSBORO",
+     "value": "gainsboro",
+     "hex": "#dcdcdc"
+    },
+    {
+     "name": "GHOSTWHITE",
+     "value": "ghostwhite",
+     "hex": "#f8f8ff"
+    },
+    {
+     "name": "GOLD",
+     "value": "gold",
+     "hex": "#ffd700"
+    },
+    {
+     "name": "GOLD1",
+     "value": "gold1",
+     "hex": "#ffd700"
+    },
+    {
+     "name": "GOLD2",
+     "value": "gold2",
+     "hex": "#eec900"
+    },
+    {
+     "name": "GOLD3",
+     "value": "gold3",
+     "hex": "#cdad00"
+    },
+    {
+     "name": "GOLD4",
+     "value": "gold4",
+     "hex": "#8b7500"
+    },
+    {
+     "name": "GOLDENROD",
+     "value": "goldenrod",
+     "hex": "#daa520"
+    },
+    {
+     "name": "GOLDENROD1",
+     "value": "goldenrod1",
+     "hex": "#ffc125"
+    },
+    {
+     "name": "GOLDENROD2",
+     "value": "goldenrod2",
+     "hex": "#eeb422"
+    },
+    {
+     "name": "GOLDENROD3",
+     "value": "goldenrod3",
+     "hex": "#cd9b1d"
+    },
+    {
+     "name": "GOLDENROD4",
+     "value": "goldenrod4",
+     "hex": "#8b6914"
+    },
+    {
+     "name": "GRAY",
+     "value": "gray",
+     "hex": "#bebebe"
+    },
+    {
+     "name": "GRAY0",
+     "value": "gray0",
+     "hex": "#000000"
+    },
+    {
+     "name": "GRAY1",
+     "value": "gray1",
+     "hex": "#030303"
+    },
+    {
+     "name": "GRAY10",
+     "value": "gray10",
+     "hex": "#1a1a1a"
+    },
+    {
+     "name": "GRAY100",
+     "value": "gray100",
+     "hex": "#ffffff"
+    },
+    {
+     "name": "GRAY11",
+     "value": "gray11",
+     "hex": "#1c1c1c"
+    },
+    {
+     "name": "GRAY12",
+     "value": "gray12",
+     "hex": "#1f1f1f"
+    },
+    {
+     "name": "GRAY13",
+     "value": "gray13",
+     "hex": "#212121"
+    },
+    {
+     "name": "GRAY14",
+     "value": "gray14",
+     "hex": "#242424"
+    },
+    {
+     "name": "GRAY15",
+     "value": "gray15",
+     "hex": "#262626"
+    },
+    {
+     "name": "GRAY16",
+     "value": "gray16",
+     "hex": "#292929"
+    },
+    {
+     "name": "GRAY17",
+     "value": "gray17",
+     "hex": "#2b2b2b"
+    },
+    {
+     "name": "GRAY18",
+     "value": "gray18",
+     "hex": "#2e2e2e"
+    },
+    {
+     "name": "GRAY19",
+     "value": "gray19",
+     "hex": "#303030"
+    },
+    {
+     "name": "GRAY2",
+     "value": "gray2",
+     "hex": "#050505"
+    },
+    {
+     "name": "GRAY20",
+     "value": "gray20",
+     "hex": "#333333"
+    },
+    {
+     "name": "GRAY21",
+     "value": "gray21",
+     "hex": "#363636"
+    },
+    {
+     "name": "GRAY22",
+     "value": "gray22",
+     "hex": "#383838"
+    },
+    {
+     "name": "GRAY23",
+     "value": "gray23",
+     "hex": "#3b3b3b"
+    },
+    {
+     "name": "GRAY24",
+     "value": "gray24",
+     "hex": "#3d3d3d"
+    },
+    {
+     "name": "GRAY25",
+     "value": "gray25",
+     "hex": "#404040"
+    },
+    {
+     "name": "GRAY26",
+     "value": "gray26",
+     "hex": "#424242"
+    },
+    {
+     "name": "GRAY27",
+     "value": "gray27",
+     "hex": "#454545"
+    },
+    {
+     "name": "GRAY28",
+     "value": "gray28",
+     "hex": "#474747"
+    },
+    {
+     "name": "GRAY29",
+     "value": "gray29",
+     "hex": "#4a4a4a"
+    },
+    {
+     "name": "GRAY3",
+     "value": "gray3",
+     "hex": "#080808"
+    },
+    {
+     "name": "GRAY30",
+     "value": "gray30",
+     "hex": "#4d4d4d"
+    },
+    {
+     "name": "GRAY31",
+     "value": "gray31",
+     "hex": "#4f4f4f"
+    },
+    {
+     "name": "GRAY32",
+     "value": "gray32",
+     "hex": "#525252"
+    },
+    {
+     "name": "GRAY33",
+     "value": "gray33",
+     "hex": "#545454"
+    },
+    {
+     "name": "GRAY34",
+     "value": "gray34",
+     "hex": "#575757"
+    },
+    {
+     "name": "GRAY35",
+     "value": "gray35",
+     "hex": "#595959"
+    },
+    {
+     "name": "GRAY36",
+     "value": "gray36",
+     "hex": "#5c5c5c"
+    },
+    {
+     "name": "GRAY37",
+     "value": "gray37",
+     "hex": "#5e5e5e"
+    },
+    {
+     "name": "GRAY38",
+     "value": "gray38",
+     "hex": "#616161"
+    },
+    {
+     "name": "GRAY39",
+     "value": "gray39",
+     "hex": "#636363"
+    },
+    {
+     "name": "GRAY4",
+     "value": "gray4",
+     "hex": "#0a0a0a"
+    },
+    {
+     "name": "GRAY40",
+     "value": "gray40",
+     "hex": "#666666"
+    },
+    {
+     "name": "GRAY41",
+     "value": "gray41",
+     "hex": "#696969"
+    },
+    {
+     "name": "GRAY42",
+     "value": "gray42",
+     "hex": "#6b6b6b"
+    },
+    {
+     "name": "GRAY43",
+     "value": "gray43",
+     "hex": "#6e6e6e"
+    },
+    {
+     "name": "GRAY44",
+     "value": "gray44",
+     "hex": "#707070"
+    },
+    {
+     "name": "GRAY45",
+     "value": "gray45",
+     "hex": "#737373"
+    },
+    {
+     "name": "GRAY46",
+     "value": "gray46",
+     "hex": "#757575"
+    },
+    {
+     "name": "GRAY47",
+     "value": "gray47",
+     "hex": "#787878"
+    },
+    {
+     "name": "GRAY48",
+     "value": "gray48",
+     "hex": "#7a7a7a"
+    },
+    {
+     "name": "GRAY49",
+     "value": "gray49",
+     "hex": "#7d7d7d"
+    },
+    {
+     "name": "GRAY5",
+     "value": "gray5",
+     "hex": "#0d0d0d"
+    },
+    {
+     "name": "GRAY50",
+     "value": "gray50",
+     "hex": "#7f7f7f"
+    },
+    {
+     "name": "GRAY51",
+     "value": "gray51",
+     "hex": "#828282"
+    },
+    {
+     "name": "GRAY52",
+     "value": "gray52",
+     "hex": "#858585"
+    },
+    {
+     "name": "GRAY53",
+     "value": "gray53",
+     "hex": "#878787"
+    },
+    {
+     "name": "GRAY54",
+     "value": "gray54",
+     "hex": "#8a8a8a"
+    },
+    {
+     "name": "GRAY55",
+     "value": "gray55",
+     "hex": "#8c8c8c"
+    },
+    {
+     "name": "GRAY56",
+     "value": "gray56",
+     "hex": "#8f8f8f"
+    },
+    {
+     "name": "GRAY57",
+     "value": "gray57",
+     "hex": "#919191"
+    },
+    {
+     "name": "GRAY58",
+     "value": "gray58",
+     "hex": "#949494"
+    },
+    {
+     "name": "GRAY59",
+     "value": "gray59",
+     "hex": "#969696"
+    },
+    {
+     "name": "GRAY6",
+     "value": "gray6",
+     "hex": "#0f0f0f"
+    },
+    {
+     "name": "GRAY60",
+     "value": "gray60",
+     "hex": "#999999"
+    },
+    {
+     "name": "GRAY61",
+     "value": "gray61",
+     "hex": "#9c9c9c"
+    },
+    {
+     "name": "GRAY62",
+     "value": "gray62",
+     "hex": "#9e9e9e"
+    },
+    {
+     "name": "GRAY63",
+     "value": "gray63",
+     "hex": "#a1a1a1"
+    },
+    {
+     "name": "GRAY64",
+     "value": "gray64",
+     "hex": "#a3a3a3"
+    },
+    {
+     "name": "GRAY65",
+     "value": "gray65",
+     "hex": "#a6a6a6"
+    },
+    {
+     "name": "GRAY66",
+     "value": "gray66",
+     "hex": "#a8a8a8"
+    },
+    {
+     "name": "GRAY67",
+     "value": "gray67",
+     "hex": "#ababab"
+    },
+    {
+     "name": "GRAY68",
+     "value": "gray68",
+     "hex": "#adadad"
+    },
+    {
+     "name": "GRAY69",
+     "value": "gray69",
+     "hex": "#b0b0b0"
+    },
+    {
+     "name": "GRAY7",
+     "value": "gray7",
+     "hex": "#121212"
+    },
+    {
+     "name": "GRAY70",
+     "value": "gray70",
+     "hex": "#b3b3b3"
+    },
+    {
+     "name": "GRAY71",
+     "value": "gray71",
+     "hex": "#b5b5b5"
+    },
+    {
+     "name": "GRAY72",
+     "value": "gray72",
+     "hex": "#b8b8b8"
+    },
+    {
+     "name": "GRAY73",
+     "value": "gray73",
+     "hex": "#bababa"
+    },
+    {
+     "name": "GRAY74",
+     "value": "gray74",
+     "hex": "#bdbdbd"
+    },
+    {
+     "name": "GRAY75",
+     "value": "gray75",
+     "hex": "#bfbfbf"
+    },
+    {
+     "name": "GRAY76",
+     "value": "gray76",
+     "hex": "#c2c2c2"
+    },
+    {
+     "name": "GRAY77",
+     "value": "gray77",
+     "hex": "#c4c4c4"
+    },
+    {
+     "name": "GRAY78",
+     "value": "gray78",
+     "hex": "#c7c7c7"
+    },
+    {
+     "name": "GRAY79",
+     "value": "gray79",
+     "hex": "#c9c9c9"
+    },
+    {
+     "name": "GRAY8",
+     "value": "gray8",
+     "hex": "#141414"
+    },
+    {
+     "name": "GRAY80",
+     "value": "gray80",
+     "hex": "#cccccc"
+    },
+    {
+     "name": "GRAY81",
+     "value": "gray81",
+     "hex": "#cfcfcf"
+    },
+    {
+     "name": "GRAY82",
+     "value": "gray82",
+     "hex": "#d1d1d1"
+    },
+    {
+     "name": "GRAY83",
+     "value": "gray83",
+     "hex": "#d4d4d4"
+    },
+    {
+     "name": "GRAY84",
+     "value": "gray84",
+     "hex": "#d6d6d6"
+    },
+    {
+     "name": "GRAY85",
+     "value": "gray85",
+     "hex": "#d9d9d9"
+    },
+    {
+     "name": "GRAY86",
+     "value": "gray86",
+     "hex": "#dbdbdb"
+    },
+    {
+     "name": "GRAY87",
+     "value": "gray87",
+     "hex": "#dedede"
+    },
+    {
+     "name": "GRAY88",
+     "value": "gray88",
+     "hex": "#e0e0e0"
+    },
+    {
+     "name": "GRAY89",
+     "value": "gray89",
+     "hex": "#e3e3e3"
+    },
+    {
+     "name": "GRAY9",
+     "value": "gray9",
+     "hex": "#171717"
+    },
+    {
+     "name": "GRAY90",
+     "value": "gray90",
+     "hex": "#e5e5e5"
+    },
+    {
+     "name": "GRAY91",
+     "value": "gray91",
+     "hex": "#e8e8e8"
+    },
+    {
+     "name": "GRAY92",
+     "value": "gray92",
+     "hex": "#ebebeb"
+    },
+    {
+     "name": "GRAY93",
+     "value": "gray93",
+     "hex": "#ededed"
+    },
+    {
+     "name": "GRAY94",
+     "value": "gray94",
+     "hex": "#f0f0f0"
+    },
+    {
+     "name": "GRAY95",
+     "value": "gray95",
+     "hex": "#f2f2f2"
+    },
+    {
+     "name": "GRAY96",
+     "value": "gray96",
+     "hex": "#f5f5f5"
+    },
+    {
+     "name": "GRAY97",
+     "value": "gray97",
+     "hex": "#f7f7f7"
+    },
+    {
+     "name": "GRAY98",
+     "value": "gray98",
+     "hex": "#fafafa"
+    },
+    {
+     "name": "GRAY99",
+     "value": "gray99",
+     "hex": "#fcfcfc"
+    },
+    {
+     "name": "GREEN",
+     "value": "green",
+     "hex": "#00ff00"
+    },
+    {
+     "name": "GREEN1",
+     "value": "green1",
+     "hex": "#00ff00"
+    },
+    {
+     "name": "GREEN2",
+     "value": "green2",
+     "hex": "#00ee00"
+    },
+    {
+     "name": "GREEN3",
+     "value": "green3",
+     "hex": "#00cd00"
+    },
+    {
+     "name": "GREEN4",
+     "value": "green4",
+     "hex": "#008b00"
+    },
+    {
+     "name": "GREENYELLOW",
+     "value": "greenyellow",
+     "hex": "#adff2f"
+    },
+    {
+     "name": "GREY",
+     "value": "grey",
+     "hex": "#bebebe"
+    },
+    {
+     "name": "GREY0",
+     "value": "grey0",
+     "hex": "#000000"
+    },
+    {
+     "name": "GREY1",
+     "value": "grey1",
+     "hex": "#030303"
+    },
+    {
+     "name": "GREY10",
+     "value": "grey10",
+     "hex": "#1a1a1a"
+    },
+    {
+     "name": "GREY100",
+     "value": "grey100",
+     "hex": "#ffffff"
+    },
+    {
+     "name": "GREY11",
+     "value": "grey11",
+     "hex": "#1c1c1c"
+    },
+    {
+     "name": "GREY12",
+     "value": "grey12",
+     "hex": "#1f1f1f"
+    },
+    {
+     "name": "GREY13",
+     "value": "grey13",
+     "hex": "#212121"
+    },
+    {
+     "name": "GREY14",
+     "value": "grey14",
+     "hex": "#242424"
+    },
+    {
+     "name": "GREY15",
+     "value": "grey15",
+     "hex": "#262626"
+    },
+    {
+     "name": "GREY16",
+     "value": "grey16",
+     "hex": "#292929"
+    },
+    {
+     "name": "GREY17",
+     "value": "grey17",
+     "hex": "#2b2b2b"
+    },
+    {
+     "name": "GREY18",
+     "value": "grey18",
+     "hex": "#2e2e2e"
+    },
+    {
+     "name": "GREY19",
+     "value": "grey19",
+     "hex": "#303030"
+    },
+    {
+     "name": "GREY2",
+     "value": "grey2",
+     "hex": "#050505"
+    },
+    {
+     "name": "GREY20",
+     "value": "grey20",
+     "hex": "#333333"
+    },
+    {
+     "name": "GREY21",
+     "value": "grey21",
+     "hex": "#363636"
+    },
+    {
+     "name": "GREY22",
+     "value": "grey22",
+     "hex": "#383838"
+    },
+    {
+     "name": "GREY23",
+     "value": "grey23",
+     "hex": "#3b3b3b"
+    },
+    {
+     "name": "GREY24",
+     "value": "grey24",
+     "hex": "#3d3d3d"
+    },
+    {
+     "name": "GREY25",
+     "value": "grey25",
+     "hex": "#404040"
+    },
+    {
+     "name": "GREY26",
+     "value": "grey26",
+     "hex": "#424242"
+    },
+    {
+     "name": "GREY27",
+     "value": "grey27",
+     "hex": "#454545"
+    },
+    {
+     "name": "GREY28",
+     "value": "grey28",
+     "hex": "#474747"
+    },
+    {
+     "name": "GREY29",
+     "value": "grey29",
+     "hex": "#4a4a4a"
+    },
+    {
+     "name": "GREY3",
+     "value": "grey3",
+     "hex": "#080808"
+    },
+    {
+     "name": "GREY30",
+     "value": "grey30",
+     "hex": "#4d4d4d"
+    },
+    {
+     "name": "GREY31",
+     "value": "grey31",
+     "hex": "#4f4f4f"
+    },
+    {
+     "name": "GREY32",
+     "value": "grey32",
+     "hex": "#525252"
+    },
+    {
+     "name": "GREY33",
+     "value": "grey33",
+     "hex": "#545454"
+    },
+    {
+     "name": "GREY34",
+     "value": "grey34",
+     "hex": "#575757"
+    },
+    {
+     "name": "GREY35",
+     "value": "grey35",
+     "hex": "#595959"
+    },
+    {
+     "name": "GREY36",
+     "value": "grey36",
+     "hex": "#5c5c5c"
+    },
+    {
+     "name": "GREY37",
+     "value": "grey37",
+     "hex": "#5e5e5e"
+    },
+    {
+     "name": "GREY38",
+     "value": "grey38",
+     "hex": "#616161"
+    },
+    {
+     "name": "GREY39",
+     "value": "grey39",
+     "hex": "#636363"
+    },
+    {
+     "name": "GREY4",
+     "value": "grey4",
+     "hex": "#0a0a0a"
+    },
+    {
+     "name": "GREY40",
+     "value": "grey40",
+     "hex": "#666666"
+    },
+    {
+     "name": "GREY41",
+     "value": "grey41",
+     "hex": "#696969"
+    },
+    {
+     "name": "GREY42",
+     "value": "grey42",
+     "hex": "#6b6b6b"
+    },
+    {
+     "name": "GREY43",
+     "value": "grey43",
+     "hex": "#6e6e6e"
+    },
+    {
+     "name": "GREY44",
+     "value": "grey44",
+     "hex": "#707070"
+    },
+    {
+     "name": "GREY45",
+     "value": "grey45",
+     "hex": "#737373"
+    },
+    {
+     "name": "GREY46",
+     "value": "grey46",
+     "hex": "#757575"
+    },
+    {
+     "name": "GREY47",
+     "value": "grey47",
+     "hex": "#787878"
+    },
+    {
+     "name": "GREY48",
+     "value": "grey48",
+     "hex": "#7a7a7a"
+    },
+    {
+     "name": "GREY49",
+     "value": "grey49",
+     "hex": "#7d7d7d"
+    },
+    {
+     "name": "GREY5",
+     "value": "grey5",
+     "hex": "#0d0d0d"
+    },
+    {
+     "name": "GREY50",
+     "value": "grey50",
+     "hex": "#7f7f7f"
+    },
+    {
+     "name": "GREY51",
+     "value": "grey51",
+     "hex": "#828282"
+    },
+    {
+     "name": "GREY52",
+     "value": "grey52",
+     "hex": "#858585"
+    },
+    {
+     "name": "GREY53",
+     "value": "grey53",
+     "hex": "#878787"
+    },
+    {
+     "name": "GREY54",
+     "value": "grey54",
+     "hex": "#8a8a8a"
+    },
+    {
+     "name": "GREY55",
+     "value": "grey55",
+     "hex": "#8c8c8c"
+    },
+    {
+     "name": "GREY56",
+     "value": "grey56",
+     "hex": "#8f8f8f"
+    },
+    {
+     "name": "GREY57",
+     "value": "grey57",
+     "hex": "#919191"
+    },
+    {
+     "name": "GREY58",
+     "value": "grey58",
+     "hex": "#949494"
+    },
+    {
+     "name": "GREY59",
+     "value": "grey59",
+     "hex": "#969696"
+    },
+    {
+     "name": "GREY6",
+     "value": "grey6",
+     "hex": "#0f0f0f"
+    },
+    {
+     "name": "GREY60",
+     "value": "grey60",
+     "hex": "#999999"
+    },
+    {
+     "name": "GREY61",
+     "value": "grey61",
+     "hex": "#9c9c9c"
+    },
+    {
+     "name": "GREY62",
+     "value": "grey62",
+     "hex": "#9e9e9e"
+    },
+    {
+     "name": "GREY63",
+     "value": "grey63",
+     "hex": "#a1a1a1"
+    },
+    {
+     "name": "GREY64",
+     "value": "grey64",
+     "hex": "#a3a3a3"
+    },
+    {
+     "name": "GREY65",
+     "value": "grey65",
+     "hex": "#a6a6a6"
+    },
+    {
+     "name": "GREY66",
+     "value": "grey66",
+     "hex": "#a8a8a8"
+    },
+    {
+     "name": "GREY67",
+     "value": "grey67",
+     "hex": "#ababab"
+    },
+    {
+     "name": "GREY68",
+     "value": "grey68",
+     "hex": "#adadad"
+    },
+    {
+     "name": "GREY69",
+     "value": "grey69",
+     "hex": "#b0b0b0"
+    },
+    {
+     "name": "GREY7",
+     "value": "grey7",
+     "hex": "#121212"
+    },
+    {
+     "name": "GREY70",
+     "value": "grey70",
+     "hex": "#b3b3b3"
+    },
+    {
+     "name": "GREY71",
+     "value": "grey71",
+     "hex": "#b5b5b5"
+    },
+    {
+     "name": "GREY72",
+     "value": "grey72",
+     "hex": "#b8b8b8"
+    },
+    {
+     "name": "GREY73",
+     "value": "grey73",
+     "hex": "#bababa"
+    },
+    {
+     "name": "GREY74",
+     "value": "grey74",
+     "hex": "#bdbdbd"
+    },
+    {
+     "name": "GREY75",
+     "value": "grey75",
+     "hex": "#bfbfbf"
+    },
+    {
+     "name": "GREY76",
+     "value": "grey76",
+     "hex": "#c2c2c2"
+    },
+    {
+     "name": "GREY77",
+     "value": "grey77",
+     "hex": "#c4c4c4"
+    },
+    {
+     "name": "GREY78",
+     "value": "grey78",
+     "hex": "#c7c7c7"
+    },
+    {
+     "name": "GREY79",
+     "value": "grey79",
+     "hex": "#c9c9c9"
+    },
+    {
+     "name": "GREY8",
+     "value": "grey8",
+     "hex": "#141414"
+    },
+    {
+     "name": "GREY80",
+     "value": "grey80",
+     "hex": "#cccccc"
+    },
+    {
+     "name": "GREY81",
+     "value": "grey81",
+     "hex": "#cfcfcf"
+    },
+    {
+     "name": "GREY82",
+     "value": "grey82",
+     "hex": "#d1d1d1"
+    },
+    {
+     "name": "GREY83",
+     "value": "grey83",
+     "hex": "#d4d4d4"
+    },
+    {
+     "name": "GREY84",
+     "value": "grey84",
+     "hex": "#d6d6d6"
+    },
+    {
+     "name": "GREY85",
+     "value": "grey85",
+     "hex": "#d9d9d9"
+    },
+    {
+     "name": "GREY86",
+     "value": "grey86",
+     "hex": "#dbdbdb"
+    },
+    {
+     "name": "GREY87",
+     "value": "grey87",
+     "hex": "#dedede"
+    },
+    {
+     "name": "GREY88",
+     "value": "grey88",
+     "hex": "#e0e0e0"
+    },
+    {
+     "name": "GREY89",
+     "value": "grey89",
+     "hex": "#e3e3e3"
+    },
+    {
+     "name": "GREY9",
+     "value": "grey9",
+     "hex": "#171717"
+    },
+    {
+     "name": "GREY90",
+     "value": "grey90",
+     "hex": "#e5e5e5"
+    },
+    {
+     "name": "GREY91",
+     "value": "grey91",
+     "hex": "#e8e8e8"
+    },
+    {
+     "name": "GREY92",
+     "value": "grey92",
+     "hex": "#ebebeb"
+    },
+    {
+     "name": "GREY93",
+     "value": "grey93",
+     "hex": "#ededed"
+    },
+    {
+     "name": "GREY94",
+     "value": "grey94",
+     "hex": "#f0f0f0"
+    },
+    {
+     "name": "GREY95",
+     "value": "grey95",
+     "hex": "#f2f2f2"
+    },
+    {
+     "name": "GREY96",
+     "value": "grey96",
+     "hex": "#f5f5f5"
+    },
+    {
+     "name": "GREY97",
+     "value": "grey97",
+     "hex": "#f7f7f7"
+    },
+    {
+     "name": "GREY98",
+     "value": "grey98",
+     "hex": "#fafafa"
+    },
+    {
+     "name": "GREY99",
+     "value": "grey99",
+     "hex": "#fcfcfc"
+    },
+    {
+     "name": "HONEYDEW",
+     "value": "honeydew",
+     "hex": "#f0fff0"
+    },
+    {
+     "name": "HONEYDEW1",
+     "value": "honeydew1",
+     "hex": "#f0fff0"
+    },
+    {
+     "name": "HONEYDEW2",
+     "value": "honeydew2",
+     "hex": "#e0eee0"
+    },
+    {
+     "name": "HONEYDEW3",
+     "value": "honeydew3",
+     "hex": "#c1cdc1"
+    },
+    {
+     "name": "HONEYDEW4",
+     "value": "honeydew4",
+     "hex": "#838b83"
+    },
+    {
+     "name": "HOTPINK",
+     "value": "hotpink",
+     "hex": "#ff69b4"
+    },
+    {
+     "name": "HOTPINK1",
+     "value": "hotpink1",
+     "hex": "#ff6eb4"
+    },
+    {
+     "name": "HOTPINK2",
+     "value": "hotpink2",
+     "hex": "#ee6aa7"
+    },
+    {
+     "name": "HOTPINK3",
+     "value": "hotpink3",
+     "hex": "#cd6090"
+    },
+    {
+     "name": "HOTPINK4",
+     "value": "hotpink4",
+     "hex": "#8b3a62"
+    },
+    {
+     "name": "INDIANRED",
+     "value": "indianred",
+     "hex": "#cd5c5c"
+    },
+    {
+     "name": "INDIANRED1",
+     "value": "indianred1",
+     "hex": "#ff6a6a"
+    },
+    {
+     "name": "INDIANRED2",
+     "value": "indianred2",
+     "hex": "#ee6363"
+    },
+    {
+     "name": "INDIANRED3",
+     "value": "indianred3",
+     "hex": "#cd5555"
+    },
+    {
+     "name": "INDIANRED4",
+     "value": "indianred4",
+     "hex": "#8b3a3a"
+    },
+    {
+     "name": "INDIGO",
+     "value": "indigo",
+     "hex": "#4b0082"
+    },
+    {
+     "name": "IVORY",
+     "value": "ivory",
+     "hex": "#fffff0"
+    },
+    {
+     "name": "IVORY1",
+     "value": "ivory1",
+     "hex": "#fffff0"
+    },
+    {
+     "name": "IVORY2",
+     "value": "ivory2",
+     "hex": "#eeeee0"
+    },
+    {
+     "name": "IVORY3",
+     "value": "ivory3",
+     "hex": "#cdcdc1"
+    },
+    {
+     "name": "IVORY4",
+     "value": "ivory4",
+     "hex": "#8b8b83"
+    },
+    {
+     "name": "KHAKI",
+     "value": "khaki",
+     "hex": "#f0e68c"
+    },
+    {
+     "name": "KHAKI1",
+     "value": "khaki1",
+     "hex": "#fff68f"
+    },
+    {
+     "name": "KHAKI2",
+     "value": "khaki2",
+     "hex": "#eee685"
+    },
+    {
+     "name": "KHAKI3",
+     "value": "khaki3",
+     "hex": "#cdc673"
+    },
+    {
+     "name": "KHAKI4",
+     "value": "khaki4",
+     "hex": "#8b864e"
+    },
+    {
+     "name": "LAVENDER",
+     "value": "lavender",
+     "hex": "#e6e6fa"
+    },
+    {
+     "name": "LAVENDERBLUSH",
+     "value": "lavenderblush",
+     "hex": "#fff0f5"
+    },
+    {
+     "name": "LAVENDERBLUSH1",
+     "value": "lavenderblush1",
+     "hex": "#fff0f5"
+    },
+    {
+     "name": "LAVENDERBLUSH2",
+     "value": "lavenderblush2",
+     "hex": "#eee0e5"
+    },
+    {
+     "name": "LAVENDERBLUSH3",
+     "value": "lavenderblush3",
+     "hex": "#cdc1c5"
+    },
+    {
+     "name": "LAVENDERBLUSH4",
+     "value": "lavenderblush4",
+     "hex": "#8b8386"
+    },
+    {
+     "name": "LAWNGREEN",
+     "value": "lawngreen",
+     "hex": "#7cfc00"
+    },
+    {
+     "name": "LEMONCHIFFON",
+     "value": "lemonchiffon",
+     "hex": "#fffacd"
+    },
+    {
+     "name": "LEMONCHIFFON1",
+     "value": "lemonchiffon1",
+     "hex": "#fffacd"
+    },
+    {
+     "name": "LEMONCHIFFON2",
+     "value": "lemonchiffon2",
+     "hex": "#eee9bf"
+    },
+    {
+     "name": "LEMONCHIFFON3",
+     "value": "lemonchiffon3",
+     "hex": "#cdc9a5"
+    },
+    {
+     "name": "LEMONCHIFFON4",
+     "value": "lemonchiffon4",
+     "hex": "#8b8970"
+    },
+    {
+     "name": "LIGHTBLUE",
+     "value": "lightblue",
+     "hex": "#add8e6"
+    },
+    {
+     "name": "LIGHTBLUE1",
+     "value": "lightblue1",
+     "hex": "#bfefff"
+    },
+    {
+     "name": "LIGHTBLUE2",
+     "value": "lightblue2",
+     "hex": "#b2dfee"
+    },
+    {
+     "name": "LIGHTBLUE3",
+     "value": "lightblue3",
+     "hex": "#9ac0cd"
+    },
+    {
+     "name": "LIGHTBLUE4",
+     "value": "lightblue4",
+     "hex": "#68838b"
+    },
+    {
+     "name": "LIGHTCORAL",
+     "value": "lightcoral",
+     "hex": "#f08080"
+    },
+    {
+     "name": "LIGHTCYAN",
+     "value": "lightcyan",
+     "hex": "#e0ffff"
+    },
+    {
+     "name": "LIGHTCYAN1",
+     "value": "lightcyan1",
+     "hex": "#e0ffff"
+    },
+    {
+     "name": "LIGHTCYAN2",
+     "value": "lightcyan2",
+     "hex": "#d1eeee"
+    },
+    {
+     "name": "LIGHTCYAN3",
+     "value": "lightcyan3",
+     "hex": "#b4cdcd"
+    },
+    {
+     "name": "LIGHTCYAN4",
+     "value": "lightcyan4",
+     "hex": "#7a8b8b"
+    },
+    {
+     "name": "LIGHTGOLDENROD",
+     "value": "lightgoldenrod",
+     "hex": "#eedd82"
+    },
+    {
+     "name": "LIGHTGOLDENROD1",
+     "value": "lightgoldenrod1",
+     "hex": "#ffec8b"
+    },
+    {
+     "name": "LIGHTGOLDENROD2",
+     "value": "lightgoldenrod2",
+     "hex": "#eedc82"
+    },
+    {
+     "name": "LIGHTGOLDENROD3",
+     "value": "lightgoldenrod3",
+     "hex": "#cdbe70"
+    },
+    {
+     "name": "LIGHTGOLDENROD4",
+     "value": "lightgoldenrod4",
+     "hex": "#8b814c"
+    },
+    {
+     "name": "LIGHTGOLDENRODYELLOW",
+     "value": "lightgoldenrodyellow",
+     "hex": "#fafad2"
+    },
+    {
+     "name": "LIGHTGRAY",
+     "value": "lightgray",
+     "hex": "#d3d3d3"
+    },
+    {
+     "name": "LIGHTGREEN",
+     "value": "lightgreen",
+     "hex": "#90ee90"
+    },
+    {
+     "name": "LIGHTGREY",
+     "value": "lightgrey",
+     "hex": "#d3d3d3"
+    },
+    {
+     "name": "LIGHTPINK",
+     "value": "lightpink",
+     "hex": "#ffb6c1"
+    },
+    {
+     "name": "LIGHTPINK1",
+     "value": "lightpink1",
+     "hex": "#ffaeb9"
+    },
+    {
+     "name": "LIGHTPINK2",
+     "value": "lightpink2",
+     "hex": "#eea2ad"
+    },
+    {
+     "name": "LIGHTPINK3",
+     "value": "lightpink3",
+     "hex": "#cd8c95"
+    },
+    {
+     "name": "LIGHTPINK4",
+     "value": "lightpink4",
+     "hex": "#8b5f65"
+    },
+    {
+     "name": "LIGHTSALMON",
+     "value": "lightsalmon",
+     "hex": "#ffa07a"
+    },
+    {
+     "name": "LIGHTSALMON1",
+     "value": "lightsalmon1",
+     "hex": "#ffa07a"
+    },
+    {
+     "name": "LIGHTSALMON2",
+     "value": "lightsalmon2",
+     "hex": "#ee9572"
+    },
+    {
+     "name": "LIGHTSALMON3",
+     "value": "lightsalmon3",
+     "hex": "#cd8162"
+    },
+    {
+     "name": "LIGHTSALMON4",
+     "value": "lightsalmon4",
+     "hex": "#8b5742"
+    },
+    {
+     "name": "LIGHTSEAGREEN",
+     "value": "lightseagreen",
+     "hex": "#20b2aa"
+    },
+    {
+     "name": "LIGHTSKYBLUE",
+     "value": "lightskyblue",
+     "hex": "#87cefa"
+    },
+    {
+     "name": "LIGHTSKYBLUE1",
+     "value": "lightskyblue1",
+     "hex": "#b0e2ff"
+    },
+    {
+     "name": "LIGHTSKYBLUE2",
+     "value": "lightskyblue2",
+     "hex": "#a4d3ee"
+    },
+    {
+     "name": "LIGHTSKYBLUE3",
+     "value": "lightskyblue3",
+     "hex": "#8db6cd"
+    },
+    {
+     "name": "LIGHTSKYBLUE4",
+     "value": "lightskyblue4",
+     "hex": "#607b8b"
+    },
+    {
+     "name": "LIGHTSLATEBLUE",
+     "value": "lightslateblue",
+     "hex": "#8470ff"
+    },
+    {
+     "name": "LIGHTSLATEGRAY",
+     "value": "lightslategray",
+     "hex": "#778899"
+    },
+    {
+     "name": "LIGHTSLATEGREY",
+     "value": "lightslategrey",
+     "hex": "#778899"
+    },
+    {
+     "name": "LIGHTSTEELBLUE",
+     "value": "lightsteelblue",
+     "hex": "#b0c4de"
+    },
+    {
+     "name": "LIGHTSTEELBLUE1",
+     "value": "lightsteelblue1",
+     "hex": "#cae1ff"
+    },
+    {
+     "name": "LIGHTSTEELBLUE2",
+     "value": "lightsteelblue2",
+     "hex": "#bcd2ee"
+    },
+    {
+     "name": "LIGHTSTEELBLUE3",
+     "value": "lightsteelblue3",
+     "hex": "#a2b5cd"
+    },
+    {
+     "name": "LIGHTSTEELBLUE4",
+     "value": "lightsteelblue4",
+     "hex": "#6e7b8b"
+    },
+    {
+     "name": "LIGHTYELLOW",
+     "value": "lightyellow",
+     "hex": "#ffffe0"
+    },
+    {
+     "name": "LIGHTYELLOW1",
+     "value": "lightyellow1",
+     "hex": "#ffffe0"
+    },
+    {
+     "name": "LIGHTYELLOW2",
+     "value": "lightyellow2",
+     "hex": "#eeeed1"
+    },
+    {
+     "name": "LIGHTYELLOW3",
+     "value": "lightyellow3",
+     "hex": "#cdcdb4"
+    },
+    {
+     "name": "LIGHTYELLOW4",
+     "value": "lightyellow4",
+     "hex": "#8b8b7a"
+    },
+    {
+     "name": "LIME",
+     "value": "lime",
+     "hex": "#00ff00"
+    },
+    {
+     "name": "LIMEGREEN",
+     "value": "limegreen",
+     "hex": "#32cd32"
+    },
+    {
+     "name": "LINEN",
+     "value": "linen",
+     "hex": "#faf0e6"
+    },
+    {
+     "name": "MAGENTA",
+     "value": "magenta",
+     "hex": "#ff00ff"
+    },
+    {
+     "name": "MAGENTA1",
+     "value": "magenta1",
+     "hex": "#ff00ff"
+    },
+    {
+     "name": "MAGENTA2",
+     "value": "magenta2",
+     "hex": "#ee00ee"
+    },
+    {
+     "name": "MAGENTA3",
+     "value": "magenta3",
+     "hex": "#cd00cd"
+    },
+    {
+     "name": "MAGENTA4",
+     "value": "magenta4",
+     "hex": "#8b008b"
+    },
+    {
+     "name": "MAROON",
+     "value": "maroon",
+     "hex": "#b03060"
+    },
+    {
+     "name": "MAROON1",
+     "value": "maroon1",
+     "hex": "#ff34b3"
+    },
+    {
+     "name": "MAROON2",
+     "value": "maroon2",
+     "hex": "#ee30a7"
+    },
+    {
+     "name": "MAROON3",
+     "value": "maroon3",
+     "hex": "#cd2990"
+    },
+    {
+     "name": "MAROON4",
+     "value": "maroon4",
+     "hex": "#8b1c62"
+    },
+    {
+     "name": "MEDIUMAQUAMARINE",
+     "value": "mediumaquamarine",
+     "hex": "#66cdaa"
+    },
+    {
+     "name": "MEDIUMBLUE",
+     "value": "mediumblue",
+     "hex": "#0000cd"
+    },
+    {
+     "name": "MEDIUMORCHID",
+     "value": "mediumorchid",
+     "hex": "#ba55d3"
+    },
+    {
+     "name": "MEDIUMORCHID1",
+     "value": "mediumorchid1",
+     "hex": "#e066ff"
+    },
+    {
+     "name": "MEDIUMORCHID2",
+     "value": "mediumorchid2",
+     "hex": "#d15fee"
+    },
+    {
+     "name": "MEDIUMORCHID3",
+     "value": "mediumorchid3",
+     "hex": "#b452cd"
+    },
+    {
+     "name": "MEDIUMORCHID4",
+     "value": "mediumorchid4",
+     "hex": "#7a378b"
+    },
+    {
+     "name": "MEDIUMPURPLE",
+     "value": "mediumpurple",
+     "hex": "#9370db"
+    },
+    {
+     "name": "MEDIUMPURPLE1",
+     "value": "mediumpurple1",
+     "hex": "#ab82ff"
+    },
+    {
+     "name": "MEDIUMPURPLE2",
+     "value": "mediumpurple2",
+     "hex": "#9f79ee"
+    },
+    {
+     "name": "MEDIUMPURPLE3",
+     "value": "mediumpurple3",
+     "hex": "#8968cd"
+    },
+    {
+     "name": "MEDIUMPURPLE4",
+     "value": "mediumpurple4",
+     "hex": "#5d478b"
+    },
+    {
+     "name": "MEDIUMSEAGREEN",
+     "value": "mediumseagreen",
+     "hex": "#3cb371"
+    },
+    {
+     "name": "MEDIUMSLATEBLUE",
+     "value": "mediumslateblue",
+     "hex": "#7b68ee"
+    },
+    {
+     "name": "MEDIUMSPRINGGREEN",
+     "value": "mediumspringgreen",
+     "hex": "#00fa9a"
+    },
+    {
+     "name": "MEDIUMTURQUOISE",
+     "value": "mediumturquoise",
+     "hex": "#48d1cc"
+    },
+    {
+     "name": "MEDIUMVIOLETRED",
+     "value": "mediumvioletred",
+     "hex": "#c71585"
+    },
+    {
+     "name": "MIDNIGHTBLUE",
+     "value": "midnightblue",
+     "hex": "#191970"
+    },
+    {
+     "name": "MINTCREAM",
+     "value": "mintcream",
+     "hex": "#f5fffa"
+    },
+    {
+     "name": "MISTYROSE",
+     "value": "mistyrose",
+     "hex": "#ffe4e1"
+    },
+    {
+     "name": "MISTYROSE1",
+     "value": "mistyrose1",
+     "hex": "#ffe4e1"
+    },
+    {
+     "name": "MISTYROSE2",
+     "value": "mistyrose2",
+     "hex": "#eed5d2"
+    },
+    {
+     "name": "MISTYROSE3",
+     "value": "mistyrose3",
+     "hex": "#cdb7b5"
+    },
+    {
+     "name": "MISTYROSE4",
+     "value": "mistyrose4",
+     "hex": "#8b7d7b"
+    },
+    {
+     "name": "MOCCASIN",
+     "value": "moccasin",
+     "hex": "#ffe4b5"
+    },
+    {
+     "name": "NAVAJOWHITE",
+     "value": "navajowhite",
+     "hex": "#ffdead"
+    },
+    {
+     "name": "NAVAJOWHITE1",
+     "value": "navajowhite1",
+     "hex": "#ffdead"
+    },
+    {
+     "name": "NAVAJOWHITE2",
+     "value": "navajowhite2",
+     "hex": "#eecfa1"
+    },
+    {
+     "name": "NAVAJOWHITE3",
+     "value": "navajowhite3",
+     "hex": "#cdb38b"
+    },
+    {
+     "name": "NAVAJOWHITE4",
+     "value": "navajowhite4",
+     "hex": "#8b795e"
+    },
+    {
+     "name": "NAVY",
+     "value": "navy",
+     "hex": "#000080"
+    },
+    {
+     "name": "NAVYBLUE",
+     "value": "navyblue",
+     "hex": "#000080"
+    },
+    {
+     "name": "OLDLACE",
+     "value": "oldlace",
+     "hex": "#fdf5e6"
+    },
+    {
+     "name": "OLIVE",
+     "value": "olive",
+     "hex": "#808000"
+    },
+    {
+     "name": "OLIVEDRAB",
+     "value": "olivedrab",
+     "hex": "#6b8e23"
+    },
+    {
+     "name": "OLIVEDRAB1",
+     "value": "olivedrab1",
+     "hex": "#c0ff3e"
+    },
+    {
+     "name": "OLIVEDRAB2",
+     "value": "olivedrab2",
+     "hex": "#b3ee3a"
+    },
+    {
+     "name": "OLIVEDRAB3",
+     "value": "olivedrab3",
+     "hex": "#9acd32"
+    },
+    {
+     "name": "OLIVEDRAB4",
+     "value": "olivedrab4",
+     "hex": "#698b22"
+    },
+    {
+     "name": "ORANGE",
+     "value": "orange",
+     "hex": "#ffa500"
+    },
+    {
+     "name": "ORANGE1",
+     "value": "orange1",
+     "hex": "#ffa500"
+    },
+    {
+     "name": "ORANGE2",
+     "value": "orange2",
+     "hex": "#ee9a00"
+    },
+    {
+     "name": "ORANGE3",
+     "value": "orange3",
+     "hex": "#cd8500"
+    },
+    {
+     "name": "ORANGE4",
+     "value": "orange4",
+     "hex": "#8b5a00"
+    },
+    {
+     "name": "ORANGERED",
+     "value": "orangered",
+     "hex": "#ff4500"
+    },
+    {
+     "name": "ORANGERED1",
+     "value": "orangered1",
+     "hex": "#ff4500"
+    },
+    {
+     "name": "ORANGERED2",
+     "value": "orangered2",
+     "hex": "#ee4000"
+    },
+    {
+     "name": "ORANGERED3",
+     "value": "orangered3",
+     "hex": "#cd3700"
+    },
+    {
+     "name": "ORANGERED4",
+     "value": "orangered4",
+     "hex": "#8b2500"
+    },
+    {
+     "name": "ORCHID",
+     "value": "orchid",
+     "hex": "#da70d6"
+    },
+    {
+     "name": "ORCHID1",
+     "value": "orchid1",
+     "hex": "#ff83fa"
+    },
+    {
+     "name": "ORCHID2",
+     "value": "orchid2",
+     "hex": "#ee7ae9"
+    },
+    {
+     "name": "ORCHID3",
+     "value": "orchid3",
+     "hex": "#cd69c9"
+    },
+    {
+     "name": "ORCHID4",
+     "value": "orchid4",
+     "hex": "#8b4789"
+    },
+    {
+     "name": "PALEGOLDENROD",
+     "value": "palegoldenrod",
+     "hex": "#eee8aa"
+    },
+    {
+     "name": "PALEGREEN",
+     "value": "palegreen",
+     "hex": "#98fb98"
+    },
+    {
+     "name": "PALEGREEN1",
+     "value": "palegreen1",
+     "hex": "#9aff9a"
+    },
+    {
+     "name": "PALEGREEN2",
+     "value": "palegreen2",
+     "hex": "#90ee90"
+    },
+    {
+     "name": "PALEGREEN3",
+     "value": "palegreen3",
+     "hex": "#7ccd7c"
+    },
+    {
+     "name": "PALEGREEN4",
+     "value": "palegreen4",
+     "hex": "#548b54"
+    },
+    {
+     "name": "PALETURQUOISE",
+     "value": "paleturquoise",
+     "hex": "#afeeee"
+    },
+    {
+     "name": "PALETURQUOISE1",
+     "value": "paleturquoise1",
+     "hex": "#bbffff"
+    },
+    {
+     "name": "PALETURQUOISE2",
+     "value": "paleturquoise2",
+     "hex": "#aeeeee"
+    },
+    {
+     "name": "PALETURQUOISE3",
+     "value": "paleturquoise3",
+     "hex": "#96cdcd"
+    },
+    {
+     "name": "PALETURQUOISE4",
+     "value": "paleturquoise4",
+     "hex": "#668b8b"
+    },
+    {
+     "name": "PALEVIOLETRED",
+     "value": "palevioletred",
+     "hex": "#db7093"
+    },
+    {
+     "name": "PALEVIOLETRED1",
+     "value": "palevioletred1",
+     "hex": "#ff82ab"
+    },
+    {
+     "name": "PALEVIOLETRED2",
+     "value": "palevioletred2",
+     "hex": "#ee799f"
+    },
+    {
+     "name": "PALEVIOLETRED3",
+     "value": "palevioletred3",
+     "hex": "#cd6889"
+    },
+    {
+     "name": "PALEVIOLETRED4",
+     "value": "palevioletred4",
+     "hex": "#8b475d"
+    },
+    {
+     "name": "PAPAYAWHIP",
+     "value": "papayawhip",
+     "hex": "#ffefd5"
+    },
+    {
+     "name": "PEACHPUFF",
+     "value": "peachpuff",
+     "hex": "#ffdab9"
+    },
+    {
+     "name": "PEACHPUFF1",
+     "value": "peachpuff1",
+     "hex": "#ffdab9"
+    },
+    {
+     "name": "PEACHPUFF2",
+     "value": "peachpuff2",
+     "hex": "#eecbad"
+    },
+    {
+     "name": "PEACHPUFF3",
+     "value": "peachpuff3",
+     "hex": "#cdaf95"
+    },
+    {
+     "name": "PEACHPUFF4",
+     "value": "peachpuff4",
+     "hex": "#8b7765"
+    },
+    {
+     "name": "PERU",
+     "value": "peru",
+     "hex": "#cd853f"
+    },
+    {
+     "name": "PINK",
+     "value": "pink",
+     "hex": "#ffc0cb"
+    },
+    {
+     "name": "PINK1",
+     "value": "pink1",
+     "hex": "#ffb5c5"
+    },
+    {
+     "name": "PINK2",
+     "value": "pink2",
+     "hex": "#eea9b8"
+    },
+    {
+     "name": "PINK3",
+     "value": "pink3",
+     "hex": "#cd919e"
+    },
+    {
+     "name": "PINK4",
+     "value": "pink4",
+     "hex": "#8b636c"
+    },
+    {
+     "name": "PLUM",
+     "value": "plum",
+     "hex": "#dda0dd"
+    },
+    {
+     "name": "PLUM1",
+     "value": "plum1",
+     "hex": "#ffbbff"
+    },
+    {
+     "name": "PLUM2",
+     "value": "plum2",
+     "hex": "#eeaeee"
+    },
+    {
+     "name": "PLUM3",
+     "value": "plum3",
+     "hex": "#cd96cd"
+    },
+    {
+     "name": "PLUM4",
+     "value": "plum4",
+     "hex": "#8b668b"
+    },
+    {
+     "name": "POWDERBLUE",
+     "value": "powderblue",
+     "hex": "#b0e0e6"
+    },
+    {
+     "name": "PURPLE",
+     "value": "purple",
+     "hex": "#a020f0"
+    },
+    {
+     "name": "PURPLE1",
+     "value": "purple1",
+     "hex": "#9b30ff"
+    },
+    {
+     "name": "PURPLE2",
+     "value": "purple2",
+     "hex": "#912cee"
+    },
+    {
+     "name": "PURPLE3",
+     "value": "purple3",
+     "hex": "#7d26cd"
+    },
+    {
+     "name": "PURPLE4",
+     "value": "purple4",
+     "hex": "#551a8b"
+    },
+    {
+     "name": "RED",
+     "value": "red",
+     "hex": "#ff0000"
+    },
+    {
+     "name": "RED1",
+     "value": "red1",
+     "hex": "#ff0000"
+    },
+    {
+     "name": "RED2",
+     "value": "red2",
+     "hex": "#ee0000"
+    },
+    {
+     "name": "RED3",
+     "value": "red3",
+     "hex": "#cd0000"
+    },
+    {
+     "name": "RED4",
+     "value": "red4",
+     "hex": "#8b0000"
+    },
+    {
+     "name": "ROSYBROWN",
+     "value": "rosybrown",
+     "hex": "#bc8f8f"
+    },
+    {
+     "name": "ROSYBROWN1",
+     "value": "rosybrown1",
+     "hex": "#ffc1c1"
+    },
+    {
+     "name": "ROSYBROWN2",
+     "value": "rosybrown2",
+     "hex": "#eeb4b4"
+    },
+    {
+     "name": "ROSYBROWN3",
+     "value": "rosybrown3",
+     "hex": "#cd9b9b"
+    },
+    {
+     "name": "ROSYBROWN4",
+     "value": "rosybrown4",
+     "hex": "#8b6969"
+    },
+    {
+     "name": "ROYALBLUE",
+     "value": "royalblue",
+     "hex": "#4169e1"
+    },
+    {
+     "name": "ROYALBLUE1",
+     "value": "royalblue1",
+     "hex": "#4876ff"
+    },
+    {
+     "name": "ROYALBLUE2",
+     "value": "royalblue2",
+     "hex": "#436eee"
+    },
+    {
+     "name": "ROYALBLUE3",
+     "value": "royalblue3",
+     "hex": "#3a5fcd"
+    },
+    {
+     "name": "ROYALBLUE4",
+     "value": "royalblue4",
+     "hex": "#27408b"
+    },
+    {
+     "name": "SADDLEBROWN",
+     "value": "saddlebrown",
+     "hex": "#8b4513"
+    },
+    {
+     "name": "SALMON",
+     "value": "salmon",
+     "hex": "#fa8072"
+    },
+    {
+     "name": "SALMON1",
+     "value": "salmon1",
+     "hex": "#ff8c69"
+    },
+    {
+     "name": "SALMON2",
+     "value": "salmon2",
+     "hex": "#ee8262"
+    },
+    {
+     "name": "SALMON3",
+     "value": "salmon3",
+     "hex": "#cd7054"
+    },
+    {
+     "name": "SALMON4",
+     "value": "salmon4",
+     "hex": "#8b4c39"
+    },
+    {
+     "name": "SANDYBROWN",
+     "value": "sandybrown",
+     "hex": "#f4a460"
+    },
+    {
+     "name": "SEAGREEN",
+     "value": "seagreen",
+     "hex": "#2e8b57"
+    },
+    {
+     "name": "SEAGREEN1",
+     "value": "seagreen1",
+     "hex": "#54ff9f"
+    },
+    {
+     "name": "SEAGREEN2",
+     "value": "seagreen2",
+     "hex": "#4eee94"
+    },
+    {
+     "name": "SEAGREEN3",
+     "value": "seagreen3",
+     "hex": "#43cd80"
+    },
+    {
+     "name": "SEAGREEN4",
+     "value": "seagreen4",
+     "hex": "#2e8b57"
+    },
+    {
+     "name": "SEASHELL",
+     "value": "seashell",
+     "hex": "#fff5ee"
+    },
+    {
+     "name": "SEASHELL1",
+     "value": "seashell1",
+     "hex": "#fff5ee"
+    },
+    {
+     "name": "SEASHELL2",
+     "value": "seashell2",
+     "hex": "#eee5de"
+    },
+    {
+     "name": "SEASHELL3",
+     "value": "seashell3",
+     "hex": "#cdc5bf"
+    },
+    {
+     "name": "SEASHELL4",
+     "value": "seashell4",
+     "hex": "#8b8682"
+    },
+    {
+     "name": "SIENNA",
+     "value": "sienna",
+     "hex": "#a0522d"
+    },
+    {
+     "name": "SIENNA1",
+     "value": "sienna1",
+     "hex": "#ff8247"
+    },
+    {
+     "name": "SIENNA2",
+     "value": "sienna2",
+     "hex": "#ee7942"
+    },
+    {
+     "name": "SIENNA3",
+     "value": "sienna3",
+     "hex": "#cd6839"
+    },
+    {
+     "name": "SIENNA4",
+     "value": "sienna4",
+     "hex": "#8b4726"
+    },
+    {
+     "name": "SILVER",
+     "value": "silver",
+     "hex": "#c0c0c0"
+    },
+    {
+     "name": "SKYBLUE",
+     "value": "skyblue",
+     "hex": "#87ceeb"
+    },
+    {
+     "name": "SKYBLUE1",
+     "value": "skyblue1",
+     "hex": "#87ceff"
+    },
+    {
+     "name": "SKYBLUE2",
+     "value": "skyblue2",
+     "hex": "#7ec0ee"
+    },
+    {
+     "name": "SKYBLUE3",
+     "value": "skyblue3",
+     "hex": "#6ca6cd"
+    },
+    {
+     "name": "SKYBLUE4",
+     "value": "skyblue4",
+     "hex": "#4a708b"
+    },
+    {
+     "name": "SLATEBLUE",
+     "value": "slateblue",
+     "hex": "#6a5acd"
+    },
+    {
+     "name": "SLATEBLUE1",
+     "value": "slateblue1",
+     "hex": "#836fff"
+    },
+    {
+     "name": "SLATEBLUE2",
+     "value": "slateblue2",
+     "hex": "#7a67ee"
+    },
+    {
+     "name": "SLATEBLUE3",
+     "value": "slateblue3",
+     "hex": "#6959cd"
+    },
+    {
+     "name": "SLATEBLUE4",
+     "value": "slateblue4",
+     "hex": "#473c8b"
+    },
+    {
+     "name": "SLATEGRAY",
+     "value": "slategray",
+     "hex": "#708090"
+    },
+    {
+     "name": "SLATEGRAY1",
+     "value": "slategray1",
+     "hex": "#c6e2ff"
+    },
+    {
+     "name": "SLATEGRAY2",
+     "value": "slategray2",
+     "hex": "#b9d3ee"
+    },
+    {
+     "name": "SLATEGRAY3",
+     "value": "slategray3",
+     "hex": "#9fb6cd"
+    },
+    {
+     "name": "SLATEGRAY4",
+     "value": "slategray4",
+     "hex": "#6c7b8b"
+    },
+    {
+     "name": "SLATEGREY",
+     "value": "slategrey",
+     "hex": "#708090"
+    },
+    {
+     "name": "SNOW",
+     "value": "snow",
+     "hex": "#fffafa"
+    },
+    {
+     "name": "SNOW1",
+     "value": "snow1",
+     "hex": "#fffafa"
+    },
+    {
+     "name": "SNOW2",
+     "value": "snow2",
+     "hex": "#eee9e9"
+    },
+    {
+     "name": "SNOW3",
+     "value": "snow3",
+     "hex": "#cdc9c9"
+    },
+    {
+     "name": "SNOW4",
+     "value": "snow4",
+     "hex": "#8b8989"
+    },
+    {
+     "name": "SPRINGGREEN",
+     "value": "springgreen",
+     "hex": "#00ff7f"
+    },
+    {
+     "name": "SPRINGGREEN1",
+     "value": "springgreen1",
+     "hex": "#00ff7f"
+    },
+    {
+     "name": "SPRINGGREEN2",
+     "value": "springgreen2",
+     "hex": "#00ee76"
+    },
+    {
+     "name": "SPRINGGREEN3",
+     "value": "springgreen3",
+     "hex": "#00cd66"
+    },
+    {
+     "name": "SPRINGGREEN4",
+     "value": "springgreen4",
+     "hex": "#008b45"
+    },
+    {
+     "name": "STEELBLUE",
+     "value": "steelblue",
+     "hex": "#4682b4"
+    },
+    {
+     "name": "STEELBLUE1",
+     "value": "steelblue1",
+     "hex": "#63b8ff"
+    },
+    {
+     "name": "STEELBLUE2",
+     "value": "steelblue2",
+     "hex": "#5cacee"
+    },
+    {
+     "name": "STEELBLUE3",
+     "value": "steelblue3",
+     "hex": "#4f94cd"
+    },
+    {
+     "name": "STEELBLUE4",
+     "value": "steelblue4",
+     "hex": "#36648b"
+    },
+    {
+     "name": "TAN",
+     "value": "tan",
+     "hex": "#d2b48c"
+    },
+    {
+     "name": "TAN1",
+     "value": "tan1",
+     "hex": "#ffa54f"
+    },
+    {
+     "name": "TAN2",
+     "value": "tan2",
+     "hex": "#ee9a49"
+    },
+    {
+     "name": "TAN3",
+     "value": "tan3",
+     "hex": "#cd853f"
+    },
+    {
+     "name": "TAN4",
+     "value": "tan4",
+     "hex": "#8b5a2b"
+    },
+    {
+     "name": "TEAL",
+     "value": "teal",
+     "hex": "#008080"
+    },
+    {
+     "name": "THISTLE",
+     "value": "thistle",
+     "hex": "#d8bfd8"
+    },
+    {
+     "name": "THISTLE1",
+     "value": "thistle1",
+     "hex": "#ffe1ff"
+    },
+    {
+     "name": "THISTLE2",
+     "value": "thistle2",
+     "hex": "#eed2ee"
+    },
+    {
+     "name": "THISTLE3",
+     "value": "thistle3",
+     "hex": "#cdb5cd"
+    },
+    {
+     "name": "THISTLE4",
+     "value": "thistle4",
+     "hex": "#8b7b8b"
+    },
+    {
+     "name": "TOMATO",
+     "value": "tomato",
+     "hex": "#ff6347"
+    },
+    {
+     "name": "TOMATO1",
+     "value": "tomato1",
+     "hex": "#ff6347"
+    },
+    {
+     "name": "TOMATO2",
+     "value": "tomato2",
+     "hex": "#ee5c42"
+    },
+    {
+     "name": "TOMATO3",
+     "value": "tomato3",
+     "hex": "#cd4f39"
+    },
+    {
+     "name": "TOMATO4",
+     "value": "tomato4",
+     "hex": "#8b3626"
+    },
+    {
+     "name": "TURQUOISE",
+     "value": "turquoise",
+     "hex": "#40e0d0"
+    },
+    {
+     "name": "TURQUOISE1",
+     "value": "turquoise1",
+     "hex": "#00f5ff"
+    },
+    {
+     "name": "TURQUOISE2",
+     "value": "turquoise2",
+     "hex": "#00e5ee"
+    },
+    {
+     "name": "TURQUOISE3",
+     "value": "turquoise3",
+     "hex": "#00c5cd"
+    },
+    {
+     "name": "TURQUOISE4",
+     "value": "turquoise4",
+     "hex": "#00868b"
+    },
+    {
+     "name": "VIOLET",
+     "value": "violet",
+     "hex": "#ee82ee"
+    },
+    {
+     "name": "VIOLETRED",
+     "value": "violetred",
+     "hex": "#d02090"
+    },
+    {
+     "name": "VIOLETRED1",
+     "value": "violetred1",
+     "hex": "#ff3e96"
+    },
+    {
+     "name": "VIOLETRED2",
+     "value": "violetred2",
+     "hex": "#ee3a8c"
+    },
+    {
+     "name": "VIOLETRED3",
+     "value": "violetred3",
+     "hex": "#cd3278"
+    },
+    {
+     "name": "VIOLETRED4",
+     "value": "violetred4",
+     "hex": "#8b2252"
+    },
+    {
+     "name": "WHEAT",
+     "value": "wheat",
+     "hex": "#f5deb3"
+    },
+    {
+     "name": "WHEAT1",
+     "value": "wheat1",
+     "hex": "#ffe7ba"
+    },
+    {
+     "name": "WHEAT2",
+     "value": "wheat2",
+     "hex": "#eed8ae"
+    },
+    {
+     "name": "WHEAT3",
+     "value": "wheat3",
+     "hex": "#cdba96"
+    },
+    {
+     "name": "WHEAT4",
+     "value": "wheat4",
+     "hex": "#8b7e66"
+    },
+    {
+     "name": "WHITE",
+     "value": "white",
+     "hex": "#ffffff"
+    },
+    {
+     "name": "WHITESMOKE",
+     "value": "whitesmoke",
+     "hex": "#f5f5f5"
+    },
+    {
+     "name": "YELLOW",
+     "value": "yellow",
+     "hex": "#ffff00"
+    },
+    {
+     "name": "YELLOW1",
+     "value": "yellow1",
+     "hex": "#ffff00"
+    },
+    {
+     "name": "YELLOW2",
+     "value": "yellow2",
+     "hex": "#eeee00"
+    },
+    {
+     "name": "YELLOW3",
+     "value": "yellow3",
+     "hex": "#cdcd00"
+    },
+    {
+     "name": "YELLOW4",
+     "value": "yellow4",
+     "hex": "#8b8b00"
+    },
+    {
+     "name": "YELLOWGREEN",
+     "value": "yellowgreen",
+     "hex": "#9acd32"
+    }
+   ],
+   "star": true
+  },
+  {
+   "name": "CONSTANTS",
+   "kind": "namespace",
+   "signature": "CONSTANTS",
+   "detail": "18 groups of words",
+   "summary": "Names for the words that choose an option, in groups, so an editor can list them and a typing slip is caught.",
+   "url": "reference/API.md#const-CONSTANTS",
+   "members": [
+    {
+     "name": "MODE",
+     "used_by": [
+      "rect_mode",
+      "ellipse_mode",
+      "image_mode"
+     ],
+     "members": [
+      {
+       "name": "CORNER",
+       "value": "corner"
+      },
+      {
+       "name": "CORNERS",
+       "value": "corners"
+      },
+      {
+       "name": "CENTER",
+       "value": "center"
+      },
+      {
+       "name": "RADIUS",
+       "value": "radius"
+      }
+     ]
+    },
+    {
+     "name": "ARC",
+     "used_by": [
+      "arc"
+     ],
+     "members": [
+      {
+       "name": "OPEN",
+       "value": "open"
+      },
+      {
+       "name": "CHORD",
+       "value": "chord"
+      },
+      {
+       "name": "PIE",
+       "value": "pie"
+      }
+     ]
+    },
+    {
+     "name": "COLOR_MODE",
+     "used_by": [
+      "color_mode"
+     ],
+     "members": [
+      {
+       "name": "RGB",
+       "value": "rgb"
+      },
+      {
+       "name": "HSB",
+       "value": "hsb"
+      },
+      {
+       "name": "HSL",
+       "value": "hsl"
+      }
+     ]
+    },
+    {
+     "name": "ALIGN",
+     "used_by": [
+      "text_align"
+     ],
+     "members": [
+      {
+       "name": "LEFT",
+       "value": "left",
+       "meaning": "x is where the text starts; it runs to the right. The default."
+      },
+      {
+       "name": "CENTER",
+       "value": "center",
+       "meaning": "Across: x is the middle of the text. Up and down: y is halfway between the top and the bottom."
+      },
+      {
+       "name": "RIGHT",
+       "value": "right",
+       "meaning": "x is where the text ends."
+      },
+      {
+       "name": "JUSTIFY",
+       "value": "justify",
+       "meaning": "In text_box(), each line is stretched to the box's width by widening the spaces, except the last line of a paragraph and a line of one word. In text() the same as left."
+      },
+      {
+       "name": "TOP",
+       "value": "top",
+       "meaning": "y is the top of the text: the tallest letters' height (the font's ascent). The default."
+      },
+      {
+       "name": "BASELINE",
+       "value": "baseline",
+       "meaning": "y is the line the letters stand on; the tails of g, p and y hang below it. Lines of text in different sizes line up on their baselines."
+      },
+      {
+       "name": "BOTTOM",
+       "value": "bottom",
+       "meaning": "y is the bottom of the text: below the tails of g, p and y (the font's descent)."
+      }
+     ]
+    },
+    {
+     "name": "STYLE",
+     "used_by": [
+      "text_style",
+      "FormattedString.append"
+     ],
+     "members": [
+      {
+       "name": "NORMAL",
+       "value": "normal",
+       "meaning": "Upright letters of the usual weight. The default."
+      },
+      {
+       "name": "BOLD",
+       "value": "bold",
+       "meaning": "Thicker, heavier letters, for emphasis and headlines."
+      },
+      {
+       "name": "ITALIC",
+       "value": "italic",
+       "meaning": "Letters slanted to the right (the built-in font's oblique)."
+      },
+      {
+       "name": "BOLD_ITALIC",
+       "value": "bold_italic",
+       "meaning": "Bold and slanted."
+      }
+     ]
+    },
+    {
+     "name": "CAP",
+     "used_by": [
+      "stroke_cap",
+      "PathBuilder.expand_stroke"
+     ],
+     "members": [
+      {
+       "name": "ROUND",
+       "value": "round",
+       "meaning": "Each end of a line is a half circle, so the line reaches half its width past its end points. The default."
+      },
+      {
+       "name": "SQUARE",
+       "value": "square",
+       "meaning": "Each end is squared off half the line's width past its end point."
+      },
+      {
+       "name": "BUTT",
+       "value": "butt",
+       "meaning": "Each end is cut off flat exactly at its end point."
+      }
+     ]
+    },
+    {
+     "name": "JOIN",
+     "used_by": [
+      "stroke_join",
+      "PathBuilder.expand_stroke"
+     ],
+     "members": [
+      {
+       "name": "ROUND",
+       "value": "round",
+       "meaning": "Corners are rounded. The default."
+      },
+      {
+       "name": "MITER",
+       "value": "miter",
+       "meaning": "Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not shoot far out."
+      },
+      {
+       "name": "BEVEL",
+       "value": "bevel",
+       "meaning": "Corners are cut off flat."
+      }
+     ]
+    },
+    {
+     "name": "CURSOR",
+     "used_by": [
+      "cursor"
+     ],
+     "members": [
+      {
+       "name": "ARROW",
+       "value": "arrow",
+       "meaning": "The usual pointer. The default."
+      },
+      {
+       "name": "CROSS",
+       "value": "cross",
+       "meaning": "A thin cross, for aiming at a point."
+      },
+      {
+       "name": "HAND",
+       "value": "hand",
+       "meaning": "A pointing hand, as over a link: something can be clicked."
+      },
+      {
+       "name": "MOVE",
+       "value": "move",
+       "meaning": "Four arrows: something can be dragged."
+      },
+      {
+       "name": "TEXT",
+       "value": "text",
+       "meaning": "The I-beam: text can be typed or selected."
+      },
+      {
+       "name": "WAIT",
+       "value": "wait",
+       "meaning": "The busy pointer (an hourglass or a spinning circle)."
+      }
+     ]
+    },
+    {
+     "name": "BLEND",
+     "used_by": [
+      "blend_mode"
+     ],
+     "members": [
+      {
+       "name": "NORMAL",
+       "value": "normal",
+       "meaning": "The new colour covers the old one (see-through only as far as its alpha or opacity() says)."
+      },
+      {
+       "name": "MULTIPLY",
+       "value": "multiply",
+       "meaning": "Multiplies the colours, so the result is always darker: like overlapping inks or colour filters. White leaves the old colour unchanged; black gives black."
+      },
+      {
+       "name": "SCREEN",
+       "value": "screen",
+       "meaning": "The opposite of multiply: the result is always lighter, like two slide projectors on one screen. Black leaves the old colour unchanged; white gives white."
+      },
+      {
+       "name": "OVERLAY",
+       "value": "overlay",
+       "meaning": "Multiply where the old colour is dark, screen where it is light: more contrast, keeping the old picture's highlights and shadows."
+      },
+      {
+       "name": "DARKEN",
+       "value": "darken",
+       "meaning": "Keeps the darker of the two colours, channel by channel (red, green and blue separately)."
+      },
+      {
+       "name": "LIGHTEN",
+       "value": "lighten",
+       "meaning": "Keeps the lighter of the two colours, channel by channel."
+      },
+      {
+       "name": "ADD",
+       "value": "add",
+       "meaning": "Adds the colours, so overlaps glow and turn white quickly: light added to light."
+      },
+      {
+       "name": "DIFFERENCE",
+       "value": "difference",
+       "meaning": "The difference between the colours: the same colours give black, white turns the old colour into its opposite (a negative)."
+      },
+      {
+       "name": "EXCLUSION",
+       "value": "exclusion",
+       "meaning": "Like difference, with less contrast: white still inverts, mid-grey gives grey."
+      },
+      {
+       "name": "DODGE",
+       "value": "dodge",
+       "meaning": "Brightens the old colour by the new one; bright new colours burn out to white (color dodge). Black changes nothing."
+      },
+      {
+       "name": "BURN",
+       "value": "burn",
+       "meaning": "Darkens the old colour by the new one, with more contrast (color burn). White changes nothing."
+      },
+      {
+       "name": "HARD_LIGHT",
+       "value": "hard_light",
+       "meaning": "Multiply where the new colour is dark, screen where it is light: like a harsh spotlight of the new colour."
+      },
+      {
+       "name": "SOFT_LIGHT",
+       "value": "soft_light",
+       "meaning": "A gentler hard_light: like a soft, diffused light of the new colour. Mid-grey changes nothing."
+      },
+      {
+       "name": "HUE",
+       "value": "hue",
+       "meaning": "The new colour's hue with the old colour's saturation and lightness: recolours the old picture."
+      },
+      {
+       "name": "SATURATION",
+       "value": "saturation",
+       "meaning": "The new colour's saturation with the old colour's hue and lightness: makes the old picture more vivid or greyer."
+      },
+      {
+       "name": "COLOR",
+       "value": "color",
+       "meaning": "The new colour's hue and saturation with the old colour's lightness: tints the old picture while keeping its shading."
+      },
+      {
+       "name": "LUMINOSITY",
+       "value": "luminosity",
+       "meaning": "The new colour's lightness with the old colour's hue and saturation: the opposite of color."
+      }
+     ]
+    },
+    {
+     "name": "FILTER",
+     "used_by": [
+      "filter",
+      "apply_filter"
+     ],
+     "members": [
+      {
+       "name": "THRESHOLD",
+       "value": "threshold",
+       "meaning": "Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5)."
+      },
+      {
+       "name": "GRAY",
+       "value": "gray",
+       "meaning": "Every pixel becomes the grey of its brightness: a black-and-white picture."
+      },
+      {
+       "name": "OPAQUE",
+       "value": "opaque",
+       "meaning": "Makes every pixel fully opaque, removing any see-through parts."
+      },
+      {
+       "name": "INVERT",
+       "value": "invert",
+       "meaning": "Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan."
+      },
+      {
+       "name": "BLUR",
+       "value": "blur",
+       "meaning": "Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier."
+      },
+      {
+       "name": "POSTERIZE",
+       "value": "posterize",
+       "meaning": "Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print."
+      },
+      {
+       "name": "ERODE",
+       "value": "erode",
+       "meaning": "Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish."
+      },
+      {
+       "name": "DILATE",
+       "value": "dilate",
+       "meaning": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink."
+      }
+     ]
+    },
+    {
+     "name": "WAVE",
+     "used_by": [
+      "tone",
+      "note",
+      "melody"
+     ],
+     "members": [
+      {
+       "name": "SINE",
+       "value": "sine",
+       "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
+      },
+      {
+       "name": "SQUARE",
+       "value": "square",
+       "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
+      },
+      {
+       "name": "SAW",
+       "value": "saw",
+       "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
+      },
+      {
+       "name": "TRIANGLE",
+       "value": "triangle",
+       "meaning": "Between sine and square: soft but a little reedy, like a flute."
+      },
+      {
+       "name": "SOFT",
+       "value": "soft",
+       "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
+      },
+      {
+       "name": "NOISE",
+       "value": "noise",
+       "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
+      }
+     ]
+    },
+    {
+     "name": "TUNING",
+     "used_by": [
+      "melody"
+     ],
+     "members": [
+      {
+       "name": "EQUAL",
+       "value": "equal"
+      },
+      {
+       "name": "JUST",
+       "value": "just"
+      }
+     ]
+    },
+    {
+     "name": "ANCHOR",
+     "used_by": [
+      "Mark.place"
+     ],
+     "members": [
+      {
+       "name": "ORIGIN",
+       "value": "origin",
+       "meaning": "The mark's own (0, 0): the point it was drawn around. The default."
+      },
+      {
+       "name": "CENTER",
+       "value": "center",
+       "meaning": "The middle of the mark's bounds()."
+      },
+      {
+       "name": "TOP",
+       "value": "top",
+       "meaning": "The middle of the top edge."
+      },
+      {
+       "name": "BOTTOM",
+       "value": "bottom",
+       "meaning": "The middle of the bottom edge."
+      },
+      {
+       "name": "LEFT",
+       "value": "left",
+       "meaning": "The middle of the left edge."
+      },
+      {
+       "name": "RIGHT",
+       "value": "right",
+       "meaning": "The middle of the right edge."
+      },
+      {
+       "name": "TOP_LEFT",
+       "value": "top-left",
+       "meaning": "The top-left corner of the bounds."
+      },
+      {
+       "name": "TOP_RIGHT",
+       "value": "top-right",
+       "meaning": "The top-right corner."
+      },
+      {
+       "name": "BOTTOM_LEFT",
+       "value": "bottom-left",
+       "meaning": "The bottom-left corner."
+      },
+      {
+       "name": "BOTTOM_RIGHT",
+       "value": "bottom-right",
+       "meaning": "The bottom-right corner."
+      }
+     ]
+    },
+    {
+     "name": "MARK_STYLE",
+     "used_by": [
+      "Mark.place"
+     ],
+     "members": [
+      {
+       "name": "OWN",
+       "value": "own"
+      },
+      {
+       "name": "CURRENT",
+       "value": "current"
+      }
+     ]
+    },
+    {
+     "name": "SAVE_TEXT",
+     "used_by": [
+      "save",
+      "Picture.save"
+     ],
+     "members": [
+      {
+       "name": "LIVE",
+       "value": "live"
+      },
+      {
+       "name": "SHAPES",
+       "value": "shapes"
+      }
+     ]
+    },
+    {
+     "name": "KEY",
+     "used_by": [
+      "key_down",
+      "f.key"
+     ],
+     "members": [
+      {
+       "name": "UP",
+       "value": "up",
+       "meaning": "The up arrow key."
+      },
+      {
+       "name": "DOWN",
+       "value": "down",
+       "meaning": "The down arrow key."
+      },
+      {
+       "name": "LEFT",
+       "value": "left",
+       "meaning": "The left arrow key."
+      },
+      {
+       "name": "RIGHT",
+       "value": "right",
+       "meaning": "The right arrow key."
+      },
+      {
+       "name": "SPACE",
+       "value": "space",
+       "meaning": "The space bar."
+      },
+      {
+       "name": "ENTER",
+       "value": "enter",
+       "meaning": "The Enter (Return) key."
+      },
+      {
+       "name": "ESCAPE",
+       "value": "escape",
+       "meaning": "The Esc key. On the desktop it also closes the sketch's window."
+      }
+     ]
+    },
+    {
+     "name": "MOUSE",
+     "used_by": [
+      "f.mouse_button"
+     ],
+     "members": [
+      {
+       "name": "LEFT",
+       "value": "left"
+      },
+      {
+       "name": "CENTER",
+       "value": "center"
+      },
+      {
+       "name": "RIGHT",
+       "value": "right"
+      }
+     ]
+    },
+    {
+     "name": "PAGE",
+     "used_by": [
+      "size",
+      "new_page",
+      "page_size"
+     ],
+     "members": [
+      {
+       "name": "A3",
+       "value": "A3"
+      },
+      {
+       "name": "A4",
+       "value": "A4"
+      },
+      {
+       "name": "A5",
+       "value": "A5"
+      },
+      {
+       "name": "B5",
+       "value": "B5"
+      },
+      {
+       "name": "LETTER",
+       "value": "Letter"
+      },
+      {
+       "name": "LEGAL",
+       "value": "Legal"
+      },
+      {
+       "name": "TABLOID",
+       "value": "Tabloid"
+      }
+     ]
+    }
+   ],
+   "star": true
+  },
+  {
    "name": "FormattedString",
    "kind": "class",
    "signature": "FormattedString()",
@@ -32,7 +3994,7 @@
    "name": "arc",
    "kind": "function",
    "signature": "arc(x, y, width, height, start, stop, mode='open')",
-   "detail": "(x: float, y: float, width: float, height: float, start: float, stop: float, mode: str = open) -> None",
+   "detail": "(x: float, y: float, width: float, height: float, start: float, stop: float, mode: CONSTANTS.ARC = open) -> None",
    "summary": "Draw part of an ellipse.",
    "url": "reference/API.md#fn-arc",
    "star": true
@@ -104,7 +4066,7 @@
    "name": "blend_mode",
    "kind": "function",
    "signature": "blend_mode(mode)",
-   "detail": "(mode: str) -> None",
+   "detail": "(mode: CONSTANTS.BLEND) -> None",
    "summary": "Choose how what you draw next mixes with what is already there.",
    "url": "reference/API.md#fn-blend_mode",
    "star": true,
@@ -230,7 +4192,7 @@
    "name": "color_mode",
    "kind": "function",
    "signature": "color_mode(mode, max1=None, max2=None, max3=None, max_alpha=None)",
-   "detail": "(mode: str, max1: float | None = None, max2: float | None = None, max3: float | None = None, max_alpha: float | None = None) -> None",
+   "detail": "(mode: CONSTANTS.COLOR_MODE, max1: float | None = None, max2: float | None = None, max3: float | None = None, max_alpha: float | None = None) -> None",
    "summary": "Choose how numbers become a colour.",
    "url": "reference/API.md#fn-color_mode",
    "star": true
@@ -284,7 +4246,7 @@
    "name": "cursor",
    "kind": "function",
    "signature": "cursor(kind='arrow')",
-   "detail": "(kind: str = arrow) -> None",
+   "detail": "(kind: CONSTANTS.CURSOR = arrow) -> None",
    "summary": "Choose the shape of the mouse pointer over the canvas.",
    "url": "reference/API.md#fn-cursor",
    "star": true,
@@ -411,7 +4373,7 @@
    "name": "ellipse_mode",
    "kind": "function",
    "signature": "ellipse_mode(mode)",
-   "detail": "(mode: str) -> None",
+   "detail": "(mode: CONSTANTS.MODE) -> None",
    "summary": "Choose how ellipse(), circle() and arc() read their numbers.",
    "url": "reference/API.md#fn-ellipse_mode",
    "star": true
@@ -447,7 +4409,7 @@
    "name": "apply_filter",
    "kind": "function",
    "signature": "apply_filter(kind, value=None)",
-   "detail": "(kind: str, value: float | None = None) -> None",
+   "detail": "(kind: CONSTANTS.FILTER, value: float | None = None) -> None",
    "summary": "Change everything drawn so far, in place: the same as filter().",
    "url": "reference/API.md#fn-apply_filter",
    "star": true,
@@ -555,7 +4517,7 @@
    "name": "image_mode",
    "kind": "function",
    "signature": "image_mode(mode)",
-   "detail": "(mode: str) -> None",
+   "detail": "(mode: CONSTANTS.MODE) -> None",
    "summary": "Choose how image() reads its numbers.",
    "url": "reference/API.md#fn-image_mode",
    "star": true
@@ -573,7 +4535,7 @@
    "name": "key_down",
    "kind": "function",
    "signature": "key_down(key)",
-   "detail": "(key: str | int) -> bool",
+   "detail": "(key: CONSTANTS.KEY | str | int) -> bool",
    "summary": "Return whether a key is held down right now.",
    "url": "reference/API.md#fn-key_down",
    "star": true,
@@ -713,7 +4675,7 @@
    "name": "tone",
    "kind": "function",
    "signature": "tone(frequency, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
-   "detail": "(frequency: float, seconds: float, wave: str = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
+   "detail": "(frequency: float, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
    "summary": "Make a sound that is one steady tone.",
    "url": "reference/API.md#fn-tone",
    "star": true,
@@ -750,7 +4712,7 @@
    "name": "note",
    "kind": "function",
    "signature": "note(name, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
-   "detail": "(name: str, seconds: float, wave: str = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
+   "detail": "(name: str, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
    "summary": "Make a sound that is one named note.",
    "url": "reference/API.md#fn-note",
    "star": true,
@@ -796,7 +4758,7 @@
    "name": "melody",
    "kind": "function",
    "signature": "melody(text, tempo=120, wave='soft', sa=None, tuning='equal', volume=0.5)",
-   "detail": "(text: str, tempo: float = 120, wave: str = soft, sa: str | None = None, tuning: str = equal, volume: float = 0.5) -> Sound",
+   "detail": "(text: str, tempo: float = 120, wave: CONSTANTS.WAVE = soft, sa: str | None = None, tuning: CONSTANTS.TUNING = equal, volume: float = 0.5) -> Sound",
    "summary": "Make a sound from a string of notes.",
    "url": "reference/API.md#fn-melody",
    "star": true,
@@ -1094,7 +5056,7 @@
    "name": "new_page",
    "kind": "function",
    "signature": "new_page(width=None, height=None)",
-   "detail": "(width: int | str | None = None, height: int | None = None) -> None",
+   "detail": "(width: int | CONSTANTS.PAGE | str | None = None, height: int | None = None) -> None",
    "summary": "End this page and start a blank one.",
    "url": "reference/API.md#fn-new_page",
    "star": true
@@ -1256,7 +5218,7 @@
    "name": "page_size",
    "kind": "function",
    "signature": "page_size(name, landscape=False)",
-   "detail": "(name: str, landscape: bool = False) -> tuple[int, int]",
+   "detail": "(name: CONSTANTS.PAGE | str, landscape: bool = False) -> tuple[int, int]",
    "summary": "Return the size of a named page, in points.",
    "url": "reference/API.md#fn-page_size",
    "star": true
@@ -1427,7 +5389,7 @@
    "name": "rect_mode",
    "kind": "function",
    "signature": "rect_mode(mode)",
-   "detail": "(mode: str) -> None",
+   "detail": "(mode: CONSTANTS.MODE) -> None",
    "summary": "Choose how rect() and square() read their numbers.",
    "url": "reference/API.md#fn-rect_mode",
    "star": true
@@ -1481,7 +5443,7 @@
    "name": "save",
    "kind": "function",
    "signature": "save(path, text='live', bleed=0, marks=False, dpi=None)",
-   "detail": "(path: str, *, text: str = live, bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None",
+   "detail": "(path: str, *, text: CONSTANTS.SAVE_TEXT = live, bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None",
    "summary": "Save this frame to a picture or document file.",
    "url": "reference/API.md#fn-save",
    "star": true
@@ -1607,7 +5569,7 @@
    "name": "size",
    "kind": "function",
    "signature": "size(width, height=None, title='funground', fps=None, margin=0, landscape=False)",
-   "detail": "(width: int | str, height: int | None = None, *, title: str = funground, fps: int | None = None, margin: float | tuple = 0, landscape: bool = False) -> None",
+   "detail": "(width: int | CONSTANTS.PAGE | str, height: int | None = None, *, title: str = funground, fps: int | None = None, margin: float | tuple = 0, landscape: bool = False) -> None",
    "summary": "Create the canvas, or change its size.",
    "url": "reference/API.md#fn-size",
    "star": true
@@ -1652,7 +5614,7 @@
    "name": "stroke_cap",
    "kind": "function",
    "signature": "stroke_cap(cap)",
-   "detail": "(cap: str) -> None",
+   "detail": "(cap: CONSTANTS.CAP) -> None",
    "summary": "Choose how the ends of lines look.",
    "url": "reference/API.md#fn-stroke_cap",
    "star": true,
@@ -1686,7 +5648,7 @@
    "name": "stroke_join",
    "kind": "function",
    "signature": "stroke_join(join)",
-   "detail": "(join: str) -> None",
+   "detail": "(join: CONSTANTS.JOIN) -> None",
    "summary": "Choose how corners of outlines look.",
    "url": "reference/API.md#fn-stroke_join",
    "star": true,
@@ -1738,7 +5700,7 @@
    "name": "text_align",
    "kind": "function",
    "signature": "text_align(horizontal, vertical=None)",
-   "detail": "(horizontal: str, vertical: str | None = None) -> None",
+   "detail": "(horizontal: CONSTANTS.ALIGN, vertical: CONSTANTS.ALIGN | None = None) -> None",
    "summary": "Choose which point of the text (x, y) means.",
    "url": "reference/API.md#fn-text_align",
    "star": true,
@@ -1866,7 +5828,7 @@
    "name": "text_style",
    "kind": "function",
    "signature": "text_style(style)",
-   "detail": "(style: str) -> None",
+   "detail": "(style: CONSTANTS.STYLE) -> None",
    "summary": "Choose one of the four styles of the built-in font.",
    "url": "reference/API.md#fn-text_style",
    "star": true,
@@ -2165,7 +6127,7 @@
    "name": "filter",
    "kind": "function",
    "signature": "filter(kind, value=None)",
-   "detail": "(kind: str, value: float | None = None) -> None",
+   "detail": "(kind: CONSTANTS.FILTER, value: float | None = None) -> None",
    "summary": "Change everything drawn so far, in place.",
    "url": "reference/API.md#fn-filter",
    "star": false,

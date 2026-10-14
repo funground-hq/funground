@@ -9,6 +9,7 @@ never changes once built, which is what makes reuse safe.
 from __future__ import annotations
 
 from . import pathops
+from ._options import StrokeCap, StrokeJoin
 from .geometry import Path, Transform, rect_radii
 
 
@@ -344,7 +345,7 @@ class PathBuilder:
         return self.xor(other)
 
     # ---- outlines, queries and moves (each returns a NEW builder or a value; contract F12)
-    def expand_stroke(self, width: float, cap: str = "round", join: str = "round",
+    def expand_stroke(self, width: float, cap: StrokeCap = "round", join: StrokeJoin = "round",
                       miter_limit: float = 10, dash=None) -> "PathBuilder":
         """Make a new path that is the outline a stroke would paint, so you can fill, cut or clip with it.
 

@@ -73,6 +73,28 @@ def test_every_public_function_is_annotated():
     assert not lacking, lacking
 
 
+def test_colors_and_constants_are_declared_statically_as_final_words():
+    """An editor reads the class bodies, so each name is ``NAME: Final = "word"`` (S-174), not made at run time."""
+    def class_bodies(path, names):
+        tree = ast.parse((PACKAGE / path).read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ClassDef) and node.name in names:
+                yield node
+
+    seen = 0
+    for path, names in (("_color_names_class.py", {"COLORS"}), ("_constants.py", {"CONSTANTS"})):
+        for cls in class_bodies(path, names):
+            for group in [cls, *[n for n in cls.body if isinstance(n, ast.ClassDef)]]:
+                for stmt in group.body:
+                    if isinstance(stmt, ast.AnnAssign):
+                        assert ast.unparse(stmt.annotation) == "Final", ast.unparse(stmt)
+                        assert isinstance(stmt.value, ast.Constant) and isinstance(stmt.value.value, str)
+                        seen += 1
+                    else:
+                        assert isinstance(stmt, (ast.Expr, ast.ClassDef)), ast.unparse(stmt)   # a docstring, or a group
+    assert seen == len(f.COLORS) + sum(len(group) for group in f.CONSTANTS)
+
+
 @pytest.mark.skipif(shutil.which("pyright") is None, reason="pyright is not installed")
 def test_pyright_reads_the_package(tmp_path):
     sketch = tmp_path / "sketch.py"
@@ -83,13 +105,27 @@ def test_pyright_reads_the_package(tmp_path):
         "f.filter('invert')\n"
         "reveal_type(f.width)\n"
         "reveal_type(f.mouse_x)\n"
-        "circle(1, 2, 3)\n", encoding="utf-8")
+        "circle(1, 2, 3)\n"
+        "reveal_type(f.COLORS.TOMATO)\n"
+        "f.fill(f.COLORS.TOMATO)\n"
+        "f.text_align(f.CONSTANTS.ALIGN.CENTER)\n"
+        "text_align(CONSTANTS.ALIGN.LEFT, CONSTANTS.ALIGN.BASELINE)\n"
+        "f.blend_mode('multiply')\n"
+        "f.text_align('centre')\n"
+        "f.rect_mode(f.CONSTANTS.ALIGN.TOP)\n"
+        "f.fill(f.COLORS.TOMATOE)\n", encoding="utf-8")
     run = subprocess.run([shutil.which("pyright"), "--outputjson", str(sketch)], capture_output=True, text=True,
                          cwd=str(PACKAGE.parent), timeout=300)
     report = json.loads(run.stdout)
     diagnostics = report["generalDiagnostics"]
     errors = [d for d in diagnostics if d["severity"] == "error"]
+    # the last three lines are meant to be wrong: a misspelt word, a word of another group, a misspelt colour
+    wrong = [d for d in errors if d["range"]["start"]["line"] >= 12]
+    assert len(wrong) == 3 and {d["range"]["start"]["line"] for d in wrong} == {12, 13, 14}, wrong
+    errors = [d for d in errors if d not in wrong]
     assert not errors, errors
     assert not [d for d in diagnostics if "reportPrivateImportUsage" in d.get("rule", "")]
     infos = " ".join(d["message"] for d in diagnostics if d["severity"] == "information")
     assert 'Type of "f.width" is "int"' in infos and 'Type of "f.width" is "object"' not in infos
+    assert 'Type of "f.COLORS.TOMATO" is "str"' not in infos
+    assert "Literal['tomato']" in infos or 'Literal["tomato"]' in infos
