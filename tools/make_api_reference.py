@@ -20,6 +20,7 @@ Docstring format (parsed by parse_doc below; tests/test_api_docs.py holds the ru
 from __future__ import annotations
 
 import importlib
+import ast
 import inspect
 import json
 import re
@@ -34,6 +35,7 @@ sys.path.insert(0, str(ROOT))
 import funground as f  # noqa: E402
 from funground import _colornames, api as _api, pages, synth  # noqa: E402
 from funground import analysis, marks, typography  # noqa: E402
+from funground._namespaces import NAMESPACE_NAMES  # noqa: E402
 _color = sys.modules["funground.color"]  # f.color (the function) hides the module as an attribute
 from funground.export import FORMATS, TEXT_MODES  # noqa: E402
 from funground.export.motion import MOTION_FORMATS  # noqa: E402
@@ -42,6 +44,8 @@ from funground.platform.base import CURSOR_KINDS, KEY_NAMES, MOUSE_BUTTONS  # no
 from funground.sketch import CALLBACK_NAMES, Sketch  # noqa: E402
 
 OUT = ROOT / "docs" / "reference" / "API.md"
+COMPLETIONS = ROOT / "funground" / "completions.json"
+COLORS_CLASS = ROOT / "funground" / "_color_names_class.py"
 CLASS_LIST = ROOT / "docs" / "reference" / "api_classes.txt"
 RULES = ROOT / "docs" / "reference" / "llms_rules.md"
 REPO_URL = "https://github.com/funground-hq/funground/blob/main/"
@@ -101,7 +105,56 @@ GROUPS: dict[str, list[str]] = {
     "Drawing sound": ["draw_wave", "draw_spectrum", "spectrogram", "draw_pitch_line"],
     "Ragas and talas": ["ragas", "raga", "talas", "tala_info", "tala", "match_ragas"],
     "Classes": ["Vector", "FormattedString"],
+    "Names for colours and options": ["COLORS", "CONSTANTS"],
 }
+
+# Which parameters take the words of each f.CONSTANTS group (D-103): (function or method, parameter). tests/test_constants.py
+# checks each pair against the code that validates the words, in both directions, so this list cannot drift.
+GROUP_PARAMS: dict[str, list[tuple[str, str]]] = {
+    "MODE": [("rect_mode", "mode"), ("ellipse_mode", "mode"), ("image_mode", "mode")],
+    "ARC": [("arc", "mode")],
+    "COLOR_MODE": [("color_mode", "mode")],
+    "ALIGN": [("text_align", "horizontal"), ("text_align", "vertical")],
+    "STYLE": [("text_style", "style"), ("FormattedString.append", "style")],
+    "CAP": [("stroke_cap", "cap"), ("PathBuilder.expand_stroke", "cap")],
+    "JOIN": [("stroke_join", "join"), ("PathBuilder.expand_stroke", "join")],
+    "CURSOR": [("cursor", "kind")],
+    "BLEND": [("blend_mode", "mode")],
+    "FILTER": [("filter", "kind"), ("apply_filter", "kind")],
+    "WAVE": [("tone", "wave"), ("note", "wave"), ("melody", "wave")],
+    "TUNING": [("melody", "tuning")],
+    "ANCHOR": [("Mark.place", "anchor")],
+    "MARK_STYLE": [("Mark.place", "style")],
+    "SAVE_TEXT": [("save", "text"), ("Picture.save", "text")],
+    "KEY": [("key_down", "key"), ("key", "value")],
+    "MOUSE": [("mouse_button", "value")],
+    "PAGE": [("size", "width"), ("new_page", "width"), ("page_size", "name")],
+}
+# The sentences that already explain the words of a group (the S-179 tables), for completions.json and API.md.
+GROUP_MEANINGS: dict[str, list[dict[str, str]]] = {
+    "ALIGN": [Sketch.TEXT_ALIGNS, Sketch.TEXT_VALIGNS], "STYLE": [typography.STYLE_MEANINGS],
+    "CAP": [Sketch.STROKE_CAPS], "JOIN": [Sketch.STROKE_JOINS], "CURSOR": [CURSOR_KINDS],
+    "BLEND": [Sketch.BLEND_MODES], "FILTER": [FILTER_KINDS], "WAVE": [synth.WAVES],
+    "ANCHOR": [marks.ANCHOR_MEANINGS], "KEY": [KEY_NAMES],
+}
+
+
+def group_used_by(group: str) -> list[str]:
+    """The functions that take a group's words (a live value such as f.key is written without a call)."""
+    names: list[str] = []
+    for function, parameter in GROUP_PARAMS[group]:
+        label = function if parameter != "value" else f"f.{function}"
+        if label not in names:
+            names.append(label)
+    return names
+
+
+def word_meaning(group: str, word: str) -> str | None:
+    """The sentence that explains *word* in *group*, or None. text_align's "center" has two (across, up and down)."""
+    found = [table[word] for table in GROUP_MEANINGS.get(group, []) if word in table]
+    if len(found) == 2:
+        return f"Across: {found[0]} Up and down: {found[1]}"
+    return found[0] if found else None
 
 
 def slug_of(title: str) -> str:
@@ -213,7 +266,7 @@ def all_classes() -> list[tuple[str, type]]:
             found.append((cls.__name__, cls))
     for name in f._PUBLIC_NAMES:
         obj = getattr(f, name, None) if name not in _api.LIVE_NAMES else None
-        if inspect.isclass(obj) and obj not in seen:
+        if inspect.isclass(obj) and obj not in seen and name not in NAMESPACE_NAMES:
             seen.add(obj)
             found.append((obj.__name__, obj))
     return found
@@ -240,6 +293,20 @@ def esc(text: str) -> str:
     return text.replace("|", "\\|")
 
 
+# The Literal aliases of funground/_options.py are named for the code; a learner reads the group of f.CONSTANTS that
+# holds the same words (tests/test_api_docs.py checks every alias has its group).
+ALIAS_GROUP = {"RectMode": "MODE", "EllipseMode": "MODE", "ImageMode": "MODE", "ArcMode": "ARC", "ColorMode": "COLOR_MODE",
+               "BlendMode": "BLEND", "TextAlignX": "ALIGN", "TextAlignY": "ALIGN", "TextStyle": "STYLE",
+               "StrokeCap": "CAP", "StrokeJoin": "JOIN", "CursorKind": "CURSOR", "FilterKind": "FILTER", "Wave": "WAVE",
+               "Tuning": "TUNING", "MarkAnchor": "ANCHOR", "MarkStyle": "MARK_STYLE", "SaveText": "SAVE_TEXT",
+               "KeyName": "KEY", "PageName": "PAGE"}
+
+
+def learner_types(text: str) -> str:
+    """A signature with each option alias written as its group: ``mode: RectMode`` becomes ``mode: CONSTANTS.MODE``."""
+    return re.sub(r"\b(" + "|".join(ALIAS_GROUP) + r")\b", lambda m: "CONSTANTS." + ALIAS_GROUP[m.group(1)], text)
+
+
 def signature_text(prefix: str, name: str, obj, drop_first: bool = False) -> str:
     if not callable(obj):                                  # a value such as f.ground: its name alone
         return f"{prefix}{name}"
@@ -252,7 +319,7 @@ def signature_text(prefix: str, name: str, obj, drop_first: bool = False) -> str
         params = params[1:]
     sig = sig.replace(parameters=params)
     text = re.sub(r"<object object at 0x[0-9A-Fa-f]+>", "<not given>", f"{prefix}{name}{sig}")   # a sentinel default
-    return re.sub(r" at 0x[0-9A-Fa-f]+", "", text)                                              # keep it deterministic
+    return learner_types(re.sub(r" at 0x[0-9A-Fa-f]+", "", text))                               # keep it deterministic
 
 
 class Page:
@@ -274,7 +341,7 @@ def see_also(names: list[str], known: set[str], owner: tuple[str, set[str]] | No
         if owner is not None and n in owner[1]:
             parts.append(f"[`{n}`](#cls-{owner[0]}-{n})")
         elif n in known:
-            kind = "cls" if inspect.isclass(getattr(f, n, None)) else "fn"
+            kind = "const" if n in NAMESPACE_NAMES else "cls" if inspect.isclass(getattr(f, n, None)) else "fn"
             parts.append(f"[`{n}`](#{kind}-{n})")
         else:
             parts.append(f"`{n}`")
@@ -416,7 +483,7 @@ def reference_tables(page: Page) -> None:
     table(page, ["Variable", "Meaning"],
           [[f"`{v}`", ENV_NOTES.get(v, "(see the source)")] for v in environment_variables()])
 
-    page.add("### Named colours", "",
+    page.add('<a id="named-colours"></a>', "### Named colours", "",
              f"All {len(_colornames.NAMED_COLORS)} names accepted wherever a colour is expected, such as "
              "`f.fill(\"tomato\")`, with their hex values.", "")
     items = sorted(_colornames.NAMED_COLORS.items())
@@ -429,6 +496,35 @@ def reference_tables(page: Page) -> None:
         cells += [""] * (2 * per - len(cells))
         page.add("| " + " | ".join(cells) + " |")
     page.add("")
+
+
+def render_namespace(page: Page, name: str, known: set[str]) -> None:
+    """The entry for f.COLORS or f.CONSTANTS: what it is, how to use it, and its members."""
+    cls = getattr(f, name)
+    d = parse_doc(cls.__doc__)
+    example = 'f.COLORS.TOMATO  # "tomato"' if name == "COLORS" else 'f.CONSTANTS.ALIGN.CENTER  # "center"'
+    page.add(f'<a id="const-{name}"></a>', f"### `f.{name}`", "", "```py", example, "```", "", d["summary"], "")
+    if d["prose"]:
+        page.add(d["prose"], "")
+    if name == "COLORS":
+        page.add(f"There is one name for each of the {len(cls)} named colours. The name is the colour in capitals and "
+                 'its value is the colour name, so `f.COLORS.TOMATO == "tomato"`. The '
+                 "[named colours table](#named-colours) lists every colour with its hex value; write its name in "
+                 "capitals. Iterate it for all the names: `list(f.COLORS)`.", "")
+    else:
+        page.add(f"There are {len(cls)} groups. Each is named after what it chooses and holds the words that choice "
+                 "accepts. Iterate a group for its words: `list(f.CONSTANTS.BLEND)`. Words can mean different things in "
+                 "different groups: `LEFT` is a text alignment, a key and a mouse button.", "")
+        for group, members in cls._members.items():
+            summary = parse_doc(members.__doc__)["summary"]
+            page.add(f'<a id="const-{name}-{group}"></a>', f"#### `f.CONSTANTS.{group}`", "",
+                     f"{summary} Used by: {code_list(group_used_by(group))}.", "")
+            rows = [[f"`{n}`", f'`"{v}"`', word_meaning(group, v) or ""] for n, v in members._members.items()]
+            table(page, ["Name", "Word", "What it does"], rows)
+    if d["Example"]:
+        page.add("```py", d["Example"], "```", "")
+    if d["see"]:
+        page.add(see_also(d["see"], known), "")
 
 
 def check_groups() -> None:
@@ -470,7 +566,8 @@ def build() -> str:
           "In the examples, `import funground as f` is understood.", "", "## Contents", "")
     for title, names in GROUPS.items():
         p.add(f"- [{title}](#{slug_of(title)}): "
-              + ", ".join(f"[`{n}`](#{'cls-' if n in class_set else 'fn-'}{n})" for n in names))
+              + ", ".join(f"[`{n}`](#{'const-' if n in NAMESPACE_NAMES else 'cls-' if n in class_set else 'fn-'}{n})"
+                      for n in names))
     p.add("- [Live values](#live-values): " + ", ".join(f"[`{n}`](#live-{n})" for n in sorted(live)))
     p.add("- [Classes in detail](#classes-in-detail): " + ", ".join(f"[`{n}`](#cls-{n})" for n, _ in classes))
     p.add("- [Constants and reference tables](#constants-and-reference-tables)", "")
@@ -479,6 +576,9 @@ def build() -> str:
         p.add(f'<a id="{slug_of(title)}"></a>', f"## {title}", "")
         for name in names:
             obj = getattr(f, name)
+            if name in NAMESPACE_NAMES:
+                render_namespace(p, name, known)
+                continue
             if inspect.isclass(obj):
                 p.add(f"- `{name}`: see [the {name} class](#cls-{name}).", "")
                 continue
@@ -583,14 +683,132 @@ def llms_full(api: str) -> str:
                       rules_text(), "", "## The API reference", "", body.strip(), ""])
 
 
+# ---- the list of names an editor suggests (S-195, D-102)
+
+def first_sentence(summary: str) -> str:
+    """The summary up to its first full stop that ends a sentence."""
+    m = re.search(r"[.!?](?=\s|$)", summary)
+    return summary[:m.end()] if m else summary
+
+
+def declared_value_types() -> dict[str, str]:
+    """The type of each live value, as declared under TYPE_CHECKING in funground/__init__.py."""
+    tree = ast.parse((ROOT / "funground" / "__init__.py").read_text(encoding="utf-8"))
+    types: dict[str, str] = {}
+    for node in tree.body:
+        if isinstance(node, ast.If) and ast.unparse(node.test) == "TYPE_CHECKING":
+            for item in node.body:
+                if isinstance(item, ast.AnnAssign) and isinstance(item.target, ast.Name):
+                    types[item.target.id] = ast.unparse(item.annotation)
+    return types
+
+
+def learner_signature(name: str, obj) -> tuple[str, str, list[str]]:
+    """(what a learner reads, with types, the names of the parameters typed as a colour) for a function or class."""
+    try:
+        sig = inspect.signature(obj)
+    except (TypeError, ValueError):
+        return f"{name}(...)", "(...)", []
+    if inspect.isclass(obj):                                # a class's signature has no return type
+        sig = sig.replace(return_annotation=inspect.Signature.empty)
+    plain, colour = [], []
+    for p in sig.parameters.values():
+        star = {p.VAR_POSITIONAL: "*", p.VAR_KEYWORD: "**"}.get(p.kind, "")
+        default = "" if p.default is p.empty else "=" + re.sub(r"<object object at 0x[0-9A-Fa-f]+>", "<not given>", repr(p.default))
+        plain.append(f"{star}{p.name}{default}")
+        if isinstance(p.annotation, str) and re.search(r"\bColor\b", p.annotation):
+            colour.append(p.name)
+    detail = re.sub(r" at 0x[0-9A-Fa-f]+", "", re.sub(r"<object object at 0x[0-9A-Fa-f]+>", "<not given>", str(sig)))
+    return f"{name}({', '.join(plain)})", learner_types(detail.replace("'", "").replace('"', "")), colour
+
+
+def namespace_members(name: str) -> list[dict]:
+    """The members of f.COLORS (name, value, hex) or f.CONSTANTS (each group with its words)."""
+    if name == "COLORS":
+        return [{"name": n, "value": v, "hex": hex_of(_colornames.NAMED_COLORS[v])[:7]}
+                for n, v in f.COLORS._members.items()]
+    groups = []
+    for group, members in f.CONSTANTS._members.items():
+        words = []
+        for n, v in members._members.items():
+            word = {"name": n, "value": v}
+            meaning = word_meaning(group, v)
+            if meaning:
+                word["meaning"] = meaning
+            words.append(word)
+        groups.append({"name": group, "used_by": group_used_by(group), "members": words})
+    return groups
+
+
+def completions_text() -> str:
+    """funground/completions.json: every public name with its signature, summary and link, the option words,
+    the named colours and the parameters that take a colour."""
+    check_groups()
+    live_docs = getattr(_api, "LIVE_DOCS", {})
+    value_types = declared_value_types()
+    star_out = set(f.STAR_LEAVES_OUT)
+    words: dict[str, dict] = {}
+    for key, tables in WORD_MEANINGS.items():
+        if key.startswith("f."):
+            words[key[2:]] = {arg: [{"word": w, "meaning": m} for w, m in table.items()] for arg, table in tables}
+    names, color_params = [], []
+    for name in f._PUBLIC_NAMES:
+        entry: dict = {"name": name}
+        if name in NAMESPACE_NAMES:
+            cls = getattr(f, name)
+            detail = f"{len(cls)} colours" if name == "COLORS" else f"{len(cls)} groups of words"
+            entry.update(kind="namespace", signature=name, detail=detail,
+                         summary=first_sentence(parse_doc(cls.__doc__)["summary"]), url=f"reference/API.md#const-{name}")
+            entry["members"] = namespace_members(name)
+        elif name in _api.LIVE_NAMES:
+            entry.update(kind="value", signature=name, detail=value_types[name],
+                         summary=first_sentence(parse_doc(live_docs.get(name))["summary"]), url=f"reference/API.md#live-{name}")
+        else:
+            obj = getattr(f, name)
+            is_class = inspect.isclass(obj)
+            signature, detail, colour = learner_signature(name, obj)
+            entry.update(kind="class" if is_class else "function", signature=signature, detail=detail,
+                         summary=first_sentence(parse_doc(obj.__doc__)["summary"]),
+                         url=f"reference/API.md#{'cls' if is_class else 'fn'}-{name}")
+            color_params += [{"function": name, "parameter": p} for p in colour]
+        entry["star"] = name not in star_out
+        if name in words:
+            entry["options"] = words[name]
+        names.append(entry)
+    colors = [{"name": n, "hex": hex_of(rgba)[:7]} for n, rgba in sorted(_colornames.NAMED_COLORS.items())]
+    data = {"version": f.__version__, "names": names, "colors": colors, "color_params": color_params}
+    return json.dumps(data, indent=1, ensure_ascii=False) + "\n"
+
+
+def colors_class_text() -> str:
+    """funground/_color_names_class.py: the class f.COLORS, one ``NAME: Final = "name"`` line for each named colour."""
+    lines = ['"""f.COLORS: a name for every named colour (D-103, S-174).', "",
+             "Generated by tools/make_api_reference.py from funground/_colornames.py. Generated, do not edit.", '"""',
+             "from __future__ import annotations", "", "from typing import Final", "",
+             "from ._namespaces import _NamespaceMeta", "", "",
+             "class COLORS(metaclass=_NamespaceMeta):",
+             '    """Names for the named colours: ``f.COLORS.TOMATO`` is the word ``"tomato"``.',
+             "",
+             '    Write whichever you like: ``f.fill(f.COLORS.TOMATO)`` and ``f.fill("tomato")`` do the same. After',
+             "    ``from funground import *`` write ``COLORS.TOMATO``. The list is fixed: you cannot add to it or change",
+             "    it. Every name is written in capitals, so the colour ``antiquewhite1`` is ``ANTIQUEWHITE1``.",
+             "", "    Example:", "        f.fill(f.COLORS.TOMATO)", "", "    See also: fill, background, stroke, CONSTANTS",
+             '    """', ""]
+    lines += [f'    {name.upper()}: Final = "{name}"' for name in sorted(_colornames.NAMED_COLORS)]
+    return "\n".join(lines) + "\n"
+
+
 def outputs() -> dict[Path, str]:
     """Every generated page and its text. The two pages for assistants are written twice: at the root of
-    the repository and inside the package (python -m pip install funground carries them)."""
+    the repository and inside the package (python -m pip install funground carries them). The list of
+    suggestions for editors, funground/completions.json, is written with them."""
     api = build()
     pages = {OUT: api}
     for name, text in (("llms.txt", llms_index()), ("llms-full.txt", llms_full(api))):
         pages[ROOT / name] = text
         pages[ROOT / "funground" / name] = text
+    pages[COMPLETIONS] = completions_text()
+    pages[COLORS_CLASS] = colors_class_text()
     return pages
 
 
@@ -602,7 +820,7 @@ def main(argv: list[str]) -> int:
         for path in stale:
             print(f"{path.relative_to(ROOT).as_posix()} is out of date. Run: .venv/Scripts/python tools/make_api_reference.py")
         if not stale:
-            print("docs/reference/API.md, llms.txt and llms-full.txt are up to date.")
+            print("docs/reference/API.md, llms.txt, llms-full.txt and completions.json are up to date.")
         return 1 if stale else 0
     for path, text in pages.items():
         path.write_bytes(text.encode("utf-8"))

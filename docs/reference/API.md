@@ -33,6 +33,7 @@ In the examples, `import funground as f` is understood.
 - [Drawing sound](#drawing-sound): [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`spectrogram`](#fn-spectrogram), [`draw_pitch_line`](#fn-draw_pitch_line)
 - [Ragas and talas](#ragas-and-talas): [`ragas`](#fn-ragas), [`raga`](#fn-raga), [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`match_ragas`](#fn-match_ragas)
 - [Classes](#classes): [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString)
+- [Names for colours and options](#names-for-colours-and-options): [`COLORS`](#const-COLORS), [`CONSTANTS`](#const-CONSTANTS)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
@@ -44,7 +45,7 @@ In the examples, `import funground as f` is understood.
 ### `f.size`
 
 ```py
-f.size(width: 'int | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int | None' = None, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'
+f.size(width: 'int | CONSTANTS.PAGE | str', height: 'int | None' = None, *, title: 'str' = 'funground', fps: 'int | None' = None, margin: 'float | tuple' = 0, landscape: 'bool' = False) -> 'None'
 ```
 
 Create the canvas, or change its size.
@@ -513,7 +514,7 @@ See also: [`triangle`](#fn-triangle), [`quad`](#fn-quad), [`begin_shape`](#fn-be
 ### `f.arc`
 
 ```py
-f.arc(x: 'float', y: 'float', width: 'float', height: 'float', start: 'float', stop: 'float', mode: 'str' = 'open') -> 'None'
+f.arc(x: 'float', y: 'float', width: 'float', height: 'float', start: 'float', stop: 'float', mode: 'CONSTANTS.ARC' = 'open') -> 'None'
 ```
 
 Draw part of an ellipse.
@@ -541,7 +542,7 @@ See also: [`ellipse`](#fn-ellipse), [`ellipse_mode`](#fn-ellipse_mode).
 ### `f.rect_mode`
 
 ```py
-f.rect_mode(mode: 'str') -> 'None'
+f.rect_mode(mode: 'CONSTANTS.MODE') -> 'None'
 ```
 
 Choose how rect() and square() read their numbers.
@@ -567,7 +568,7 @@ See also: [`rect`](#fn-rect), [`square`](#fn-square), [`ellipse_mode`](#fn-ellip
 ### `f.ellipse_mode`
 
 ```py
-f.ellipse_mode(mode: 'str') -> 'None'
+f.ellipse_mode(mode: 'CONSTANTS.MODE') -> 'None'
 ```
 
 Choose how ellipse(), circle() and arc() read their numbers.
@@ -970,7 +971,7 @@ See also: [`background`](#fn-background), [`erase`](#fn-erase), [`save`](#fn-sav
 ### `f.color`
 
 ```py
-f.color(*values)
+f.color(*values: 'Any') -> 'Color'
 ```
 
 Make a colour that you can read and reuse.
@@ -998,7 +999,7 @@ See also: [`hsb`](#fn-hsb), [`hsl`](#fn-hsl), [`lerp_color`](#fn-lerp_color), [`
 ### `f.color_mode`
 
 ```py
-f.color_mode(mode: 'str', max1: 'float | None' = None, max2: 'float | None' = None, max3: 'float | None' = None, max_alpha: 'float | None' = None) -> 'None'
+f.color_mode(mode: 'CONSTANTS.COLOR_MODE', max1: 'float | None' = None, max2: 'float | None' = None, max3: 'float | None' = None, max_alpha: 'float | None' = None) -> 'None'
 ```
 
 Choose how numbers become a colour.
@@ -1028,7 +1029,7 @@ See also: [`color`](#fn-color), [`hsb`](#fn-hsb), [`hsl`](#fn-hsl), [`fill`](#fn
 ### `f.hsb`
 
 ```py
-f.hsb(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255)
+f.hsb(hue: 'float', saturation: 'float', brightness: 'float', alpha: 'float' = 255) -> 'Color'
 ```
 
 Make a colour from hue, saturation and brightness.
@@ -1054,7 +1055,7 @@ See also: [`hsl`](#fn-hsl), [`color`](#fn-color), [`color_mode`](#fn-color_mode)
 ### `f.hsl`
 
 ```py
-f.hsl(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255)
+f.hsl(hue: 'float', saturation: 'float', lightness: 'float', alpha: 'float' = 255) -> 'Color'
 ```
 
 Make a colour from hue, saturation and lightness.
@@ -1080,7 +1081,7 @@ See also: [`hsb`](#fn-hsb), [`color`](#fn-color), [`color_mode`](#fn-color_mode)
 ### `f.cmyk`
 
 ```py
-f.cmyk(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255)
+f.cmyk(cyan: 'float', magenta: 'float', yellow: 'float', black: 'float', alpha: 'float' = 255) -> 'Color'
 ```
 
 Make a colour from printing inks: cyan, magenta, yellow and black.
@@ -1112,7 +1113,7 @@ See also: [`hsb`](#fn-hsb), [`color`](#fn-color), [`save`](#fn-save), [`lerp_col
 ### `f.lerp_color`
 
 ```py
-f.lerp_color(c1: 'Color', c2: 'Color', amount: 'float')
+f.lerp_color(c1: 'Color', c2: 'Color', amount: 'float') -> 'Color'
 ```
 
 Return a colour part of the way between two colours.
@@ -1137,7 +1138,7 @@ See also: [`color`](#fn-color), [`lerp`](#fn-lerp), [`linear_gradient`](#fn-line
 ### `f.linear_gradient`
 
 ```py
-f.linear_gradient(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors, stops=None)
+f.linear_gradient(x1: 'float', y1: 'float', x2: 'float', y2: 'float', colors: 'Any', stops: 'Any' = None) -> 'Gradient'
 ```
 
 Make a gradient: colours blended along a line.
@@ -1164,7 +1165,7 @@ See also: [`radial_gradient`](#fn-radial_gradient), [`fill`](#fn-fill), [`lerp_c
 ### `f.radial_gradient`
 
 ```py
-f.radial_gradient(x: 'float', y: 'float', radius: 'float', colors, stops=None)
+f.radial_gradient(x: 'float', y: 'float', radius: 'float', colors: 'Any', stops: 'Any' = None) -> 'Gradient'
 ```
 
 Make a gradient: colours blended outward from a point.
@@ -1307,7 +1308,7 @@ See also: [`stroke`](#fn-stroke), [`stroke_cap`](#fn-stroke_cap), [`stroke_join`
 ### `f.stroke_cap`
 
 ```py
-f.stroke_cap(cap: 'str') -> 'None'
+f.stroke_cap(cap: 'CONSTANTS.CAP') -> 'None'
 ```
 
 Choose how the ends of lines look.
@@ -1338,7 +1339,7 @@ See also: [`stroke_join`](#fn-stroke_join), [`stroke_width`](#fn-stroke_width).
 ### `f.stroke_join`
 
 ```py
-f.stroke_join(join: 'str') -> 'None'
+f.stroke_join(join: 'CONSTANTS.JOIN') -> 'None'
 ```
 
 Choose how corners of outlines look.
@@ -1495,7 +1496,7 @@ See also: [`blend_mode`](#fn-blend_mode), [`fill`](#fn-fill), [`tint`](#fn-tint)
 ### `f.blend_mode`
 
 ```py
-f.blend_mode(mode: 'str') -> 'None'
+f.blend_mode(mode: 'CONSTANTS.BLEND') -> 'None'
 ```
 
 Choose how what you draw next mixes with what is already there.
@@ -1581,7 +1582,7 @@ See also: [`erase`](#fn-erase).
 ### `f.tint`
 
 ```py
-f.tint(color, *more: 'float') -> 'None'
+f.tint(color: 'Any', *more: 'float') -> 'None'
 ```
 
 Colour every picture drawn with image() from now on.
@@ -1643,7 +1644,7 @@ See also: [`text_size`](#fn-text_size), [`text_align`](#fn-text_align), [`text_w
 ### `f.text_align`
 
 ```py
-f.text_align(horizontal: 'str', vertical: 'str | None' = None) -> 'None'
+f.text_align(horizontal: 'CONSTANTS.ALIGN', vertical: 'CONSTANTS.ALIGN | None' = None) -> 'None'
 ```
 
 Choose which point of the text (x, y) means.
@@ -1874,7 +1875,7 @@ See also: [`text`](#fn-text), [`text_width`](#fn-text_width), [`text_font`](#fn-
 ### `f.text_style`
 
 ```py
-f.text_style(style: 'str') -> 'None'
+f.text_style(style: 'CONSTANTS.STYLE') -> 'None'
 ```
 
 Choose one of the four styles of the built-in font.
@@ -1929,7 +1930,7 @@ See also: [`text_width`](#fn-text_width), [`text_size`](#fn-text_size).
 ### `f.text_fallback`
 
 ```py
-f.text_fallback(*fonts) -> 'None'
+f.text_fallback(*fonts: 'Font | str') -> 'None'
 ```
 
 Choose fonts to use for letters that the current font does not have.
@@ -1950,7 +1951,7 @@ See also: [`system_font`](#fn-system_font), [`load_font`](#fn-load_font), [`text
 ### `f.system_font`
 
 ```py
-f.system_font(name: 'str')
+f.system_font(name: 'str') -> 'Font'
 ```
 
 Find a font installed on this computer.
@@ -2119,7 +2120,7 @@ See also: [`text`](#fn-text), [`text_path`](#fn-text_path), [`text_align`](#fn-t
 ### `f.text_font`
 
 ```py
-f.text_font(font, size: 'float | None' = None) -> 'None'
+f.text_font(font: 'Font | str | None', size: 'float | None' = None) -> 'None'
 ```
 
 Choose the font for the text you draw after this.
@@ -2146,7 +2147,7 @@ See also: [`load_font`](#fn-load_font), [`system_font`](#fn-system_font), [`text
 ### `f.load_font`
 
 ```py
-f.load_font(path: 'str', face: 'int | str' = 0)
+f.load_font(path: 'str', face: 'int | str' = 0) -> 'Font'
 ```
 
 Load a font file.
@@ -2506,7 +2507,7 @@ See also: [`path`](#fn-path), [`load_svg`](#fn-load_svg), [`saved_state`](#fn-sa
 ### `f.variations`
 
 ```py
-f.variations(fn, *, columns: 'int | None' = None, **values) -> 'list'
+f.variations(fn: 'Callable[..., Any]', *, columns: 'int | None' = None, **values: 'Any') -> 'list'
 ```
 
 Draw several versions of a drawing side by side, as a labelled contact sheet.
@@ -2546,7 +2547,7 @@ See also: [`keep`](#fn-keep), [`mark`](#fn-mark), [`random_seed`](#fn-random_see
 ### `f.keep`
 
 ```py
-f.keep(note: 'str' = '', *, pdf: 'bool' = False, **settings) -> 'str'
+f.keep(note: 'str' = '', *, pdf: 'bool' = False, **settings: 'Any') -> 'str'
 ```
 
 Save this version of your picture in a studio folder, with what made it.
@@ -2682,7 +2683,7 @@ See also: [`hide_layer`](#fn-hide_layer), [`layer`](#fn-layer).
 ### `f.image`
 
 ```py
-f.image(picture, x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'
+f.image(picture: 'Picture', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'
 ```
 
 Draw a picture.
@@ -2711,7 +2712,7 @@ See also: [`load_image`](#fn-load_image), [`create_graphics`](#fn-create_graphic
 ### `f.image_mode`
 
 ```py
-f.image_mode(mode: 'str') -> 'None'
+f.image_mode(mode: 'CONSTANTS.MODE') -> 'None'
 ```
 
 Choose how image() reads its numbers.
@@ -2826,7 +2827,7 @@ See also: [`load_svg`](#fn-load_svg), [`path`](#fn-path), [`draw_path`](#fn-draw
 ### `f.get`
 
 ```py
-f.get(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None)
+f.get(x: 'float', y: 'float', w: 'float | None' = None, h: 'float | None' = None) -> 'Color | Picture'
 ```
 
 Read a pixel, or copy a region of the canvas.
@@ -2851,7 +2852,7 @@ See also: [`set`](#fn-set), [`load_pixels`](#fn-load_pixels), [`image`](#fn-imag
 ### `f.set`
 
 ```py
-f.set(x: 'float', y: 'float', color, *more: 'float') -> 'None'
+f.set(x: 'float', y: 'float', color: 'Any', *more: 'float') -> 'None'
 ```
 
 Make one pixel exactly one colour.
@@ -2874,7 +2875,7 @@ See also: [`get`](#fn-get), [`update_pixels`](#fn-update_pixels).
 ### `f.set_pixel`
 
 ```py
-f.set_pixel(x: 'float', y: 'float', color, *more: 'float') -> 'None'
+f.set_pixel(x: 'float', y: 'float', color: 'Any', *more: 'float') -> 'None'
 ```
 
 Make one pixel exactly one colour: the same as set().
@@ -2933,7 +2934,7 @@ See also: [`load_pixels`](#fn-load_pixels), [`set`](#fn-set).
 ### `f.filter`
 
 ```py
-f.filter(kind: 'str', value: 'float | None' = None) -> 'None'
+f.filter(kind: 'CONSTANTS.FILTER', value: 'float | None' = None) -> 'None'
 ```
 
 Change everything drawn so far, in place.
@@ -2972,7 +2973,7 @@ See also: [`get`](#fn-get), [`create_graphics`](#fn-create_graphics).
 ### `f.apply_filter`
 
 ```py
-f.apply_filter(kind: 'str', value: 'float | None' = None) -> 'None'
+f.apply_filter(kind: 'CONSTANTS.FILTER', value: 'float | None' = None) -> 'None'
 ```
 
 Change everything drawn so far, in place: the same as filter().
@@ -3019,7 +3020,7 @@ f.random(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'
 
 Return a random number.
 
-random(10) gives a number from 0 up to 10. random(5, 10) gives a number from 5 up to 10. random() gives a number from 0 up to 1. It uses its own generator and never touches Python's own random module.
+random(10) gives a number from 0 up to 10. random(5, 10) gives a number from 5 up to 10. random() gives a number from 0 up to 1. To pick one item of a list, use random_choice(). It uses its own generator and never touches Python's own random module.
 
 | Argument | Meaning |
 |---|---|
@@ -3063,7 +3064,7 @@ See also: [`random`](#fn-random), [`random_seed`](#fn-random_seed), [`random_cho
 ### `f.random_choice`
 
 ```py
-f.random_choice(items)
+f.random_choice(items: 'Any') -> 'Any'
 ```
 
 Return one item picked at random.
@@ -3072,7 +3073,7 @@ It can be repeated with random_seed().
 
 | Argument | Meaning |
 |---|---|
-| `items` | a list, a tuple or a string. It must not be empty. |
+| `items` | a list, a tuple, a string, or anything else that can be listed, such as f.COLORS. It must not be empty. |
 
 **Returns.** One of the items. For a string, one letter.
 
@@ -3082,6 +3083,7 @@ It can be repeated with random_seed().
 
 ```py
 f.fill(f.random_choice(["red", "gold", "skyblue"]))
+f.fill(f.random_choice(f.COLORS))
 ```
 
 See also: [`random`](#fn-random), [`random_seed`](#fn-random_seed).
@@ -3501,7 +3503,7 @@ See also: [`frame_rate`](#fn-frame_rate).
 ### `f.key_down`
 
 ```py
-f.key_down(key: 'str | int') -> 'bool'
+f.key_down(key: 'CONSTANTS.KEY | str | int') -> 'bool'
 ```
 
 Return whether a key is held down right now.
@@ -3541,7 +3543,7 @@ See also: `is_key_pressed`, `key`, `key_code`.
 ### `f.cursor`
 
 ```py
-f.cursor(kind: 'str' = 'arrow') -> 'None'
+f.cursor(kind: 'CONSTANTS.CURSOR' = 'arrow') -> 'None'
 ```
 
 Choose the shape of the mouse pointer over the canvas.
@@ -3673,7 +3675,7 @@ See also: [`create_checkbox`](#fn-create_checkbox), [`create_button`](#fn-create
 ### `f.save`
 
 ```py
-f.save(path: 'str', *, text: 'str' = 'live', bleed: 'float' = 0, marks: 'bool' = False, dpi: 'float | None' = None) -> 'None'
+f.save(path: 'str', *, text: 'CONSTANTS.SAVE_TEXT' = 'live', bleed: 'float' = 0, marks: 'bool' = False, dpi: 'float | None' = None) -> 'None'
 ```
 
 Save this frame to a picture or document file.
@@ -3943,7 +3945,7 @@ See also: [`new_page`](#fn-new_page), [`save`](#fn-save), [`save_gif`](#fn-save_
 ### `f.new_page`
 
 ```py
-f.new_page(width: 'int | str | None' = None, height: 'int | None' = None) -> 'None'
+f.new_page(width: 'int | CONSTANTS.PAGE | str | None' = None, height: 'int | None' = None) -> 'None'
 ```
 
 End this page and start a blank one.
@@ -3970,7 +3972,7 @@ See also: [`page_count`](#fn-page_count), [`page_size`](#fn-page_size), [`save`]
 ### `f.page_size`
 
 ```py
-f.page_size(name: 'str', landscape: 'bool' = False) -> 'tuple[int, int]'
+f.page_size(name: 'CONSTANTS.PAGE | str', landscape: 'bool' = False) -> 'tuple[int, int]'
 ```
 
 Return the size of a named page, in points.
@@ -4018,7 +4020,7 @@ See also: [`new_page`](#fn-new_page).
 ### `f.load_sound`
 
 ```py
-f.load_sound(path: 'str')
+f.load_sound(path: 'str') -> 'Sound'
 ```
 
 Read a sound file and return a sound.
@@ -4047,7 +4049,7 @@ See also: [`create_sound`](#fn-create_sound), [`tone`](#fn-tone), [`note`](#fn-n
 ### `f.create_sound`
 
 ```py
-f.create_sound(samples, rate: 'int' = 44100)
+f.create_sound(samples: 'Any', rate: 'int' = 44100) -> 'Sound'
 ```
 
 Make a sound from a list of numbers.
@@ -4077,7 +4079,7 @@ See also: [`tone`](#fn-tone), [`load_sound`](#fn-load_sound), [`mix`](#fn-mix).
 ### `f.tone`
 
 ```py
-f.tone(frequency: 'float', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7)
+f.tone(frequency: 'float', seconds: 'float', wave: 'CONSTANTS.WAVE' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'
 ```
 
 Make a sound that is one steady tone.
@@ -4118,7 +4120,7 @@ See also: [`note`](#fn-note), [`pluck`](#fn-pluck), [`melody`](#fn-melody), [`cr
 ### `f.note`
 
 ```py
-f.note(name: 'str', seconds: 'float', wave: 'str' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7)
+f.note(name: 'str', seconds: 'float', wave: 'CONSTANTS.WAVE' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'
 ```
 
 Make a sound that is one named note.
@@ -4163,7 +4165,7 @@ See also: [`tone`](#fn-tone), [`melody`](#fn-melody), [`note_to_frequency`](#fn-
 ### `f.pluck`
 
 ```py
-f.pluck(name_or_frequency, seconds: 'float', volume: 'float' = 0.5)
+f.pluck(name_or_frequency: 'float | str', seconds: 'float', volume: 'float' = 0.5) -> 'Sound'
 ```
 
 Make a sound like a plucked string.
@@ -4188,7 +4190,7 @@ See also: [`tone`](#fn-tone), [`note`](#fn-note), [`drone`](#fn-drone).
 ### `f.melody`
 
 ```py
-f.melody(text: 'str', tempo: 'float' = 120, wave: 'str' = 'soft', sa: 'str | None' = None, tuning: 'str' = 'equal', volume: 'float' = 0.5)
+f.melody(text: 'str', tempo: 'float' = 120, wave: 'CONSTANTS.WAVE' = 'soft', sa: 'str | None' = None, tuning: 'CONSTANTS.TUNING' = 'equal', volume: 'float' = 0.5) -> 'Sound'
 ```
 
 Make a sound from a string of notes.
@@ -4231,7 +4233,7 @@ See also: [`note`](#fn-note), [`sequence`](#fn-sequence), [`mix`](#fn-mix), [`ra
 ### `f.sequence`
 
 ```py
-f.sequence(*sounds)
+f.sequence(*sounds: 'Sound') -> 'Sound'
 ```
 
 Make a new sound that plays the given sounds one after another.
@@ -4252,7 +4254,7 @@ See also: [`mix`](#fn-mix), [`melody`](#fn-melody).
 ### `f.mix`
 
 ```py
-f.mix(*sounds)
+f.mix(*sounds: 'Sound') -> 'Sound'
 ```
 
 Make a new sound that plays the given sounds together.
@@ -4275,7 +4277,7 @@ See also: [`sequence`](#fn-sequence), [`chord_notes`](#fn-chord_notes).
 ### `f.drone`
 
 ```py
-f.drone(sa, seconds: 'float', pattern: 'str' = "P S' S' S", volume: 'float' = 0.5)
+f.drone(sa: 'float | str', seconds: 'float', pattern: 'str' = "P S' S' S", volume: 'float' = 0.5) -> 'Sound'
 ```
 
 Make a tanpura-like drone.
@@ -4379,7 +4381,7 @@ See also: [`mix`](#fn-mix), [`note`](#fn-note).
 ### `f.microphone`
 
 ```py
-f.microphone(name: 'str | None' = None)
+f.microphone(name: 'str | None' = None) -> 'Microphone'
 ```
 
 Make a microphone object for the computer's default input.
@@ -4427,7 +4429,7 @@ See also: [`microphone`](#fn-microphone).
 ### `f.draw_wave`
 
 ```py
-f.draw_wave(source, x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'
+f.draw_wave(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'
 ```
 
 Draw the wave of a sound, a microphone or a list of numbers.
@@ -4450,7 +4452,7 @@ See also: [`draw_spectrum`](#fn-draw_spectrum), [`spectrogram`](#fn-spectrogram)
 ### `f.draw_spectrum`
 
 ```py
-f.draw_spectrum(source, x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'
+f.draw_spectrum(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'
 ```
 
 Draw bars for a spectrum, as it is now.
@@ -4474,7 +4476,7 @@ See also: [`draw_wave`](#fn-draw_wave), [`spectrogram`](#fn-spectrogram).
 ### `f.spectrogram`
 
 ```py
-f.spectrogram(sound, width: 'int', height: 'int') -> 'Picture'
+f.spectrogram(sound: 'Sound', width: 'int', height: 'int') -> 'Picture'
 ```
 
 Make a picture of a whole sound.
@@ -4499,7 +4501,7 @@ See also: [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`
 ### `f.draw_pitch_line`
 
 ```py
-f.draw_pitch_line(source, x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'
+f.draw_pitch_line(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'
 ```
 
 Draw the pitch of a sound or microphone as a scrolling line.
@@ -4544,7 +4546,7 @@ See also: [`raga`](#fn-raga), [`match_ragas`](#fn-match_ragas), [`talas`](#fn-ta
 ### `f.raga`
 
 ```py
-f.raga(name: 'str')
+f.raga(name: 'str') -> 'Raga'
 ```
 
 Return one raga from the built-in table.
@@ -4584,7 +4586,7 @@ See also: [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`ragas`](#fn-ragas)
 ### `f.tala_info`
 
 ```py
-f.tala_info(name: 'str')
+f.tala_info(name: 'str') -> 'Tala'
 ```
 
 Return one tala from the built-in table.
@@ -4609,7 +4611,7 @@ See also: [`talas`](#fn-talas), [`tala`](#fn-tala).
 ### `f.tala`
 
 ```py
-f.tala(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1)
+f.tala(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1) -> 'Sound'
 ```
 
 Make a sound of a tala's theka played with simple drum sounds.
@@ -4638,7 +4640,7 @@ See also: [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`drone`](#fn-dron
 ### `f.match_ragas`
 
 ```py
-f.match_ragas(histogram) -> 'list[tuple[str, float]]'
+f.match_ragas(histogram: 'Any') -> 'list[tuple[str, float]]'
 ```
 
 Rank the table's ragas by how well their swaras fit a histogram.
@@ -4664,6 +4666,296 @@ See also: [`ragas`](#fn-ragas), [`raga`](#fn-raga).
 - `Vector`: see [the Vector class](#cls-Vector).
 
 - `FormattedString`: see [the FormattedString class](#cls-FormattedString).
+
+<a id="names-for-colours-and-options"></a>
+## Names for colours and options
+
+<a id="const-COLORS"></a>
+### `f.COLORS`
+
+```py
+f.COLORS.TOMATO  # "tomato"
+```
+
+Names for the named colours: ``f.COLORS.TOMATO`` is the word ``"tomato"``.
+
+Write whichever you like: ``f.fill(f.COLORS.TOMATO)`` and ``f.fill("tomato")`` do the same. After
+``from funground import *`` write ``COLORS.TOMATO``. The list is fixed: you cannot add to it or change
+it. Every name is written in capitals, so the colour ``antiquewhite1`` is ``ANTIQUEWHITE1``.
+
+There is one name for each of the 665 named colours. The name is the colour in capitals and its value is the colour name, so `f.COLORS.TOMATO == "tomato"`. The [named colours table](#named-colours) lists every colour with its hex value; write its name in capitals. Iterate it for all the names: `list(f.COLORS)`.
+
+```py
+f.fill(f.COLORS.TOMATO)
+```
+
+See also: [`fill`](#fn-fill), [`background`](#fn-background), [`stroke`](#fn-stroke), [`CONSTANTS`](#const-CONSTANTS).
+
+<a id="const-CONSTANTS"></a>
+### `f.CONSTANTS`
+
+```py
+f.CONSTANTS.ALIGN.CENTER  # "center"
+```
+
+Names for the words that choose an option, in groups, so an editor can list them and a typing slip is caught.
+
+Each group is named after what it chooses: ``f.CONSTANTS.ALIGN.CENTER`` is the word ``"center"``. Write whichever
+you like: ``f.text_align(f.CONSTANTS.ALIGN.CENTER)`` and ``f.text_align("center")`` do the same. After
+``from funground import *`` write ``CONSTANTS.ALIGN.CENTER``.
+
+The lists are fixed: you cannot add to them or change them. Iterate a group to get its words:
+``list(f.CONSTANTS.BLEND)``. A group holds the words its functions accept.
+
+There are 18 groups. Each is named after what it chooses and holds the words that choice accepts. Iterate a group for its words: `list(f.CONSTANTS.BLEND)`. Words can mean different things in different groups: `LEFT` is a text alignment, a key and a mouse button.
+
+<a id="const-CONSTANTS-MODE"></a>
+#### `f.CONSTANTS.MODE`
+
+How rect_mode(), ellipse_mode() and image_mode() read their numbers. image_mode() has no RADIUS. Used by: `rect_mode`, `ellipse_mode`, `image_mode`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `CORNER` | `"corner"` |  |
+| `CORNERS` | `"corners"` |  |
+| `CENTER` | `"center"` |  |
+| `RADIUS` | `"radius"` |  |
+
+<a id="const-CONSTANTS-ARC"></a>
+#### `f.CONSTANTS.ARC`
+
+How arc() closes its shape. Used by: `arc`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `OPEN` | `"open"` |  |
+| `CHORD` | `"chord"` |  |
+| `PIE` | `"pie"` |  |
+
+<a id="const-CONSTANTS-COLOR_MODE"></a>
+#### `f.CONSTANTS.COLOR_MODE`
+
+The colour model for color_mode(). Used by: `color_mode`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `RGB` | `"rgb"` |  |
+| `HSB` | `"hsb"` |  |
+| `HSL` | `"hsl"` |  |
+
+<a id="const-CONSTANTS-ALIGN"></a>
+#### `f.CONSTANTS.ALIGN`
+
+Where text_align() puts the text: the first four across, TOP to BOTTOM up and down. Used by: `text_align`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `LEFT` | `"left"` | x is where the text starts; it runs to the right. The default. |
+| `CENTER` | `"center"` | Across: x is the middle of the text. Up and down: y is halfway between the top and the bottom. |
+| `RIGHT` | `"right"` | x is where the text ends. |
+| `JUSTIFY` | `"justify"` | In text_box(), each line is stretched to the box's width by widening the spaces, except the last line of a paragraph and a line of one word. In text() the same as left. |
+| `TOP` | `"top"` | y is the top of the text: the tallest letters' height (the font's ascent). The default. |
+| `BASELINE` | `"baseline"` | y is the line the letters stand on; the tails of g, p and y hang below it. Lines of text in different sizes line up on their baselines. |
+| `BOTTOM` | `"bottom"` | y is the bottom of the text: below the tails of g, p and y (the font's descent). |
+
+<a id="const-CONSTANTS-STYLE"></a>
+#### `f.CONSTANTS.STYLE`
+
+The text styles for text_style() and FormattedString.append(). Used by: `text_style`, `FormattedString.append`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `NORMAL` | `"normal"` | Upright letters of the usual weight. The default. |
+| `BOLD` | `"bold"` | Thicker, heavier letters, for emphasis and headlines. |
+| `ITALIC` | `"italic"` | Letters slanted to the right (the built-in font's oblique). |
+| `BOLD_ITALIC` | `"bold_italic"` | Bold and slanted. |
+
+<a id="const-CONSTANTS-CAP"></a>
+#### `f.CONSTANTS.CAP`
+
+The ends of a line for stroke_cap(). Used by: `stroke_cap`, `PathBuilder.expand_stroke`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `ROUND` | `"round"` | Each end of a line is a half circle, so the line reaches half its width past its end points. The default. |
+| `SQUARE` | `"square"` | Each end is squared off half the line's width past its end point. |
+| `BUTT` | `"butt"` | Each end is cut off flat exactly at its end point. |
+
+<a id="const-CONSTANTS-JOIN"></a>
+#### `f.CONSTANTS.JOIN`
+
+The corners of a line for stroke_join(). Used by: `stroke_join`, `PathBuilder.expand_stroke`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `ROUND` | `"round"` | Corners are rounded. The default. |
+| `MITER` | `"miter"` | Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not shoot far out. |
+| `BEVEL` | `"bevel"` | Corners are cut off flat. |
+
+<a id="const-CONSTANTS-CURSOR"></a>
+#### `f.CONSTANTS.CURSOR`
+
+The mouse pointers for cursor(). Used by: `cursor`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `ARROW` | `"arrow"` | The usual pointer. The default. |
+| `CROSS` | `"cross"` | A thin cross, for aiming at a point. |
+| `HAND` | `"hand"` | A pointing hand, as over a link: something can be clicked. |
+| `MOVE` | `"move"` | Four arrows: something can be dragged. |
+| `TEXT` | `"text"` | The I-beam: text can be typed or selected. |
+| `WAIT` | `"wait"` | The busy pointer (an hourglass or a spinning circle). |
+
+<a id="const-CONSTANTS-BLEND"></a>
+#### `f.CONSTANTS.BLEND`
+
+The blend modes for blend_mode(). Used by: `blend_mode`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `NORMAL` | `"normal"` | The new colour covers the old one (see-through only as far as its alpha or opacity() says). |
+| `MULTIPLY` | `"multiply"` | Multiplies the colours, so the result is always darker: like overlapping inks or colour filters. White leaves the old colour unchanged; black gives black. |
+| `SCREEN` | `"screen"` | The opposite of multiply: the result is always lighter, like two slide projectors on one screen. Black leaves the old colour unchanged; white gives white. |
+| `OVERLAY` | `"overlay"` | Multiply where the old colour is dark, screen where it is light: more contrast, keeping the old picture's highlights and shadows. |
+| `DARKEN` | `"darken"` | Keeps the darker of the two colours, channel by channel (red, green and blue separately). |
+| `LIGHTEN` | `"lighten"` | Keeps the lighter of the two colours, channel by channel. |
+| `ADD` | `"add"` | Adds the colours, so overlaps glow and turn white quickly: light added to light. |
+| `DIFFERENCE` | `"difference"` | The difference between the colours: the same colours give black, white turns the old colour into its opposite (a negative). |
+| `EXCLUSION` | `"exclusion"` | Like difference, with less contrast: white still inverts, mid-grey gives grey. |
+| `DODGE` | `"dodge"` | Brightens the old colour by the new one; bright new colours burn out to white (color dodge). Black changes nothing. |
+| `BURN` | `"burn"` | Darkens the old colour by the new one, with more contrast (color burn). White changes nothing. |
+| `HARD_LIGHT` | `"hard_light"` | Multiply where the new colour is dark, screen where it is light: like a harsh spotlight of the new colour. |
+| `SOFT_LIGHT` | `"soft_light"` | A gentler hard_light: like a soft, diffused light of the new colour. Mid-grey changes nothing. |
+| `HUE` | `"hue"` | The new colour's hue with the old colour's saturation and lightness: recolours the old picture. |
+| `SATURATION` | `"saturation"` | The new colour's saturation with the old colour's hue and lightness: makes the old picture more vivid or greyer. |
+| `COLOR` | `"color"` | The new colour's hue and saturation with the old colour's lightness: tints the old picture while keeping its shading. |
+| `LUMINOSITY` | `"luminosity"` | The new colour's lightness with the old colour's hue and saturation: the opposite of color. |
+
+<a id="const-CONSTANTS-FILTER"></a>
+#### `f.CONSTANTS.FILTER`
+
+The filters for filter() and apply_filter(). Used by: `filter`, `apply_filter`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `THRESHOLD` | `"threshold"` | Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5). |
+| `GRAY` | `"gray"` | Every pixel becomes the grey of its brightness: a black-and-white picture. |
+| `OPAQUE` | `"opaque"` | Makes every pixel fully opaque, removing any see-through parts. |
+| `INVERT` | `"invert"` | Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan. |
+| `BLUR` | `"blur"` | Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier. |
+| `POSTERIZE` | `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
+| `ERODE` | `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
+| `DILATE` | `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
+
+<a id="const-CONSTANTS-WAVE"></a>
+#### `f.CONSTANTS.WAVE`
+
+The sound waves for tone(), note() and melody(). Used by: `tone`, `note`, `melody`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `SINE` | `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `SQUARE` | `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `SAW` | `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `TRIANGLE` | `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `SOFT` | `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `NOISE` | `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
+
+<a id="const-CONSTANTS-TUNING"></a>
+#### `f.CONSTANTS.TUNING`
+
+The tuning for melody(). Used by: `melody`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `EQUAL` | `"equal"` |  |
+| `JUST` | `"just"` |  |
+
+<a id="const-CONSTANTS-ANCHOR"></a>
+#### `f.CONSTANTS.ANCHOR`
+
+The point of a mark that Mark.place() puts at x, y. Used by: `Mark.place`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `ORIGIN` | `"origin"` | The mark's own (0, 0): the point it was drawn around. The default. |
+| `CENTER` | `"center"` | The middle of the mark's bounds(). |
+| `TOP` | `"top"` | The middle of the top edge. |
+| `BOTTOM` | `"bottom"` | The middle of the bottom edge. |
+| `LEFT` | `"left"` | The middle of the left edge. |
+| `RIGHT` | `"right"` | The middle of the right edge. |
+| `TOP_LEFT` | `"top-left"` | The top-left corner of the bounds. |
+| `TOP_RIGHT` | `"top-right"` | The top-right corner. |
+| `BOTTOM_LEFT` | `"bottom-left"` | The bottom-left corner. |
+| `BOTTOM_RIGHT` | `"bottom-right"` | The bottom-right corner. |
+
+<a id="const-CONSTANTS-MARK_STYLE"></a>
+#### `f.CONSTANTS.MARK_STYLE`
+
+Which paint Mark.place() uses. Used by: `Mark.place`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `OWN` | `"own"` |  |
+| `CURRENT` | `"current"` |  |
+
+<a id="const-CONSTANTS-SAVE_TEXT"></a>
+#### `f.CONSTANTS.SAVE_TEXT`
+
+How save() keeps text. Used by: `save`, `Picture.save`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `LIVE` | `"live"` |  |
+| `SHAPES` | `"shapes"` |  |
+
+<a id="const-CONSTANTS-KEY"></a>
+#### `f.CONSTANTS.KEY`
+
+The named keys for key_down(), and the values f.key can hold for them. Used by: `key_down`, `f.key`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `UP` | `"up"` | The up arrow key. |
+| `DOWN` | `"down"` | The down arrow key. |
+| `LEFT` | `"left"` | The left arrow key. |
+| `RIGHT` | `"right"` | The right arrow key. |
+| `SPACE` | `"space"` | The space bar. |
+| `ENTER` | `"enter"` | The Enter (Return) key. |
+| `ESCAPE` | `"escape"` | The Esc key. On the desktop it also closes the sketch's window. |
+
+<a id="const-CONSTANTS-MOUSE"></a>
+#### `f.CONSTANTS.MOUSE`
+
+The values f.mouse_button can hold. Used by: `f.mouse_button`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `LEFT` | `"left"` |  |
+| `CENTER` | `"center"` |  |
+| `RIGHT` | `"right"` |  |
+
+<a id="const-CONSTANTS-PAGE"></a>
+#### `f.CONSTANTS.PAGE`
+
+The page sizes for size(), new_page() and page_size(). Used by: `size`, `new_page`, `page_size`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `A3` | `"A3"` |  |
+| `A4` | `"A4"` |  |
+| `A5` | `"A5"` |  |
+| `B5` | `"B5"` |  |
+| `LETTER` | `"Letter"` |  |
+| `LEGAL` | `"Legal"` |  |
+| `TABLOID` | `"Tabloid"` |  |
+
+```py
+f.text_align(f.CONSTANTS.ALIGN.CENTER)
+f.blend_mode(f.CONSTANTS.BLEND.MULTIPLY)
+```
+
+See also: [`text_align`](#fn-text_align), [`blend_mode`](#fn-blend_mode), [`rect_mode`](#fn-rect_mode), [`COLORS`](#const-COLORS).
 
 <a id="live-values"></a>
 ## Live values
@@ -6019,7 +6311,7 @@ See also: [`copy`](#cls-Picture-copy), [`mask`](#cls-Picture-mask).
 #### `Picture.save`
 
 ```py
-Picture.save(path: 'str', *, text: 'str' = 'live') -> 'None'
+Picture.save(path: 'str', *, text: 'CONSTANTS.SAVE_TEXT' = 'live') -> 'None'
 ```
 
 Write the picture to a file straight away.
@@ -6568,7 +6860,7 @@ f.text(line, 20, 100)
 #### `FormattedString.append`
 
 ```py
-FormattedString.append(text: 'object', font=None, size: 'float | None' = None, style: 'str | None' = None, color=None, tracking: 'float | None' = None, features: 'dict | None' = None, variations: 'dict | None' = None) -> "'FormattedString'"
+FormattedString.append(text: 'object', font=None, size: 'float | None' = None, style: 'CONSTANTS.STYLE | None' = None, color=None, tracking: 'float | None' = None, features: 'dict | None' = None, variations: 'dict | None' = None) -> "'FormattedString'"
 ```
 
 Add a run of text to the end.
@@ -6936,7 +7228,7 @@ See also: [`circle`](#cls-PathBuilder-circle), [`rect`](#cls-PathBuilder-rect).
 #### `PathBuilder.expand_stroke`
 
 ```py
-PathBuilder.expand_stroke(width: 'float', cap: 'str' = 'round', join: 'str' = 'round', miter_limit: 'float' = 10, dash=None) -> "'PathBuilder'"
+PathBuilder.expand_stroke(width: 'float', cap: 'CONSTANTS.CAP' = 'round', join: 'CONSTANTS.JOIN' = 'round', miter_limit: 'float' = 10, dash=None) -> "'PathBuilder'"
 ```
 
 Make a new path that is the outline a stroke would paint, so you can fill, cut or clip with it.
@@ -7417,7 +7709,7 @@ See also: [`bounds`](#cls-Mark-bounds).
 #### `Mark.place`
 
 ```py
-Mark.place(x: 'float', y: 'float', *, scale: 'float | tuple[float, float] | None' = None, rotate: 'float' = 0, opacity: 'float' = 1, anchor: 'str' = 'origin', width: 'float | None' = None, height: 'float | None' = None, style: 'str' = 'own') -> 'None'
+Mark.place(x: 'float', y: 'float', *, scale: 'float | tuple[float, float] | None' = None, rotate: 'float' = 0, opacity: 'float' = 1, anchor: 'CONSTANTS.ANCHOR' = 'origin', width: 'float | None' = None, height: 'float | None' = None, style: 'CONSTANTS.MARK_STYLE' = 'own') -> 'None'
 ```
 
 Draw the mark now, with its origin at (x, y).
@@ -9538,6 +9830,7 @@ Files in `funground/fonts`, always available with no install.
 | `WAYLAND_DISPLAY` | Read to detect a Wayland desktop on Linux. |
 | `WINDIR` | (see the source) |
 
+<a id="named-colours"></a>
 ### Named colours
 
 All 665 names accepted wherever a colour is expected, such as `f.fill("tomato")`, with their hex values.

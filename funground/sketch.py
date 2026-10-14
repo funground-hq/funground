@@ -13,10 +13,11 @@ import dataclasses
 from collections import namedtuple
 import datetime
 import math
+import numbers
 import time
 import random as _random
 import warnings
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 
 from . import ir
@@ -2228,6 +2229,11 @@ class Sketch:
 
     # ------------------------------------------------------------ helpers
     def random(self, low: float = 1.0, high: float | None = None) -> float:
+        for value in (low, high):
+            if value is not None and not isinstance(value, numbers.Real):      # numpy numbers too
+                what = f"f.{value.__qualname__}" if isinstance(value, type) else type(value).__name__   # f.COLORS
+                raise TypeError(f"f.random() takes numbers, not {what}. "
+                                "To pick one item of a list (or of f.COLORS), use f.random_choice(...)")
         if high is None:
             high = low
             low = 0.0
@@ -2262,6 +2268,8 @@ class Sketch:
 
     def random_choice(self, items):
         """One item picked at random from a list, tuple or string."""
+        if not isinstance(items, Sequence):        # f.COLORS, a set, a dictionary's keys: anything that can be listed
+            items = list(items)
         if len(items) == 0:
             raise ValueError("f.random_choice() needs at least one item to choose from")
         return self._rng.choice(items)

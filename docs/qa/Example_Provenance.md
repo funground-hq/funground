@@ -188,3 +188,15 @@ The 12 sketches in examples/course/ are original CC0 examples written to demonst
 ## Course completion — 13 October 2026
 
 Lessons 3–11 add 25 original CC0 sketches. The completed course contains 37 scripts and 19 fenced Python examples, checked against 2,955 corpus units with no pairs flagged. The course now has 35 rendered PNG outputs and one GIF. [Current results](Creative_Course_Originality.md).
+
+## Basics 05 and 06 (S-199) — 14 October 2026
+
+`examples/gallery/basics/05_where_things_are.py` (a labelled map of the canvas) and `06_mouse_position.py` (the
+mouse's x and y, live) are original CC0 examples written for chapter 1. `tools/check_originality.py` against the
+2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged (highest combined scores 0.20 and 0.24).
+
+## Colour 06, colour schemes — 14 October 2026
+
+`examples/gallery/colour/06_colour_schemes.py` (the same random shapes in four colour schemes, chosen from the
+learner's own lists) is an original CC0 example written after the maintainer asked for one. `tools/check_originality.py`
+against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged (highest combined score 0.16).

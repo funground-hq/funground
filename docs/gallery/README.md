@@ -126,6 +126,66 @@ The same kind of sketch as the others, written in the shorter style: from fungro
 
 Source: [`examples/gallery/basics/04_without_f.py`](../../examples/gallery/basics/04_without_f.py)
 
+### Where things are: a map of the canvas
+
+![Where things are: a map of the canvas](images/basics-05_where_things_are.png)
+
+What you see: a map of the drawing area, 640 pixels wide and 400 high. A light grid has a line every 50 pixels. The numbers along the top and left edges count pixels. Marks and labels show the origin, the centre and the bottom-right corner.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.size() sets the width and the height. f.width and f.height give the two numbers back.
+- The point (0, 0), called the origin, is the top-left corner. x grows to the right. y grows down, which is the other way round from a graph in maths class.
+- The centre is (f.width / 2, f.height / 2). The bottom-right corner is (f.width, f.height).
+- f.line() draws the grid with a loop. f.text() writes the numbers and labels.
+- f.circle() marks the points. f.triangle() makes the arrow heads.
+- f.text_align() says which point of the text the position means. Here it keeps the corner label inside the window.
+
+**Make it yours**
+
+- Change 50 in the two grid loops to 25 or 100 and watch the grid change.
+- Change the numbers in f.size(). The centre and the corner labels move with it.
+- Mark the top-right corner with a circle. Its position is (f.width, 0).
+- Draw a circle at x = 100 and y = 300. Is it where you expected?
+- Change the colour of the grid with f.stroke().
+
+</details>
+
+Source: [`examples/gallery/basics/05_where_things_are.py`](../../examples/gallery/basics/05_where_things_are.py)
+
+### Read the mouse position
+
+![Read the mouse position](images/basics-06_mouse_position.png)
+
+Move the mouse over the window. A cross follows it, and a label next to it shows its x and y. Near the right or bottom edge the label moves to the other side, so you can always read it.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.mouse_x and f.mouse_y are the position of the mouse, in the same pixels as the drawing.
+- (0, 0) is the top-left corner. x grows to the right and y grows down.
+- f.line() draws the two lines of the cross, through the mouse position.
+- f.text() writes the label. The text f"x = {x}, y = {y}" puts the two numbers into it.
+- f.text_width() measures the label, so the sketch knows when it would run off the window.
+- draw() runs again and again, so the cross and the numbers keep up with the mouse.
+
+**Make it yours**
+
+- Change "x = " to something else, or round the numbers with int().
+- Change the colours of the cross and the label.
+- Draw a circle at the mouse with f.circle() instead of a cross.
+- Show the position as a fraction of the window: f.mouse_x / f.width.
+- Draw a second cross at the opposite point: f.width - f.mouse_x and f.height - f.mouse_y.
+
+</details>
+
+Source: [`examples/gallery/basics/06_mouse_position.py`](../../examples/gallery/basics/06_mouse_position.py)
+
 ## Shapes
 
 ### The basic shapes
@@ -391,6 +451,36 @@ A two-ink poster for a printer. Every colour comes from f.cmyk(), so the PDF it 
 </details>
 
 Source: [`examples/gallery/colour/05_cmyk_poster.py`](../../examples/gallery/colour/05_cmyk_poster.py)
+
+### Colour schemes: random shapes from your own colours
+
+![Colour schemes: random shapes from your own colours](images/colour-06_colour_schemes.png)
+
+The same random shapes are drawn four times, each time with a different colour scheme. A scheme is a paper colour and a short list of ink colours that you choose. Random picks from your own list keep the surprise of randomness, but the picture still looks planned.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- SCHEMES holds four schemes. Each has a name, a paper colour and a list of inks.
+- f.random_choice(inks) picks one ink from the list for each shape. A colour that is in the list twice is picked twice as often: "sunset" lists "tomato" three times, so it is the main colour and the others are accents.
+- dot, box and peak each draw a shape centred on x, y with the same three numbers. That is why f.random_choice([dot, box, peak]) can pick any of them: the list holds the functions themselves.
+- setup() chooses the 24 shapes once, with their places and sizes, and keeps them in the list shapes. Every panel draws that same list, so only the colours change.
+- f.random_seed(5) in panel() makes the colour picks the same on every frame, so nothing flickers.
+- f.translate() moves each panel to its corner, so the shapes are drawn as if each panel were a small canvas of its own.
+
+**Make it yours**
+
+- Make a scheme of your own: copy a line in SCHEMES and change the name and the colours.
+- Put one ink in a list several times to make it the main colour.
+- Use f.COLORS in a list, such as [f.COLORS.NAVY, f.COLORS.GOLD], so your editor lists the names.
+- Change the seed 1 in setup() for a different layout, or range(24) for more shapes.
+- Draw a stroke in the paper colour around each shape with f.stroke(paper) and f.stroke_width(3).
+
+</details>
+
+Source: [`examples/gallery/colour/06_colour_schemes.py`](../../examples/gallery/colour/06_colour_schemes.py)
 
 ## Blending, opacity and shadows
 

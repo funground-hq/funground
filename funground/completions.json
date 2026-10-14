@@ -1,0 +1,8894 @@
+{
+ "version": "0.2.0.dev0",
+ "names": [
+  {
+   "name": "COLORS",
+   "kind": "namespace",
+   "signature": "COLORS",
+   "detail": "665 colours",
+   "summary": "Names for the named colours: ``f.COLORS.TOMATO`` is the word ``\"tomato\"``.",
+   "url": "reference/API.md#const-COLORS",
+   "members": [
+    {
+     "name": "ALICEBLUE",
+     "value": "aliceblue",
+     "hex": "#f0f8ff"
+    },
+    {
+     "name": "ANTIQUEWHITE",
+     "value": "antiquewhite",
+     "hex": "#faebd7"
+    },
+    {
+     "name": "ANTIQUEWHITE1",
+     "value": "antiquewhite1",
+     "hex": "#ffefdb"
+    },
+    {
+     "name": "ANTIQUEWHITE2",
+     "value": "antiquewhite2",
+     "hex": "#eedfcc"
+    },
+    {
+     "name": "ANTIQUEWHITE3",
+     "value": "antiquewhite3",
+     "hex": "#cdc0b0"
+    },
+    {
+     "name": "ANTIQUEWHITE4",
+     "value": "antiquewhite4",
+     "hex": "#8b8378"
+    },
+    {
+     "name": "AQUA",
+     "value": "aqua",
+     "hex": "#00ffff"
+    },
+    {
+     "name": "AQUAMARINE",
+     "value": "aquamarine",
+     "hex": "#7fffd4"
+    },
+    {
+     "name": "AQUAMARINE1",
+     "value": "aquamarine1",
+     "hex": "#7fffd4"
+    },
+    {
+     "name": "AQUAMARINE2",
+     "value": "aquamarine2",
+     "hex": "#76eec6"
+    },
+    {
+     "name": "AQUAMARINE3",
+     "value": "aquamarine3",
+     "hex": "#66cdaa"
+    },
+    {
+     "name": "AQUAMARINE4",
+     "value": "aquamarine4",
+     "hex": "#458b74"
+    },
+    {
+     "name": "AZURE",
+     "value": "azure",
+     "hex": "#f0ffff"
+    },
+    {
+     "name": "AZURE1",
+     "value": "azure1",
+     "hex": "#f0ffff"
+    },
+    {
+     "name": "AZURE2",
+     "value": "azure2",
+     "hex": "#e0eeee"
+    },
+    {
+     "name": "AZURE3",
+     "value": "azure3",
+     "hex": "#c1cdcd"
+    },
+    {
+     "name": "AZURE4",
+     "value": "azure4",
+     "hex": "#838b8b"
+    },
+    {
+     "name": "BEIGE",
+     "value": "beige",
+     "hex": "#f5f5dc"
+    },
+    {
+     "name": "BISQUE",
+     "value": "bisque",
+     "hex": "#ffe4c4"
+    },
+    {
+     "name": "BISQUE1",
+     "value": "bisque1",
+     "hex": "#ffe4c4"
+    },
+    {
+     "name": "BISQUE2",
+     "value": "bisque2",
+     "hex": "#eed5b7"
+    },
+    {
+     "name": "BISQUE3",
+     "value": "bisque3",
+     "hex": "#cdb79e"
+    },
+    {
+     "name": "BISQUE4",
+     "value": "bisque4",
+     "hex": "#8b7d6b"
+    },
+    {
+     "name": "BLACK",
+     "value": "black",
+     "hex": "#000000"
+    },
+    {
+     "name": "BLANCHEDALMOND",
+     "value": "blanchedalmond",
+     "hex": "#ffebcd"
+    },
+    {
+     "name": "BLUE",
+     "value": "blue",
+     "hex": "#0000ff"
+    },
+    {
+     "name": "BLUE1",
+     "value": "blue1",
+     "hex": "#0000ff"
+    },
+    {
+     "name": "BLUE2",
+     "value": "blue2",
+     "hex": "#0000ee"
+    },
+    {
+     "name": "BLUE3",
+     "value": "blue3",
+     "hex": "#0000cd"
+    },
+    {
+     "name": "BLUE4",
+     "value": "blue4",
+     "hex": "#00008b"
+    },
+    {
+     "name": "BLUEVIOLET",
+     "value": "blueviolet",
+     "hex": "#8a2be2"
+    },
+    {
+     "name": "BROWN",
+     "value": "brown",
+     "hex": "#a52a2a"
+    },
+    {
+     "name": "BROWN1",
+     "value": "brown1",
+     "hex": "#ff4040"
+    },
+    {
+     "name": "BROWN2",
+     "value": "brown2",
+     "hex": "#ee3b3b"
+    },
+    {
+     "name": "BROWN3",
+     "value": "brown3",
+     "hex": "#cd3333"
+    },
+    {
+     "name": "BROWN4",
+     "value": "brown4",
+     "hex": "#8b2323"
+    },
+    {
+     "name": "BURLYWOOD",
+     "value": "burlywood",
+     "hex": "#deb887"
+    },
+    {
+     "name": "BURLYWOOD1",
+     "value": "burlywood1",
+     "hex": "#ffd39b"
+    },
+    {
+     "name": "BURLYWOOD2",
+     "value": "burlywood2",
+     "hex": "#eec591"
+    },
+    {
+     "name": "BURLYWOOD3",
+     "value": "burlywood3",
+     "hex": "#cdaa7d"
+    },
+    {
+     "name": "BURLYWOOD4",
+     "value": "burlywood4",
+     "hex": "#8b7355"
+    },
+    {
+     "name": "CADETBLUE",
+     "value": "cadetblue",
+     "hex": "#5f9ea0"
+    },
+    {
+     "name": "CADETBLUE1",
+     "value": "cadetblue1",
+     "hex": "#98f5ff"
+    },
+    {
+     "name": "CADETBLUE2",
+     "value": "cadetblue2",
+     "hex": "#8ee5ee"
+    },
+    {
+     "name": "CADETBLUE3",
+     "value": "cadetblue3",
+     "hex": "#7ac5cd"
+    },
+    {
+     "name": "CADETBLUE4",
+     "value": "cadetblue4",
+     "hex": "#53868b"
+    },
+    {
+     "name": "CHARTREUSE",
+     "value": "chartreuse",
+     "hex": "#7fff00"
+    },
+    {
+     "name": "CHARTREUSE1",
+     "value": "chartreuse1",
+     "hex": "#7fff00"
+    },
+    {
+     "name": "CHARTREUSE2",
+     "value": "chartreuse2",
+     "hex": "#76ee00"
+    },
+    {
+     "name": "CHARTREUSE3",
+     "value": "chartreuse3",
+     "hex": "#66cd00"
+    },
+    {
+     "name": "CHARTREUSE4",
+     "value": "chartreuse4",
+     "hex": "#458b00"
+    },
+    {
+     "name": "CHOCOLATE",
+     "value": "chocolate",
+     "hex": "#d2691e"
+    },
+    {
+     "name": "CHOCOLATE1",
+     "value": "chocolate1",
+     "hex": "#ff7f24"
+    },
+    {
+     "name": "CHOCOLATE2",
+     "value": "chocolate2",
+     "hex": "#ee7621"
+    },
+    {
+     "name": "CHOCOLATE3",
+     "value": "chocolate3",
+     "hex": "#cd661d"
+    },
+    {
+     "name": "CHOCOLATE4",
+     "value": "chocolate4",
+     "hex": "#8b4513"
+    },
+    {
+     "name": "CORAL",
+     "value": "coral",
+     "hex": "#ff7f50"
+    },
+    {
+     "name": "CORAL1",
+     "value": "coral1",
+     "hex": "#ff7256"
+    },
+    {
+     "name": "CORAL2",
+     "value": "coral2",
+     "hex": "#ee6a50"
+    },
+    {
+     "name": "CORAL3",
+     "value": "coral3",
+     "hex": "#cd5b45"
+    },
+    {
+     "name": "CORAL4",
+     "value": "coral4",
+     "hex": "#8b3e2f"
+    },
+    {
+     "name": "CORNFLOWERBLUE",
+     "value": "cornflowerblue",
+     "hex": "#6495ed"
+    },
+    {
+     "name": "CORNSILK",
+     "value": "cornsilk",
+     "hex": "#fff8dc"
+    },
+    {
+     "name": "CORNSILK1",
+     "value": "cornsilk1",
+     "hex": "#fff8dc"
+    },
+    {
+     "name": "CORNSILK2",
+     "value": "cornsilk2",
+     "hex": "#eee8cd"
+    },
+    {
+     "name": "CORNSILK3",
+     "value": "cornsilk3",
+     "hex": "#cdc8b1"
+    },
+    {
+     "name": "CORNSILK4",
+     "value": "cornsilk4",
+     "hex": "#8b8878"
+    },
+    {
+     "name": "CRIMSON",
+     "value": "crimson",
+     "hex": "#dc143c"
+    },
+    {
+     "name": "CYAN",
+     "value": "cyan",
+     "hex": "#00ffff"
+    },
+    {
+     "name": "CYAN1",
+     "value": "cyan1",
+     "hex": "#00ffff"
+    },
+    {
+     "name": "CYAN2",
+     "value": "cyan2",
+     "hex": "#00eeee"
+    },
+    {
+     "name": "CYAN3",
+     "value": "cyan3",
+     "hex": "#00cdcd"
+    },
+    {
+     "name": "CYAN4",
+     "value": "cyan4",
+     "hex": "#008b8b"
+    },
+    {
+     "name": "DARKBLUE",
+     "value": "darkblue",
+     "hex": "#00008b"
+    },
+    {
+     "name": "DARKCYAN",
+     "value": "darkcyan",
+     "hex": "#008b8b"
+    },
+    {
+     "name": "DARKGOLDENROD",
+     "value": "darkgoldenrod",
+     "hex": "#b8860b"
+    },
+    {
+     "name": "DARKGOLDENROD1",
+     "value": "darkgoldenrod1",
+     "hex": "#ffb90f"
+    },
+    {
+     "name": "DARKGOLDENROD2",
+     "value": "darkgoldenrod2",
+     "hex": "#eead0e"
+    },
+    {
+     "name": "DARKGOLDENROD3",
+     "value": "darkgoldenrod3",
+     "hex": "#cd950c"
+    },
+    {
+     "name": "DARKGOLDENROD4",
+     "value": "darkgoldenrod4",
+     "hex": "#8b6508"
+    },
+    {
+     "name": "DARKGRAY",
+     "value": "darkgray",
+     "hex": "#a9a9a9"
+    },
+    {
+     "name": "DARKGREEN",
+     "value": "darkgreen",
+     "hex": "#006400"
+    },
+    {
+     "name": "DARKGREY",
+     "value": "darkgrey",
+     "hex": "#a9a9a9"
+    },
+    {
+     "name": "DARKKHAKI",
+     "value": "darkkhaki",
+     "hex": "#bdb76b"
+    },
+    {
+     "name": "DARKMAGENTA",
+     "value": "darkmagenta",
+     "hex": "#8b008b"
+    },
+    {
+     "name": "DARKOLIVEGREEN",
+     "value": "darkolivegreen",
+     "hex": "#556b2f"
+    },
+    {
+     "name": "DARKOLIVEGREEN1",
+     "value": "darkolivegreen1",
+     "hex": "#caff70"
+    },
+    {
+     "name": "DARKOLIVEGREEN2",
+     "value": "darkolivegreen2",
+     "hex": "#bcee68"
+    },
+    {
+     "name": "DARKOLIVEGREEN3",
+     "value": "darkolivegreen3",
+     "hex": "#a2cd5a"
+    },
+    {
+     "name": "DARKOLIVEGREEN4",
+     "value": "darkolivegreen4",
+     "hex": "#6e8b3d"
+    },
+    {
+     "name": "DARKORANGE",
+     "value": "darkorange",
+     "hex": "#ff8c00"
+    },
+    {
+     "name": "DARKORANGE1",
+     "value": "darkorange1",
+     "hex": "#ff7f00"
+    },
+    {
+     "name": "DARKORANGE2",
+     "value": "darkorange2",
+     "hex": "#ee7600"
+    },
+    {
+     "name": "DARKORANGE3",
+     "value": "darkorange3",
+     "hex": "#cd6600"
+    },
+    {
+     "name": "DARKORANGE4",
+     "value": "darkorange4",
+     "hex": "#8b4500"
+    },
+    {
+     "name": "DARKORCHID",
+     "value": "darkorchid",
+     "hex": "#9932cc"
+    },
+    {
+     "name": "DARKORCHID1",
+     "value": "darkorchid1",
+     "hex": "#bf3eff"
+    },
+    {
+     "name": "DARKORCHID2",
+     "value": "darkorchid2",
+     "hex": "#b23aee"
+    },
+    {
+     "name": "DARKORCHID3",
+     "value": "darkorchid3",
+     "hex": "#9a32cd"
+    },
+    {
+     "name": "DARKORCHID4",
+     "value": "darkorchid4",
+     "hex": "#68228b"
+    },
+    {
+     "name": "DARKRED",
+     "value": "darkred",
+     "hex": "#8b0000"
+    },
+    {
+     "name": "DARKSALMON",
+     "value": "darksalmon",
+     "hex": "#e9967a"
+    },
+    {
+     "name": "DARKSEAGREEN",
+     "value": "darkseagreen",
+     "hex": "#8fbc8f"
+    },
+    {
+     "name": "DARKSEAGREEN1",
+     "value": "darkseagreen1",
+     "hex": "#c1ffc1"
+    },
+    {
+     "name": "DARKSEAGREEN2",
+     "value": "darkseagreen2",
+     "hex": "#b4eeb4"
+    },
+    {
+     "name": "DARKSEAGREEN3",
+     "value": "darkseagreen3",
+     "hex": "#9bcd9b"
+    },
+    {
+     "name": "DARKSEAGREEN4",
+     "value": "darkseagreen4",
+     "hex": "#698b69"
+    },
+    {
+     "name": "DARKSLATEBLUE",
+     "value": "darkslateblue",
+     "hex": "#483d8b"
+    },
+    {
+     "name": "DARKSLATEGRAY",
+     "value": "darkslategray",
+     "hex": "#2f4f4f"
+    },
+    {
+     "name": "DARKSLATEGRAY1",
+     "value": "darkslategray1",
+     "hex": "#97ffff"
+    },
+    {
+     "name": "DARKSLATEGRAY2",
+     "value": "darkslategray2",
+     "hex": "#8deeee"
+    },
+    {
+     "name": "DARKSLATEGRAY3",
+     "value": "darkslategray3",
+     "hex": "#79cdcd"
+    },
+    {
+     "name": "DARKSLATEGRAY4",
+     "value": "darkslategray4",
+     "hex": "#528b8b"
+    },
+    {
+     "name": "DARKSLATEGREY",
+     "value": "darkslategrey",
+     "hex": "#2f4f4f"
+    },
+    {
+     "name": "DARKTURQUOISE",
+     "value": "darkturquoise",
+     "hex": "#00ced1"
+    },
+    {
+     "name": "DARKVIOLET",
+     "value": "darkviolet",
+     "hex": "#9400d3"
+    },
+    {
+     "name": "DEEPPINK",
+     "value": "deeppink",
+     "hex": "#ff1493"
+    },
+    {
+     "name": "DEEPPINK1",
+     "value": "deeppink1",
+     "hex": "#ff1493"
+    },
+    {
+     "name": "DEEPPINK2",
+     "value": "deeppink2",
+     "hex": "#ee1289"
+    },
+    {
+     "name": "DEEPPINK3",
+     "value": "deeppink3",
+     "hex": "#cd1076"
+    },
+    {
+     "name": "DEEPPINK4",
+     "value": "deeppink4",
+     "hex": "#8b0a50"
+    },
+    {
+     "name": "DEEPSKYBLUE",
+     "value": "deepskyblue",
+     "hex": "#00bfff"
+    },
+    {
+     "name": "DEEPSKYBLUE1",
+     "value": "deepskyblue1",
+     "hex": "#00bfff"
+    },
+    {
+     "name": "DEEPSKYBLUE2",
+     "value": "deepskyblue2",
+     "hex": "#00b2ee"
+    },
+    {
+     "name": "DEEPSKYBLUE3",
+     "value": "deepskyblue3",
+     "hex": "#009acd"
+    },
+    {
+     "name": "DEEPSKYBLUE4",
+     "value": "deepskyblue4",
+     "hex": "#00688b"
+    },
+    {
+     "name": "DIMGRAY",
+     "value": "dimgray",
+     "hex": "#696969"
+    },
+    {
+     "name": "DIMGREY",
+     "value": "dimgrey",
+     "hex": "#696969"
+    },
+    {
+     "name": "DODGERBLUE",
+     "value": "dodgerblue",
+     "hex": "#1e90ff"
+    },
+    {
+     "name": "DODGERBLUE1",
+     "value": "dodgerblue1",
+     "hex": "#1e90ff"
+    },
+    {
+     "name": "DODGERBLUE2",
+     "value": "dodgerblue2",
+     "hex": "#1c86ee"
+    },
+    {
+     "name": "DODGERBLUE3",
+     "value": "dodgerblue3",
+     "hex": "#1874cd"
+    },
+    {
+     "name": "DODGERBLUE4",
+     "value": "dodgerblue4",
+     "hex": "#104e8b"
+    },
+    {
+     "name": "FIREBRICK",
+     "value": "firebrick",
+     "hex": "#b22222"
+    },
+    {
+     "name": "FIREBRICK1",
+     "value": "firebrick1",
+     "hex": "#ff3030"
+    },
+    {
+     "name": "FIREBRICK2",
+     "value": "firebrick2",
+     "hex": "#ee2c2c"
+    },
+    {
+     "name": "FIREBRICK3",
+     "value": "firebrick3",
+     "hex": "#cd2626"
+    },
+    {
+     "name": "FIREBRICK4",
+     "value": "firebrick4",
+     "hex": "#8b1a1a"
+    },
+    {
+     "name": "FLORALWHITE",
+     "value": "floralwhite",
+     "hex": "#fffaf0"
+    },
+    {
+     "name": "FORESTGREEN",
+     "value": "forestgreen",
+     "hex": "#228b22"
+    },
+    {
+     "name": "FUCHSIA",
+     "value": "fuchsia",
+     "hex": "#ff00ff"
+    },
+    {
+     "name": "GAINSBORO",
+     "value": "gainsboro",
+     "hex": "#dcdcdc"
+    },
+    {
+     "name": "GHOSTWHITE",
+     "value": "ghostwhite",
+     "hex": "#f8f8ff"
+    },
+    {
+     "name": "GOLD",
+     "value": "gold",
+     "hex": "#ffd700"
+    },
+    {
+     "name": "GOLD1",
+     "value": "gold1",
+     "hex": "#ffd700"
+    },
+    {
+     "name": "GOLD2",
+     "value": "gold2",
+     "hex": "#eec900"
+    },
+    {
+     "name": "GOLD3",
+     "value": "gold3",
+     "hex": "#cdad00"
+    },
+    {
+     "name": "GOLD4",
+     "value": "gold4",
+     "hex": "#8b7500"
+    },
+    {
+     "name": "GOLDENROD",
+     "value": "goldenrod",
+     "hex": "#daa520"
+    },
+    {
+     "name": "GOLDENROD1",
+     "value": "goldenrod1",
+     "hex": "#ffc125"
+    },
+    {
+     "name": "GOLDENROD2",
+     "value": "goldenrod2",
+     "hex": "#eeb422"
+    },
+    {
+     "name": "GOLDENROD3",
+     "value": "goldenrod3",
+     "hex": "#cd9b1d"
+    },
+    {
+     "name": "GOLDENROD4",
+     "value": "goldenrod4",
+     "hex": "#8b6914"
+    },
+    {
+     "name": "GRAY",
+     "value": "gray",
+     "hex": "#bebebe"
+    },
+    {
+     "name": "GRAY0",
+     "value": "gray0",
+     "hex": "#000000"
+    },
+    {
+     "name": "GRAY1",
+     "value": "gray1",
+     "hex": "#030303"
+    },
+    {
+     "name": "GRAY10",
+     "value": "gray10",
+     "hex": "#1a1a1a"
+    },
+    {
+     "name": "GRAY100",
+     "value": "gray100",
+     "hex": "#ffffff"
+    },
+    {
+     "name": "GRAY11",
+     "value": "gray11",
+     "hex": "#1c1c1c"
+    },
+    {
+     "name": "GRAY12",
+     "value": "gray12",
+     "hex": "#1f1f1f"
+    },
+    {
+     "name": "GRAY13",
+     "value": "gray13",
+     "hex": "#212121"
+    },
+    {
+     "name": "GRAY14",
+     "value": "gray14",
+     "hex": "#242424"
+    },
+    {
+     "name": "GRAY15",
+     "value": "gray15",
+     "hex": "#262626"
+    },
+    {
+     "name": "GRAY16",
+     "value": "gray16",
+     "hex": "#292929"
+    },
+    {
+     "name": "GRAY17",
+     "value": "gray17",
+     "hex": "#2b2b2b"
+    },
+    {
+     "name": "GRAY18",
+     "value": "gray18",
+     "hex": "#2e2e2e"
+    },
+    {
+     "name": "GRAY19",
+     "value": "gray19",
+     "hex": "#303030"
+    },
+    {
+     "name": "GRAY2",
+     "value": "gray2",
+     "hex": "#050505"
+    },
+    {
+     "name": "GRAY20",
+     "value": "gray20",
+     "hex": "#333333"
+    },
+    {
+     "name": "GRAY21",
+     "value": "gray21",
+     "hex": "#363636"
+    },
+    {
+     "name": "GRAY22",
+     "value": "gray22",
+     "hex": "#383838"
+    },
+    {
+     "name": "GRAY23",
+     "value": "gray23",
+     "hex": "#3b3b3b"
+    },
+    {
+     "name": "GRAY24",
+     "value": "gray24",
+     "hex": "#3d3d3d"
+    },
+    {
+     "name": "GRAY25",
+     "value": "gray25",
+     "hex": "#404040"
+    },
+    {
+     "name": "GRAY26",
+     "value": "gray26",
+     "hex": "#424242"
+    },
+    {
+     "name": "GRAY27",
+     "value": "gray27",
+     "hex": "#454545"
+    },
+    {
+     "name": "GRAY28",
+     "value": "gray28",
+     "hex": "#474747"
+    },
+    {
+     "name": "GRAY29",
+     "value": "gray29",
+     "hex": "#4a4a4a"
+    },
+    {
+     "name": "GRAY3",
+     "value": "gray3",
+     "hex": "#080808"
+    },
+    {
+     "name": "GRAY30",
+     "value": "gray30",
+     "hex": "#4d4d4d"
+    },
+    {
+     "name": "GRAY31",
+     "value": "gray31",
+     "hex": "#4f4f4f"
+    },
+    {
+     "name": "GRAY32",
+     "value": "gray32",
+     "hex": "#525252"
+    },
+    {
+     "name": "GRAY33",
+     "value": "gray33",
+     "hex": "#545454"
+    },
+    {
+     "name": "GRAY34",
+     "value": "gray34",
+     "hex": "#575757"
+    },
+    {
+     "name": "GRAY35",
+     "value": "gray35",
+     "hex": "#595959"
+    },
+    {
+     "name": "GRAY36",
+     "value": "gray36",
+     "hex": "#5c5c5c"
+    },
+    {
+     "name": "GRAY37",
+     "value": "gray37",
+     "hex": "#5e5e5e"
+    },
+    {
+     "name": "GRAY38",
+     "value": "gray38",
+     "hex": "#616161"
+    },
+    {
+     "name": "GRAY39",
+     "value": "gray39",
+     "hex": "#636363"
+    },
+    {
+     "name": "GRAY4",
+     "value": "gray4",
+     "hex": "#0a0a0a"
+    },
+    {
+     "name": "GRAY40",
+     "value": "gray40",
+     "hex": "#666666"
+    },
+    {
+     "name": "GRAY41",
+     "value": "gray41",
+     "hex": "#696969"
+    },
+    {
+     "name": "GRAY42",
+     "value": "gray42",
+     "hex": "#6b6b6b"
+    },
+    {
+     "name": "GRAY43",
+     "value": "gray43",
+     "hex": "#6e6e6e"
+    },
+    {
+     "name": "GRAY44",
+     "value": "gray44",
+     "hex": "#707070"
+    },
+    {
+     "name": "GRAY45",
+     "value": "gray45",
+     "hex": "#737373"
+    },
+    {
+     "name": "GRAY46",
+     "value": "gray46",
+     "hex": "#757575"
+    },
+    {
+     "name": "GRAY47",
+     "value": "gray47",
+     "hex": "#787878"
+    },
+    {
+     "name": "GRAY48",
+     "value": "gray48",
+     "hex": "#7a7a7a"
+    },
+    {
+     "name": "GRAY49",
+     "value": "gray49",
+     "hex": "#7d7d7d"
+    },
+    {
+     "name": "GRAY5",
+     "value": "gray5",
+     "hex": "#0d0d0d"
+    },
+    {
+     "name": "GRAY50",
+     "value": "gray50",
+     "hex": "#7f7f7f"
+    },
+    {
+     "name": "GRAY51",
+     "value": "gray51",
+     "hex": "#828282"
+    },
+    {
+     "name": "GRAY52",
+     "value": "gray52",
+     "hex": "#858585"
+    },
+    {
+     "name": "GRAY53",
+     "value": "gray53",
+     "hex": "#878787"
+    },
+    {
+     "name": "GRAY54",
+     "value": "gray54",
+     "hex": "#8a8a8a"
+    },
+    {
+     "name": "GRAY55",
+     "value": "gray55",
+     "hex": "#8c8c8c"
+    },
+    {
+     "name": "GRAY56",
+     "value": "gray56",
+     "hex": "#8f8f8f"
+    },
+    {
+     "name": "GRAY57",
+     "value": "gray57",
+     "hex": "#919191"
+    },
+    {
+     "name": "GRAY58",
+     "value": "gray58",
+     "hex": "#949494"
+    },
+    {
+     "name": "GRAY59",
+     "value": "gray59",
+     "hex": "#969696"
+    },
+    {
+     "name": "GRAY6",
+     "value": "gray6",
+     "hex": "#0f0f0f"
+    },
+    {
+     "name": "GRAY60",
+     "value": "gray60",
+     "hex": "#999999"
+    },
+    {
+     "name": "GRAY61",
+     "value": "gray61",
+     "hex": "#9c9c9c"
+    },
+    {
+     "name": "GRAY62",
+     "value": "gray62",
+     "hex": "#9e9e9e"
+    },
+    {
+     "name": "GRAY63",
+     "value": "gray63",
+     "hex": "#a1a1a1"
+    },
+    {
+     "name": "GRAY64",
+     "value": "gray64",
+     "hex": "#a3a3a3"
+    },
+    {
+     "name": "GRAY65",
+     "value": "gray65",
+     "hex": "#a6a6a6"
+    },
+    {
+     "name": "GRAY66",
+     "value": "gray66",
+     "hex": "#a8a8a8"
+    },
+    {
+     "name": "GRAY67",
+     "value": "gray67",
+     "hex": "#ababab"
+    },
+    {
+     "name": "GRAY68",
+     "value": "gray68",
+     "hex": "#adadad"
+    },
+    {
+     "name": "GRAY69",
+     "value": "gray69",
+     "hex": "#b0b0b0"
+    },
+    {
+     "name": "GRAY7",
+     "value": "gray7",
+     "hex": "#121212"
+    },
+    {
+     "name": "GRAY70",
+     "value": "gray70",
+     "hex": "#b3b3b3"
+    },
+    {
+     "name": "GRAY71",
+     "value": "gray71",
+     "hex": "#b5b5b5"
+    },
+    {
+     "name": "GRAY72",
+     "value": "gray72",
+     "hex": "#b8b8b8"
+    },
+    {
+     "name": "GRAY73",
+     "value": "gray73",
+     "hex": "#bababa"
+    },
+    {
+     "name": "GRAY74",
+     "value": "gray74",
+     "hex": "#bdbdbd"
+    },
+    {
+     "name": "GRAY75",
+     "value": "gray75",
+     "hex": "#bfbfbf"
+    },
+    {
+     "name": "GRAY76",
+     "value": "gray76",
+     "hex": "#c2c2c2"
+    },
+    {
+     "name": "GRAY77",
+     "value": "gray77",
+     "hex": "#c4c4c4"
+    },
+    {
+     "name": "GRAY78",
+     "value": "gray78",
+     "hex": "#c7c7c7"
+    },
+    {
+     "name": "GRAY79",
+     "value": "gray79",
+     "hex": "#c9c9c9"
+    },
+    {
+     "name": "GRAY8",
+     "value": "gray8",
+     "hex": "#141414"
+    },
+    {
+     "name": "GRAY80",
+     "value": "gray80",
+     "hex": "#cccccc"
+    },
+    {
+     "name": "GRAY81",
+     "value": "gray81",
+     "hex": "#cfcfcf"
+    },
+    {
+     "name": "GRAY82",
+     "value": "gray82",
+     "hex": "#d1d1d1"
+    },
+    {
+     "name": "GRAY83",
+     "value": "gray83",
+     "hex": "#d4d4d4"
+    },
+    {
+     "name": "GRAY84",
+     "value": "gray84",
+     "hex": "#d6d6d6"
+    },
+    {
+     "name": "GRAY85",
+     "value": "gray85",
+     "hex": "#d9d9d9"
+    },
+    {
+     "name": "GRAY86",
+     "value": "gray86",
+     "hex": "#dbdbdb"
+    },
+    {
+     "name": "GRAY87",
+     "value": "gray87",
+     "hex": "#dedede"
+    },
+    {
+     "name": "GRAY88",
+     "value": "gray88",
+     "hex": "#e0e0e0"
+    },
+    {
+     "name": "GRAY89",
+     "value": "gray89",
+     "hex": "#e3e3e3"
+    },
+    {
+     "name": "GRAY9",
+     "value": "gray9",
+     "hex": "#171717"
+    },
+    {
+     "name": "GRAY90",
+     "value": "gray90",
+     "hex": "#e5e5e5"
+    },
+    {
+     "name": "GRAY91",
+     "value": "gray91",
+     "hex": "#e8e8e8"
+    },
+    {
+     "name": "GRAY92",
+     "value": "gray92",
+     "hex": "#ebebeb"
+    },
+    {
+     "name": "GRAY93",
+     "value": "gray93",
+     "hex": "#ededed"
+    },
+    {
+     "name": "GRAY94",
+     "value": "gray94",
+     "hex": "#f0f0f0"
+    },
+    {
+     "name": "GRAY95",
+     "value": "gray95",
+     "hex": "#f2f2f2"
+    },
+    {
+     "name": "GRAY96",
+     "value": "gray96",
+     "hex": "#f5f5f5"
+    },
+    {
+     "name": "GRAY97",
+     "value": "gray97",
+     "hex": "#f7f7f7"
+    },
+    {
+     "name": "GRAY98",
+     "value": "gray98",
+     "hex": "#fafafa"
+    },
+    {
+     "name": "GRAY99",
+     "value": "gray99",
+     "hex": "#fcfcfc"
+    },
+    {
+     "name": "GREEN",
+     "value": "green",
+     "hex": "#00ff00"
+    },
+    {
+     "name": "GREEN1",
+     "value": "green1",
+     "hex": "#00ff00"
+    },
+    {
+     "name": "GREEN2",
+     "value": "green2",
+     "hex": "#00ee00"
+    },
+    {
+     "name": "GREEN3",
+     "value": "green3",
+     "hex": "#00cd00"
+    },
+    {
+     "name": "GREEN4",
+     "value": "green4",
+     "hex": "#008b00"
+    },
+    {
+     "name": "GREENYELLOW",
+     "value": "greenyellow",
+     "hex": "#adff2f"
+    },
+    {
+     "name": "GREY",
+     "value": "grey",
+     "hex": "#bebebe"
+    },
+    {
+     "name": "GREY0",
+     "value": "grey0",
+     "hex": "#000000"
+    },
+    {
+     "name": "GREY1",
+     "value": "grey1",
+     "hex": "#030303"
+    },
+    {
+     "name": "GREY10",
+     "value": "grey10",
+     "hex": "#1a1a1a"
+    },
+    {
+     "name": "GREY100",
+     "value": "grey100",
+     "hex": "#ffffff"
+    },
+    {
+     "name": "GREY11",
+     "value": "grey11",
+     "hex": "#1c1c1c"
+    },
+    {
+     "name": "GREY12",
+     "value": "grey12",
+     "hex": "#1f1f1f"
+    },
+    {
+     "name": "GREY13",
+     "value": "grey13",
+     "hex": "#212121"
+    },
+    {
+     "name": "GREY14",
+     "value": "grey14",
+     "hex": "#242424"
+    },
+    {
+     "name": "GREY15",
+     "value": "grey15",
+     "hex": "#262626"
+    },
+    {
+     "name": "GREY16",
+     "value": "grey16",
+     "hex": "#292929"
+    },
+    {
+     "name": "GREY17",
+     "value": "grey17",
+     "hex": "#2b2b2b"
+    },
+    {
+     "name": "GREY18",
+     "value": "grey18",
+     "hex": "#2e2e2e"
+    },
+    {
+     "name": "GREY19",
+     "value": "grey19",
+     "hex": "#303030"
+    },
+    {
+     "name": "GREY2",
+     "value": "grey2",
+     "hex": "#050505"
+    },
+    {
+     "name": "GREY20",
+     "value": "grey20",
+     "hex": "#333333"
+    },
+    {
+     "name": "GREY21",
+     "value": "grey21",
+     "hex": "#363636"
+    },
+    {
+     "name": "GREY22",
+     "value": "grey22",
+     "hex": "#383838"
+    },
+    {
+     "name": "GREY23",
+     "value": "grey23",
+     "hex": "#3b3b3b"
+    },
+    {
+     "name": "GREY24",
+     "value": "grey24",
+     "hex": "#3d3d3d"
+    },
+    {
+     "name": "GREY25",
+     "value": "grey25",
+     "hex": "#404040"
+    },
+    {
+     "name": "GREY26",
+     "value": "grey26",
+     "hex": "#424242"
+    },
+    {
+     "name": "GREY27",
+     "value": "grey27",
+     "hex": "#454545"
+    },
+    {
+     "name": "GREY28",
+     "value": "grey28",
+     "hex": "#474747"
+    },
+    {
+     "name": "GREY29",
+     "value": "grey29",
+     "hex": "#4a4a4a"
+    },
+    {
+     "name": "GREY3",
+     "value": "grey3",
+     "hex": "#080808"
+    },
+    {
+     "name": "GREY30",
+     "value": "grey30",
+     "hex": "#4d4d4d"
+    },
+    {
+     "name": "GREY31",
+     "value": "grey31",
+     "hex": "#4f4f4f"
+    },
+    {
+     "name": "GREY32",
+     "value": "grey32",
+     "hex": "#525252"
+    },
+    {
+     "name": "GREY33",
+     "value": "grey33",
+     "hex": "#545454"
+    },
+    {
+     "name": "GREY34",
+     "value": "grey34",
+     "hex": "#575757"
+    },
+    {
+     "name": "GREY35",
+     "value": "grey35",
+     "hex": "#595959"
+    },
+    {
+     "name": "GREY36",
+     "value": "grey36",
+     "hex": "#5c5c5c"
+    },
+    {
+     "name": "GREY37",
+     "value": "grey37",
+     "hex": "#5e5e5e"
+    },
+    {
+     "name": "GREY38",
+     "value": "grey38",
+     "hex": "#616161"
+    },
+    {
+     "name": "GREY39",
+     "value": "grey39",
+     "hex": "#636363"
+    },
+    {
+     "name": "GREY4",
+     "value": "grey4",
+     "hex": "#0a0a0a"
+    },
+    {
+     "name": "GREY40",
+     "value": "grey40",
+     "hex": "#666666"
+    },
+    {
+     "name": "GREY41",
+     "value": "grey41",
+     "hex": "#696969"
+    },
+    {
+     "name": "GREY42",
+     "value": "grey42",
+     "hex": "#6b6b6b"
+    },
+    {
+     "name": "GREY43",
+     "value": "grey43",
+     "hex": "#6e6e6e"
+    },
+    {
+     "name": "GREY44",
+     "value": "grey44",
+     "hex": "#707070"
+    },
+    {
+     "name": "GREY45",
+     "value": "grey45",
+     "hex": "#737373"
+    },
+    {
+     "name": "GREY46",
+     "value": "grey46",
+     "hex": "#757575"
+    },
+    {
+     "name": "GREY47",
+     "value": "grey47",
+     "hex": "#787878"
+    },
+    {
+     "name": "GREY48",
+     "value": "grey48",
+     "hex": "#7a7a7a"
+    },
+    {
+     "name": "GREY49",
+     "value": "grey49",
+     "hex": "#7d7d7d"
+    },
+    {
+     "name": "GREY5",
+     "value": "grey5",
+     "hex": "#0d0d0d"
+    },
+    {
+     "name": "GREY50",
+     "value": "grey50",
+     "hex": "#7f7f7f"
+    },
+    {
+     "name": "GREY51",
+     "value": "grey51",
+     "hex": "#828282"
+    },
+    {
+     "name": "GREY52",
+     "value": "grey52",
+     "hex": "#858585"
+    },
+    {
+     "name": "GREY53",
+     "value": "grey53",
+     "hex": "#878787"
+    },
+    {
+     "name": "GREY54",
+     "value": "grey54",
+     "hex": "#8a8a8a"
+    },
+    {
+     "name": "GREY55",
+     "value": "grey55",
+     "hex": "#8c8c8c"
+    },
+    {
+     "name": "GREY56",
+     "value": "grey56",
+     "hex": "#8f8f8f"
+    },
+    {
+     "name": "GREY57",
+     "value": "grey57",
+     "hex": "#919191"
+    },
+    {
+     "name": "GREY58",
+     "value": "grey58",
+     "hex": "#949494"
+    },
+    {
+     "name": "GREY59",
+     "value": "grey59",
+     "hex": "#969696"
+    },
+    {
+     "name": "GREY6",
+     "value": "grey6",
+     "hex": "#0f0f0f"
+    },
+    {
+     "name": "GREY60",
+     "value": "grey60",
+     "hex": "#999999"
+    },
+    {
+     "name": "GREY61",
+     "value": "grey61",
+     "hex": "#9c9c9c"
+    },
+    {
+     "name": "GREY62",
+     "value": "grey62",
+     "hex": "#9e9e9e"
+    },
+    {
+     "name": "GREY63",
+     "value": "grey63",
+     "hex": "#a1a1a1"
+    },
+    {
+     "name": "GREY64",
+     "value": "grey64",
+     "hex": "#a3a3a3"
+    },
+    {
+     "name": "GREY65",
+     "value": "grey65",
+     "hex": "#a6a6a6"
+    },
+    {
+     "name": "GREY66",
+     "value": "grey66",
+     "hex": "#a8a8a8"
+    },
+    {
+     "name": "GREY67",
+     "value": "grey67",
+     "hex": "#ababab"
+    },
+    {
+     "name": "GREY68",
+     "value": "grey68",
+     "hex": "#adadad"
+    },
+    {
+     "name": "GREY69",
+     "value": "grey69",
+     "hex": "#b0b0b0"
+    },
+    {
+     "name": "GREY7",
+     "value": "grey7",
+     "hex": "#121212"
+    },
+    {
+     "name": "GREY70",
+     "value": "grey70",
+     "hex": "#b3b3b3"
+    },
+    {
+     "name": "GREY71",
+     "value": "grey71",
+     "hex": "#b5b5b5"
+    },
+    {
+     "name": "GREY72",
+     "value": "grey72",
+     "hex": "#b8b8b8"
+    },
+    {
+     "name": "GREY73",
+     "value": "grey73",
+     "hex": "#bababa"
+    },
+    {
+     "name": "GREY74",
+     "value": "grey74",
+     "hex": "#bdbdbd"
+    },
+    {
+     "name": "GREY75",
+     "value": "grey75",
+     "hex": "#bfbfbf"
+    },
+    {
+     "name": "GREY76",
+     "value": "grey76",
+     "hex": "#c2c2c2"
+    },
+    {
+     "name": "GREY77",
+     "value": "grey77",
+     "hex": "#c4c4c4"
+    },
+    {
+     "name": "GREY78",
+     "value": "grey78",
+     "hex": "#c7c7c7"
+    },
+    {
+     "name": "GREY79",
+     "value": "grey79",
+     "hex": "#c9c9c9"
+    },
+    {
+     "name": "GREY8",
+     "value": "grey8",
+     "hex": "#141414"
+    },
+    {
+     "name": "GREY80",
+     "value": "grey80",
+     "hex": "#cccccc"
+    },
+    {
+     "name": "GREY81",
+     "value": "grey81",
+     "hex": "#cfcfcf"
+    },
+    {
+     "name": "GREY82",
+     "value": "grey82",
+     "hex": "#d1d1d1"
+    },
+    {
+     "name": "GREY83",
+     "value": "grey83",
+     "hex": "#d4d4d4"
+    },
+    {
+     "name": "GREY84",
+     "value": "grey84",
+     "hex": "#d6d6d6"
+    },
+    {
+     "name": "GREY85",
+     "value": "grey85",
+     "hex": "#d9d9d9"
+    },
+    {
+     "name": "GREY86",
+     "value": "grey86",
+     "hex": "#dbdbdb"
+    },
+    {
+     "name": "GREY87",
+     "value": "grey87",
+     "hex": "#dedede"
+    },
+    {
+     "name": "GREY88",
+     "value": "grey88",
+     "hex": "#e0e0e0"
+    },
+    {
+     "name": "GREY89",
+     "value": "grey89",
+     "hex": "#e3e3e3"
+    },
+    {
+     "name": "GREY9",
+     "value": "grey9",
+     "hex": "#171717"
+    },
+    {
+     "name": "GREY90",
+     "value": "grey90",
+     "hex": "#e5e5e5"
+    },
+    {
+     "name": "GREY91",
+     "value": "grey91",
+     "hex": "#e8e8e8"
+    },
+    {
+     "name": "GREY92",
+     "value": "grey92",
+     "hex": "#ebebeb"
+    },
+    {
+     "name": "GREY93",
+     "value": "grey93",
+     "hex": "#ededed"
+    },
+    {
+     "name": "GREY94",
+     "value": "grey94",
+     "hex": "#f0f0f0"
+    },
+    {
+     "name": "GREY95",
+     "value": "grey95",
+     "hex": "#f2f2f2"
+    },
+    {
+     "name": "GREY96",
+     "value": "grey96",
+     "hex": "#f5f5f5"
+    },
+    {
+     "name": "GREY97",
+     "value": "grey97",
+     "hex": "#f7f7f7"
+    },
+    {
+     "name": "GREY98",
+     "value": "grey98",
+     "hex": "#fafafa"
+    },
+    {
+     "name": "GREY99",
+     "value": "grey99",
+     "hex": "#fcfcfc"
+    },
+    {
+     "name": "HONEYDEW",
+     "value": "honeydew",
+     "hex": "#f0fff0"
+    },
+    {
+     "name": "HONEYDEW1",
+     "value": "honeydew1",
+     "hex": "#f0fff0"
+    },
+    {
+     "name": "HONEYDEW2",
+     "value": "honeydew2",
+     "hex": "#e0eee0"
+    },
+    {
+     "name": "HONEYDEW3",
+     "value": "honeydew3",
+     "hex": "#c1cdc1"
+    },
+    {
+     "name": "HONEYDEW4",
+     "value": "honeydew4",
+     "hex": "#838b83"
+    },
+    {
+     "name": "HOTPINK",
+     "value": "hotpink",
+     "hex": "#ff69b4"
+    },
+    {
+     "name": "HOTPINK1",
+     "value": "hotpink1",
+     "hex": "#ff6eb4"
+    },
+    {
+     "name": "HOTPINK2",
+     "value": "hotpink2",
+     "hex": "#ee6aa7"
+    },
+    {
+     "name": "HOTPINK3",
+     "value": "hotpink3",
+     "hex": "#cd6090"
+    },
+    {
+     "name": "HOTPINK4",
+     "value": "hotpink4",
+     "hex": "#8b3a62"
+    },
+    {
+     "name": "INDIANRED",
+     "value": "indianred",
+     "hex": "#cd5c5c"
+    },
+    {
+     "name": "INDIANRED1",
+     "value": "indianred1",
+     "hex": "#ff6a6a"
+    },
+    {
+     "name": "INDIANRED2",
+     "value": "indianred2",
+     "hex": "#ee6363"
+    },
+    {
+     "name": "INDIANRED3",
+     "value": "indianred3",
+     "hex": "#cd5555"
+    },
+    {
+     "name": "INDIANRED4",
+     "value": "indianred4",
+     "hex": "#8b3a3a"
+    },
+    {
+     "name": "INDIGO",
+     "value": "indigo",
+     "hex": "#4b0082"
+    },
+    {
+     "name": "IVORY",
+     "value": "ivory",
+     "hex": "#fffff0"
+    },
+    {
+     "name": "IVORY1",
+     "value": "ivory1",
+     "hex": "#fffff0"
+    },
+    {
+     "name": "IVORY2",
+     "value": "ivory2",
+     "hex": "#eeeee0"
+    },
+    {
+     "name": "IVORY3",
+     "value": "ivory3",
+     "hex": "#cdcdc1"
+    },
+    {
+     "name": "IVORY4",
+     "value": "ivory4",
+     "hex": "#8b8b83"
+    },
+    {
+     "name": "KHAKI",
+     "value": "khaki",
+     "hex": "#f0e68c"
+    },
+    {
+     "name": "KHAKI1",
+     "value": "khaki1",
+     "hex": "#fff68f"
+    },
+    {
+     "name": "KHAKI2",
+     "value": "khaki2",
+     "hex": "#eee685"
+    },
+    {
+     "name": "KHAKI3",
+     "value": "khaki3",
+     "hex": "#cdc673"
+    },
+    {
+     "name": "KHAKI4",
+     "value": "khaki4",
+     "hex": "#8b864e"
+    },
+    {
+     "name": "LAVENDER",
+     "value": "lavender",
+     "hex": "#e6e6fa"
+    },
+    {
+     "name": "LAVENDERBLUSH",
+     "value": "lavenderblush",
+     "hex": "#fff0f5"
+    },
+    {
+     "name": "LAVENDERBLUSH1",
+     "value": "lavenderblush1",
+     "hex": "#fff0f5"
+    },
+    {
+     "name": "LAVENDERBLUSH2",
+     "value": "lavenderblush2",
+     "hex": "#eee0e5"
+    },
+    {
+     "name": "LAVENDERBLUSH3",
+     "value": "lavenderblush3",
+     "hex": "#cdc1c5"
+    },
+    {
+     "name": "LAVENDERBLUSH4",
+     "value": "lavenderblush4",
+     "hex": "#8b8386"
+    },
+    {
+     "name": "LAWNGREEN",
+     "value": "lawngreen",
+     "hex": "#7cfc00"
+    },
+    {
+     "name": "LEMONCHIFFON",
+     "value": "lemonchiffon",
+     "hex": "#fffacd"
+    },
+    {
+     "name": "LEMONCHIFFON1",
+     "value": "lemonchiffon1",
+     "hex": "#fffacd"
+    },
+    {
+     "name": "LEMONCHIFFON2",
+     "value": "lemonchiffon2",
+     "hex": "#eee9bf"
+    },
+    {
+     "name": "LEMONCHIFFON3",
+     "value": "lemonchiffon3",
+     "hex": "#cdc9a5"
+    },
+    {
+     "name": "LEMONCHIFFON4",
+     "value": "lemonchiffon4",
+     "hex": "#8b8970"
+    },
+    {
+     "name": "LIGHTBLUE",
+     "value": "lightblue",
+     "hex": "#add8e6"
+    },
+    {
+     "name": "LIGHTBLUE1",
+     "value": "lightblue1",
+     "hex": "#bfefff"
+    },
+    {
+     "name": "LIGHTBLUE2",
+     "value": "lightblue2",
+     "hex": "#b2dfee"
+    },
+    {
+     "name": "LIGHTBLUE3",
+     "value": "lightblue3",
+     "hex": "#9ac0cd"
+    },
+    {
+     "name": "LIGHTBLUE4",
+     "value": "lightblue4",
+     "hex": "#68838b"
+    },
+    {
+     "name": "LIGHTCORAL",
+     "value": "lightcoral",
+     "hex": "#f08080"
+    },
+    {
+     "name": "LIGHTCYAN",
+     "value": "lightcyan",
+     "hex": "#e0ffff"
+    },
+    {
+     "name": "LIGHTCYAN1",
+     "value": "lightcyan1",
+     "hex": "#e0ffff"
+    },
+    {
+     "name": "LIGHTCYAN2",
+     "value": "lightcyan2",
+     "hex": "#d1eeee"
+    },
+    {
+     "name": "LIGHTCYAN3",
+     "value": "lightcyan3",
+     "hex": "#b4cdcd"
+    },
+    {
+     "name": "LIGHTCYAN4",
+     "value": "lightcyan4",
+     "hex": "#7a8b8b"
+    },
+    {
+     "name": "LIGHTGOLDENROD",
+     "value": "lightgoldenrod",
+     "hex": "#eedd82"
+    },
+    {
+     "name": "LIGHTGOLDENROD1",
+     "value": "lightgoldenrod1",
+     "hex": "#ffec8b"
+    },
+    {
+     "name": "LIGHTGOLDENROD2",
+     "value": "lightgoldenrod2",
+     "hex": "#eedc82"
+    },
+    {
+     "name": "LIGHTGOLDENROD3",
+     "value": "lightgoldenrod3",
+     "hex": "#cdbe70"
+    },
+    {
+     "name": "LIGHTGOLDENROD4",
+     "value": "lightgoldenrod4",
+     "hex": "#8b814c"
+    },
+    {
+     "name": "LIGHTGOLDENRODYELLOW",
+     "value": "lightgoldenrodyellow",
+     "hex": "#fafad2"
+    },
+    {
+     "name": "LIGHTGRAY",
+     "value": "lightgray",
+     "hex": "#d3d3d3"
+    },
+    {
+     "name": "LIGHTGREEN",
+     "value": "lightgreen",
+     "hex": "#90ee90"
+    },
+    {
+     "name": "LIGHTGREY",
+     "value": "lightgrey",
+     "hex": "#d3d3d3"
+    },
+    {
+     "name": "LIGHTPINK",
+     "value": "lightpink",
+     "hex": "#ffb6c1"
+    },
+    {
+     "name": "LIGHTPINK1",
+     "value": "lightpink1",
+     "hex": "#ffaeb9"
+    },
+    {
+     "name": "LIGHTPINK2",
+     "value": "lightpink2",
+     "hex": "#eea2ad"
+    },
+    {
+     "name": "LIGHTPINK3",
+     "value": "lightpink3",
+     "hex": "#cd8c95"
+    },
+    {
+     "name": "LIGHTPINK4",
+     "value": "lightpink4",
+     "hex": "#8b5f65"
+    },
+    {
+     "name": "LIGHTSALMON",
+     "value": "lightsalmon",
+     "hex": "#ffa07a"
+    },
+    {
+     "name": "LIGHTSALMON1",
+     "value": "lightsalmon1",
+     "hex": "#ffa07a"
+    },
+    {
+     "name": "LIGHTSALMON2",
+     "value": "lightsalmon2",
+     "hex": "#ee9572"
+    },
+    {
+     "name": "LIGHTSALMON3",
+     "value": "lightsalmon3",
+     "hex": "#cd8162"
+    },
+    {
+     "name": "LIGHTSALMON4",
+     "value": "lightsalmon4",
+     "hex": "#8b5742"
+    },
+    {
+     "name": "LIGHTSEAGREEN",
+     "value": "lightseagreen",
+     "hex": "#20b2aa"
+    },
+    {
+     "name": "LIGHTSKYBLUE",
+     "value": "lightskyblue",
+     "hex": "#87cefa"
+    },
+    {
+     "name": "LIGHTSKYBLUE1",
+     "value": "lightskyblue1",
+     "hex": "#b0e2ff"
+    },
+    {
+     "name": "LIGHTSKYBLUE2",
+     "value": "lightskyblue2",
+     "hex": "#a4d3ee"
+    },
+    {
+     "name": "LIGHTSKYBLUE3",
+     "value": "lightskyblue3",
+     "hex": "#8db6cd"
+    },
+    {
+     "name": "LIGHTSKYBLUE4",
+     "value": "lightskyblue4",
+     "hex": "#607b8b"
+    },
+    {
+     "name": "LIGHTSLATEBLUE",
+     "value": "lightslateblue",
+     "hex": "#8470ff"
+    },
+    {
+     "name": "LIGHTSLATEGRAY",
+     "value": "lightslategray",
+     "hex": "#778899"
+    },
+    {
+     "name": "LIGHTSLATEGREY",
+     "value": "lightslategrey",
+     "hex": "#778899"
+    },
+    {
+     "name": "LIGHTSTEELBLUE",
+     "value": "lightsteelblue",
+     "hex": "#b0c4de"
+    },
+    {
+     "name": "LIGHTSTEELBLUE1",
+     "value": "lightsteelblue1",
+     "hex": "#cae1ff"
+    },
+    {
+     "name": "LIGHTSTEELBLUE2",
+     "value": "lightsteelblue2",
+     "hex": "#bcd2ee"
+    },
+    {
+     "name": "LIGHTSTEELBLUE3",
+     "value": "lightsteelblue3",
+     "hex": "#a2b5cd"
+    },
+    {
+     "name": "LIGHTSTEELBLUE4",
+     "value": "lightsteelblue4",
+     "hex": "#6e7b8b"
+    },
+    {
+     "name": "LIGHTYELLOW",
+     "value": "lightyellow",
+     "hex": "#ffffe0"
+    },
+    {
+     "name": "LIGHTYELLOW1",
+     "value": "lightyellow1",
+     "hex": "#ffffe0"
+    },
+    {
+     "name": "LIGHTYELLOW2",
+     "value": "lightyellow2",
+     "hex": "#eeeed1"
+    },
+    {
+     "name": "LIGHTYELLOW3",
+     "value": "lightyellow3",
+     "hex": "#cdcdb4"
+    },
+    {
+     "name": "LIGHTYELLOW4",
+     "value": "lightyellow4",
+     "hex": "#8b8b7a"
+    },
+    {
+     "name": "LIME",
+     "value": "lime",
+     "hex": "#00ff00"
+    },
+    {
+     "name": "LIMEGREEN",
+     "value": "limegreen",
+     "hex": "#32cd32"
+    },
+    {
+     "name": "LINEN",
+     "value": "linen",
+     "hex": "#faf0e6"
+    },
+    {
+     "name": "MAGENTA",
+     "value": "magenta",
+     "hex": "#ff00ff"
+    },
+    {
+     "name": "MAGENTA1",
+     "value": "magenta1",
+     "hex": "#ff00ff"
+    },
+    {
+     "name": "MAGENTA2",
+     "value": "magenta2",
+     "hex": "#ee00ee"
+    },
+    {
+     "name": "MAGENTA3",
+     "value": "magenta3",
+     "hex": "#cd00cd"
+    },
+    {
+     "name": "MAGENTA4",
+     "value": "magenta4",
+     "hex": "#8b008b"
+    },
+    {
+     "name": "MAROON",
+     "value": "maroon",
+     "hex": "#b03060"
+    },
+    {
+     "name": "MAROON1",
+     "value": "maroon1",
+     "hex": "#ff34b3"
+    },
+    {
+     "name": "MAROON2",
+     "value": "maroon2",
+     "hex": "#ee30a7"
+    },
+    {
+     "name": "MAROON3",
+     "value": "maroon3",
+     "hex": "#cd2990"
+    },
+    {
+     "name": "MAROON4",
+     "value": "maroon4",
+     "hex": "#8b1c62"
+    },
+    {
+     "name": "MEDIUMAQUAMARINE",
+     "value": "mediumaquamarine",
+     "hex": "#66cdaa"
+    },
+    {
+     "name": "MEDIUMBLUE",
+     "value": "mediumblue",
+     "hex": "#0000cd"
+    },
+    {
+     "name": "MEDIUMORCHID",
+     "value": "mediumorchid",
+     "hex": "#ba55d3"
+    },
+    {
+     "name": "MEDIUMORCHID1",
+     "value": "mediumorchid1",
+     "hex": "#e066ff"
+    },
+    {
+     "name": "MEDIUMORCHID2",
+     "value": "mediumorchid2",
+     "hex": "#d15fee"
+    },
+    {
+     "name": "MEDIUMORCHID3",
+     "value": "mediumorchid3",
+     "hex": "#b452cd"
+    },
+    {
+     "name": "MEDIUMORCHID4",
+     "value": "mediumorchid4",
+     "hex": "#7a378b"
+    },
+    {
+     "name": "MEDIUMPURPLE",
+     "value": "mediumpurple",
+     "hex": "#9370db"
+    },
+    {
+     "name": "MEDIUMPURPLE1",
+     "value": "mediumpurple1",
+     "hex": "#ab82ff"
+    },
+    {
+     "name": "MEDIUMPURPLE2",
+     "value": "mediumpurple2",
+     "hex": "#9f79ee"
+    },
+    {
+     "name": "MEDIUMPURPLE3",
+     "value": "mediumpurple3",
+     "hex": "#8968cd"
+    },
+    {
+     "name": "MEDIUMPURPLE4",
+     "value": "mediumpurple4",
+     "hex": "#5d478b"
+    },
+    {
+     "name": "MEDIUMSEAGREEN",
+     "value": "mediumseagreen",
+     "hex": "#3cb371"
+    },
+    {
+     "name": "MEDIUMSLATEBLUE",
+     "value": "mediumslateblue",
+     "hex": "#7b68ee"
+    },
+    {
+     "name": "MEDIUMSPRINGGREEN",
+     "value": "mediumspringgreen",
+     "hex": "#00fa9a"
+    },
+    {
+     "name": "MEDIUMTURQUOISE",
+     "value": "mediumturquoise",
+     "hex": "#48d1cc"
+    },
+    {
+     "name": "MEDIUMVIOLETRED",
+     "value": "mediumvioletred",
+     "hex": "#c71585"
+    },
+    {
+     "name": "MIDNIGHTBLUE",
+     "value": "midnightblue",
+     "hex": "#191970"
+    },
+    {
+     "name": "MINTCREAM",
+     "value": "mintcream",
+     "hex": "#f5fffa"
+    },
+    {
+     "name": "MISTYROSE",
+     "value": "mistyrose",
+     "hex": "#ffe4e1"
+    },
+    {
+     "name": "MISTYROSE1",
+     "value": "mistyrose1",
+     "hex": "#ffe4e1"
+    },
+    {
+     "name": "MISTYROSE2",
+     "value": "mistyrose2",
+     "hex": "#eed5d2"
+    },
+    {
+     "name": "MISTYROSE3",
+     "value": "mistyrose3",
+     "hex": "#cdb7b5"
+    },
+    {
+     "name": "MISTYROSE4",
+     "value": "mistyrose4",
+     "hex": "#8b7d7b"
+    },
+    {
+     "name": "MOCCASIN",
+     "value": "moccasin",
+     "hex": "#ffe4b5"
+    },
+    {
+     "name": "NAVAJOWHITE",
+     "value": "navajowhite",
+     "hex": "#ffdead"
+    },
+    {
+     "name": "NAVAJOWHITE1",
+     "value": "navajowhite1",
+     "hex": "#ffdead"
+    },
+    {
+     "name": "NAVAJOWHITE2",
+     "value": "navajowhite2",
+     "hex": "#eecfa1"
+    },
+    {
+     "name": "NAVAJOWHITE3",
+     "value": "navajowhite3",
+     "hex": "#cdb38b"
+    },
+    {
+     "name": "NAVAJOWHITE4",
+     "value": "navajowhite4",
+     "hex": "#8b795e"
+    },
+    {
+     "name": "NAVY",
+     "value": "navy",
+     "hex": "#000080"
+    },
+    {
+     "name": "NAVYBLUE",
+     "value": "navyblue",
+     "hex": "#000080"
+    },
+    {
+     "name": "OLDLACE",
+     "value": "oldlace",
+     "hex": "#fdf5e6"
+    },
+    {
+     "name": "OLIVE",
+     "value": "olive",
+     "hex": "#808000"
+    },
+    {
+     "name": "OLIVEDRAB",
+     "value": "olivedrab",
+     "hex": "#6b8e23"
+    },
+    {
+     "name": "OLIVEDRAB1",
+     "value": "olivedrab1",
+     "hex": "#c0ff3e"
+    },
+    {
+     "name": "OLIVEDRAB2",
+     "value": "olivedrab2",
+     "hex": "#b3ee3a"
+    },
+    {
+     "name": "OLIVEDRAB3",
+     "value": "olivedrab3",
+     "hex": "#9acd32"
+    },
+    {
+     "name": "OLIVEDRAB4",
+     "value": "olivedrab4",
+     "hex": "#698b22"
+    },
+    {
+     "name": "ORANGE",
+     "value": "orange",
+     "hex": "#ffa500"
+    },
+    {
+     "name": "ORANGE1",
+     "value": "orange1",
+     "hex": "#ffa500"
+    },
+    {
+     "name": "ORANGE2",
+     "value": "orange2",
+     "hex": "#ee9a00"
+    },
+    {
+     "name": "ORANGE3",
+     "value": "orange3",
+     "hex": "#cd8500"
+    },
+    {
+     "name": "ORANGE4",
+     "value": "orange4",
+     "hex": "#8b5a00"
+    },
+    {
+     "name": "ORANGERED",
+     "value": "orangered",
+     "hex": "#ff4500"
+    },
+    {
+     "name": "ORANGERED1",
+     "value": "orangered1",
+     "hex": "#ff4500"
+    },
+    {
+     "name": "ORANGERED2",
+     "value": "orangered2",
+     "hex": "#ee4000"
+    },
+    {
+     "name": "ORANGERED3",
+     "value": "orangered3",
+     "hex": "#cd3700"
+    },
+    {
+     "name": "ORANGERED4",
+     "value": "orangered4",
+     "hex": "#8b2500"
+    },
+    {
+     "name": "ORCHID",
+     "value": "orchid",
+     "hex": "#da70d6"
+    },
+    {
+     "name": "ORCHID1",
+     "value": "orchid1",
+     "hex": "#ff83fa"
+    },
+    {
+     "name": "ORCHID2",
+     "value": "orchid2",
+     "hex": "#ee7ae9"
+    },
+    {
+     "name": "ORCHID3",
+     "value": "orchid3",
+     "hex": "#cd69c9"
+    },
+    {
+     "name": "ORCHID4",
+     "value": "orchid4",
+     "hex": "#8b4789"
+    },
+    {
+     "name": "PALEGOLDENROD",
+     "value": "palegoldenrod",
+     "hex": "#eee8aa"
+    },
+    {
+     "name": "PALEGREEN",
+     "value": "palegreen",
+     "hex": "#98fb98"
+    },
+    {
+     "name": "PALEGREEN1",
+     "value": "palegreen1",
+     "hex": "#9aff9a"
+    },
+    {
+     "name": "PALEGREEN2",
+     "value": "palegreen2",
+     "hex": "#90ee90"
+    },
+    {
+     "name": "PALEGREEN3",
+     "value": "palegreen3",
+     "hex": "#7ccd7c"
+    },
+    {
+     "name": "PALEGREEN4",
+     "value": "palegreen4",
+     "hex": "#548b54"
+    },
+    {
+     "name": "PALETURQUOISE",
+     "value": "paleturquoise",
+     "hex": "#afeeee"
+    },
+    {
+     "name": "PALETURQUOISE1",
+     "value": "paleturquoise1",
+     "hex": "#bbffff"
+    },
+    {
+     "name": "PALETURQUOISE2",
+     "value": "paleturquoise2",
+     "hex": "#aeeeee"
+    },
+    {
+     "name": "PALETURQUOISE3",
+     "value": "paleturquoise3",
+     "hex": "#96cdcd"
+    },
+    {
+     "name": "PALETURQUOISE4",
+     "value": "paleturquoise4",
+     "hex": "#668b8b"
+    },
+    {
+     "name": "PALEVIOLETRED",
+     "value": "palevioletred",
+     "hex": "#db7093"
+    },
+    {
+     "name": "PALEVIOLETRED1",
+     "value": "palevioletred1",
+     "hex": "#ff82ab"
+    },
+    {
+     "name": "PALEVIOLETRED2",
+     "value": "palevioletred2",
+     "hex": "#ee799f"
+    },
+    {
+     "name": "PALEVIOLETRED3",
+     "value": "palevioletred3",
+     "hex": "#cd6889"
+    },
+    {
+     "name": "PALEVIOLETRED4",
+     "value": "palevioletred4",
+     "hex": "#8b475d"
+    },
+    {
+     "name": "PAPAYAWHIP",
+     "value": "papayawhip",
+     "hex": "#ffefd5"
+    },
+    {
+     "name": "PEACHPUFF",
+     "value": "peachpuff",
+     "hex": "#ffdab9"
+    },
+    {
+     "name": "PEACHPUFF1",
+     "value": "peachpuff1",
+     "hex": "#ffdab9"
+    },
+    {
+     "name": "PEACHPUFF2",
+     "value": "peachpuff2",
+     "hex": "#eecbad"
+    },
+    {
+     "name": "PEACHPUFF3",
+     "value": "peachpuff3",
+     "hex": "#cdaf95"
+    },
+    {
+     "name": "PEACHPUFF4",
+     "value": "peachpuff4",
+     "hex": "#8b7765"
+    },
+    {
+     "name": "PERU",
+     "value": "peru",
+     "hex": "#cd853f"
+    },
+    {
+     "name": "PINK",
+     "value": "pink",
+     "hex": "#ffc0cb"
+    },
+    {
+     "name": "PINK1",
+     "value": "pink1",
+     "hex": "#ffb5c5"
+    },
+    {
+     "name": "PINK2",
+     "value": "pink2",
+     "hex": "#eea9b8"
+    },
+    {
+     "name": "PINK3",
+     "value": "pink3",
+     "hex": "#cd919e"
+    },
+    {
+     "name": "PINK4",
+     "value": "pink4",
+     "hex": "#8b636c"
+    },
+    {
+     "name": "PLUM",
+     "value": "plum",
+     "hex": "#dda0dd"
+    },
+    {
+     "name": "PLUM1",
+     "value": "plum1",
+     "hex": "#ffbbff"
+    },
+    {
+     "name": "PLUM2",
+     "value": "plum2",
+     "hex": "#eeaeee"
+    },
+    {
+     "name": "PLUM3",
+     "value": "plum3",
+     "hex": "#cd96cd"
+    },
+    {
+     "name": "PLUM4",
+     "value": "plum4",
+     "hex": "#8b668b"
+    },
+    {
+     "name": "POWDERBLUE",
+     "value": "powderblue",
+     "hex": "#b0e0e6"
+    },
+    {
+     "name": "PURPLE",
+     "value": "purple",
+     "hex": "#a020f0"
+    },
+    {
+     "name": "PURPLE1",
+     "value": "purple1",
+     "hex": "#9b30ff"
+    },
+    {
+     "name": "PURPLE2",
+     "value": "purple2",
+     "hex": "#912cee"
+    },
+    {
+     "name": "PURPLE3",
+     "value": "purple3",
+     "hex": "#7d26cd"
+    },
+    {
+     "name": "PURPLE4",
+     "value": "purple4",
+     "hex": "#551a8b"
+    },
+    {
+     "name": "RED",
+     "value": "red",
+     "hex": "#ff0000"
+    },
+    {
+     "name": "RED1",
+     "value": "red1",
+     "hex": "#ff0000"
+    },
+    {
+     "name": "RED2",
+     "value": "red2",
+     "hex": "#ee0000"
+    },
+    {
+     "name": "RED3",
+     "value": "red3",
+     "hex": "#cd0000"
+    },
+    {
+     "name": "RED4",
+     "value": "red4",
+     "hex": "#8b0000"
+    },
+    {
+     "name": "ROSYBROWN",
+     "value": "rosybrown",
+     "hex": "#bc8f8f"
+    },
+    {
+     "name": "ROSYBROWN1",
+     "value": "rosybrown1",
+     "hex": "#ffc1c1"
+    },
+    {
+     "name": "ROSYBROWN2",
+     "value": "rosybrown2",
+     "hex": "#eeb4b4"
+    },
+    {
+     "name": "ROSYBROWN3",
+     "value": "rosybrown3",
+     "hex": "#cd9b9b"
+    },
+    {
+     "name": "ROSYBROWN4",
+     "value": "rosybrown4",
+     "hex": "#8b6969"
+    },
+    {
+     "name": "ROYALBLUE",
+     "value": "royalblue",
+     "hex": "#4169e1"
+    },
+    {
+     "name": "ROYALBLUE1",
+     "value": "royalblue1",
+     "hex": "#4876ff"
+    },
+    {
+     "name": "ROYALBLUE2",
+     "value": "royalblue2",
+     "hex": "#436eee"
+    },
+    {
+     "name": "ROYALBLUE3",
+     "value": "royalblue3",
+     "hex": "#3a5fcd"
+    },
+    {
+     "name": "ROYALBLUE4",
+     "value": "royalblue4",
+     "hex": "#27408b"
+    },
+    {
+     "name": "SADDLEBROWN",
+     "value": "saddlebrown",
+     "hex": "#8b4513"
+    },
+    {
+     "name": "SALMON",
+     "value": "salmon",
+     "hex": "#fa8072"
+    },
+    {
+     "name": "SALMON1",
+     "value": "salmon1",
+     "hex": "#ff8c69"
+    },
+    {
+     "name": "SALMON2",
+     "value": "salmon2",
+     "hex": "#ee8262"
+    },
+    {
+     "name": "SALMON3",
+     "value": "salmon3",
+     "hex": "#cd7054"
+    },
+    {
+     "name": "SALMON4",
+     "value": "salmon4",
+     "hex": "#8b4c39"
+    },
+    {
+     "name": "SANDYBROWN",
+     "value": "sandybrown",
+     "hex": "#f4a460"
+    },
+    {
+     "name": "SEAGREEN",
+     "value": "seagreen",
+     "hex": "#2e8b57"
+    },
+    {
+     "name": "SEAGREEN1",
+     "value": "seagreen1",
+     "hex": "#54ff9f"
+    },
+    {
+     "name": "SEAGREEN2",
+     "value": "seagreen2",
+     "hex": "#4eee94"
+    },
+    {
+     "name": "SEAGREEN3",
+     "value": "seagreen3",
+     "hex": "#43cd80"
+    },
+    {
+     "name": "SEAGREEN4",
+     "value": "seagreen4",
+     "hex": "#2e8b57"
+    },
+    {
+     "name": "SEASHELL",
+     "value": "seashell",
+     "hex": "#fff5ee"
+    },
+    {
+     "name": "SEASHELL1",
+     "value": "seashell1",
+     "hex": "#fff5ee"
+    },
+    {
+     "name": "SEASHELL2",
+     "value": "seashell2",
+     "hex": "#eee5de"
+    },
+    {
+     "name": "SEASHELL3",
+     "value": "seashell3",
+     "hex": "#cdc5bf"
+    },
+    {
+     "name": "SEASHELL4",
+     "value": "seashell4",
+     "hex": "#8b8682"
+    },
+    {
+     "name": "SIENNA",
+     "value": "sienna",
+     "hex": "#a0522d"
+    },
+    {
+     "name": "SIENNA1",
+     "value": "sienna1",
+     "hex": "#ff8247"
+    },
+    {
+     "name": "SIENNA2",
+     "value": "sienna2",
+     "hex": "#ee7942"
+    },
+    {
+     "name": "SIENNA3",
+     "value": "sienna3",
+     "hex": "#cd6839"
+    },
+    {
+     "name": "SIENNA4",
+     "value": "sienna4",
+     "hex": "#8b4726"
+    },
+    {
+     "name": "SILVER",
+     "value": "silver",
+     "hex": "#c0c0c0"
+    },
+    {
+     "name": "SKYBLUE",
+     "value": "skyblue",
+     "hex": "#87ceeb"
+    },
+    {
+     "name": "SKYBLUE1",
+     "value": "skyblue1",
+     "hex": "#87ceff"
+    },
+    {
+     "name": "SKYBLUE2",
+     "value": "skyblue2",
+     "hex": "#7ec0ee"
+    },
+    {
+     "name": "SKYBLUE3",
+     "value": "skyblue3",
+     "hex": "#6ca6cd"
+    },
+    {
+     "name": "SKYBLUE4",
+     "value": "skyblue4",
+     "hex": "#4a708b"
+    },
+    {
+     "name": "SLATEBLUE",
+     "value": "slateblue",
+     "hex": "#6a5acd"
+    },
+    {
+     "name": "SLATEBLUE1",
+     "value": "slateblue1",
+     "hex": "#836fff"
+    },
+    {
+     "name": "SLATEBLUE2",
+     "value": "slateblue2",
+     "hex": "#7a67ee"
+    },
+    {
+     "name": "SLATEBLUE3",
+     "value": "slateblue3",
+     "hex": "#6959cd"
+    },
+    {
+     "name": "SLATEBLUE4",
+     "value": "slateblue4",
+     "hex": "#473c8b"
+    },
+    {
+     "name": "SLATEGRAY",
+     "value": "slategray",
+     "hex": "#708090"
+    },
+    {
+     "name": "SLATEGRAY1",
+     "value": "slategray1",
+     "hex": "#c6e2ff"
+    },
+    {
+     "name": "SLATEGRAY2",
+     "value": "slategray2",
+     "hex": "#b9d3ee"
+    },
+    {
+     "name": "SLATEGRAY3",
+     "value": "slategray3",
+     "hex": "#9fb6cd"
+    },
+    {
+     "name": "SLATEGRAY4",
+     "value": "slategray4",
+     "hex": "#6c7b8b"
+    },
+    {
+     "name": "SLATEGREY",
+     "value": "slategrey",
+     "hex": "#708090"
+    },
+    {
+     "name": "SNOW",
+     "value": "snow",
+     "hex": "#fffafa"
+    },
+    {
+     "name": "SNOW1",
+     "value": "snow1",
+     "hex": "#fffafa"
+    },
+    {
+     "name": "SNOW2",
+     "value": "snow2",
+     "hex": "#eee9e9"
+    },
+    {
+     "name": "SNOW3",
+     "value": "snow3",
+     "hex": "#cdc9c9"
+    },
+    {
+     "name": "SNOW4",
+     "value": "snow4",
+     "hex": "#8b8989"
+    },
+    {
+     "name": "SPRINGGREEN",
+     "value": "springgreen",
+     "hex": "#00ff7f"
+    },
+    {
+     "name": "SPRINGGREEN1",
+     "value": "springgreen1",
+     "hex": "#00ff7f"
+    },
+    {
+     "name": "SPRINGGREEN2",
+     "value": "springgreen2",
+     "hex": "#00ee76"
+    },
+    {
+     "name": "SPRINGGREEN3",
+     "value": "springgreen3",
+     "hex": "#00cd66"
+    },
+    {
+     "name": "SPRINGGREEN4",
+     "value": "springgreen4",
+     "hex": "#008b45"
+    },
+    {
+     "name": "STEELBLUE",
+     "value": "steelblue",
+     "hex": "#4682b4"
+    },
+    {
+     "name": "STEELBLUE1",
+     "value": "steelblue1",
+     "hex": "#63b8ff"
+    },
+    {
+     "name": "STEELBLUE2",
+     "value": "steelblue2",
+     "hex": "#5cacee"
+    },
+    {
+     "name": "STEELBLUE3",
+     "value": "steelblue3",
+     "hex": "#4f94cd"
+    },
+    {
+     "name": "STEELBLUE4",
+     "value": "steelblue4",
+     "hex": "#36648b"
+    },
+    {
+     "name": "TAN",
+     "value": "tan",
+     "hex": "#d2b48c"
+    },
+    {
+     "name": "TAN1",
+     "value": "tan1",
+     "hex": "#ffa54f"
+    },
+    {
+     "name": "TAN2",
+     "value": "tan2",
+     "hex": "#ee9a49"
+    },
+    {
+     "name": "TAN3",
+     "value": "tan3",
+     "hex": "#cd853f"
+    },
+    {
+     "name": "TAN4",
+     "value": "tan4",
+     "hex": "#8b5a2b"
+    },
+    {
+     "name": "TEAL",
+     "value": "teal",
+     "hex": "#008080"
+    },
+    {
+     "name": "THISTLE",
+     "value": "thistle",
+     "hex": "#d8bfd8"
+    },
+    {
+     "name": "THISTLE1",
+     "value": "thistle1",
+     "hex": "#ffe1ff"
+    },
+    {
+     "name": "THISTLE2",
+     "value": "thistle2",
+     "hex": "#eed2ee"
+    },
+    {
+     "name": "THISTLE3",
+     "value": "thistle3",
+     "hex": "#cdb5cd"
+    },
+    {
+     "name": "THISTLE4",
+     "value": "thistle4",
+     "hex": "#8b7b8b"
+    },
+    {
+     "name": "TOMATO",
+     "value": "tomato",
+     "hex": "#ff6347"
+    },
+    {
+     "name": "TOMATO1",
+     "value": "tomato1",
+     "hex": "#ff6347"
+    },
+    {
+     "name": "TOMATO2",
+     "value": "tomato2",
+     "hex": "#ee5c42"
+    },
+    {
+     "name": "TOMATO3",
+     "value": "tomato3",
+     "hex": "#cd4f39"
+    },
+    {
+     "name": "TOMATO4",
+     "value": "tomato4",
+     "hex": "#8b3626"
+    },
+    {
+     "name": "TURQUOISE",
+     "value": "turquoise",
+     "hex": "#40e0d0"
+    },
+    {
+     "name": "TURQUOISE1",
+     "value": "turquoise1",
+     "hex": "#00f5ff"
+    },
+    {
+     "name": "TURQUOISE2",
+     "value": "turquoise2",
+     "hex": "#00e5ee"
+    },
+    {
+     "name": "TURQUOISE3",
+     "value": "turquoise3",
+     "hex": "#00c5cd"
+    },
+    {
+     "name": "TURQUOISE4",
+     "value": "turquoise4",
+     "hex": "#00868b"
+    },
+    {
+     "name": "VIOLET",
+     "value": "violet",
+     "hex": "#ee82ee"
+    },
+    {
+     "name": "VIOLETRED",
+     "value": "violetred",
+     "hex": "#d02090"
+    },
+    {
+     "name": "VIOLETRED1",
+     "value": "violetred1",
+     "hex": "#ff3e96"
+    },
+    {
+     "name": "VIOLETRED2",
+     "value": "violetred2",
+     "hex": "#ee3a8c"
+    },
+    {
+     "name": "VIOLETRED3",
+     "value": "violetred3",
+     "hex": "#cd3278"
+    },
+    {
+     "name": "VIOLETRED4",
+     "value": "violetred4",
+     "hex": "#8b2252"
+    },
+    {
+     "name": "WHEAT",
+     "value": "wheat",
+     "hex": "#f5deb3"
+    },
+    {
+     "name": "WHEAT1",
+     "value": "wheat1",
+     "hex": "#ffe7ba"
+    },
+    {
+     "name": "WHEAT2",
+     "value": "wheat2",
+     "hex": "#eed8ae"
+    },
+    {
+     "name": "WHEAT3",
+     "value": "wheat3",
+     "hex": "#cdba96"
+    },
+    {
+     "name": "WHEAT4",
+     "value": "wheat4",
+     "hex": "#8b7e66"
+    },
+    {
+     "name": "WHITE",
+     "value": "white",
+     "hex": "#ffffff"
+    },
+    {
+     "name": "WHITESMOKE",
+     "value": "whitesmoke",
+     "hex": "#f5f5f5"
+    },
+    {
+     "name": "YELLOW",
+     "value": "yellow",
+     "hex": "#ffff00"
+    },
+    {
+     "name": "YELLOW1",
+     "value": "yellow1",
+     "hex": "#ffff00"
+    },
+    {
+     "name": "YELLOW2",
+     "value": "yellow2",
+     "hex": "#eeee00"
+    },
+    {
+     "name": "YELLOW3",
+     "value": "yellow3",
+     "hex": "#cdcd00"
+    },
+    {
+     "name": "YELLOW4",
+     "value": "yellow4",
+     "hex": "#8b8b00"
+    },
+    {
+     "name": "YELLOWGREEN",
+     "value": "yellowgreen",
+     "hex": "#9acd32"
+    }
+   ],
+   "star": true
+  },
+  {
+   "name": "CONSTANTS",
+   "kind": "namespace",
+   "signature": "CONSTANTS",
+   "detail": "18 groups of words",
+   "summary": "Names for the words that choose an option, in groups, so an editor can list them and a typing slip is caught.",
+   "url": "reference/API.md#const-CONSTANTS",
+   "members": [
+    {
+     "name": "MODE",
+     "used_by": [
+      "rect_mode",
+      "ellipse_mode",
+      "image_mode"
+     ],
+     "members": [
+      {
+       "name": "CORNER",
+       "value": "corner"
+      },
+      {
+       "name": "CORNERS",
+       "value": "corners"
+      },
+      {
+       "name": "CENTER",
+       "value": "center"
+      },
+      {
+       "name": "RADIUS",
+       "value": "radius"
+      }
+     ]
+    },
+    {
+     "name": "ARC",
+     "used_by": [
+      "arc"
+     ],
+     "members": [
+      {
+       "name": "OPEN",
+       "value": "open"
+      },
+      {
+       "name": "CHORD",
+       "value": "chord"
+      },
+      {
+       "name": "PIE",
+       "value": "pie"
+      }
+     ]
+    },
+    {
+     "name": "COLOR_MODE",
+     "used_by": [
+      "color_mode"
+     ],
+     "members": [
+      {
+       "name": "RGB",
+       "value": "rgb"
+      },
+      {
+       "name": "HSB",
+       "value": "hsb"
+      },
+      {
+       "name": "HSL",
+       "value": "hsl"
+      }
+     ]
+    },
+    {
+     "name": "ALIGN",
+     "used_by": [
+      "text_align"
+     ],
+     "members": [
+      {
+       "name": "LEFT",
+       "value": "left",
+       "meaning": "x is where the text starts; it runs to the right. The default."
+      },
+      {
+       "name": "CENTER",
+       "value": "center",
+       "meaning": "Across: x is the middle of the text. Up and down: y is halfway between the top and the bottom."
+      },
+      {
+       "name": "RIGHT",
+       "value": "right",
+       "meaning": "x is where the text ends."
+      },
+      {
+       "name": "JUSTIFY",
+       "value": "justify",
+       "meaning": "In text_box(), each line is stretched to the box's width by widening the spaces, except the last line of a paragraph and a line of one word. In text() the same as left."
+      },
+      {
+       "name": "TOP",
+       "value": "top",
+       "meaning": "y is the top of the text: the tallest letters' height (the font's ascent). The default."
+      },
+      {
+       "name": "BASELINE",
+       "value": "baseline",
+       "meaning": "y is the line the letters stand on; the tails of g, p and y hang below it. Lines of text in different sizes line up on their baselines."
+      },
+      {
+       "name": "BOTTOM",
+       "value": "bottom",
+       "meaning": "y is the bottom of the text: below the tails of g, p and y (the font's descent)."
+      }
+     ]
+    },
+    {
+     "name": "STYLE",
+     "used_by": [
+      "text_style",
+      "FormattedString.append"
+     ],
+     "members": [
+      {
+       "name": "NORMAL",
+       "value": "normal",
+       "meaning": "Upright letters of the usual weight. The default."
+      },
+      {
+       "name": "BOLD",
+       "value": "bold",
+       "meaning": "Thicker, heavier letters, for emphasis and headlines."
+      },
+      {
+       "name": "ITALIC",
+       "value": "italic",
+       "meaning": "Letters slanted to the right (the built-in font's oblique)."
+      },
+      {
+       "name": "BOLD_ITALIC",
+       "value": "bold_italic",
+       "meaning": "Bold and slanted."
+      }
+     ]
+    },
+    {
+     "name": "CAP",
+     "used_by": [
+      "stroke_cap",
+      "PathBuilder.expand_stroke"
+     ],
+     "members": [
+      {
+       "name": "ROUND",
+       "value": "round",
+       "meaning": "Each end of a line is a half circle, so the line reaches half its width past its end points. The default."
+      },
+      {
+       "name": "SQUARE",
+       "value": "square",
+       "meaning": "Each end is squared off half the line's width past its end point."
+      },
+      {
+       "name": "BUTT",
+       "value": "butt",
+       "meaning": "Each end is cut off flat exactly at its end point."
+      }
+     ]
+    },
+    {
+     "name": "JOIN",
+     "used_by": [
+      "stroke_join",
+      "PathBuilder.expand_stroke"
+     ],
+     "members": [
+      {
+       "name": "ROUND",
+       "value": "round",
+       "meaning": "Corners are rounded. The default."
+      },
+      {
+       "name": "MITER",
+       "value": "miter",
+       "meaning": "Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not shoot far out."
+      },
+      {
+       "name": "BEVEL",
+       "value": "bevel",
+       "meaning": "Corners are cut off flat."
+      }
+     ]
+    },
+    {
+     "name": "CURSOR",
+     "used_by": [
+      "cursor"
+     ],
+     "members": [
+      {
+       "name": "ARROW",
+       "value": "arrow",
+       "meaning": "The usual pointer. The default."
+      },
+      {
+       "name": "CROSS",
+       "value": "cross",
+       "meaning": "A thin cross, for aiming at a point."
+      },
+      {
+       "name": "HAND",
+       "value": "hand",
+       "meaning": "A pointing hand, as over a link: something can be clicked."
+      },
+      {
+       "name": "MOVE",
+       "value": "move",
+       "meaning": "Four arrows: something can be dragged."
+      },
+      {
+       "name": "TEXT",
+       "value": "text",
+       "meaning": "The I-beam: text can be typed or selected."
+      },
+      {
+       "name": "WAIT",
+       "value": "wait",
+       "meaning": "The busy pointer (an hourglass or a spinning circle)."
+      }
+     ]
+    },
+    {
+     "name": "BLEND",
+     "used_by": [
+      "blend_mode"
+     ],
+     "members": [
+      {
+       "name": "NORMAL",
+       "value": "normal",
+       "meaning": "The new colour covers the old one (see-through only as far as its alpha or opacity() says)."
+      },
+      {
+       "name": "MULTIPLY",
+       "value": "multiply",
+       "meaning": "Multiplies the colours, so the result is always darker: like overlapping inks or colour filters. White leaves the old colour unchanged; black gives black."
+      },
+      {
+       "name": "SCREEN",
+       "value": "screen",
+       "meaning": "The opposite of multiply: the result is always lighter, like two slide projectors on one screen. Black leaves the old colour unchanged; white gives white."
+      },
+      {
+       "name": "OVERLAY",
+       "value": "overlay",
+       "meaning": "Multiply where the old colour is dark, screen where it is light: more contrast, keeping the old picture's highlights and shadows."
+      },
+      {
+       "name": "DARKEN",
+       "value": "darken",
+       "meaning": "Keeps the darker of the two colours, channel by channel (red, green and blue separately)."
+      },
+      {
+       "name": "LIGHTEN",
+       "value": "lighten",
+       "meaning": "Keeps the lighter of the two colours, channel by channel."
+      },
+      {
+       "name": "ADD",
+       "value": "add",
+       "meaning": "Adds the colours, so overlaps glow and turn white quickly: light added to light."
+      },
+      {
+       "name": "DIFFERENCE",
+       "value": "difference",
+       "meaning": "The difference between the colours: the same colours give black, white turns the old colour into its opposite (a negative)."
+      },
+      {
+       "name": "EXCLUSION",
+       "value": "exclusion",
+       "meaning": "Like difference, with less contrast: white still inverts, mid-grey gives grey."
+      },
+      {
+       "name": "DODGE",
+       "value": "dodge",
+       "meaning": "Brightens the old colour by the new one; bright new colours burn out to white (color dodge). Black changes nothing."
+      },
+      {
+       "name": "BURN",
+       "value": "burn",
+       "meaning": "Darkens the old colour by the new one, with more contrast (color burn). White changes nothing."
+      },
+      {
+       "name": "HARD_LIGHT",
+       "value": "hard_light",
+       "meaning": "Multiply where the new colour is dark, screen where it is light: like a harsh spotlight of the new colour."
+      },
+      {
+       "name": "SOFT_LIGHT",
+       "value": "soft_light",
+       "meaning": "A gentler hard_light: like a soft, diffused light of the new colour. Mid-grey changes nothing."
+      },
+      {
+       "name": "HUE",
+       "value": "hue",
+       "meaning": "The new colour's hue with the old colour's saturation and lightness: recolours the old picture."
+      },
+      {
+       "name": "SATURATION",
+       "value": "saturation",
+       "meaning": "The new colour's saturation with the old colour's hue and lightness: makes the old picture more vivid or greyer."
+      },
+      {
+       "name": "COLOR",
+       "value": "color",
+       "meaning": "The new colour's hue and saturation with the old colour's lightness: tints the old picture while keeping its shading."
+      },
+      {
+       "name": "LUMINOSITY",
+       "value": "luminosity",
+       "meaning": "The new colour's lightness with the old colour's hue and saturation: the opposite of color."
+      }
+     ]
+    },
+    {
+     "name": "FILTER",
+     "used_by": [
+      "filter",
+      "apply_filter"
+     ],
+     "members": [
+      {
+       "name": "THRESHOLD",
+       "value": "threshold",
+       "meaning": "Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5)."
+      },
+      {
+       "name": "GRAY",
+       "value": "gray",
+       "meaning": "Every pixel becomes the grey of its brightness: a black-and-white picture."
+      },
+      {
+       "name": "OPAQUE",
+       "value": "opaque",
+       "meaning": "Makes every pixel fully opaque, removing any see-through parts."
+      },
+      {
+       "name": "INVERT",
+       "value": "invert",
+       "meaning": "Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan."
+      },
+      {
+       "name": "BLUR",
+       "value": "blur",
+       "meaning": "Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier."
+      },
+      {
+       "name": "POSTERIZE",
+       "value": "posterize",
+       "meaning": "Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print."
+      },
+      {
+       "name": "ERODE",
+       "value": "erode",
+       "meaning": "Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish."
+      },
+      {
+       "name": "DILATE",
+       "value": "dilate",
+       "meaning": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink."
+      }
+     ]
+    },
+    {
+     "name": "WAVE",
+     "used_by": [
+      "tone",
+      "note",
+      "melody"
+     ],
+     "members": [
+      {
+       "name": "SINE",
+       "value": "sine",
+       "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
+      },
+      {
+       "name": "SQUARE",
+       "value": "square",
+       "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
+      },
+      {
+       "name": "SAW",
+       "value": "saw",
+       "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
+      },
+      {
+       "name": "TRIANGLE",
+       "value": "triangle",
+       "meaning": "Between sine and square: soft but a little reedy, like a flute."
+      },
+      {
+       "name": "SOFT",
+       "value": "soft",
+       "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
+      },
+      {
+       "name": "NOISE",
+       "value": "noise",
+       "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
+      }
+     ]
+    },
+    {
+     "name": "TUNING",
+     "used_by": [
+      "melody"
+     ],
+     "members": [
+      {
+       "name": "EQUAL",
+       "value": "equal"
+      },
+      {
+       "name": "JUST",
+       "value": "just"
+      }
+     ]
+    },
+    {
+     "name": "ANCHOR",
+     "used_by": [
+      "Mark.place"
+     ],
+     "members": [
+      {
+       "name": "ORIGIN",
+       "value": "origin",
+       "meaning": "The mark's own (0, 0): the point it was drawn around. The default."
+      },
+      {
+       "name": "CENTER",
+       "value": "center",
+       "meaning": "The middle of the mark's bounds()."
+      },
+      {
+       "name": "TOP",
+       "value": "top",
+       "meaning": "The middle of the top edge."
+      },
+      {
+       "name": "BOTTOM",
+       "value": "bottom",
+       "meaning": "The middle of the bottom edge."
+      },
+      {
+       "name": "LEFT",
+       "value": "left",
+       "meaning": "The middle of the left edge."
+      },
+      {
+       "name": "RIGHT",
+       "value": "right",
+       "meaning": "The middle of the right edge."
+      },
+      {
+       "name": "TOP_LEFT",
+       "value": "top-left",
+       "meaning": "The top-left corner of the bounds."
+      },
+      {
+       "name": "TOP_RIGHT",
+       "value": "top-right",
+       "meaning": "The top-right corner."
+      },
+      {
+       "name": "BOTTOM_LEFT",
+       "value": "bottom-left",
+       "meaning": "The bottom-left corner."
+      },
+      {
+       "name": "BOTTOM_RIGHT",
+       "value": "bottom-right",
+       "meaning": "The bottom-right corner."
+      }
+     ]
+    },
+    {
+     "name": "MARK_STYLE",
+     "used_by": [
+      "Mark.place"
+     ],
+     "members": [
+      {
+       "name": "OWN",
+       "value": "own"
+      },
+      {
+       "name": "CURRENT",
+       "value": "current"
+      }
+     ]
+    },
+    {
+     "name": "SAVE_TEXT",
+     "used_by": [
+      "save",
+      "Picture.save"
+     ],
+     "members": [
+      {
+       "name": "LIVE",
+       "value": "live"
+      },
+      {
+       "name": "SHAPES",
+       "value": "shapes"
+      }
+     ]
+    },
+    {
+     "name": "KEY",
+     "used_by": [
+      "key_down",
+      "f.key"
+     ],
+     "members": [
+      {
+       "name": "UP",
+       "value": "up",
+       "meaning": "The up arrow key."
+      },
+      {
+       "name": "DOWN",
+       "value": "down",
+       "meaning": "The down arrow key."
+      },
+      {
+       "name": "LEFT",
+       "value": "left",
+       "meaning": "The left arrow key."
+      },
+      {
+       "name": "RIGHT",
+       "value": "right",
+       "meaning": "The right arrow key."
+      },
+      {
+       "name": "SPACE",
+       "value": "space",
+       "meaning": "The space bar."
+      },
+      {
+       "name": "ENTER",
+       "value": "enter",
+       "meaning": "The Enter (Return) key."
+      },
+      {
+       "name": "ESCAPE",
+       "value": "escape",
+       "meaning": "The Esc key. On the desktop it also closes the sketch's window."
+      }
+     ]
+    },
+    {
+     "name": "MOUSE",
+     "used_by": [
+      "f.mouse_button"
+     ],
+     "members": [
+      {
+       "name": "LEFT",
+       "value": "left"
+      },
+      {
+       "name": "CENTER",
+       "value": "center"
+      },
+      {
+       "name": "RIGHT",
+       "value": "right"
+      }
+     ]
+    },
+    {
+     "name": "PAGE",
+     "used_by": [
+      "size",
+      "new_page",
+      "page_size"
+     ],
+     "members": [
+      {
+       "name": "A3",
+       "value": "A3"
+      },
+      {
+       "name": "A4",
+       "value": "A4"
+      },
+      {
+       "name": "A5",
+       "value": "A5"
+      },
+      {
+       "name": "B5",
+       "value": "B5"
+      },
+      {
+       "name": "LETTER",
+       "value": "Letter"
+      },
+      {
+       "name": "LEGAL",
+       "value": "Legal"
+      },
+      {
+       "name": "TABLOID",
+       "value": "Tabloid"
+      }
+     ]
+    }
+   ],
+   "star": true
+  },
+  {
+   "name": "FormattedString",
+   "kind": "class",
+   "signature": "FormattedString()",
+   "detail": "()",
+   "summary": "Text made of runs, where each run can have its own font, size, style, colour and so on.",
+   "url": "reference/API.md#cls-FormattedString",
+   "star": true
+  },
+  {
+   "name": "Vector",
+   "kind": "class",
+   "signature": "Vector(x=0.0, y=0.0)",
+   "detail": "(x: float = 0.0, y: float = 0.0)",
+   "summary": "A 2D vector: two numbers, x and y, that you can add, scale, turn and measure.",
+   "url": "reference/API.md#cls-Vector",
+   "star": true
+  },
+  {
+   "name": "apply_matrix",
+   "kind": "function",
+   "signature": "apply_matrix(a, b, c, d, e, f)",
+   "detail": "(a: float, b: float, c: float, d: float, e: float, f: float) -> None",
+   "summary": "Multiply a whole transform into later drawing.",
+   "url": "reference/API.md#fn-apply_matrix",
+   "star": true
+  },
+  {
+   "name": "arc",
+   "kind": "function",
+   "signature": "arc(x, y, width, height, start, stop, mode='open')",
+   "detail": "(x: float, y: float, width: float, height: float, start: float, stop: float, mode: CONSTANTS.ARC = open) -> None",
+   "summary": "Draw part of an ellipse.",
+   "url": "reference/API.md#fn-arc",
+   "star": true
+  },
+  {
+   "name": "background",
+   "kind": "function",
+   "signature": "background(color, *more)",
+   "detail": "(color: Color, *more: float) -> None",
+   "summary": "Fill the whole canvas with one colour.",
+   "url": "reference/API.md#fn-background",
+   "star": true
+  },
+  {
+   "name": "begin_contour",
+   "kind": "function",
+   "signature": "begin_contour()",
+   "detail": "() -> None",
+   "summary": "Start a hole inside the shape being built.",
+   "url": "reference/API.md#fn-begin_contour",
+   "star": true
+  },
+  {
+   "name": "begin_shape",
+   "kind": "function",
+   "signature": "begin_shape()",
+   "detail": "() -> None",
+   "summary": "Start a shape that you build from its corners.",
+   "url": "reference/API.md#fn-begin_shape",
+   "star": true
+  },
+  {
+   "name": "bezier",
+   "kind": "function",
+   "signature": "bezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2)",
+   "detail": "(x1: float, y1: float, cx1: float, cy1: float, cx2: float, cy2: float, x2: float, y2: float) -> None",
+   "summary": "Draw a Bezier curve from one point to another.",
+   "url": "reference/API.md#fn-bezier",
+   "star": true
+  },
+  {
+   "name": "bezier_point",
+   "kind": "function",
+   "signature": "bezier_point(a, b, c, d, t)",
+   "detail": "(a: float, b: float, c: float, d: float, t: float) -> float",
+   "summary": "Return one coordinate of a Bezier curve at a place along it.",
+   "url": "reference/API.md#fn-bezier_point",
+   "star": true
+  },
+  {
+   "name": "bezier_tangent",
+   "kind": "function",
+   "signature": "bezier_tangent(a, b, c, d, t)",
+   "detail": "(a: float, b: float, c: float, d: float, t: float) -> float",
+   "summary": "Return the slope of one coordinate of a Bezier curve at a place along it.",
+   "url": "reference/API.md#fn-bezier_tangent",
+   "star": true
+  },
+  {
+   "name": "bezier_vertex",
+   "kind": "function",
+   "signature": "bezier_vertex(cx1, cy1, cx2, cy2, x, y)",
+   "detail": "(cx1: float, cy1: float, cx2: float, cy2: float, x: float, y: float) -> None",
+   "summary": "Add a Bezier curve segment to the shape being built.",
+   "url": "reference/API.md#fn-bezier_vertex",
+   "star": true
+  },
+  {
+   "name": "blend_mode",
+   "kind": "function",
+   "signature": "blend_mode(mode)",
+   "detail": "(mode: CONSTANTS.BLEND) -> None",
+   "summary": "Choose how what you draw next mixes with what is already there.",
+   "url": "reference/API.md#fn-blend_mode",
+   "star": true,
+   "options": {
+    "mode": [
+     {
+      "word": "normal",
+      "meaning": "The new colour covers the old one (see-through only as far as its alpha or opacity() says)."
+     },
+     {
+      "word": "multiply",
+      "meaning": "Multiplies the colours, so the result is always darker: like overlapping inks or colour filters. White leaves the old colour unchanged; black gives black."
+     },
+     {
+      "word": "screen",
+      "meaning": "The opposite of multiply: the result is always lighter, like two slide projectors on one screen. Black leaves the old colour unchanged; white gives white."
+     },
+     {
+      "word": "overlay",
+      "meaning": "Multiply where the old colour is dark, screen where it is light: more contrast, keeping the old picture's highlights and shadows."
+     },
+     {
+      "word": "darken",
+      "meaning": "Keeps the darker of the two colours, channel by channel (red, green and blue separately)."
+     },
+     {
+      "word": "lighten",
+      "meaning": "Keeps the lighter of the two colours, channel by channel."
+     },
+     {
+      "word": "add",
+      "meaning": "Adds the colours, so overlaps glow and turn white quickly: light added to light."
+     },
+     {
+      "word": "difference",
+      "meaning": "The difference between the colours: the same colours give black, white turns the old colour into its opposite (a negative)."
+     },
+     {
+      "word": "exclusion",
+      "meaning": "Like difference, with less contrast: white still inverts, mid-grey gives grey."
+     },
+     {
+      "word": "dodge",
+      "meaning": "Brightens the old colour by the new one; bright new colours burn out to white (color dodge). Black changes nothing."
+     },
+     {
+      "word": "burn",
+      "meaning": "Darkens the old colour by the new one, with more contrast (color burn). White changes nothing."
+     },
+     {
+      "word": "hard_light",
+      "meaning": "Multiply where the new colour is dark, screen where it is light: like a harsh spotlight of the new colour."
+     },
+     {
+      "word": "soft_light",
+      "meaning": "A gentler hard_light: like a soft, diffused light of the new colour. Mid-grey changes nothing."
+     },
+     {
+      "word": "hue",
+      "meaning": "The new colour's hue with the old colour's saturation and lightness: recolours the old picture."
+     },
+     {
+      "word": "saturation",
+      "meaning": "The new colour's saturation with the old colour's hue and lightness: makes the old picture more vivid or greyer."
+     },
+     {
+      "word": "color",
+      "meaning": "The new colour's hue and saturation with the old colour's lightness: tints the old picture while keeping its shading."
+     },
+     {
+      "word": "luminosity",
+      "meaning": "The new colour's lightness with the old colour's hue and saturation: the opposite of color."
+     }
+    ]
+   }
+  },
+  {
+   "name": "circle",
+   "kind": "function",
+   "signature": "circle(x, y, diameter)",
+   "detail": "(x: float, y: float, diameter: float) -> None",
+   "summary": "Draw a circle.",
+   "url": "reference/API.md#fn-circle",
+   "star": true
+  },
+  {
+   "name": "clear",
+   "kind": "function",
+   "signature": "clear()",
+   "detail": "() -> None",
+   "summary": "Make the whole canvas transparent.",
+   "url": "reference/API.md#fn-clear",
+   "star": true
+  },
+  {
+   "name": "clip",
+   "kind": "function",
+   "signature": "clip(path)",
+   "detail": "(path: PathBuilder) -> None",
+   "summary": "Limit later drawing to the inside of a path.",
+   "url": "reference/API.md#fn-clip",
+   "star": true
+  },
+  {
+   "name": "cmyk",
+   "kind": "function",
+   "signature": "cmyk(cyan, magenta, yellow, black, alpha=255)",
+   "detail": "(cyan: float, magenta: float, yellow: float, black: float, alpha: float = 255) -> Color",
+   "summary": "Make a colour from printing inks: cyan, magenta, yellow and black.",
+   "url": "reference/API.md#fn-cmyk",
+   "star": true
+  },
+  {
+   "name": "color",
+   "kind": "function",
+   "signature": "color(*values)",
+   "detail": "(*values: Any) -> Color",
+   "summary": "Make a colour that you can read and reuse.",
+   "url": "reference/API.md#fn-color",
+   "star": true
+  },
+  {
+   "name": "color_mode",
+   "kind": "function",
+   "signature": "color_mode(mode, max1=None, max2=None, max3=None, max_alpha=None)",
+   "detail": "(mode: CONSTANTS.COLOR_MODE, max1: float | None = None, max2: float | None = None, max3: float | None = None, max_alpha: float | None = None) -> None",
+   "summary": "Choose how numbers become a colour.",
+   "url": "reference/API.md#fn-color_mode",
+   "star": true
+  },
+  {
+   "name": "constrain",
+   "kind": "function",
+   "signature": "constrain(value, low, high)",
+   "detail": "(value: float, low: float, high: float) -> float",
+   "summary": "Keep a number inside a minimum and a maximum.",
+   "url": "reference/API.md#fn-constrain",
+   "star": true
+  },
+  {
+   "name": "create_button",
+   "kind": "function",
+   "signature": "create_button(label)",
+   "detail": "(label: str) -> Button",
+   "summary": "Make a button in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_button",
+   "star": true
+  },
+  {
+   "name": "create_checkbox",
+   "kind": "function",
+   "signature": "create_checkbox(label, checked=False)",
+   "detail": "(label: str, checked: bool = False) -> Checkbox",
+   "summary": "Make a tick box in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_checkbox",
+   "star": true
+  },
+  {
+   "name": "create_graphics",
+   "kind": "function",
+   "signature": "create_graphics(width, height)",
+   "detail": "(width: int, height: int) -> Picture",
+   "summary": "Make a picture: an off-screen canvas.",
+   "url": "reference/API.md#fn-create_graphics",
+   "star": true
+  },
+  {
+   "name": "create_slider",
+   "kind": "function",
+   "signature": "create_slider(low, high, value=None, step=None, label=None)",
+   "detail": "(low: float, high: float, value: float | None = None, step: float | None = None, label: str | None = None) -> Slider",
+   "summary": "Make a slider in a panel below the canvas.",
+   "url": "reference/API.md#fn-create_slider",
+   "star": true
+  },
+  {
+   "name": "cursor",
+   "kind": "function",
+   "signature": "cursor(kind='arrow')",
+   "detail": "(kind: CONSTANTS.CURSOR = arrow) -> None",
+   "summary": "Choose the shape of the mouse pointer over the canvas.",
+   "url": "reference/API.md#fn-cursor",
+   "star": true,
+   "options": {
+    "kind": [
+     {
+      "word": "arrow",
+      "meaning": "The usual pointer. The default."
+     },
+     {
+      "word": "cross",
+      "meaning": "A thin cross, for aiming at a point."
+     },
+     {
+      "word": "hand",
+      "meaning": "A pointing hand, as over a link: something can be clicked."
+     },
+     {
+      "word": "move",
+      "meaning": "Four arrows: something can be dragged."
+     },
+     {
+      "word": "text",
+      "meaning": "The I-beam: text can be typed or selected."
+     },
+     {
+      "word": "wait",
+      "meaning": "The busy pointer (an hourglass or a spinning circle)."
+     }
+    ]
+   }
+  },
+  {
+   "name": "curve",
+   "kind": "function",
+   "signature": "curve(x1, y1, x2, y2, x3, y3, x4, y4)",
+   "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float, x4: float, y4: float) -> None",
+   "summary": "Draw a smooth curve from point 2 to point 3.",
+   "url": "reference/API.md#fn-curve",
+   "star": true
+  },
+  {
+   "name": "curve_point",
+   "kind": "function",
+   "signature": "curve_point(a, b, c, d, t)",
+   "detail": "(a: float, b: float, c: float, d: float, t: float) -> float",
+   "summary": "Return one coordinate of a curve() segment at a place along it.",
+   "url": "reference/API.md#fn-curve_point",
+   "star": true
+  },
+  {
+   "name": "curve_tangent",
+   "kind": "function",
+   "signature": "curve_tangent(a, b, c, d, t)",
+   "detail": "(a: float, b: float, c: float, d: float, t: float) -> float",
+   "summary": "Return the slope of one coordinate of a curve() segment at a place along it.",
+   "url": "reference/API.md#fn-curve_tangent",
+   "star": true
+  },
+  {
+   "name": "curve_tightness",
+   "kind": "function",
+   "signature": "curve_tightness(tightness)",
+   "detail": "(tightness: float) -> None",
+   "summary": "Set how tight curve_vertex() and curve() curves are.",
+   "url": "reference/API.md#fn-curve_tightness",
+   "star": true
+  },
+  {
+   "name": "curve_vertex",
+   "kind": "function",
+   "signature": "curve_vertex(x, y)",
+   "detail": "(x: float, y: float) -> None",
+   "summary": "Add a point for a smooth curve that passes through the points.",
+   "url": "reference/API.md#fn-curve_vertex",
+   "star": true
+  },
+  {
+   "name": "day",
+   "kind": "function",
+   "signature": "day()",
+   "detail": "() -> int",
+   "summary": "Return the day of the month, from 1 to 31.",
+   "url": "reference/API.md#fn-day",
+   "star": true
+  },
+  {
+   "name": "degrees",
+   "kind": "function",
+   "signature": "degrees(radians)",
+   "detail": "(radians: float) -> float",
+   "summary": "Convert radians to degrees.",
+   "url": "reference/API.md#fn-degrees",
+   "star": true
+  },
+  {
+   "name": "distance",
+   "kind": "function",
+   "signature": "distance(x1, y1, x2, y2)",
+   "detail": "(x1: float, y1: float, x2: float, y2: float) -> float",
+   "summary": "Return the straight-line distance between two points.",
+   "url": "reference/API.md#fn-distance",
+   "star": true
+  },
+  {
+   "name": "draw_path",
+   "kind": "function",
+   "signature": "draw_path(path)",
+   "detail": "(path: PathBuilder) -> None",
+   "summary": "Draw a path made with path().",
+   "url": "reference/API.md#fn-draw_path",
+   "star": true
+  },
+  {
+   "name": "ellipse",
+   "kind": "function",
+   "signature": "ellipse(x, y, width, height)",
+   "detail": "(x: float, y: float, width: float, height: float) -> None",
+   "summary": "Draw an ellipse.",
+   "url": "reference/API.md#fn-ellipse",
+   "star": true
+  },
+  {
+   "name": "ellipse_mode",
+   "kind": "function",
+   "signature": "ellipse_mode(mode)",
+   "detail": "(mode: CONSTANTS.MODE) -> None",
+   "summary": "Choose how ellipse(), circle() and arc() read their numbers.",
+   "url": "reference/API.md#fn-ellipse_mode",
+   "star": true
+  },
+  {
+   "name": "end_contour",
+   "kind": "function",
+   "signature": "end_contour()",
+   "detail": "() -> None",
+   "summary": "Finish the hole started by begin_contour().",
+   "url": "reference/API.md#fn-end_contour",
+   "star": true
+  },
+  {
+   "name": "end_shape",
+   "kind": "function",
+   "signature": "end_shape(close=False)",
+   "detail": "(close: bool = False) -> None",
+   "summary": "Draw the shape that you built from corners.",
+   "url": "reference/API.md#fn-end_shape",
+   "star": true
+  },
+  {
+   "name": "fill",
+   "kind": "function",
+   "signature": "fill(color, *more)",
+   "detail": "(color: Color, *more: float) -> None",
+   "summary": "Set the colour that shapes are filled with.",
+   "url": "reference/API.md#fn-fill",
+   "star": true
+  },
+  {
+   "name": "apply_filter",
+   "kind": "function",
+   "signature": "apply_filter(kind, value=None)",
+   "detail": "(kind: CONSTANTS.FILTER, value: float | None = None) -> None",
+   "summary": "Change everything drawn so far, in place: the same as filter().",
+   "url": "reference/API.md#fn-apply_filter",
+   "star": true,
+   "options": {
+    "kind": [
+     {
+      "word": "threshold",
+      "meaning": "Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5)."
+     },
+     {
+      "word": "gray",
+      "meaning": "Every pixel becomes the grey of its brightness: a black-and-white picture."
+     },
+     {
+      "word": "opaque",
+      "meaning": "Makes every pixel fully opaque, removing any see-through parts."
+     },
+     {
+      "word": "invert",
+      "meaning": "Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan."
+     },
+     {
+      "word": "blur",
+      "meaning": "Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier."
+     },
+     {
+      "word": "posterize",
+      "meaning": "Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print."
+     },
+     {
+      "word": "erode",
+      "meaning": "Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish."
+     },
+     {
+      "word": "dilate",
+      "meaning": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink."
+     }
+    ]
+   }
+  },
+  {
+   "name": "frame_rate",
+   "kind": "function",
+   "signature": "frame_rate()",
+   "detail": "() -> float",
+   "summary": "Return the frames per second that the sketch is really achieving.",
+   "url": "reference/API.md#fn-frame_rate",
+   "star": true
+  },
+  {
+   "name": "full_screen",
+   "kind": "function",
+   "signature": "full_screen()",
+   "detail": "() -> None",
+   "summary": "Fill the whole screen with the canvas.",
+   "url": "reference/API.md#fn-full_screen",
+   "star": true
+  },
+  {
+   "name": "get",
+   "kind": "function",
+   "signature": "get(x, y, w=None, h=None)",
+   "detail": "(x: float, y: float, w: float | None = None, h: float | None = None) -> Color | Picture",
+   "summary": "Read a pixel, or copy a region of the canvas.",
+   "url": "reference/API.md#fn-get",
+   "star": true
+  },
+  {
+   "name": "hour",
+   "kind": "function",
+   "signature": "hour()",
+   "detail": "() -> int",
+   "summary": "Return the clock's hour, from 0 to 23.",
+   "url": "reference/API.md#fn-hour",
+   "star": true
+  },
+  {
+   "name": "hsb",
+   "kind": "function",
+   "signature": "hsb(hue, saturation, brightness, alpha=255)",
+   "detail": "(hue: float, saturation: float, brightness: float, alpha: float = 255) -> Color",
+   "summary": "Make a colour from hue, saturation and brightness.",
+   "url": "reference/API.md#fn-hsb",
+   "star": true
+  },
+  {
+   "name": "hsl",
+   "kind": "function",
+   "signature": "hsl(hue, saturation, lightness, alpha=255)",
+   "detail": "(hue: float, saturation: float, lightness: float, alpha: float = 255) -> Color",
+   "summary": "Make a colour from hue, saturation and lightness.",
+   "url": "reference/API.md#fn-hsl",
+   "star": true
+  },
+  {
+   "name": "image",
+   "kind": "function",
+   "signature": "image(picture, x, y, width=None, height=None, sx=None, sy=None, sw=None, sh=None)",
+   "detail": "(picture: Picture, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
+   "summary": "Draw a picture.",
+   "url": "reference/API.md#fn-image",
+   "star": true
+  },
+  {
+   "name": "image_mode",
+   "kind": "function",
+   "signature": "image_mode(mode)",
+   "detail": "(mode: CONSTANTS.MODE) -> None",
+   "summary": "Choose how image() reads its numbers.",
+   "url": "reference/API.md#fn-image_mode",
+   "star": true
+  },
+  {
+   "name": "is_looping",
+   "kind": "function",
+   "signature": "is_looping()",
+   "detail": "() -> bool",
+   "summary": "Return whether draw() is called every frame.",
+   "url": "reference/API.md#fn-is_looping",
+   "star": true
+  },
+  {
+   "name": "key_down",
+   "kind": "function",
+   "signature": "key_down(key)",
+   "detail": "(key: CONSTANTS.KEY | str | int) -> bool",
+   "summary": "Return whether a key is held down right now.",
+   "url": "reference/API.md#fn-key_down",
+   "star": true,
+   "options": {
+    "key": [
+     {
+      "word": "left",
+      "meaning": "The left arrow key."
+     },
+     {
+      "word": "right",
+      "meaning": "The right arrow key."
+     },
+     {
+      "word": "up",
+      "meaning": "The up arrow key."
+     },
+     {
+      "word": "down",
+      "meaning": "The down arrow key."
+     },
+     {
+      "word": "space",
+      "meaning": "The space bar."
+     },
+     {
+      "word": "enter",
+      "meaning": "The Enter (Return) key."
+     },
+     {
+      "word": "escape",
+      "meaning": "The Esc key. On the desktop it also closes the sketch's window."
+     }
+    ]
+   }
+  },
+  {
+   "name": "hide_layer",
+   "kind": "function",
+   "signature": "hide_layer(name)",
+   "detail": "(name: str) -> None",
+   "summary": "Stop showing a layer.",
+   "url": "reference/API.md#fn-hide_layer",
+   "star": true
+  },
+  {
+   "name": "layer",
+   "kind": "function",
+   "signature": "layer(name)",
+   "detail": "(name: str) -> Picture",
+   "summary": "Return the layer with a given name, and make it if it is new.",
+   "url": "reference/API.md#fn-layer",
+   "star": true
+  },
+  {
+   "name": "lerp",
+   "kind": "function",
+   "signature": "lerp(start, stop, amount)",
+   "detail": "(start: float, stop: float, amount: float) -> float",
+   "summary": "Return the number that is part of the way from start to stop.",
+   "url": "reference/API.md#fn-lerp",
+   "star": true
+  },
+  {
+   "name": "lerp_color",
+   "kind": "function",
+   "signature": "lerp_color(c1, c2, amount)",
+   "detail": "(c1: Color, c2: Color, amount: float) -> Color",
+   "summary": "Return a colour part of the way between two colours.",
+   "url": "reference/API.md#fn-lerp_color",
+   "star": true
+  },
+  {
+   "name": "line",
+   "kind": "function",
+   "signature": "line(x1, y1, x2, y2)",
+   "detail": "(x1: float, y1: float, x2: float, y2: float) -> None",
+   "summary": "Draw a straight line between two points.",
+   "url": "reference/API.md#fn-line",
+   "star": true
+  },
+  {
+   "name": "linear_gradient",
+   "kind": "function",
+   "signature": "linear_gradient(x1, y1, x2, y2, colors, stops=None)",
+   "detail": "(x1: float, y1: float, x2: float, y2: float, colors: Any, stops: Any = None) -> Gradient",
+   "summary": "Make a gradient: colours blended along a line.",
+   "url": "reference/API.md#fn-linear_gradient",
+   "star": true
+  },
+  {
+   "name": "load_font",
+   "kind": "function",
+   "signature": "load_font(path, face=0)",
+   "detail": "(path: str, face: int | str = 0) -> Font",
+   "summary": "Load a font file.",
+   "url": "reference/API.md#fn-load_font",
+   "star": true
+  },
+  {
+   "name": "load_image",
+   "kind": "function",
+   "signature": "load_image(path)",
+   "detail": "(path: str) -> Picture",
+   "summary": "Read an image file and return it as a picture.",
+   "url": "reference/API.md#fn-load_image",
+   "star": true
+  },
+  {
+   "name": "load_pixels",
+   "kind": "function",
+   "signature": "load_pixels()",
+   "detail": "() -> None",
+   "summary": "Copy the canvas into f.pixels.",
+   "url": "reference/API.md#fn-load_pixels",
+   "star": true
+  },
+  {
+   "name": "load_sound",
+   "kind": "function",
+   "signature": "load_sound(path)",
+   "detail": "(path: str) -> Sound",
+   "summary": "Read a sound file and return a sound.",
+   "url": "reference/API.md#fn-load_sound",
+   "star": true
+  },
+  {
+   "name": "create_sound",
+   "kind": "function",
+   "signature": "create_sound(samples, rate=44100)",
+   "detail": "(samples: Any, rate: int = 44100) -> Sound",
+   "summary": "Make a sound from a list of numbers.",
+   "url": "reference/API.md#fn-create_sound",
+   "star": true
+  },
+  {
+   "name": "tone",
+   "kind": "function",
+   "signature": "tone(frequency, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
+   "detail": "(frequency: float, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
+   "summary": "Make a sound that is one steady tone.",
+   "url": "reference/API.md#fn-tone",
+   "star": true,
+   "options": {
+    "wave": [
+     {
+      "word": "sine",
+      "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
+     },
+     {
+      "word": "square",
+      "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
+     },
+     {
+      "word": "saw",
+      "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
+     },
+     {
+      "word": "triangle",
+      "meaning": "Between sine and square: soft but a little reedy, like a flute."
+     },
+     {
+      "word": "soft",
+      "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
+     },
+     {
+      "word": "noise",
+      "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
+     }
+    ]
+   }
+  },
+  {
+   "name": "note",
+   "kind": "function",
+   "signature": "note(name, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
+   "detail": "(name: str, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
+   "summary": "Make a sound that is one named note.",
+   "url": "reference/API.md#fn-note",
+   "star": true,
+   "options": {
+    "wave": [
+     {
+      "word": "sine",
+      "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
+     },
+     {
+      "word": "square",
+      "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
+     },
+     {
+      "word": "saw",
+      "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
+     },
+     {
+      "word": "triangle",
+      "meaning": "Between sine and square: soft but a little reedy, like a flute."
+     },
+     {
+      "word": "soft",
+      "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
+     },
+     {
+      "word": "noise",
+      "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
+     }
+    ]
+   }
+  },
+  {
+   "name": "pluck",
+   "kind": "function",
+   "signature": "pluck(name_or_frequency, seconds, volume=0.5)",
+   "detail": "(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -> Sound",
+   "summary": "Make a sound like a plucked string.",
+   "url": "reference/API.md#fn-pluck",
+   "star": true
+  },
+  {
+   "name": "melody",
+   "kind": "function",
+   "signature": "melody(text, tempo=120, wave='soft', sa=None, tuning='equal', volume=0.5)",
+   "detail": "(text: str, tempo: float = 120, wave: CONSTANTS.WAVE = soft, sa: str | None = None, tuning: CONSTANTS.TUNING = equal, volume: float = 0.5) -> Sound",
+   "summary": "Make a sound from a string of notes.",
+   "url": "reference/API.md#fn-melody",
+   "star": true,
+   "options": {
+    "wave": [
+     {
+      "word": "sine",
+      "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
+     },
+     {
+      "word": "square",
+      "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
+     },
+     {
+      "word": "saw",
+      "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
+     },
+     {
+      "word": "triangle",
+      "meaning": "Between sine and square: soft but a little reedy, like a flute."
+     },
+     {
+      "word": "soft",
+      "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
+     },
+     {
+      "word": "noise",
+      "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
+     }
+    ]
+   }
+  },
+  {
+   "name": "sequence",
+   "kind": "function",
+   "signature": "sequence(*sounds)",
+   "detail": "(*sounds: Sound) -> Sound",
+   "summary": "Make a new sound that plays the given sounds one after another.",
+   "url": "reference/API.md#fn-sequence",
+   "star": true
+  },
+  {
+   "name": "mix",
+   "kind": "function",
+   "signature": "mix(*sounds)",
+   "detail": "(*sounds: Sound) -> Sound",
+   "summary": "Make a new sound that plays the given sounds together.",
+   "url": "reference/API.md#fn-mix",
+   "star": true
+  },
+  {
+   "name": "note_to_frequency",
+   "kind": "function",
+   "signature": "note_to_frequency(name, sa=None)",
+   "detail": "(name: str, sa: str | None = None) -> float",
+   "summary": "Return the frequency of a note, in hertz.",
+   "url": "reference/API.md#fn-note_to_frequency",
+   "star": true
+  },
+  {
+   "name": "frequency_to_note",
+   "kind": "function",
+   "signature": "frequency_to_note(hz, sa=None)",
+   "detail": "(hz: float, sa: str | None = None) -> str",
+   "summary": "Return the name of the note nearest to a frequency.",
+   "url": "reference/API.md#fn-frequency_to_note",
+   "star": true
+  },
+  {
+   "name": "chord_notes",
+   "kind": "function",
+   "signature": "chord_notes(name)",
+   "detail": "(name: str) -> list[str]",
+   "summary": "Return the note names in a chord.",
+   "url": "reference/API.md#fn-chord_notes",
+   "star": true
+  },
+  {
+   "name": "microphone",
+   "kind": "function",
+   "signature": "microphone(name=None)",
+   "detail": "(name: str | None = None) -> Microphone",
+   "summary": "Make a microphone object for the computer's default input.",
+   "url": "reference/API.md#fn-microphone",
+   "star": true
+  },
+  {
+   "name": "microphones",
+   "kind": "function",
+   "signature": "microphones()",
+   "detail": "() -> list[str]",
+   "summary": "Return the names of the computer's microphones (inputs).",
+   "url": "reference/API.md#fn-microphones",
+   "star": true
+  },
+  {
+   "name": "ragas",
+   "kind": "function",
+   "signature": "ragas()",
+   "detail": "() -> list[str]",
+   "summary": "Return the names of the ragas in funground's small built-in table.",
+   "url": "reference/API.md#fn-ragas",
+   "star": true
+  },
+  {
+   "name": "raga",
+   "kind": "function",
+   "signature": "raga(name)",
+   "detail": "(name: str) -> Raga",
+   "summary": "Return one raga from the built-in table.",
+   "url": "reference/API.md#fn-raga",
+   "star": true
+  },
+  {
+   "name": "talas",
+   "kind": "function",
+   "signature": "talas()",
+   "detail": "() -> list[str]",
+   "summary": "Return the names of the talas in the built-in table.",
+   "url": "reference/API.md#fn-talas",
+   "star": true
+  },
+  {
+   "name": "tala_info",
+   "kind": "function",
+   "signature": "tala_info(name)",
+   "detail": "(name: str) -> Tala",
+   "summary": "Return one tala from the built-in table.",
+   "url": "reference/API.md#fn-tala_info",
+   "star": true
+  },
+  {
+   "name": "tala",
+   "kind": "function",
+   "signature": "tala(name, tempo=80, cycles=1)",
+   "detail": "(name: str, tempo: float = 80, cycles: int = 1) -> Sound",
+   "summary": "Make a sound of a tala's theka played with simple drum sounds.",
+   "url": "reference/API.md#fn-tala",
+   "star": true
+  },
+  {
+   "name": "drone",
+   "kind": "function",
+   "signature": "drone(sa, seconds, pattern=\"P S' S' S\", volume=0.5)",
+   "detail": "(sa: float | str, seconds: float, pattern: str = P S S S, volume: float = 0.5) -> Sound",
+   "summary": "Make a tanpura-like drone.",
+   "url": "reference/API.md#fn-drone",
+   "star": true
+  },
+  {
+   "name": "match_ragas",
+   "kind": "function",
+   "signature": "match_ragas(histogram)",
+   "detail": "(histogram: Any) -> list[tuple[str, float]]",
+   "summary": "Rank the table's ragas by how well their swaras fit a histogram.",
+   "url": "reference/API.md#fn-match_ragas",
+   "star": true
+  },
+  {
+   "name": "draw_wave",
+   "kind": "function",
+   "signature": "draw_wave(source, x, y, w, h)",
+   "detail": "(source: Any, x: float, y: float, w: float, h: float) -> None",
+   "summary": "Draw the wave of a sound, a microphone or a list of numbers.",
+   "url": "reference/API.md#fn-draw_wave",
+   "star": true
+  },
+  {
+   "name": "draw_spectrum",
+   "kind": "function",
+   "signature": "draw_spectrum(source, x, y, w, h, bands=32)",
+   "detail": "(source: Any, x: float, y: float, w: float, h: float, bands: int = 32) -> None",
+   "summary": "Draw bars for a spectrum, as it is now.",
+   "url": "reference/API.md#fn-draw_spectrum",
+   "star": true
+  },
+  {
+   "name": "spectrogram",
+   "kind": "function",
+   "signature": "spectrogram(sound, width, height)",
+   "detail": "(sound: Sound, width: int, height: int) -> Picture",
+   "summary": "Make a picture of a whole sound.",
+   "url": "reference/API.md#fn-spectrogram",
+   "star": true
+  },
+  {
+   "name": "draw_pitch_line",
+   "kind": "function",
+   "signature": "draw_pitch_line(source, x, y, w, h, seconds=5, low='C3', high='C6', sa=None)",
+   "detail": "(source: Any, x: float, y: float, w: float, h: float, seconds: float = 5, low: str = C3, high: str = C6, sa: str | None = None) -> None",
+   "summary": "Draw the pitch of a sound or microphone as a scrolling line.",
+   "url": "reference/API.md#fn-draw_pitch_line",
+   "star": true
+  },
+  {
+   "name": "load_svg",
+   "kind": "function",
+   "signature": "load_svg(path)",
+   "detail": "(path: str) -> Picture",
+   "summary": "Read an SVG file and return a picture of its shapes.",
+   "url": "reference/API.md#fn-load_svg",
+   "star": true
+  },
+  {
+   "name": "loop",
+   "kind": "function",
+   "signature": "loop()",
+   "detail": "() -> None",
+   "summary": "Call draw() every frame again, after no_loop().",
+   "url": "reference/API.md#fn-loop",
+   "star": true
+  },
+  {
+   "name": "mag",
+   "kind": "function",
+   "signature": "mag(x, y)",
+   "detail": "(x: float, y: float) -> float",
+   "summary": "Return the length of the arrow (x, y).",
+   "url": "reference/API.md#fn-mag",
+   "star": true
+  },
+  {
+   "name": "map_range",
+   "kind": "function",
+   "signature": "map_range(value, start1, stop1, start2, stop2, clamp=False)",
+   "detail": "(value: float, start1: float, stop1: float, start2: float, stop2: float, clamp: bool = False) -> float",
+   "summary": "Re-scale a number from one range to another.",
+   "url": "reference/API.md#fn-map_range",
+   "star": true
+  },
+  {
+   "name": "mark",
+   "kind": "function",
+   "signature": "mark(path=None, fill=<not given>, stroke=<not given>, stroke_width=None)",
+   "detail": "(path: PathBuilder | str | None = None, *, fill: Color | None = <not given>, stroke: Color | None = <not given>, stroke_width: float | None = None) -> Mark",
+   "summary": "Make a mark: a drawing kept as a value, to place as often as you like.",
+   "url": "reference/API.md#fn-mark",
+   "star": true
+  },
+  {
+   "name": "keep",
+   "kind": "function",
+   "signature": "keep(note='', pdf=False, **settings)",
+   "detail": "(note: str = , *, pdf: bool = False, **settings: Any) -> str",
+   "summary": "Save this version of your picture in a studio folder, with what made it.",
+   "url": "reference/API.md#fn-keep",
+   "star": true
+  },
+  {
+   "name": "variations",
+   "kind": "function",
+   "signature": "variations(fn, columns=None, **values)",
+   "detail": "(fn: Callable[..., Any], *, columns: int | None = None, **values: Any) -> list",
+   "summary": "Draw several versions of a drawing side by side, as a labelled contact sheet.",
+   "url": "reference/API.md#fn-variations",
+   "star": true
+  },
+  {
+   "name": "millis",
+   "kind": "function",
+   "signature": "millis()",
+   "detail": "() -> int",
+   "summary": "Return the milliseconds since the sketch started running.",
+   "url": "reference/API.md#fn-millis",
+   "star": true
+  },
+  {
+   "name": "minute",
+   "kind": "function",
+   "signature": "minute()",
+   "detail": "() -> int",
+   "summary": "Return the clock's minutes, from 0 to 59.",
+   "url": "reference/API.md#fn-minute",
+   "star": true
+  },
+  {
+   "name": "miter_limit",
+   "kind": "function",
+   "signature": "miter_limit(limit)",
+   "detail": "(limit: float) -> None",
+   "summary": "Set how far a sharp \"miter\" corner may stick out.",
+   "url": "reference/API.md#fn-miter_limit",
+   "star": true
+  },
+  {
+   "name": "month",
+   "kind": "function",
+   "signature": "month()",
+   "detail": "() -> int",
+   "summary": "Return the month, from 1 to 12.",
+   "url": "reference/API.md#fn-month",
+   "star": true
+  },
+  {
+   "name": "new_page",
+   "kind": "function",
+   "signature": "new_page(width=None, height=None)",
+   "detail": "(width: int | CONSTANTS.PAGE | str | None = None, height: int | None = None) -> None",
+   "summary": "End this page and start a blank one.",
+   "url": "reference/API.md#fn-new_page",
+   "star": true
+  },
+  {
+   "name": "no_clip",
+   "kind": "function",
+   "signature": "no_clip()",
+   "detail": "() -> None",
+   "summary": "Remove clipping.",
+   "url": "reference/API.md#fn-no_clip",
+   "star": true
+  },
+  {
+   "name": "no_cursor",
+   "kind": "function",
+   "signature": "no_cursor()",
+   "detail": "() -> None",
+   "summary": "Hide the mouse pointer over the canvas.",
+   "url": "reference/API.md#fn-no_cursor",
+   "star": true
+  },
+  {
+   "name": "no_dash",
+   "kind": "function",
+   "signature": "no_dash()",
+   "detail": "() -> None",
+   "summary": "Draw solid outlines and lines again.",
+   "url": "reference/API.md#fn-no_dash",
+   "star": true
+  },
+  {
+   "name": "no_fill",
+   "kind": "function",
+   "signature": "no_fill()",
+   "detail": "() -> None",
+   "summary": "Do not fill shapes drawn after this.",
+   "url": "reference/API.md#fn-no_fill",
+   "star": true
+  },
+  {
+   "name": "no_loop",
+   "kind": "function",
+   "signature": "no_loop()",
+   "detail": "() -> None",
+   "summary": "Stop calling draw() every frame.",
+   "url": "reference/API.md#fn-no_loop",
+   "star": true
+  },
+  {
+   "name": "no_shadow",
+   "kind": "function",
+   "signature": "no_shadow()",
+   "detail": "() -> None",
+   "summary": "Stop drawing shadows.",
+   "url": "reference/API.md#fn-no_shadow",
+   "star": true
+  },
+  {
+   "name": "no_smooth",
+   "kind": "function",
+   "signature": "no_smooth()",
+   "detail": "() -> None",
+   "summary": "Draw hard, pixel-sharp edges from now on.",
+   "url": "reference/API.md#fn-no_smooth",
+   "star": true
+  },
+  {
+   "name": "no_stroke",
+   "kind": "function",
+   "signature": "no_stroke()",
+   "detail": "() -> None",
+   "summary": "Do not draw outlines or lines after this.",
+   "url": "reference/API.md#fn-no_stroke",
+   "star": true
+  },
+  {
+   "name": "no_erase",
+   "kind": "function",
+   "signature": "no_erase()",
+   "detail": "() -> None",
+   "summary": "Go back to painting.",
+   "url": "reference/API.md#fn-no_erase",
+   "star": true
+  },
+  {
+   "name": "no_tint",
+   "kind": "function",
+   "signature": "no_tint()",
+   "detail": "() -> None",
+   "summary": "Stop tinting pictures.",
+   "url": "reference/API.md#fn-no_tint",
+   "star": true
+  },
+  {
+   "name": "erase",
+   "kind": "function",
+   "signature": "erase(fill_strength=255, stroke_strength=255)",
+   "detail": "(fill_strength: float = 255, stroke_strength: float = 255) -> None",
+   "summary": "Make everything drawn after this remove what is under it, instead of painting.",
+   "url": "reference/API.md#fn-erase",
+   "star": true
+  },
+  {
+   "name": "noise",
+   "kind": "function",
+   "signature": "noise(x, y=0.0, z=0.0)",
+   "detail": "(x: float, y: float = 0.0, z: float = 0.0) -> float",
+   "summary": "Return a smooth random number from 0 to 1.",
+   "url": "reference/API.md#fn-noise",
+   "star": true
+  },
+  {
+   "name": "noise_detail",
+   "kind": "function",
+   "signature": "noise_detail(octaves, falloff=None)",
+   "detail": "(octaves: int, falloff: float | None = None) -> None",
+   "summary": "Choose how much detail noise() has.",
+   "url": "reference/API.md#fn-noise_detail",
+   "star": true
+  },
+  {
+   "name": "noise_seed",
+   "kind": "function",
+   "signature": "noise_seed(seed)",
+   "detail": "(seed: int) -> None",
+   "summary": "Make noise() repeatable.",
+   "url": "reference/API.md#fn-noise_seed",
+   "star": true
+  },
+  {
+   "name": "norm",
+   "kind": "function",
+   "signature": "norm(value, start, stop)",
+   "detail": "(value: float, start: float, stop: float) -> float",
+   "summary": "Return where a number sits between two others, as 0 to 1.",
+   "url": "reference/API.md#fn-norm",
+   "star": true
+  },
+  {
+   "name": "opacity",
+   "kind": "function",
+   "signature": "opacity(amount)",
+   "detail": "(amount: float) -> None",
+   "summary": "Make everything drawn after this see-through.",
+   "url": "reference/API.md#fn-opacity",
+   "star": true
+  },
+  {
+   "name": "page_count",
+   "kind": "function",
+   "signature": "page_count()",
+   "detail": "() -> int",
+   "summary": "Return how many pages the document has so far.",
+   "url": "reference/API.md#fn-page_count",
+   "star": true
+  },
+  {
+   "name": "page_size",
+   "kind": "function",
+   "signature": "page_size(name, landscape=False)",
+   "detail": "(name: CONSTANTS.PAGE | str, landscape: bool = False) -> tuple[int, int]",
+   "summary": "Return the size of a named page, in points.",
+   "url": "reference/API.md#fn-page_size",
+   "star": true
+  },
+  {
+   "name": "area",
+   "kind": "function",
+   "signature": "area(x, y, w, h)",
+   "detail": "(x: float, y: float, w: float, h: float) -> Area",
+   "summary": "Make an area: a rectangle kept as a value.",
+   "url": "reference/API.md#fn-area",
+   "star": true
+  },
+  {
+   "name": "grid",
+   "kind": "function",
+   "signature": "grid(cols, rows, gutter=0, area=None)",
+   "detail": "(cols: int, rows: int, *, gutter: float | tuple = 0, area: object = None) -> Grid",
+   "summary": "Divide an area into a grid of equal cells.",
+   "url": "reference/API.md#fn-grid",
+   "star": true
+  },
+  {
+   "name": "inch",
+   "kind": "function",
+   "signature": "inch(n)",
+   "detail": "(n: float) -> float",
+   "summary": "Convert inches to funground units.",
+   "url": "reference/API.md#fn-inch",
+   "star": true
+  },
+  {
+   "name": "mm",
+   "kind": "function",
+   "signature": "mm(n)",
+   "detail": "(n: float) -> float",
+   "summary": "Convert millimetres to funground units.",
+   "url": "reference/API.md#fn-mm",
+   "star": true
+  },
+  {
+   "name": "path",
+   "kind": "function",
+   "signature": "path()",
+   "detail": "() -> PathBuilder",
+   "summary": "Make a new, empty path that you can reuse.",
+   "url": "reference/API.md#fn-path",
+   "star": true
+  },
+  {
+   "name": "point",
+   "kind": "function",
+   "signature": "point(x, y)",
+   "detail": "(x: float, y: float) -> None",
+   "summary": "Draw a dot.",
+   "url": "reference/API.md#fn-point",
+   "star": true
+  },
+  {
+   "name": "polygon",
+   "kind": "function",
+   "signature": "polygon(points)",
+   "detail": "(points: list[tuple[float, float]]) -> None",
+   "summary": "Draw a closed shape through a list of points.",
+   "url": "reference/API.md#fn-polygon",
+   "star": true
+  },
+  {
+   "name": "pop",
+   "kind": "function",
+   "signature": "pop()",
+   "detail": "() -> None",
+   "summary": "Restore the transform and style saved by the last push().",
+   "url": "reference/API.md#fn-pop",
+   "star": true
+  },
+  {
+   "name": "push",
+   "kind": "function",
+   "signature": "push()",
+   "detail": "() -> None",
+   "summary": "Save the current transform and style.",
+   "url": "reference/API.md#fn-push",
+   "star": true
+  },
+  {
+   "name": "quad",
+   "kind": "function",
+   "signature": "quad(x1, y1, x2, y2, x3, y3, x4, y4)",
+   "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float, x4: float, y4: float) -> None",
+   "summary": "Draw a four-sided shape through four corners.",
+   "url": "reference/API.md#fn-quad",
+   "star": true
+  },
+  {
+   "name": "quadratic_vertex",
+   "kind": "function",
+   "signature": "quadratic_vertex(cx, cy, x, y)",
+   "detail": "(cx: float, cy: float, x: float, y: float) -> None",
+   "summary": "Add a quadratic curve segment to the shape being built.",
+   "url": "reference/API.md#fn-quadratic_vertex",
+   "star": true
+  },
+  {
+   "name": "radial_gradient",
+   "kind": "function",
+   "signature": "radial_gradient(x, y, radius, colors, stops=None)",
+   "detail": "(x: float, y: float, radius: float, colors: Any, stops: Any = None) -> Gradient",
+   "summary": "Make a gradient: colours blended outward from a point.",
+   "url": "reference/API.md#fn-radial_gradient",
+   "star": true
+  },
+  {
+   "name": "radians",
+   "kind": "function",
+   "signature": "radians(degrees)",
+   "detail": "(degrees: float) -> float",
+   "summary": "Convert degrees to radians.",
+   "url": "reference/API.md#fn-radians",
+   "star": true
+  },
+  {
+   "name": "random_number",
+   "kind": "function",
+   "signature": "random_number(low=1.0, high=None)",
+   "detail": "(low: float = 1.0, high: float | None = None) -> float",
+   "summary": "Return a random number: the same as random().",
+   "url": "reference/API.md#fn-random_number",
+   "star": true
+  },
+  {
+   "name": "random_choice",
+   "kind": "function",
+   "signature": "random_choice(items)",
+   "detail": "(items: Any) -> Any",
+   "summary": "Return one item picked at random.",
+   "url": "reference/API.md#fn-random_choice",
+   "star": true
+  },
+  {
+   "name": "random_gaussian",
+   "kind": "function",
+   "signature": "random_gaussian(mean=0.0, sd=1.0)",
+   "detail": "(mean: float = 0.0, sd: float = 1.0) -> float",
+   "summary": "Return a random number from a bell curve.",
+   "url": "reference/API.md#fn-random_gaussian",
+   "star": true
+  },
+  {
+   "name": "random_seed",
+   "kind": "function",
+   "signature": "random_seed(seed=None)",
+   "detail": "(seed: int | None = None) -> None",
+   "summary": "Make random() repeatable.",
+   "url": "reference/API.md#fn-random_seed",
+   "star": true
+  },
+  {
+   "name": "rect",
+   "kind": "function",
+   "signature": "rect(x, y, width, height, *radii)",
+   "detail": "(x: float, y: float, width: float, height: float, *radii: float) -> None",
+   "summary": "Draw a rectangle.",
+   "url": "reference/API.md#fn-rect",
+   "star": true
+  },
+  {
+   "name": "rect_mode",
+   "kind": "function",
+   "signature": "rect_mode(mode)",
+   "detail": "(mode: CONSTANTS.MODE) -> None",
+   "summary": "Choose how rect() and square() read their numbers.",
+   "url": "reference/API.md#fn-rect_mode",
+   "star": true
+  },
+  {
+   "name": "redraw",
+   "kind": "function",
+   "signature": "redraw()",
+   "detail": "() -> None",
+   "summary": "Call draw() once more.",
+   "url": "reference/API.md#fn-redraw",
+   "star": true
+  },
+  {
+   "name": "reset_matrix",
+   "kind": "function",
+   "signature": "reset_matrix()",
+   "detail": "() -> None",
+   "summary": "Forget every translate, rotate, scale and shear so far.",
+   "url": "reference/API.md#fn-reset_matrix",
+   "star": true
+  },
+  {
+   "name": "resize_canvas",
+   "kind": "function",
+   "signature": "resize_canvas(width, height)",
+   "detail": "(width: int, height: int) -> None",
+   "summary": "Change the canvas size while the sketch runs.",
+   "url": "reference/API.md#fn-resize_canvas",
+   "star": true
+  },
+  {
+   "name": "rotate",
+   "kind": "function",
+   "signature": "rotate(degrees)",
+   "detail": "(degrees: float) -> None",
+   "summary": "Turn later drawing about the current origin.",
+   "url": "reference/API.md#fn-rotate",
+   "star": true
+  },
+  {
+   "name": "run",
+   "kind": "function",
+   "signature": "run(fps=None, max_frames=None)",
+   "detail": "(*, fps: int | None = None, max_frames: int | None = None) -> None",
+   "summary": "Start the sketch: call setup() once, then draw() again and again.",
+   "url": "reference/API.md#fn-run",
+   "star": true
+  },
+  {
+   "name": "save",
+   "kind": "function",
+   "signature": "save(path, text='live', bleed=0, marks=False, dpi=None)",
+   "detail": "(path: str, *, text: CONSTANTS.SAVE_TEXT = live, bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None",
+   "summary": "Save this frame to a picture or document file.",
+   "url": "reference/API.md#fn-save",
+   "star": true
+  },
+  {
+   "name": "save_frames",
+   "kind": "function",
+   "signature": "save_frames(pattern, count)",
+   "detail": "(pattern: str, count: int) -> None",
+   "summary": "Save this frame and the next ones as numbered picture files.",
+   "url": "reference/API.md#fn-save_frames",
+   "star": true
+  },
+  {
+   "name": "save_gif",
+   "kind": "function",
+   "signature": "save_gif(path, seconds)",
+   "detail": "(path: str, seconds: float) -> None",
+   "summary": "Record the next few seconds of an animated sketch into a GIF.",
+   "url": "reference/API.md#fn-save_gif",
+   "star": true
+  },
+  {
+   "name": "save_movie",
+   "kind": "function",
+   "signature": "save_movie(path, seconds)",
+   "detail": "(path: str, seconds: float) -> None",
+   "summary": "Record the next few seconds of an animated sketch into an MP4 movie.",
+   "url": "reference/API.md#fn-save_movie",
+   "star": true
+  },
+  {
+   "name": "frame_duration",
+   "kind": "function",
+   "signature": "frame_duration(seconds)",
+   "detail": "(seconds: float) -> None",
+   "summary": "Set how long each page is shown in a saved GIF or MP4.",
+   "url": "reference/API.md#fn-frame_duration",
+   "star": true
+  },
+  {
+   "name": "saved_state",
+   "kind": "function",
+   "signature": "saved_state()",
+   "detail": "() -> AbstractContextManager[None]",
+   "summary": "Return a ``with`` block that saves and restores the transform and style.",
+   "url": "reference/API.md#fn-saved_state",
+   "star": true
+  },
+  {
+   "name": "scale",
+   "kind": "function",
+   "signature": "scale(sx, sy=None)",
+   "detail": "(sx: float, sy: float | None = None) -> None",
+   "summary": "Grow or shrink later drawing about the origin.",
+   "url": "reference/API.md#fn-scale",
+   "star": true
+  },
+  {
+   "name": "second",
+   "kind": "function",
+   "signature": "second()",
+   "detail": "() -> int",
+   "summary": "Return the clock's seconds, from 0 to 59.",
+   "url": "reference/API.md#fn-second",
+   "star": true
+  },
+  {
+   "name": "set_pixel",
+   "kind": "function",
+   "signature": "set_pixel(x, y, color, *more)",
+   "detail": "(x: float, y: float, color: Any, *more: float) -> None",
+   "summary": "Make one pixel exactly one colour: the same as set().",
+   "url": "reference/API.md#fn-set_pixel",
+   "star": true
+  },
+  {
+   "name": "shadow",
+   "kind": "function",
+   "signature": "shadow(x_offset, y_offset, blur=5, color=(0, 0, 0, 128))",
+   "detail": "(x_offset: float, y_offset: float, blur: float = 5, color: Color = (0, 0, 0, 128)) -> None",
+   "summary": "Give everything drawn after this a soft shadow.",
+   "url": "reference/API.md#fn-shadow",
+   "star": true
+  },
+  {
+   "name": "shear_x",
+   "kind": "function",
+   "signature": "shear_x(degrees)",
+   "detail": "(degrees: float) -> None",
+   "summary": "Slant later drawing sideways.",
+   "url": "reference/API.md#fn-shear_x",
+   "star": true
+  },
+  {
+   "name": "shear_y",
+   "kind": "function",
+   "signature": "shear_y(degrees)",
+   "detail": "(degrees: float) -> None",
+   "summary": "Slant later drawing up or down.",
+   "url": "reference/API.md#fn-shear_y",
+   "star": true
+  },
+  {
+   "name": "show",
+   "kind": "function",
+   "signature": "show()",
+   "detail": "() -> None",
+   "summary": "Open a window on what a script has drawn, and wait until it is closed.",
+   "url": "reference/API.md#fn-show",
+   "star": true
+  },
+  {
+   "name": "show_layer",
+   "kind": "function",
+   "signature": "show_layer(name)",
+   "detail": "(name: str) -> None",
+   "summary": "Show a layer that hide_layer() hid.",
+   "url": "reference/API.md#fn-show_layer",
+   "star": true
+  },
+  {
+   "name": "size",
+   "kind": "function",
+   "signature": "size(width, height=None, title='funground', fps=None, margin=0, landscape=False)",
+   "detail": "(width: int | CONSTANTS.PAGE | str, height: int | None = None, *, title: str = funground, fps: int | None = None, margin: float | tuple = 0, landscape: bool = False) -> None",
+   "summary": "Create the canvas, or change its size.",
+   "url": "reference/API.md#fn-size",
+   "star": true
+  },
+  {
+   "name": "smooth",
+   "kind": "function",
+   "signature": "smooth()",
+   "detail": "() -> None",
+   "summary": "Draw smooth (anti-aliased) edges again.",
+   "url": "reference/API.md#fn-smooth",
+   "star": true
+  },
+  {
+   "name": "square",
+   "kind": "function",
+   "signature": "square(x, y, size, *radii)",
+   "detail": "(x: float, y: float, size: float, *radii: float) -> None",
+   "summary": "Draw a square.",
+   "url": "reference/API.md#fn-square",
+   "star": true
+  },
+  {
+   "name": "stop",
+   "kind": "function",
+   "signature": "stop()",
+   "detail": "() -> None",
+   "summary": "Ask the sketch to stop.",
+   "url": "reference/API.md#fn-stop",
+   "star": true
+  },
+  {
+   "name": "stroke",
+   "kind": "function",
+   "signature": "stroke(color, *more)",
+   "detail": "(color: Color, *more: float) -> None",
+   "summary": "Set the colour of outlines and lines.",
+   "url": "reference/API.md#fn-stroke",
+   "star": true
+  },
+  {
+   "name": "stroke_cap",
+   "kind": "function",
+   "signature": "stroke_cap(cap)",
+   "detail": "(cap: CONSTANTS.CAP) -> None",
+   "summary": "Choose how the ends of lines look.",
+   "url": "reference/API.md#fn-stroke_cap",
+   "star": true,
+   "options": {
+    "cap": [
+     {
+      "word": "round",
+      "meaning": "Each end of a line is a half circle, so the line reaches half its width past its end points. The default."
+     },
+     {
+      "word": "square",
+      "meaning": "Each end is squared off half the line's width past its end point."
+     },
+     {
+      "word": "butt",
+      "meaning": "Each end is cut off flat exactly at its end point."
+     }
+    ]
+   }
+  },
+  {
+   "name": "stroke_dash",
+   "kind": "function",
+   "signature": "stroke_dash(pattern, offset=0)",
+   "detail": "(pattern: float | list[float], offset: float = 0) -> None",
+   "summary": "Draw outlines and lines as dashes.",
+   "url": "reference/API.md#fn-stroke_dash",
+   "star": true
+  },
+  {
+   "name": "stroke_join",
+   "kind": "function",
+   "signature": "stroke_join(join)",
+   "detail": "(join: CONSTANTS.JOIN) -> None",
+   "summary": "Choose how corners of outlines look.",
+   "url": "reference/API.md#fn-stroke_join",
+   "star": true,
+   "options": {
+    "join": [
+     {
+      "word": "round",
+      "meaning": "Corners are rounded. The default."
+     },
+     {
+      "word": "miter",
+      "meaning": "Corners come to a sharp point. A very sharp corner is cut flat instead, so the point does not shoot far out."
+     },
+     {
+      "word": "bevel",
+      "meaning": "Corners are cut off flat."
+     }
+    ]
+   }
+  },
+  {
+   "name": "stroke_width",
+   "kind": "function",
+   "signature": "stroke_width(pixels)",
+   "detail": "(pixels: int) -> None",
+   "summary": "Set how thick outlines and lines are.",
+   "url": "reference/API.md#fn-stroke_width",
+   "star": true
+  },
+  {
+   "name": "svg_paths",
+   "kind": "function",
+   "signature": "svg_paths(path)",
+   "detail": "(path: str) -> list[PathBuilder]",
+   "summary": "Read an SVG file and return its shapes as paths.",
+   "url": "reference/API.md#fn-svg_paths",
+   "star": true
+  },
+  {
+   "name": "text",
+   "kind": "function",
+   "signature": "text(message, x, y, color=None)",
+   "detail": "(message: object, x: float, y: float, color: Color | None = None) -> None",
+   "summary": "Draw text.",
+   "url": "reference/API.md#fn-text",
+   "star": true
+  },
+  {
+   "name": "text_align",
+   "kind": "function",
+   "signature": "text_align(horizontal, vertical=None)",
+   "detail": "(horizontal: CONSTANTS.ALIGN, vertical: CONSTANTS.ALIGN | None = None) -> None",
+   "summary": "Choose which point of the text (x, y) means.",
+   "url": "reference/API.md#fn-text_align",
+   "star": true,
+   "options": {
+    "horizontal": [
+     {
+      "word": "left",
+      "meaning": "x is where the text starts; it runs to the right. The default."
+     },
+     {
+      "word": "center",
+      "meaning": "x is the middle of the text."
+     },
+     {
+      "word": "right",
+      "meaning": "x is where the text ends."
+     },
+     {
+      "word": "justify",
+      "meaning": "In text_box(), each line is stretched to the box's width by widening the spaces, except the last line of a paragraph and a line of one word. In text() the same as left."
+     }
+    ],
+    "vertical": [
+     {
+      "word": "top",
+      "meaning": "y is the top of the text: the tallest letters' height (the font's ascent). The default."
+     },
+     {
+      "word": "center",
+      "meaning": "y is halfway between the top and the bottom."
+     },
+     {
+      "word": "baseline",
+      "meaning": "y is the line the letters stand on; the tails of g, p and y hang below it. Lines of text in different sizes line up on their baselines."
+     },
+     {
+      "word": "bottom",
+      "meaning": "y is the bottom of the text: below the tails of g, p and y (the font's descent)."
+     }
+    ]
+   }
+  },
+  {
+   "name": "text_ascent",
+   "kind": "function",
+   "signature": "text_ascent()",
+   "detail": "() -> float",
+   "summary": "Return how far letters reach above the baseline, in pixels.",
+   "url": "reference/API.md#fn-text_ascent",
+   "star": true
+  },
+  {
+   "name": "text_box",
+   "kind": "function",
+   "signature": "text_box(message, x, y, width, height=None, color=None)",
+   "detail": "(message: object, x: float, y: float, width: float, height: float | None = None, color: Color | None = None) -> str | FormattedString",
+   "summary": "Draw text wrapped inside a box, and return whatever did not fit.",
+   "url": "reference/API.md#fn-text_box",
+   "star": true
+  },
+  {
+   "name": "text_descent",
+   "kind": "function",
+   "signature": "text_descent()",
+   "detail": "() -> float",
+   "summary": "Return how far letters such as g and y reach below the baseline, in pixels.",
+   "url": "reference/API.md#fn-text_descent",
+   "star": true
+  },
+  {
+   "name": "text_font",
+   "kind": "function",
+   "signature": "text_font(font, size=None)",
+   "detail": "(font: Font | str | None, size: float | None = None) -> None",
+   "summary": "Choose the font for the text you draw after this.",
+   "url": "reference/API.md#fn-text_font",
+   "star": true
+  },
+  {
+   "name": "text_leading",
+   "kind": "function",
+   "signature": "text_leading(leading)",
+   "detail": "(leading: float | None) -> None",
+   "summary": "Set the distance from one line's baseline to the next.",
+   "url": "reference/API.md#fn-text_leading",
+   "star": true
+  },
+  {
+   "name": "text_path",
+   "kind": "function",
+   "signature": "text_path(message, x, y)",
+   "detail": "(message: object, x: float, y: float) -> PathBuilder",
+   "summary": "Return the outlines of some text as a path.",
+   "url": "reference/API.md#fn-text_path",
+   "star": true
+  },
+  {
+   "name": "text_to_points",
+   "kind": "function",
+   "signature": "text_to_points(message, x, y, spacing=5)",
+   "detail": "(message: object, x: float, y: float, spacing: float = 5) -> list[tuple[float, float]]",
+   "summary": "Return points along the outlines of some text.",
+   "url": "reference/API.md#fn-text_to_points",
+   "star": true
+  },
+  {
+   "name": "current_font",
+   "kind": "function",
+   "signature": "current_font()",
+   "detail": "() -> Font",
+   "summary": "Return the font that text is set in now.",
+   "url": "reference/API.md#fn-current_font",
+   "star": true
+  },
+  {
+   "name": "text_size",
+   "kind": "function",
+   "signature": "text_size(size)",
+   "detail": "(size: float) -> None",
+   "summary": "Set the size of text.",
+   "url": "reference/API.md#fn-text_size",
+   "star": true
+  },
+  {
+   "name": "text_style",
+   "kind": "function",
+   "signature": "text_style(style)",
+   "detail": "(style: CONSTANTS.STYLE) -> None",
+   "summary": "Choose one of the four styles of the built-in font.",
+   "url": "reference/API.md#fn-text_style",
+   "star": true,
+   "options": {
+    "style": [
+     {
+      "word": "normal",
+      "meaning": "Upright letters of the usual weight. The default."
+     },
+     {
+      "word": "bold",
+      "meaning": "Thicker, heavier letters, for emphasis and headlines."
+     },
+     {
+      "word": "italic",
+      "meaning": "Letters slanted to the right (the built-in font's oblique)."
+     },
+     {
+      "word": "bold_italic",
+      "meaning": "Bold and slanted."
+     }
+    ]
+   }
+  },
+  {
+   "name": "text_tracking",
+   "kind": "function",
+   "signature": "text_tracking(pixels)",
+   "detail": "(pixels: float) -> None",
+   "summary": "Add space after every letter.",
+   "url": "reference/API.md#fn-text_tracking",
+   "star": true
+  },
+  {
+   "name": "text_fallback",
+   "kind": "function",
+   "signature": "text_fallback(*fonts)",
+   "detail": "(*fonts: Font | str) -> None",
+   "summary": "Choose fonts to use for letters that the current font does not have.",
+   "url": "reference/API.md#fn-text_fallback",
+   "star": true
+  },
+  {
+   "name": "system_font",
+   "kind": "function",
+   "signature": "system_font(name)",
+   "detail": "(name: str) -> Font",
+   "summary": "Find a font installed on this computer.",
+   "url": "reference/API.md#fn-system_font",
+   "star": true
+  },
+  {
+   "name": "text_features",
+   "kind": "function",
+   "signature": "text_features(**features)",
+   "detail": "(**features: bool) -> None",
+   "summary": "Turn OpenType features of the font on or off.",
+   "url": "reference/API.md#fn-text_features",
+   "star": true
+  },
+  {
+   "name": "font_variations",
+   "kind": "function",
+   "signature": "font_variations(**axes)",
+   "detail": "(**axes: float) -> None",
+   "summary": "Set the axes of a variable font.",
+   "url": "reference/API.md#fn-font_variations",
+   "star": true
+  },
+  {
+   "name": "text_width",
+   "kind": "function",
+   "signature": "text_width(message)",
+   "detail": "(message: object) -> float",
+   "summary": "Return how wide some text will be, in pixels.",
+   "url": "reference/API.md#fn-text_width",
+   "star": true
+  },
+  {
+   "name": "fit_text_size",
+   "kind": "function",
+   "signature": "fit_text_size(message, width, height=None)",
+   "detail": "(message: object, width: float, height: float | None = None) -> float",
+   "summary": "Return the text size at which a message is exactly as wide as you want.",
+   "url": "reference/API.md#fn-fit_text_size",
+   "star": true
+  },
+  {
+   "name": "text_on_path",
+   "kind": "function",
+   "signature": "text_on_path(message, path, offset=0)",
+   "detail": "(message: object, path: PathBuilder, offset: float = 0) -> str",
+   "summary": "Draw text along a path, and return the part that did not fit.",
+   "url": "reference/API.md#fn-text_on_path",
+   "star": true
+  },
+  {
+   "name": "tint",
+   "kind": "function",
+   "signature": "tint(color, *more)",
+   "detail": "(color: Any, *more: float) -> None",
+   "summary": "Colour every picture drawn with image() from now on.",
+   "url": "reference/API.md#fn-tint",
+   "star": true
+  },
+  {
+   "name": "translate",
+   "kind": "function",
+   "signature": "translate(dx, dy)",
+   "detail": "(dx: float, dy: float) -> None",
+   "summary": "Move the origin.",
+   "url": "reference/API.md#fn-translate",
+   "star": true
+  },
+  {
+   "name": "triangle",
+   "kind": "function",
+   "signature": "triangle(x1, y1, x2, y2, x3, y3)",
+   "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> None",
+   "summary": "Draw a triangle through three corners.",
+   "url": "reference/API.md#fn-triangle",
+   "star": true
+  },
+  {
+   "name": "update_pixels",
+   "kind": "function",
+   "signature": "update_pixels()",
+   "detail": "() -> None",
+   "summary": "Write f.pixels back onto the canvas.",
+   "url": "reference/API.md#fn-update_pixels",
+   "star": true
+  },
+  {
+   "name": "vertex",
+   "kind": "function",
+   "signature": "vertex(x, y)",
+   "detail": "(x: float, y: float) -> None",
+   "summary": "Add a corner to the shape begun by begin_shape().",
+   "url": "reference/API.md#fn-vertex",
+   "star": true
+  },
+  {
+   "name": "year",
+   "kind": "function",
+   "signature": "year()",
+   "detail": "() -> int",
+   "summary": "Return the year, for example 2026.",
+   "url": "reference/API.md#fn-year",
+   "star": true
+  },
+  {
+   "name": "width",
+   "kind": "value",
+   "signature": "width",
+   "detail": "int",
+   "summary": "The width of the canvas, in pixels.",
+   "url": "reference/API.md#live-width",
+   "star": true
+  },
+  {
+   "name": "height",
+   "kind": "value",
+   "signature": "height",
+   "detail": "int",
+   "summary": "The height of the canvas, in pixels.",
+   "url": "reference/API.md#live-height",
+   "star": true
+  },
+  {
+   "name": "mouse_x",
+   "kind": "value",
+   "signature": "mouse_x",
+   "detail": "float",
+   "summary": "The mouse's x position over the canvas, in pixels from the left edge.",
+   "url": "reference/API.md#live-mouse_x",
+   "star": true
+  },
+  {
+   "name": "mouse_y",
+   "kind": "value",
+   "signature": "mouse_y",
+   "detail": "float",
+   "summary": "The mouse's y position over the canvas, in pixels from the top edge.",
+   "url": "reference/API.md#live-mouse_y",
+   "star": true
+  },
+  {
+   "name": "is_mouse_pressed",
+   "kind": "value",
+   "signature": "is_mouse_pressed",
+   "detail": "bool",
+   "summary": "Whether a mouse button is held down now.",
+   "url": "reference/API.md#live-is_mouse_pressed",
+   "star": true
+  },
+  {
+   "name": "pmouse_x",
+   "kind": "value",
+   "signature": "pmouse_x",
+   "detail": "float",
+   "summary": "Where the mouse's x was in the previous frame, in pixels.",
+   "url": "reference/API.md#live-pmouse_x",
+   "star": true
+  },
+  {
+   "name": "pmouse_y",
+   "kind": "value",
+   "signature": "pmouse_y",
+   "detail": "float",
+   "summary": "Where the mouse's y was in the previous frame, in pixels.",
+   "url": "reference/API.md#live-pmouse_y",
+   "star": true
+  },
+  {
+   "name": "mouse_button",
+   "kind": "value",
+   "signature": "mouse_button",
+   "detail": "str | None",
+   "summary": "The last mouse button that was pressed or released.",
+   "url": "reference/API.md#live-mouse_button",
+   "star": true
+  },
+  {
+   "name": "key",
+   "kind": "value",
+   "signature": "key",
+   "detail": "str | None",
+   "summary": "The last key that was pressed or released.",
+   "url": "reference/API.md#live-key",
+   "star": true
+  },
+  {
+   "name": "key_code",
+   "kind": "value",
+   "signature": "key_code",
+   "detail": "int | None",
+   "summary": "The code of the last key that was pressed or released.",
+   "url": "reference/API.md#live-key_code",
+   "star": true
+  },
+  {
+   "name": "is_key_pressed",
+   "kind": "value",
+   "signature": "is_key_pressed",
+   "detail": "bool",
+   "summary": "Whether any key is held down now.",
+   "url": "reference/API.md#live-is_key_pressed",
+   "star": true
+  },
+  {
+   "name": "frame_count",
+   "kind": "value",
+   "signature": "frame_count",
+   "detail": "int",
+   "summary": "How many frames have been completed since the sketch started.",
+   "url": "reference/API.md#live-frame_count",
+   "star": true
+  },
+  {
+   "name": "delta_time",
+   "kind": "value",
+   "signature": "delta_time",
+   "detail": "float",
+   "summary": "The seconds that the previous frame took.",
+   "url": "reference/API.md#live-delta_time",
+   "star": true
+  },
+  {
+   "name": "pixels",
+   "kind": "value",
+   "signature": "pixels",
+   "detail": "bytearray | None",
+   "summary": "The canvas pixels, after load_pixels().",
+   "url": "reference/API.md#live-pixels",
+   "star": true
+  },
+  {
+   "name": "ground",
+   "kind": "value",
+   "signature": "ground",
+   "detail": "Ground",
+   "summary": "The canvas as an area, with its margins.",
+   "url": "reference/API.md#live-ground",
+   "star": true
+  },
+  {
+   "name": "exit",
+   "kind": "function",
+   "signature": "exit()",
+   "detail": "() -> None",
+   "summary": "End the sketch after this frame.",
+   "url": "reference/API.md#fn-exit",
+   "star": false
+  },
+  {
+   "name": "filter",
+   "kind": "function",
+   "signature": "filter(kind, value=None)",
+   "detail": "(kind: CONSTANTS.FILTER, value: float | None = None) -> None",
+   "summary": "Change everything drawn so far, in place.",
+   "url": "reference/API.md#fn-filter",
+   "star": false,
+   "options": {
+    "kind": [
+     {
+      "word": "threshold",
+      "meaning": "Every pixel becomes black or white: white where its brightness is above the value (0 to 1, default 0.5)."
+     },
+     {
+      "word": "gray",
+      "meaning": "Every pixel becomes the grey of its brightness: a black-and-white picture."
+     },
+     {
+      "word": "opaque",
+      "meaning": "Makes every pixel fully opaque, removing any see-through parts."
+     },
+     {
+      "word": "invert",
+      "meaning": "Every colour becomes its opposite, like a photographic negative: black and white swap, red becomes cyan."
+     },
+     {
+      "word": "blur",
+      "meaning": "Softens the picture; the value is the radius in pixels (default 1). Larger is blurrier."
+     },
+     {
+      "word": "posterize",
+      "meaning": "Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print."
+     },
+     {
+      "word": "erode",
+      "meaning": "Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish."
+     },
+     {
+      "word": "dilate",
+      "meaning": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink."
+     }
+    ]
+   }
+  },
+  {
+   "name": "random",
+   "kind": "function",
+   "signature": "random(low=1.0, high=None)",
+   "detail": "(low: float = 1.0, high: float | None = None) -> float",
+   "summary": "Return a random number.",
+   "url": "reference/API.md#fn-random",
+   "star": false
+  },
+  {
+   "name": "set",
+   "kind": "function",
+   "signature": "set(x, y, color, *more)",
+   "detail": "(x: float, y: float, color: Any, *more: float) -> None",
+   "summary": "Make one pixel exactly one colour.",
+   "url": "reference/API.md#fn-set",
+   "star": false
+  }
+ ],
+ "colors": [
+  {
+   "name": "aliceblue",
+   "hex": "#f0f8ff"
+  },
+  {
+   "name": "antiquewhite",
+   "hex": "#faebd7"
+  },
+  {
+   "name": "antiquewhite1",
+   "hex": "#ffefdb"
+  },
+  {
+   "name": "antiquewhite2",
+   "hex": "#eedfcc"
+  },
+  {
+   "name": "antiquewhite3",
+   "hex": "#cdc0b0"
+  },
+  {
+   "name": "antiquewhite4",
+   "hex": "#8b8378"
+  },
+  {
+   "name": "aqua",
+   "hex": "#00ffff"
+  },
+  {
+   "name": "aquamarine",
+   "hex": "#7fffd4"
+  },
+  {
+   "name": "aquamarine1",
+   "hex": "#7fffd4"
+  },
+  {
+   "name": "aquamarine2",
+   "hex": "#76eec6"
+  },
+  {
+   "name": "aquamarine3",
+   "hex": "#66cdaa"
+  },
+  {
+   "name": "aquamarine4",
+   "hex": "#458b74"
+  },
+  {
+   "name": "azure",
+   "hex": "#f0ffff"
+  },
+  {
+   "name": "azure1",
+   "hex": "#f0ffff"
+  },
+  {
+   "name": "azure2",
+   "hex": "#e0eeee"
+  },
+  {
+   "name": "azure3",
+   "hex": "#c1cdcd"
+  },
+  {
+   "name": "azure4",
+   "hex": "#838b8b"
+  },
+  {
+   "name": "beige",
+   "hex": "#f5f5dc"
+  },
+  {
+   "name": "bisque",
+   "hex": "#ffe4c4"
+  },
+  {
+   "name": "bisque1",
+   "hex": "#ffe4c4"
+  },
+  {
+   "name": "bisque2",
+   "hex": "#eed5b7"
+  },
+  {
+   "name": "bisque3",
+   "hex": "#cdb79e"
+  },
+  {
+   "name": "bisque4",
+   "hex": "#8b7d6b"
+  },
+  {
+   "name": "black",
+   "hex": "#000000"
+  },
+  {
+   "name": "blanchedalmond",
+   "hex": "#ffebcd"
+  },
+  {
+   "name": "blue",
+   "hex": "#0000ff"
+  },
+  {
+   "name": "blue1",
+   "hex": "#0000ff"
+  },
+  {
+   "name": "blue2",
+   "hex": "#0000ee"
+  },
+  {
+   "name": "blue3",
+   "hex": "#0000cd"
+  },
+  {
+   "name": "blue4",
+   "hex": "#00008b"
+  },
+  {
+   "name": "blueviolet",
+   "hex": "#8a2be2"
+  },
+  {
+   "name": "brown",
+   "hex": "#a52a2a"
+  },
+  {
+   "name": "brown1",
+   "hex": "#ff4040"
+  },
+  {
+   "name": "brown2",
+   "hex": "#ee3b3b"
+  },
+  {
+   "name": "brown3",
+   "hex": "#cd3333"
+  },
+  {
+   "name": "brown4",
+   "hex": "#8b2323"
+  },
+  {
+   "name": "burlywood",
+   "hex": "#deb887"
+  },
+  {
+   "name": "burlywood1",
+   "hex": "#ffd39b"
+  },
+  {
+   "name": "burlywood2",
+   "hex": "#eec591"
+  },
+  {
+   "name": "burlywood3",
+   "hex": "#cdaa7d"
+  },
+  {
+   "name": "burlywood4",
+   "hex": "#8b7355"
+  },
+  {
+   "name": "cadetblue",
+   "hex": "#5f9ea0"
+  },
+  {
+   "name": "cadetblue1",
+   "hex": "#98f5ff"
+  },
+  {
+   "name": "cadetblue2",
+   "hex": "#8ee5ee"
+  },
+  {
+   "name": "cadetblue3",
+   "hex": "#7ac5cd"
+  },
+  {
+   "name": "cadetblue4",
+   "hex": "#53868b"
+  },
+  {
+   "name": "chartreuse",
+   "hex": "#7fff00"
+  },
+  {
+   "name": "chartreuse1",
+   "hex": "#7fff00"
+  },
+  {
+   "name": "chartreuse2",
+   "hex": "#76ee00"
+  },
+  {
+   "name": "chartreuse3",
+   "hex": "#66cd00"
+  },
+  {
+   "name": "chartreuse4",
+   "hex": "#458b00"
+  },
+  {
+   "name": "chocolate",
+   "hex": "#d2691e"
+  },
+  {
+   "name": "chocolate1",
+   "hex": "#ff7f24"
+  },
+  {
+   "name": "chocolate2",
+   "hex": "#ee7621"
+  },
+  {
+   "name": "chocolate3",
+   "hex": "#cd661d"
+  },
+  {
+   "name": "chocolate4",
+   "hex": "#8b4513"
+  },
+  {
+   "name": "coral",
+   "hex": "#ff7f50"
+  },
+  {
+   "name": "coral1",
+   "hex": "#ff7256"
+  },
+  {
+   "name": "coral2",
+   "hex": "#ee6a50"
+  },
+  {
+   "name": "coral3",
+   "hex": "#cd5b45"
+  },
+  {
+   "name": "coral4",
+   "hex": "#8b3e2f"
+  },
+  {
+   "name": "cornflowerblue",
+   "hex": "#6495ed"
+  },
+  {
+   "name": "cornsilk",
+   "hex": "#fff8dc"
+  },
+  {
+   "name": "cornsilk1",
+   "hex": "#fff8dc"
+  },
+  {
+   "name": "cornsilk2",
+   "hex": "#eee8cd"
+  },
+  {
+   "name": "cornsilk3",
+   "hex": "#cdc8b1"
+  },
+  {
+   "name": "cornsilk4",
+   "hex": "#8b8878"
+  },
+  {
+   "name": "crimson",
+   "hex": "#dc143c"
+  },
+  {
+   "name": "cyan",
+   "hex": "#00ffff"
+  },
+  {
+   "name": "cyan1",
+   "hex": "#00ffff"
+  },
+  {
+   "name": "cyan2",
+   "hex": "#00eeee"
+  },
+  {
+   "name": "cyan3",
+   "hex": "#00cdcd"
+  },
+  {
+   "name": "cyan4",
+   "hex": "#008b8b"
+  },
+  {
+   "name": "darkblue",
+   "hex": "#00008b"
+  },
+  {
+   "name": "darkcyan",
+   "hex": "#008b8b"
+  },
+  {
+   "name": "darkgoldenrod",
+   "hex": "#b8860b"
+  },
+  {
+   "name": "darkgoldenrod1",
+   "hex": "#ffb90f"
+  },
+  {
+   "name": "darkgoldenrod2",
+   "hex": "#eead0e"
+  },
+  {
+   "name": "darkgoldenrod3",
+   "hex": "#cd950c"
+  },
+  {
+   "name": "darkgoldenrod4",
+   "hex": "#8b6508"
+  },
+  {
+   "name": "darkgray",
+   "hex": "#a9a9a9"
+  },
+  {
+   "name": "darkgreen",
+   "hex": "#006400"
+  },
+  {
+   "name": "darkgrey",
+   "hex": "#a9a9a9"
+  },
+  {
+   "name": "darkkhaki",
+   "hex": "#bdb76b"
+  },
+  {
+   "name": "darkmagenta",
+   "hex": "#8b008b"
+  },
+  {
+   "name": "darkolivegreen",
+   "hex": "#556b2f"
+  },
+  {
+   "name": "darkolivegreen1",
+   "hex": "#caff70"
+  },
+  {
+   "name": "darkolivegreen2",
+   "hex": "#bcee68"
+  },
+  {
+   "name": "darkolivegreen3",
+   "hex": "#a2cd5a"
+  },
+  {
+   "name": "darkolivegreen4",
+   "hex": "#6e8b3d"
+  },
+  {
+   "name": "darkorange",
+   "hex": "#ff8c00"
+  },
+  {
+   "name": "darkorange1",
+   "hex": "#ff7f00"
+  },
+  {
+   "name": "darkorange2",
+   "hex": "#ee7600"
+  },
+  {
+   "name": "darkorange3",
+   "hex": "#cd6600"
+  },
+  {
+   "name": "darkorange4",
+   "hex": "#8b4500"
+  },
+  {
+   "name": "darkorchid",
+   "hex": "#9932cc"
+  },
+  {
+   "name": "darkorchid1",
+   "hex": "#bf3eff"
+  },
+  {
+   "name": "darkorchid2",
+   "hex": "#b23aee"
+  },
+  {
+   "name": "darkorchid3",
+   "hex": "#9a32cd"
+  },
+  {
+   "name": "darkorchid4",
+   "hex": "#68228b"
+  },
+  {
+   "name": "darkred",
+   "hex": "#8b0000"
+  },
+  {
+   "name": "darksalmon",
+   "hex": "#e9967a"
+  },
+  {
+   "name": "darkseagreen",
+   "hex": "#8fbc8f"
+  },
+  {
+   "name": "darkseagreen1",
+   "hex": "#c1ffc1"
+  },
+  {
+   "name": "darkseagreen2",
+   "hex": "#b4eeb4"
+  },
+  {
+   "name": "darkseagreen3",
+   "hex": "#9bcd9b"
+  },
+  {
+   "name": "darkseagreen4",
+   "hex": "#698b69"
+  },
+  {
+   "name": "darkslateblue",
+   "hex": "#483d8b"
+  },
+  {
+   "name": "darkslategray",
+   "hex": "#2f4f4f"
+  },
+  {
+   "name": "darkslategray1",
+   "hex": "#97ffff"
+  },
+  {
+   "name": "darkslategray2",
+   "hex": "#8deeee"
+  },
+  {
+   "name": "darkslategray3",
+   "hex": "#79cdcd"
+  },
+  {
+   "name": "darkslategray4",
+   "hex": "#528b8b"
+  },
+  {
+   "name": "darkslategrey",
+   "hex": "#2f4f4f"
+  },
+  {
+   "name": "darkturquoise",
+   "hex": "#00ced1"
+  },
+  {
+   "name": "darkviolet",
+   "hex": "#9400d3"
+  },
+  {
+   "name": "deeppink",
+   "hex": "#ff1493"
+  },
+  {
+   "name": "deeppink1",
+   "hex": "#ff1493"
+  },
+  {
+   "name": "deeppink2",
+   "hex": "#ee1289"
+  },
+  {
+   "name": "deeppink3",
+   "hex": "#cd1076"
+  },
+  {
+   "name": "deeppink4",
+   "hex": "#8b0a50"
+  },
+  {
+   "name": "deepskyblue",
+   "hex": "#00bfff"
+  },
+  {
+   "name": "deepskyblue1",
+   "hex": "#00bfff"
+  },
+  {
+   "name": "deepskyblue2",
+   "hex": "#00b2ee"
+  },
+  {
+   "name": "deepskyblue3",
+   "hex": "#009acd"
+  },
+  {
+   "name": "deepskyblue4",
+   "hex": "#00688b"
+  },
+  {
+   "name": "dimgray",
+   "hex": "#696969"
+  },
+  {
+   "name": "dimgrey",
+   "hex": "#696969"
+  },
+  {
+   "name": "dodgerblue",
+   "hex": "#1e90ff"
+  },
+  {
+   "name": "dodgerblue1",
+   "hex": "#1e90ff"
+  },
+  {
+   "name": "dodgerblue2",
+   "hex": "#1c86ee"
+  },
+  {
+   "name": "dodgerblue3",
+   "hex": "#1874cd"
+  },
+  {
+   "name": "dodgerblue4",
+   "hex": "#104e8b"
+  },
+  {
+   "name": "firebrick",
+   "hex": "#b22222"
+  },
+  {
+   "name": "firebrick1",
+   "hex": "#ff3030"
+  },
+  {
+   "name": "firebrick2",
+   "hex": "#ee2c2c"
+  },
+  {
+   "name": "firebrick3",
+   "hex": "#cd2626"
+  },
+  {
+   "name": "firebrick4",
+   "hex": "#8b1a1a"
+  },
+  {
+   "name": "floralwhite",
+   "hex": "#fffaf0"
+  },
+  {
+   "name": "forestgreen",
+   "hex": "#228b22"
+  },
+  {
+   "name": "fuchsia",
+   "hex": "#ff00ff"
+  },
+  {
+   "name": "gainsboro",
+   "hex": "#dcdcdc"
+  },
+  {
+   "name": "ghostwhite",
+   "hex": "#f8f8ff"
+  },
+  {
+   "name": "gold",
+   "hex": "#ffd700"
+  },
+  {
+   "name": "gold1",
+   "hex": "#ffd700"
+  },
+  {
+   "name": "gold2",
+   "hex": "#eec900"
+  },
+  {
+   "name": "gold3",
+   "hex": "#cdad00"
+  },
+  {
+   "name": "gold4",
+   "hex": "#8b7500"
+  },
+  {
+   "name": "goldenrod",
+   "hex": "#daa520"
+  },
+  {
+   "name": "goldenrod1",
+   "hex": "#ffc125"
+  },
+  {
+   "name": "goldenrod2",
+   "hex": "#eeb422"
+  },
+  {
+   "name": "goldenrod3",
+   "hex": "#cd9b1d"
+  },
+  {
+   "name": "goldenrod4",
+   "hex": "#8b6914"
+  },
+  {
+   "name": "gray",
+   "hex": "#bebebe"
+  },
+  {
+   "name": "gray0",
+   "hex": "#000000"
+  },
+  {
+   "name": "gray1",
+   "hex": "#030303"
+  },
+  {
+   "name": "gray10",
+   "hex": "#1a1a1a"
+  },
+  {
+   "name": "gray100",
+   "hex": "#ffffff"
+  },
+  {
+   "name": "gray11",
+   "hex": "#1c1c1c"
+  },
+  {
+   "name": "gray12",
+   "hex": "#1f1f1f"
+  },
+  {
+   "name": "gray13",
+   "hex": "#212121"
+  },
+  {
+   "name": "gray14",
+   "hex": "#242424"
+  },
+  {
+   "name": "gray15",
+   "hex": "#262626"
+  },
+  {
+   "name": "gray16",
+   "hex": "#292929"
+  },
+  {
+   "name": "gray17",
+   "hex": "#2b2b2b"
+  },
+  {
+   "name": "gray18",
+   "hex": "#2e2e2e"
+  },
+  {
+   "name": "gray19",
+   "hex": "#303030"
+  },
+  {
+   "name": "gray2",
+   "hex": "#050505"
+  },
+  {
+   "name": "gray20",
+   "hex": "#333333"
+  },
+  {
+   "name": "gray21",
+   "hex": "#363636"
+  },
+  {
+   "name": "gray22",
+   "hex": "#383838"
+  },
+  {
+   "name": "gray23",
+   "hex": "#3b3b3b"
+  },
+  {
+   "name": "gray24",
+   "hex": "#3d3d3d"
+  },
+  {
+   "name": "gray25",
+   "hex": "#404040"
+  },
+  {
+   "name": "gray26",
+   "hex": "#424242"
+  },
+  {
+   "name": "gray27",
+   "hex": "#454545"
+  },
+  {
+   "name": "gray28",
+   "hex": "#474747"
+  },
+  {
+   "name": "gray29",
+   "hex": "#4a4a4a"
+  },
+  {
+   "name": "gray3",
+   "hex": "#080808"
+  },
+  {
+   "name": "gray30",
+   "hex": "#4d4d4d"
+  },
+  {
+   "name": "gray31",
+   "hex": "#4f4f4f"
+  },
+  {
+   "name": "gray32",
+   "hex": "#525252"
+  },
+  {
+   "name": "gray33",
+   "hex": "#545454"
+  },
+  {
+   "name": "gray34",
+   "hex": "#575757"
+  },
+  {
+   "name": "gray35",
+   "hex": "#595959"
+  },
+  {
+   "name": "gray36",
+   "hex": "#5c5c5c"
+  },
+  {
+   "name": "gray37",
+   "hex": "#5e5e5e"
+  },
+  {
+   "name": "gray38",
+   "hex": "#616161"
+  },
+  {
+   "name": "gray39",
+   "hex": "#636363"
+  },
+  {
+   "name": "gray4",
+   "hex": "#0a0a0a"
+  },
+  {
+   "name": "gray40",
+   "hex": "#666666"
+  },
+  {
+   "name": "gray41",
+   "hex": "#696969"
+  },
+  {
+   "name": "gray42",
+   "hex": "#6b6b6b"
+  },
+  {
+   "name": "gray43",
+   "hex": "#6e6e6e"
+  },
+  {
+   "name": "gray44",
+   "hex": "#707070"
+  },
+  {
+   "name": "gray45",
+   "hex": "#737373"
+  },
+  {
+   "name": "gray46",
+   "hex": "#757575"
+  },
+  {
+   "name": "gray47",
+   "hex": "#787878"
+  },
+  {
+   "name": "gray48",
+   "hex": "#7a7a7a"
+  },
+  {
+   "name": "gray49",
+   "hex": "#7d7d7d"
+  },
+  {
+   "name": "gray5",
+   "hex": "#0d0d0d"
+  },
+  {
+   "name": "gray50",
+   "hex": "#7f7f7f"
+  },
+  {
+   "name": "gray51",
+   "hex": "#828282"
+  },
+  {
+   "name": "gray52",
+   "hex": "#858585"
+  },
+  {
+   "name": "gray53",
+   "hex": "#878787"
+  },
+  {
+   "name": "gray54",
+   "hex": "#8a8a8a"
+  },
+  {
+   "name": "gray55",
+   "hex": "#8c8c8c"
+  },
+  {
+   "name": "gray56",
+   "hex": "#8f8f8f"
+  },
+  {
+   "name": "gray57",
+   "hex": "#919191"
+  },
+  {
+   "name": "gray58",
+   "hex": "#949494"
+  },
+  {
+   "name": "gray59",
+   "hex": "#969696"
+  },
+  {
+   "name": "gray6",
+   "hex": "#0f0f0f"
+  },
+  {
+   "name": "gray60",
+   "hex": "#999999"
+  },
+  {
+   "name": "gray61",
+   "hex": "#9c9c9c"
+  },
+  {
+   "name": "gray62",
+   "hex": "#9e9e9e"
+  },
+  {
+   "name": "gray63",
+   "hex": "#a1a1a1"
+  },
+  {
+   "name": "gray64",
+   "hex": "#a3a3a3"
+  },
+  {
+   "name": "gray65",
+   "hex": "#a6a6a6"
+  },
+  {
+   "name": "gray66",
+   "hex": "#a8a8a8"
+  },
+  {
+   "name": "gray67",
+   "hex": "#ababab"
+  },
+  {
+   "name": "gray68",
+   "hex": "#adadad"
+  },
+  {
+   "name": "gray69",
+   "hex": "#b0b0b0"
+  },
+  {
+   "name": "gray7",
+   "hex": "#121212"
+  },
+  {
+   "name": "gray70",
+   "hex": "#b3b3b3"
+  },
+  {
+   "name": "gray71",
+   "hex": "#b5b5b5"
+  },
+  {
+   "name": "gray72",
+   "hex": "#b8b8b8"
+  },
+  {
+   "name": "gray73",
+   "hex": "#bababa"
+  },
+  {
+   "name": "gray74",
+   "hex": "#bdbdbd"
+  },
+  {
+   "name": "gray75",
+   "hex": "#bfbfbf"
+  },
+  {
+   "name": "gray76",
+   "hex": "#c2c2c2"
+  },
+  {
+   "name": "gray77",
+   "hex": "#c4c4c4"
+  },
+  {
+   "name": "gray78",
+   "hex": "#c7c7c7"
+  },
+  {
+   "name": "gray79",
+   "hex": "#c9c9c9"
+  },
+  {
+   "name": "gray8",
+   "hex": "#141414"
+  },
+  {
+   "name": "gray80",
+   "hex": "#cccccc"
+  },
+  {
+   "name": "gray81",
+   "hex": "#cfcfcf"
+  },
+  {
+   "name": "gray82",
+   "hex": "#d1d1d1"
+  },
+  {
+   "name": "gray83",
+   "hex": "#d4d4d4"
+  },
+  {
+   "name": "gray84",
+   "hex": "#d6d6d6"
+  },
+  {
+   "name": "gray85",
+   "hex": "#d9d9d9"
+  },
+  {
+   "name": "gray86",
+   "hex": "#dbdbdb"
+  },
+  {
+   "name": "gray87",
+   "hex": "#dedede"
+  },
+  {
+   "name": "gray88",
+   "hex": "#e0e0e0"
+  },
+  {
+   "name": "gray89",
+   "hex": "#e3e3e3"
+  },
+  {
+   "name": "gray9",
+   "hex": "#171717"
+  },
+  {
+   "name": "gray90",
+   "hex": "#e5e5e5"
+  },
+  {
+   "name": "gray91",
+   "hex": "#e8e8e8"
+  },
+  {
+   "name": "gray92",
+   "hex": "#ebebeb"
+  },
+  {
+   "name": "gray93",
+   "hex": "#ededed"
+  },
+  {
+   "name": "gray94",
+   "hex": "#f0f0f0"
+  },
+  {
+   "name": "gray95",
+   "hex": "#f2f2f2"
+  },
+  {
+   "name": "gray96",
+   "hex": "#f5f5f5"
+  },
+  {
+   "name": "gray97",
+   "hex": "#f7f7f7"
+  },
+  {
+   "name": "gray98",
+   "hex": "#fafafa"
+  },
+  {
+   "name": "gray99",
+   "hex": "#fcfcfc"
+  },
+  {
+   "name": "green",
+   "hex": "#00ff00"
+  },
+  {
+   "name": "green1",
+   "hex": "#00ff00"
+  },
+  {
+   "name": "green2",
+   "hex": "#00ee00"
+  },
+  {
+   "name": "green3",
+   "hex": "#00cd00"
+  },
+  {
+   "name": "green4",
+   "hex": "#008b00"
+  },
+  {
+   "name": "greenyellow",
+   "hex": "#adff2f"
+  },
+  {
+   "name": "grey",
+   "hex": "#bebebe"
+  },
+  {
+   "name": "grey0",
+   "hex": "#000000"
+  },
+  {
+   "name": "grey1",
+   "hex": "#030303"
+  },
+  {
+   "name": "grey10",
+   "hex": "#1a1a1a"
+  },
+  {
+   "name": "grey100",
+   "hex": "#ffffff"
+  },
+  {
+   "name": "grey11",
+   "hex": "#1c1c1c"
+  },
+  {
+   "name": "grey12",
+   "hex": "#1f1f1f"
+  },
+  {
+   "name": "grey13",
+   "hex": "#212121"
+  },
+  {
+   "name": "grey14",
+   "hex": "#242424"
+  },
+  {
+   "name": "grey15",
+   "hex": "#262626"
+  },
+  {
+   "name": "grey16",
+   "hex": "#292929"
+  },
+  {
+   "name": "grey17",
+   "hex": "#2b2b2b"
+  },
+  {
+   "name": "grey18",
+   "hex": "#2e2e2e"
+  },
+  {
+   "name": "grey19",
+   "hex": "#303030"
+  },
+  {
+   "name": "grey2",
+   "hex": "#050505"
+  },
+  {
+   "name": "grey20",
+   "hex": "#333333"
+  },
+  {
+   "name": "grey21",
+   "hex": "#363636"
+  },
+  {
+   "name": "grey22",
+   "hex": "#383838"
+  },
+  {
+   "name": "grey23",
+   "hex": "#3b3b3b"
+  },
+  {
+   "name": "grey24",
+   "hex": "#3d3d3d"
+  },
+  {
+   "name": "grey25",
+   "hex": "#404040"
+  },
+  {
+   "name": "grey26",
+   "hex": "#424242"
+  },
+  {
+   "name": "grey27",
+   "hex": "#454545"
+  },
+  {
+   "name": "grey28",
+   "hex": "#474747"
+  },
+  {
+   "name": "grey29",
+   "hex": "#4a4a4a"
+  },
+  {
+   "name": "grey3",
+   "hex": "#080808"
+  },
+  {
+   "name": "grey30",
+   "hex": "#4d4d4d"
+  },
+  {
+   "name": "grey31",
+   "hex": "#4f4f4f"
+  },
+  {
+   "name": "grey32",
+   "hex": "#525252"
+  },
+  {
+   "name": "grey33",
+   "hex": "#545454"
+  },
+  {
+   "name": "grey34",
+   "hex": "#575757"
+  },
+  {
+   "name": "grey35",
+   "hex": "#595959"
+  },
+  {
+   "name": "grey36",
+   "hex": "#5c5c5c"
+  },
+  {
+   "name": "grey37",
+   "hex": "#5e5e5e"
+  },
+  {
+   "name": "grey38",
+   "hex": "#616161"
+  },
+  {
+   "name": "grey39",
+   "hex": "#636363"
+  },
+  {
+   "name": "grey4",
+   "hex": "#0a0a0a"
+  },
+  {
+   "name": "grey40",
+   "hex": "#666666"
+  },
+  {
+   "name": "grey41",
+   "hex": "#696969"
+  },
+  {
+   "name": "grey42",
+   "hex": "#6b6b6b"
+  },
+  {
+   "name": "grey43",
+   "hex": "#6e6e6e"
+  },
+  {
+   "name": "grey44",
+   "hex": "#707070"
+  },
+  {
+   "name": "grey45",
+   "hex": "#737373"
+  },
+  {
+   "name": "grey46",
+   "hex": "#757575"
+  },
+  {
+   "name": "grey47",
+   "hex": "#787878"
+  },
+  {
+   "name": "grey48",
+   "hex": "#7a7a7a"
+  },
+  {
+   "name": "grey49",
+   "hex": "#7d7d7d"
+  },
+  {
+   "name": "grey5",
+   "hex": "#0d0d0d"
+  },
+  {
+   "name": "grey50",
+   "hex": "#7f7f7f"
+  },
+  {
+   "name": "grey51",
+   "hex": "#828282"
+  },
+  {
+   "name": "grey52",
+   "hex": "#858585"
+  },
+  {
+   "name": "grey53",
+   "hex": "#878787"
+  },
+  {
+   "name": "grey54",
+   "hex": "#8a8a8a"
+  },
+  {
+   "name": "grey55",
+   "hex": "#8c8c8c"
+  },
+  {
+   "name": "grey56",
+   "hex": "#8f8f8f"
+  },
+  {
+   "name": "grey57",
+   "hex": "#919191"
+  },
+  {
+   "name": "grey58",
+   "hex": "#949494"
+  },
+  {
+   "name": "grey59",
+   "hex": "#969696"
+  },
+  {
+   "name": "grey6",
+   "hex": "#0f0f0f"
+  },
+  {
+   "name": "grey60",
+   "hex": "#999999"
+  },
+  {
+   "name": "grey61",
+   "hex": "#9c9c9c"
+  },
+  {
+   "name": "grey62",
+   "hex": "#9e9e9e"
+  },
+  {
+   "name": "grey63",
+   "hex": "#a1a1a1"
+  },
+  {
+   "name": "grey64",
+   "hex": "#a3a3a3"
+  },
+  {
+   "name": "grey65",
+   "hex": "#a6a6a6"
+  },
+  {
+   "name": "grey66",
+   "hex": "#a8a8a8"
+  },
+  {
+   "name": "grey67",
+   "hex": "#ababab"
+  },
+  {
+   "name": "grey68",
+   "hex": "#adadad"
+  },
+  {
+   "name": "grey69",
+   "hex": "#b0b0b0"
+  },
+  {
+   "name": "grey7",
+   "hex": "#121212"
+  },
+  {
+   "name": "grey70",
+   "hex": "#b3b3b3"
+  },
+  {
+   "name": "grey71",
+   "hex": "#b5b5b5"
+  },
+  {
+   "name": "grey72",
+   "hex": "#b8b8b8"
+  },
+  {
+   "name": "grey73",
+   "hex": "#bababa"
+  },
+  {
+   "name": "grey74",
+   "hex": "#bdbdbd"
+  },
+  {
+   "name": "grey75",
+   "hex": "#bfbfbf"
+  },
+  {
+   "name": "grey76",
+   "hex": "#c2c2c2"
+  },
+  {
+   "name": "grey77",
+   "hex": "#c4c4c4"
+  },
+  {
+   "name": "grey78",
+   "hex": "#c7c7c7"
+  },
+  {
+   "name": "grey79",
+   "hex": "#c9c9c9"
+  },
+  {
+   "name": "grey8",
+   "hex": "#141414"
+  },
+  {
+   "name": "grey80",
+   "hex": "#cccccc"
+  },
+  {
+   "name": "grey81",
+   "hex": "#cfcfcf"
+  },
+  {
+   "name": "grey82",
+   "hex": "#d1d1d1"
+  },
+  {
+   "name": "grey83",
+   "hex": "#d4d4d4"
+  },
+  {
+   "name": "grey84",
+   "hex": "#d6d6d6"
+  },
+  {
+   "name": "grey85",
+   "hex": "#d9d9d9"
+  },
+  {
+   "name": "grey86",
+   "hex": "#dbdbdb"
+  },
+  {
+   "name": "grey87",
+   "hex": "#dedede"
+  },
+  {
+   "name": "grey88",
+   "hex": "#e0e0e0"
+  },
+  {
+   "name": "grey89",
+   "hex": "#e3e3e3"
+  },
+  {
+   "name": "grey9",
+   "hex": "#171717"
+  },
+  {
+   "name": "grey90",
+   "hex": "#e5e5e5"
+  },
+  {
+   "name": "grey91",
+   "hex": "#e8e8e8"
+  },
+  {
+   "name": "grey92",
+   "hex": "#ebebeb"
+  },
+  {
+   "name": "grey93",
+   "hex": "#ededed"
+  },
+  {
+   "name": "grey94",
+   "hex": "#f0f0f0"
+  },
+  {
+   "name": "grey95",
+   "hex": "#f2f2f2"
+  },
+  {
+   "name": "grey96",
+   "hex": "#f5f5f5"
+  },
+  {
+   "name": "grey97",
+   "hex": "#f7f7f7"
+  },
+  {
+   "name": "grey98",
+   "hex": "#fafafa"
+  },
+  {
+   "name": "grey99",
+   "hex": "#fcfcfc"
+  },
+  {
+   "name": "honeydew",
+   "hex": "#f0fff0"
+  },
+  {
+   "name": "honeydew1",
+   "hex": "#f0fff0"
+  },
+  {
+   "name": "honeydew2",
+   "hex": "#e0eee0"
+  },
+  {
+   "name": "honeydew3",
+   "hex": "#c1cdc1"
+  },
+  {
+   "name": "honeydew4",
+   "hex": "#838b83"
+  },
+  {
+   "name": "hotpink",
+   "hex": "#ff69b4"
+  },
+  {
+   "name": "hotpink1",
+   "hex": "#ff6eb4"
+  },
+  {
+   "name": "hotpink2",
+   "hex": "#ee6aa7"
+  },
+  {
+   "name": "hotpink3",
+   "hex": "#cd6090"
+  },
+  {
+   "name": "hotpink4",
+   "hex": "#8b3a62"
+  },
+  {
+   "name": "indianred",
+   "hex": "#cd5c5c"
+  },
+  {
+   "name": "indianred1",
+   "hex": "#ff6a6a"
+  },
+  {
+   "name": "indianred2",
+   "hex": "#ee6363"
+  },
+  {
+   "name": "indianred3",
+   "hex": "#cd5555"
+  },
+  {
+   "name": "indianred4",
+   "hex": "#8b3a3a"
+  },
+  {
+   "name": "indigo",
+   "hex": "#4b0082"
+  },
+  {
+   "name": "ivory",
+   "hex": "#fffff0"
+  },
+  {
+   "name": "ivory1",
+   "hex": "#fffff0"
+  },
+  {
+   "name": "ivory2",
+   "hex": "#eeeee0"
+  },
+  {
+   "name": "ivory3",
+   "hex": "#cdcdc1"
+  },
+  {
+   "name": "ivory4",
+   "hex": "#8b8b83"
+  },
+  {
+   "name": "khaki",
+   "hex": "#f0e68c"
+  },
+  {
+   "name": "khaki1",
+   "hex": "#fff68f"
+  },
+  {
+   "name": "khaki2",
+   "hex": "#eee685"
+  },
+  {
+   "name": "khaki3",
+   "hex": "#cdc673"
+  },
+  {
+   "name": "khaki4",
+   "hex": "#8b864e"
+  },
+  {
+   "name": "lavender",
+   "hex": "#e6e6fa"
+  },
+  {
+   "name": "lavenderblush",
+   "hex": "#fff0f5"
+  },
+  {
+   "name": "lavenderblush1",
+   "hex": "#fff0f5"
+  },
+  {
+   "name": "lavenderblush2",
+   "hex": "#eee0e5"
+  },
+  {
+   "name": "lavenderblush3",
+   "hex": "#cdc1c5"
+  },
+  {
+   "name": "lavenderblush4",
+   "hex": "#8b8386"
+  },
+  {
+   "name": "lawngreen",
+   "hex": "#7cfc00"
+  },
+  {
+   "name": "lemonchiffon",
+   "hex": "#fffacd"
+  },
+  {
+   "name": "lemonchiffon1",
+   "hex": "#fffacd"
+  },
+  {
+   "name": "lemonchiffon2",
+   "hex": "#eee9bf"
+  },
+  {
+   "name": "lemonchiffon3",
+   "hex": "#cdc9a5"
+  },
+  {
+   "name": "lemonchiffon4",
+   "hex": "#8b8970"
+  },
+  {
+   "name": "lightblue",
+   "hex": "#add8e6"
+  },
+  {
+   "name": "lightblue1",
+   "hex": "#bfefff"
+  },
+  {
+   "name": "lightblue2",
+   "hex": "#b2dfee"
+  },
+  {
+   "name": "lightblue3",
+   "hex": "#9ac0cd"
+  },
+  {
+   "name": "lightblue4",
+   "hex": "#68838b"
+  },
+  {
+   "name": "lightcoral",
+   "hex": "#f08080"
+  },
+  {
+   "name": "lightcyan",
+   "hex": "#e0ffff"
+  },
+  {
+   "name": "lightcyan1",
+   "hex": "#e0ffff"
+  },
+  {
+   "name": "lightcyan2",
+   "hex": "#d1eeee"
+  },
+  {
+   "name": "lightcyan3",
+   "hex": "#b4cdcd"
+  },
+  {
+   "name": "lightcyan4",
+   "hex": "#7a8b8b"
+  },
+  {
+   "name": "lightgoldenrod",
+   "hex": "#eedd82"
+  },
+  {
+   "name": "lightgoldenrod1",
+   "hex": "#ffec8b"
+  },
+  {
+   "name": "lightgoldenrod2",
+   "hex": "#eedc82"
+  },
+  {
+   "name": "lightgoldenrod3",
+   "hex": "#cdbe70"
+  },
+  {
+   "name": "lightgoldenrod4",
+   "hex": "#8b814c"
+  },
+  {
+   "name": "lightgoldenrodyellow",
+   "hex": "#fafad2"
+  },
+  {
+   "name": "lightgray",
+   "hex": "#d3d3d3"
+  },
+  {
+   "name": "lightgreen",
+   "hex": "#90ee90"
+  },
+  {
+   "name": "lightgrey",
+   "hex": "#d3d3d3"
+  },
+  {
+   "name": "lightpink",
+   "hex": "#ffb6c1"
+  },
+  {
+   "name": "lightpink1",
+   "hex": "#ffaeb9"
+  },
+  {
+   "name": "lightpink2",
+   "hex": "#eea2ad"
+  },
+  {
+   "name": "lightpink3",
+   "hex": "#cd8c95"
+  },
+  {
+   "name": "lightpink4",
+   "hex": "#8b5f65"
+  },
+  {
+   "name": "lightsalmon",
+   "hex": "#ffa07a"
+  },
+  {
+   "name": "lightsalmon1",
+   "hex": "#ffa07a"
+  },
+  {
+   "name": "lightsalmon2",
+   "hex": "#ee9572"
+  },
+  {
+   "name": "lightsalmon3",
+   "hex": "#cd8162"
+  },
+  {
+   "name": "lightsalmon4",
+   "hex": "#8b5742"
+  },
+  {
+   "name": "lightseagreen",
+   "hex": "#20b2aa"
+  },
+  {
+   "name": "lightskyblue",
+   "hex": "#87cefa"
+  },
+  {
+   "name": "lightskyblue1",
+   "hex": "#b0e2ff"
+  },
+  {
+   "name": "lightskyblue2",
+   "hex": "#a4d3ee"
+  },
+  {
+   "name": "lightskyblue3",
+   "hex": "#8db6cd"
+  },
+  {
+   "name": "lightskyblue4",
+   "hex": "#607b8b"
+  },
+  {
+   "name": "lightslateblue",
+   "hex": "#8470ff"
+  },
+  {
+   "name": "lightslategray",
+   "hex": "#778899"
+  },
+  {
+   "name": "lightslategrey",
+   "hex": "#778899"
+  },
+  {
+   "name": "lightsteelblue",
+   "hex": "#b0c4de"
+  },
+  {
+   "name": "lightsteelblue1",
+   "hex": "#cae1ff"
+  },
+  {
+   "name": "lightsteelblue2",
+   "hex": "#bcd2ee"
+  },
+  {
+   "name": "lightsteelblue3",
+   "hex": "#a2b5cd"
+  },
+  {
+   "name": "lightsteelblue4",
+   "hex": "#6e7b8b"
+  },
+  {
+   "name": "lightyellow",
+   "hex": "#ffffe0"
+  },
+  {
+   "name": "lightyellow1",
+   "hex": "#ffffe0"
+  },
+  {
+   "name": "lightyellow2",
+   "hex": "#eeeed1"
+  },
+  {
+   "name": "lightyellow3",
+   "hex": "#cdcdb4"
+  },
+  {
+   "name": "lightyellow4",
+   "hex": "#8b8b7a"
+  },
+  {
+   "name": "lime",
+   "hex": "#00ff00"
+  },
+  {
+   "name": "limegreen",
+   "hex": "#32cd32"
+  },
+  {
+   "name": "linen",
+   "hex": "#faf0e6"
+  },
+  {
+   "name": "magenta",
+   "hex": "#ff00ff"
+  },
+  {
+   "name": "magenta1",
+   "hex": "#ff00ff"
+  },
+  {
+   "name": "magenta2",
+   "hex": "#ee00ee"
+  },
+  {
+   "name": "magenta3",
+   "hex": "#cd00cd"
+  },
+  {
+   "name": "magenta4",
+   "hex": "#8b008b"
+  },
+  {
+   "name": "maroon",
+   "hex": "#b03060"
+  },
+  {
+   "name": "maroon1",
+   "hex": "#ff34b3"
+  },
+  {
+   "name": "maroon2",
+   "hex": "#ee30a7"
+  },
+  {
+   "name": "maroon3",
+   "hex": "#cd2990"
+  },
+  {
+   "name": "maroon4",
+   "hex": "#8b1c62"
+  },
+  {
+   "name": "mediumaquamarine",
+   "hex": "#66cdaa"
+  },
+  {
+   "name": "mediumblue",
+   "hex": "#0000cd"
+  },
+  {
+   "name": "mediumorchid",
+   "hex": "#ba55d3"
+  },
+  {
+   "name": "mediumorchid1",
+   "hex": "#e066ff"
+  },
+  {
+   "name": "mediumorchid2",
+   "hex": "#d15fee"
+  },
+  {
+   "name": "mediumorchid3",
+   "hex": "#b452cd"
+  },
+  {
+   "name": "mediumorchid4",
+   "hex": "#7a378b"
+  },
+  {
+   "name": "mediumpurple",
+   "hex": "#9370db"
+  },
+  {
+   "name": "mediumpurple1",
+   "hex": "#ab82ff"
+  },
+  {
+   "name": "mediumpurple2",
+   "hex": "#9f79ee"
+  },
+  {
+   "name": "mediumpurple3",
+   "hex": "#8968cd"
+  },
+  {
+   "name": "mediumpurple4",
+   "hex": "#5d478b"
+  },
+  {
+   "name": "mediumseagreen",
+   "hex": "#3cb371"
+  },
+  {
+   "name": "mediumslateblue",
+   "hex": "#7b68ee"
+  },
+  {
+   "name": "mediumspringgreen",
+   "hex": "#00fa9a"
+  },
+  {
+   "name": "mediumturquoise",
+   "hex": "#48d1cc"
+  },
+  {
+   "name": "mediumvioletred",
+   "hex": "#c71585"
+  },
+  {
+   "name": "midnightblue",
+   "hex": "#191970"
+  },
+  {
+   "name": "mintcream",
+   "hex": "#f5fffa"
+  },
+  {
+   "name": "mistyrose",
+   "hex": "#ffe4e1"
+  },
+  {
+   "name": "mistyrose1",
+   "hex": "#ffe4e1"
+  },
+  {
+   "name": "mistyrose2",
+   "hex": "#eed5d2"
+  },
+  {
+   "name": "mistyrose3",
+   "hex": "#cdb7b5"
+  },
+  {
+   "name": "mistyrose4",
+   "hex": "#8b7d7b"
+  },
+  {
+   "name": "moccasin",
+   "hex": "#ffe4b5"
+  },
+  {
+   "name": "navajowhite",
+   "hex": "#ffdead"
+  },
+  {
+   "name": "navajowhite1",
+   "hex": "#ffdead"
+  },
+  {
+   "name": "navajowhite2",
+   "hex": "#eecfa1"
+  },
+  {
+   "name": "navajowhite3",
+   "hex": "#cdb38b"
+  },
+  {
+   "name": "navajowhite4",
+   "hex": "#8b795e"
+  },
+  {
+   "name": "navy",
+   "hex": "#000080"
+  },
+  {
+   "name": "navyblue",
+   "hex": "#000080"
+  },
+  {
+   "name": "oldlace",
+   "hex": "#fdf5e6"
+  },
+  {
+   "name": "olive",
+   "hex": "#808000"
+  },
+  {
+   "name": "olivedrab",
+   "hex": "#6b8e23"
+  },
+  {
+   "name": "olivedrab1",
+   "hex": "#c0ff3e"
+  },
+  {
+   "name": "olivedrab2",
+   "hex": "#b3ee3a"
+  },
+  {
+   "name": "olivedrab3",
+   "hex": "#9acd32"
+  },
+  {
+   "name": "olivedrab4",
+   "hex": "#698b22"
+  },
+  {
+   "name": "orange",
+   "hex": "#ffa500"
+  },
+  {
+   "name": "orange1",
+   "hex": "#ffa500"
+  },
+  {
+   "name": "orange2",
+   "hex": "#ee9a00"
+  },
+  {
+   "name": "orange3",
+   "hex": "#cd8500"
+  },
+  {
+   "name": "orange4",
+   "hex": "#8b5a00"
+  },
+  {
+   "name": "orangered",
+   "hex": "#ff4500"
+  },
+  {
+   "name": "orangered1",
+   "hex": "#ff4500"
+  },
+  {
+   "name": "orangered2",
+   "hex": "#ee4000"
+  },
+  {
+   "name": "orangered3",
+   "hex": "#cd3700"
+  },
+  {
+   "name": "orangered4",
+   "hex": "#8b2500"
+  },
+  {
+   "name": "orchid",
+   "hex": "#da70d6"
+  },
+  {
+   "name": "orchid1",
+   "hex": "#ff83fa"
+  },
+  {
+   "name": "orchid2",
+   "hex": "#ee7ae9"
+  },
+  {
+   "name": "orchid3",
+   "hex": "#cd69c9"
+  },
+  {
+   "name": "orchid4",
+   "hex": "#8b4789"
+  },
+  {
+   "name": "palegoldenrod",
+   "hex": "#eee8aa"
+  },
+  {
+   "name": "palegreen",
+   "hex": "#98fb98"
+  },
+  {
+   "name": "palegreen1",
+   "hex": "#9aff9a"
+  },
+  {
+   "name": "palegreen2",
+   "hex": "#90ee90"
+  },
+  {
+   "name": "palegreen3",
+   "hex": "#7ccd7c"
+  },
+  {
+   "name": "palegreen4",
+   "hex": "#548b54"
+  },
+  {
+   "name": "paleturquoise",
+   "hex": "#afeeee"
+  },
+  {
+   "name": "paleturquoise1",
+   "hex": "#bbffff"
+  },
+  {
+   "name": "paleturquoise2",
+   "hex": "#aeeeee"
+  },
+  {
+   "name": "paleturquoise3",
+   "hex": "#96cdcd"
+  },
+  {
+   "name": "paleturquoise4",
+   "hex": "#668b8b"
+  },
+  {
+   "name": "palevioletred",
+   "hex": "#db7093"
+  },
+  {
+   "name": "palevioletred1",
+   "hex": "#ff82ab"
+  },
+  {
+   "name": "palevioletred2",
+   "hex": "#ee799f"
+  },
+  {
+   "name": "palevioletred3",
+   "hex": "#cd6889"
+  },
+  {
+   "name": "palevioletred4",
+   "hex": "#8b475d"
+  },
+  {
+   "name": "papayawhip",
+   "hex": "#ffefd5"
+  },
+  {
+   "name": "peachpuff",
+   "hex": "#ffdab9"
+  },
+  {
+   "name": "peachpuff1",
+   "hex": "#ffdab9"
+  },
+  {
+   "name": "peachpuff2",
+   "hex": "#eecbad"
+  },
+  {
+   "name": "peachpuff3",
+   "hex": "#cdaf95"
+  },
+  {
+   "name": "peachpuff4",
+   "hex": "#8b7765"
+  },
+  {
+   "name": "peru",
+   "hex": "#cd853f"
+  },
+  {
+   "name": "pink",
+   "hex": "#ffc0cb"
+  },
+  {
+   "name": "pink1",
+   "hex": "#ffb5c5"
+  },
+  {
+   "name": "pink2",
+   "hex": "#eea9b8"
+  },
+  {
+   "name": "pink3",
+   "hex": "#cd919e"
+  },
+  {
+   "name": "pink4",
+   "hex": "#8b636c"
+  },
+  {
+   "name": "plum",
+   "hex": "#dda0dd"
+  },
+  {
+   "name": "plum1",
+   "hex": "#ffbbff"
+  },
+  {
+   "name": "plum2",
+   "hex": "#eeaeee"
+  },
+  {
+   "name": "plum3",
+   "hex": "#cd96cd"
+  },
+  {
+   "name": "plum4",
+   "hex": "#8b668b"
+  },
+  {
+   "name": "powderblue",
+   "hex": "#b0e0e6"
+  },
+  {
+   "name": "purple",
+   "hex": "#a020f0"
+  },
+  {
+   "name": "purple1",
+   "hex": "#9b30ff"
+  },
+  {
+   "name": "purple2",
+   "hex": "#912cee"
+  },
+  {
+   "name": "purple3",
+   "hex": "#7d26cd"
+  },
+  {
+   "name": "purple4",
+   "hex": "#551a8b"
+  },
+  {
+   "name": "red",
+   "hex": "#ff0000"
+  },
+  {
+   "name": "red1",
+   "hex": "#ff0000"
+  },
+  {
+   "name": "red2",
+   "hex": "#ee0000"
+  },
+  {
+   "name": "red3",
+   "hex": "#cd0000"
+  },
+  {
+   "name": "red4",
+   "hex": "#8b0000"
+  },
+  {
+   "name": "rosybrown",
+   "hex": "#bc8f8f"
+  },
+  {
+   "name": "rosybrown1",
+   "hex": "#ffc1c1"
+  },
+  {
+   "name": "rosybrown2",
+   "hex": "#eeb4b4"
+  },
+  {
+   "name": "rosybrown3",
+   "hex": "#cd9b9b"
+  },
+  {
+   "name": "rosybrown4",
+   "hex": "#8b6969"
+  },
+  {
+   "name": "royalblue",
+   "hex": "#4169e1"
+  },
+  {
+   "name": "royalblue1",
+   "hex": "#4876ff"
+  },
+  {
+   "name": "royalblue2",
+   "hex": "#436eee"
+  },
+  {
+   "name": "royalblue3",
+   "hex": "#3a5fcd"
+  },
+  {
+   "name": "royalblue4",
+   "hex": "#27408b"
+  },
+  {
+   "name": "saddlebrown",
+   "hex": "#8b4513"
+  },
+  {
+   "name": "salmon",
+   "hex": "#fa8072"
+  },
+  {
+   "name": "salmon1",
+   "hex": "#ff8c69"
+  },
+  {
+   "name": "salmon2",
+   "hex": "#ee8262"
+  },
+  {
+   "name": "salmon3",
+   "hex": "#cd7054"
+  },
+  {
+   "name": "salmon4",
+   "hex": "#8b4c39"
+  },
+  {
+   "name": "sandybrown",
+   "hex": "#f4a460"
+  },
+  {
+   "name": "seagreen",
+   "hex": "#2e8b57"
+  },
+  {
+   "name": "seagreen1",
+   "hex": "#54ff9f"
+  },
+  {
+   "name": "seagreen2",
+   "hex": "#4eee94"
+  },
+  {
+   "name": "seagreen3",
+   "hex": "#43cd80"
+  },
+  {
+   "name": "seagreen4",
+   "hex": "#2e8b57"
+  },
+  {
+   "name": "seashell",
+   "hex": "#fff5ee"
+  },
+  {
+   "name": "seashell1",
+   "hex": "#fff5ee"
+  },
+  {
+   "name": "seashell2",
+   "hex": "#eee5de"
+  },
+  {
+   "name": "seashell3",
+   "hex": "#cdc5bf"
+  },
+  {
+   "name": "seashell4",
+   "hex": "#8b8682"
+  },
+  {
+   "name": "sienna",
+   "hex": "#a0522d"
+  },
+  {
+   "name": "sienna1",
+   "hex": "#ff8247"
+  },
+  {
+   "name": "sienna2",
+   "hex": "#ee7942"
+  },
+  {
+   "name": "sienna3",
+   "hex": "#cd6839"
+  },
+  {
+   "name": "sienna4",
+   "hex": "#8b4726"
+  },
+  {
+   "name": "silver",
+   "hex": "#c0c0c0"
+  },
+  {
+   "name": "skyblue",
+   "hex": "#87ceeb"
+  },
+  {
+   "name": "skyblue1",
+   "hex": "#87ceff"
+  },
+  {
+   "name": "skyblue2",
+   "hex": "#7ec0ee"
+  },
+  {
+   "name": "skyblue3",
+   "hex": "#6ca6cd"
+  },
+  {
+   "name": "skyblue4",
+   "hex": "#4a708b"
+  },
+  {
+   "name": "slateblue",
+   "hex": "#6a5acd"
+  },
+  {
+   "name": "slateblue1",
+   "hex": "#836fff"
+  },
+  {
+   "name": "slateblue2",
+   "hex": "#7a67ee"
+  },
+  {
+   "name": "slateblue3",
+   "hex": "#6959cd"
+  },
+  {
+   "name": "slateblue4",
+   "hex": "#473c8b"
+  },
+  {
+   "name": "slategray",
+   "hex": "#708090"
+  },
+  {
+   "name": "slategray1",
+   "hex": "#c6e2ff"
+  },
+  {
+   "name": "slategray2",
+   "hex": "#b9d3ee"
+  },
+  {
+   "name": "slategray3",
+   "hex": "#9fb6cd"
+  },
+  {
+   "name": "slategray4",
+   "hex": "#6c7b8b"
+  },
+  {
+   "name": "slategrey",
+   "hex": "#708090"
+  },
+  {
+   "name": "snow",
+   "hex": "#fffafa"
+  },
+  {
+   "name": "snow1",
+   "hex": "#fffafa"
+  },
+  {
+   "name": "snow2",
+   "hex": "#eee9e9"
+  },
+  {
+   "name": "snow3",
+   "hex": "#cdc9c9"
+  },
+  {
+   "name": "snow4",
+   "hex": "#8b8989"
+  },
+  {
+   "name": "springgreen",
+   "hex": "#00ff7f"
+  },
+  {
+   "name": "springgreen1",
+   "hex": "#00ff7f"
+  },
+  {
+   "name": "springgreen2",
+   "hex": "#00ee76"
+  },
+  {
+   "name": "springgreen3",
+   "hex": "#00cd66"
+  },
+  {
+   "name": "springgreen4",
+   "hex": "#008b45"
+  },
+  {
+   "name": "steelblue",
+   "hex": "#4682b4"
+  },
+  {
+   "name": "steelblue1",
+   "hex": "#63b8ff"
+  },
+  {
+   "name": "steelblue2",
+   "hex": "#5cacee"
+  },
+  {
+   "name": "steelblue3",
+   "hex": "#4f94cd"
+  },
+  {
+   "name": "steelblue4",
+   "hex": "#36648b"
+  },
+  {
+   "name": "tan",
+   "hex": "#d2b48c"
+  },
+  {
+   "name": "tan1",
+   "hex": "#ffa54f"
+  },
+  {
+   "name": "tan2",
+   "hex": "#ee9a49"
+  },
+  {
+   "name": "tan3",
+   "hex": "#cd853f"
+  },
+  {
+   "name": "tan4",
+   "hex": "#8b5a2b"
+  },
+  {
+   "name": "teal",
+   "hex": "#008080"
+  },
+  {
+   "name": "thistle",
+   "hex": "#d8bfd8"
+  },
+  {
+   "name": "thistle1",
+   "hex": "#ffe1ff"
+  },
+  {
+   "name": "thistle2",
+   "hex": "#eed2ee"
+  },
+  {
+   "name": "thistle3",
+   "hex": "#cdb5cd"
+  },
+  {
+   "name": "thistle4",
+   "hex": "#8b7b8b"
+  },
+  {
+   "name": "tomato",
+   "hex": "#ff6347"
+  },
+  {
+   "name": "tomato1",
+   "hex": "#ff6347"
+  },
+  {
+   "name": "tomato2",
+   "hex": "#ee5c42"
+  },
+  {
+   "name": "tomato3",
+   "hex": "#cd4f39"
+  },
+  {
+   "name": "tomato4",
+   "hex": "#8b3626"
+  },
+  {
+   "name": "turquoise",
+   "hex": "#40e0d0"
+  },
+  {
+   "name": "turquoise1",
+   "hex": "#00f5ff"
+  },
+  {
+   "name": "turquoise2",
+   "hex": "#00e5ee"
+  },
+  {
+   "name": "turquoise3",
+   "hex": "#00c5cd"
+  },
+  {
+   "name": "turquoise4",
+   "hex": "#00868b"
+  },
+  {
+   "name": "violet",
+   "hex": "#ee82ee"
+  },
+  {
+   "name": "violetred",
+   "hex": "#d02090"
+  },
+  {
+   "name": "violetred1",
+   "hex": "#ff3e96"
+  },
+  {
+   "name": "violetred2",
+   "hex": "#ee3a8c"
+  },
+  {
+   "name": "violetred3",
+   "hex": "#cd3278"
+  },
+  {
+   "name": "violetred4",
+   "hex": "#8b2252"
+  },
+  {
+   "name": "wheat",
+   "hex": "#f5deb3"
+  },
+  {
+   "name": "wheat1",
+   "hex": "#ffe7ba"
+  },
+  {
+   "name": "wheat2",
+   "hex": "#eed8ae"
+  },
+  {
+   "name": "wheat3",
+   "hex": "#cdba96"
+  },
+  {
+   "name": "wheat4",
+   "hex": "#8b7e66"
+  },
+  {
+   "name": "white",
+   "hex": "#ffffff"
+  },
+  {
+   "name": "whitesmoke",
+   "hex": "#f5f5f5"
+  },
+  {
+   "name": "yellow",
+   "hex": "#ffff00"
+  },
+  {
+   "name": "yellow1",
+   "hex": "#ffff00"
+  },
+  {
+   "name": "yellow2",
+   "hex": "#eeee00"
+  },
+  {
+   "name": "yellow3",
+   "hex": "#cdcd00"
+  },
+  {
+   "name": "yellow4",
+   "hex": "#8b8b00"
+  },
+  {
+   "name": "yellowgreen",
+   "hex": "#9acd32"
+  }
+ ],
+ "color_params": [
+  {
+   "function": "background",
+   "parameter": "color"
+  },
+  {
+   "function": "fill",
+   "parameter": "color"
+  },
+  {
+   "function": "lerp_color",
+   "parameter": "c1"
+  },
+  {
+   "function": "lerp_color",
+   "parameter": "c2"
+  },
+  {
+   "function": "mark",
+   "parameter": "fill"
+  },
+  {
+   "function": "mark",
+   "parameter": "stroke"
+  },
+  {
+   "function": "shadow",
+   "parameter": "color"
+  },
+  {
+   "function": "stroke",
+   "parameter": "color"
+  },
+  {
+   "function": "text",
+   "parameter": "color"
+  },
+  {
+   "function": "text_box",
+   "parameter": "color"
+  }
+ ]
+}

@@ -8,11 +8,16 @@ from __future__ import annotations
 import atexit
 import inspect
 import sys
+from collections.abc import Callable
 from contextlib import AbstractContextManager
+from typing import TYPE_CHECKING, Any
 
 from . import exploring as _exploring  # S-132 Play: variations and keep (the Play section at the end)
 from .color import ColorLike as Color
 from .controls import Button, Checkbox, Slider  # noqa: F401  (public through f.create_slider and friends, S-101)
+from ._options import (ArcMode, BlendMode, ColorMode, CursorKind, EllipseMode, FilterKind, ImageMode, KeyName,  # noqa: F401
+                       PageName, RectMode, SaveText, StrokeCap, StrokeJoin, TextAlignX, TextAlignY, TextStyle,
+                       Tuning, Wave)   # the option words as Literal types (S-174)
 from .marks import NOT_GIVEN, Mark, mark_from_path, mark_from_svg, refuse_in_mark  # S-132: marks (the Marks section at the end)
 from .paths import PathBuilder
 from .typography import Font
@@ -21,6 +26,12 @@ from .sketch import DEFAULT_SHADOW_COLOR, Sketch
 from .surface import Area, Grid  # noqa: F401  (S-132 part 4: returned by f.area and f.grid, contract G1)
 from .formatted import FormattedString  # noqa: F401  (public: f.FormattedString, S-091)
 from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
+
+if TYPE_CHECKING:                                    # only for the annotations below; nothing is imported at run time
+    from .hindustani import Raga, Tala
+    from .microphone_input import Microphone
+    from .paint import Gradient
+    from .sound import Sound
 
 _active: Sketch | None = None
 
@@ -322,7 +333,7 @@ def _share_with_caller() -> None:
 
 
 # ---- window / lifecycle
-def size(width: int | str, height: int | None = None, *, title: str = "funground", fps: int | None = None,
+def size(width: int | PageName | str, height: int | None = None, *, title: str = "funground", fps: int | None = None,
          margin: float | tuple = 0, landscape: bool = False) -> None:
     """Create the canvas, or change its size.
 
@@ -388,7 +399,7 @@ def show() -> None:
     canvas_sketch().show()
 
 
-def new_page(width: int | str | None = None, height: int | None = None) -> None:
+def new_page(width: int | PageName | str | None = None, height: int | None = None) -> None:
     """End this page and start a blank one.
 
     This is for scripts (a file with no draw()). Colours, text settings and other styles carry over. The transform starts afresh. After a few pages, save("x.pdf") writes every page. PNG and SVG write x_1.png, x_2.png and so on. In a window, the arrow keys turn the pages.
@@ -425,7 +436,7 @@ def page_count() -> int:
     return canvas_sketch().page_count()
 
 
-def page_size(name: str, landscape: bool = False) -> tuple[int, int]:
+def page_size(name: PageName | str, landscape: bool = False) -> tuple[int, int]:
     """Return the size of a named page, in points.
 
     Add "Landscape" to the name, or give landscape=True, to turn the page on its side.
@@ -710,7 +721,7 @@ def year() -> int:
     return Sketch.year()
 
 
-def save(path: str, *, text: str = "live", bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None:
+def save(path: str, *, text: SaveText = "live", bleed: float = 0, marks: bool = False, dpi: float | None = None) -> None:
     """Save this frame to a picture or document file.
 
     The file is written when the frame is complete, and it holds everything that frame drew, including what comes after the call. In a script, it writes at once. A .png holds pixels. A .pdf or .svg holds a true vector drawing. A .gif or .mp4 records an animation (see save_gif and save_movie). Any other extension is an error that names the choices. In a document of several pages, a PDF holds every page.
@@ -776,7 +787,7 @@ def full_screen() -> None:
     _share_with_caller()
 
 
-def cursor(kind: str = "arrow") -> None:
+def cursor(kind: CursorKind = "arrow") -> None:
     """Choose the shape of the mouse pointer over the canvas.
 
     Arguments:
@@ -955,7 +966,7 @@ def rect(x: float, y: float, width: float, height: float, *radii: float) -> None
     active_sketch().rect(x, y, width, height, *radii)
 
 
-def rect_mode(mode: str) -> None:
+def rect_mode(mode: RectMode) -> None:
     """Choose how rect() and square() read their numbers.
 
     The choice is saved by push() and brought back by pop().
@@ -975,7 +986,7 @@ def rect_mode(mode: str) -> None:
     active_sketch().rect_mode(mode)
 
 
-def ellipse_mode(mode: str) -> None:
+def ellipse_mode(mode: EllipseMode) -> None:
     """Choose how ellipse(), circle() and arc() read their numbers.
 
     The choice is saved by push() and brought back by pop().
@@ -995,7 +1006,7 @@ def ellipse_mode(mode: str) -> None:
     active_sketch().ellipse_mode(mode)
 
 
-def image_mode(mode: str) -> None:
+def image_mode(mode: ImageMode) -> None:
     """Choose how image() reads its numbers.
 
     The choice is saved by push() and brought back by pop().
@@ -1122,7 +1133,7 @@ def polygon(points: list[tuple[float, float]]) -> None:
     active_sketch().polygon(points)
 
 
-def arc(x: float, y: float, width: float, height: float, start: float, stop: float, mode: str = "open") -> None:
+def arc(x: float, y: float, width: float, height: float, start: float, stop: float, mode: ArcMode = "open") -> None:
     """Draw part of an ellipse.
 
     Angles are in degrees and go clockwise, starting from the right (3 o'clock). If stop is less than start, 360 is added to it. An arc is never more than one full turn. ellipse_mode() changes how x, y, width and height are read.
@@ -1268,7 +1279,7 @@ def current_font() -> Font:
     return canvas_sketch().current_font()
 
 
-def text_align(horizontal: str, vertical: str | None = None) -> None:
+def text_align(horizontal: TextAlignX, vertical: TextAlignY | None = None) -> None:
     """Choose which point of the text (x, y) means.
 
     The default is left and top. The choice is saved by push() and brought back by pop().
@@ -1407,7 +1418,7 @@ def fit_text_size(message: object, width: float, height: float | None = None) ->
 
 
 # ---- style
-def color(*values):
+def color(*values: Any) -> Color:
     """Make a colour that you can read and reuse.
 
     You can pass it to fill(), stroke(), background() and so on. It has these parts: red, green, blue and alpha (each 0 to 255), hue (0 to 360), and saturation, brightness and lightness (each 0 to 100). Numbers follow the colour mode. A tuple always means red, green, blue. Use hsb() or hsl() to give a hue.
@@ -1436,7 +1447,7 @@ def color(*values):
     raise ValueError("f.color() takes one colour, a grey and alpha, or 3 or 4 numbers (red, green, blue[, alpha])")
 
 
-def hsb(hue: float, saturation: float, brightness: float, alpha: float = 255):
+def hsb(hue: float, saturation: float, brightness: float, alpha: float = 255) -> Color:
     """Make a colour from hue, saturation and brightness.
 
     The ranges are always these, whatever the colour mode is.
@@ -1460,7 +1471,7 @@ def hsb(hue: float, saturation: float, brightness: float, alpha: float = 255):
     return _Color.from_hsb(hue, saturation, brightness, alpha)
 
 
-def hsl(hue: float, saturation: float, lightness: float, alpha: float = 255):
+def hsl(hue: float, saturation: float, lightness: float, alpha: float = 255) -> Color:
     """Make a colour from hue, saturation and lightness.
 
     The ranges are always these, whatever the colour mode is.
@@ -1484,7 +1495,7 @@ def hsl(hue: float, saturation: float, lightness: float, alpha: float = 255):
     return _Color.from_hsl(hue, saturation, lightness, alpha)
 
 
-def cmyk(cyan: float, magenta: float, yellow: float, black: float, alpha: float = 255):
+def cmyk(cyan: float, magenta: float, yellow: float, black: float, alpha: float = 255) -> Color:
     """Make a colour from printing inks: cyan, magenta, yellow and black.
 
     Use it where you want an exact print colour. A PDF you save holds exactly these ink amounts, so a print shop gets your numbers, not a guess. On the screen, in a PNG and in an SVG the colour is shown as the nearest red, green and blue. That is an approximation: a screen cannot show ink. The ranges are always these, whatever the colour mode is.
@@ -1513,7 +1524,7 @@ def cmyk(cyan: float, magenta: float, yellow: float, black: float, alpha: float 
     return _Color.from_cmyk(cyan, magenta, yellow, black, alpha)
 
 
-def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors, stops=None):
+def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors: Any, stops: Any = None) -> Gradient:
     """Make a gradient: colours blended along a line.
 
     Use it like a colour in fill(), stroke() or background().
@@ -1538,7 +1549,7 @@ def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors, stops=No
     return make(x1, y1, x2, y2, colors, stops, canvas_sketch().read_color)
 
 
-def radial_gradient(x: float, y: float, radius: float, colors, stops=None):
+def radial_gradient(x: float, y: float, radius: float, colors: Any, stops: Any = None) -> Gradient:
     """Make a gradient: colours blended outward from a point.
 
     The first colour is at the centre. Use it like a colour in fill(), stroke() or background().
@@ -1562,7 +1573,7 @@ def radial_gradient(x: float, y: float, radius: float, colors, stops=None):
     return make(x, y, radius, colors, stops, canvas_sketch().read_color)
 
 
-def color_mode(mode: str, max1: float | None = None, max2: float | None = None,
+def color_mode(mode: ColorMode, max1: float | None = None, max2: float | None = None,
                max3: float | None = None, max_alpha: float | None = None) -> None:
     """Choose how numbers become a colour.
 
@@ -1587,7 +1598,7 @@ def color_mode(mode: str, max1: float | None = None, max2: float | None = None,
     active_sketch().color_mode(mode, max1, max2, max3, max_alpha)
 
 
-def blend_mode(mode: str) -> None:
+def blend_mode(mode: BlendMode) -> None:
     """Choose how what you draw next mixes with what is already there.
 
     "multiply" darkens like overlapping inks, "screen" lightens like overlapping lights, and so on: the table below says what each word does. The mode applies to shapes, lines, text and pictures drawn after it, until you choose another. The choice is saved by push() and brought back by pop(). The names are the usual ones in drawing programs (Photoshop, Illustrator, DrawBot's blendMode()); DrawBot's "colorDodge", "colorBurn", "softLight" and "hardLight" are "dodge", "burn", "soft_light" and "hard_light" here, and its "plusLighter" is "add".
@@ -1654,7 +1665,7 @@ def no_shadow() -> None:
     active_sketch().no_shadow()
 
 
-def lerp_color(c1: Color, c2: Color, amount: float):
+def lerp_color(c1: Color, c2: Color, amount: float) -> Color:
     """Return a colour part of the way between two colours.
 
     It mixes red, green, blue and alpha.
@@ -1765,7 +1776,7 @@ def stroke_width(pixels: int) -> None:
     active_sketch().stroke_width(pixels)
 
 
-def stroke_cap(cap: str) -> None:
+def stroke_cap(cap: StrokeCap) -> None:
     """Choose how the ends of lines look.
 
     Arguments:
@@ -1782,7 +1793,7 @@ def stroke_cap(cap: str) -> None:
     active_sketch().stroke_cap(cap)
 
 
-def stroke_join(join: str) -> None:
+def stroke_join(join: StrokeJoin) -> None:
     """Choose how corners of outlines look.
 
     Arguments:
@@ -1891,7 +1902,7 @@ def text_size(size: float) -> None:
 
 
 # ---- fonts and styles (S-054, contract T11/T12)
-def load_font(path: str, face: int | str = 0):
+def load_font(path: str, face: int | str = 0) -> Font:
     """Load a font file.
 
     Pass the result to text_font(), text_fallback() and so on. A relative path is looked for next to your sketch file first, then in the current folder.
@@ -1923,7 +1934,7 @@ def load_font(path: str, face: int | str = 0):
     return active_sketch().load_font(path, base_dir=base_dir, face=face)
 
 
-def text_font(font, size: float | None = None) -> None:
+def text_font(font: Font | str | None, size: float | None = None) -> None:
     """Choose the font for the text you draw after this.
 
     The choice is saved by push() and brought back by pop().
@@ -1952,7 +1963,7 @@ def text_font(font, size: float | None = None) -> None:
     active_sketch().text_font(font, size, base_dir=base_dir)
 
 
-def text_style(style: str) -> None:
+def text_style(style: TextStyle) -> None:
     """Choose one of the four styles of the built-in font.
 
     It is ignored once you have chosen a font with text_font(), but remembered for when you go back to the built-in one.
@@ -1972,7 +1983,7 @@ def text_style(style: str) -> None:
 
 
 # ---- tracking, OpenType features, font variations (S-090)
-def text_fallback(*fonts) -> None:
+def text_fallback(*fonts: Font | str) -> None:
     """Choose fonts to use for letters that the current font does not have.
 
     They are tried before funground's built-in fallbacks (emoji, symbols and Devanagari). Emoji are drawn in one colour, the fill. Part of the drawing state, so push() and pop() keep it.
@@ -1988,7 +1999,7 @@ def text_fallback(*fonts) -> None:
     active_sketch().text_fallback(*fonts)
 
 
-def system_font(name: str):
+def system_font(name: str) -> Font:
     """Find a font installed on this computer.
 
     A sketch that uses it can look different on another computer. Font collections (.ttc files) are read too.
@@ -2774,7 +2785,7 @@ def load_svg(path: str) -> Picture:
     return canvas_sketch().load_svg(path, base_dir=_sketch_folder())
 
 
-def load_sound(path: str):
+def load_sound(path: str) -> Sound:
     """Read a sound file and return a sound.
 
     A relative path is looked for next to your sketch file first, then in the current folder. With no sound device (or FUNGROUND_HEADLESS=1) it plays silently and keeps time.
@@ -2804,7 +2815,7 @@ def _sound_frame() -> int:
     return canvas_sketch().frame_count
 
 
-def create_sound(samples, rate: int = 44100):
+def create_sound(samples: Any, rate: int = 44100) -> Sound:
     """Make a sound from a list of numbers.
 
     It is an ordinary sound. sound.samples() gives the numbers back.
@@ -2831,8 +2842,8 @@ def create_sound(samples, rate: int = 44100):
     return sound.create(samples, rate, _sound_frame)
 
 
-def tone(frequency: float, seconds: float, wave: str = "sine", volume: float = 0.5,
-         attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7):
+def tone(frequency: float, seconds: float, wave: Wave = "sine", volume: float = 0.5,
+         attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound:
     """Make a sound that is one steady tone.
 
     The loudness follows an envelope. It rises to full over the attack, falls to the sustain level over the decay, holds, and fades out over the last release seconds. If attack and release do not fit, they are made shorter. Noise repeats after random_seed().
@@ -2862,8 +2873,8 @@ def tone(frequency: float, seconds: float, wave: str = "sine", volume: float = 0
                                  decay, sustain), _sound_frame, "f.tone()")
 
 
-def note(name: str, seconds: float, wave: str = "sine", volume: float = 0.5,
-         attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7):
+def note(name: str, seconds: float, wave: Wave = "sine", volume: float = 0.5,
+         attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound:
     """Make a sound that is one named note.
 
     It takes the same options as tone().
@@ -2897,7 +2908,7 @@ def note(name: str, seconds: float, wave: str = "sine", volume: float = 0.5,
                                  decay, sustain), _sound_frame, "f.note()")
 
 
-def pluck(name_or_frequency, seconds: float, volume: float = 0.5):
+def pluck(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -> Sound:
     """Make a sound like a plucked string.
 
     It dies away by itself. It repeats after random_seed().
@@ -2921,8 +2932,8 @@ def pluck(name_or_frequency, seconds: float, volume: float = 0.5):
     return sound.make(values, _sound_frame, "f.pluck()")
 
 
-def melody(text: str, tempo: float = 120, wave: str = "soft", sa: str | None = None,
-           tuning: str = "equal", volume: float = 0.5):
+def melody(text: str, tempo: float = 120, wave: Wave = "soft", sa: str | None = None,
+           tuning: Tuning = "equal", volume: float = 0.5) -> Sound:
     """Make a sound from a string of notes.
 
     Separate the tokens with spaces. A token is a note name, "-" for a rest, or "[C4 E4 G4]" for a chord. Add ":2" after a token for how many beats it lasts (1 if left off). Notes are smooth: each one fades out over 0.15 seconds while the next begins, so the sound lasts that much longer than its beats when it ends on a note. With sa given, the notes are sargam: S r R g G m M P d D n N, with ' for the octave above and a comma for the octave below. In sargam, "S~G" glides from S to G over the token's beats, and "(R)G" touches R for about 60 milliseconds and then plays G.
@@ -2952,7 +2963,7 @@ def melody(text: str, tempo: float = 120, wave: str = "soft", sa: str | None = N
     return sound.make(values, _sound_frame, "f.melody()")
 
 
-def sequence(*sounds):
+def sequence(*sounds: Sound) -> Sound:
     """Make a new sound that plays the given sounds one after another.
 
     Arguments:
@@ -2971,7 +2982,7 @@ def sequence(*sounds):
     return sound.sequence(sounds, _sound_frame)
 
 
-def mix(*sounds):
+def mix(*sounds: Sound) -> Sound:
     """Make a new sound that plays the given sounds together.
 
     A soft limiter keeps the loudest moments at or below 0.9, so the sum never clips. Quiet sums are not changed.
@@ -3075,7 +3086,7 @@ def ragas() -> list[str]:
     return _ragas.raga_names()
 
 
-def raga(name: str):
+def raga(name: str) -> Raga:
     """Return one raga from the built-in table.
 
     Arguments:
@@ -3112,7 +3123,7 @@ def talas() -> list[str]:
     return _ragas.tala_names()
 
 
-def tala_info(name: str):
+def tala_info(name: str) -> Tala:
     """Return one tala from the built-in table.
 
     Arguments:
@@ -3134,7 +3145,7 @@ def tala_info(name: str):
     return _ragas.find_tala(name, "f.tala_info()")
 
 
-def tala(name: str, tempo: float = 80, cycles: int = 1):
+def tala(name: str, tempo: float = 80, cycles: int = 1) -> Sound:
     """Make a sound of a tala's theka played with simple drum sounds.
 
     The sam is accented, and the khali part is softer. The sound is exactly beats * 60 / tempo * cycles seconds long.
@@ -3160,7 +3171,7 @@ def tala(name: str, tempo: float = 80, cycles: int = 1):
     return sound.make(_ragas.tala(name, tempo, cycles, None, "f.tala()"), _sound_frame, "f.tala()")
 
 
-def drone(sa, seconds: float, pattern: str = "P S' S' S", volume: float = 0.5):
+def drone(sa: float | str, seconds: float, pattern: str = "P S' S' S", volume: float = 0.5) -> Sound:
     """Make a tanpura-like drone.
 
     It is plucked strings that ring on, played in turn over and over. It loops smoothly with sound.loop(). It repeats after random_seed().
@@ -3185,7 +3196,7 @@ def drone(sa, seconds: float, pattern: str = "P S' S' S", volume: float = 0.5):
     return sound.make(values, _sound_frame, "f.drone()")
 
 
-def match_ragas(histogram) -> list[tuple[str, float]]:
+def match_ragas(histogram: Any) -> list[tuple[str, float]]:
     """Rank the table's ragas by how well their swaras fit a histogram.
 
     It compares note sets only, so ragas with the same swaras score almost the same (for example Bhupali and Deshkar). It is a learning aid, not a judge.
@@ -3207,7 +3218,7 @@ def match_ragas(histogram) -> list[tuple[str, float]]:
     return _ragas.match(histogram, "f.match_ragas()")
 
 
-def microphone(name: str | None = None):
+def microphone(name: str | None = None) -> Microphone:
     """Make a microphone object for the computer's default input.
 
     Call mic.start() to listen. While it listens, mic.level(), mic.spectrum(bands) and mic.pitch() work as they do on a sound. mic.capture(seconds) returns the last few seconds as a sound. It is never played back. With FUNGROUND_HEADLESS=1 it is silent and hears nothing. On a Mac, allow microphone access in System Settings.
@@ -3249,7 +3260,7 @@ def microphones() -> list[str]:
 
 
 # ---- drawing sound (S-111, contract A7, D-061)
-def draw_wave(source, x: float, y: float, w: float, h: float) -> None:
+def draw_wave(source: Any, x: float, y: float, w: float, h: float) -> None:
     """Draw the wave of a sound, a microphone or a list of numbers.
 
     It is drawn inside a box, with the current fill, stroke and transform. For a sound it shows the whole sound, with a line at the place it is playing. For a microphone it shows the last half second. A sound's shape is worked out once for each width, so it is quick.
@@ -3269,7 +3280,7 @@ def draw_wave(source, x: float, y: float, w: float, h: float) -> None:
     sound_views.draw_wave(active_sketch(), source, x, y, w, h)
 
 
-def draw_spectrum(source, x: float, y: float, w: float, h: float, bands: int = 32) -> None:
+def draw_spectrum(source: Any, x: float, y: float, w: float, h: float, bands: int = 32) -> None:
     """Draw bars for a spectrum, as it is now.
 
     The bars stand on the bottom of a box, in the current style.
@@ -3290,7 +3301,7 @@ def draw_spectrum(source, x: float, y: float, w: float, h: float, bands: int = 3
     sound_views.draw_spectrum(active_sketch(), source, x, y, w, h, bands)
 
 
-def spectrogram(sound, width: int, height: int) -> Picture:
+def spectrogram(sound: Sound, width: int, height: int) -> Picture:
     """Make a picture of a whole sound.
 
     Time goes across. Pitch goes up (about 40 hertz to 16 kilohertz, spaced like notes). Louder is brighter. The brightest colour is the current fill. It takes a moment (about a second for 10 seconds of sound at 400 by 200), so make it once, in setup().
@@ -3313,7 +3324,7 @@ def spectrogram(sound, width: int, height: int) -> Picture:
     return sound_views.spectrogram(canvas_sketch(), active_sketch(), sound, width, height)
 
 
-def draw_pitch_line(source, x: float, y: float, w: float, h: float, seconds: float = 5,
+def draw_pitch_line(source: Any, x: float, y: float, w: float, h: float, seconds: float = 5,
                     low: str = "C3", high: str = "C6", sa: str | None = None) -> None:
     """Draw the pitch of a sound or microphone as a scrolling line.
 
@@ -3367,7 +3378,7 @@ def svg_paths(path: str) -> list[PathBuilder]:
     return [PathBuilder(geometry) for geometry in svg.shapes_as_paths(svg.read(resolved, "f.svg_paths()"))]
 
 
-def image(picture, x: float, y: float, width: float | None = None, height: float | None = None,
+def image(picture: Picture, x: float, y: float, width: float | None = None, height: float | None = None,
           sx: float | None = None, sy: float | None = None,
           sw: float | None = None, sh: float | None = None) -> None:
     """Draw a picture.
@@ -3392,7 +3403,7 @@ def image(picture, x: float, y: float, width: float | None = None, height: float
     draw_image(active_sketch(), picture, x, y, width, height, sx, sy, sw, sh)
 
 
-def tint(color, *more: float) -> None:
+def tint(color: Any, *more: float) -> None:
     """Colour every picture drawn with image() from now on.
 
     Red, green and blue of each pixel are multiplied by the tint's, and the alpha is multiplied in. Shapes and text are not tinted. The choice is saved by push() and brought back by pop().
@@ -3449,7 +3460,7 @@ def no_erase() -> None:
 
 
 # ---- pixels (S-079, contract P7, P8)
-def get(x: float, y: float, w: float | None = None, h: float | None = None):
+def get(x: float, y: float, w: float | None = None, h: float | None = None) -> Color | Picture:
     """Read a pixel, or copy a region of the canvas.
 
     It sees what has been drawn so far, this frame included. Outside the canvas is transparent. Coordinates are rounded down. On a high-resolution screen it reads the top-left real pixel of a logical one.
@@ -3471,7 +3482,7 @@ def get(x: float, y: float, w: float | None = None, h: float | None = None):
     return active_sketch().get(x, y, w, h)
 
 
-def set(x: float, y: float, color, *more: float) -> None:  # noqa: A001  (p5's name)
+def set(x: float, y: float, color: Any, *more: float) -> None:  # noqa: A001  (p5's name)
     """Make one pixel exactly one colour.
 
     Fill, stroke, transform, clip, tint, opacity and blend mode do not apply. Outside the canvas, nothing happens.
@@ -3490,7 +3501,7 @@ def set(x: float, y: float, color, *more: float) -> None:  # noqa: A001  (p5's n
     active_sketch().set(x, y, color, *more)
 
 
-def set_pixel(x: float, y: float, color, *more: float) -> None:
+def set_pixel(x: float, y: float, color: Any, *more: float) -> None:
     """Make one pixel exactly one colour: the same as set().
 
     This name also works after from funground import *, where set is Python's own set() (D-088). Fill, stroke, transform, clip, tint, opacity and blend mode do not apply. Outside the canvas, nothing happens.
@@ -3540,7 +3551,7 @@ def update_pixels() -> None:
     active_sketch().update_pixels()
 
 
-def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's name)
+def filter(kind: FilterKind, value: float | None = None) -> None:  # noqa: A001  (p5's name)
     """Change everything drawn so far, in place.
 
     Alpha is kept, except by "opaque". "posterize", "erode" and "dilate" are faster with funground[extras] installed, but the result is the same.
@@ -3561,7 +3572,7 @@ def filter(kind: str, value: float | None = None) -> None:  # noqa: A001  (p5's 
     active_sketch().filter(kind, value)
 
 
-def apply_filter(kind: str, value: float | None = None) -> None:
+def apply_filter(kind: FilterKind, value: float | None = None) -> None:
     """Change everything drawn so far, in place: the same as filter().
 
     This name also works after from funground import *, where filter is Python's own filter() (D-088). Alpha is kept, except by "opaque".
@@ -3583,7 +3594,7 @@ def apply_filter(kind: str, value: float | None = None) -> None:
 
 
 # ---- input
-def key_down(key: str | int) -> bool:
+def key_down(key: KeyName | str | int) -> bool:
     """Return whether a key is held down right now.
 
     Escape also closes the sketch. With no window, no key is ever down.
@@ -3610,7 +3621,7 @@ def key_down(key: str | int) -> bool:
 def random(low: float = 1.0, high: float | None = None) -> float:
     """Return a random number.
 
-    random(10) gives a number from 0 up to 10. random(5, 10) gives a number from 5 up to 10. random() gives a number from 0 up to 1. It uses its own generator and never touches Python's own random module.
+    random(10) gives a number from 0 up to 10. random(5, 10) gives a number from 5 up to 10. random() gives a number from 0 up to 1. To pick one item of a list, use random_choice(). It uses its own generator and never touches Python's own random module.
 
     Arguments:
         low: with one argument, the top of the range (it starts at 0). With high as well, the bottom.
@@ -3744,13 +3755,13 @@ def random_gaussian(mean: float = 0.0, sd: float = 1.0) -> float:
     return canvas_sketch().random_gaussian(mean, sd)
 
 
-def random_choice(items):
+def random_choice(items: Any) -> Any:
     """Return one item picked at random.
 
     It can be repeated with random_seed().
 
     Arguments:
-        items: a list, a tuple or a string. It must not be empty.
+        items: a list, a tuple, a string, or anything else that can be listed, such as f.COLORS. It must not be empty.
 
     Returns:
         One of the items. For a string, one letter.
@@ -3760,6 +3771,7 @@ def random_choice(items):
 
     Example:
         f.fill(f.random_choice(["red", "gold", "skyblue"]))
+        f.fill(f.random_choice(f.COLORS))
 
     See also: random, random_seed
     """
@@ -3981,7 +3993,7 @@ def mark(path: PathBuilder | str | None = None, *, fill: Color | None = NOT_GIVE
 
 
 # ---- play: variations and keep (S-132 parts 3 and 4, contracts E1 and E2, D-071, D-073)
-def variations(fn, *, columns: int | None = None, **values) -> list:
+def variations(fn: Callable[..., Any], *, columns: int | None = None, **values: Any) -> list:
     """Draw several versions of a drawing side by side, as a labelled contact sheet.
 
     Write the drawing as a function with a parameter, then give a list of values to try. variations() calls the function once for each value, and draws each result in its own cell over f.ground.content, with a thin frame and a label such as "gap = 35".
@@ -4016,7 +4028,7 @@ def variations(fn, *, columns: int | None = None, **values) -> list:
     return _exploring.variations(fn, values, columns)
 
 
-def keep(note: str = "", *, pdf: bool = False, **settings) -> str:
+def keep(note: str = "", *, pdf: bool = False, **settings: Any) -> str:
     """Save this version of your picture in a studio folder, with what made it.
 
     The files go in a folder called studio next to your sketch file (or in the current folder when there is no file). They are numbered in order, after any already there: 001.png, 002.png and so on. Each kept version has a picture (.png), a copy of your sketch (.py), and a record (.json). The record holds your note, the settings you give, every control's value, the random and noise seeds, the size and margin, the page or frame, the date, the versions of funground and Python, the fonts used and the files read. It also lists what it could not keep, such as fonts installed on this computer. It prints one line saying where it saved. Grid guides from show() are not in the picture.
