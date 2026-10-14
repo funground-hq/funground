@@ -7,7 +7,7 @@
 its arguments and a sentence, `f.width` is a number, `f.fill("` offers the colour names, and the star style is
 not flagged. The first chapter shows, with a picture and a live sketch, where things go on the canvas.
 
-**Decisions:** D-102 pending (how Play suggests code; recommended c, which starts with funground's own list).
+**Decisions:** D-102 accepted (a): Play suggests from funground's own generated list.
 D-090 (constants) is accepted, so S-174 can start.
 
 | Story | Value | Status |
