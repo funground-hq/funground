@@ -382,3 +382,11 @@ emits them yet, so they are untested by a snapshot.
 
 `spikes/reference/drawbot-skia/` — shallow clone of justvanrossum/drawbot-skia (precedent for the
 Skia adapter, `gstate.py`, `path.py`, `document.py`). Study only; not a dependency.
+
+## 13. Suggestions in github.dev and vscode.dev (S-197, 14 Oct 2026) — `13_editor_completion/`
+
+Pylance in the browser reads one file at a time (pylance-release #4926, 1 Sept 2026), so stubs carried in the
+sketchbook most likely give nothing there (unverified in a browser). A generated 25.8 KB stub works for Pyright where
+it can read files. A prototype completion, hover and signature provider for the funground extension, fed by
+`completions.json` (104 KB), gives `f.`, colours and option words against a stand-in VS Code API. Recommendation:
+the extension supplies suggestions (route B); stubs only if the browser check shows they are read.
