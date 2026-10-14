@@ -1,6 +1,6 @@
 # Sprint 17 review — 0.2 web spikes
 
-**Dates:** 8 October 2026. **Not yet signed off.**
+**Dates:** 8 October 2026. **Signed off 14 October 2026.**
 
 ## Outcome
 
@@ -55,3 +55,9 @@ on a throttled link untested (S-139).
   travels with every repository.
 - Redirecting S-133 mid-flight to try the existing wheel first saved the shim from becoming product
   code. Check PyPI for existing wasm wheels before planning a build.
+
+## Sign-off
+
+**Signed off by the maintainer, 14 October 2026** ("Sign off pending sprints"). Sprint closed.
+
+D-075 was accepted (C) on 9 October; see the Sprint 19 review.

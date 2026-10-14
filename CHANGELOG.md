@@ -4,7 +4,40 @@ What changed in funground, newest first. Release numbers follow the
 [roadmap](docs/Roadmap.md). Decisions are cited as D-nnn from the
 [decision log](docs/design/Decision_Log.md).
 
-## Unreleased — will become 0.1.0
+## Unreleased — will become 0.2
+
+A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
+
+### Added
+- **Editors know funground** (S-130, S-195): the package is typed (`py.typed`, a literal `__all__`, typed live
+  values), so VS Code lists every function with its arguments after `f.`, knows `f.width` is a number and accepts the
+  star style. `funground/completions.json`, generated with the API reference, gives the same list (names, arguments,
+  a sentence, option words, colours) to the Play editor and other editors.
+- **`f.COLORS` and `f.CONSTANTS`** (S-174, D-103): names that an editor can list. `f.COLORS.TOMATO` is the word
+  `"tomato"`, one name for each of the 665 named colours. `f.CONSTANTS.ALIGN.CENTER` is the word `"center"`, in 18
+  groups (`ALIGN`, `BLEND`, `MODE`, `STYLE`, `CAP`, `JOIN`, `CURSOR`, `FILTER`, `WAVE`, `PAGE` and more). They are
+  the same in `from funground import *` (`COLORS.TOMATO`), read-only, and iterable (`list(f.COLORS)`), and a
+  misspelt name says "Did you mean ...?". Strings still work everywhere, so no sketch changes. The option
+  parameters (`text_align`, `blend_mode`, `rect_mode`, ...) are typed with `Literal` words, so an editor underlines
+  `f.text_align("centre")`. `completions.json` lists the members.
+- **Where things are** (S-199): chapter 1 explains the canvas (the origin at the top left, x to the right, y down,
+  `f.width` and `f.height`, the centre, what falls outside), with two new gallery examples, `basics-05` (a labelled
+  map of the canvas) and `basics-06` (the mouse's x and y, live).
+- **Colour schemes** (gallery `colour-06`): the same random shapes in four schemes chosen from your own colour lists;
+  the colour chapter says why picking from all 665 names gives a muddle.
+
+### Changed
+- **`f.random_choice()` takes anything that can be listed**, such as `f.COLORS` or a set, and `f.random()` given
+  something that is not a number says to use `random_choice` (found trying `f.random(f.COLORS)` in Play).
+- **The developer install is visible to editors** (S-198): `pip install -e ".[dev]" --config-settings
+  editable_mode=compat`; chapter 1 says how to choose the interpreter in VS Code, chapter 2 how to silence the
+  star-import warning.
+
+## 0.1.0 — 14 October 2026
+
+The first full release, after the alpha. New since then: a course, pages for AI assistants, upper bounds on library
+versions and a fix for `f.run(fps)`. The parts not yet tried by hand are in the
+[release notes](docs/releases/0.1.0.md).
 
 ### Fixed
 - **`f.run(fps=...)` works** (maintainer's report, 13 Oct): `f.size()` in `setup()` no longer resets the rate to 60, so
@@ -17,13 +50,6 @@ What changed in funground, newest first. Release numbers follow the
   was tested with (`tested-versions.txt` on the GitHub Release), for a school that wants to install exactly those.
 
 ### Added
-- **`f.COLORS` and `f.CONSTANTS`** (S-174, D-103): names that an editor can list. `f.COLORS.TOMATO` is the word
-  `"tomato"`, one name for each of the 665 named colours. `f.CONSTANTS.ALIGN.CENTER` is the word `"center"`, in 18
-  groups (`ALIGN`, `BLEND`, `MODE`, `STYLE`, `CAP`, `JOIN`, `CURSOR`, `FILTER`, `WAVE`, `PAGE` and more). They are
-  the same in `from funground import *` (`COLORS.TOMATO`), read-only, and iterable (`list(f.COLORS)`), and a
-  misspelt name says "Did you mean ...?". Strings still work everywhere, so no sketch changes. The option
-  parameters (`text_align`, `blend_mode`, `rect_mode`, ...) are typed with `Literal` words, so an editor underlines
-  `f.text_align("centre")`. `completions.json` lists the members.
 - **A course: Creative practice with funground** (S-194): eleven lessons in looking and making, from
   composition, weight and colour to type, covers, poster systems, motion, interaction and generative work, ending
   in a small visual world of the learner's own; with runnable sketches, rendered pictures, assignments and

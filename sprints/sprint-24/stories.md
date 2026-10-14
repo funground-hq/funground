@@ -22,8 +22,8 @@ downloaded from that build and screenshotted locally with `tools/design_shots.mj
 | S-185 | (SITE-C-02) stylesheet, fonts, logo | done: verified on built previews (strict build, links, no sideways scroll, night sticker fixed) |
 | S-186 | (SITE-C-03) the home page (install line updated for PyPI) | done: revised design plus the maintainer's changes; template links all resolve |
 | S-187 | (SITE-C-04) the Play layout, with a design note | done: editor only (no sidebars, footer or tab row), split, zoom, messages above the picture, help popover, status with spinner, keys, restart notice; `design/Play_Layout_Note.md`; `test_editor.mjs` 12/12 |
-| S-190 | (SITE-C-07) the gallery index | planned |
-| S-191 | (SITE-C-08) sketch panels on example pages | planned |
+| S-190 | (SITE-C-07) the gallery index | not started: back to the backlog |
+| S-191 | (SITE-C-08) sketch panels on example pages | not started: back to the backlog |
 
 Later: S-188 (picker with thumbnails), S-189 (Play layouts and phones). In funground's own backlog as candidates:
 S-192 (square thumbnails and loops), S-193 (Try this notes).

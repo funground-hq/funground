@@ -1,6 +1,6 @@
 # Sprint 19 review — 0.2: a faster core, measured in the browser; the website
 
-**Dates:** 8–9 October 2026, on `release-0.2-web`. **Not yet signed off.**
+**Dates:** 8–9 October 2026, on `release-0.2-web`. **Signed off 14 October 2026.**
 
 ## Outcome
 
@@ -53,3 +53,7 @@ S-149 fixes, reviews, commits and the Pages switch.
 - S-143's estimates overstated two fixes (S-145, S-147): its profiles mixed string and numeric colours, and
   its baseline predates S-144–S-146. Prototype gains are upper bounds.
 - Clean designs held: every fix is small, documented and output-identical.
+
+## Sign-off
+
+**Signed off by the maintainer, 14 October 2026** ("Sign off pending sprints"). Sprint closed.

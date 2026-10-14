@@ -17,21 +17,21 @@ irreversible actions).
 ## Before publishing (Claude)
 
 - [ ] CI green on all 12 cells for the release commit. GitHub was unreachable on 2 Oct; push first.
-- [ ] Relative image links in `README.md` do not render on PyPI.
+- [x] Relative image links in `README.md` do not render on PyPI. (0.1.0: the README has no images; every link is absolute to the `v0.1.0` tag.)
   - Make them absolute (`https://raw.githubusercontent.com/funground-hq/funground/main/...`).
   - Or keep the PyPI description text-only.
-- [ ] `CHANGELOG.md`: turn "Unreleased" into "0.1.0 — <date>".
-- [ ] Root `README.md` install line: switch from the git URL to `pip install funground`. Guide chapter 1 already says that.
-- [ ] Version `0.1.0.dev0` → `0.1.0` in `pyproject.toml`, in a commit of its own.
+- [x] `CHANGELOG.md`: turn "Unreleased" into "0.1.0 — <date>". (14 Oct; changed to the tag day if later.)
+- [x] Root `README.md` install line: switch from the git URL to `pip install funground`. Guide chapter 1 already says that.
+- [x] Version `0.1.0` in `pyproject.toml` and `funground.__version__` (from 0.1.0a1; one release commit, as Releasing.md says).
 - [ ] Build again from a clean checkout of the tagged commit, then run `twine check`.
 - [x] Dry run: run `release.yml` by hand → TestPyPI upload plus install and smoke test on Windows, macOS and Linux (`smoke-test` job). Passed 5 Oct 2026 with 0.1.0.dev1 (run 37274058907); the first run found the Linux Cairo prerequisite, now installed in the smoke test as the docs say.
 
 ## Maintainer decisions and checks
 
-- [ ] **Sprint 10 and Sprint 11 signed off.**
+- [x] **Sprint 10 and Sprint 11 signed off.** (both closed 3 Oct 2026)
 - [x] **D-045 = B:** ffmpeg on the PATH, else the optional `funground[video]` extra.
 - [x] **Ship the examples and the gallery browser in the package?** Yes (D-049, built in S-103): `python -m funground.gallery`; the examples, their data, the pictures and the CC0 licence are in the wheel.
-- [ ] **Manual run on a real macOS and a real Linux desktop** (Roadmap prerequisite): the gallery browser, a window with HiDPI, full screen, keyboard and mouse, the controls panel, and sound. **Not tested for 0.1** (maintainer, 12 Oct 2026): listed under "Not yet tested" in the release notes.
+- [ ] **Manual run on a real macOS desktop, by the maintainer: a gate for 0.1.0** (maintainer, 14 Oct 2026: "0.1 can be released only when we have tested on local Mac first"): the gallery browser, a window on a high-resolution screen, full screen, keyboard and mouse, the controls panel, sound and the microphone. **Linux** is covered by the release CI run (the full suite and the smoke test, without a screen); a Linux desktop by hand stays under "Not yet tested". **The candidate is `main` at `19dd280`** (the merge of release PR #5, 14 Oct): test that commit (`git checkout 19dd280`), and tag it `v0.1.0`. Merges to `main` go on meanwhile (maintainer, 14 Oct: "the Mac test should hold the release but not merges"); `main` is `0.2.0.dev0` from Sprint 25.
 - [x] **Microphone, once per system (Windows, macOS, Linux)** — with the gallery's tuner (`python -m funground.gallery`, Sound → Tuner): sing or play a note and check the name and needle; on macOS also check the permission prompt and the message after "Don't allow". Not needed per learner or per microphone. Done by the maintainer on Windows, 12 Oct 2026; macOS and Linux **not tested for 0.1**.
 - [ ] **Live SVG text in Illustrator and Inkscape** (T19, D-059): open a saved SVG with Hindi and Latin text, check it is editable and shaped correctly (Illustrator: World-Ready Paragraph Composer). **Not tested for 0.1** (maintainer, 12 Oct 2026): listed under "Not yet tested" in the release notes.
 - [x] **PyPI account:** maverick27 (linked to GitHub samir-joshi). Organisation `funground` requested, pending approval; not needed to publish (transfer the project later).

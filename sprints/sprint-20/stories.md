@@ -25,8 +25,8 @@ second origin.
 - [x] S-137
 - [x] S-154
 - [x] S-151 part 1
-- [ ] S-151 part 2
+- [x] S-151 part 2
 - [x] S-156
 - [x] S-157
 - [x] S-158
-- [ ] S-155
+- [x] S-155
