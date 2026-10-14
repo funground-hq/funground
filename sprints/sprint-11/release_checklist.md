@@ -17,12 +17,12 @@ irreversible actions).
 ## Before publishing (Claude)
 
 - [ ] CI green on all 12 cells for the release commit. GitHub was unreachable on 2 Oct; push first.
-- [ ] Relative image links in `README.md` do not render on PyPI.
+- [x] Relative image links in `README.md` do not render on PyPI. (0.1.0: the README has no images; every link is absolute to the `v0.1.0` tag.)
   - Make them absolute (`https://raw.githubusercontent.com/funground-hq/funground/main/...`).
   - Or keep the PyPI description text-only.
-- [ ] `CHANGELOG.md`: turn "Unreleased" into "0.1.0 — <date>".
-- [ ] Root `README.md` install line: switch from the git URL to `pip install funground`. Guide chapter 1 already says that.
-- [ ] Version `0.1.0.dev0` → `0.1.0` in `pyproject.toml`, in a commit of its own.
+- [x] `CHANGELOG.md`: turn "Unreleased" into "0.1.0 — <date>". (14 Oct; changed to the tag day if later.)
+- [x] Root `README.md` install line: switch from the git URL to `pip install funground`. Guide chapter 1 already says that.
+- [x] Version `0.1.0` in `pyproject.toml` and `funground.__version__` (from 0.1.0a1; one release commit, as Releasing.md says).
 - [ ] Build again from a clean checkout of the tagged commit, then run `twine check`.
 - [x] Dry run: run `release.yml` by hand → TestPyPI upload plus install and smoke test on Windows, macOS and Linux (`smoke-test` job). Passed 5 Oct 2026 with 0.1.0.dev1 (run 37274058907); the first run found the Linux Cairo prerequisite, now installed in the smoke test as the docs say.
 
