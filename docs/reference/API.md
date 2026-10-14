@@ -3020,7 +3020,7 @@ f.random(low: 'float' = 1.0, high: 'float | None' = None) -> 'float'
 
 Return a random number.
 
-random(10) gives a number from 0 up to 10. random(5, 10) gives a number from 5 up to 10. random() gives a number from 0 up to 1. It uses its own generator and never touches Python's own random module.
+random(10) gives a number from 0 up to 10. random(5, 10) gives a number from 5 up to 10. random() gives a number from 0 up to 1. To pick one item of a list, use random_choice(). It uses its own generator and never touches Python's own random module.
 
 | Argument | Meaning |
 |---|---|
@@ -3073,7 +3073,7 @@ It can be repeated with random_seed().
 
 | Argument | Meaning |
 |---|---|
-| `items` | a list, a tuple or a string. It must not be empty. |
+| `items` | a list, a tuple, a string, or anything else that can be listed, such as f.COLORS. It must not be empty. |
 
 **Returns.** One of the items. For a string, one letter.
 
@@ -3083,6 +3083,7 @@ It can be repeated with random_seed().
 
 ```py
 f.fill(f.random_choice(["red", "gold", "skyblue"]))
+f.fill(f.random_choice(f.COLORS))
 ```
 
 See also: [`random`](#fn-random), [`random_seed`](#fn-random_seed).
