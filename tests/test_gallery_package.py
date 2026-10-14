@@ -165,4 +165,5 @@ def test_the_wheel_carries_the_examples_pictures_and_licence(tmp_path):
     assert any(n.endswith("licenses/examples/LICENSE") for n in names)
     assert "funground/gallery.py" in names
     assert {"funground/llms.txt", "funground/llms-full.txt"} <= names       # the pages for AI assistants (S-129)
+    assert "funground/completions.json" in names                             # the editor suggestions (S-195)
     assert not any(n.endswith(".pyc") for n in names)
