@@ -22,6 +22,7 @@ preview gets one new message (`guides`), ignored by older previews; the protocol
 | S-206 | Gallery example pages: a breadcrumb, Previous and Next, back to the gallery (maintainer, 15 Oct) | done (site PR #9, deployed): breadcrumb, Previous/Next top and bottom, back to the topic; guide links to an example's heading now go to its page (two were dead anchors); 1710 links OK, strict build clean, 1366 and 390 wide checked |
 | S-207 | Play: Previous and Next beside the example picker (maintainer, 15 Oct) | done (site PR #12, live): ‹ › through the 115 examples, named in tooltips, drafts kept, hidden for blank and shared sketches |
 | S-189 | Play on phones, the core (pulled in, maintainer, 15 Oct: "In the mobile size, the Play loses the editor completely and the sketch size is too small"; measured: editor 0 px tall, picture 68 x 44 at 390 wide): stacked layout under 900 px, picture first at the full width, editor below at a usable height | in progress |
+| S-208 | Change a number with Alt+Up/Down or by Alt+dragging; Auto-run follows (pulled forward, maintainer, 15 Oct) | next, after S-189 |
 | S-168 | Polish: toolbar buttons sized for the page; Reset shown only when the code differs (check what S-187 already did) | done (site PR #12): status one line with an ellipsis, toolbar one row (50 px) at 1366, nothing overflows at 390; Reset after an edit was already so, now tested |
 
 Order: S-201 and S-204 (the editor bundle), then S-203, S-202 and S-200 (the page and the preview); S-205 alongside, in
@@ -41,3 +42,4 @@ before sign-off (Sprint 25 finding 1).
 - [x] S-207
 - [x] S-168
 - [ ] S-189
+- [ ] S-208
