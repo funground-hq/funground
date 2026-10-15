@@ -824,8 +824,11 @@ you can draw again and again.
 | `.quad_to(cx, cy, x, y)` | Quadratic Bézier: one control point, then the end point. | |
 | `.close()` | Join back to where the sub-path started. Only closed paths are filled. | |
 | `.rect(x, y, w, h, *radii)` | Add a closed rectangle; (x, y) is its top-left corner. Takes one or four corner radii like `f.rect`. Not changed by `rect_mode`. | `f.path().rect(10, 10, 80, 50, 8)` |
+| `.square(x, y, size, *radii)` | Add a closed square; (x, y) is its top-left corner. Takes corner radii like `.rect`. | `f.path().square(10, 10, 60)` |
 | `.ellipse(x, y, w, h)` | Add a closed ellipse centred on (x, y), width `w`, height `h`. Not changed by `ellipse_mode`. | `f.path().ellipse(50, 50, 80, 40)` |
 | `.circle(x, y, d)` | Add a closed circle centred on (x, y), diameter `d`. | `f.path().circle(50, 50, 40)` |
+| `.triangle(x1, y1, x2, y2, x3, y3)` | Add a closed triangle through three corners, as `f.triangle`. | `f.path().triangle(10, 90, 90, 90, 50, 10)` |
+| `.quad(x1, y1, x2, y2, x3, y3, x4, y4)` | Add a closed four-sided shape through four corners, joined in order, as `f.quad`. | `f.path().quad(20, 20, 80, 20, 90, 80, 10, 80)` |
 | `.polygon(points)` | Add a closed shape through a list of `(x, y)` corners (3 or more). | `f.path().polygon([(0, 0), (40, 0), (20, 30)])` |
 | `a.union(b)`, `a \| b` | a new path covering everything `a` or `b` covers. `a` and `b` are not changed. Only closed shapes count; each is read with the non-zero rule. | `both = ring \| star` |
 | `a.intersection(b)`, `a & b` | a new path covering only what both cover. | `lens = ring & star` |

@@ -23,8 +23,8 @@ class PathBuilder:
     as you like.
 
     Most methods change the path and give it back, so you can chain calls: f.path().move_to(0, 0).line_to(50, 0).
-    The building methods are move_to, line_to, curve_to, quad_to, close, rect, ellipse, circle and
-    polygon. They change this builder. The methods that make a new shape (union, intersection, difference,
+    The building methods are move_to, line_to, curve_to, quad_to, close, rect, square, ellipse, circle,
+    triangle, quad and polygon. They change this builder. The methods that make a new shape (union, intersection, difference,
     xor, remove_overlap, expand_stroke, translate, scale, rotate and copy) give you a new builder and leave
     this one alone. The operators do the same: a | b is union, a & b is intersection, a - b and a % b are
     difference, and a ^ b is xor.
@@ -42,9 +42,6 @@ class PathBuilder:
 
     # What to write instead of a drawing function that a path does not have (f.triangle(...) is not p.triangle(...)).
     _INSTEAD = {
-        "triangle": "polygon([(x1, y1), (x2, y2), (x3, y3)])",
-        "quad": "polygon([(x1, y1), (x2, y2), (x3, y3), (x4, y4)])",
-        "square": "rect(x, y, size, size)",
         "line": "move_to(x1, y1).line_to(x2, y2)",
         "point": "a small circle(x, y, 2)",
         "arc": "curve_to(...) from the arc's start, or ellipse(...) for a whole oval",
@@ -58,12 +55,12 @@ class PathBuilder:
         # wrote f.path().triangle(...) after f.triangle(...)).
         if name.startswith("_"):
             raise AttributeError(name)
-        shapes = "rect, ellipse, circle and polygon"
+        shapes = "rect, square, ellipse, circle, triangle, quad and polygon"
         if name in self._INSTEAD:
             raise AttributeError(f"A path has no {name}(). Use {self._INSTEAD[name]}. A path's shapes are {shapes}.")
         public = [n for n in dir(type(self)) if not n.startswith("_")]
         close = difflib.get_close_matches(name, public + list(self._INSTEAD), n=1, cutoff=0.75)
-        if close and close[0] in self._INSTEAD:              # a slip in a missing shape: sqare is a square
+        if close and close[0] in self._INSTEAD:              # a slip in a missing shape: lin is a line
             hint = f" For a {close[0]}, use {self._INSTEAD[close[0]]}. A path's shapes are {shapes}."
         elif close:
             hint = f" Did you mean {close[0]}?"
@@ -267,6 +264,67 @@ class PathBuilder:
         segs = [("move", pts[0])] + [("line", pt) for pt in pts[1:]] + [("close",)]
         self._path = Path(self._path.segments + tuple(segs))
         return self
+
+    def square(self, x: float, y: float, size: float, *radii: float) -> "PathBuilder":
+        """Add a square as a closed part of the path.
+
+        Arguments:
+            x, y: the top left corner.
+            size: the length of each side.
+            *radii: optional corner rounding, as for rect(): one number, or four.
+
+        Returns:
+            this builder, changed.
+
+        Raises:
+            ValueError: if the number of radii is not 0, 1 or 4, or a radius is negative.
+
+        Example:
+            p = f.path().square(10, 10, 60, 8)
+
+        See also: rect, circle
+        """
+        return self.rect(x, y, size, size, *radii)
+
+    def triangle(self, x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> "PathBuilder":
+        """Add a triangle through three corners as a closed part of the path.
+
+        Arguments:
+            x1, y1: the first corner.
+            x2, y2: the second corner.
+            x3, y3: the third corner.
+
+        Returns:
+            this builder, changed.
+
+        Example:
+            p = f.path().triangle(10, 90, 90, 90, 50, 10)
+
+        See also: quad, polygon
+        """
+        return self.polygon([(x1, y1), (x2, y2), (x3, y3)])
+
+    def quad(self, x1: float, y1: float, x2: float, y2: float, x3: float, y3: float,
+             x4: float, y4: float) -> "PathBuilder":
+        """Add a four-sided shape through four corners as a closed part of the path.
+
+        The corners are joined in the order you give them.
+
+        Arguments:
+            x1, y1: the first corner.
+            x2, y2: the second corner.
+            x3, y3: the third corner.
+            x4, y4: the fourth corner.
+
+        Returns:
+            this builder, changed.
+
+        Example:
+            p = f.path().quad(20, 20, 80, 20, 90, 80, 10, 80)
+
+        See also: triangle, polygon
+        """
+        return self.polygon([(x1, y1), (x2, y2), (x3, y3), (x4, y4)])
 
     # ---- booleans (each returns a NEW builder; contract F11)
     def union(self, other: "PathBuilder") -> "PathBuilder":
