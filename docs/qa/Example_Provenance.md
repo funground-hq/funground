@@ -200,3 +200,9 @@ mouse's x and y, live) are original CC0 examples written for chapter 1. `tools/c
 `examples/gallery/colour/06_colour_schemes.py` (the same random shapes in four colour schemes, chosen from the
 learner's own lists) is an original CC0 example written after the maintainer asked for one. `tools/check_originality.py`
 against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged (highest combined score 0.16).
+
+## Motion 02, sparks that fade — 15 October 2026
+
+`examples/gallery/motion/02_fading_sparks.py` (a class for one spark and a list of them; new sparks each frame, old
+ones fading by age) is an original CC0 example written after the maintainer asked for one. `tools/check_originality.py`
+against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged (highest combined score 0.16).
