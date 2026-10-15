@@ -8,6 +8,8 @@ never changes once built, which is what makes reuse safe.
 """
 from __future__ import annotations
 
+import difflib
+
 from . import pathops
 from ._options import StrokeCap, StrokeJoin
 from .geometry import Path, Transform, rect_radii
@@ -38,8 +40,36 @@ class PathBuilder:
     """
     __slots__ = ("_path",)
 
+    # What to write instead of a drawing function that a path does not have (f.triangle(...) is not p.triangle(...)).
+    _INSTEAD = {
+        "triangle": "polygon([(x1, y1), (x2, y2), (x3, y3)])",
+        "quad": "polygon([(x1, y1), (x2, y2), (x3, y3), (x4, y4)])",
+        "square": "rect(x, y, size, size)",
+        "line": "move_to(x1, y1).line_to(x2, y2)",
+        "point": "a small circle(x, y, 2)",
+        "arc": "curve_to(...) from the arc's start, or ellipse(...) for a whole oval",
+    }
+
     def __init__(self, path: Path | None = None) -> None:
         self._path = path if path is not None else Path()
+
+    def __getattr__(self, name: str):
+        # Only reached for a name the path does not have: say what to write instead (found 15 Oct, a learner
+        # wrote f.path().triangle(...) after f.triangle(...)).
+        if name.startswith("_"):
+            raise AttributeError(name)
+        shapes = "rect, ellipse, circle and polygon"
+        if name in self._INSTEAD:
+            raise AttributeError(f"A path has no {name}(). Use {self._INSTEAD[name]}. A path's shapes are {shapes}.")
+        public = [n for n in dir(type(self)) if not n.startswith("_")]
+        close = difflib.get_close_matches(name, public + list(self._INSTEAD), n=1, cutoff=0.75)
+        if close and close[0] in self._INSTEAD:              # a slip in a missing shape: sqare is a square
+            hint = f" For a {close[0]}, use {self._INSTEAD[close[0]]}. A path's shapes are {shapes}."
+        elif close:
+            hint = f" Did you mean {close[0]}?"
+        else:
+            hint = f" A path's shapes are {shapes}."
+        raise AttributeError(f"A path has no {name}.{hint}")
 
     # ---- building (each returns self so calls chain)
     def move_to(self, x: float, y: float) -> "PathBuilder":

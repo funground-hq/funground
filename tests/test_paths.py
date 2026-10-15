@@ -337,3 +337,16 @@ def test_clip_with_an_empty_path_warns_and_is_ignored(sketch, canvas):
         p.rect(0, 0, 50, 50)
     assert not any(type(op).__name__ == "ClipPath" for op in sketch.frame.ops)
     assert tuple(canvas.get_at((25, 25))[:3]) == (255, 0, 0)
+
+
+def test_a_missing_path_method_says_what_to_write_instead():
+    path = p.path()
+    with pytest.raises(AttributeError, match=r"no triangle\(\)\. Use polygon"):
+        path.triangle(0, 0, 10, 0, 5, 10)
+    with pytest.raises(AttributeError, match=r"For a square, use rect\(x, y, size, size\)"):
+        path.sqare(0, 0, 10)
+    with pytest.raises(AttributeError, match="Did you mean circle"):
+        path.cirle(0, 0, 10)
+    with pytest.raises(AttributeError, match="shapes are rect, ellipse, circle and polygon"):
+        path.frobnicate()
+    assert not hasattr(path, "_private")                      # private names stay plain AttributeErrors
