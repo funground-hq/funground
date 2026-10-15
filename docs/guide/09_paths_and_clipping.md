@@ -53,8 +53,10 @@ apply to it like to any shape.
 ## Combining shapes
 
 A path can also be built from ready-made shapes. Each call adds a closed shape and gives the
-path back, so calls chain: `rect(x, y, w, h)` (x, y is the top-left corner), `ellipse(x, y, w, h)`
-and `circle(x, y, d)` (x, y is the centre), and `polygon(points)` (a list of `(x, y)` corners).
+path back, so calls chain: `rect(x, y, w, h)` and `square(x, y, size)` (x, y is the top-left corner),
+`ellipse(x, y, w, h)` and `circle(x, y, d)` (x, y is the centre), `triangle(x1, y1, x2, y2, x3, y3)` and
+`quad(x1, y1, ..., x4, y4)` (the corners, as `f.triangle` and `f.quad`), and `polygon(points)` (a list of
+`(x, y)` corners).
 
 Two paths can be joined, overlapped, cut and mixed. Each call gives back a **new** path. The two
 you started with do not change.
