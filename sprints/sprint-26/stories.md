@@ -21,8 +21,8 @@ preview gets one new message (`guides`), ignored by older previews; the protocol
 | S-205 | Suggestions in github.dev from the funground extension (S-197 route B) | done (funground-web PR #8): completion, hover, signature help, COLORS/CONSTANTS, colours and option words in quotes, from the runtime's `completions.json`; 13 tests with a stand-in API; end-to-end (site mode) passes; extension 0.2.0, `.vsix` 64 KB. Real github.dev check (P1) and Marketplace publish: the maintainer |
 | S-206 | Gallery example pages: a breadcrumb, Previous and Next, back to the gallery (maintainer, 15 Oct) | done (site PR #9, deployed): breadcrumb, Previous/Next top and bottom, back to the topic; guide links to an example's heading now go to its page (two were dead anchors); 1710 links OK, strict build clean, 1366 and 390 wide checked |
 | S-207 | Play: Previous and Next beside the example picker (maintainer, 15 Oct) | done (site PR #12, live): ‹ › through the 115 examples, named in tooltips, drafts kept, hidden for blank and shared sketches |
-| S-189 | Play on phones, the core (pulled in, maintainer, 15 Oct: "In the mobile size, the Play loses the editor completely and the sketch size is too small"; measured: editor 0 px tall, picture 68 x 44 at 390 wide): stacked layout under 900 px, picture first at the full width, editor below at a usable height | in progress |
-| S-208 | Change a number with Alt+Up/Down or by Alt+dragging; Auto-run follows (pulled forward, maintainer, 15 Oct) | next, after S-189 |
+| S-189 | Play on phones, the core (pulled in, maintainer, 15 Oct: "In the mobile size, the Play loses the editor completely and the sketch size is too small"; measured: editor 0 px tall, picture 68 x 44 at 390 wide): stacked layout under 900 px, picture first at the full width, editor below at a usable height | done (site PRs #15, #16, live): under 900 px one column, picture as wide as the column (378 x 238 at 390), editor max(60svh, 480px), floating Run, a one-line first-visit notice instead of the full help; 1366 unchanged |
+| S-208 | Change a number with Alt+Up/Down or by Alt+dragging; Auto-run follows (pulled forward, maintainer, 15 Oct) | done (site PR #16, live): Alt+Up/Down by the last digit's step, Alt+Shift ten steps, Alt+drag scrubs (one undo), move-line kept off numbers; Alt highlights the number or the line; Alt's key-up prevented in the editor, confirmed by the maintainer in Chrome on Windows (the live site without it moved focus to the menu) |
 | S-168 | Polish: toolbar buttons sized for the page; Reset shown only when the code differs (check what S-187 already did) | done (site PR #12): status one line with an ellipsis, toolbar one row (50 px) at 1366, nothing overflows at 390; Reset after an edit was already so, now tested |
 
 Order: S-201 and S-204 (the editor bundle), then S-203, S-202 and S-200 (the page and the preview); S-205 alongside, in
@@ -41,5 +41,5 @@ before sign-off (Sprint 25 finding 1).
 - [x] S-206
 - [x] S-207
 - [x] S-168
-- [ ] S-189
-- [ ] S-208
+- [x] S-189
+- [x] S-208
