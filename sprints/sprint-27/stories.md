@@ -13,10 +13,10 @@ one new message (`file`), ignored by older editors.
 
 | Story | Value | Status |
 |---|---|---|
-| S-209 | The picture before Python is ready | planned |
+| S-209 | The picture before Python is ready | done (site PR #17, live): the example's gallery picture, tagged, with the loading status over it; only when the code is the example's own |
 | S-210 | The runtime kept on the device, replaced when a new version is ready | planned |
-| S-211 | Fonts fetched only when a sketch draws text | planned |
-| S-212 | `f.save()` in Play gives you the file; a Save picture button | planned |
+| S-211 | Fonts fetched only when a sketch draws text | built, not effective on GitHub Pages yet (funground-web PRs #9, #10): fonts are lazy files with a fail-safe; GitHub Pages compresses them in transit, so the size check fails and Play loads them at start-up (as before, nothing broken). Option B (a small private funground change, fetching a font when first opened) awaits the maintainer |
+| S-212 | `f.save()` in Play gives you the file; a Save picture button | done (funground-web PR #9, preview PR #5, site PR #19, live): "Saved poster.png - Download" lines, replaced when saved again, no automatic downloads; Save picture downloads the frame; Pillow loads for GIF saves |
 | S-213 | My sketches: a list kept in this browser, download and open `.py` | planned |
 
 Order: S-209 and S-212 first (the editor and the preview), S-211 alongside in funground-web; then S-210 (it caches
@@ -25,8 +25,8 @@ what S-211 changes); then S-213. One builder at a time per repository.
 Acceptance for the sprint: `test_editor.mjs` green with a check for each story; a repeat visit measured against the
 3 s budget; the maintainer's trial on the live site.
 
-- [ ] S-209
+- [x] S-209
 - [ ] S-210
 - [ ] S-211
-- [ ] S-212
+- [x] S-212
 - [ ] S-213
