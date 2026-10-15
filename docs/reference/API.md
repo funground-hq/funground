@@ -7029,8 +7029,8 @@ a clip with f.clip(p). A path does not draw anything until you do that, so you c
 as you like.
 
 Most methods change the path and give it back, so you can chain calls: f.path().move_to(0, 0).line_to(50, 0).
-The building methods are move_to, line_to, curve_to, quad_to, close, rect, ellipse, circle and
-polygon. They change this builder. The methods that make a new shape (union, intersection, difference,
+The building methods are move_to, line_to, curve_to, quad_to, close, rect, square, ellipse, circle,
+triangle, quad and polygon. They change this builder. The methods that make a new shape (union, intersection, difference,
 xor, remove_overlap, expand_stroke, translate, scale, rotate and copy) give you a new builder and leave
 this one alone. The operators do the same: a | b is union, a & b is intersection, a - b and a % b are
 difference, and a ^ b is xor.
@@ -7419,6 +7419,32 @@ p = f.path().polygon([(50, 10), (90, 80), (10, 80)])
 
 See also: [`rect`](#cls-PathBuilder-rect), [`line_to`](#cls-PathBuilder-line_to).
 
+<a id="cls-PathBuilder-quad"></a>
+#### `PathBuilder.quad`
+
+```py
+PathBuilder.quad(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float', x4: 'float', y4: 'float') -> "'PathBuilder'"
+```
+
+Add a four-sided shape through four corners as a closed part of the path.
+
+The corners are joined in the order you give them.
+
+| Argument | Meaning |
+|---|---|
+| `x1`, `y1` | the first corner. |
+| `x2`, `y2` | the second corner. |
+| `x3`, `y3` | the third corner. |
+| `x4`, `y4` | the fourth corner. |
+
+**Returns.** this builder, changed.
+
+```py
+p = f.path().quad(20, 20, 80, 20, 90, 80, 10, 80)
+```
+
+See also: [`triangle`](#cls-PathBuilder-triangle), [`polygon`](#cls-PathBuilder-polygon).
+
 <a id="cls-PathBuilder-quad_to"></a>
 #### `PathBuilder.quad_to`
 
@@ -7533,6 +7559,33 @@ big = f.path().circle(0, 0, 40).scale(2)
 
 See also: [`translate`](#cls-PathBuilder-translate), [`rotate`](#cls-PathBuilder-rotate).
 
+<a id="cls-PathBuilder-square"></a>
+#### `PathBuilder.square`
+
+```py
+PathBuilder.square(x: 'float', y: 'float', size: 'float', *radii: 'float') -> "'PathBuilder'"
+```
+
+Add a square as a closed part of the path.
+
+| Argument | Meaning |
+|---|---|
+| `x`, `y` | the top left corner. |
+| `size` | the length of each side. |
+| `radii` | optional corner rounding, as for rect(): one number, or four. |
+
+**Returns.** this builder, changed.
+
+**Raises.**
+
+- `ValueError`: if the number of radii is not 0, 1 or 4, or a radius is negative.
+
+```py
+p = f.path().square(10, 10, 60, 8)
+```
+
+See also: [`rect`](#cls-PathBuilder-rect), [`circle`](#cls-PathBuilder-circle).
+
 <a id="cls-PathBuilder-translate"></a>
 #### `PathBuilder.translate`
 
@@ -7553,6 +7606,29 @@ moved = f.path().circle(0, 0, 40).translate(100, 100)
 ```
 
 See also: [`scale`](#cls-PathBuilder-scale), [`rotate`](#cls-PathBuilder-rotate).
+
+<a id="cls-PathBuilder-triangle"></a>
+#### `PathBuilder.triangle`
+
+```py
+PathBuilder.triangle(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float', y3: 'float') -> "'PathBuilder'"
+```
+
+Add a triangle through three corners as a closed part of the path.
+
+| Argument | Meaning |
+|---|---|
+| `x1`, `y1` | the first corner. |
+| `x2`, `y2` | the second corner. |
+| `x3`, `y3` | the third corner. |
+
+**Returns.** this builder, changed.
+
+```py
+p = f.path().triangle(10, 90, 90, 90, 50, 10)
+```
+
+See also: [`quad`](#cls-PathBuilder-quad), [`polygon`](#cls-PathBuilder-polygon).
 
 <a id="cls-PathBuilder-union"></a>
 #### `PathBuilder.union`

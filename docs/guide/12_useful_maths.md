@@ -90,6 +90,22 @@ f.run()
 
 ![Movers with vectors](../gallery/images/motion-01_movers.png)
 
+## Many things at once: a class and a list
+
+When a sketch has many things that each move, change and end on their own, write a `class` for one of
+them. The class says what each one knows (its position, velocity and age) and what it can do (move,
+draw itself, say when it is finished). Keep all of them in a list:
+
+- each frame, `append()` new ones to the list;
+- go through the list, and move and draw each one;
+- make the list again from only the ones that are not finished, so it does not grow for ever.
+
+In the gallery example [Sparks that fade](../gallery/README.md#sparks-that-fade-a-class-and-a-list-of-objects),
+every spark counts its age in frames. `f.map_range()` turns the age into its opacity, so an old spark
+fades away instead of vanishing at once.
+
+![Sparks that fade](../gallery/images/motion-02_fading_sparks.png)
+
 ## See also
 
 - Gallery: [Useful maths](../gallery/README.md#useful-maths) and [Motion](../gallery/README.md#motion).

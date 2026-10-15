@@ -339,14 +339,26 @@ def test_clip_with_an_empty_path_warns_and_is_ignored(sketch, canvas):
     assert tuple(canvas.get_at((25, 25))[:3]) == (255, 0, 0)
 
 
+def test_path_square_triangle_and_quad_match_the_canvas_shapes():
+    # The same corners as f.square, f.triangle and f.quad (found 15 Oct: a learner wrote f.path().triangle).
+    assert p.path().square(10, 20, 30).geometry == p.path().rect(10, 20, 30, 30).geometry
+    assert p.path().square(10, 20, 30, 5).geometry == p.path().rect(10, 20, 30, 30, 5).geometry
+    corners = [(0, 0), (10, 0), (5, 10)]
+    assert p.path().triangle(0, 0, 10, 0, 5, 10).geometry == p.path().polygon(corners).geometry
+    four = [(0, 0), (10, 0), (12, 8), (-2, 8)]
+    assert p.path().quad(0, 0, 10, 0, 12, 8, -2, 8).geometry == p.path().polygon(four).geometry
+    both = p.path().triangle(0, 0, 10, 0, 5, 10).square(20, 0, 10)       # each adds a closed part and chains
+    assert both.contains(5, 3) and both.contains(25, 5) and not both.contains(15, 5)
+
+
 def test_a_missing_path_method_says_what_to_write_instead():
     path = p.path()
-    with pytest.raises(AttributeError, match=r"no triangle\(\)\. Use polygon"):
-        path.triangle(0, 0, 10, 0, 5, 10)
-    with pytest.raises(AttributeError, match=r"For a square, use rect\(x, y, size, size\)"):
+    with pytest.raises(AttributeError, match=r"no line\(\)\. Use move_to\(x1, y1\)\.line_to"):
+        path.line(0, 0, 10, 10)
+    with pytest.raises(AttributeError, match="Did you mean square"):
         path.sqare(0, 0, 10)
     with pytest.raises(AttributeError, match="Did you mean circle"):
         path.cirle(0, 0, 10)
-    with pytest.raises(AttributeError, match="shapes are rect, ellipse, circle and polygon"):
+    with pytest.raises(AttributeError, match="shapes are rect, square, ellipse, circle, triangle, quad and polygon"):
         path.frobnicate()
     assert not hasattr(path, "_private")                      # private names stay plain AttributeErrors
