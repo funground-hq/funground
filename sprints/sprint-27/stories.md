@@ -17,7 +17,7 @@ one new message (`file`), ignored by older editors.
 | S-210 | The runtime kept on the device, replaced when a new version is ready | planned |
 | S-211 | Fonts fetched only when a sketch draws text | built, not effective on GitHub Pages yet (funground-web PRs #9, #10): fonts are lazy files with a fail-safe; GitHub Pages compresses them in transit, so the size check fails and Play loads them at start-up (as before, nothing broken). Option B (a small private funground change, fetching a font when first opened) awaits the maintainer |
 | S-212 | `f.save()` in Play gives you the file; a Save picture button | done (funground-web PR #9, preview PR #5, site PR #19, live): "Saved poster.png - Download" lines, replaced when saved again, no automatic downloads; Save picture downloads the frame; Pillow loads for GIF saves |
-| S-213 | My sketches: a list kept in this browser, download and open `.py` | planned |
+| S-213 | My sketches: a list kept in this browser, download and open `.py` | done (site PR #20, live): a My sketches group in the picker; New, Open .py, Rename, Duplicate, Download .py, Delete with Undo, Keep as my sketch; one localStorage key; a line if storage fails |
 
 Order: S-209 and S-212 first (the editor and the preview), S-211 alongside in funground-web; then S-210 (it caches
 what S-211 changes); then S-213. One builder at a time per repository.
@@ -29,4 +29,4 @@ Acceptance for the sprint: `test_editor.mjs` green with a check for each story; 
 - [ ] S-210
 - [ ] S-211
 - [x] S-212
-- [ ] S-213
+- [x] S-213
