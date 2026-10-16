@@ -704,12 +704,16 @@ def declared_value_types() -> dict[str, str]:
     return types
 
 
-def learner_signature(name: str, obj) -> tuple[str, str, list[str]]:
-    """(what a learner reads, with types, the names of the parameters typed as a colour) for a function or class."""
+def learner_signature(name: str, obj, drop_first: bool = False) -> tuple[str, str, list[str]]:
+    """(what a learner reads, with types, the names of the parameters typed as a colour) for a function, a class or,
+    with *drop_first*, a method (its ``self`` is left out)."""
     try:
         sig = inspect.signature(obj)
     except (TypeError, ValueError):
         return f"{name}(...)", "(...)", []
+    params = list(sig.parameters.values())
+    if drop_first and params and params[0].name in ("self", "cls"):
+        sig = sig.replace(parameters=params[1:])
     if inspect.isclass(obj):                                # a class's signature has no return type
         sig = sig.replace(return_annotation=inspect.Signature.empty)
     plain, colour = [], []
@@ -741,10 +745,45 @@ def namespace_members(name: str) -> list[dict]:
     return groups
 
 
+def returned_class(annotation, doc: str | None, class_set: set[str]) -> str | None:
+    """The documented class a function or method gives back, or None. The return annotation says it
+    (``-> "PathBuilder"``, ``-> Clip | None``); without one, the Returns text must begin "a new Picture"."""
+    if isinstance(annotation, str):
+        found = annotation.replace("'", "").replace('"', "").split("|")[0].strip()
+    else:
+        found = re.match(r"(?:an?|the)(?: new| same)? ([A-Z]\w*)", " ".join(parse_doc(doc)["Returns"].split()))
+        found = found.group(1) if found else ""
+    return found if found in class_set else None
+
+
+def class_members(cls: type, class_set: set[str]) -> list[dict]:
+    """The methods and properties of a class, as editors suggest them after ``object.`` (the order of the reference)."""
+    members = []
+    for name, member in public_members(cls):
+        is_property = isinstance(member, property)
+        function = member.fget if is_property else member
+        annotation = inspect.signature(function).return_annotation
+        entry: dict = {"name": name, "kind": "property" if is_property else "method"}
+        if is_property:
+            kept = annotation if isinstance(annotation, str) else ""
+            entry.update(signature=name, detail=learner_types(kept.replace("'", "").replace('"', "")))
+        else:
+            signature, detail, _ = learner_signature(name, function, True)
+            entry.update(signature=signature, detail=detail)
+        entry.update(summary=first_sentence(parse_doc(function.__doc__)["summary"]),
+                     url=f"reference/API.md#cls-{cls.__name__}-{name}")
+        returns = returned_class(annotation, function.__doc__, class_set)
+        if returns:
+            entry["returns"] = returns
+        members.append(entry)
+    return members
+
+
 def completions_text() -> str:
     """funground/completions.json: every public name with its signature, summary and link, the option words,
-    the named colours and the parameters that take a colour."""
+    the named colours, the parameters that take a colour and the members of every documented class."""
     check_groups()
+    class_set = {n for n, _ in all_classes()}
     live_docs = getattr(_api, "LIVE_DOCS", {})
     value_types = declared_value_types()
     star_out = set(f.STAR_LEAVES_OUT)
@@ -772,12 +811,17 @@ def completions_text() -> str:
                          summary=first_sentence(parse_doc(obj.__doc__)["summary"]),
                          url=f"reference/API.md#{'cls' if is_class else 'fn'}-{name}")
             color_params += [{"function": name, "parameter": p} for p in colour]
+            returns = None if is_class else returned_class(inspect.signature(obj).return_annotation, obj.__doc__, class_set)
+            if returns:
+                entry["returns"] = returns
         entry["star"] = name not in star_out
         if name in words:
             entry["options"] = words[name]
         names.append(entry)
     colors = [{"name": n, "hex": hex_of(rgba)[:7]} for n, rgba in sorted(_colornames.NAMED_COLORS.items())]
-    data = {"version": f.__version__, "names": names, "colors": colors, "color_params": color_params}
+    classes = {name: {"summary": first_sentence(parse_doc(cls.__doc__)["summary"]), "url": f"reference/API.md#cls-{name}",
+                      "members": class_members(cls, class_set)} for name, cls in all_classes()}
+    data = {"version": f.__version__, "names": names, "colors": colors, "color_params": color_params, "classes": classes}
     return json.dumps(data, indent=1, ensure_ascii=False) + "\n"
 
 
