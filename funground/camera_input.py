@@ -21,8 +21,12 @@ from __future__ import annotations
 
 import os
 import sys
+from typing import TYPE_CHECKING
 
 from .sound import _is_headless
+
+if TYPE_CHECKING:
+    from .picture import Picture
 
 DEFAULT_SIZE = (640, 480)
 MAX_SECONDS = 10
@@ -329,7 +333,7 @@ class Camera:
         """The picture f.image() draws, or None before the first frame."""
         return self._picture if self._frame is not None else None
 
-    def picture(self):
+    def picture(self) -> "Picture":
         """Make a still picture from the latest frame.
 
         It is a new, ordinary picture that is yours to keep: later frames do not change it. Read its pixels with
@@ -482,7 +486,7 @@ class Clip:
         if not self.done:
             self._frames.append(frame)
 
-    def frame(self, i: int):
+    def frame(self, i: int) -> "Picture":
         """Make a picture from one frame of the clip.
 
         Arguments:
