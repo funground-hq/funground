@@ -1,7 +1,7 @@
 # Design note: camera input (`f.camera`)
 
-**Status:** draft for the maintainer's review, 11 October 2026. Story S-172 (epic E-33). Nothing is built.
-Decisions it needs are listed at the end (proposed D-089).
+**Status:** accepted, 16 October 2026 (D-089, all four as recommended). Story S-172 (epic E-33), built in
+Sprint 28. Written 11 October 2026.
 
 ## Why
 
@@ -99,7 +99,7 @@ so in github.dev a sketch using the camera gets one line saying to run it on the
 frame; turning every pixel into a funground colour in Python is not (a sketch that samples a grid of points
 is). The guide shows sampling, not looping over every pixel; `picture()` copies only when asked.
 
-## Decisions for the maintainer (proposed D-089)
+## Decisions (D-089, accepted 16 October 2026 as recommended)
 
 1. **macOS:** a `camera` extra with OpenCV (large), or "desktop camera on Windows and Linux; on a Mac use the
    website" for 0.2. Recommendation: the latter for 0.2, the extra later if asked for.
