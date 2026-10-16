@@ -279,7 +279,7 @@ class Camera:
         if self in _started:
             _started.remove(self)
         for clip in self._recordings:
-            clip._end()
+            clip.stop()
         self._recordings.clear()
         self._frame = None
         if self._device is not None:
@@ -448,7 +448,7 @@ class Clip:
         self._total = total
         self._canvas = canvas
         self._frames: list[bytes] = []
-        self._ended = False                          # cam.stop() ended the recording before it was full
+        self._ended = False                          # clip.stop() or cam.stop() ended the recording before it was full
 
     @property
     def fps(self) -> int:
@@ -465,8 +465,8 @@ class Clip:
     def done(self) -> bool:
         """Whether the recording is over, so nothing more will be added.
 
-        It is True when the clip is full, or when cam.stop() ended the recording early. Check len(clip) to see how
-        many frames it holds.
+        It is True when the clip is full, or when clip.stop() or cam.stop() ended the recording early. Check
+        len(clip) to see how many frames it holds.
 
         Example:
             if clip.done:
@@ -479,7 +479,20 @@ class Clip:
     def __len__(self) -> int:
         return len(self._frames)
 
-    def _end(self) -> None:
+    def stop(self) -> None:
+        """End the recording now, before its time is up.
+
+        The frames kept so far stay, and clip.done becomes True. The camera stays on. Use it for a record button that
+        you press again to stop: record the longest clip you allow, and stop it when the button is pressed.
+
+        Example:
+            clip = cam.record(10)
+            # later, when the button is pressed again:
+            clip.stop()
+            clip.save("take.gif")
+
+        See also: done, save, record
+        """
         self._ended = True
 
     def _keep(self, frame: bytes) -> None:
