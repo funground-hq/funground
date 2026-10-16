@@ -14,7 +14,7 @@ Windows (Media Foundation, checked: "Integrated Webcam" listed) and Linux (V4L2)
 
 | Story | Value | Status |
 |---|---|---|
-| S-172 | Camera input, `f.camera()`, desktop and browser, still image and short clips | building: parts 1 and 2 done (funground, built by a Sonnet subagent, reviewed); the browser next |
+| S-172 | Camera input, `f.camera()`, desktop and browser, still image and short clips | built and live, 16 Oct: funground PR #10 (built by a Sonnet subagent, reviewed), funground-web PR #11, site PR #23; `tools/test_camera.py` and editor check 55 pass with Chrome's fake camera. Waiting for the maintainer's try with a real camera (Windows desktop, the live site) |
 
 ## Tasks
 
@@ -35,15 +35,15 @@ Windows (Media Foundation, checked: "Integrated Webcam" listed) and Linux (V4L2)
 
 **Part 3, the browser runner (`funground-web`)**
 - [x] `Session.push_camera(pixels, width, height)` and the host camera device in `funground.web`
-- [ ] the page opens `getUserMedia({video})` when the sketch calls `start()`, scales frames on an `OffscreenCanvas`,
+- [x] the page opens `getUserMedia({video})` when the sketch calls `start()`, scales frames on an `OffscreenCanvas`,
   transfers at most one a display frame to the worker; stops the tracks on `stop()`, Stop and the end
-- [ ] refusal: never ready and one line of output; test with Chrome's fake camera
+- [x] refusal: never ready and one line of output; test with Chrome's fake camera
 
 **Part 4, Play**
-- [ ] the preview iframe gets `allow="camera"`; the preview page passes frames; a check in `test_editor.mjs`
+- [x] the preview iframe gets `allow="camera"`; the preview page passes frames; a check in `test_editor.mjs`
 
 **Part 5, github.dev**
-- [ ] the extension's panel cannot use the camera: one line saying to run the sketch on the website or the desktop
+- [x] the extension's panel cannot use the camera: one line saying to run the sketch on the website or the desktop
 
 Acceptance (S-172): a fake camera's frames are drawn, saved and recorded on the desktop and in headless Chrome; refusal
 leaves a black picture and one line of output; the maintainer tries it on the live site and on Windows.
