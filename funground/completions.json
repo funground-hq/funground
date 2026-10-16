@@ -9400,6 +9400,30 @@
      "returns": "Picture"
     },
     {
+     "name": "is_paused",
+     "kind": "method",
+     "signature": "is_paused()",
+     "detail": "() -> bool",
+     "summary": "Whether the recording is paused.",
+     "url": "reference/API.md#cls-Clip-is_paused"
+    },
+    {
+     "name": "pause",
+     "kind": "method",
+     "signature": "pause()",
+     "detail": "() -> None",
+     "summary": "Hold the recording: no frames are kept until resume().",
+     "url": "reference/API.md#cls-Clip-pause"
+    },
+    {
+     "name": "resume",
+     "kind": "method",
+     "signature": "resume()",
+     "detail": "() -> None",
+     "summary": "Go on recording after pause().",
+     "url": "reference/API.md#cls-Clip-resume"
+    },
+    {
      "name": "save",
      "kind": "method",
      "signature": "save(path)",

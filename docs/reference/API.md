@@ -6449,6 +6449,56 @@ last = clip.frame(-1)
 
 See also: [`save`](#cls-Clip-save), [`done`](#cls-Clip-done).
 
+<a id="cls-Clip-is_paused"></a>
+#### `Clip.is_paused`
+
+```py
+Clip.is_paused() -> 'bool'
+```
+
+Whether the recording is paused.
+
+**Returns.** True after pause() until resume(), otherwise False.
+
+```py
+label = "Resume" if clip.is_paused() else "Pause"
+```
+
+See also: [`pause`](#cls-Clip-pause), [`resume`](#cls-Clip-resume), [`done`](#cls-Clip-done).
+
+<a id="cls-Clip-pause"></a>
+#### `Clip.pause`
+
+```py
+Clip.pause() -> 'None'
+```
+
+Hold the recording: no frames are kept until resume().
+
+The time a clip can hold only counts the frames it keeps, so a paused clip waits as long as you like. Pausing a
+clip that is done does nothing.
+
+```py
+clip.pause()
+```
+
+See also: [`resume`](#cls-Clip-resume), [`is_paused`](#cls-Clip-is_paused), [`stop`](#cls-Clip-stop).
+
+<a id="cls-Clip-resume"></a>
+#### `Clip.resume`
+
+```py
+Clip.resume() -> 'None'
+```
+
+Go on recording after pause().
+
+```py
+clip.resume()
+```
+
+See also: [`pause`](#cls-Clip-pause), [`is_paused`](#cls-Clip-is_paused).
+
 <a id="cls-Clip-save"></a>
 #### `Clip.save`
 
