@@ -8,7 +8,9 @@ never waits. What the host does:
   * sets the time of each step with `set_time(seconds)`; `tick()` returns the seconds since the step before;
   * receives each finished frame through the `on_frame` callback;
   * receives sounds through `on_sound`, and the microphone's requests through `on_microphone`, and pushes what
-    the microphone heard with `push_microphone(samples)` (platform/browser_audio.py has the commands).
+    the microphone heard with `push_microphone(samples)` (platform/browser_audio.py has the commands);
+  * receives the camera's requests through `on_camera`, and is pushed its frames with `push_camera(pixels, width,
+    height)` (platform/browser_camera.py has the commands).
 
 The event vocabulary is the one of `InputEvent` (platform.base): kinds in `EVENT_KINDS`, buttons in
 `MOUSE_BUTTONS`, coordinates in logical pixels, keys as a character ("a", " ") or a name from `KEY_NAMES`
@@ -23,6 +25,7 @@ from collections.abc import Callable
 
 from .base import EVENT_KINDS, MOUSE_BUTTONS, InputEvent, Pixels
 from .browser_audio import HostMicrophone, HostMixer, MicrophoneCallback, SoundCallback
+from .browser_camera import CameraCallback, HostCamera
 from .headless import HeadlessPlatform
 
 # on_frame(data, width, height, stride): data is the frame's bytes (BGRA, premultiplied, row-major),
@@ -39,7 +42,8 @@ class BrowserPlatform(HeadlessPlatform):
     host_driven = True
 
     def __init__(self, width: int, height: int, scale: float = 1.0, on_frame: FrameCallback | None = None,
-                 on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None) -> None:
+                 on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None,
+                 on_camera: CameraCallback | None = None) -> None:
         super().__init__()
         if width <= 0 or height <= 0:
             raise ValueError("the host's canvas size must be above 0")
@@ -52,6 +56,7 @@ class BrowserPlatform(HeadlessPlatform):
         self._previous: float | None = None      # the clock at the previous tick
         self.mixer = HostMixer(on_sound)         # what sound.py plays through, instead of pygame's mixer
         self.microphone = HostMicrophone(on_microphone)
+        self.camera = HostCamera(on_camera)
 
     @property
     def backing_scale(self) -> float:
@@ -68,6 +73,10 @@ class BrowserPlatform(HeadlessPlatform):
     def push_microphone(self, samples) -> None:
         """Mono samples (-1 to 1, 44 100 Hz) that the host's microphone heard; they are used while a sketch listens."""
         self.microphone.feed(samples)
+
+    def push_camera(self, pixels, width: int, height: int) -> None:
+        """One RGBA frame from the host's camera (`width * height * 4` bytes); the sketch uses the latest."""
+        self.camera.push(pixels, width, height)
 
     def poll(self) -> bool:
         super().poll()
@@ -102,6 +111,7 @@ class BrowserPlatform(HeadlessPlatform):
     def close(self) -> None:
         self.mixer.stop_all()                    # a run that ends leaves nothing playing or listening
         self.microphone.close()
+        self.camera.close()
         super().close()
 
     # ---- output, to the host

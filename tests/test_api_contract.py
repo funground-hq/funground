@@ -152,7 +152,7 @@ ADDED_FUNCTIONS = {
     "text_style": "(style: 'TextStyle') -> 'None'",
     # S-052 off-screen graphics
     "create_graphics": "(width: 'int', height: 'int') -> 'Picture'",
-    "image": "(picture: 'Picture', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'",
+    "image": "(picture: 'Picture | Camera', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'",
     # S-076 script mode
     "show": "() -> 'None'",
     # S-077 images
@@ -177,6 +177,9 @@ ADDED_FUNCTIONS = {
     # S-108 microphone
     "microphone": "(name: 'str | None' = None) -> 'Microphone'",
     "microphones": "() -> 'list[str]'",
+    # S-172 camera
+    "camera": "(name: 'str | None' = None) -> 'Camera'",
+    "cameras": "() -> 'list[str]'",
     # S-115 ragas
     "ragas": "() -> 'list[str]'",
     "raga": "(name: 'str') -> 'Raga'",

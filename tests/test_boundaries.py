@@ -16,6 +16,7 @@ ALLOWED = {"platform/": {"pygame"}, "renderers/": {"cairo", "skia", "blend2d", "
            "imaging.py": {"pygame"},
            "sound.py": {"pygame"},                           # sound playback (D-046)
            "microphone_input.py": {"pygame"},                     # microphone input via pygame._sdl2.audio (D-058)
+           "camera_input.py": {"pygame"},                         # camera input via pygame.camera (D-089)
            "pathops.py": {"pathops"},                        # path booleans (ADR-005, D-037)
            "svg.py": {"svgelements"}}                       # SVG import (D-041)
 

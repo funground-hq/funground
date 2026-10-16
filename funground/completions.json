@@ -4508,7 +4508,7 @@
    "name": "image",
    "kind": "function",
    "signature": "image(picture, x, y, width=None, height=None, sx=None, sy=None, sw=None, sh=None)",
-   "detail": "(picture: Picture, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
+   "detail": "(picture: Picture | Camera, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
    "summary": "Draw a picture.",
    "url": "reference/API.md#fn-image",
    "star": true
@@ -4852,6 +4852,24 @@
    "detail": "() -> list[str]",
    "summary": "Return the names of the computer's microphones (inputs).",
    "url": "reference/API.md#fn-microphones",
+   "star": true
+  },
+  {
+   "name": "camera",
+   "kind": "function",
+   "signature": "camera(name=None)",
+   "detail": "(name: str | None = None) -> Camera",
+   "summary": "Make a camera object for the computer's default camera.",
+   "url": "reference/API.md#fn-camera",
+   "star": true
+  },
+  {
+   "name": "cameras",
+   "kind": "function",
+   "signature": "cameras()",
+   "detail": "() -> list[str]",
+   "summary": "Return the names of the computer's cameras.",
+   "url": "reference/API.md#fn-cameras",
    "star": true
   },
   {
