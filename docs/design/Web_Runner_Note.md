@@ -80,6 +80,20 @@ first gesture is not started later; a refused microphone does not raise at `star
 desktop-only (`f.microphone("name")` raises, `f.microphones()` is `[]`). Tests: `tests/test_web_sound.py`
 (here) and `tools/test_sound.py` (`funground-web`, headless Chrome with a fake microphone).
 
+**Camera (S-172).** The same shape as the microphone, with pictures instead of samples. `camera_input` keeps the
+latest frame; under a host its device is a `HostCamera` (`platform/browser_camera.py`, installed by
+`camera_input.use_host_camera`). `cam.start(width, height, mirror)` makes the host an `on_camera("start", {"width",
+"height"})` request; `"stop"` and `"close"` (the run ended) follow. The page opens `getUserMedia({video})`, draws
+frames at the asked size on an `OffscreenCanvas` and the worker passes each to `Session.push_camera(pixels, width,
+height)`: RGBA bytes, row by row, `width * height * 4` of them (a frame of another size is scaled). Frames the sketch
+has not used are replaced, never queued; the sketch takes the latest once before each `draw()`. Mirroring is done in
+Python on both platforms. If the page cannot open the camera (refused, none, busy) it calls
+`Session.camera_unavailable(reason)`, which prints one line, `The camera is not available: {reason}.`, once for each
+start; the camera stays not ready, so `f.image(cam)` draws nothing and `cam.picture()` is black. Without `on_camera`
+the camera never becomes ready. A host has one camera: a sketch should make one `f.camera()`. Choosing a camera by
+name is desktop-only (`f.camera("name")` raises, `f.cameras()` is `[]`), and so is `.mp4` for a clip (GIF works). Tests:
+`tests/test_camera.py` (here, with a fake page).
+
 ## Origins and safety (D-078)
 
 - The site (`funground-hq.github.io`) runs **our** code: gallery examples and guide sketches.

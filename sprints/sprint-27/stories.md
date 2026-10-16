@@ -26,7 +26,7 @@ Acceptance for the sprint: `test_editor.mjs` green with a check for each story; 
 3 s budget; the maintainer's trial on the live site.
 
 - [x] S-209
-- [ ] S-210
-- [ ] S-211
+- [ ] S-210 (carried over to the backlog)
+- [ ] S-211 (carried over to the backlog)
 - [x] S-212
 - [x] S-213

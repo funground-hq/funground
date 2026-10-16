@@ -102,6 +102,7 @@ GROUPS: dict[str, list[str]] = {
     "Sound": ["load_sound", "create_sound", "tone", "note", "pluck", "melody", "sequence", "mix", "drone",
               "note_to_frequency", "frequency_to_note", "chord_notes"],
     "Music analysis and the microphone": ["microphone", "microphones"],
+    "Camera": ["camera", "cameras"],
     "Drawing sound": ["draw_wave", "draw_spectrum", "spectrogram", "draw_pitch_line"],
     "Ragas and talas": ["ragas", "raga", "talas", "tala_info", "tala", "match_ragas"],
     "Classes": ["Vector", "FormattedString"],

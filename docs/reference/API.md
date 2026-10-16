@@ -30,12 +30,13 @@ In the examples, `import funground as f` is understood.
 - [Motion and pages](#motion-and-pages): [`frame_duration`](#fn-frame_duration), [`new_page`](#fn-new_page), [`page_size`](#fn-page_size), [`page_count`](#fn-page_count)
 - [Sound](#sound): [`load_sound`](#fn-load_sound), [`create_sound`](#fn-create_sound), [`tone`](#fn-tone), [`note`](#fn-note), [`pluck`](#fn-pluck), [`melody`](#fn-melody), [`sequence`](#fn-sequence), [`mix`](#fn-mix), [`drone`](#fn-drone), [`note_to_frequency`](#fn-note_to_frequency), [`frequency_to_note`](#fn-frequency_to_note), [`chord_notes`](#fn-chord_notes)
 - [Music analysis and the microphone](#music-analysis-and-the-microphone): [`microphone`](#fn-microphone), [`microphones`](#fn-microphones)
+- [Camera](#camera): [`camera`](#fn-camera), [`cameras`](#fn-cameras)
 - [Drawing sound](#drawing-sound): [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`spectrogram`](#fn-spectrogram), [`draw_pitch_line`](#fn-draw_pitch_line)
 - [Ragas and talas](#ragas-and-talas): [`ragas`](#fn-ragas), [`raga`](#fn-raga), [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`match_ragas`](#fn-match_ragas)
 - [Classes](#classes): [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString)
 - [Names for colours and options](#names-for-colours-and-options): [`COLORS`](#const-COLORS), [`CONSTANTS`](#const-CONSTANTS)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
-- [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
+- [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
 
 <a id="sketch-and-loop"></a>
@@ -2683,7 +2684,7 @@ See also: [`hide_layer`](#fn-hide_layer), [`layer`](#fn-layer).
 ### `f.image`
 
 ```py
-f.image(picture: 'Picture', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'
+f.image(picture: 'Picture | Camera', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'
 ```
 
 Draw a picture.
@@ -2692,7 +2693,7 @@ It is drawn as it is at this moment: later drawing on the picture does not chang
 
 | Argument | Meaning |
 |---|---|
-| `picture` | a Picture, from load_image(), load_svg(), create_graphics(), get() or spectrogram(). |
+| `picture` | a Picture, from load_image(), load_svg(), create_graphics(), get() or spectrogram(), or a camera from camera(). A camera draws its latest frame, and nothing before the first one arrives. |
 | `x`, `y` | where to put it, by default the top-left corner. |
 | `width`, `height` | the size to stretch it to. The default None uses the picture's own size. |
 | `sx`, `sy`, `sw`, `sh` | give all four to draw only that part of the picture (in its own pixels) into the box. A part that reaches outside the picture is clipped and keeps its place. sw and sh must be above 0. |
@@ -2706,7 +2707,7 @@ f.image(photo, 0, 0)
 f.image(photo, 0, 0, 200, 150, 40, 30, 100, 75)
 ```
 
-See also: [`load_image`](#fn-load_image), [`create_graphics`](#fn-create_graphics), [`image_mode`](#fn-image_mode), [`tint`](#fn-tint).
+See also: [`load_image`](#fn-load_image), [`create_graphics`](#fn-create_graphics), [`image_mode`](#fn-image_mode), [`tint`](#fn-tint), [`camera`](#fn-camera).
 
 <a id="fn-image_mode"></a>
 ### `f.image_mode`
@@ -4422,6 +4423,58 @@ print(f.microphones())
 
 See also: [`microphone`](#fn-microphone).
 
+<a id="camera"></a>
+## Camera
+
+<a id="fn-camera"></a>
+### `f.camera`
+
+```py
+f.camera(name: 'str | None' = None) -> 'Camera'
+```
+
+Make a camera object for the computer's default camera.
+
+Nothing opens, and no light comes on, until you call cam.start(). Then use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives a still copy whose pixels you can read with get(), cam.save("me.png") writes a photo, and cam.record(3) keeps three seconds as a clip you can save as a GIF. Frames stay on your computer. In the browser, press Play and allow the camera when it asks. On a Mac, the desktop camera does not work yet: run the sketch on the website. With FUNGROUND_HEADLESS=1 the camera opens nothing and is never ready.
+
+| Argument | Meaning |
+|---|---|
+| `name` | part of the name of the camera to use. The default None uses the first camera. See cameras(). In the browser the browser chooses, so leave it out. |
+
+**Returns.** A Camera: start(width, height, mirror), stop(), is_ready(), width, height, picture(), save(path) and record(seconds).
+
+**Raises.**
+
+- `ValueError`: name is not text.
+- `RuntimeError`: there is no camera, no camera has that name, or this is a Mac desktop.
+
+```py
+cam = f.camera()
+cam.start()
+f.image(cam, 0, 0)
+```
+
+See also: [`cameras`](#fn-cameras), [`image`](#fn-image), [`load_image`](#fn-load_image).
+
+<a id="fn-cameras"></a>
+### `f.cameras`
+
+```py
+f.cameras() -> 'list[str]'
+```
+
+Return the names of the computer's cameras.
+
+The list is empty in the browser, where the browser chooses the camera, and on a Mac desktop.
+
+**Returns.** A list of names. Give part of one to camera().
+
+```py
+print(f.cameras())
+```
+
+See also: [`camera`](#fn-camera).
+
 <a id="drawing-sound"></a>
 ## Drawing sound
 
@@ -6112,6 +6165,317 @@ if sa:
 ```
 
 See also: [`swara_histogram`](#cls-Microphone-swara_histogram), [`pitch`](#cls-Microphone-pitch), [`match_ragas`](#fn-match_ragas).
+
+<a id="cls-Camera"></a>
+### `Camera`
+
+```py
+Camera(device_name: 'str | None', canvas=None, silent: 'bool' = False) -> 'None'
+```
+
+A camera that your sketch can look through.
+
+You get one from f.camera(). Nothing opens until you call start(). Then the computer (or the browser) asks
+permission the first time, and frames begin to arrive.
+
+Use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives you a still copy, to read
+pixels with get() or to change. cam.save("me.png") writes a photo. cam.record(3) keeps the next three seconds as
+a clip you can save as a GIF.
+
+The frame is taken once before each draw(), so everything you do in one frame sees the same picture. Before the
+first frame arrives, f.image(cam) draws nothing and cam.picture() is black, so use is_ready() to know when to
+start. Every frame is scaled to the size you asked for and, by default, flipped left to right like a mirror.
+Frames stay on your computer: funground never sends them anywhere. With FUNGROUND_HEADLESS=1 a camera opens
+nothing and is never ready.
+
+```py
+cam = f.camera()
+cam.start()
+f.image(cam, 0, 0)
+```
+
+<a id="cls-Camera-height"></a>
+#### `Camera.height`
+
+```py
+Camera.height  # property
+```
+
+The height of every frame, in pixels: the size asked in start(), or 480 before that.
+
+```py
+print(cam.width, cam.height)
+```
+
+See also: [`width`](#cls-Camera-width), [`start`](#cls-Camera-start).
+
+<a id="cls-Camera-is_ready"></a>
+#### `Camera.is_ready`
+
+```py
+Camera.is_ready() -> 'bool'
+```
+
+Whether a frame has arrived.
+
+**Returns.** True once the camera is started and its first frame has come, otherwise False. It stays False if you refuse permission, and always with FUNGROUND_HEADLESS=1.
+
+```py
+if not cam.is_ready():
+    f.text("Waiting for the camera", 20, 40)
+```
+
+See also: [`start`](#cls-Camera-start), [`picture`](#cls-Camera-picture).
+
+<a id="cls-Camera-picture"></a>
+#### `Camera.picture`
+
+```py
+Camera.picture()
+```
+
+Make a still picture from the latest frame.
+
+It is a new, ordinary picture that is yours to keep: later frames do not change it. Read its pixels with
+get(x, y), change them, filter it, or draw on it. Before the first frame it is black, at the size you asked.
+
+**Returns.** a new Picture, as wide and high as the camera's frames.
+
+```py
+shot = cam.picture()
+colour = shot.get(100, 100)
+```
+
+See also: [`save`](#cls-Camera-save), [`is_ready`](#cls-Camera-is_ready), [`image`](#fn-image).
+
+<a id="cls-Camera-record"></a>
+#### `Camera.record`
+
+```py
+Camera.record(seconds: 'float') -> "'Clip'"
+```
+
+Start keeping the frames of the next few seconds.
+
+It returns a clip at once, and the clip fills as the sketch draws. One frame is kept for each frame the
+sketch draws while the camera is ready, so a full clip holds seconds times the frame rate. The clip is held
+in memory, so it is limited to 10 seconds. Nothing is written until you call clip.save().
+
+| Argument | Meaning |
+|---|---|
+| `seconds` | how long to record, more than 0 and at most 10. |
+
+**Returns.** a Clip that is empty now and full after the time has passed. Check clip.done.
+
+**Raises.**
+
+- `ValueError`: if seconds is not more than 0 and at most 10. The message says how much memory a longer clip needs.
+- `RuntimeError`: if the camera is not started.
+
+```py
+clip = cam.record(3)
+# later, when clip.done is True:
+clip.save("me.gif")
+```
+
+See also: `Clip`, [`stop`](#cls-Camera-stop), [`save`](#cls-Camera-save).
+
+<a id="cls-Camera-save"></a>
+#### `Camera.save`
+
+```py
+Camera.save(path: 'str') -> 'None'
+```
+
+Save the latest frame as a photo.
+
+The file type comes from the name: .png, or .jpg (a .jpg needs Pillow: pip install funground[extras]). It
+writes a new file. Before the first frame the photo is black.
+
+| Argument | Meaning |
+|---|---|
+| `path` | the file name, such as "me.png". |
+
+**Raises.**
+
+- `ValueError`: if the name does not end in .png, .jpg or .jpeg.
+- `RuntimeError`: for a .jpg, if Pillow is not installed.
+
+```py
+cam.save("me.png")
+```
+
+See also: [`picture`](#cls-Camera-picture), [`record`](#cls-Camera-record).
+
+<a id="cls-Camera-start"></a>
+#### `Camera.start`
+
+```py
+Camera.start(width: 'int' = 640, height: 'int' = 480, mirror: 'bool' = True) -> 'None'
+```
+
+Open the camera.
+
+The computer or the browser may ask your permission first. Frames are scaled to width and height, so your
+layout never depends on the camera. Call it again with other numbers to change the size. The camera closes
+when you call stop() and when the sketch ends.
+
+| Argument | Meaning |
+|---|---|
+| `width`, `height` | the size of every frame in pixels, whole numbers above 0. |
+| `mirror` | True (the default) flips each frame left to right, like a mirror. False shows what the camera sees. |
+
+**Raises.**
+
+- `ValueError`: if width or height is not a whole number above 0.
+- `RuntimeError`: if the camera is busy, or the computer will not let funground use it.
+
+```py
+cam = f.camera()
+cam.start(320, 240)
+```
+
+See also: [`stop`](#cls-Camera-stop), [`is_ready`](#cls-Camera-is_ready), [`picture`](#cls-Camera-picture).
+
+<a id="cls-Camera-stop"></a>
+#### `Camera.stop`
+
+```py
+Camera.stop() -> 'None'
+```
+
+Let go of the camera, so its light goes off.
+
+A recording that is still going ends early, and what it kept stays. After stop(), is_ready() is False and
+f.image(cam) draws nothing, until you call start() again. funground calls it when a sketch ends.
+
+```py
+cam.stop()
+```
+
+See also: [`start`](#cls-Camera-start), [`record`](#cls-Camera-record).
+
+<a id="cls-Camera-width"></a>
+#### `Camera.width`
+
+```py
+Camera.width  # property
+```
+
+The width of every frame, in pixels: the size asked in start(), or 640 before that.
+
+```py
+print(cam.width, cam.height)
+```
+
+See also: [`height`](#cls-Camera-height), [`start`](#cls-Camera-start).
+
+<a id="cls-Clip"></a>
+### `Clip`
+
+```py
+Clip(width: 'int', height: 'int', fps: 'int', total: 'int', canvas) -> 'None'
+```
+
+A few seconds of camera frames, kept in memory.
+
+You get one from cam.record(). It fills while the sketch draws. When clip.done is True it is full. len(clip)
+is how many frames it holds, clip.frame(i) is one of them as a picture, and clip.save("me.gif") writes it as
+an animated GIF (or an MP4 on a computer with the video extra). Nothing is written to a file until you save.
+
+```py
+clip = cam.record(2)
+if clip.done:
+    clip.save("me.gif")
+```
+
+<a id="cls-Clip-done"></a>
+#### `Clip.done`
+
+```py
+Clip.done  # property
+```
+
+Whether the recording is over, so nothing more will be added.
+
+It is True when the clip is full, or when cam.stop() ended the recording early. Check len(clip) to see how
+many frames it holds.
+
+```py
+if clip.done:
+    clip.save("me.gif")
+```
+
+See also: [`save`](#cls-Clip-save).
+
+<a id="cls-Clip-fps"></a>
+#### `Clip.fps`
+
+```py
+Clip.fps  # property
+```
+
+How many frames a second the clip plays: the sketch's frame rate when it was recorded.
+
+```py
+print(clip.fps)
+```
+
+See also: [`done`](#cls-Clip-done).
+
+<a id="cls-Clip-frame"></a>
+#### `Clip.frame`
+
+```py
+Clip.frame(i: 'int')
+```
+
+Make a picture from one frame of the clip.
+
+| Argument | Meaning |
+|---|---|
+| `i` | the frame number. 0 is the first. A negative number counts from the end, so -1 is the last. |
+
+**Returns.** a new Picture.
+
+**Raises.**
+
+- `IndexError`: if there is no frame i.
+
+```py
+first = clip.frame(0)
+last = clip.frame(-1)
+```
+
+See also: [`save`](#cls-Clip-save), [`done`](#cls-Clip-done).
+
+<a id="cls-Clip-save"></a>
+#### `Clip.save`
+
+```py
+Clip.save(path: 'str') -> 'None'
+```
+
+Write the frames kept so far to a file.
+
+The file type comes from the name. A .gif is an endless animation and works everywhere. An .mp4 is a movie:
+it works on a computer with the video extra (pip install funground[video]), not in the browser. It writes a
+new file.
+
+| Argument | Meaning |
+|---|---|
+| `path` | the file name, such as "me.gif". |
+
+**Raises.**
+
+- `ValueError`: if the name does not end in a type that works, or the clip has no frames yet.
+- `RuntimeError`: if the computer has nothing to write that type with.
+
+```py
+clip.save("me.gif")
+```
+
+See also: [`frame`](#cls-Clip-frame), [`done`](#cls-Clip-done).
 
 <a id="cls-Picture"></a>
 ### `Picture`
