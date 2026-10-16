@@ -28,10 +28,11 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from . import api, global_style, microphone_input, sound, typography
+from . import api, camera_input, global_style, microphone_input, sound, typography
 from .platform.base import InputEvent
 from .platform.browser import BrowserPlatform, FrameCallback
 from .platform.browser_audio import MicrophoneCallback, SoundCallback
+from .platform.browser_camera import CameraCallback
 from .sketch import Sketch
 
 
@@ -45,13 +46,22 @@ class Session:
     Sound and the microphone go through the host too (S-137): `on_sound(command, voice, fields, samples)`
     plays what the sketch makes, `on_microphone(command)` is asked to start and stop the input, and
     `push_microphone(samples)` delivers what it heard (platform.browser_audio has the commands). Without
-    these callbacks sounds play silently and keep time, and the microphone hears nothing."""
+    these callbacks sounds play silently and keep time, and the microphone hears nothing.
+
+    The camera goes through the host as well (S-172): `on_camera(command, fields)` is told "start" (with the
+    width and height the sketch asked for), "stop" and "close", and `push_camera(pixels, width, height)` delivers a
+    frame as RGBA bytes, row by row, `width * height * 4` of them, at the size asked (a frame of another size is
+    scaled). The sketch mirrors it when it asked for that. `camera_unavailable(reason)` tells the Session that the
+    page could not open the camera: it prints one line, "The camera is not available: ...", for each start, and
+    the camera stays not ready. Without `on_camera` the camera never becomes ready."""
 
     def __init__(self, width: int, height: int, scale: float = 1.0, on_frame: FrameCallback | None = None,
-                 on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None) -> None:
-        self._platform = BrowserPlatform(width, height, scale, on_frame, on_sound, on_microphone)
+                 on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None,
+                 on_camera: CameraCallback | None = None) -> None:
+        self._platform = BrowserPlatform(width, height, scale, on_frame, on_sound, on_microphone, on_camera)
         sound.use_host_mixer(self._platform.mixer)
         microphone_input.use_host_input(self._platform.microphone)
+        camera_input.use_host_camera(self._platform.camera)
         self._sketch = api.use_sketch(Sketch(platform=self._platform))
         self._stopped = False
         self._font_mark = typography.file_font_mark()
@@ -118,8 +128,18 @@ class Session:
         """Mono samples from -1 to 1 at 44 100 Hz that the host's microphone heard. Used while the sketch listens."""
         self._platform.push_microphone(samples)
 
+    def push_camera(self, pixels, width: int, height: int) -> None:
+        """One frame from the host's camera: RGBA bytes, row by row from the top left, `width * height * 4` of them,
+        at the size "start" asked for (another size is scaled). Used while the sketch has the camera started."""
+        self._platform.push_camera(pixels, width, height)
+
+    def camera_unavailable(self, reason: str) -> None:
+        """The page could not open the camera (refused, none, busy). Prints one line to the sketch's output for each
+        start; the camera stays not ready."""
+        self._platform.camera.unavailable(reason)
+
     def stop(self) -> None:
-        """End the run: the sketch's finish() runs, once; sounds stop and the microphone is let go. Safe to call again."""
+        """End the run: the sketch's finish() runs, once; sounds stop and the microphone and camera are let go. Safe to call again."""
         if self._stopped:
             return
         self._stopped = True
@@ -128,6 +148,7 @@ class Session:
         finally:
             sound.use_host_mixer(None)
             microphone_input.use_host_input(None)
+            camera_input.use_host_camera(None)
             api.use_sketch(None)
             typography.forget_file_fonts(self._font_mark)
             self._forget_sketch_modules()

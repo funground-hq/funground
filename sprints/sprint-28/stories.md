@@ -14,27 +14,27 @@ Windows (Media Foundation, checked: "Integrated Webcam" listed) and Linux (V4L2)
 
 | Story | Value | Status |
 |---|---|---|
-| S-172 | Camera input, `f.camera()`, desktop and browser, still image and short clips | planned |
+| S-172 | Camera input, `f.camera()`, desktop and browser, still image and short clips | building: parts 1 and 2 done (funground, built by a Sonnet subagent, reviewed); the browser next |
 
 ## Tasks
 
 **Part 1, funground on the desktop**
-- [ ] `funground/camera_input.py`: the only module that touches `pygame.camera` (boundary table); a replaceable device
+- [x] `funground/camera_input.py`: the only module that touches `pygame.camera` (boundary table); a replaceable device
   (as `microphone_input.use_host_input`); a fake device for tests; the headless camera (never ready)
-- [ ] `f.camera()`, `f.cameras()`; `Camera.start/stop/is_ready/picture/save/record`, `width`, `height`; `Clip`
-- [ ] the frame taken once before each `draw()`; recording one frame per drawn frame; cameras stopped at the end
-- [ ] `f.image(cam, ...)` draws the frame (P3, P5, P6); nothing before the first frame
-- [ ] the Mac message; errors as I4 and I5
-- [ ] tests: `tests/test_camera.py` with the fake device (drawn, mirrored, scaled, `picture`, `save`, `record`, clip
+- [x] `f.camera()`, `f.cameras()`; `Camera.start/stop/is_ready/picture/save/record`, `width`, `height`; `Clip`
+- [x] the frame taken once before each `draw()`; recording one frame per drawn frame; cameras stopped at the end
+- [x] `f.image(cam, ...)` draws the frame (P3, P5, P6); nothing before the first frame
+- [x] the Mac message; errors as I4 and I5
+- [x] tests: `tests/test_camera.py` with the fake device (drawn, mirrored, scaled, `picture`, `save`, `record`, clip
   GIF, the 10 s cap, headless, errors, the boundary)
 
 **Part 2, documentation**
-- [ ] docstrings, `make_api_reference.py`, Quick Reference rows, a guide section (images chapter)
-- [ ] two gallery examples with a fallback picture when there is no camera: a mirror of dots (sampling `picture()`),
+- [x] docstrings, `make_api_reference.py`, Quick Reference rows, a guide section (images chapter)
+- [x] two gallery examples with a fallback picture when there is no camera: a mirror of dots (sampling `picture()`),
   a photo booth (a key records a 3 s GIF); goldens show the fallback (headless camera); originality check
 
 **Part 3, the browser runner (`funground-web`)**
-- [ ] `Session.push_camera(pixels, width, height)` and the host camera device in `funground.web`
+- [x] `Session.push_camera(pixels, width, height)` and the host camera device in `funground.web`
 - [ ] the page opens `getUserMedia({video})` when the sketch calls `start()`, scales frames on an `OffscreenCanvas`,
   transfers at most one a display frame to the worker; stops the tracks on `stop()`, Stop and the end
 - [ ] refusal: never ready and one line of output; test with Chrome's fake camera

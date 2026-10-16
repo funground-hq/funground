@@ -29,6 +29,7 @@ from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
 
 if TYPE_CHECKING:                                    # only for the annotations below; nothing is imported at run time
     from .hindustani import Raga, Tala
+    from .camera_input import Camera
     from .microphone_input import Microphone
     from .paint import Gradient
     from .sound import Sound
@@ -3259,6 +3260,51 @@ def microphones() -> list[str]:
     return mic.microphones()
 
 
+def camera(name: str | None = None) -> Camera:
+    """Make a camera object for the computer's default camera.
+
+    Nothing opens, and no light comes on, until you call cam.start(). Then use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives a still copy whose pixels you can read with get(), cam.save("me.png") writes a photo, and cam.record(3) keeps three seconds as a clip you can save as a GIF. Frames stay on your computer. In the browser, press Play and allow the camera when it asks. On a Mac, the desktop camera does not work yet: run the sketch on the website. With FUNGROUND_HEADLESS=1 the camera opens nothing and is never ready.
+
+    Arguments:
+        name: part of the name of the camera to use. The default None uses the first camera. See cameras(). In the browser the browser chooses, so leave it out.
+
+    Returns:
+        A Camera: start(width, height, mirror), stop(), is_ready(), width, height, picture(), save(path) and record(seconds).
+
+    Raises:
+        ValueError: name is not text.
+        RuntimeError: there is no camera, no camera has that name, or this is a Mac desktop.
+
+    Example:
+        cam = f.camera()
+        cam.start()
+        f.image(cam, 0, 0)
+
+    See also: cameras, image, load_image
+    """
+    from . import camera_input
+
+    return camera_input.make(name, canvas_sketch)
+
+
+def cameras() -> list[str]:
+    """Return the names of the computer's cameras.
+
+    The list is empty in the browser, where the browser chooses the camera, and on a Mac desktop.
+
+    Returns:
+        A list of names. Give part of one to camera().
+
+    Example:
+        print(f.cameras())
+
+    See also: camera
+    """
+    from . import camera_input
+
+    return camera_input.cameras()
+
+
 # ---- drawing sound (S-111, contract A7, D-061)
 def draw_wave(source: Any, x: float, y: float, w: float, h: float) -> None:
     """Draw the wave of a sound, a microphone or a list of numbers.
@@ -3378,7 +3424,7 @@ def svg_paths(path: str) -> list[PathBuilder]:
     return [PathBuilder(geometry) for geometry in svg.shapes_as_paths(svg.read(resolved, "f.svg_paths()"))]
 
 
-def image(picture: Picture, x: float, y: float, width: float | None = None, height: float | None = None,
+def image(picture: Picture | Camera, x: float, y: float, width: float | None = None, height: float | None = None,
           sx: float | None = None, sy: float | None = None,
           sw: float | None = None, sh: float | None = None) -> None:
     """Draw a picture.
@@ -3386,7 +3432,7 @@ def image(picture: Picture, x: float, y: float, width: float | None = None, heig
     It is drawn as it is at this moment: later drawing on the picture does not change what was placed. image_mode() changes how x, y, width and height are read. tint() colours it.
 
     Arguments:
-        picture: a Picture, from load_image(), load_svg(), create_graphics(), get() or spectrogram().
+        picture: a Picture, from load_image(), load_svg(), create_graphics(), get() or spectrogram(), or a camera from camera(). A camera draws its latest frame, and nothing before the first one arrives.
         x, y: where to put it, by default the top-left corner.
         width, height: the size to stretch it to. The default None uses the picture's own size.
         sx, sy, sw, sh: give all four to draw only that part of the picture (in its own pixels) into the box. A part that reaches outside the picture is clipped and keeps its place. sw and sh must be above 0.
@@ -3398,7 +3444,7 @@ def image(picture: Picture, x: float, y: float, width: float | None = None, heig
         f.image(photo, 0, 0)
         f.image(photo, 0, 0, 200, 150, 40, 30, 100, 75)
 
-    See also: load_image, create_graphics, image_mode, tint
+    See also: load_image, create_graphics, image_mode, tint, camera
     """
     draw_image(active_sketch(), picture, x, y, width, height, sx, sy, sw, sh)
 

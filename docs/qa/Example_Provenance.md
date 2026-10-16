@@ -206,3 +206,10 @@ against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagg
 `examples/gallery/motion/02_fading_sparks.py` (a class for one spark and a list of them; new sparks each frame, old
 ones fading by age) is an original CC0 example written after the maintainer asked for one. `tools/check_originality.py`
 against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged (highest combined score 0.16).
+
+## Images 06 and 07, the camera (S-172) — 16 October 2026
+
+`examples/gallery/images/06_mirror_of_dots.py` (a grid of dots sized by the brightness of `cam.picture().get(x, y)`) and
+`07_photo_booth.py` (a key records a three-second clip and saves it as a GIF) are original CC0 examples written for the
+camera feature. Both show a photo when there is no camera. `tools/check_originality.py` against the 2,974 corpus files in
+`C:\Projects\funground-corpora`: nothing flagged (highest combined score 0.16 for each).
