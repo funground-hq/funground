@@ -1,5 +1,7 @@
 sound.Sound
 microphone_input.Microphone
+camera_input.Camera
+camera_input.Clip
 picture.Picture
 vector.Vector
 formatted.FormattedString

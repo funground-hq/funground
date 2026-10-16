@@ -749,6 +749,75 @@ f.run()
 | `g.filter(kind, value)` | Change every pixel of the picture. |
 | `f.filter(kind, value)` | Change everything drawn on the canvas so far. |
 
+### The camera
+
+A picture can also come from your camera. `f.camera()` makes a camera object. **Nothing opens until you
+call `cam.start()`.** Then your computer (or the browser) asks for permission, and the camera's light comes on.
+Frames stay on your computer: funground never sends them anywhere. The camera is let go when you call
+`cam.stop()` and when the sketch ends. The camera works on Windows and Linux computers and on the website
+(Play). On a Mac computer, `f.camera()` says to run the sketch on the website instead.
+
+```py
+cam = f.camera()
+
+
+def setup():
+    f.size(640, 480)
+    cam.start()                  # asks permission the first time
+
+
+def draw():
+    f.image(cam, 0, 0)           # the camera's latest frame
+
+
+def key_pressed():
+    if f.key == "s":
+        cam.save("me.png")       # a photo, at the camera's size
+
+
+f.run()
+```
+
+Use the camera like a picture. `f.image(cam, x, y)` draws its latest frame and takes everything `f.image()` takes:
+a size, `f.tint()`, `f.image_mode()`. The frame is taken once before each `draw()`, so everything you do in one
+frame sees the same picture. Every frame is scaled to the size you gave `cam.start(width, height)`, and it is
+flipped left to right like a mirror. Use `cam.start(mirror=False)` to see what the camera sees.
+
+The camera needs a moment to wake up. Until the first frame arrives, `cam.is_ready()` is `False`, `f.image(cam)`
+draws nothing, and `cam.picture()` is black. So a sketch never crashes while it waits. If the camera is refused
+or there is none, it stays that way, so give your sketch something else to show, such as a photo you load.
+
+`cam.picture()` gives a **still copy** of the latest frame. It is an ordinary picture: read its pixels with
+`get(x, y)`, filter it or draw on it. To turn yourself into dots, look at a grid of points. Do not look at every
+pixel: that is slow.
+
+```py
+shot = cam.picture()
+for y in range(0, 480, 20):
+    for x in range(0, 640, 20):
+        c = shot.get(x, y)
+        f.circle(x, y, 18 * (c.red + c.green + c.blue) / 765)
+```
+
+`clip = cam.record(3)` keeps the next three seconds, one frame for each frame your sketch draws. The clip is in
+memory only, so it is limited to 10 seconds. When `clip.done` is `True` the recording is over. Then `clip.save("me.gif")`
+writes an animated GIF. (An `.mp4` also works on a computer with the video extra, but not in the browser.)
+
+| Call | What it does |
+|---|---|
+| `f.camera()` / `f.cameras()` | A camera, and the names of the cameras on your computer. |
+| `cam.start(width, height, mirror)` / `cam.stop()` | Open the camera, and let it go. |
+| `cam.is_ready()` | `True` once a frame has arrived. |
+| `f.image(cam, x, y)` | Draw the latest frame. |
+| `cam.picture()` | A still copy as a picture. |
+| `cam.save("me.png")` | Save a photo. |
+| `cam.record(seconds)` | Keep the next few seconds as a clip. |
+| `clip.done`, `len(clip)`, `clip.frame(i)`, `clip.save("me.gif")` | The clip, frame by frame, and as a file. |
+
+On Windows and Linux the camera works on the desktop. **On a Mac, run the sketch on the website** (press Play) to
+use the camera. In Visual Studio Code's panel the camera is not available. The gallery has a
+[mirror of dots](../gallery/README.md#pictures-and-images) and a photo booth. Both show a photo when there is no camera.
+
 ## See also
 
 - Gallery: [Paths and clipping](../gallery/README.md#paths-and-clipping), [Curves](../gallery/README.md#curves), [Pictures and images](../gallery/README.md#pictures-and-images) and [Blending](../gallery/README.md#blending-opacity-and-shadows) (for pictures and layers).

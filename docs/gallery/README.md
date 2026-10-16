@@ -2170,6 +2170,65 @@ f.load_svg() reads an SVG file and gives you a picture. It is made of shapes, no
 
 Source: [`examples/gallery/images/05_svg.py`](../../examples/gallery/images/05_svg.py)
 
+### A mirror of dots
+
+![A mirror of dots](images/images-06_mirror_of_dots.png)
+
+You, drawn as a grid of white dots on black. Bright parts of you get big dots and dark parts get small ones. Move around and the dots follow. With no camera, it draws the same dots from a photo, so it always works.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.camera() makes a camera object, and cam.start(400, 300) opens it. The computer asks your permission first. It opens only here, and the light goes off when the sketch ends.
+- cam.picture() is a still copy of the latest frame. It is an ordinary picture, so picture.get(x, y) gives the colour at one point.
+- Looking at a grid of points, one every 10 pixels, is quick. Looking at every pixel of every frame would not be.
+- The size of each dot comes from the brightness: red, green and blue added up, divided by 765 (3 x 255).
+- cam.is_ready() is False until the first frame arrives, and for ever if there is no camera. Then the sketch loads a photo with f.load_image() and draws that instead.
+
+**Make it yours**
+
+- Change STEP to 6 for more, smaller dots, or to 16 for fewer and bigger ones.
+- Change the background and the dot colour. Try dark dots on a white background.
+- Draw squares with f.square() or letters with f.text() in place of circles.
+- Show the colour of the dot: use f.fill(c) in place of the white.
+- Call cam.start(400, 300, mirror=False) to see what the camera sees, not a mirror.
+
+</details>
+
+Source: [`examples/gallery/images/06_mirror_of_dots.py`](../../examples/gallery/images/06_mirror_of_dots.py)
+
+### Photo booth
+
+![Photo booth](images/images-07_photo_booth.png)
+
+The camera, live on the canvas. Press the space bar and it records three seconds, counting down as it goes. Then it saves them as an animated picture called booth.gif, in the folder you ran it from. With no camera, it shows a photo.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.camera() makes a camera object, and cam.start() opens it. f.image(cam, 0, 0) draws its latest frame, like any picture.
+- cam.record(3) starts a clip. The clip fills with one frame for each frame the sketch draws, so f.run(fps=15) makes it 15 frames a second.
+- clip.done is True when the clip is full, and len(clip) counts the frames so far. The countdown is worked out from them.
+- clip.save("booth.gif") writes the animated GIF. Everything before that was only in memory.
+- cam.is_ready() is False until the first frame arrives, and for ever if there is no camera. Then a photo from f.load_image() is shown, and the space bar does nothing.
+- f.cameras() lists the names of the cameras, and the sketch prints them. Give part of a name to f.camera() to choose one.
+
+**Make it yours**
+
+- Change SECONDS to record for longer. A clip can be at most 10 seconds.
+- Change f.run(fps=15) to 10 for a smaller file, or to 24 for smoother movement.
+- Show the countdown as a big number in the middle with f.text_size(80) and f.text_align("center").
+- Name each file differently, such as "booth-1.gif", "booth-2.gif", and so on.
+- Add f.tint("gold") or another colour before f.image() for a coloured filter.
+
+</details>
+
+Source: [`examples/gallery/images/07_photo_booth.py`](../../examples/gallery/images/07_photo_booth.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it

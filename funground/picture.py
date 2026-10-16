@@ -17,6 +17,7 @@ from typing import Any
 
 from . import ir
 from ._options import SaveText
+from .camera_input import Camera
 from .platform.base import InputState
 from .renderers.cairo2d import CairoRenderer
 from .sketch import Sketch
@@ -514,7 +515,14 @@ def draw_image(target: Sketch, picture: Any, x: float, y: float,
     *target* is whichever Sketch is issuing the call - the main sketch for ``f.image()``, or
     a picture's own inner sketch for ``g.image()`` - so the current transform, clip,
     blend_mode and opacity are always the *caller's*, never the source picture's.
+
+    A camera (contract I4) is drawn as its latest frame, which is one picture of its own; before the first frame
+    nothing is drawn.
     """
+    if isinstance(picture, Camera):
+        picture = picture._current_picture()
+        if picture is None:
+            return
     if not isinstance(picture, Picture):
         raise TypeError(
             f"f.image() needs a picture made with f.create_graphics(), not {type(picture).__name__} "
