@@ -2923,7 +2923,7 @@ Source: [`examples/gallery/projects/08_flow_field_print.py`](../../examples/gall
 
 ![Blow the words away](images/projects-09_blow_the_words_away.png)
 
-You on the camera, and a cloud of words hanging in front of your mouth like fog. The words drift and thin out and gather again. Blow into the microphone and the words nearest your mouth fly away and fade. A moment later they drift back into the cloud. Click to move the cloud to where your mouth is. With no camera the words hang in a night sky, and with no microphone you blow by holding Space.
+You on the camera, and a cloud of words hanging in front of your mouth like fog. The words drift and thin out and gather again, and your breath blows them away. Press Record, blow, and press Stop: the sketch plays your take back with the words flying exactly when you blew, and saves it as blow.gif (and the plain video as take.gif). Click the picture to put the cloud on your mouth, and zoom in for a close-up. With no camera the words hang in a night sky; with no microphone, hold Space to blow.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
@@ -2931,19 +2931,18 @@ You on the camera, and a cloud of words hanging in front of your mouth like fog.
 **How it works**
 
 - Each word is an object of class Word. It knows its text, its home in the cloud, where it is now and how fast it moves, and how much of it is left (fade). A list holds all the words.
-- The cloud is fog because each word's opacity changes slowly with f.noise(), so words come and go. Inside with f.saved_state(), f.opacity() sets one word's opacity and leaves the others alone.
-- mic.level() gives the breath. It is turned into decibels, so a soft breath on a laptop's microphone counts too. A breath pushes each word away from the mouth, harder when it is close.
-- A blown word slows down in the air, and its fade drops as it goes further from home. When it has faded away, it starts again at its home, invisible, and fades in.
-- Behind the words, a few soft puffs of fog drift: circles filled with f.radial_gradient(), white in the middle and see-through at the edge. A breath thins them, and they thicken again slowly.
-- f.image(cam, 0, 0) draws the camera behind everything. f.save_gif() keeps three seconds when you press G.
+- The cloud is fog because each word's opacity changes slowly with f.noise(), and soft puffs of f.radial_gradient() drift behind them. f.opacity() inside with f.saved_state() fades one word only.
+- mic.level() gives the breath, turned into decibels so a soft breath on a laptop counts too. A breath pushes each word away from the mouth, harder when it is close; then it fades and drifts back.
+- Record starts cam.record(), and the sketch keeps the breath of every frame in a list. Stop calls clip.stop(). The take is played back with clip.frame(i), and the words move with the breath kept for that frame, while f.save_gif() records the playback. clip.save() writes the plain video.
+- Zoom draws only the middle part of the camera picture, larger: f.image() with a source box.
 
 **Make it yours**
 
 - Change TEXT to your own sentence, or a poem.
-- Change SPREAD for a wider or tighter cloud.
-- Change BLOW: a bigger number blows the words further.
+- Change SPREAD for a wider or tighter cloud, and BLOW: a bigger number blows the words further.
 - Give each word its own colour with f.random_choice() in Word.__init__.
 - Make the words fall like leaves: add a small downward pull in Word.move().
+- Change MAX_TAKE for longer takes. Every frame stays in memory, and a long GIF is slow to save.
 
 </details>
 
