@@ -474,6 +474,20 @@ def test_frame_index_errors(desk):
         clip.frame(0.5)
 
 
+def test_clip_stop_ends_the_recording_and_keeps_the_camera_on(desk):
+    cam = f.camera()
+    f.size(8, 4)
+    cam.start(8, 4)
+    clip = cam.record(5)
+    sketch = api.active_sketch()
+    for _ in range(3):
+        ci.take_frames(sketch)
+    clip.stop()
+    assert clip.done and len(clip) == 3
+    ci.take_frames(sketch)
+    assert len(clip) == 3 and cam.is_ready()            # nothing more is kept, and the camera still gives frames
+
+
 def test_stop_ends_a_recording_early_and_what_was_kept_stays(desk):
     cam = f.camera()
     f.size(8, 4)
