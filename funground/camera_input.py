@@ -449,6 +449,7 @@ class Clip:
         self._canvas = canvas
         self._frames: list[bytes] = []
         self._ended = False                          # clip.stop() or cam.stop() ended the recording before it was full
+        self._paused = False                         # clip.pause(): frames are not kept until clip.resume()
 
     @property
     def fps(self) -> int:
@@ -495,8 +496,44 @@ class Clip:
         """
         self._ended = True
 
+    def pause(self) -> None:
+        """Hold the recording: no frames are kept until resume().
+
+        The time a clip can hold only counts the frames it keeps, so a paused clip waits as long as you like. Pausing a
+        clip that is done does nothing.
+
+        Example:
+            clip.pause()
+
+        See also: resume, is_paused, stop
+        """
+        self._paused = True
+
+    def resume(self) -> None:
+        """Go on recording after pause().
+
+        Example:
+            clip.resume()
+
+        See also: pause, is_paused
+        """
+        self._paused = False
+
+    def is_paused(self) -> bool:
+        """Whether the recording is paused.
+
+        Returns:
+            True after pause() until resume(), otherwise False.
+
+        Example:
+            label = "Resume" if clip.is_paused() else "Pause"
+
+        See also: pause, resume, done
+        """
+        return self._paused
+
     def _keep(self, frame: bytes) -> None:
-        if not self.done:
+        if not self.done and not self._paused:
             self._frames.append(frame)
 
     def frame(self, i: int) -> "Picture":

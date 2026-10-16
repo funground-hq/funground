@@ -13,7 +13,7 @@ a spot the learner places, words as fog). No new public funground name is planne
 | Story | Value | Status |
 |---|---|---|
 | S-214 | Play suggests the methods of what funground gives back (`f.path().`, a camera, a picture...) | done, live 16 Oct (funground PR #11, site PR #24; built by a Sonnet subagent, reviewed) |
-| S-215 | Each gallery example says where the guide teaches it | planned |
+| S-215 | Each gallery example says where the guide teaches it | done, live 16 Oct (site PR #25; built by a Sonnet subagent, reviewed: areas credited only to chapters that link them) |
 | S-216 | Lessons 1, 3 and 5 open their experiments in Play, with prompts and a way back | planned |
 | S-173 | Blow the words away: a fog of words around your mouth, scattered by your breath | done, live 16 Oct (funground PR #11); the inspiring GIF's source to be added |
 
@@ -28,9 +28,9 @@ classes' members)
 - [x] checks in `test_editor.mjs`
 
 **S-215 Gallery and guide** (site, `tools/assemble.py`)
-- [ ] from the guide's links and pictures, the guide sections that use each example
-- [ ] "In the guide: ..." on each example page; the chapter on each area of the gallery index
-- [ ] `check_links.py`, strict build
+- [x] from the guide's links and pictures, the guide sections that use each example
+- [x] "In the guide: ..." on each example page; the chapter on each area of the gallery index
+- [x] `check_links.py`, strict build
 
 **S-216 The course in Play, first step** (funground `docs/course`, `examples/course`; site)
 - [ ] for each experiment of Lessons 1, 3 and 5: its prediction prompt and named comparison, written in the course's
