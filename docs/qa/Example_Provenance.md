@@ -213,3 +213,13 @@ against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagg
 `07_photo_booth.py` (a key records a three-second clip and saves it as a GIF) are original CC0 examples written for the
 camera feature. Both show a photo when there is no camera. `tools/check_originality.py` against the 2,974 corpus files in
 `C:\Projects\funground-corpora`: nothing flagged (highest combined score 0.16 for each).
+
+## Projects 09, blow the words away — 16 October 2026
+
+`examples/gallery/projects/09_blow_the_words_away.py` (story S-173, D-105) is an original CC0 example. **Inspiration:**
+an animated GIF the maintainer shared on 11 October 2026, in which rings of letters around a mouth scatter with a breath.
+Only the idea was taken: the maintainer asked for a different form (a cloud of words that drifts and fades like fog,
+around a spot the learner places), and the code was written from funground's camera, microphone, noise and gradient
+features. The GIF's source is to be linked here and in the example when the maintainer gives it.
+`tools/check_originality.py` against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged
+(highest combined score 0.16).

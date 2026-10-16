@@ -2919,6 +2919,36 @@ Hundreds of tiny walkers cross the page, and each one leaves a thin line. A hidd
 
 Source: [`examples/gallery/projects/08_flow_field_print.py`](../../examples/gallery/projects/08_flow_field_print.py)
 
+### Blow the words away
+
+![Blow the words away](images/projects-09_blow_the_words_away.png)
+
+You on the camera, and a cloud of words hanging in front of your mouth like fog. The words drift and thin out and gather again. Blow into the microphone and the words nearest your mouth fly away and fade. A moment later they drift back into the cloud. Click to move the cloud to where your mouth is. With no camera the words hang in a night sky, and with no microphone you blow by holding Space.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- Each word is an object of class Word. It knows its text, its home in the cloud, where it is now and how fast it moves, and how much of it is left (fade). A list holds all the words.
+- The cloud is fog because each word's opacity changes slowly with f.noise(), so words come and go. Inside with f.saved_state(), f.opacity() sets one word's opacity and leaves the others alone.
+- mic.level() gives the breath. It is turned into decibels, so a soft breath on a laptop's microphone counts too. A breath pushes each word away from the mouth, harder when it is close.
+- A blown word slows down in the air, and its fade drops as it goes further from home. When it has faded away, it starts again at its home, invisible, and fades in.
+- Behind the words, a few soft puffs of fog drift: circles filled with f.radial_gradient(), white in the middle and see-through at the edge. A breath thins them, and they thicken again slowly.
+- f.image(cam, 0, 0) draws the camera behind everything. f.save_gif() keeps three seconds when you press G.
+
+**Make it yours**
+
+- Change TEXT to your own sentence, or a poem.
+- Change SPREAD for a wider or tighter cloud.
+- Change BLOW: a bigger number blows the words further.
+- Give each word its own colour with f.random_choice() in Word.__init__.
+- Make the words fall like leaves: add a small downward pull in Word.move().
+
+</details>
+
+Source: [`examples/gallery/projects/09_blow_the_words_away.py`](../../examples/gallery/projects/09_blow_the_words_away.py)
+
 ## Studios
 
 ### Placement: one mark in nine places (studio 1)
