@@ -6398,8 +6398,8 @@ Clip.done  # property
 
 Whether the recording is over, so nothing more will be added.
 
-It is True when the clip is full, or when cam.stop() ended the recording early. Check len(clip) to see how
-many frames it holds.
+It is True when the clip is full, or when clip.stop() or cam.stop() ended the recording early. Check
+len(clip) to see how many frames it holds.
 
 ```py
 if clip.done:
@@ -6476,6 +6476,27 @@ clip.save("me.gif")
 ```
 
 See also: [`frame`](#cls-Clip-frame), [`done`](#cls-Clip-done).
+
+<a id="cls-Clip-stop"></a>
+#### `Clip.stop`
+
+```py
+Clip.stop() -> 'None'
+```
+
+End the recording now, before its time is up.
+
+The frames kept so far stay, and clip.done becomes True. The camera stays on. Use it for a record button that
+you press again to stop: record the longest clip you allow, and stop it when the button is pressed.
+
+```py
+clip = cam.record(10)
+# later, when the button is pressed again:
+clip.stop()
+clip.save("take.gif")
+```
+
+See also: [`done`](#cls-Clip-done), [`save`](#cls-Clip-save), `record`.
 
 <a id="cls-Picture"></a>
 ### `Picture`

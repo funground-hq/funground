@@ -9406,6 +9406,14 @@
      "detail": "(path: str) -> None",
      "summary": "Write the frames kept so far to a file.",
      "url": "reference/API.md#cls-Clip-save"
+    },
+    {
+     "name": "stop",
+     "kind": "method",
+     "signature": "stop()",
+     "detail": "() -> None",
+     "summary": "End the recording now, before its time is up.",
+     "url": "reference/API.md#cls-Clip-stop"
     }
    ]
   },
