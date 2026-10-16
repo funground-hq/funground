@@ -110,3 +110,34 @@ def test_constants_lists_each_group_with_its_words_and_the_functions_that_take_t
 
 def test_other_entries_have_no_members():
     assert "members" not in entries()["circle"]
+
+
+def test_functions_name_the_class_they_give_back():
+    found = entries()
+    assert found["path"]["returns"] == "PathBuilder" and found["camera"]["returns"] == "Camera"
+    assert found["tone"]["returns"] == "Sound" and found["grid"]["returns"] == "Grid"
+    assert "returns" not in found["circle"] and "returns" not in found["Vector"]
+
+
+def test_every_documented_class_lists_its_members():
+    classes = data()["classes"]
+    assert set(classes) == {name for name, _ in tool.all_classes()}
+    api = (ROOT / "docs" / "reference" / "API.md").read_text(encoding="utf-8")
+    anchors = set(re.findall(r'<a id="([^"]+)"></a>', api))
+    for name, cls in classes.items():
+        assert cls["summary"].strip() and cls["url"] == f"reference/API.md#cls-{name}", name
+        for member in cls["members"]:
+            assert member["kind"] in ("method", "property") and member["signature"], (name, member)
+            assert member["url"].partition("#")[2] in anchors, member
+            if "returns" in member:
+                assert member["returns"] in classes, member
+
+
+def test_members_are_signed_without_self_and_chain_by_what_they_return():
+    members = {m["name"]: m for m in data()["classes"]["PathBuilder"]["members"]}
+    assert members["rect"]["signature"] == "rect(x, y, w, h, *radii)"
+    assert members["rect"]["returns"] == "PathBuilder" and members["union"]["returns"] == "PathBuilder"
+    camera = {m["name"]: m for m in data()["classes"]["Camera"]["members"]}
+    assert camera["width"]["kind"] == "property" and camera["record"]["returns"] == "Clip"
+    assert camera["picture"]["returns"] == "Picture"          # from the Returns text: the method has no annotation
+    assert "self" not in camera["start"]["detail"]

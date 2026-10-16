@@ -6231,7 +6231,7 @@ See also: [`start`](#cls-Camera-start), [`picture`](#cls-Camera-picture).
 #### `Camera.picture`
 
 ```py
-Camera.picture()
+Camera.picture() -> "'Picture'"
 ```
 
 Make a still picture from the latest frame.
@@ -6427,7 +6427,7 @@ See also: [`done`](#cls-Clip-done).
 #### `Clip.frame`
 
 ```py
-Clip.frame(i: 'int')
+Clip.frame(i: 'int') -> "'Picture'"
 ```
 
 Make a picture from one frame of the clip.

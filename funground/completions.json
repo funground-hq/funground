@@ -4177,6 +4177,7 @@
    "detail": "(cyan: float, magenta: float, yellow: float, black: float, alpha: float = 255) -> Color",
    "summary": "Make a colour from printing inks: cyan, magenta, yellow and black.",
    "url": "reference/API.md#fn-cmyk",
+   "returns": "Color",
    "star": true
   },
   {
@@ -4186,6 +4187,7 @@
    "detail": "(*values: Any) -> Color",
    "summary": "Make a colour that you can read and reuse.",
    "url": "reference/API.md#fn-color",
+   "returns": "Color",
    "star": true
   },
   {
@@ -4213,6 +4215,7 @@
    "detail": "(label: str) -> Button",
    "summary": "Make a button in the panel below the canvas.",
    "url": "reference/API.md#fn-create_button",
+   "returns": "Button",
    "star": true
   },
   {
@@ -4222,6 +4225,7 @@
    "detail": "(label: str, checked: bool = False) -> Checkbox",
    "summary": "Make a tick box in the panel below the canvas.",
    "url": "reference/API.md#fn-create_checkbox",
+   "returns": "Checkbox",
    "star": true
   },
   {
@@ -4231,6 +4235,7 @@
    "detail": "(width: int, height: int) -> Picture",
    "summary": "Make a picture: an off-screen canvas.",
    "url": "reference/API.md#fn-create_graphics",
+   "returns": "Picture",
    "star": true
   },
   {
@@ -4240,6 +4245,7 @@
    "detail": "(low: float, high: float, value: float | None = None, step: float | None = None, label: str | None = None) -> Slider",
    "summary": "Make a slider in a panel below the canvas.",
    "url": "reference/API.md#fn-create_slider",
+   "returns": "Slider",
    "star": true
   },
   {
@@ -4475,6 +4481,7 @@
    "detail": "(x: float, y: float, w: float | None = None, h: float | None = None) -> Color | Picture",
    "summary": "Read a pixel, or copy a region of the canvas.",
    "url": "reference/API.md#fn-get",
+   "returns": "Color",
    "star": true
   },
   {
@@ -4493,6 +4500,7 @@
    "detail": "(hue: float, saturation: float, brightness: float, alpha: float = 255) -> Color",
    "summary": "Make a colour from hue, saturation and brightness.",
    "url": "reference/API.md#fn-hsb",
+   "returns": "Color",
    "star": true
   },
   {
@@ -4502,6 +4510,7 @@
    "detail": "(hue: float, saturation: float, lightness: float, alpha: float = 255) -> Color",
    "summary": "Make a colour from hue, saturation and lightness.",
    "url": "reference/API.md#fn-hsl",
+   "returns": "Color",
    "star": true
   },
   {
@@ -4588,6 +4597,7 @@
    "detail": "(name: str) -> Picture",
    "summary": "Return the layer with a given name, and make it if it is new.",
    "url": "reference/API.md#fn-layer",
+   "returns": "Picture",
    "star": true
   },
   {
@@ -4606,6 +4616,7 @@
    "detail": "(c1: Color, c2: Color, amount: float) -> Color",
    "summary": "Return a colour part of the way between two colours.",
    "url": "reference/API.md#fn-lerp_color",
+   "returns": "Color",
    "star": true
   },
   {
@@ -4624,6 +4635,7 @@
    "detail": "(x1: float, y1: float, x2: float, y2: float, colors: Any, stops: Any = None) -> Gradient",
    "summary": "Make a gradient: colours blended along a line.",
    "url": "reference/API.md#fn-linear_gradient",
+   "returns": "Gradient",
    "star": true
   },
   {
@@ -4633,6 +4645,7 @@
    "detail": "(path: str, face: int | str = 0) -> Font",
    "summary": "Load a font file.",
    "url": "reference/API.md#fn-load_font",
+   "returns": "Font",
    "star": true
   },
   {
@@ -4642,6 +4655,7 @@
    "detail": "(path: str) -> Picture",
    "summary": "Read an image file and return it as a picture.",
    "url": "reference/API.md#fn-load_image",
+   "returns": "Picture",
    "star": true
   },
   {
@@ -4660,6 +4674,7 @@
    "detail": "(path: str) -> Sound",
    "summary": "Read a sound file and return a sound.",
    "url": "reference/API.md#fn-load_sound",
+   "returns": "Sound",
    "star": true
   },
   {
@@ -4669,6 +4684,7 @@
    "detail": "(samples: Any, rate: int = 44100) -> Sound",
    "summary": "Make a sound from a list of numbers.",
    "url": "reference/API.md#fn-create_sound",
+   "returns": "Sound",
    "star": true
   },
   {
@@ -4678,6 +4694,7 @@
    "detail": "(frequency: float, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
    "summary": "Make a sound that is one steady tone.",
    "url": "reference/API.md#fn-tone",
+   "returns": "Sound",
    "star": true,
    "options": {
     "wave": [
@@ -4715,6 +4732,7 @@
    "detail": "(name: str, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
    "summary": "Make a sound that is one named note.",
    "url": "reference/API.md#fn-note",
+   "returns": "Sound",
    "star": true,
    "options": {
     "wave": [
@@ -4752,6 +4770,7 @@
    "detail": "(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -> Sound",
    "summary": "Make a sound like a plucked string.",
    "url": "reference/API.md#fn-pluck",
+   "returns": "Sound",
    "star": true
   },
   {
@@ -4761,6 +4780,7 @@
    "detail": "(text: str, tempo: float = 120, wave: CONSTANTS.WAVE = soft, sa: str | None = None, tuning: CONSTANTS.TUNING = equal, volume: float = 0.5) -> Sound",
    "summary": "Make a sound from a string of notes.",
    "url": "reference/API.md#fn-melody",
+   "returns": "Sound",
    "star": true,
    "options": {
     "wave": [
@@ -4798,6 +4818,7 @@
    "detail": "(*sounds: Sound) -> Sound",
    "summary": "Make a new sound that plays the given sounds one after another.",
    "url": "reference/API.md#fn-sequence",
+   "returns": "Sound",
    "star": true
   },
   {
@@ -4807,6 +4828,7 @@
    "detail": "(*sounds: Sound) -> Sound",
    "summary": "Make a new sound that plays the given sounds together.",
    "url": "reference/API.md#fn-mix",
+   "returns": "Sound",
    "star": true
   },
   {
@@ -4843,6 +4865,7 @@
    "detail": "(name: str | None = None) -> Microphone",
    "summary": "Make a microphone object for the computer's default input.",
    "url": "reference/API.md#fn-microphone",
+   "returns": "Microphone",
    "star": true
   },
   {
@@ -4861,6 +4884,7 @@
    "detail": "(name: str | None = None) -> Camera",
    "summary": "Make a camera object for the computer's default camera.",
    "url": "reference/API.md#fn-camera",
+   "returns": "Camera",
    "star": true
   },
   {
@@ -4888,6 +4912,7 @@
    "detail": "(name: str) -> Raga",
    "summary": "Return one raga from the built-in table.",
    "url": "reference/API.md#fn-raga",
+   "returns": "Raga",
    "star": true
   },
   {
@@ -4906,6 +4931,7 @@
    "detail": "(name: str) -> Tala",
    "summary": "Return one tala from the built-in table.",
    "url": "reference/API.md#fn-tala_info",
+   "returns": "Tala",
    "star": true
   },
   {
@@ -4915,6 +4941,7 @@
    "detail": "(name: str, tempo: float = 80, cycles: int = 1) -> Sound",
    "summary": "Make a sound of a tala's theka played with simple drum sounds.",
    "url": "reference/API.md#fn-tala",
+   "returns": "Sound",
    "star": true
   },
   {
@@ -4924,6 +4951,7 @@
    "detail": "(sa: float | str, seconds: float, pattern: str = P S S S, volume: float = 0.5) -> Sound",
    "summary": "Make a tanpura-like drone.",
    "url": "reference/API.md#fn-drone",
+   "returns": "Sound",
    "star": true
   },
   {
@@ -4960,6 +4988,7 @@
    "detail": "(sound: Sound, width: int, height: int) -> Picture",
    "summary": "Make a picture of a whole sound.",
    "url": "reference/API.md#fn-spectrogram",
+   "returns": "Picture",
    "star": true
   },
   {
@@ -4978,6 +5007,7 @@
    "detail": "(path: str) -> Picture",
    "summary": "Read an SVG file and return a picture of its shapes.",
    "url": "reference/API.md#fn-load_svg",
+   "returns": "Picture",
    "star": true
   },
   {
@@ -5014,6 +5044,7 @@
    "detail": "(path: PathBuilder | str | None = None, *, fill: Color | None = <not given>, stroke: Color | None = <not given>, stroke_width: float | None = None) -> Mark",
    "summary": "Make a mark: a drawing kept as a value, to place as often as you like.",
    "url": "reference/API.md#fn-mark",
+   "returns": "Mark",
    "star": true
   },
   {
@@ -5248,6 +5279,7 @@
    "detail": "(x: float, y: float, w: float, h: float) -> Area",
    "summary": "Make an area: a rectangle kept as a value.",
    "url": "reference/API.md#fn-area",
+   "returns": "Area",
    "star": true
   },
   {
@@ -5257,6 +5289,7 @@
    "detail": "(cols: int, rows: int, *, gutter: float | tuple = 0, area: object = None) -> Grid",
    "summary": "Divide an area into a grid of equal cells.",
    "url": "reference/API.md#fn-grid",
+   "returns": "Grid",
    "star": true
   },
   {
@@ -5284,6 +5317,7 @@
    "detail": "() -> PathBuilder",
    "summary": "Make a new, empty path that you can reuse.",
    "url": "reference/API.md#fn-path",
+   "returns": "PathBuilder",
    "star": true
   },
   {
@@ -5347,6 +5381,7 @@
    "detail": "(x: float, y: float, radius: float, colors: Any, stops: Any = None) -> Gradient",
    "summary": "Make a gradient: colours blended outward from a point.",
    "url": "reference/API.md#fn-radial_gradient",
+   "returns": "Gradient",
    "star": true
   },
   {
@@ -5813,6 +5848,7 @@
    "detail": "(message: object, x: float, y: float) -> PathBuilder",
    "summary": "Return the outlines of some text as a path.",
    "url": "reference/API.md#fn-text_path",
+   "returns": "PathBuilder",
    "star": true
   },
   {
@@ -5831,6 +5867,7 @@
    "detail": "() -> Font",
    "summary": "Return the font that text is set in now.",
    "url": "reference/API.md#fn-current_font",
+   "returns": "Font",
    "star": true
   },
   {
@@ -5896,6 +5933,7 @@
    "detail": "(name: str) -> Font",
    "summary": "Find a font installed on this computer.",
    "url": "reference/API.md#fn-system_font",
+   "returns": "Font",
    "star": true
   },
   {
@@ -8908,5 +8946,1940 @@
    "function": "text_box",
    "parameter": "color"
   }
- ]
+ ],
+ "classes": {
+  "Sound": {
+   "summary": "A sound that you can play, listen to and change.",
+   "url": "reference/API.md#cls-Sound",
+   "members": [
+    {
+     "name": "beats",
+     "kind": "method",
+     "signature": "beats()",
+     "detail": "() -> list[float]",
+     "summary": "The times of the beats, at the sound's tempo.",
+     "url": "reference/API.md#cls-Sound-beats"
+    },
+    {
+     "name": "chord",
+     "kind": "method",
+     "signature": "chord()",
+     "detail": "() -> str | None",
+     "summary": "The chord sounding now, as a name.",
+     "url": "reference/API.md#cls-Sound-chord"
+    },
+    {
+     "name": "chroma",
+     "kind": "method",
+     "signature": "chroma()",
+     "detail": "() -> list[float]",
+     "summary": "How strong each of the twelve note names is right now, whatever the octave.",
+     "url": "reference/API.md#cls-Sound-chroma"
+    },
+    {
+     "name": "current_time",
+     "kind": "method",
+     "signature": "current_time()",
+     "detail": "() -> float",
+     "summary": "Where the sound is now.",
+     "url": "reference/API.md#cls-Sound-current_time"
+    },
+    {
+     "name": "duration",
+     "kind": "method",
+     "signature": "duration()",
+     "detail": "() -> float",
+     "summary": "The length of the sound.",
+     "url": "reference/API.md#cls-Sound-duration"
+    },
+    {
+     "name": "get_volume",
+     "kind": "method",
+     "signature": "get_volume()",
+     "detail": "() -> float",
+     "summary": "The loudness set by set_volume().",
+     "url": "reference/API.md#cls-Sound-get_volume"
+    },
+    {
+     "name": "is_onset",
+     "kind": "method",
+     "signature": "is_onset()",
+     "detail": "() -> bool",
+     "summary": "Whether a new note or hit is heard in this frame.",
+     "url": "reference/API.md#cls-Sound-is_onset"
+    },
+    {
+     "name": "is_playing",
+     "kind": "method",
+     "signature": "is_playing()",
+     "detail": "() -> bool",
+     "summary": "Whether the sound is playing now.",
+     "url": "reference/API.md#cls-Sound-is_playing"
+    },
+    {
+     "name": "key",
+     "kind": "method",
+     "signature": "key()",
+     "detail": "() -> str | None",
+     "summary": "The key of the whole sound.",
+     "url": "reference/API.md#cls-Sound-key"
+    },
+    {
+     "name": "level",
+     "kind": "method",
+     "signature": "level()",
+     "detail": "() -> float",
+     "summary": "How loud the sound is right now, from 0 (silent) to 1.",
+     "url": "reference/API.md#cls-Sound-level"
+    },
+    {
+     "name": "loop",
+     "kind": "method",
+     "signature": "loop()",
+     "detail": "() -> None",
+     "summary": "Play the sound over and over, until you call stop() or pause().",
+     "url": "reference/API.md#cls-Sound-loop"
+    },
+    {
+     "name": "onsets",
+     "kind": "method",
+     "signature": "onsets()",
+     "detail": "() -> list[float]",
+     "summary": "The times where a note or a hit begins.",
+     "url": "reference/API.md#cls-Sound-onsets"
+    },
+    {
+     "name": "pan",
+     "kind": "method",
+     "signature": "pan(position)",
+     "detail": "(position: float) -> None",
+     "summary": "Move the sound between the left and right speakers.",
+     "url": "reference/API.md#cls-Sound-pan"
+    },
+    {
+     "name": "pause",
+     "kind": "method",
+     "signature": "pause()",
+     "detail": "() -> None",
+     "summary": "Stop the sound and keep the place, so that play() carries on from there.",
+     "url": "reference/API.md#cls-Sound-pause"
+    },
+    {
+     "name": "pitch",
+     "kind": "method",
+     "signature": "pitch()",
+     "detail": "() -> float | None",
+     "summary": "The frequency of the one voice or instrument heard right now.",
+     "url": "reference/API.md#cls-Sound-pitch"
+    },
+    {
+     "name": "play",
+     "kind": "method",
+     "signature": "play()",
+     "detail": "() -> None",
+     "summary": "Play the sound from the start, or from where pause() left it.",
+     "url": "reference/API.md#cls-Sound-play"
+    },
+    {
+     "name": "reverb",
+     "kind": "method",
+     "signature": "reverb(amount=0.3)",
+     "detail": "(amount: float = 0.3) -> Sound",
+     "summary": "Make a new sound that is this sound played in a room.",
+     "url": "reference/API.md#cls-Sound-reverb",
+     "returns": "Sound"
+    },
+    {
+     "name": "samples",
+     "kind": "method",
+     "signature": "samples()",
+     "detail": "() -> list[float]",
+     "summary": "The sound as a list of numbers.",
+     "url": "reference/API.md#cls-Sound-samples"
+    },
+    {
+     "name": "save",
+     "kind": "method",
+     "signature": "save(path)",
+     "detail": "(path: str) -> None",
+     "summary": "Write the sound to a 16-bit WAV file.",
+     "url": "reference/API.md#cls-Sound-save"
+    },
+    {
+     "name": "set_volume",
+     "kind": "method",
+     "signature": "set_volume(volume)",
+     "detail": "(volume: float) -> None",
+     "summary": "Set how loud the sound plays.",
+     "url": "reference/API.md#cls-Sound-set_volume"
+    },
+    {
+     "name": "spectrum",
+     "kind": "method",
+     "signature": "spectrum(bands=32)",
+     "detail": "(bands: int = 32) -> list[float]",
+     "summary": "How strong the sound is now in each of several ranges of pitch, from low notes to high notes.",
+     "url": "reference/API.md#cls-Sound-spectrum"
+    },
+    {
+     "name": "stop",
+     "kind": "method",
+     "signature": "stop()",
+     "detail": "() -> None",
+     "summary": "Stop the sound and go back to its start.",
+     "url": "reference/API.md#cls-Sound-stop"
+    },
+    {
+     "name": "swara_histogram",
+     "kind": "method",
+     "signature": "swara_histogram(sa)",
+     "detail": "(sa) -> list[float]",
+     "summary": "How much of the singing was on each swara.",
+     "url": "reference/API.md#cls-Sound-swara_histogram"
+    },
+    {
+     "name": "tempo",
+     "kind": "method",
+     "signature": "tempo()",
+     "detail": "() -> float | None",
+     "summary": "The speed of the music.",
+     "url": "reference/API.md#cls-Sound-tempo"
+    },
+    {
+     "name": "tonic",
+     "kind": "method",
+     "signature": "tonic()",
+     "detail": "() -> float | None",
+     "summary": "A guess at Sa, the starting note of a singer, in hertz.",
+     "url": "reference/API.md#cls-Sound-tonic"
+    }
+   ]
+  },
+  "Microphone": {
+   "summary": "A microphone that your sketch can listen to.",
+   "url": "reference/API.md#cls-Microphone",
+   "members": [
+    {
+     "name": "beats",
+     "kind": "method",
+     "signature": "beats()",
+     "detail": "()",
+     "summary": "Not for a microphone, because it looks at a whole sound.",
+     "url": "reference/API.md#cls-Microphone-beats"
+    },
+    {
+     "name": "capture",
+     "kind": "method",
+     "signature": "capture(seconds)",
+     "detail": "(seconds: float)",
+     "summary": "Make a new sound from the last few seconds the microphone heard.",
+     "url": "reference/API.md#cls-Microphone-capture",
+     "returns": "Sound"
+    },
+    {
+     "name": "chord",
+     "kind": "method",
+     "signature": "chord()",
+     "detail": "() -> str | None",
+     "summary": "The chord sounding now, as a name.",
+     "url": "reference/API.md#cls-Microphone-chord"
+    },
+    {
+     "name": "chroma",
+     "kind": "method",
+     "signature": "chroma()",
+     "detail": "() -> list[float]",
+     "summary": "How strong each of the twelve note names is right now, whatever the octave.",
+     "url": "reference/API.md#cls-Microphone-chroma"
+    },
+    {
+     "name": "close",
+     "kind": "method",
+     "signature": "close()",
+     "detail": "() -> None",
+     "summary": "Stop listening and let go of the microphone.",
+     "url": "reference/API.md#cls-Microphone-close"
+    },
+    {
+     "name": "is_listening",
+     "kind": "method",
+     "signature": "is_listening()",
+     "detail": "() -> bool",
+     "summary": "Whether the microphone is listening.",
+     "url": "reference/API.md#cls-Microphone-is_listening"
+    },
+    {
+     "name": "is_onset",
+     "kind": "method",
+     "signature": "is_onset()",
+     "detail": "() -> bool",
+     "summary": "Whether a new note or hit is heard in this frame.",
+     "url": "reference/API.md#cls-Microphone-is_onset"
+    },
+    {
+     "name": "key",
+     "kind": "method",
+     "signature": "key()",
+     "detail": "()",
+     "summary": "Not for a microphone, because it looks at a whole sound.",
+     "url": "reference/API.md#cls-Microphone-key"
+    },
+    {
+     "name": "level",
+     "kind": "method",
+     "signature": "level()",
+     "detail": "() -> float",
+     "summary": "How loud the sound is right now, from 0 (silent) to 1.",
+     "url": "reference/API.md#cls-Microphone-level"
+    },
+    {
+     "name": "onsets",
+     "kind": "method",
+     "signature": "onsets()",
+     "detail": "()",
+     "summary": "Not for a microphone, because it looks at a whole sound.",
+     "url": "reference/API.md#cls-Microphone-onsets"
+    },
+    {
+     "name": "pitch",
+     "kind": "method",
+     "signature": "pitch()",
+     "detail": "() -> float | None",
+     "summary": "The frequency of the one voice or instrument heard right now.",
+     "url": "reference/API.md#cls-Microphone-pitch"
+    },
+    {
+     "name": "spectrum",
+     "kind": "method",
+     "signature": "spectrum(bands=32)",
+     "detail": "(bands: int = 32) -> list[float]",
+     "summary": "How strong the sound is now in each of several ranges of pitch, from low notes to high notes.",
+     "url": "reference/API.md#cls-Microphone-spectrum"
+    },
+    {
+     "name": "start",
+     "kind": "method",
+     "signature": "start()",
+     "detail": "() -> None",
+     "summary": "Start listening.",
+     "url": "reference/API.md#cls-Microphone-start"
+    },
+    {
+     "name": "stop",
+     "kind": "method",
+     "signature": "stop()",
+     "detail": "() -> None",
+     "summary": "Stop listening, but keep what was heard, so that capture() still works.",
+     "url": "reference/API.md#cls-Microphone-stop"
+    },
+    {
+     "name": "swara_histogram",
+     "kind": "method",
+     "signature": "swara_histogram(sa)",
+     "detail": "(sa) -> list[float]",
+     "summary": "How much of the singing was on each swara.",
+     "url": "reference/API.md#cls-Microphone-swara_histogram"
+    },
+    {
+     "name": "tempo",
+     "kind": "method",
+     "signature": "tempo()",
+     "detail": "()",
+     "summary": "Not for a microphone, because it looks at a whole sound.",
+     "url": "reference/API.md#cls-Microphone-tempo"
+    },
+    {
+     "name": "tonic",
+     "kind": "method",
+     "signature": "tonic()",
+     "detail": "() -> float | None",
+     "summary": "A guess at Sa, the starting note of a singer, in hertz.",
+     "url": "reference/API.md#cls-Microphone-tonic"
+    }
+   ]
+  },
+  "Camera": {
+   "summary": "A camera that your sketch can look through.",
+   "url": "reference/API.md#cls-Camera",
+   "members": [
+    {
+     "name": "height",
+     "kind": "property",
+     "signature": "height",
+     "detail": "int",
+     "summary": "The height of every frame, in pixels: the size asked in start(), or 480 before that.",
+     "url": "reference/API.md#cls-Camera-height"
+    },
+    {
+     "name": "is_ready",
+     "kind": "method",
+     "signature": "is_ready()",
+     "detail": "() -> bool",
+     "summary": "Whether a frame has arrived.",
+     "url": "reference/API.md#cls-Camera-is_ready"
+    },
+    {
+     "name": "picture",
+     "kind": "method",
+     "signature": "picture()",
+     "detail": "() -> Picture",
+     "summary": "Make a still picture from the latest frame.",
+     "url": "reference/API.md#cls-Camera-picture",
+     "returns": "Picture"
+    },
+    {
+     "name": "record",
+     "kind": "method",
+     "signature": "record(seconds)",
+     "detail": "(seconds: float) -> Clip",
+     "summary": "Start keeping the frames of the next few seconds.",
+     "url": "reference/API.md#cls-Camera-record",
+     "returns": "Clip"
+    },
+    {
+     "name": "save",
+     "kind": "method",
+     "signature": "save(path)",
+     "detail": "(path: str) -> None",
+     "summary": "Save the latest frame as a photo.",
+     "url": "reference/API.md#cls-Camera-save"
+    },
+    {
+     "name": "start",
+     "kind": "method",
+     "signature": "start(width=640, height=480, mirror=True)",
+     "detail": "(width: int = 640, height: int = 480, mirror: bool = True) -> None",
+     "summary": "Open the camera.",
+     "url": "reference/API.md#cls-Camera-start"
+    },
+    {
+     "name": "stop",
+     "kind": "method",
+     "signature": "stop()",
+     "detail": "() -> None",
+     "summary": "Let go of the camera, so its light goes off.",
+     "url": "reference/API.md#cls-Camera-stop"
+    },
+    {
+     "name": "width",
+     "kind": "property",
+     "signature": "width",
+     "detail": "int",
+     "summary": "The width of every frame, in pixels: the size asked in start(), or 640 before that.",
+     "url": "reference/API.md#cls-Camera-width"
+    }
+   ]
+  },
+  "Clip": {
+   "summary": "A few seconds of camera frames, kept in memory.",
+   "url": "reference/API.md#cls-Clip",
+   "members": [
+    {
+     "name": "done",
+     "kind": "property",
+     "signature": "done",
+     "detail": "bool",
+     "summary": "Whether the recording is over, so nothing more will be added.",
+     "url": "reference/API.md#cls-Clip-done"
+    },
+    {
+     "name": "fps",
+     "kind": "property",
+     "signature": "fps",
+     "detail": "int",
+     "summary": "How many frames a second the clip plays: the sketch's frame rate when it was recorded.",
+     "url": "reference/API.md#cls-Clip-fps"
+    },
+    {
+     "name": "frame",
+     "kind": "method",
+     "signature": "frame(i)",
+     "detail": "(i: int) -> Picture",
+     "summary": "Make a picture from one frame of the clip.",
+     "url": "reference/API.md#cls-Clip-frame",
+     "returns": "Picture"
+    },
+    {
+     "name": "save",
+     "kind": "method",
+     "signature": "save(path)",
+     "detail": "(path: str) -> None",
+     "summary": "Write the frames kept so far to a file.",
+     "url": "reference/API.md#cls-Clip-save"
+    }
+   ]
+  },
+  "Picture": {
+   "summary": "A surface that you can draw on and then draw onto the canvas, save, copy or use as a mask.",
+   "url": "reference/API.md#cls-Picture",
+   "members": [
+    {
+     "name": "copy",
+     "kind": "method",
+     "signature": "copy()",
+     "detail": "() -> Picture",
+     "summary": "Make a new picture with the same pixels and drawing history.",
+     "url": "reference/API.md#cls-Picture-copy",
+     "returns": "Picture"
+    },
+    {
+     "name": "from_pixels",
+     "kind": "method",
+     "signature": "from_pixels(width, height, bgra, name)",
+     "detail": "(width: int, height: int, bgra: bytes, name: str) -> Picture",
+     "summary": "Make a picture from decoded image pixels.",
+     "url": "reference/API.md#cls-Picture-from_pixels",
+     "returns": "Picture"
+    },
+    {
+     "name": "image",
+     "kind": "method",
+     "signature": "image(picture, x, y, width=None, height=None, sx=None, sy=None, sw=None, sh=None)",
+     "detail": "(picture: Picture, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
+     "summary": "Draw another picture onto this one, the same as f.image() does on the canvas.",
+     "url": "reference/API.md#cls-Picture-image"
+    },
+    {
+     "name": "mask",
+     "kind": "method",
+     "signature": "mask(other)",
+     "detail": "(other: Picture) -> None",
+     "summary": "Make this picture see-through where another picture is see-through, in place.",
+     "url": "reference/API.md#cls-Picture-mask"
+    },
+    {
+     "name": "pixels",
+     "kind": "property",
+     "signature": "pixels",
+     "detail": "bytearray | None",
+     "summary": "The colour of every pixel, after load_pixels().",
+     "url": "reference/API.md#cls-Picture-pixels"
+    },
+    {
+     "name": "resize",
+     "kind": "method",
+     "signature": "resize(width, height)",
+     "detail": "(width: int, height: int) -> None",
+     "summary": "Change the size of the picture, in place, scaling its pixels smoothly.",
+     "url": "reference/API.md#cls-Picture-resize"
+    },
+    {
+     "name": "save",
+     "kind": "method",
+     "signature": "save(path, text='live')",
+     "detail": "(path: str, *, text: CONSTANTS.SAVE_TEXT = live) -> None",
+     "summary": "Write the picture to a file straight away.",
+     "url": "reference/API.md#cls-Picture-save"
+    }
+   ]
+  },
+  "Vector": {
+   "summary": "A 2D vector: two numbers, x and y, that you can add, scale, turn and measure.",
+   "url": "reference/API.md#cls-Vector",
+   "members": [
+    {
+     "name": "add",
+     "kind": "method",
+     "signature": "add(x, y=None)",
+     "detail": "(x, y=None) -> Vector",
+     "summary": "Add to the vector, in place.",
+     "url": "reference/API.md#cls-Vector-add",
+     "returns": "Vector"
+    },
+    {
+     "name": "angle_between",
+     "kind": "method",
+     "signature": "angle_between(other)",
+     "detail": "(other) -> float",
+     "summary": "The angle that turns this vector's direction onto another's.",
+     "url": "reference/API.md#cls-Vector-angle_between"
+    },
+    {
+     "name": "copy",
+     "kind": "method",
+     "signature": "copy()",
+     "detail": "() -> Vector",
+     "summary": "Make a new vector with the same x and y.",
+     "url": "reference/API.md#cls-Vector-copy",
+     "returns": "Vector"
+    },
+    {
+     "name": "cross",
+     "kind": "method",
+     "signature": "cross(other)",
+     "detail": "(other) -> float",
+     "summary": "The 2D cross product of this vector and another.",
+     "url": "reference/API.md#cls-Vector-cross"
+    },
+    {
+     "name": "dist",
+     "kind": "method",
+     "signature": "dist(other)",
+     "detail": "(other) -> float",
+     "summary": "The distance from this point to another.",
+     "url": "reference/API.md#cls-Vector-dist"
+    },
+    {
+     "name": "div",
+     "kind": "method",
+     "signature": "div(n)",
+     "detail": "(n: float) -> Vector",
+     "summary": "Divide both parts by a number, in place.",
+     "url": "reference/API.md#cls-Vector-div",
+     "returns": "Vector"
+    },
+    {
+     "name": "dot",
+     "kind": "method",
+     "signature": "dot(other)",
+     "detail": "(other) -> float",
+     "summary": "The dot product of this vector and another.",
+     "url": "reference/API.md#cls-Vector-dot"
+    },
+    {
+     "name": "from_angle",
+     "kind": "method",
+     "signature": "from_angle(angle, length=1.0)",
+     "detail": "(angle: float, length: float = 1.0) -> Vector",
+     "summary": "Make a vector that points at an angle.",
+     "url": "reference/API.md#cls-Vector-from_angle",
+     "returns": "Vector"
+    },
+    {
+     "name": "heading",
+     "kind": "method",
+     "signature": "heading()",
+     "detail": "() -> float",
+     "summary": "The direction the vector points in.",
+     "url": "reference/API.md#cls-Vector-heading"
+    },
+    {
+     "name": "lerp",
+     "kind": "method",
+     "signature": "lerp(target, amount)",
+     "detail": "(target, amount: float) -> Vector",
+     "summary": "Move part of the way towards another vector, in place.",
+     "url": "reference/API.md#cls-Vector-lerp",
+     "returns": "Vector"
+    },
+    {
+     "name": "limit",
+     "kind": "method",
+     "signature": "limit(maximum)",
+     "detail": "(maximum: float) -> Vector",
+     "summary": "Shorten the vector, in place, if it is longer than a maximum length.",
+     "url": "reference/API.md#cls-Vector-limit",
+     "returns": "Vector"
+    },
+    {
+     "name": "mag",
+     "kind": "method",
+     "signature": "mag()",
+     "detail": "() -> float",
+     "summary": "The length of the vector.",
+     "url": "reference/API.md#cls-Vector-mag"
+    },
+    {
+     "name": "mag_sq",
+     "kind": "method",
+     "signature": "mag_sq()",
+     "detail": "() -> float",
+     "summary": "The length of the vector, squared.",
+     "url": "reference/API.md#cls-Vector-mag_sq"
+    },
+    {
+     "name": "mult",
+     "kind": "method",
+     "signature": "mult(n)",
+     "detail": "(n: float) -> Vector",
+     "summary": "Multiply both parts by a number, in place.",
+     "url": "reference/API.md#cls-Vector-mult",
+     "returns": "Vector"
+    },
+    {
+     "name": "normalize",
+     "kind": "method",
+     "signature": "normalize()",
+     "detail": "() -> Vector",
+     "summary": "Make the length 1, keeping the direction, in place.",
+     "url": "reference/API.md#cls-Vector-normalize",
+     "returns": "Vector"
+    },
+    {
+     "name": "random_2d",
+     "kind": "method",
+     "signature": "random_2d()",
+     "detail": "() -> Vector",
+     "summary": "Make a vector of length 1 that points in a random direction.",
+     "url": "reference/API.md#cls-Vector-random_2d",
+     "returns": "Vector"
+    },
+    {
+     "name": "rotate",
+     "kind": "method",
+     "signature": "rotate(angle)",
+     "detail": "(angle: float) -> Vector",
+     "summary": "Turn the vector by an angle, in place.",
+     "url": "reference/API.md#cls-Vector-rotate",
+     "returns": "Vector"
+    },
+    {
+     "name": "set",
+     "kind": "method",
+     "signature": "set(x, y=None)",
+     "detail": "(x, y=None) -> Vector",
+     "summary": "Give the vector new x and y values, in place.",
+     "url": "reference/API.md#cls-Vector-set",
+     "returns": "Vector"
+    },
+    {
+     "name": "set_heading",
+     "kind": "method",
+     "signature": "set_heading(angle)",
+     "detail": "(angle: float) -> Vector",
+     "summary": "Turn the vector to point at an angle, in place, keeping its length.",
+     "url": "reference/API.md#cls-Vector-set_heading",
+     "returns": "Vector"
+    },
+    {
+     "name": "set_mag",
+     "kind": "method",
+     "signature": "set_mag(length)",
+     "detail": "(length: float) -> Vector",
+     "summary": "Give the vector a new length, in place, keeping its direction.",
+     "url": "reference/API.md#cls-Vector-set_mag",
+     "returns": "Vector"
+    },
+    {
+     "name": "sub",
+     "kind": "method",
+     "signature": "sub(x, y=None)",
+     "detail": "(x, y=None) -> Vector",
+     "summary": "Take away from the vector, in place.",
+     "url": "reference/API.md#cls-Vector-sub",
+     "returns": "Vector"
+    }
+   ]
+  },
+  "FormattedString": {
+   "summary": "Text made of runs, where each run can have its own font, size, style, colour and so on.",
+   "url": "reference/API.md#cls-FormattedString",
+   "members": [
+    {
+     "name": "append",
+     "kind": "method",
+     "signature": "append(text, font=None, size=None, style=None, color=None, tracking=None, features=None, variations=None)",
+     "detail": "(text: object, font=None, size: float | None = None, style: CONSTANTS.STYLE | None = None, color=None, tracking: float | None = None, features: dict | None = None, variations: dict | None = None) -> FormattedString",
+     "summary": "Add a run of text to the end.",
+     "url": "reference/API.md#cls-FormattedString-append",
+     "returns": "FormattedString"
+    },
+    {
+     "name": "lines",
+     "kind": "method",
+     "signature": "lines()",
+     "detail": "() -> list[list[tuple[str, int | None]]]",
+     "summary": "Split the text at every new line.",
+     "url": "reference/API.md#cls-FormattedString-lines"
+    },
+    {
+     "name": "runs",
+     "kind": "property",
+     "signature": "runs",
+     "detail": "tuple[Run, ...]",
+     "summary": "The runs, in order.",
+     "url": "reference/API.md#cls-FormattedString-runs"
+    },
+    {
+     "name": "wrap",
+     "kind": "method",
+     "signature": "wrap(fits)",
+     "detail": "(fits) -> tuple[list[list[tuple[str, int | None]]], list[int]]",
+     "summary": "Break the text into lines that fit, at spaces.",
+     "url": "reference/API.md#cls-FormattedString-wrap"
+    }
+   ]
+  },
+  "Run": {
+   "summary": "One piece of a FormattedString: some text and the settings that were given for it.",
+   "url": "reference/API.md#cls-Run",
+   "members": [
+    {
+     "name": "apply",
+     "kind": "method",
+     "signature": "apply(state)",
+     "detail": "(state)",
+     "summary": "Work out the drawing state for this run.",
+     "url": "reference/API.md#cls-Run-apply"
+    },
+    {
+     "name": "with_text",
+     "kind": "method",
+     "signature": "with_text(text)",
+     "detail": "(text: str) -> Run",
+     "summary": "Make a new run with the same settings and different text.",
+     "url": "reference/API.md#cls-Run-with_text",
+     "returns": "Run"
+    }
+   ]
+  },
+  "PathBuilder": {
+   "summary": "A path that you build step by step, then draw, clip with, cut, outline or measure.",
+   "url": "reference/API.md#cls-PathBuilder",
+   "members": [
+    {
+     "name": "bounds",
+     "kind": "method",
+     "signature": "bounds()",
+     "detail": "()",
+     "summary": "The box that exactly holds the path.",
+     "url": "reference/API.md#cls-PathBuilder-bounds"
+    },
+    {
+     "name": "circle",
+     "kind": "method",
+     "signature": "circle(x, y, d)",
+     "detail": "(x: float, y: float, d: float) -> PathBuilder",
+     "summary": "Add a circle as a closed part of the path.",
+     "url": "reference/API.md#cls-PathBuilder-circle",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "close",
+     "kind": "method",
+     "signature": "close()",
+     "detail": "() -> PathBuilder",
+     "summary": "Join the current point back to where the part of the path began.",
+     "url": "reference/API.md#cls-PathBuilder-close",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "contains",
+     "kind": "method",
+     "signature": "contains(x, y)",
+     "detail": "(x: float, y: float) -> bool",
+     "summary": "Whether a point is inside the shape that the path fills.",
+     "url": "reference/API.md#cls-PathBuilder-contains"
+    },
+    {
+     "name": "copy",
+     "kind": "method",
+     "signature": "copy()",
+     "detail": "() -> PathBuilder",
+     "summary": "Make a new builder with the same path.",
+     "url": "reference/API.md#cls-PathBuilder-copy",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "curve_to",
+     "kind": "method",
+     "signature": "curve_to(cx1, cy1, cx2, cy2, x, y)",
+     "detail": "(cx1: float, cy1: float, cx2: float, cy2: float, x: float, y: float) -> PathBuilder",
+     "summary": "Add a smooth curve from the current point to a new point (a cubic Bezier curve).",
+     "url": "reference/API.md#cls-PathBuilder-curve_to",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "difference",
+     "kind": "method",
+     "signature": "difference(other)",
+     "detail": "(other: PathBuilder) -> PathBuilder",
+     "summary": "Make a new path of what this path covers, minus what another path covers.",
+     "url": "reference/API.md#cls-PathBuilder-difference",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "ellipse",
+     "kind": "method",
+     "signature": "ellipse(x, y, w, h)",
+     "detail": "(x: float, y: float, w: float, h: float) -> PathBuilder",
+     "summary": "Add an ellipse as a closed part of the path.",
+     "url": "reference/API.md#cls-PathBuilder-ellipse",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "expand_stroke",
+     "kind": "method",
+     "signature": "expand_stroke(width, cap='round', join='round', miter_limit=10, dash=None)",
+     "detail": "(width: float, cap: CONSTANTS.CAP = round, join: CONSTANTS.JOIN = round, miter_limit: float = 10, dash=None) -> PathBuilder",
+     "summary": "Make a new path that is the outline a stroke would paint, so you can fill, cut or clip with it.",
+     "url": "reference/API.md#cls-PathBuilder-expand_stroke",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "geometry",
+     "kind": "property",
+     "signature": "geometry",
+     "detail": "Path",
+     "summary": "The plain path data built so far.",
+     "url": "reference/API.md#cls-PathBuilder-geometry",
+     "returns": "Path"
+    },
+    {
+     "name": "intersection",
+     "kind": "method",
+     "signature": "intersection(other)",
+     "detail": "(other: PathBuilder) -> PathBuilder",
+     "summary": "Make a new path of only what both paths cover.",
+     "url": "reference/API.md#cls-PathBuilder-intersection",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "is_closed",
+     "kind": "property",
+     "signature": "is_closed",
+     "detail": "bool",
+     "summary": "Whether every part of the path that draws something is closed.",
+     "url": "reference/API.md#cls-PathBuilder-is_closed"
+    },
+    {
+     "name": "is_empty",
+     "kind": "property",
+     "signature": "is_empty",
+     "detail": "bool",
+     "summary": "Whether nothing has been added to the path.",
+     "url": "reference/API.md#cls-PathBuilder-is_empty"
+    },
+    {
+     "name": "line_to",
+     "kind": "method",
+     "signature": "line_to(x, y)",
+     "detail": "(x: float, y: float) -> PathBuilder",
+     "summary": "Add a straight line from the current point to a new point.",
+     "url": "reference/API.md#cls-PathBuilder-line_to",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "move_to",
+     "kind": "method",
+     "signature": "move_to(x, y)",
+     "detail": "(x: float, y: float) -> PathBuilder",
+     "summary": "Start a new part of the path at a point, without drawing.",
+     "url": "reference/API.md#cls-PathBuilder-move_to",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "polygon",
+     "kind": "method",
+     "signature": "polygon(points)",
+     "detail": "(points) -> PathBuilder",
+     "summary": "Add a closed shape through a list of corners.",
+     "url": "reference/API.md#cls-PathBuilder-polygon",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "quad",
+     "kind": "method",
+     "signature": "quad(x1, y1, x2, y2, x3, y3, x4, y4)",
+     "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float, x4: float, y4: float) -> PathBuilder",
+     "summary": "Add a four-sided shape through four corners as a closed part of the path.",
+     "url": "reference/API.md#cls-PathBuilder-quad",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "quad_to",
+     "kind": "method",
+     "signature": "quad_to(cx, cy, x, y)",
+     "detail": "(cx: float, cy: float, x: float, y: float) -> PathBuilder",
+     "summary": "Add a curve from the current point to a new point, pulled towards one control point (a quadratic Bezier curve).",
+     "url": "reference/API.md#cls-PathBuilder-quad_to",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "rect",
+     "kind": "method",
+     "signature": "rect(x, y, w, h, *radii)",
+     "detail": "(x: float, y: float, w: float, h: float, *radii: float) -> PathBuilder",
+     "summary": "Add a rectangle as a closed part of the path.",
+     "url": "reference/API.md#cls-PathBuilder-rect",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "remove_overlap",
+     "kind": "method",
+     "signature": "remove_overlap()",
+     "detail": "() -> PathBuilder",
+     "summary": "Make a new path that fills the same area, drawn as one clean outline with no overlapping parts.",
+     "url": "reference/API.md#cls-PathBuilder-remove_overlap",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "rotate",
+     "kind": "method",
+     "signature": "rotate(degrees, cx=0, cy=0)",
+     "detail": "(degrees: float, cx: float = 0, cy: float = 0) -> PathBuilder",
+     "summary": "Make a new path that is this path turned about a point.",
+     "url": "reference/API.md#cls-PathBuilder-rotate",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "scale",
+     "kind": "method",
+     "signature": "scale(sx, sy=None)",
+     "detail": "(sx: float, sy: float | None = None) -> PathBuilder",
+     "summary": "Make a new path that is this path scaled about the point (0, 0).",
+     "url": "reference/API.md#cls-PathBuilder-scale",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "square",
+     "kind": "method",
+     "signature": "square(x, y, size, *radii)",
+     "detail": "(x: float, y: float, size: float, *radii: float) -> PathBuilder",
+     "summary": "Add a square as a closed part of the path.",
+     "url": "reference/API.md#cls-PathBuilder-square",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "translate",
+     "kind": "method",
+     "signature": "translate(dx, dy)",
+     "detail": "(dx: float, dy: float) -> PathBuilder",
+     "summary": "Make a new path that is this path moved.",
+     "url": "reference/API.md#cls-PathBuilder-translate",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "triangle",
+     "kind": "method",
+     "signature": "triangle(x1, y1, x2, y2, x3, y3)",
+     "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> PathBuilder",
+     "summary": "Add a triangle through three corners as a closed part of the path.",
+     "url": "reference/API.md#cls-PathBuilder-triangle",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "union",
+     "kind": "method",
+     "signature": "union(other)",
+     "detail": "(other: PathBuilder) -> PathBuilder",
+     "summary": "Make a new path of everything that either path covers.",
+     "url": "reference/API.md#cls-PathBuilder-union",
+     "returns": "PathBuilder"
+    },
+    {
+     "name": "xor",
+     "kind": "method",
+     "signature": "xor(other)",
+     "detail": "(other: PathBuilder) -> PathBuilder",
+     "summary": "Make a new path of what exactly one of the two paths covers.",
+     "url": "reference/API.md#cls-PathBuilder-xor",
+     "returns": "PathBuilder"
+    }
+   ]
+  },
+  "Mark": {
+   "summary": "A drawing kept as a value, which you can place as often as you like.",
+   "url": "reference/API.md#cls-Mark",
+   "members": [
+    {
+     "name": "bounds",
+     "kind": "method",
+     "signature": "bounds()",
+     "detail": "() -> tuple[float, float, float, float] | None",
+     "summary": "Return the area the mark covers, in its own coordinates.",
+     "url": "reference/API.md#cls-Mark-bounds"
+    },
+    {
+     "name": "height",
+     "kind": "property",
+     "signature": "height",
+     "detail": "float",
+     "summary": "The height of the area the mark covers, from bounds(); 0 for an empty mark.",
+     "url": "reference/API.md#cls-Mark-height"
+    },
+    {
+     "name": "is_empty",
+     "kind": "property",
+     "signature": "is_empty",
+     "detail": "bool",
+     "summary": "Whether the mark paints nothing.",
+     "url": "reference/API.md#cls-Mark-is_empty"
+    },
+    {
+     "name": "place",
+     "kind": "method",
+     "signature": "place(x, y, scale=None, rotate=0, opacity=1, anchor='origin', width=None, height=None, style='own')",
+     "detail": "(x: float, y: float, *, scale: float | tuple[float, float] | None = None, rotate: float = 0, opacity: float = 1, anchor: CONSTANTS.ANCHOR = origin, width: float | None = None, height: float | None = None, style: CONSTANTS.MARK_STYLE = own) -> None",
+     "summary": "Draw the mark now, with its origin at (x, y).",
+     "url": "reference/API.md#cls-Mark-place"
+    },
+    {
+     "name": "width",
+     "kind": "property",
+     "signature": "width",
+     "detail": "float",
+     "summary": "The width of the area the mark covers, from bounds(); 0 for an empty mark.",
+     "url": "reference/API.md#cls-Mark-width"
+    }
+   ]
+  },
+  "Area": {
+   "summary": "A rectangle on the canvas, kept as a value.",
+   "url": "reference/API.md#cls-Area",
+   "members": [
+    {
+     "name": "bottom",
+     "kind": "property",
+     "signature": "bottom",
+     "detail": "float",
+     "summary": "The y of the area's bottom edge: top + height.",
+     "url": "reference/API.md#cls-Area-bottom"
+    },
+    {
+     "name": "cx",
+     "kind": "property",
+     "signature": "cx",
+     "detail": "float",
+     "summary": "The x of the area's centre.",
+     "url": "reference/API.md#cls-Area-cx"
+    },
+    {
+     "name": "cy",
+     "kind": "property",
+     "signature": "cy",
+     "detail": "float",
+     "summary": "The y of the area's centre.",
+     "url": "reference/API.md#cls-Area-cy"
+    },
+    {
+     "name": "grid",
+     "kind": "method",
+     "signature": "grid(cols, rows, gutter=0)",
+     "detail": "(cols: int, rows: int, *, gutter: float | tuple = 0) -> Grid",
+     "summary": "Return a grid of equal cells over this area.",
+     "url": "reference/API.md#cls-Area-grid",
+     "returns": "Grid"
+    },
+    {
+     "name": "height",
+     "kind": "property",
+     "signature": "height",
+     "detail": "float",
+     "summary": "How high the area is: 0 or more.",
+     "url": "reference/API.md#cls-Area-height"
+    },
+    {
+     "name": "inset",
+     "kind": "method",
+     "signature": "inset(all=None, top=None, right=None, bottom=None, left=None)",
+     "detail": "(all: float | None = None, *, top: float | None = None, right: float | None = None, bottom: float | None = None, left: float | None = None) -> Area",
+     "summary": "Return a smaller area inside this one.",
+     "url": "reference/API.md#cls-Area-inset",
+     "returns": "Area"
+    },
+    {
+     "name": "left",
+     "kind": "property",
+     "signature": "left",
+     "detail": "float",
+     "summary": "The x of the area's left edge.",
+     "url": "reference/API.md#cls-Area-left"
+    },
+    {
+     "name": "right",
+     "kind": "property",
+     "signature": "right",
+     "detail": "float",
+     "summary": "The x of the area's right edge: left + width.",
+     "url": "reference/API.md#cls-Area-right"
+    },
+    {
+     "name": "top",
+     "kind": "property",
+     "signature": "top",
+     "detail": "float",
+     "summary": "The y of the area's top edge.",
+     "url": "reference/API.md#cls-Area-top"
+    },
+    {
+     "name": "width",
+     "kind": "property",
+     "signature": "width",
+     "detail": "float",
+     "summary": "How wide the area is: 0 or more.",
+     "url": "reference/API.md#cls-Area-width"
+    }
+   ]
+  },
+  "Ground": {
+   "summary": "The canvas as an area, with its margins.",
+   "url": "reference/API.md#cls-Ground",
+   "members": [
+    {
+     "name": "bottom",
+     "kind": "property",
+     "signature": "bottom",
+     "detail": "float",
+     "summary": "The y of the area's bottom edge: top + height.",
+     "url": "reference/API.md#cls-Ground-bottom"
+    },
+    {
+     "name": "content",
+     "kind": "property",
+     "signature": "content",
+     "detail": "Ground",
+     "summary": "The area inside the margins.",
+     "url": "reference/API.md#cls-Ground-content",
+     "returns": "Ground"
+    },
+    {
+     "name": "cx",
+     "kind": "property",
+     "signature": "cx",
+     "detail": "float",
+     "summary": "The x of the area's centre.",
+     "url": "reference/API.md#cls-Ground-cx"
+    },
+    {
+     "name": "cy",
+     "kind": "property",
+     "signature": "cy",
+     "detail": "float",
+     "summary": "The y of the area's centre.",
+     "url": "reference/API.md#cls-Ground-cy"
+    },
+    {
+     "name": "grid",
+     "kind": "method",
+     "signature": "grid(cols, rows, gutter=0)",
+     "detail": "(cols: int, rows: int, *, gutter: float | tuple = 0) -> Grid",
+     "summary": "Return a grid of equal cells over this area.",
+     "url": "reference/API.md#cls-Ground-grid",
+     "returns": "Grid"
+    },
+    {
+     "name": "height",
+     "kind": "property",
+     "signature": "height",
+     "detail": "float",
+     "summary": "How high the area is: 0 or more.",
+     "url": "reference/API.md#cls-Ground-height"
+    },
+    {
+     "name": "inset",
+     "kind": "method",
+     "signature": "inset(all=None, top=None, right=None, bottom=None, left=None)",
+     "detail": "(all: float | None = None, *, top: float | None = None, right: float | None = None, bottom: float | None = None, left: float | None = None) -> Area",
+     "summary": "Return a smaller area inside this one.",
+     "url": "reference/API.md#cls-Ground-inset",
+     "returns": "Area"
+    },
+    {
+     "name": "left",
+     "kind": "property",
+     "signature": "left",
+     "detail": "float",
+     "summary": "The x of the area's left edge.",
+     "url": "reference/API.md#cls-Ground-left"
+    },
+    {
+     "name": "margin",
+     "kind": "property",
+     "signature": "margin",
+     "detail": "tuple",
+     "summary": "The margins as (top, right, bottom, left).",
+     "url": "reference/API.md#cls-Ground-margin"
+    },
+    {
+     "name": "right",
+     "kind": "property",
+     "signature": "right",
+     "detail": "float",
+     "summary": "The x of the area's right edge: left + width.",
+     "url": "reference/API.md#cls-Ground-right"
+    },
+    {
+     "name": "top",
+     "kind": "property",
+     "signature": "top",
+     "detail": "float",
+     "summary": "The y of the area's top edge.",
+     "url": "reference/API.md#cls-Ground-top"
+    },
+    {
+     "name": "width",
+     "kind": "property",
+     "signature": "width",
+     "detail": "float",
+     "summary": "How wide the area is: 0 or more.",
+     "url": "reference/API.md#cls-Ground-width"
+    }
+   ]
+  },
+  "Cell": {
+   "summary": "One cell of a grid: an area that knows its column, row and place in the grid.",
+   "url": "reference/API.md#cls-Cell",
+   "members": [
+    {
+     "name": "bottom",
+     "kind": "property",
+     "signature": "bottom",
+     "detail": "float",
+     "summary": "The y of the area's bottom edge: top + height.",
+     "url": "reference/API.md#cls-Cell-bottom"
+    },
+    {
+     "name": "col",
+     "kind": "property",
+     "signature": "col",
+     "detail": "int",
+     "summary": "The cell's column, counted from 0 at the left.",
+     "url": "reference/API.md#cls-Cell-col"
+    },
+    {
+     "name": "cx",
+     "kind": "property",
+     "signature": "cx",
+     "detail": "float",
+     "summary": "The x of the area's centre.",
+     "url": "reference/API.md#cls-Cell-cx"
+    },
+    {
+     "name": "cy",
+     "kind": "property",
+     "signature": "cy",
+     "detail": "float",
+     "summary": "The y of the area's centre.",
+     "url": "reference/API.md#cls-Cell-cy"
+    },
+    {
+     "name": "grid",
+     "kind": "method",
+     "signature": "grid(cols, rows, gutter=0)",
+     "detail": "(cols: int, rows: int, *, gutter: float | tuple = 0) -> Grid",
+     "summary": "Return a grid of equal cells over this area.",
+     "url": "reference/API.md#cls-Cell-grid",
+     "returns": "Grid"
+    },
+    {
+     "name": "height",
+     "kind": "property",
+     "signature": "height",
+     "detail": "float",
+     "summary": "How high the area is: 0 or more.",
+     "url": "reference/API.md#cls-Cell-height"
+    },
+    {
+     "name": "index",
+     "kind": "property",
+     "signature": "index",
+     "detail": "int",
+     "summary": "The cell's place in the grid, counted from 0, row by row: row * column_count + col.",
+     "url": "reference/API.md#cls-Cell-index"
+    },
+    {
+     "name": "inset",
+     "kind": "method",
+     "signature": "inset(all=None, top=None, right=None, bottom=None, left=None)",
+     "detail": "(all: float | None = None, *, top: float | None = None, right: float | None = None, bottom: float | None = None, left: float | None = None) -> Area",
+     "summary": "Return a smaller area inside this one.",
+     "url": "reference/API.md#cls-Cell-inset",
+     "returns": "Area"
+    },
+    {
+     "name": "left",
+     "kind": "property",
+     "signature": "left",
+     "detail": "float",
+     "summary": "The x of the area's left edge.",
+     "url": "reference/API.md#cls-Cell-left"
+    },
+    {
+     "name": "right",
+     "kind": "property",
+     "signature": "right",
+     "detail": "float",
+     "summary": "The x of the area's right edge: left + width.",
+     "url": "reference/API.md#cls-Cell-right"
+    },
+    {
+     "name": "row",
+     "kind": "property",
+     "signature": "row",
+     "detail": "int",
+     "summary": "The cell's row, counted from 0 at the top.",
+     "url": "reference/API.md#cls-Cell-row"
+    },
+    {
+     "name": "top",
+     "kind": "property",
+     "signature": "top",
+     "detail": "float",
+     "summary": "The y of the area's top edge.",
+     "url": "reference/API.md#cls-Cell-top"
+    },
+    {
+     "name": "width",
+     "kind": "property",
+     "signature": "width",
+     "detail": "float",
+     "summary": "How wide the area is: 0 or more.",
+     "url": "reference/API.md#cls-Cell-width"
+    }
+   ]
+  },
+  "Grid": {
+   "summary": "An area divided into equal cells, with gutters between them.",
+   "url": "reference/API.md#cls-Grid",
+   "members": [
+    {
+     "name": "area",
+     "kind": "property",
+     "signature": "area",
+     "detail": "Area",
+     "summary": "The area the grid divides.",
+     "url": "reference/API.md#cls-Grid-area",
+     "returns": "Area"
+    },
+    {
+     "name": "cell",
+     "kind": "method",
+     "signature": "cell(col, row)",
+     "detail": "(col: int, row: int) -> Cell",
+     "summary": "Return the cell at a column and a row.",
+     "url": "reference/API.md#cls-Grid-cell",
+     "returns": "Cell"
+    },
+    {
+     "name": "column_count",
+     "kind": "property",
+     "signature": "column_count",
+     "detail": "int",
+     "summary": "How many columns the grid has.",
+     "url": "reference/API.md#cls-Grid-column_count"
+    },
+    {
+     "name": "columns",
+     "kind": "property",
+     "signature": "columns",
+     "detail": "list",
+     "summary": "The columns as a list of areas, left to right, each as high as the whole grid.",
+     "url": "reference/API.md#cls-Grid-columns"
+    },
+    {
+     "name": "gutter",
+     "kind": "property",
+     "signature": "gutter",
+     "detail": "tuple",
+     "summary": "The gaps between cells, as (column_gutter, row_gutter).",
+     "url": "reference/API.md#cls-Grid-gutter"
+    },
+    {
+     "name": "row_count",
+     "kind": "property",
+     "signature": "row_count",
+     "detail": "int",
+     "summary": "How many rows the grid has.",
+     "url": "reference/API.md#cls-Grid-row_count"
+    },
+    {
+     "name": "rows",
+     "kind": "property",
+     "signature": "rows",
+     "detail": "list",
+     "summary": "The rows as a list of areas, top to bottom, each as wide as the whole grid.",
+     "url": "reference/API.md#cls-Grid-rows"
+    },
+    {
+     "name": "show",
+     "kind": "method",
+     "signature": "show(color='#1e90ff', in_files=False)",
+     "detail": "(*, color=#1e90ff, in_files: bool = False) -> None",
+     "summary": "Draw thin guide lines that show the grid: the outline of its area and of every cell.",
+     "url": "reference/API.md#cls-Grid-show"
+    },
+    {
+     "name": "span",
+     "kind": "method",
+     "signature": "span(col, row, cols=1, rows=1)",
+     "detail": "(col: int, row: int, cols: int = 1, rows: int = 1) -> Area",
+     "summary": "Return one area that covers several cells, with the gutters between them.",
+     "url": "reference/API.md#cls-Grid-span",
+     "returns": "Area"
+    }
+   ]
+  },
+  "Path": {
+   "summary": "The plain data of a path: a fixed list of moves, lines, curves and closes.",
+   "url": "reference/API.md#cls-Path",
+   "members": [
+    {
+     "name": "arc_to",
+     "kind": "method",
+     "signature": "arc_to(cx, cy, rx, ry, start, stop)",
+     "detail": "(cx: float, cy: float, rx: float, ry: float, start: float, stop: float) -> Path",
+     "summary": "Make a new path with an arc of an ellipse added.",
+     "url": "reference/API.md#cls-Path-arc_to",
+     "returns": "Path"
+    },
+    {
+     "name": "bounds",
+     "kind": "method",
+     "signature": "bounds()",
+     "detail": "() -> tuple[float, float, float, float] | None",
+     "summary": "The box that holds every point of the path, including curve control points.",
+     "url": "reference/API.md#cls-Path-bounds"
+    },
+    {
+     "name": "close",
+     "kind": "method",
+     "signature": "close()",
+     "detail": "() -> Path",
+     "summary": "Make a new path with the current part closed.",
+     "url": "reference/API.md#cls-Path-close",
+     "returns": "Path"
+    },
+    {
+     "name": "cubic_to",
+     "kind": "method",
+     "signature": "cubic_to(c1x, c1y, c2x, c2y, x, y)",
+     "detail": "(c1x: float, c1y: float, c2x: float, c2y: float, x: float, y: float) -> Path",
+     "summary": "Make a new path with a cubic Bezier curve added.",
+     "url": "reference/API.md#cls-Path-cubic_to",
+     "returns": "Path"
+    },
+    {
+     "name": "current_point",
+     "kind": "method",
+     "signature": "current_point()",
+     "detail": "() -> Point",
+     "summary": "The point where the path now ends.",
+     "url": "reference/API.md#cls-Path-current_point"
+    },
+    {
+     "name": "ellipse",
+     "kind": "method",
+     "signature": "ellipse(cx, cy, rx, ry)",
+     "detail": "(cx: float, cy: float, rx: float, ry: float) -> Path",
+     "summary": "Make a new path that is one closed ellipse.",
+     "url": "reference/API.md#cls-Path-ellipse",
+     "returns": "Path"
+    },
+    {
+     "name": "is_closed",
+     "kind": "property",
+     "signature": "is_closed",
+     "detail": "bool",
+     "summary": "Whether every part that draws something ends with a close.",
+     "url": "reference/API.md#cls-Path-is_closed"
+    },
+    {
+     "name": "is_empty",
+     "kind": "property",
+     "signature": "is_empty",
+     "detail": "bool",
+     "summary": "Whether the path has no parts.",
+     "url": "reference/API.md#cls-Path-is_empty"
+    },
+    {
+     "name": "line_to",
+     "kind": "method",
+     "signature": "line_to(x, y)",
+     "detail": "(x: float, y: float) -> Path",
+     "summary": "Make a new path with a straight line added.",
+     "url": "reference/API.md#cls-Path-line_to",
+     "returns": "Path"
+    },
+    {
+     "name": "move_to",
+     "kind": "method",
+     "signature": "move_to(x, y)",
+     "detail": "(x: float, y: float) -> Path",
+     "summary": "Make a new path with a new part started at a point.",
+     "url": "reference/API.md#cls-Path-move_to",
+     "returns": "Path"
+    },
+    {
+     "name": "points",
+     "kind": "method",
+     "signature": "points()",
+     "detail": "() -> Iterator[Point]",
+     "summary": "Every point in the path, including curve control points, in order.",
+     "url": "reference/API.md#cls-Path-points"
+    },
+    {
+     "name": "quad_to",
+     "kind": "method",
+     "signature": "quad_to(cx, cy, x, y)",
+     "detail": "(cx: float, cy: float, x: float, y: float) -> Path",
+     "summary": "Make a new path with a quadratic Bezier curve added.",
+     "url": "reference/API.md#cls-Path-quad_to",
+     "returns": "Path"
+    },
+    {
+     "name": "rect",
+     "kind": "method",
+     "signature": "rect(x, y, w, h)",
+     "detail": "(x: float, y: float, w: float, h: float) -> Path",
+     "summary": "Make a new path that is one closed rectangle.",
+     "url": "reference/API.md#cls-Path-rect",
+     "returns": "Path"
+    },
+    {
+     "name": "rounded_rect",
+     "kind": "method",
+     "signature": "rounded_rect(x, y, w, h, radii)",
+     "detail": "(x: float, y: float, w: float, h: float, radii: tuple[float, float, float, float]) -> Path",
+     "summary": "Make a new path that is one closed rectangle with rounded corners.",
+     "url": "reference/API.md#cls-Path-rounded_rect",
+     "returns": "Path"
+    },
+    {
+     "name": "transformed",
+     "kind": "method",
+     "signature": "transformed(t)",
+     "detail": "(t: Transform) -> Path",
+     "summary": "Make a new path with every point moved by a transform.",
+     "url": "reference/API.md#cls-Path-transformed",
+     "returns": "Path"
+    },
+    {
+     "name": "translated",
+     "kind": "method",
+     "signature": "translated(dx, dy)",
+     "detail": "(dx: float, dy: float) -> Path",
+     "summary": "Make a new path with every point moved across and down.",
+     "url": "reference/API.md#cls-Path-translated",
+     "returns": "Path"
+    }
+   ]
+  },
+  "Font": {
+   "summary": "A font that you can pass to f.text_font(), or ask questions about.",
+   "url": "reference/API.md#cls-Font",
+   "members": [
+    {
+     "name": "contains",
+     "kind": "method",
+     "signature": "contains(text)",
+     "detail": "(text: str) -> bool",
+     "summary": "Whether the font has a shape for every character of some text.",
+     "url": "reference/API.md#cls-Font-contains"
+    },
+    {
+     "name": "family",
+     "kind": "method",
+     "signature": "family()",
+     "detail": "() -> str",
+     "summary": "The family name of the font, as written in the font file.",
+     "url": "reference/API.md#cls-Font-family"
+    },
+    {
+     "name": "features",
+     "kind": "method",
+     "signature": "features()",
+     "detail": "() -> list[str]",
+     "summary": "The OpenType features that the font has.",
+     "url": "reference/API.md#cls-Font-features"
+    },
+    {
+     "name": "style",
+     "kind": "method",
+     "signature": "style()",
+     "detail": "() -> str",
+     "summary": "The style name of the font, as written in the font file.",
+     "url": "reference/API.md#cls-Font-style"
+    },
+    {
+     "name": "variations",
+     "kind": "method",
+     "signature": "variations()",
+     "detail": "() -> dict[str, tuple[float, float, float]]",
+     "summary": "The axes of a variable font and how far each one can go.",
+     "url": "reference/API.md#cls-Font-variations"
+    }
+   ]
+  },
+  "Control": {
+   "summary": "What a slider, a checkbox and a button share: a label.",
+   "url": "reference/API.md#cls-Control",
+   "members": [
+    {
+     "name": "label",
+     "kind": "property",
+     "signature": "label",
+     "detail": "str",
+     "summary": "The text shown beside the control.",
+     "url": "reference/API.md#cls-Control-label"
+    },
+    {
+     "name": "visible",
+     "kind": "method",
+     "signature": "visible(flag=<not given>)",
+     "detail": "(flag=<not given>)",
+     "summary": "Read whether the control is shown, or hide or show it.",
+     "url": "reference/API.md#cls-Control-visible"
+    }
+   ]
+  },
+  "Slider": {
+   "summary": "A control that holds a number between a low and a high end.",
+   "url": "reference/API.md#cls-Slider",
+   "members": [
+    {
+     "name": "high",
+     "kind": "property",
+     "signature": "high",
+     "detail": "",
+     "summary": "The largest value the slider can have.",
+     "url": "reference/API.md#cls-Slider-high"
+    },
+    {
+     "name": "label",
+     "kind": "property",
+     "signature": "label",
+     "detail": "str",
+     "summary": "The text shown beside the control.",
+     "url": "reference/API.md#cls-Slider-label"
+    },
+    {
+     "name": "low",
+     "kind": "property",
+     "signature": "low",
+     "detail": "",
+     "summary": "The smallest value the slider can have.",
+     "url": "reference/API.md#cls-Slider-low"
+    },
+    {
+     "name": "step",
+     "kind": "property",
+     "signature": "step",
+     "detail": "",
+     "summary": "The size of each jump of the slider.",
+     "url": "reference/API.md#cls-Slider-step"
+    },
+    {
+     "name": "text",
+     "kind": "method",
+     "signature": "text()",
+     "detail": "() -> str",
+     "summary": "The value as the panel shows it.",
+     "url": "reference/API.md#cls-Slider-text"
+    },
+    {
+     "name": "value",
+     "kind": "method",
+     "signature": "value(v=<not given>)",
+     "detail": "(v=<not given>)",
+     "summary": "Read the slider's number, or set it.",
+     "url": "reference/API.md#cls-Slider-value"
+    },
+    {
+     "name": "visible",
+     "kind": "method",
+     "signature": "visible(flag=<not given>)",
+     "detail": "(flag=<not given>)",
+     "summary": "Read whether the control is shown, or hide or show it.",
+     "url": "reference/API.md#cls-Slider-visible"
+    }
+   ]
+  },
+  "Checkbox": {
+   "summary": "A box that is ticked or not.",
+   "url": "reference/API.md#cls-Checkbox",
+   "members": [
+    {
+     "name": "checked",
+     "kind": "method",
+     "signature": "checked(b=<not given>)",
+     "detail": "(b=<not given>)",
+     "summary": "Read whether the box is ticked, or tick or untick it.",
+     "url": "reference/API.md#cls-Checkbox-checked"
+    },
+    {
+     "name": "label",
+     "kind": "property",
+     "signature": "label",
+     "detail": "str",
+     "summary": "The text shown beside the control.",
+     "url": "reference/API.md#cls-Checkbox-label"
+    },
+    {
+     "name": "visible",
+     "kind": "method",
+     "signature": "visible(flag=<not given>)",
+     "detail": "(flag=<not given>)",
+     "summary": "Read whether the control is shown, or hide or show it.",
+     "url": "reference/API.md#cls-Checkbox-visible"
+    }
+   ]
+  },
+  "Button": {
+   "summary": "A button that you click in the panel below the canvas.",
+   "url": "reference/API.md#cls-Button",
+   "members": [
+    {
+     "name": "clicked",
+     "kind": "method",
+     "signature": "clicked()",
+     "detail": "() -> bool",
+     "summary": "Whether the button was clicked since you last asked.",
+     "url": "reference/API.md#cls-Button-clicked"
+    },
+    {
+     "name": "label",
+     "kind": "property",
+     "signature": "label",
+     "detail": "str",
+     "summary": "The text shown beside the control.",
+     "url": "reference/API.md#cls-Button-label"
+    },
+    {
+     "name": "visible",
+     "kind": "method",
+     "signature": "visible(flag=<not given>)",
+     "detail": "(flag=<not given>)",
+     "summary": "Read whether the control is shown, or hide or show it.",
+     "url": "reference/API.md#cls-Button-visible"
+    }
+   ]
+  },
+  "Color": {
+   "summary": "A colour, as red, green, blue and alpha numbers.",
+   "url": "reference/API.md#cls-Color",
+   "members": [
+    {
+     "name": "alpha",
+     "kind": "property",
+     "signature": "alpha",
+     "detail": "int",
+     "summary": "How solid the colour is.",
+     "url": "reference/API.md#cls-Color-alpha"
+    },
+    {
+     "name": "blue",
+     "kind": "property",
+     "signature": "blue",
+     "detail": "int",
+     "summary": "How much blue the colour has.",
+     "url": "reference/API.md#cls-Color-blue"
+    },
+    {
+     "name": "brightness",
+     "kind": "property",
+     "signature": "brightness",
+     "detail": "float",
+     "summary": "How bright the colour is, in the HSB way of measuring.",
+     "url": "reference/API.md#cls-Color-brightness"
+    },
+    {
+     "name": "from_cmyk",
+     "kind": "method",
+     "signature": "from_cmyk(c, m, y, k, a=255)",
+     "detail": "(c: float, m: float, y: float, k: float, a: float = 255) -> Color",
+     "summary": "Make a colour from ink amounts: cyan, magenta, yellow and black.",
+     "url": "reference/API.md#cls-Color-from_cmyk",
+     "returns": "Color"
+    },
+    {
+     "name": "from_hsb",
+     "kind": "method",
+     "signature": "from_hsb(h, s, b, a=255)",
+     "detail": "(h: float, s: float, b: float, a: float = 255) -> Color",
+     "summary": "Make a colour from hue, saturation and brightness.",
+     "url": "reference/API.md#cls-Color-from_hsb",
+     "returns": "Color"
+    },
+    {
+     "name": "from_hsl",
+     "kind": "method",
+     "signature": "from_hsl(h, s, l, a=255)",
+     "detail": "(h: float, s: float, l: float, a: float = 255) -> Color",
+     "summary": "Make a colour from hue, saturation and lightness.",
+     "url": "reference/API.md#cls-Color-from_hsl",
+     "returns": "Color"
+    },
+    {
+     "name": "green",
+     "kind": "property",
+     "signature": "green",
+     "detail": "int",
+     "summary": "How much green the colour has.",
+     "url": "reference/API.md#cls-Color-green"
+    },
+    {
+     "name": "hue",
+     "kind": "property",
+     "signature": "hue",
+     "detail": "float",
+     "summary": "The hue of the colour: its place on the colour wheel.",
+     "url": "reference/API.md#cls-Color-hue"
+    },
+    {
+     "name": "lerp",
+     "kind": "method",
+     "signature": "lerp(other, amount)",
+     "detail": "(other: Color, amount: float) -> Color",
+     "summary": "Make a colour that is part of the way from this colour to another.",
+     "url": "reference/API.md#cls-Color-lerp",
+     "returns": "Color"
+    },
+    {
+     "name": "lightness",
+     "kind": "property",
+     "signature": "lightness",
+     "detail": "float",
+     "summary": "How light the colour is, in the HSL way of measuring.",
+     "url": "reference/API.md#cls-Color-lightness"
+    },
+    {
+     "name": "parse",
+     "kind": "method",
+     "signature": "parse(value)",
+     "detail": "(value: ColorLike) -> Color",
+     "summary": "Read a colour from any of the forms that funground accepts.",
+     "url": "reference/API.md#cls-Color-parse",
+     "returns": "Color"
+    },
+    {
+     "name": "red",
+     "kind": "property",
+     "signature": "red",
+     "detail": "int",
+     "summary": "How much red the colour has.",
+     "url": "reference/API.md#cls-Color-red"
+    },
+    {
+     "name": "rgb",
+     "kind": "property",
+     "signature": "rgb",
+     "detail": "tuple[int, int, int]",
+     "summary": "The red, green and blue parts together.",
+     "url": "reference/API.md#cls-Color-rgb"
+    },
+    {
+     "name": "rgba",
+     "kind": "property",
+     "signature": "rgba",
+     "detail": "tuple[int, int, int, int]",
+     "summary": "The red, green, blue and alpha parts together.",
+     "url": "reference/API.md#cls-Color-rgba"
+    },
+    {
+     "name": "saturation",
+     "kind": "property",
+     "signature": "saturation",
+     "detail": "float",
+     "summary": "How strong the colour is, in the HSB way of measuring.",
+     "url": "reference/API.md#cls-Color-saturation"
+    }
+   ]
+  },
+  "Gradient": {
+   "summary": "A blend of colours that you can use in place of a colour.",
+   "url": "reference/API.md#cls-Gradient",
+   "members": []
+  },
+  "Raga": {
+   "summary": "One raga from funground's small table.",
+   "url": "reference/API.md#cls-Raga",
+   "members": []
+  },
+  "Tala": {
+   "summary": "One tala from funground's small table.",
+   "url": "reference/API.md#cls-Tala",
+   "members": []
+  }
+ }
 }
