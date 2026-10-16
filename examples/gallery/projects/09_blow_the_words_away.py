@@ -49,6 +49,7 @@ mode = "live"                                          # "live", "recording" or 
 take = None                                            # the clip being recorded or played back
 breaths = []                                           # the breath of each frame of the take
 played = 0                                             # how many frames of the take have been played back
+card_left = 0                                          # frames left of the card shown before the playback
 message = ""
 
 
@@ -204,13 +205,19 @@ def start_recording():
 
 
 def stop_recording():
-    """Stop the take and play it back from the start, recording the playback as a GIF."""
-    global mode, played
+    """Stop the take, save the plain video, and show for a moment that the playback is about to start."""
+    global mode, card_left
     if take is not None:
         take.stop()
         take.save("take.gif")                        # the plain video
     if not breaths:
         return start_live("Nothing was recorded.")
+    mode, card_left = "about to play", FPS            # a card for one second, then the playback
+
+
+def start_playback():
+    """Play the take from the start, with the words in their cloud, while f.save_gif() records it."""
+    global mode, played
     for word in words:
         word.go_home(0)
     f.save_gif("blow.gif", len(breaths) / FPS)
@@ -248,10 +255,21 @@ def status(live):
 
 
 def draw():
-    global haze, played
+    global haze, played, card_left
     time = f.frame_count / FPS
     live = cam is not None and cam.is_ready()
 
+    if mode == "about to play":                         # a card between Stop and the playback (not in the GIF)
+        f.background(0, 0, 0)
+        f.fill("white")
+        f.text_size(22)
+        f.text("Your take", WIDTH / 2, HEIGHT / 2 - 20)
+        f.text_size(15)
+        f.text("Playing it back and saving blow.gif...", WIDTH / 2, HEIGHT / 2 + 14)
+        card_left -= 1
+        if card_left <= 0:
+            start_playback()
+        return
     if mode == "playing back":
         strength = breaths[played]
         draw_background(take.frame(played) if take is not None and played < len(take) else None)

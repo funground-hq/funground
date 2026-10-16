@@ -6238,6 +6238,53 @@ last = clip.frame(-1)
 
 See also: `save`, `done`.
 
+##### `Clip.is_paused`
+
+```py
+Clip.is_paused() -> 'bool'
+```
+
+Whether the recording is paused.
+
+**Returns.** True after pause() until resume(), otherwise False.
+
+```py
+label = "Resume" if clip.is_paused() else "Pause"
+```
+
+See also: `pause`, `resume`, `done`.
+
+##### `Clip.pause`
+
+```py
+Clip.pause() -> 'None'
+```
+
+Hold the recording: no frames are kept until resume().
+
+The time a clip can hold only counts the frames it keeps, so a paused clip waits as long as you like. Pausing a
+clip that is done does nothing.
+
+```py
+clip.pause()
+```
+
+See also: `resume`, `is_paused`, `stop`.
+
+##### `Clip.resume`
+
+```py
+Clip.resume() -> 'None'
+```
+
+Go on recording after pause().
+
+```py
+clip.resume()
+```
+
+See also: `pause`, `is_paused`.
+
 ##### `Clip.save`
 
 ```py

@@ -474,6 +474,23 @@ def test_frame_index_errors(desk):
         clip.frame(0.5)
 
 
+def test_pause_and_resume_leave_the_paused_frames_out(desk):
+    cam = f.camera()
+    f.size(8, 4)
+    cam.start(8, 4)
+    clip = cam.record(5)
+    sketch = api.active_sketch()
+    ci.take_frames(sketch)
+    clip.pause()
+    assert clip.is_paused()
+    for _ in range(4):
+        ci.take_frames(sketch)
+    assert len(clip) == 1 and not clip.done              # paused: nothing kept, and not over
+    clip.resume()
+    ci.take_frames(sketch)
+    assert len(clip) == 2 and not clip.is_paused()
+
+
 def test_clip_stop_ends_the_recording_and_keeps_the_camera_on(desk):
     cam = f.camera()
     f.size(8, 4)
