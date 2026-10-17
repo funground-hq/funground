@@ -40,6 +40,7 @@ stretch_start = 0                            # the clip's length when the curren
 sounds = []                                  # the sound of each recording stretch
 zoom = 1.0
 message = ""
+saving = 0                                   # frames until the take is saved: 2 after Stop, so "Saving" shows first
 
 
 def open_camera():
@@ -83,10 +84,11 @@ def record_or_stop():
         take = cam.record(MAX_TAKE)
         stretch_start, sounds, message = 0, [], ""
         return
+    global saving
     if not take.is_paused():
         keep_sound()
     take.stop()
-    finish_take()
+    saving = 2                               # saving takes a moment: show "Saving" on one frame, save on the next
 
 
 def finish_take():
@@ -114,6 +116,8 @@ def pause_or_resume():
 def mouse_pressed():
     global zoom, message
     live = cam is not None and cam.is_ready()
+    if saving:
+        return                                   # one thing at a time: the take is being saved
     if inside("record") and live:
         record_or_stop()
     elif inside("pause") and take is not None:
@@ -133,9 +137,11 @@ def inside(button):
 
 
 def draw_buttons(live):
-    labels = {"record": "Stop" if take else "Record", "pause": "Resume" if take and take.is_paused() else "Pause",
-              "photo": "Photo", "zoom out": "-", "zoom in": "+"}
-    usable = {"record": live, "pause": take is not None, "photo": live, "zoom out": True, "zoom in": True}
+    record = "Saving" if saving else "Stop" if take else "Record"
+    pause = "Resume" if take and take.is_paused() else "Pause"
+    labels = {"record": record, "pause": pause, "photo": "Photo", "zoom out": "-", "zoom in": "+"}
+    usable = {"record": live and not saving, "pause": take is not None and not saving, "photo": live,
+              "zoom out": True, "zoom in": True}
     f.no_stroke()
     f.text_size(14)
     for name, (x, y, w, h) in BUTTONS.items():
@@ -166,6 +172,7 @@ def say(words):
 
 
 def draw():
+    global saving
     live = cam is not None and cam.is_ready()
     if live:
         part_w, part_h = WIDTH / zoom, HEIGHT / zoom
@@ -173,9 +180,16 @@ def draw():
     else:
         f.image(photo, 0, 0)
 
-    if take is not None and take.done:           # the take is full: stop it as if Stop was pressed
+    if saving:
+        saving -= 1
+        if saving == 0:
+            finish_take()
+    elif take is not None and take.done:         # the take is full: stop it as if Stop was pressed
         record_or_stop()
-    if take is not None:
+    if saving:
+        draw_frame((90, 150, 240))
+        say("Saving take.gif and take.wav...")
+    elif take is not None:
         seconds = len(take) / FPS
         if take.is_paused():
             draw_frame((240, 170, 30))

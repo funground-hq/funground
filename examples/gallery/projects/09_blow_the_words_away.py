@@ -209,10 +209,9 @@ def stop_recording():
     global mode, card_left
     if take is not None:
         take.stop()
-        take.save("take.gif")                        # the plain video
     if not breaths:
         return start_live("Nothing was recorded.")
-    mode, card_left = "about to play", FPS            # a card for one second, then the playback
+    mode, card_left = "about to play", FPS            # a card for one second (it saves take.gif), then the playback
 
 
 def start_playback():
@@ -266,6 +265,8 @@ def draw():
         f.text("Your take", WIDTH / 2, HEIGHT / 2 - 20)
         f.text_size(15)
         f.text("Playing it back and saving blow.gif...", WIDTH / 2, HEIGHT / 2 + 14)
+        if card_left == FPS - 1 and take is not None:
+            take.save("take.gif")                        # the plain video, once the card is on screen
         card_left -= 1
         if card_left <= 0:
             start_playback()
