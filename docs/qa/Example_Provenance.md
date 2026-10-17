@@ -223,3 +223,10 @@ around a spot the learner places), and the code was written from funground's cam
 features. The GIF's source is to be linked here and in the example when the maintainer gives it.
 `tools/check_originality.py` against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged
 (highest combined score 0.16).
+
+## Images 08, play a take — 17 October 2026
+
+`examples/gallery/images/08_play_a_take.py` (story S-220: a clip loaded with `f.load_clip`, scrubbed with the mouse and
+played at any speed, backwards too) and its sample `data/take.gif`, drawn by `data/make_take.py` (a paper boat rocking
+under a moving sun), are original CC0 work. `tools/check_originality.py` against the 2,974 corpus files in
+`C:\Projects\funground-corpora`: nothing flagged.

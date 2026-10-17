@@ -802,6 +802,8 @@ for y in range(0, 480, 20):
 `clip = cam.record(3)` keeps the next three seconds, one frame for each frame your sketch draws. The clip is in
 memory only, so it is limited to 10 seconds. When `clip.done` is `True` the recording is over. Then `clip.save("me.gif")`
 writes an animated GIF. (An `.mp4` also works on a computer with the video extra, but not in the browser.)
+`f.load_clip("take.gif")` reads a GIF back as a clip, so a take saved by one sketch can play in another:
+`f.image(take.frame(f.frame_count % len(take)), 0, 0)` loops it.
 
 | Call | What it does |
 |---|---|

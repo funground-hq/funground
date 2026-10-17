@@ -903,6 +903,7 @@ files and Python's own `random` are not covered.
 | `clip.done` / `len(clip)` / `clip.fps` / `clip.frame(i)` | `True` when the recording is over (full, or stopped); the frames kept so far; the sketch's frame rate; frame `i` as a new picture (a negative `i` counts from the end; no such frame is an `IndexError`). | `last = clip.frame(-1)` |
 | `clip.pause()` / `clip.resume()` / `clip.is_paused()` | hold the recording (no frames kept, the time does not run) and go on; whether it is paused. | `clip.pause()` |
 | `clip.stop()` | end the recording now and keep the camera on: for a record button pressed again to stop. | `clip.stop()` |
+| `f.load_clip(path)` | read an animated GIF or WebP (such as a saved take) as a clip, with `len`, `frame(i)` and `fps`. | `take = f.load_clip("take.gif")` |
 | `clip.save(path)` | write the frames kept so far: `.gif` everywhere, `.mp4` on a computer with the `video` extra (not in the browser). Another ending, or an empty clip, is a `ValueError`. | `clip.save("me.gif")` |
 | `f.get(x, y)` | the colour at one pixel, as a colour object (`.red`, `.green`, `.blue`, `.alpha`), as drawn so far, this frame included. Outside the canvas: transparent black. `x`, `y` are rounded down. On a high-resolution screen it reads the top-left real pixel of a logical one. | `c = f.get(10, 20)` |
 | `f.get(x, y, w, h)` | a new picture copied from that rectangle of the canvas (parts outside are see-through). A picture has `g.get(...)` too. | `part = f.get(0, 0, 50, 50)` |
