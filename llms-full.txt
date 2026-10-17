@@ -131,7 +131,7 @@ In the examples, `import funground as f` is understood.
 - Motion and pages: `frame_duration`, `new_page`, `page_size`, `page_count`
 - Sound: `load_sound`, `create_sound`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `drone`, `note_to_frequency`, `frequency_to_note`, `chord_notes`
 - Music analysis and the microphone: `microphone`, `microphones`
-- Camera: `camera`, `cameras`
+- Camera: `camera`, `cameras`, `load_clip`
 - Drawing sound: `draw_wave`, `draw_spectrum`, `spectrogram`, `draw_pitch_line`
 - Ragas and talas: `ragas`, `raga`, `talas`, `tala_info`, `tala`, `match_ragas`
 - Classes: `Vector`, `FormattedString`
@@ -4371,6 +4371,38 @@ print(f.cameras())
 ```
 
 See also: `camera`.
+
+#### `f.load_clip`
+
+```py
+f.load_clip(path: 'str') -> 'Clip'
+```
+
+Read an animated GIF or WebP file and return it as a clip.
+
+It is the same kind of clip that cam.record() gives, so a take saved from the photo booth can come back in another
+sketch: len(clip) counts its frames, clip.frame(i) is one of them as a picture, and clip.fps is how many frames a
+second it plays. A relative path is found next to the sketch file first, then in the current folder. A still
+picture gives a clip of one frame. The frame rate comes from the file's frame times; when they differ, the middle
+one is used.
+
+| Argument | Meaning |
+|---|---|
+| `path` | the file name, such as "take.gif". |
+
+**Returns.** A Clip that is complete: clip.done is True.
+
+**Raises.**
+
+- `FileNotFoundError`: there is no such file.
+- `ValueError`: the file is not a picture funground can read, or it is an SVG file.
+
+```py
+take = f.load_clip("take.gif")
+f.image(take.frame(f.frame_count % len(take)), 0, 0)
+```
+
+See also: `camera`, `load_image`, `load_sound`.
 
 ### Drawing sound
 

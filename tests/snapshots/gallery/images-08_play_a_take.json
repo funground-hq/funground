@@ -1,0 +1,95 @@
+[
+ {
+  "height": 360.0,
+  "op": "Image",
+  "source": "graphics-30",
+  "version": 0,
+  "width": 480.0,
+  "x": 0.0,
+  "y": 0.0
+ },
+ {
+  "height": 34,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    150
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 480,
+  "x": 0,
+  "y": 326
+ },
+ {
+  "height": 4,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    90
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "width": 460,
+  "x": 10,
+  "y": 330
+ },
+ {
+  "diameter": 10,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "x": 250.0,
+  "y": 332
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_align": "center",
+   "text_size": 13,
+   "text_valign": "center"
+  },
+  "text": "frame 13 of 24   speed 1   drag to scrub, arrows for speed",
+  "x": 51.452392578125,
+  "y": 339.43359375
+ }
+]

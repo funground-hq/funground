@@ -426,6 +426,25 @@ class Camera:
         return clip
 
 
+def load_clip(path: str, canvas) -> "Clip":
+    """A clip read from an animated GIF or WebP at *path* (an existing file; contract I5, D-109)."""
+    from . import imaging
+
+    width, height, frames, delays = imaging.decode_animation(path)
+    clip = Clip(width, height, _fps_of(delays), len(frames), canvas)
+    clip._frames = frames
+    clip._ended = True                               # a loaded clip is complete: nothing more is added
+    return clip
+
+
+def _fps_of(delays: list[float]) -> int:
+    """The frame rate a clip plays at, from its frames' delays in milliseconds (their median, so one long pause in a
+    GIF does not slow the whole clip). A delay of 0, which browsers show as 100 ms, counts as 100 ms."""
+    ordered = sorted(delay if delay > 0 else 100.0 for delay in delays)
+    middle = ordered[len(ordered) // 2]
+    return max(1, min(60, round(1000 / middle)))
+
+
 class Clip:
     """A few seconds of camera frames, kept in memory.
 

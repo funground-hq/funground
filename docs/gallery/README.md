@@ -2228,6 +2228,34 @@ The camera, live on the canvas, with buttons along the top. Record starts a take
 
 Source: [`examples/gallery/images/07_photo_booth.py`](../../examples/gallery/images/07_photo_booth.py)
 
+### Play a take
+
+![Play a take](images/images-08_play_a_take.png)
+
+A short video, played back under your control. Drag across the picture to scrub through it, frame by frame. The arrow keys change the speed, and below zero it plays backwards. Space pauses. It plays your own take.gif when one is next to the sketch (save one with the photo booth), and a little film of a paper boat when there is none.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.load_clip("take.gif") reads an animated GIF into a clip: len(clip) counts its frames, clip.frame(i) gives frame i as a picture, and clip.fps is how fast it was made to play.
+- The sketch keeps a playhead, a number that can sit between two frames. Each frame of the sketch moves it on by speed * clip.fps / 30, so speed 1 plays the clip at its own pace, 2 twice as fast, -1 backwards.
+- int(playhead) % len(clip) picks the frame to show, so the clip loops both ways.
+- While the mouse is pressed, f.map_range() turns the mouse's x into a frame number: that is scrubbing.
+- try and except FileNotFoundError fall back to the boat when there is no take.gif.
+
+**Make it yours**
+
+- Make it a boomerang: when the playhead reaches the end, turn the speed round.
+- Leave a trail: draw the two frames before this one first, with f.opacity(60).
+- Save the frame on the screen with f.save("still.png") when you press S.
+- Try f.filter("posterize", 4) after drawing the frame.
+
+</details>
+
+Source: [`examples/gallery/images/08_play_a_take.py`](../../examples/gallery/images/08_play_a_take.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it

@@ -119,8 +119,10 @@ are raised and closed.
 | D-110 | 2026-10-16 | A step-by-step project from pixels to marks (after the p5.js webcam-dots tutorial the maintainer shared) | keep current behaviour (the gallery's Mirror of dots only) · b a guide project, six steps opening in Play, no new API · c the same with a region average (`pic.average(...)` through pygame-ce's `average_color`) | c | **accepted, b**; the region average stays an open option, to bring back if the project shows the need | 2026-10-16 | `docs/backlog/stories.md` (S-223) |
 | D-111 | 2026-10-16 | An edge filter | keep current behaviour · b `"edges"` for `f.filter` and `pic.filter` (pygame-ce's `laplacian`) | b | **accepted, b** | 2026-10-16 | `docs/backlog/stories.md` (S-224) |
 | D-112 | 2026-10-16 | A guide page on coding with an AI assistant, carefully | keep current behaviour (none) · b the page · c the page and a note in the course | b | **declined for now**: nothing on this currently | 2026-10-16 | this row |
+| D-113 | 2026-10-17 | The course's experiments and funground's studio vocabulary (`f.variations`, `f.keep`, `f.mark`) | keep current behaviour · a "Extend" variants for Lessons 1, 3, 5 written with variations or mark · b a, and Play's Keep through `f.keep` once My files exists | b, after S-216 and S-221 | **pending** | | `docs/design/Course_Studio_Note.md` |
 
 ## Open
 
 - D-101 JPEG decoding in the browser (Sprint 20 review)
 - D-106 background replacement: method names (S-218, Sprint 30)
+- D-113 course experiments and the studio vocabulary (Course_Studio_Note.md)

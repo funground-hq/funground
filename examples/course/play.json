@@ -1,0 +1,118 @@
+{
+ "about": "The course's experiments in Play (S-216, D-104): for each sketch, its lesson, the section it belongs to (the heading as written in the lesson), what to predict before running it and what to compare after. The words come from the lessons. Each lesson's keep note is its own. The site reads this file; nothing else does.",
+ "lessons": {
+  "1": {
+   "title": "Look, frame and compose",
+   "page": "01_look_frame_compose.md",
+   "keep": "I wanted to suggest ____. I changed ____. I noticed ____. I kept version ____ because ____."
+  },
+  "3": {
+   "title": "Contrast and colour",
+   "page": "03_contrast_colour.md",
+   "keep": "I used ____ as paper, ____ as ink and ____ as accent. The essential information was ____. When I changed ____, the card read as ____."
+  },
+  "5": {
+   "title": "Repetition, rhythm and variation",
+   "page": "05_rhythm_variation.md",
+   "keep": "The stable rule is ____. The variable is ____. The pause or accent occurs at ____. I changed ____ because ____."
+  }
+ },
+ "experiments": [
+  {
+   "sketch": "01_starter.py",
+   "title": "One circle",
+   "lesson": "1",
+   "section": "3. Make one circle together",
+   "predict": "The frame's centre is (180, 150). Where will the circle sit, and which gap around it will you notice first?",
+   "compare": "Change X and Y to 35, then try X = 180 and Y = 250. What changed besides the coordinates?"
+  },
+  {
+   "sketch": "01_positions.py",
+   "title": "Experiment A: change position, keep the mark",
+   "lesson": "1",
+   "section": "4. Experiment A: change position, keep the mark",
+   "predict": "What will happen when the circle sits close to two edges?",
+   "compare": "Notice the gap between the circle and each edge in the three panels. Then move the low circle five units at a time toward the bottom: when does the gap begin to look accidental, cramped or deliberate to you?"
+  },
+  {
+   "sketch": "01_space.py",
+   "title": "Experiment B: give the group more room",
+   "lesson": "1",
+   "section": "5. Experiment B: give the group more room",
+   "predict": "The group grows while its proportions, colours and frame stay fixed. In which panel will you notice the frame first?",
+   "compare": "Where do the marks begin to occupy most of your attention? Does the large version feel more confident, more crowded or simply easier to read?"
+  },
+  {
+   "sketch": "01_grouping.py",
+   "title": "Experiment C: space makes groups",
+   "lesson": "1",
+   "section": "6. Experiment C: space makes groups",
+   "predict": "Both rows have six circles of the same size and colour. How many groups will you see in each?",
+   "compare": "Change the x positions in the second list to make three pairs, then one group of four and one of two. Keep the dot size fixed. If the groups are hard to see, increase the difference between the small and large gaps."
+  },
+  {
+   "sketch": "01_exercise.py",
+   "title": "Make your own: three marks, three readings",
+   "lesson": "1",
+   "section": "7. Make your own: three marks, three readings",
+   "predict": "Choose one word: quiet, crowded, unstable or open. Which relationship to the frame might suggest it?",
+   "compare": "Change only the positions, and set VERSION to a, b and c as you save each version. Compare the three and choose one to develop."
+  },
+  {
+   "sketch": "01_composition.py",
+   "title": "Three arrangements of the same marks",
+   "lesson": "1",
+   "section": "7. Make your own: three marks, three readings",
+   "predict": "The marks are identical in all three. Which arrangement will feel most open to you?",
+   "compare": "These are not answers to the assignment. What does each one change: the gaps between the marks, or the group's distance from an edge?"
+  },
+  {
+   "sketch": "03_starter.py",
+   "title": "The reading-circle card",
+   "lesson": "3",
+   "section": "3. Make a card together",
+   "predict": "Which part of the card will you read first, and which colour sends you there?",
+   "compare": "Set PAPER to 235 and INK to 205, keeping ACCENT, and save a version. Change only INK to 35 and save another. Compare them at full size and as a thumbnail."
+  },
+  {
+   "sketch": "03_values.py",
+   "title": "Experiment A: value before hue",
+   "lesson": "3",
+   "section": "4. Experiment A: value before hue",
+   "predict": "Which words will be easiest to find: the light, the medium or the dark ink?",
+   "compare": "Notice the small date as well as the large title. Where does the separation from the paper become weak?"
+  },
+  {
+   "sketch": "03_palettes.py",
+   "title": "Experiment B: give the palette a character",
+   "lesson": "3",
+   "section": "5. Experiment B: give the palette a character",
+   "predict": "Before you label a palette cheerful, serious or gentle, describe what you see. Which colour will change the character most?",
+   "compare": "Swap PAPER and INK: does the same accent still work? Then swap INK and ACCENT: is the important text still clear?"
+  },
+  {
+   "sketch": "05_starter.py",
+   "title": "One rule, made visible",
+   "lesson": "5",
+   "section": "2. Make one rule visible",
+   "predict": "Every circle is GAP units after the last. Will the row feel steady, lively or interrupted?",
+   "compare": "Change the colour of one mark only, and move that accent to the first, last and middle positions. Where do you start looking each time?"
+  },
+  {
+   "sketch": "05_rhythms.py",
+   "title": "Experiment A: make a pause",
+   "lesson": "5",
+   "section": "3. Experiment A: make a pause",
+   "predict": "Replace the equal intervals with six of your own and make one of them larger. Where will a group appear?",
+   "compare": "Then make a row that seems to accelerate. Should the intervals shrink or grow for the reading you intend? Test both."
+  },
+  {
+   "sketch": "05_patterns.py",
+   "title": "Experiment B: repeat a rule in two dimensions",
+   "lesson": "5",
+   "section": "5. Experiment B: repeat a rule in two dimensions",
+   "predict": "The second panel alternates the direction of the same small mark. Will it read as one surface, or as stripes?",
+   "compare": "Change only the rotation rule. Which version holds still, and which seems to move?"
+  }
+ ]
+}
