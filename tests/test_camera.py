@@ -761,3 +761,56 @@ def test_a_session_runs_without_pygame_camera_or_pygame():
                           env={**os.environ, "FUNGROUND_HEADLESS": "1"})
     assert done.returncode == 0, done.stderr
     assert done.stdout.strip() == "start,stop,close"
+
+
+# ---- loading a clip (S-220, D-109)
+def test_a_saved_take_loads_back_as_the_same_clip(desk, tmp_path):
+    pytest.importorskip("PIL")
+    cam = f.camera()
+    clips = []
+
+    def setup():
+        f.size(8, 4)
+        cam.start(8, 4, mirror=False)
+
+    def draw():
+        if not clips:
+            clips.append(cam.record(0.4))
+
+    run(draw, setup=setup, frames=8, fps=10)
+    path = tmp_path / "take.gif"
+    clips[0].save(str(path))
+    loaded = f.load_clip(str(path))
+    assert loaded.done and len(loaded) == len(clips[0]) == 4
+    assert loaded.fps == 10
+    picture = loaded.frame(-1)
+    assert (picture.width, picture.height) == (8, 4)
+
+
+def test_a_still_picture_loads_as_one_frame(tmp_path):
+    pygame = pytest.importorskip("pygame")
+    surface = pygame.Surface((5, 3))
+    surface.fill((200, 40, 40))
+    path = tmp_path / "still.png"
+    pygame.image.save(surface, str(path))
+    clip = f.load_clip(str(path))
+    assert len(clip) == 1 and clip.done
+
+
+def test_load_clip_errors(tmp_path):
+    with pytest.raises(FileNotFoundError):
+        f.load_clip(str(tmp_path / "missing.gif"))
+    svg = tmp_path / "shape.svg"
+    svg.write_text('<svg xmlns="http://www.w3.org/2000/svg"/>', encoding="utf-8")
+    with pytest.raises(ValueError, match="SVG"):
+        f.load_clip(str(svg))
+    junk = tmp_path / "junk.gif"
+    junk.write_bytes(b"not a picture")
+    with pytest.raises(ValueError, match="not an animated picture"):
+        f.load_clip(str(junk))
+
+
+def test_the_frame_rate_comes_from_the_middle_delay():
+    assert ci._fps_of([100, 100, 100]) == 10
+    assert ci._fps_of([40, 40, 2000]) == 25                 # one long pause does not slow the whole clip
+    assert ci._fps_of([0, 0]) == 10                         # 0 ms is shown as 100 ms, as browsers do

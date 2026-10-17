@@ -48,6 +48,33 @@ def decode(path: str) -> tuple[int, int, bytes]:
     return width, height, pygame.image.tobytes(rgba.premul_alpha(), "BGRA")
 
 
+def decode_animation(path: str) -> tuple[int, int, list[bytes], list[float]]:
+    """Read the animated GIF or WebP at *path* (an existing file): ``(width, height, frames, delays)``.
+
+    Each frame is premultiplied BGRA at the first frame's size; each delay is in milliseconds, as the file gives it.
+    A still image gives one frame. Raises ``ValueError`` for an SVG file or a file pygame cannot read.
+    """
+    with open(path, "rb") as handle:
+        head = handle.read(1024)
+    if path.lower().endswith((".svg", ".svgz")) or (head.lstrip()[:1] == b"<" and b"<svg" in head.lower()):
+        raise ValueError(f"f.load_clip(): {path!r} is an SVG file, not a clip. Use f.load_svg() to read it as a drawing")
+    try:
+        loaded = pygame.image.load_animation(path)
+    except Exception as exc:                      # pygame.error, or anything the decoder raises
+        raise ValueError(f"f.load_clip(): {path!r} is not an animated picture funground can read ({exc})") from exc
+    if not loaded:
+        raise ValueError(f"f.load_clip(): {path!r} has no frames")
+    width, height = loaded[0][0].get_size()
+    if width <= 0 or height <= 0:
+        raise ValueError(f"f.load_clip(): {path!r} has no pixels")
+    frames = []
+    for surface, _ in loaded:
+        rgba = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+        rgba.blit(surface, (0, 0))                # every frame at the first frame's size, with an alpha channel
+        frames.append(pygame.image.tobytes(rgba.premul_alpha(), "BGRA"))
+    return width, height, frames, [float(delay) for _, delay in loaded]
+
+
 # ------------------------------------------------------------------ orientation (EXIF)
 def exif_orientation(path: str) -> int:
     """The EXIF orientation (1-8) of a JPEG file; 1 when there is none or it is damaged."""

@@ -30,7 +30,7 @@ In the examples, `import funground as f` is understood.
 - [Motion and pages](#motion-and-pages): [`frame_duration`](#fn-frame_duration), [`new_page`](#fn-new_page), [`page_size`](#fn-page_size), [`page_count`](#fn-page_count)
 - [Sound](#sound): [`load_sound`](#fn-load_sound), [`create_sound`](#fn-create_sound), [`tone`](#fn-tone), [`note`](#fn-note), [`pluck`](#fn-pluck), [`melody`](#fn-melody), [`sequence`](#fn-sequence), [`mix`](#fn-mix), [`drone`](#fn-drone), [`note_to_frequency`](#fn-note_to_frequency), [`frequency_to_note`](#fn-frequency_to_note), [`chord_notes`](#fn-chord_notes)
 - [Music analysis and the microphone](#music-analysis-and-the-microphone): [`microphone`](#fn-microphone), [`microphones`](#fn-microphones)
-- [Camera](#camera): [`camera`](#fn-camera), [`cameras`](#fn-cameras)
+- [Camera](#camera): [`camera`](#fn-camera), [`cameras`](#fn-cameras), [`load_clip`](#fn-load_clip)
 - [Drawing sound](#drawing-sound): [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`spectrogram`](#fn-spectrogram), [`draw_pitch_line`](#fn-draw_pitch_line)
 - [Ragas and talas](#ragas-and-talas): [`ragas`](#fn-ragas), [`raga`](#fn-raga), [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`match_ragas`](#fn-match_ragas)
 - [Classes](#classes): [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString)
@@ -4474,6 +4474,39 @@ print(f.cameras())
 ```
 
 See also: [`camera`](#fn-camera).
+
+<a id="fn-load_clip"></a>
+### `f.load_clip`
+
+```py
+f.load_clip(path: 'str') -> 'Clip'
+```
+
+Read an animated GIF or WebP file and return it as a clip.
+
+It is the same kind of clip that cam.record() gives, so a take saved from the photo booth can come back in another
+sketch: len(clip) counts its frames, clip.frame(i) is one of them as a picture, and clip.fps is how many frames a
+second it plays. A relative path is found next to the sketch file first, then in the current folder. A still
+picture gives a clip of one frame. The frame rate comes from the file's frame times; when they differ, the middle
+one is used.
+
+| Argument | Meaning |
+|---|---|
+| `path` | the file name, such as "take.gif". |
+
+**Returns.** A Clip that is complete: clip.done is True.
+
+**Raises.**
+
+- `FileNotFoundError`: there is no such file.
+- `ValueError`: the file is not a picture funground can read, or it is an SVG file.
+
+```py
+take = f.load_clip("take.gif")
+f.image(take.frame(f.frame_count % len(take)), 0, 0)
+```
+
+See also: [`camera`](#fn-camera), [`load_image`](#fn-load_image), [`load_sound`](#fn-load_sound).
 
 <a id="drawing-sound"></a>
 ## Drawing sound
