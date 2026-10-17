@@ -29,7 +29,7 @@ from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
 
 if TYPE_CHECKING:                                    # only for the annotations below; nothing is imported at run time
     from .hindustani import Raga, Tala
-    from .camera_input import Camera
+    from .camera_input import Camera, Clip
     from .microphone_input import Microphone
     from .paint import Gradient
     from .sound import Sound
@@ -3303,6 +3303,46 @@ def cameras() -> list[str]:
     from . import camera_input
 
     return camera_input.cameras()
+
+
+def load_clip(path: str) -> Clip:
+    """Read an animated GIF or WebP file and return it as a clip.
+
+    It is the same kind of clip that cam.record() gives, so a take saved from the photo booth can come back in another
+    sketch: len(clip) counts its frames, clip.frame(i) is one of them as a picture, and clip.fps is how many frames a
+    second it plays. A relative path is found next to the sketch file first, then in the current folder. A still
+    picture gives a clip of one frame. The frame rate comes from the file's frame times; when they differ, the middle
+    one is used.
+
+    Arguments:
+        path: the file name, such as "take.gif".
+
+    Returns:
+        A Clip that is complete: clip.done is True.
+
+    Raises:
+        FileNotFoundError: there is no such file.
+        ValueError: the file is not a picture funground can read, or it is an SVG file.
+
+    Example:
+        take = f.load_clip("take.gif")
+        f.image(take.frame(f.frame_count % len(take)), 0, 0)
+
+    See also: camera, load_image, load_sound
+    """
+    from . import camera_input
+    from .typography import _resolve_path
+
+    caller = inspect.currentframe()
+    base_dir = None
+    if caller is not None and caller.f_back is not None:
+        sketch_file = caller.f_back.f_globals.get("__file__")
+        if sketch_file:
+            import os
+
+            base_dir = os.path.dirname(os.path.abspath(sketch_file))
+    resolved = _resolve_path(path, base_dir, "f.load_clip()", "clip")
+    return camera_input.load_clip(resolved, canvas_sketch)
 
 
 # ---- drawing sound (S-111, contract A7, D-061)

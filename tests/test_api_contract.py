@@ -180,6 +180,7 @@ ADDED_FUNCTIONS = {
     # S-172 camera
     "camera": "(name: 'str | None' = None) -> 'Camera'",
     "cameras": "() -> 'list[str]'",
+    "load_clip": "(path: 'str') -> 'Clip'",
     # S-115 ragas
     "ragas": "() -> 'list[str]'",
     "raga": "(name: 'str') -> 'Raga'",
