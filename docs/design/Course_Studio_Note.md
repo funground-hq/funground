@@ -1,7 +1,8 @@
 # Design note: the course's experiments and funground's studio vocabulary
 
-**Status:** proposal for the maintainer, 17 October 2026 (asked: "see if mark and variations have any usefulness and
-applicability for experiments"). Nothing is built. Related: S-216 (the course in Play), D-104, D-071, D-073,
+**Status:** accepted 18 October 2026 as option b (D-113; the maintainer will review the result and may change it);
+built as S-226 in Sprint 30. Asked 17 Oct: "see if mark and variations have any usefulness and applicability for
+experiments". Related: S-216 (the course in Play), D-104, D-071, D-073,
 `Studio_Vocabulary_Note.md`, contract rows E1, E2, K1, K2.
 
 ## Why

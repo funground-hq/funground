@@ -1,7 +1,7 @@
 # Design note: replacing the background behind you (S-218)
 
-**Status:** proposal for the maintainer, 17 October 2026 (D-106: the approach is agreed, a colour key and an
-empty-room snapshot; the names and the tolerance are to approve). Nothing is built.
+**Status:** accepted 18 October 2026 (D-106: the approach, a colour key and an empty-room snapshot, agreed 16 Oct; the
+names, the tolerance and "in place" approved 18 Oct). Built in Sprint 30.
 
 ## What a learner writes
 
@@ -38,7 +38,7 @@ The idea is **see-through**, not "replace": the method makes the matching pixels
 whatever they like behind. That keeps it one small step that fits what pictures already do (P1 to P10): any picture,
 not only the camera, and any background, including a moving sketch.
 
-## Proposed names (to approve)
+## Names (approved, D-106)
 
 | Call | Does |
 |---|---|
@@ -74,8 +74,29 @@ Known pixels: exact and near colours removed, others kept, alpha of kept pixels 
 background of a different size → `ValueError`; the same in Play's runner (`test_runner.py` case). A gallery example
 with the fallback photo and a drawn "empty room" so the golden is deterministic.
 
-## Decision for the maintainer (D-106)
+## Decision (D-106)
+
+Accepted 18 October 2026, as proposed below.
+
 
 Approve the names `remove_color` and `remove_background`, the tolerance meaning (largest channel difference, 0 to 255),
 and in place with nothing returned — or choose other names. Recommendation: as above; they read as plain English and
 say what happens.
+
+## Next steps: help for the cut-out (D-115, pending; spike S-227)
+
+The maintainer asked (18 Oct) whether edge detection could help, or whether the cut-out shape could be laid over the
+picture as a path whose points are moved to correct the mask. The colour key and the snapshot leave two kinds of fault:
+specks of room that look like you, and holes in you that look like the room.
+
+- **Edges alone cannot decide it.** `filter("edges")` shows where outlines are, but not which side of an outline is you.
+  It is useful only after there is a mask: to pull its border onto the nearest real outline (option d).
+- **Tidy the mask (a).** pygame-ce's `Mask.connected_component()` keeps the largest connected part (you) and drops the
+  specks; filling the holes of that part removes the holes. Both are C, a few milliseconds.
+- **An editable outline (b).** `Mask.outline()` gives the border as points; thinned to some dozens, they become an
+  `f.path()` drawn over the picture. A learner drags a point to correct it, and the path cuts the picture out
+  (`clip`), which also teaches what a path is. Good for a still picture; for live video the outline changes every frame,
+  so (b) is for a photo or a kept frame.
+
+Recommendation: a and b as a spike after S-218 (S-227), with the names for the maintainer; d only if b's outline is
+visibly off. Machine-learning person masks stay a later spike.
