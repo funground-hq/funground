@@ -124,6 +124,7 @@ class CONSTANTS(metaclass=_NamespaceMeta):
         POSTERIZE: Final = "posterize"
         ERODE: Final = "erode"
         DILATE: Final = "dilate"
+        EDGES: Final = "edges"
 
     class WAVE(metaclass=_NamespaceMeta):
         """The sound waves for tone(), note() and melody()."""
