@@ -1,0 +1,14502 @@
+[
+ {
+  "color": [
+   253,
+   246,
+   227,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.31294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    215,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 6.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.049411764705884,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    228,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 8.884705882352943,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    230,
+    60,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 9.016470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    229,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 18.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 9.510588235294119,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    206,
+    57,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.720000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    64,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 30.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 7.9952941176470596,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    82,
+    76,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 8.291764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    75,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 42.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.962352941176471,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    83,
+    77,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 54.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.567058823529415,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    93,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.63294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    91,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 66.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.4023529411764715,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    97,
+    80,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.2705882352941185,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    100,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 78.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 6.710588235294118,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    114,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 6.908235294117649,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    109,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 7.0070588235294125,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    107,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 90.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.842352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    111,
+    84,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 102.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.315294117647062,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    124,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.150588235294119,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    128,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 6.282352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    125,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 114.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.524705882352944,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    144,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.59058823529412,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    142,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.95294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    133,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 126.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.75529411764706,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    138,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 6.480000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    120,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 6.381176470588237,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    122,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 6.249411764705885,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    126,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 6.249411764705885,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    126,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 6.381176470588237,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    122,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 6.480000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    120,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.920000000000001,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    134,
+    90,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.623529411764707,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    141,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.78823529411765,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    137,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.75529411764706,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    138,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.722352941176473,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    139,
+    91,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 138.0
+ },
+ {
+  "diameter": 5.623529411764707,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    141,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.150588235294119,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    128,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.480000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    120,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.216470588235296,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    127,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.216470588235296,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    127,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.491764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    145,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.59058823529412,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    142,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 4.865882352941178,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    160,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 5.55764705882353,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    241,
+    143,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 150.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.360000000000003,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    148,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.491764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    145,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.2611764705882385,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    150,
+    94,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.524705882352944,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    144,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.491764705882354,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    145,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 162.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.842352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    111,
+    84,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 8.02823529411765,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    81,
+    76,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.063529411764708,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    155,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.776470588235297,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    113,
+    84,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.545882352941177,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    118,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.414117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    122,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.710588235294118,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    114,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.425882352941179,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    146,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 174.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.6776470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    115,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.710588235294118,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    114,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 5.096470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    155,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 5.096470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    155,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 4.865882352941178,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    160,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 4.9976470588235316,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    157,
+    96,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 4.9976470588235316,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    157,
+    96,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 4.931764705882355,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    159,
+    96,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 5.030588235294118,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    156,
+    96,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 9.049411764705884,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    228,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.183529411764707,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    127,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.315294117647062,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    124,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.381176470588237,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    122,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 7.040000000000001,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    237,
+    106,
+    83,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 186.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.480000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    120,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 5.524705882352944,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    144,
+    92,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 5.096470588235295,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    155,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 5.162352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    153,
+    95,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 4.832941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    161,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.414117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    122,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.710588235294118,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    114,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.512941176470589,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    119,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 198.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 8.225882352941177,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    76,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 7.204705882352943,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    102,
+    82,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 7.435294117647061,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    96,
+    80,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 7.138823529411766,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    104,
+    82,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 7.336470588235296,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    99,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 4.964705882352943,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    243,
+    158,
+    96,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.249411764705885,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    126,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 210.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 8.225882352941177,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    233,
+    76,
+    75,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 7.369411764705884,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    98,
+    80,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 4.800000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    244,
+    162,
+    97,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 7.336470588235296,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    99,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 9.345882352941178,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    213,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 8.884705882352943,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    230,
+    60,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 7.4023529411764715,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    97,
+    80,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.381176470588237,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    122,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 222.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 7.237647058823531,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    101,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 8.489411764705883,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    70,
+    73,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 8.621176470588235,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 7.435294117647061,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    235,
+    96,
+    80,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 5.2611764705882385,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    150,
+    94,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 5.39294117647059,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    242,
+    147,
+    93,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 7.336470588235296,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    236,
+    99,
+    81,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 9.280000000000001,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    217,
+    57,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 8.621176470588235,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 8.687058823529414,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    65,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 8.983529411764707,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    230,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.315294117647062,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    124,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 234.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.480000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    120,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.315294117647062,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    124,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.55529411764706,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    68,
+    73,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.621176470588235,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.851764705882355,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    230,
+    61,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.917647058823531,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    230,
+    59,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.489411764705883,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    70,
+    73,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.489411764705883,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    70,
+    73,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.983529411764707,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    230,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.818823529411766,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    62,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.621176470588235,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 8.522352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    69,
+    73,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 7.665882352941178,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    234,
+    90,
+    79,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.249411764705885,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    126,
+    88,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 246.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 9.11529411764706,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    224,
+    57,
+    70,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.710588235294118,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    114,
+    85,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.315294117647062,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    124,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 258.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.55529411764706,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    68,
+    73,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.588235294117649,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    67,
+    73,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 8.687058823529414,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    65,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.480000000000002,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    238,
+    120,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 270.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.315294117647062,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    124,
+    87,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.785882352941176,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    62,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.522352941176472,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    232,
+    69,
+    73,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.084705882352942,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    240,
+    130,
+    89,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 282.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 6.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 18.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 30.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 42.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.818823529411766,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    62,
+    71,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 54.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 66.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 78.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 90.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 102.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 114.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 126.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 138.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 150.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 162.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 174.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 186.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 198.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 210.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 222.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 234.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 246.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 258.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 270.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 282.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 294.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 306.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 318.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.654117647058825,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 330.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 8.621176470588235,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    231,
+    66,
+    72,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 342.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 354.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 366.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 378.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 390.0,
+  "y": 294.0
+ },
+ {
+  "diameter": 6.447058823529413,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    239,
+    121,
+    86,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "x": 402.0,
+  "y": 294.0
+ },
+ {
+  "height": 22,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    170
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "width": 400,
+  "x": 0,
+  "y": 278
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 13
+  },
+  "text": "G keeps two seconds as a GIF",
+  "x": 8,
+  "y": 282
+ }
+]

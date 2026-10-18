@@ -67,6 +67,7 @@ AREAS = {
     "saving": "Saving your work",
     "documents": "Documents and pages",
     "images": "Pictures and images",
+    "pixels": "Pixels to marks",
     "sound": "Sound",
     "music": "Music",
     "projects": "Projects",
@@ -251,7 +252,7 @@ STILL = "A still picture: press Run to see it move."
 
 # ---- layout (all in window pixels; pure functions, so tests can aim clicks)
 SIDE_W = 240
-ROW_H = 27                        # 21 rows end at y = 659 in a 720-pixel window: room to spare
+ROW_H = 25                        # 23 rows (All and the areas) end at y = 667 in a 720-pixel window: room to spare
 ROW_PAD = 4                       # the gap under each row is inside ROW_H
 AREA_TOP = 92
 SIDE_BOTTOM_PAD = 10              # the list stops this far above the window's bottom edge
