@@ -2256,6 +2256,33 @@ A short video, played back under your control. Drag across the picture to scrub 
 
 Source: [`examples/gallery/images/08_play_a_take.py`](../../examples/gallery/images/08_play_a_take.py)
 
+### You as a line drawing
+
+![You as a line drawing](images/images-09_line_drawing.png)
+
+The camera turned into lines, live. Wherever the picture changes from light to dark there is a line, so your face, your hands and the room become a moving drawing. Press Space to switch between white lines on black and dark lines on paper. With no camera, the photo is drawn in lines.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- cam.picture() gives the camera's latest frame as an ordinary picture, which is yours to change.
+- picture.filter("edges") keeps only the outlines: white where the brightness changes, black where it stays the same. Colours of the same brightness make no line.
+- picture.filter("invert") then swaps black and white, for dark lines on paper.
+- f.image() draws the changed picture. The camera itself is never changed: each frame starts from a new copy.
+
+**Make it yours**
+
+- Blur first, with picture.filter("blur", 2), for fewer, calmer lines.
+- Draw the camera itself, then the lines on top with f.opacity(120), for an outlined photo.
+- Use f.tint("gold") before f.image() for coloured lines.
+- Try f.filter("edges") on your own drawings, not only on the camera.
+
+</details>
+
+Source: [`examples/gallery/images/09_line_drawing.py`](../../examples/gallery/images/09_line_drawing.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it

@@ -2944,7 +2944,7 @@ Alpha is kept, except by "opaque". "posterize", "erode" and "dilate" are faster 
 
 | Argument | Meaning |
 |---|---|
-| `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate". |
+| `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode", "dilate" or "edges". |
 | `value` | for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none. |
 
 **The words for `kind`.**
@@ -2959,6 +2959,7 @@ Alpha is kept, except by "opaque". "posterize", "erode" and "dilate" are faster 
 | `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
 | `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
 | `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
+| `"edges"` | The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture. |
 
 **Raises.**
 
@@ -2983,7 +2984,7 @@ This name also works after from funground import *, where filter is Python's own
 
 | Argument | Meaning |
 |---|---|
-| `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate". |
+| `kind` | "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode", "dilate" or "edges". |
 | `value` | for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none. |
 
 **The words for `kind`.**
@@ -2998,6 +2999,7 @@ This name also works after from funground import *, where filter is Python's own
 | `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
 | `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
 | `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
+| `"edges"` | The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture. |
 
 **Raises.**
 
@@ -4932,6 +4934,7 @@ The filters for filter() and apply_filter(). Used by: `filter`, `apply_filter`.
 | `POSTERIZE` | `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
 | `ERODE` | `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
 | `DILATE` | `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
+| `EDGES` | `"edges"` | The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture. |
 
 <a id="const-CONSTANTS-WAVE"></a>
 #### `f.CONSTANTS.WAVE`
@@ -10235,7 +10238,7 @@ Every table here is generated from the funground source, so it cannot drift from
 | `f.text_style(style)` | `normal`, `bold`, `italic`, `bold_italic` |
 | `f.color_mode(mode)` | `rgb`, `hsb`, `hsl` |
 | `f.cursor(kind)` | `arrow`, `cross`, `hand`, `move`, `text`, `wait` |
-| `f.filter(kind)` | `threshold`, `gray`, `opaque`, `invert`, `blur`, `posterize`, `erode`, `dilate` |
+| `f.filter(kind)` | `threshold`, `gray`, `opaque`, `invert`, `blur`, `posterize`, `erode`, `dilate`, `edges` |
 | `f.save(path, text=...)`, text | `live`, `shapes` |
 | Sound waves | `sine`, `square`, `saw`, `triangle`, `soft`, `noise` |
 

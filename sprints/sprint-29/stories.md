@@ -14,7 +14,9 @@ a spot the learner places, words as fog). No new public funground name is planne
 |---|---|---|
 | S-214 | Play suggests the methods of what funground gives back (`f.path().`, a camera, a picture...) | done, live 16 Oct (funground PR #11, site PR #24; built by a Sonnet subagent, reviewed) |
 | S-215 | Each gallery example says where the guide teaches it | done, live 16 Oct (site PR #25; built by a Sonnet subagent, reviewed: areas credited only to chapters that link them) |
-| S-216 | Lessons 1, 3 and 5 open their experiments in Play, with prompts and a way back | planned |
+| S-216 | Lessons 1, 3 and 5 open their experiments in Play, with prompts and a way back | done, live 17 Oct (funground PR #15, funground-web PR #12, site PR #26; site part built by a Sonnet subagent, reviewed) |
+| S-219 | (pulled in from Sprint 30) The photo booth records takes | done, live 16-17 Oct (funground PRs #13, #14) |
+| S-220 | (pulled in from Sprint 30) `f.load_clip()`, `clip.pause()`, `clip.resume()` | done, live 17 Oct (funground PRs #13, #15, funground-web PR #12) |
 | S-173 | Blow the words away: a fog of words around your mouth, scattered by your breath | done, live 16 Oct (funground PR #11); the inspiring GIF's source to be added |
 
 ## Tasks
@@ -33,11 +35,11 @@ classes' members)
 - [x] `check_links.py`, strict build
 
 **S-216 The course in Play, first step** (funground `docs/course`, `examples/course`; site)
-- [ ] for each experiment of Lessons 1, 3 and 5: its prediction prompt and named comparison, written in the course's
+- [x] for each experiment of Lessons 1, 3 and 5: its prediction prompt and named comparison, written in the course's
   voice (Look, Predict, Make, Compare, Choose, Extend), kept with the example
-- [ ] "Open in Play" in the lesson, with the code and files; Play shows the prompt and comparison, "Keep this" (My
+- [x] "Open in Play" in the lesson, with the code and files; Play shows the prompt and comparison, "Keep this" (My
   sketches, with a sentence about the choice) and "Back to Lesson N, section"
-- [ ] checks in `test_editor.mjs`; the lesson pages still work without Play (download stays)
+- [x] checks in `test_editor.mjs`; the lesson pages still work without Play (download stays)
 
 **S-173 Blow the words away** (funground, `examples/gallery/`)
 - [x] an original example: the camera picture, a cloud of words drifting and fading like fog around a spot the learner
