@@ -307,6 +307,42 @@ def test_erode_and_dilate_work_per_channel_and_keep_alpha():
     assert out[1][:3] == (255, 0, 255)
 
 
+# ---- P10: edges (D-111) -------------------------------------------------------------------------
+def test_edges_outline_a_square_in_white_on_black():
+    dark, light = (0, 0, 0), (200, 200, 200)
+    rows = [[dark] * 8 for _ in range(6)]
+    for y in range(1, 5):
+        for x in range(2, 6):
+            rows[y][x] = light
+    out = apply("edges", None, [c for row in rows for c in row], width=8)
+    whites = {(i % 8, i // 8) for i, c in enumerate(out) if c[:3] == (255, 255, 255)}
+    ring = {(x, y) for x in range(2, 6) for y in range(1, 5)} - {(x, y) for x in (3, 4) for y in (2, 3)}
+    assert whites == ring                                    # the square's border, nothing inside or outside
+    assert all(c[:3] in ((0, 0, 0), (255, 255, 255)) for c in out)
+
+
+def test_edges_follow_brightness_not_hue_and_keep_alpha():
+    # A grey and a green of the same brightness (0.587 x 255 is 150) have no edge between them.
+    same = apply("edges", None, [(150, 150, 150), (0, 255, 0), (150, 150, 150), (0, 255, 0)], width=2)
+    assert all(c[:3] == (0, 0, 0) for c in same)
+    out = apply("edges", None, [(0, 0, 0, 40), (255, 255, 255, 200)], width=2)
+    assert [c[3] for c in out] == [40, 200]
+
+
+def test_edges_on_the_canvas_and_on_a_picture_agree():
+    script(8, 6)
+    g = p.create_graphics(8, 6)
+    for target in (p, g):
+        target.background(0)
+        target.no_stroke()
+        target.fill(200)
+        target.rect(2, 1, 4, 4)
+        target.filter("edges")
+    canvas = [p.get(x, y).r for y in range(6) for x in range(8)]
+    picture = [g.get(x, y).r for y in range(6) for x in range(8)]
+    assert canvas == picture and max(canvas) == 255
+
+
 # ---- P10: blur ----------------------------------------------------------------------------------
 def _dot_picture(scale, size=21):
     g = Picture(size, size, scale, "graphics-901")

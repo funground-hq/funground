@@ -657,6 +657,7 @@ A picture can change itself. These are methods of a picture, written `g.copy()` 
 | `"posterize"`, value 2 to 255 | Each colour keeps only that many levels. You must give the value. |
 | `"erode"` | Each pixel takes the darkest value of its 3 by 3 neighbours, for each colour. Dark areas grow. |
 | `"dilate"` | The same with the brightest value. Bright areas grow. |
+| `"edges"` | The outlines: white where the brightness changes, black elsewhere, like a line drawing. Try it on the camera ([You as a line drawing](../gallery/README.md#you-as-a-line-drawing)). |
 
 Alpha stays as it is, except with `"opaque"`. An unknown kind, or a value out of range, is an
 error that tells you what is allowed.
