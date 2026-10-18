@@ -236,3 +236,12 @@ under a moving sun), are original CC0 work. `tools/check_originality.py` against
 `examples/gallery/images/09_line_drawing.py` (story S-224: the camera through `filter("edges")`, with lines on black
 or on paper) is an original CC0 example. `tools/check_originality.py` against the 2,974 corpus files in `C:\Projects\funground-corpora`:
 nothing flagged.
+
+## From pixels to marks, steps 1 to 6 — 18 October 2026
+
+`examples/gallery/pixels/01_a_grid_of_colours.py` to `06_palette_and_gif.py` and the guide project
+`docs/guide/projects/10_pixels_to_marks.md` (story S-223, D-110) are original CC0 work, written from the idea after
+the maintainer shared the p5.js tutorial "Chatting with/about Code" (Sarah Ciston, Emily Martinez, Minne Atairu),
+which builds a webcam halftone. Only the idea (sampling a grid, a mark sized by brightness) was taken, as the
+originality rule allows; the tutorial is credited in the guide as further reading. `tools/check_originality.py`
+against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged. The sample photo is `images/data/photo.jpg`, copied.
