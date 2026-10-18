@@ -15,7 +15,7 @@ Taken 18 Oct: D-106 (S-218 names approved), D-113 b (S-226), D-114 b (S-211, fon
 | S-221 | My files in Play: files a sketch saves are kept and usable by any sketch; Add file; download stays | done, live 18 Oct (site PR #27, funground-web PR #13: a rewritten kept file is reported again; built by a Sonnet subagent, reviewed) |
 | S-222 | Blow the words loads a take (video and sound) and stays simple | done, live 18 Oct (funground PR #17): loads take.gif + take.wav, breath per frame from the sound, G saves one loop |
 | S-223 | From pixels to marks: a six-step project opening in Play | done, live 18 Oct (funground PR #17; gallery area Pixels to marks, guide project 10) |
-| S-218 | Replace the background behind you: `pic.remove_color()` and `pic.remove_background()` | building (D-106 accepted 18 Oct) |
+| S-218 | Replace the background behind you: `pic.remove_color()` and `pic.remove_background()` | built 19 Oct (a Sonnet subagent, reviewed: the colour is read under the colour mode as `fill()` reads it; images-10 in the gallery; 9.5 and 13.6 ms at 640 x 480 for an antialiased picture, the Python step only for partly see-through pixels) |
 | S-226 | The course's studio step: Extend with `f.variations` and `f.mark`, Keep through `f.keep` (D-113 b) | planned 18 Oct |
 | S-211 | Fonts on demand where the host compresses them: fetched the first time funground opens one (D-114 b) | carried in 18 Oct |
 | S-228 | JPEG pictures in the browser checked with a tolerance (D-101 a) | planned 18 Oct |

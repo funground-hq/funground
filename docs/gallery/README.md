@@ -2283,6 +2283,34 @@ The camera turned into lines, live. Wherever the picture changes from light to d
 
 Source: [`examples/gallery/images/09_line_drawing.py`](../../examples/gallery/images/09_line_drawing.py)
 
+### In front of a picture
+
+![In front of a picture](images/images-10_in_front_of_a_picture.png)
+
+You, standing in front of a sunset. Press E while you are out of view, so the camera sees the empty room. Then step back in: whatever looks like the empty room becomes see-through, and the sunset shows behind you. With no camera, a drawn figure sways in a drawn room, so it always works.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- cam.picture() is a still copy of the latest frame. Take one of the empty room and keep it.
+- picture.remove_background(empty, tolerance=30) makes every pixel see-through that is almost the same as the same pixel of the empty room. The tolerance is how different a pixel may be and still count as the same.
+- A camera flickers a little, even in a still room, so a tolerance of 0 rarely works. Raise it if specks are left.
+- Draw the new background first with f.image(). Then draw the cut-out picture on top: you are in front.
+- picture.remove_color() does the same for one colour, such as a green cloth, with no empty room.
+
+**Make it yours**
+
+- Change TOLERANCE to 10, then 80. See what is left behind each time.
+- Hang a green cloth behind you and use picture.remove_color("green", tolerance=60) instead.
+- Draw a moving background in place of the photo, such as drifting circles.
+- Draw something between the background and you, such as f.text(), for a title behind your head.
+
+</details>
+
+Source: [`examples/gallery/images/10_in_front_of_a_picture.py`](../../examples/gallery/images/10_in_front_of_a_picture.py)
+
 ## Pixels to marks
 
 ### From pixels to marks, step 1: a grid of colours

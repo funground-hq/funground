@@ -245,3 +245,9 @@ the maintainer shared the p5.js tutorial "Chatting with/about Code" (Sarah Cisto
 which builds a webcam halftone. Only the idea (sampling a grid, a mark sized by brightness) was taken, as the
 originality rule allows; the tutorial is credited in the guide as further reading. `tools/check_originality.py`
 against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged. The sample photo is `images/data/photo.jpg`, copied.
+
+## Images 10, in front of a picture — 19 October 2026
+
+`examples/gallery/images/10_in_front_of_a_picture.py` (story S-218, D-106: `remove_background` with an empty room,
+and a drawn figure when there is no camera) is an original CC0 example, written from the feature. `tools/check_originality.py`
+against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged. The background is `images/data/photo.jpg`, copied.

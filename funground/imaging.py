@@ -234,6 +234,35 @@ def mask_bgra(bgra: bytes, mask_alpha: bytes) -> bytes:
     return bytes(out)
 
 
+# ------------------------------------------------------------------ see-through by colour (S-218, P12)
+def check_tolerance(tolerance, name: str) -> int:
+    """The tolerance of ``remove_color`` / ``remove_background``: a whole number from 0 to 255."""
+    if isinstance(tolerance, bool) or not isinstance(tolerance, int) or not 0 <= tolerance <= 255:
+        raise ValueError(f"{name}: tolerance must be a whole number from 0 to 255, not {tolerance!r}. "
+                         "It is how different a colour may be and still match (0 is exactly the same)")
+    return tolerance
+
+
+def remove_matching_bgra(bgra: bytes, width: int, height: int, tolerance: int,
+                         color: tuple[int, int, int] | None = None, empty_bgra: bytes | None = None) -> bytes:
+    """Premultiplied BGRA with the pixels that match made fully transparent (contract P12).
+
+    A pixel matches when its red, green and blue each differ by at most *tolerance* from *color*, or from the
+    same pixel of *empty_bgra* (same size). The comparison runs in pygame-ce (C), on the plain colours.
+    Kept pixels are not touched. Already-transparent pixels stay so.
+    """
+    # Compare plain (not premultiplied) colours, so a see-through pixel is judged by its colour, not its alpha.
+    surface = pygame.image.frombuffer(bgra_to_rgba(bgra, width, height), (width, height), "RGBA")
+    other = None
+    if empty_bgra is not None:
+        other = pygame.image.frombuffer(bgra_to_rgba(empty_bgra, width, height), (width, height), "RGBA")
+    out = surface.copy()
+    # transform.threshold with inverse_set sets the pixels WITHIN the threshold (inclusive); alpha is ignored (255).
+    pygame.transform.threshold(out, surface, None if color is None else (*color, 255),
+                               (tolerance, tolerance, tolerance, 255), (0, 0, 0, 0), 1, other, True)
+    return rgba_to_bgra(pygame.image.tobytes(out, "RGBA"), width, height)
+
+
 # ------------------------------------------------------------------ filters (S-080, P10)
 FILTER_KINDS = {        # each kind and what it does (D-092); the API reference prints the meanings
     "threshold": "Every pixel becomes black or white: white where its brightness is above the value (0 to 1, "

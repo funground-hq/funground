@@ -439,6 +439,92 @@ class Picture:
         self._write_pixels(imaging.mask_bgra(snap.pixels, scaled[3::4]))
         self._history = None
 
+    def remove_color(self, color: Any, tolerance: int = 40) -> None:
+        """Make every pixel that is close to a colour see-through, in place.
+
+        A pixel is close when its red, green and blue each differ from the colour by at most the tolerance.
+        Draw something behind the picture and it shows through. Use it with a green cloth, a blue wall or a
+        flat background. Pixels that are kept are not changed, and pixels that are already see-through stay
+        see-through. The drawing history is dropped.
+
+        Arguments:
+            color: the colour to remove, in one argument: a name, a hex string, a grey number or (red, green, blue), read as fill() reads it.
+            tolerance: how different a colour may be and still go, from 0 (exactly this colour) to 255 (every colour). It is 40 at first.
+
+        Returns:
+            None. The picture itself is changed.
+
+        Raises:
+            ValueError: if the tolerance is not a whole number from 0 to 255.
+
+        Example:
+            g = f.create_graphics(100, 100)
+            g.background("lime")
+            g.fill("tomato")
+            g.circle(50, 50, 60)
+            g.remove_color("lime", tolerance=60)    # only the red circle is left
+            f.image(g, 0, 0)
+
+        See also: remove_background, mask, filter
+        """
+        from . import imaging
+
+        tolerance = imaging.check_tolerance(tolerance, "g.remove_color()")
+        c = self._sketch.read_color(color)              # as fill() reads it, under the colour mode
+        snap = self._snapshot()
+        out = imaging.remove_matching_bgra(snap.pixels, snap.phys_width, snap.phys_height, tolerance,
+                                           color=(c.red, c.green, c.blue))
+        self._write_pixels(out)
+        self._history = None
+
+    def remove_background(self, empty: "Picture", tolerance: int = 30) -> None:
+        """Make every pixel that looks the same as an empty picture see-through, in place.
+
+        Take a picture of the room with nobody in it, then compare each new picture with it. A pixel is the
+        same when its red, green and blue each differ from the same pixel of the empty picture by at most the
+        tolerance. What is left is whatever changed, such as you. Pixels that are kept are not changed. The
+        drawing history is dropped.
+
+        Arguments:
+            empty: a Picture of the same size, showing only the background.
+            tolerance: how different a pixel may be and still count as the same, from 0 to 255. It is 30 at first. A camera flickers a little, so 0 rarely works.
+
+        Returns:
+            None. The picture itself is changed.
+
+        Raises:
+            TypeError: if empty is not a Picture.
+            ValueError: if the tolerance is not a whole number from 0 to 255, or if empty has a different size.
+
+        Example:
+            empty = f.create_graphics(100, 100)
+            empty.background("navy")
+            now = empty.copy()
+            now.fill("gold")
+            now.circle(50, 50, 40)
+            now.remove_background(empty)    # only the gold circle is left
+
+        See also: remove_color, mask, filter
+        """
+        from . import imaging
+
+        if not isinstance(empty, Picture):
+            raise TypeError(f"g.remove_background() needs a picture of the empty background, not {type(empty).__name__}")
+        tolerance = imaging.check_tolerance(tolerance, "g.remove_background()")
+        if (self.width, self.height) != (empty.width, empty.height):
+            raise ValueError(f"g.remove_background(): the empty picture is {empty.width} x {empty.height} but this "
+                             f"picture is {self.width} x {self.height}. They must be the same size")
+        snap = self._snapshot()
+        esnap = empty._snapshot()
+        empty_pixels = esnap.pixels
+        if (esnap.phys_width, esnap.phys_height) != (snap.phys_width, snap.phys_height):     # the same size, another scale
+            empty_pixels = imaging.resize_bgra(esnap.pixels, esnap.phys_width, esnap.phys_height,
+                                               snap.phys_width, snap.phys_height)
+        out = imaging.remove_matching_bgra(snap.pixels, snap.phys_width, snap.phys_height, tolerance,
+                                           empty_bgra=empty_pixels)
+        self._write_pixels(out)
+        self._history = None
+
     def _write_pixels(self, bgra: bytes) -> None:
         """Put premultiplied BGRA (this picture's physical size) on the surface; a new version."""
         surface = self._sketch._renderer.surface
