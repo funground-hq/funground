@@ -821,6 +821,62 @@ On Windows and Linux the camera works on the desktop. **On a Mac, run the sketch
 use the camera. In Visual Studio Code's panel the camera is not available. The gallery has a
 [mirror of dots](../gallery/README.md#pictures-and-images) and a photo booth. Both show a photo when there is no camera.
 
+### Stand in front of any picture
+
+You can make part of a picture see-through, and then draw anything behind it. There are two ways to choose the part.
+
+**By colour.** `me.remove_color("green", tolerance=60)` makes every pixel that is close to green see-through. Hang a
+green cloth behind you, and you are left alone on the picture.
+
+**By comparing with an empty room.** Take a picture of the room with nobody in it. Then `me.remove_background(empty,
+tolerance=30)` makes every pixel see-through that looks the same as the same pixel of the empty room. What is left is
+whatever changed: you.
+
+```py
+cam = f.camera()
+beach = f.load_image("beach.jpg")    # your own picture
+empty = None                         # the room with nobody in it
+
+
+def setup():
+    f.size(640, 480)
+    cam.start()
+
+
+def key_pressed():
+    global empty
+    if f.key == "e":                 # step out of view, then press E
+        empty = cam.picture()
+
+
+def draw():
+    f.image(beach, 0, 0)             # the new background first
+    me = cam.picture()
+    if empty is not None:
+        me.remove_background(empty, tolerance=30)
+    f.image(me, 0, 0)                # you, in front of the beach
+
+
+f.run()
+```
+
+The **tolerance** is how different a pixel may be and still count as the same. It goes from 0 (exactly the same) to 255
+(everything). A pixel matches when its red, green and blue each differ by at most the tolerance. A camera flickers by a
+few steps, even in a still room, so a tolerance of 0 rarely works with a camera. Start with 30 and raise it if specks of
+the room are left. Lower it if parts of you disappear.
+
+Both methods change the picture in place and give nothing back, like `filter()`. They work on any picture, not only the
+camera, and the picture behind can be anything you draw, even something that moves. The sizes must match: an empty
+room of a different size is a `ValueError`.
+
+| Call | What it does |
+|---|---|
+| `me.remove_color(color, tolerance=40)` | Pixels close to `color` become see-through. `color` is anything `f.fill()` takes. |
+| `me.remove_background(empty, tolerance=30)` | Pixels close to the same pixel of the picture `empty` become see-through. |
+
+The gallery has [in front of a picture](../gallery/README.md#pictures-and-images). It draws a figure in a room when there
+is no camera.
+
 ## See also
 
 - Gallery: [Paths and clipping](../gallery/README.md#paths-and-clipping), [Curves](../gallery/README.md#curves), [Pictures and images](../gallery/README.md#pictures-and-images) and [Blending](../gallery/README.md#blending-opacity-and-shadows) (for pictures and layers).

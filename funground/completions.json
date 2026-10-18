@@ -9511,6 +9511,22 @@
      "url": "reference/API.md#cls-Picture-pixels"
     },
     {
+     "name": "remove_background",
+     "kind": "method",
+     "signature": "remove_background(empty, tolerance=30)",
+     "detail": "(empty: Picture, tolerance: int = 30) -> None",
+     "summary": "Make every pixel that looks the same as an empty picture see-through, in place.",
+     "url": "reference/API.md#cls-Picture-remove_background"
+    },
+    {
+     "name": "remove_color",
+     "kind": "method",
+     "signature": "remove_color(color, tolerance=40)",
+     "detail": "(color: Any, tolerance: int = 40) -> None",
+     "summary": "Make every pixel that is close to a colour see-through, in place.",
+     "url": "reference/API.md#cls-Picture-remove_color"
+    },
+    {
      "name": "resize",
      "kind": "method",
      "signature": "resize(width, height)",
