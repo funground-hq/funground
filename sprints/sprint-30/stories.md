@@ -11,8 +11,8 @@ Pending: D-106 (S-218 names; a proposal is written for the maintainer), D-113 (c
 
 | Story | Value | Status |
 |---|---|---|
-| S-224 | `f.filter("edges")`: the outlines in a picture or the camera | planned |
-| S-221 | My files in Play: files a sketch saves are kept and usable by any sketch; Add file; download stays | planned |
+| S-224 | `f.filter("edges")`: the outlines in a picture or the camera | done, live 18 Oct (funground PR #16; gallery images-09) |
+| S-221 | My files in Play: files a sketch saves are kept and usable by any sketch; Add file; download stays | building (a Sonnet subagent) |
 | S-222 | Blow the words loads a take (video and sound) and stays simple | planned (after S-221) |
 | S-223 | From pixels to marks: a six-step project opening in Play | planned |
 | S-218 | Replace the background behind you | waits for D-106 (proposal in `docs/design/Background_Note.md`) |

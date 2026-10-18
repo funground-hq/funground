@@ -1138,185 +1138,6 @@
   "y": 208.79999999999998
  },
  {
-  "height": 30,
-  "op": "Rect",
-  "radii": [
-   8.0,
-   8.0,
-   8.0,
-   8.0
-  ],
-  "style": {
-   "fill": [
-    0,
-    0,
-    0,
-    160
-   ],
-   "stroke": null,
-   "stroke_width": 1,
-   "text_align": "center",
-   "text_size": 13,
-   "text_style": "bold",
-   "text_valign": "center"
-  },
-  "width": 34,
-  "x": 284,
-  "y": 10
- },
- {
-  "color": [
-   255,
-   255,
-   255,
-   255
-  ],
-  "op": "Text",
-  "style": {
-   "fill": [
-    255,
-    255,
-    255,
-    255
-   ],
-   "stroke": null,
-   "stroke_width": 1,
-   "text_align": "center",
-   "text_size": 15,
-   "text_style": "bold",
-   "text_valign": "center"
-  },
-  "text": "-",
-  "x": 297.88720703125,
-  "y": 16.26953125
- },
- {
-  "height": 30,
-  "op": "Rect",
-  "radii": [
-   8.0,
-   8.0,
-   8.0,
-   8.0
-  ],
-  "style": {
-   "fill": [
-    0,
-    0,
-    0,
-    160
-   ],
-   "stroke": null,
-   "stroke_width": 1,
-   "text_align": "center",
-   "text_size": 15,
-   "text_style": "bold",
-   "text_valign": "center"
-  },
-  "width": 34,
-  "x": 324,
-  "y": 10
- },
- {
-  "color": [
-   255,
-   255,
-   255,
-   255
-  ],
-  "op": "Text",
-  "style": {
-   "fill": [
-    255,
-    255,
-    255,
-    255
-   ],
-   "stroke": null,
-   "stroke_width": 1,
-   "text_align": "center",
-   "text_size": 15,
-   "text_style": "bold",
-   "text_valign": "center"
-  },
-  "text": "+",
-  "x": 334.7158203125,
-  "y": 16.26953125
- },
- {
-  "height": 30,
-  "op": "Rect",
-  "radii": [
-   8.0,
-   8.0,
-   8.0,
-   8.0
-  ],
-  "style": {
-   "fill": [
-    0,
-    0,
-    0,
-    160
-   ],
-   "stroke": null,
-   "stroke_width": 1,
-   "text_align": "center",
-   "text_size": 15,
-   "text_style": "bold",
-   "text_valign": "center"
-  },
-  "width": 102,
-  "x": 368,
-  "y": 10
- },
- {
-  "color": [
-   255,
-   255,
-   255,
-   255
-  ],
-  "op": "Text",
-  "style": {
-   "fill": [
-    255,
-    255,
-    255,
-    255
-   ],
-   "stroke": null,
-   "stroke_width": 1,
-   "text_align": "center",
-   "text_size": 15,
-   "text_style": "bold",
-   "text_valign": "center"
-  },
-  "text": "Record",
-  "x": 397.472412109375,
-  "y": 16.26953125
- },
- {
-  "diameter": 12,
-  "op": "Circle",
-  "style": {
-   "fill": [
-    230,
-    40,
-    50,
-    255
-   ],
-   "stroke": null,
-   "stroke_width": 1,
-   "text_align": "center",
-   "text_size": 15,
-   "text_style": "bold",
-   "text_valign": "center"
-  },
-  "x": 384,
-  "y": 25.0
- },
- {
   "height": 26,
   "op": "Rect",
   "style": {
@@ -1329,7 +1150,7 @@
    "stroke": null,
    "stroke_width": 1,
    "text_align": "center",
-   "text_size": 15,
+   "text_size": 13,
    "text_style": "bold",
    "text_valign": "center"
   },
@@ -1359,8 +1180,8 @@
    "text_style": "bold",
    "text_valign": "center"
   },
-  "text": "Click your mouth, then Record. No camera.",
-  "x": 82.197265625,
+  "text": "No take.gif: live camera. Make a take with the photo booth.",
+  "x": 20.989990234375,
   "y": 339.43359375
  }
 ]

@@ -1,56 +1,79 @@
 """Blow the words away
 
-You on the camera, and a cloud of words hanging in front of your mouth like fog. The words drift and
-thin out and gather again, and your breath blows them away. Press Record, blow, and press Stop: the
-sketch plays your take back with the words flying exactly when you blew, and saves it as blow.gif
-(and the plain video as take.gif). Click the picture to put the cloud on your mouth, and zoom in for
-a close-up. With no camera the words hang in a night sky; with no microphone, hold Space to blow.
+A cloud of words hangs in front of a mouth like fog, and breath blows it away. Make a take with the photo booth
+first: it saves take.gif and take.wav. This sketch plays the take over and over, and the words fly exactly where
+the sound in it was loud: when you blew. Click to put the cloud on the mouth. Press G to save one loop with the
+words as blow.gif. With no take it uses the live camera and microphone (hold Space to blow without one).
 
 How it works:
-- Each word is an object of class Word. It knows its text, its home in the cloud, where it is now
-  and how fast it moves, and how much of it is left (fade). A list holds all the words.
-- The cloud is fog because each word's opacity changes slowly with f.noise(), and soft puffs of
-  f.radial_gradient() drift behind them. f.opacity() inside with f.saved_state() fades one word only.
-- mic.level() gives the breath, turned into decibels so a soft breath on a laptop counts too. A
-  breath pushes each word away from the mouth, harder when it is close; then it fades and drifts back.
-- Record starts cam.record(), and the sketch keeps the breath of every frame in a list. Stop calls
-  clip.stop(). The take is played back with clip.frame(i), and the words move with the breath kept
-  for that frame, while f.save_gif() records the playback. clip.save() writes the plain video.
-- Zoom draws only the middle part of the camera picture, larger: f.image() with a source box.
+- f.load_clip("take.gif") and f.load_sound("take.wav") read the take. Each frame of the clip is drawn in turn with
+  clip.frame(i), and the sound plays alongside, starting again with the clip so the two stay together.
+- Before it starts, the sketch works out how loud the sound is during each frame of the clip, from
+  sound.samples(), and turns it into a breath from 0 to 1. Frame i always gets breath i, so the words move at
+  exactly the right moments, every loop.
+- Each word is an object of class Word with its home in the cloud, its speed and how much of it is left. A breath
+  pushes the words near the mouth away; then they fade and drift back. f.noise() makes the fog come and go.
+- f.save_gif() keeps one whole loop, from its first frame, as blow.gif.
 
 Make it yours:
 - Change TEXT to your own sentence, or a poem.
 - Change SPREAD for a wider or tighter cloud, and BLOW: a bigger number blows the words further.
 - Give each word its own colour with f.random_choice() in Word.__init__.
+- Use another take: any GIF and WAV of the same length work, such as a clap or a song.
 - Make the words fall like leaves: add a small downward pull in Word.move().
-- Change MAX_TAKE for longer takes. Every frame stays in memory, and a long GIF is slow to save.
 """
 import math
 
 import funground as f
 
 WIDTH, HEIGHT = 480, 360
-FPS = 24
-MAX_TAKE = 6            # seconds: a take stops by itself after this
 TEXT = ("every breath carries a word away into the morning mist "
         "and the quiet air lets it drift where it likes before it comes home")
 SPREAD = 85             # how far the cloud reaches from its centre, in pixels
 BLOW = 3.5              # how hard a full breath pushes a word next to the mouth
-BUTTONS = {"zoom out": (WIDTH - 196, 10, 34, 30), "zoom in": (WIDTH - 156, 10, 34, 30),
-           "record": (WIDTH - 112, 10, 102, 30)}         # x, y, width, height
 
+
+def load_take():
+    """The photo booth's take next to this sketch, as (clip, sound), or (None, None) when there is none."""
+    try:
+        clip = f.load_clip("take.gif")
+    except FileNotFoundError:
+        return None, None
+    try:
+        return clip, f.load_sound("take.wav")
+    except FileNotFoundError:
+        return clip, None                              # a silent take: hold Space to blow
+
+
+def breath_of(level):
+    """A loudness from 0 to 1 as a breath from 0 to 1, in decibels so a soft breath on a laptop counts too:
+    -45 dB (a quiet room) is 0, -20 dB (a breath) is 1."""
+    return f.constrain((20 * math.log10(level + 1e-9) + 45) / 25, 0, 1)
+
+
+def breaths_of(sound, frames, fps):
+    """How hard the breath is during each frame of the take: the loudness of the sound for that frame."""
+    if sound is None:
+        return [0.0] * frames
+    samples = sound.samples()                          # 44 100 numbers for every second
+    per_frame = 44100 / fps
+    result = []
+    for i in range(frames):
+        part = samples[int(i * per_frame):int((i + 1) * per_frame)]
+        level = math.sqrt(sum(v * v for v in part) / len(part)) if part else 0.0
+        result.append(breath_of(level))
+    return result
+
+
+take, take_sound = load_take()
+FPS = take.fps if take is not None else 24
+breaths = breaths_of(take_sound, len(take), FPS) if take is not None else []
 cam = None
 mic = None
 spot = f.Vector(WIDTH / 2, HEIGHT * 0.58)              # where the mouth is: click to move it
 words = []
 haze = 1.0                                             # how thick the fog is: 1 is thick, a breath thins it
-zoom = 1.0
-mode = "live"                                          # "live", "recording" or "playing back"
-take = None                                            # the clip being recorded or played back
-breaths = []                                           # the breath of each frame of the take
-played = 0                                             # how many frames of the take have been played back
-card_left = 0                                          # frames left of the card shown before the playback
-message = ""
+gif = "none"                                           # "none", "waiting" for the loop to start, "saving", "saved"
 
 
 class Word:
@@ -76,7 +99,7 @@ class Word:
         home = self.home_now(time)
         away = self.position - spot
         if breath > 0 and away.mag() < SPREAD * 3:
-            push = breath * BLOW / (1 + (away.mag() / 40) ** 2)        # much weaker further from the mouth
+            push = breath * BLOW * 24 / FPS / (1 + (away.mag() / 40) ** 2)    # weaker further away; tuned at 24 fps
             self.velocity.add(away.copy().set_mag(push) + f.Vector(0, -push * 0.3))
         self.position.add(self.velocity)
         self.velocity.mult(0.93)                         # the air slows it down
@@ -124,37 +147,6 @@ def draw_haze(time):
         f.circle(x, y, 2 * radius)
 
 
-def draw_background(picture):
-    """The camera (or a frame of the take), zoomed in on its middle; a night sky without one."""
-    if picture is None:
-        f.background(f.linear_gradient(0, 0, 0, HEIGHT, ["#0b1026", "#2b2f5e"]))
-        return
-    part_w, part_h = WIDTH / zoom, HEIGHT / zoom
-    f.image(picture, 0, 0, WIDTH, HEIGHT, (WIDTH - part_w) / 2, (HEIGHT - part_h) / 2, part_w, part_h)
-
-
-def draw_buttons():
-    labels = {"zoom out": "-", "zoom in": "+",
-              "record": {"live": "Record", "recording": "Stop", "playing back": "Playing"}[mode]}
-    for name, (x, y, w, h) in BUTTONS.items():
-        if name == "record" and mode == "recording":
-            f.fill(200, 30, 40, 230)
-        else:
-            f.fill(0, 0, 0, 160)
-        f.rect(x, y, w, h, 8)
-        f.fill("white")
-        f.text_size(15)
-        f.text(labels[name], x + w / 2 + (8 if name == "record" else 0), y + h / 2)
-    x, y, w, h = BUTTONS["record"]
-    f.fill("white" if mode == "recording" and f.frame_count % FPS < FPS // 2 else (230, 40, 50))
-    f.circle(x + 16, y + h / 2, 12)                      # the record light: it blinks while recording
-
-
-def inside(button):
-    x, y, w, h = BUTTONS[button]
-    return x <= f.mouse_x <= x + w and y <= f.mouse_y <= y + h
-
-
 def open_camera():
     try:
         camera = f.camera()
@@ -173,145 +165,90 @@ def open_microphone():
         return None
 
 
-def breath():
-    """How hard you are blowing, from 0 to 1: the microphone in decibels, or Space."""
+def live_breath():
+    """Blowing now: Space, or the microphone."""
     if f.key_down("space"):
         return 1.0
-    if mic is None:
-        return 0.0
-    decibels = 20 * math.log10(mic.level() + 1e-9)
-    return f.constrain((decibels + 45) / 25, 0, 1)        # -45 dB (a quiet room) is 0, -20 dB (a breath) is 1
+    return breath_of(mic.level()) if mic is not None else 0.0
 
 
 def setup():
     global cam, mic
     f.size(WIDTH, HEIGHT)
     f.random_seed(9)
-    f.noise_seed(9)                                  # the same fog each run
+    f.noise_seed(9)                                    # the same fog each run
     f.text_align("center", "center")
     f.text_style("bold")
     f.no_stroke()
-    cam = open_camera()
-    mic = open_microphone()
     make_cloud()
-
-
-def start_recording():
-    global mode, take, breaths, message
-    take = cam.record(MAX_TAKE) if cam is not None and cam.is_ready() else None
-    breaths = []
-    message = ""
-    mode = "recording"
-
-
-def stop_recording():
-    """Stop the take, save the plain video, and show for a moment that the playback is about to start."""
-    global mode, card_left
-    if take is not None:
-        take.stop()
-    if not breaths:
-        return start_live("Nothing was recorded.")
-    mode, card_left = "about to play", FPS            # a card for one second (it saves take.gif), then the playback
-
-
-def start_playback():
-    """Play the take from the start, with the words in their cloud, while f.save_gif() records it."""
-    global mode, played
-    for word in words:
-        word.go_home(0)
-    f.save_gif("blow.gif", len(breaths) / FPS)
-    played = 0
-    mode = "playing back"
-
-
-def start_live(words_to_show):
-    global mode, message
-    mode = "live"
-    message = words_to_show
+    if take is None:                                   # no take: the camera and the microphone, live
+        cam = open_camera()
+        mic = open_microphone()
 
 
 def mouse_pressed():
-    global zoom
-    if inside("record"):
-        if mode == "live":
-            start_recording()
-        elif mode == "recording":
-            stop_recording()
-    elif inside("zoom in"):
-        zoom = min(3.0, zoom + 0.25)
-    elif inside("zoom out"):
-        zoom = max(1.0, zoom - 0.25)
-    elif mode == "live":
-        spot.x, spot.y = f.mouse_x, f.mouse_y
+    spot.x, spot.y = f.mouse_x, f.mouse_y
 
 
-def status(live):
-    """What the bar at the bottom says."""
-    if mode == "recording":
-        return f"Recording: {len(breaths) / FPS:.1f} s. Blow! Press Stop when you are done."
-    return message or ("Click your mouth, then Record." + ("" if mic else " No microphone: hold Space.")
-                       + ("" if live else " No camera."))
+def key_pressed():
+    global gif
+    if f.key in ("g", "G") and take is not None and gif in ("none", "saved"):
+        gif = "waiting"                                # the GIF starts with the loop's first frame
 
 
 def draw():
-    global haze, played, card_left
+    global haze, gif
     time = f.frame_count / FPS
-    live = cam is not None and cam.is_ready()
-
-    if mode == "about to play":                         # a card between Stop and the playback (not in the GIF)
-        f.background(0, 0, 0)
-        f.fill("white")
-        f.text_size(22)
-        f.text("Your take", WIDTH / 2, HEIGHT / 2 - 20)
-        f.text_size(15)
-        f.text("Playing it back and saving blow.gif...", WIDTH / 2, HEIGHT / 2 + 14)
-        if card_left == FPS - 1 and take is not None:
-            take.save("take.gif")                        # the plain video, once the card is on screen
-        card_left -= 1
-        if card_left <= 0:
-            start_playback()
-        return
-    if mode == "playing back":
-        strength = breaths[played]
-        draw_background(take.frame(played) if take is not None and played < len(take) else None)
-        played += 1
+    if take is not None:
+        i = f.frame_count % len(take)
+        if i == 0:
+            if take_sound is not None:                 # the sound starts again with the clip
+                take_sound.stop()
+                take_sound.play()
+            if gif == "waiting":
+                f.save_gif("blow.gif", len(take) / FPS)
+                gif = "saving"
+            elif gif == "saving":
+                gif = "saved"
+        f.image(take.frame(i), 0, 0, WIDTH, HEIGHT)
+        strength = max(breaths[i], 1.0 if f.key_down("space") else 0.0)
     else:
-        strength = breath()
-        draw_background(cam if live else None)
-        if mode == "recording":
-            breaths.append(strength)
-            if len(breaths) >= MAX_TAKE * FPS:
-                stop_recording()
+        if cam is not None and cam.is_ready():
+            f.image(cam, 0, 0)
+        else:
+            f.background(f.linear_gradient(0, 0, 0, HEIGHT, ["#0b1026", "#2b2f5e"]))
+        strength = live_breath()
 
-    haze = max(0.1, haze - strength * 0.08)              # a breath thins the fog
-    haze += (1 - haze) * 0.01                            # and it thickens again, slowly
+    haze = max(0.1, haze - strength * 0.08)            # a breath thins the fog
+    haze += (1 - haze) * 0.01                          # and it thickens again, slowly
     draw_haze(time)
     f.fill("white")
     for word in words:
         word.move(strength, time)
         word.draw(time)
 
-    if mode == "playing back":                           # nothing but the take and the words: this is the GIF
-        if played >= len(breaths):
-            start_live("Saved blow.gif" + (" and take.gif." if take is not None else "."))
-        return
-    if mode == "recording":
-        f.no_fill()
-        f.stroke(220, 30, 40)
-        f.stroke_width(6)
-        f.rect(3, 3, WIDTH - 6, HEIGHT - 6)              # a red frame: the take is being recorded
-        f.no_stroke()
-    else:
-        f.no_fill()
-        f.stroke(255, 255, 255, 60)
-        f.circle(spot.x, spot.y, 16)                     # where the mouth should be
-        f.no_stroke()
-    draw_buttons()
+    if gif == "saving":
+        return                                         # nothing but the take and the words: this is the GIF
+    f.no_fill()
+    f.stroke(255, 255, 255, 60)
+    f.circle(spot.x, spot.y, 16)                       # where the mouth should be
+    f.no_stroke()
     f.fill(0, 0, 0, 150)
     f.rect(0, HEIGHT - 26, WIDTH, 26)
     f.fill("white")
     f.text_size(13)
-    f.text(status(live), WIDTH / 2, HEIGHT - 13)
+    f.text(status(), WIDTH / 2, HEIGHT - 13)
+
+
+def status():
+    """What the bar at the bottom says."""
+    if take is None:
+        return "No take.gif: live camera. Make a take with the photo booth."
+    if gif == "waiting":
+        return "Saving starts with the next loop..."
+    if gif == "saved":
+        return "Saved blow.gif. Click the mouth, or press G again."
+    return "Click the mouth. G saves one loop as blow.gif."
 
 
 f.run(fps=FPS)

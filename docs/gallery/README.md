@@ -2283,6 +2283,171 @@ The camera turned into lines, live. Wherever the picture changes from light to d
 
 Source: [`examples/gallery/images/09_line_drawing.py`](../../examples/gallery/images/09_line_drawing.py)
 
+## Pixels to marks
+
+### From pixels to marks, step 1: a grid of colours
+
+![From pixels to marks, step 1: a grid of colours](images/pixels-01_a_grid_of_colours.png)
+
+A photo, cut into a grid of squares. Each square takes the colour of the photo at its centre, so the picture becomes a mosaic, like a picture made of tiles or a very old computer game. This is the first step of the project From pixels to marks in the guide.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- A picture is a grid of pixels, and each pixel is a colour. photo.get(x, y) gives the colour at one point.
+- Two loops walk over the canvas in steps of CELL: the outer loop goes down, the inner loop goes across.
+- For each cell the sketch reads the colour at the cell's centre and fills a square of that colour.
+- Nothing is drawn of the photo itself: the squares are the whole picture.
+
+**Make it yours**
+
+- Change CELL to 10 for more detail, or to 40 for big, bold tiles.
+- Draw circles with f.circle() instead of squares.
+- Leave a gap between tiles: draw each square 2 pixels smaller than CELL.
+- Put f.stroke("white") before the loops for a grid of lines.
+
+</details>
+
+Source: [`examples/gallery/pixels/01_a_grid_of_colours.py`](../../examples/gallery/pixels/01_a_grid_of_colours.py)
+
+### From pixels to marks, step 2: dots by brightness
+
+![From pixels to marks, step 2: dots by brightness](images/pixels-02_dots_by_brightness.png)
+
+The same grid, but now every cell is a black dot on white paper, and the colour decides only its size: dark parts of the photo give big dots, light parts small ones. From a step back the dots become the picture again. Printers have used this trick, called halftone, for over a hundred years.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- colour.brightness is a number from 0 (black) to 100 (white).
+- f.map_range() turns brightness into a diameter: 0 becomes the whole cell, 100 becomes nothing.
+- The dot is drawn at the centre of its cell, with no outline.
+- min() keeps the point read inside the photo: 400 is not a whole number of cells, so the last column of cells reaches past its edge.
+- The background is white, so where the photo is light there is mostly paper.
+
+**Make it yours**
+
+- Swap the colours: white dots on black, with big dots where the photo is light.
+- Change CELL. Small cells give a finer picture, big ones an abstract pattern.
+- Draw squares with f.rect() instead of dots, centred in the cell.
+- Colour each dot with the photo's own colour, as in step 1, and keep the size from brightness.
+
+</details>
+
+Source: [`examples/gallery/pixels/02_dots_by_brightness.py`](../../examples/gallery/pixels/02_dots_by_brightness.py)
+
+### From pixels to marks, step 3: the live camera
+
+![From pixels to marks, step 3: the live camera](images/pixels-03_live_camera.png)
+
+Step 2's dots, drawn from your camera, again and again. Move, and the dots follow. With no camera it keeps using the photo, so the sketch still works.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- The drawing from step 2 moved into draw(), which runs many times a second.
+- cam.picture() gives the camera's latest frame as a picture, so the rest of the code does not change at all: only the line that chooses the picture is new.
+- f.camera() and cam.start() open the camera. If there is none, the try and except keep the photo instead.
+- f.run(fps=15) asks for 15 frames a second: the dots are a lot of work, and 15 is plenty.
+
+**Make it yours**
+
+- Change CELL while it runs: try 8 for detail or 24 for a bold poster.
+- Add f.filter("blur", 1) to the picture before reading it, for smoother dots.
+- Save a frame with f.save("dots.png") in key_pressed().
+- Use squares, or the photo's own colours, as in the earlier steps.
+
+</details>
+
+Source: [`examples/gallery/pixels/03_live_camera.py`](../../examples/gallery/pixels/03_live_camera.py)
+
+### From pixels to marks, step 4: grid and contrast
+
+![From pixels to marks, step 4: grid and contrast](images/pixels-04_grid_and_contrast.png)
+
+Now the mouse holds the controls. Left and right change the size of the grid, from fine to coarse. Up and down change the contrast: at the top the dots are bold, with only big dots and paper, and at the bottom they are gentle and grey-looking.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.map_range() turns the mouse's x into a cell size from 6 to 30 pixels. round() keeps it a whole number.
+- Contrast is a power: brightness from 0 to 1, raised to a power from 0.5 to 3. A power above 1 pushes middle greys towards dark, so more dots grow big; below 1 pushes them towards light.
+- The two numbers are shown at the top, so you can write down the settings you like.
+- With no camera the photo is used, as in step 3.
+
+**Make it yours**
+
+- Swap the mouse directions, so up and down change the grid.
+- Use the arrow keys instead of the mouse, with key_pressed().
+- Show the settings only while a key is held.
+- Keep a picture you like with f.keep(), which also saves the settings.
+
+</details>
+
+Source: [`examples/gallery/pixels/04_grid_and_contrast.py`](../../examples/gallery/pixels/04_grid_and_contrast.py)
+
+### From pixels to marks, step 5: other marks
+
+![From pixels to marks, step 5: other marks](images/pixels-05_other_marks.png)
+
+The dots are only one choice. Press 1, 2 or 3 to change the mark: letters chosen by brightness, so the picture is written in characters; short lines that turn with brightness, like strokes of a pen; or the words of a sentence, one per cell, sized by darkness. Each mark gives the same photo a different voice.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- MARKS is a string of characters from light to dark. The brightness picks one by its position in the string, so dark cells get dense characters like @ and light cells get a dot or a space.
+- A line is drawn inside f.saved_state(): f.translate() moves to the cell's centre and f.rotate() turns it by an angle that comes from brightness, then f.line() draws it.
+- The words come round again and again: the cell's number, modulo the number of words, picks one.
+- key_pressed() remembers the chosen mark in a variable; draw() asks which mark to draw.
+
+**Make it yours**
+
+- Change MARKS to your own characters, from light to dark.
+- Write your own sentence in WORDS.
+- Make the lines longer, or let brightness change their width with f.stroke_width().
+- Add a fourth mark: a small shape you draw, chosen with the key 4.
+
+</details>
+
+Source: [`examples/gallery/pixels/05_other_marks.py`](../../examples/gallery/pixels/05_other_marks.py)
+
+### From pixels to marks, step 6: a palette and a GIF
+
+![From pixels to marks, step 6: a palette and a GIF](images/pixels-06_palette_and_gif.png)
+
+The dots get colour, but only from a palette of three colours you choose: dark cells take the first, middle ones the second and light ones the third, on a paper of your choice. Fewer colours make a stronger picture, like a print. Press G to keep two seconds of it as a GIF.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- PALETTE holds three colours, from dark to light. f.lerp_color() blends between neighbours, so the colours change smoothly with brightness instead of jumping.
+- The dot's size still comes from darkness, as in step 2, so the picture keeps its shape.
+- f.save_gif("dots.gif", 2) keeps the next two seconds. Saving a GIF takes a moment, so the bar says "Saving" while it records and "Saved" afterwards.
+- With no camera the photo is used, and the GIF shows it still.
+
+**Make it yours**
+
+- Choose your own palette and paper: a sunset, the sea, your school colours.
+- Use four colours: add one to PALETTE and change how the blend is picked.
+- Leave out the size change, so every dot is the same and only the colour speaks.
+- Make the GIF longer, and remember that a long GIF is slow to save.
+
+</details>
+
+Source: [`examples/gallery/pixels/06_palette_and_gif.py`](../../examples/gallery/pixels/06_palette_and_gif.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it
@@ -2977,26 +3142,25 @@ Source: [`examples/gallery/projects/08_flow_field_print.py`](../../examples/gall
 
 ![Blow the words away](images/projects-09_blow_the_words_away.png)
 
-You on the camera, and a cloud of words hanging in front of your mouth like fog. The words drift and thin out and gather again, and your breath blows them away. Press Record, blow, and press Stop: the sketch plays your take back with the words flying exactly when you blew, and saves it as blow.gif (and the plain video as take.gif). Click the picture to put the cloud on your mouth, and zoom in for a close-up. With no camera the words hang in a night sky; with no microphone, hold Space to blow.
+A cloud of words hangs in front of a mouth like fog, and breath blows it away. Make a take with the photo booth first: it saves take.gif and take.wav. This sketch plays the take over and over, and the words fly exactly where the sound in it was loud: when you blew. Click to put the cloud on the mouth. Press G to save one loop with the words as blow.gif. With no take it uses the live camera and microphone (hold Space to blow without one).
 
 <details>
 <summary>How it works, and how to make it yours</summary>
 
 **How it works**
 
-- Each word is an object of class Word. It knows its text, its home in the cloud, where it is now and how fast it moves, and how much of it is left (fade). A list holds all the words.
-- The cloud is fog because each word's opacity changes slowly with f.noise(), and soft puffs of f.radial_gradient() drift behind them. f.opacity() inside with f.saved_state() fades one word only.
-- mic.level() gives the breath, turned into decibels so a soft breath on a laptop counts too. A breath pushes each word away from the mouth, harder when it is close; then it fades and drifts back.
-- Record starts cam.record(), and the sketch keeps the breath of every frame in a list. Stop calls clip.stop(). The take is played back with clip.frame(i), and the words move with the breath kept for that frame, while f.save_gif() records the playback. clip.save() writes the plain video.
-- Zoom draws only the middle part of the camera picture, larger: f.image() with a source box.
+- f.load_clip("take.gif") and f.load_sound("take.wav") read the take. Each frame of the clip is drawn in turn with clip.frame(i), and the sound plays alongside, starting again with the clip so the two stay together.
+- Before it starts, the sketch works out how loud the sound is during each frame of the clip, from sound.samples(), and turns it into a breath from 0 to 1. Frame i always gets breath i, so the words move at exactly the right moments, every loop.
+- Each word is an object of class Word with its home in the cloud, its speed and how much of it is left. A breath pushes the words near the mouth away; then they fade and drift back. f.noise() makes the fog come and go.
+- f.save_gif() keeps one whole loop, from its first frame, as blow.gif.
 
 **Make it yours**
 
 - Change TEXT to your own sentence, or a poem.
 - Change SPREAD for a wider or tighter cloud, and BLOW: a bigger number blows the words further.
 - Give each word its own colour with f.random_choice() in Word.__init__.
+- Use another take: any GIF and WAV of the same length work, such as a clap or a song.
 - Make the words fall like leaves: add a small downward pull in Word.move().
-- Change MAX_TAKE for longer takes. Every frame stays in memory, and a long GIF is slow to save.
 
 </details>
 
