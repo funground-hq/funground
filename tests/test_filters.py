@@ -545,3 +545,86 @@ def test_smooth_scaling_still_blends_pictures():
     s = run_draw(_strip_draw(True))
     row = [final_px(s, x, 10) for x in range(40)]
     assert set(row) - {(255, 0, 0), (0, 0, 255)}             # some in-between colours
+
+
+# ---- P12: remove_color and remove_background (S-218) ---------------------------------------------
+def mk(width, height, pixels) -> Picture:
+    script()
+    return make(width, height, pixels)
+
+
+def test_remove_color_removes_exact_and_near_colours_only():
+    g = mk(5, 1, [(0, 255, 0), (10, 245, 5), (40, 255, 40), (41, 255, 0), (200, 20, 20)])
+    assert g.remove_color("lime", tolerance=40) is None
+    px = read(g)
+    assert px[0] == px[1] == px[2] == (0, 0, 0, 0)         # exact, near, and exactly at the tolerance
+    assert px[3] == (41, 255, 0, 255)                       # one step outside the tolerance is kept
+    assert px[4] == (200, 20, 20, 255)
+
+
+def test_remove_color_keeps_alpha_of_kept_pixels_and_leaves_transparent_ones():
+    g = mk(3, 1, [(200, 20, 20, 255), (200, 20, 20, 128), (0, 0, 0, 0)])
+    g.remove_color("lime")
+    px = read(g)
+    assert px[0][3] == 255 and px[1][3] == 128 and px[2] == (0, 0, 0, 0)
+
+
+def test_remove_color_tolerance_zero_and_255():
+    pixels = [(0, 255, 0), (1, 255, 0), (90, 10, 200)]
+    g = mk(3, 1, pixels)
+    g.remove_color((0, 255, 0), 0)
+    assert read(g) == [(0, 0, 0, 0), (1, 255, 0, 255), (90, 10, 200, 255)]
+    g = mk(3, 1, pixels)
+    g.remove_color("lime", 255)
+    assert read(g) == [(0, 0, 0, 0)] * 3
+
+
+def test_remove_color_takes_names_and_hex():
+    for color in ("red", "#ff0000", (255, 0, 0)):
+        g = mk(2, 1, [(250, 3, 0), (0, 0, 255)])
+        g.remove_color(color, tolerance=10)
+        assert read(g) == [(0, 0, 0, 0), (0, 0, 255, 255)]
+
+
+@pytest.mark.parametrize("bad", [-1, 256, 3.5, "40", None, True])
+def test_remove_color_rejects_a_bad_tolerance(bad):
+    g = mk(1, 1, [(1, 2, 3)])
+    with pytest.raises(ValueError, match="tolerance"):
+        g.remove_color("red", bad)
+    with pytest.raises(ValueError, match="tolerance"):
+        g.remove_background(g.copy(), bad)
+
+
+def test_remove_background_compares_with_the_same_pixel():
+    empty = mk(4, 1, [(10, 10, 10), (100, 100, 100), (100, 100, 100), (50, 60, 70)])
+    g = mk(4, 1, [(20, 5, 12), (100, 100, 131), (131, 100, 100), (50, 60, 70, 128)])
+    assert g.remove_background(empty, tolerance=30) is None
+    px = read(g)
+    assert px[0] == (0, 0, 0, 0)                            # differs by 10 at most
+    assert px[1] == (100, 100, 131, 255)                    # blue differs by 31
+    assert px[2] == (131, 100, 100, 255)
+    assert px[3] == (0, 0, 0, 0)                            # semi-transparent but the same colour: gone
+
+
+def test_remove_background_tolerance_zero_and_default():
+    empty = mk(2, 1, [(5, 5, 5), (5, 5, 5)])
+    g = mk(2, 1, [(5, 5, 5), (6, 5, 5)])
+    g.remove_background(empty, 0)
+    assert read(g) == [(0, 0, 0, 0), (6, 5, 5, 255)]
+    g = mk(2, 1, [(35, 5, 5), (36, 5, 5)])
+    g.remove_background(empty)                              # the default is 30
+    assert read(g) == [(0, 0, 0, 0), (36, 5, 5, 255)]
+
+
+def test_remove_background_size_mismatch_names_both_sizes():
+    with pytest.raises(ValueError, match=r"3 x 2.*4 x 1|4 x 1.*3 x 2"):
+        mk(4, 1, [(0, 0, 0)] * 4).remove_background(mk(3, 2, [(0, 0, 0)] * 6))
+    with pytest.raises(TypeError):
+        mk(1, 1, [(0, 0, 0)]).remove_background("room")
+
+
+def test_remove_color_changes_in_place_and_a_copy_is_not_changed():
+    g = mk(2, 1, [(0, 255, 0), (9, 9, 9)])
+    h = g.copy()
+    g.remove_color("lime")
+    assert read(h)[0] == (0, 255, 0, 255) and read(g)[0] == (0, 0, 0, 0)
