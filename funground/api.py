@@ -3643,7 +3643,7 @@ def filter(kind: FilterKind, value: float | None = None) -> None:  # noqa: A001 
     Alpha is kept, except by "opaque". "posterize", "erode" and "dilate" are faster with funground[extras] installed, but the result is the same.
 
     Arguments:
-        kind: "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate".
+        kind: "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode", "dilate" or "edges".
         value: for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none.
 
     Raises:
@@ -3664,7 +3664,7 @@ def apply_filter(kind: FilterKind, value: float | None = None) -> None:
     This name also works after from funground import *, where filter is Python's own filter() (D-088). Alpha is kept, except by "opaque".
 
     Arguments:
-        kind: "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode" or "dilate".
+        kind: "threshold", "gray", "opaque", "invert", "blur", "posterize", "erode", "dilate" or "edges".
         value: for "threshold", a level from 0 to 1 (default 0.5). For "blur", a radius in pixels (default 1). For "posterize", the number of levels, 2 to 255 (required). The others take none.
 
     Raises:

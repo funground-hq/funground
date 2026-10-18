@@ -230,3 +230,9 @@ features. The GIF's source is to be linked here and in the example when the main
 played at any speed, backwards too) and its sample `data/take.gif`, drawn by `data/make_take.py` (a paper boat rocking
 under a moving sun), are original CC0 work. `tools/check_originality.py` against the 2,974 corpus files in
 `C:\Projects\funground-corpora`: nothing flagged.
+
+## Images 09, you as a line drawing — 17 October 2026
+
+`examples/gallery/images/09_line_drawing.py` (story S-224: the camera through `filter("edges")`, with lines on black
+or on paper) is an original CC0 example. `tools/check_originality.py` against the 2,974 corpus files in `C:\Projects\funground-corpora`:
+nothing flagged.

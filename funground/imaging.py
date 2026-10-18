@@ -248,6 +248,8 @@ FILTER_KINDS = {        # each kind and what it does (D-092); the API reference 
     "erode": "Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin "
              "lines of light vanish.",
     "dilate": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink.",
+    "edges": "The outlines: white where the brightness changes, black where it stays the same, like a line "
+             "drawing of the picture.",
 }
 
 
@@ -371,6 +373,17 @@ def _extreme(rgba: bytes, width: int, height: int, kind: str) -> bytearray:
     return bytearray(merged.tobytes())
 
 
+def _edges(rgba: bytes, width: int, height: int) -> bytearray:
+    """The outlines (D-111): pygame-ce's Laplacian of the picture's brightness, made opaque first so that only the
+    colours count; the result is grey (white on the edges) with the picture's own alpha."""
+    plane = luminance_plane(rgba)
+    grey = bytearray(len(rgba))
+    grey[0::4] = grey[1::4] = grey[2::4] = plane
+    grey[3::4] = bytes([255]) * (width * height)
+    edges = pygame.transform.laplacian(pygame.image.frombuffer(grey, (width, height), "RGBA"))
+    return _gray_like(rgba, pygame.image.tobytes(edges, "RGBA")[0::4])
+
+
 def filter_bgra(bgra: bytes, width: int, height: int, kind: str, value=None) -> bytes:
     """Premultiplied BGRA with a filter applied (contract P10); *kind* and *value* as ``check_filter``.
 
@@ -398,6 +411,8 @@ def filter_bgra(bgra: bytes, width: int, height: int, kind: str, value=None) -> 
         out = _map_channels(rgba, bytes(255 - v for v in range(256)))
     elif kind == "posterize":
         out = _posterize(rgba, width, height, value)
+    elif kind == "edges":
+        out = _edges(rgba, width, height)
     else:                                                  # erode or dilate
         out = _extreme(rgba, width, height, kind)
     return rgba_to_bgra(bytes(out), width, height)

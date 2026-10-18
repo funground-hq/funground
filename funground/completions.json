@@ -3708,6 +3708,11 @@
        "name": "DILATE",
        "value": "dilate",
        "meaning": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink."
+      },
+      {
+       "name": "EDGES",
+       "value": "edges",
+       "meaning": "The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture."
       }
      ]
     },
@@ -4452,6 +4457,10 @@
      {
       "word": "dilate",
       "meaning": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink."
+     },
+     {
+      "word": "edges",
+      "meaning": "The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture."
      }
     ]
    }
@@ -6230,6 +6239,10 @@
      {
       "word": "dilate",
       "meaning": "Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink."
+     },
+     {
+      "word": "edges",
+      "meaning": "The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture."
      }
     ]
    }
