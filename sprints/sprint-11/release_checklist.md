@@ -16,14 +16,14 @@ irreversible actions).
 
 ## Before publishing (Claude)
 
-- [ ] CI green on the release run for the release commit (D-116: Windows 3.11 to 3.14, Linux 3.11 to 3.14, macOS 3.11 and 3.14; branch `rc/0.1.0` at `19dd280`, run 39472067389, 20 Oct 2026).
+- [x] CI green on the release run for the release commit: 10 of 10 jobs, 20 Oct 2026 (D-116: Windows 3.11 to 3.14, Linux 3.11 to 3.14, macOS 3.11 and 3.14; branch `rc/0.1.0` at `19dd280`, run 39472067389, 20 Oct 2026).
 - [x] Relative image links in `README.md` do not render on PyPI. (0.1.0: the README has no images; every link is absolute to the `v0.1.0` tag.)
   - Make them absolute (`https://raw.githubusercontent.com/funground-hq/funground/main/...`).
   - Or keep the PyPI description text-only.
 - [x] `CHANGELOG.md`: turn "Unreleased" into "0.1.0 — <date>". (14 Oct; changed to the tag day if later.)
 - [x] Root `README.md` install line: switch from the git URL to `pip install funground`. Guide chapter 1 already says that.
 - [x] Version `0.1.0` in `pyproject.toml` and `funground.__version__` (from 0.1.0a1; one release commit, as Releasing.md says).
-- [ ] Build again from a clean checkout of the tagged commit, then run `twine check`.
+- [x] Build again from a clean checkout of the tagged commit, then run `twine check`. Passed 20 Oct 2026 (sdist and wheel; the wheel has no camera, booth or background removal).
 - [x] Dry run: run `release.yml` by hand → TestPyPI upload plus install and smoke test on Windows, macOS and Linux (`smoke-test` job). Passed 5 Oct 2026 with 0.1.0.dev1 (run 37274058907); the first run found the Linux Cairo prerequisite, now installed in the smoke test as the docs say.
 
 ## Maintainer decisions and checks
@@ -46,3 +46,13 @@ irreversible actions).
 - [x] **The web parts** (the Play page) tried by the maintainer, 12 Oct 2026. Found: after Run was pressed again
   during a run (the space bar on the focused Run button), Stop was disabled while the sketch played on. Fixed in
   funground-run.github.io#2 and funground-hq.github.io#6, waiting to be merged.
+
+## Released (20 October 2026)
+
+- `v0.1.0` tags `ff88b9a`: the candidate `19dd280` plus the changelog's date. Its message has `[skip ci]`, so the tag
+  push started no workflow; `release.yml` was run by hand on the tag (run 39474761005), the same steps with the tag
+  as the ref: build, TestPyPI, the smoke test on Windows, macOS and Linux, then PyPI after the maintainer's approval.
+  Lesson: never put `[skip ci]` in a commit that will be tagged.
+- PyPI has 0.1.0. Installed from PyPI in a fresh environment on Windows (Python 3.14.7): the smoke test passed (draw,
+  PDF/SVG/PNG, the PDF's text, a sargam melody, Hindi shaped), `python -m funground.gallery --list` lists 98 examples.
+- The GitHub Release has `tested-versions.txt`; `pip install funground -c <its URL>` resolves.

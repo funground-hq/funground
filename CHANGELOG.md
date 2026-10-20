@@ -33,7 +33,7 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
   editable_mode=compat`; chapter 1 says how to choose the interpreter in VS Code, chapter 2 how to silence the
   star-import warning.
 
-## 0.1.0 — 14 October 2026
+## 0.1.0 — 20 October 2026
 
 The first full release, after the alpha. New since then: a course, pages for AI assistants, upper bounds on library
 versions and a fix for `f.run(fps)`. The parts not yet tried by hand are in the

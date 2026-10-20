@@ -109,6 +109,7 @@ after the maintainer's go-ahead.
 | Symptom | Likely cause |
 |---|---|
 | "invalid-publisher" or 403 on upload | The pending publisher's fields do not match exactly: owner, repository, workflow file name or environment name |
+| The tag was pushed but no release run started | The tagged commit's message has `[skip ci]`, which skips every push workflow, tags included. Do not move the tag: run the workflow on it, `gh workflow run release --ref v0.1.0` (the ref is then the tag, so the PyPI step runs). Never put `[skip ci]` in a commit that will be tagged |
 | "File already exists" | That version was uploaded before; bump the version (PyPI never allows re-uploading a version) |
 | The smoke test cannot find the package | TestPyPI takes a minute to index; the step retries 5 times, 30 s apart |
 | Tag/version check fails | The tag is not `v` plus the `pyproject.toml` version |
