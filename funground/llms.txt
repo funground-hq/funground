@@ -92,6 +92,12 @@ show()
 - **In the browser** (the Play page, or beside github.dev) the same code runs unchanged. Files from `f.save()`
   stay inside the page; `input()`, MP4 export and choosing a microphone by name work on a computer only.
 
+### Versions
+
+A name with "Since 0.2." under it in the reference needs funground 0.2 or newer. A person with an older funground
+(`python -m pip install funground` gives the latest release, which may be older than the documentation) gets an
+`AttributeError` for it. Names with no such line work in every release.
+
 ### When unsure
 
 Look the name up in the API reference (it lists every public name, its arguments and an example) and the

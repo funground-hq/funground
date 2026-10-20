@@ -19,6 +19,8 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import since  # noqa: E402  (which release a name arrives in, S-229)
 sys.path.insert(0, str(ROOT))      # the example list and parsing live in the package: one source of truth
 from funground.gallery import (AREAS, TIME_DEPENDENT_MARK, area_rank, example_id, is_time_dependent,  # noqa: E402,F401
                                explanation, list_examples, title_and_description)
@@ -70,6 +72,9 @@ def build_index() -> str:
             description + (" *(Uses real time, so the picture varies from run to run.)*" if is_time_dependent(path) else ""),
             "",
         ]
+        arrives = since.later_use(path.read_text(encoding="utf-8"))
+        if arrives:                    # an example that needs a name from a later release (S-229)
+            parts += [since.marker(arrives), ""]
         parts += explanation_block(path)
         parts += [
             f"Source: [`{source}`](../../{source})",

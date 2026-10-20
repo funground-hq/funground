@@ -2959,7 +2959,7 @@ Alpha is kept, except by "opaque". "posterize", "erode" and "dilate" are faster 
 | `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
 | `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
 | `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
-| `"edges"` | The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture. |
+| `"edges"` | The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture. (Since 0.2.) |
 
 **Raises.**
 
@@ -2999,7 +2999,7 @@ This name also works after from funground import *, where filter is Python's own
 | `"posterize"` | Each colour channel keeps only that many levels (2 to 255, required), giving flat bands of colour like a screen print. |
 | `"erode"` | Each pixel takes the darkest colour around it: dark shapes grow, light ones shrink and thin lines of light vanish. |
 | `"dilate"` | Each pixel takes the lightest colour around it: light shapes grow, dark ones shrink. |
-| `"edges"` | The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture. |
+| `"edges"` | The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture. (Since 0.2.) |
 
 **Raises.**
 
@@ -4437,6 +4437,8 @@ f.camera(name: 'str | None' = None) -> 'Camera'
 
 Make a camera object for the computer's default camera.
 
+Since 0.2.
+
 Nothing opens, and no light comes on, until you call cam.start(). Then use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives a still copy whose pixels you can read with get(), cam.save("me.png") writes a photo, and cam.record(3) keeps three seconds as a clip you can save as a GIF. Frames stay on your computer. In the browser, press Play and allow the camera when it asks. On a Mac, the desktop camera does not work yet: run the sketch on the website. With FUNGROUND_HEADLESS=1 the camera opens nothing and is never ready.
 
 | Argument | Meaning |
@@ -4467,6 +4469,8 @@ f.cameras() -> 'list[str]'
 
 Return the names of the computer's cameras.
 
+Since 0.2.
+
 The list is empty in the browser, where the browser chooses the camera, and on a Mac desktop.
 
 **Returns.** A list of names. Give part of one to camera().
@@ -4485,6 +4489,8 @@ f.load_clip(path: 'str') -> 'Clip'
 ```
 
 Read an animated GIF or WebP file and return it as a clip.
+
+Since 0.2.
 
 It is the same kind of clip that cam.record() gives, so a take saved from the photo booth can come back in another
 sketch: len(clip) counts its frames, clip.frame(i) is one of them as a picture, and clip.fps is how many frames a
@@ -4767,6 +4773,8 @@ f.COLORS.TOMATO  # "tomato"
 
 Names for the named colours: ``f.COLORS.TOMATO`` is the word ``"tomato"``.
 
+Since 0.2.
+
 Write whichever you like: ``f.fill(f.COLORS.TOMATO)`` and ``f.fill("tomato")`` do the same. After
 ``from funground import *`` write ``COLORS.TOMATO``. The list is fixed: you cannot add to it or change
 it. Every name is written in capitals, so the colour ``antiquewhite1`` is ``ANTIQUEWHITE1``.
@@ -4787,6 +4795,8 @@ f.CONSTANTS.ALIGN.CENTER  # "center"
 ```
 
 Names for the words that choose an option, in groups, so an editor can list them and a typing slip is caught.
+
+Since 0.2.
 
 Each group is named after what it chooses: ``f.CONSTANTS.ALIGN.CENTER`` is the word ``"center"``. Write whichever
 you like: ``f.text_align(f.CONSTANTS.ALIGN.CENTER)`` and ``f.text_align("center")`` do the same. After
@@ -6211,6 +6221,8 @@ Camera(device_name: 'str | None', canvas=None, silent: 'bool' = False) -> 'None'
 
 A camera that your sketch can look through.
 
+Since 0.2.
+
 You get one from f.camera(). Nothing opens until you call start(). Then the computer (or the browser) asks
 permission the first time, and frames begin to arrive.
 
@@ -6239,6 +6251,8 @@ Camera.height  # property
 
 The height of every frame, in pixels: the size asked in start(), or 480 before that.
 
+Since 0.2.
+
 ```py
 print(cam.width, cam.height)
 ```
@@ -6253,6 +6267,8 @@ Camera.is_ready() -> 'bool'
 ```
 
 Whether a frame has arrived.
+
+Since 0.2.
 
 **Returns.** True once the camera is started and its first frame has come, otherwise False. It stays False if you refuse permission, and always with FUNGROUND_HEADLESS=1.
 
@@ -6271,6 +6287,8 @@ Camera.picture() -> "'Picture'"
 ```
 
 Make a still picture from the latest frame.
+
+Since 0.2.
 
 It is a new, ordinary picture that is yours to keep: later frames do not change it. Read its pixels with
 get(x, y), change them, filter it, or draw on it. Before the first frame it is black, at the size you asked.
@@ -6292,6 +6310,8 @@ Camera.record(seconds: 'float') -> "'Clip'"
 ```
 
 Start keeping the frames of the next few seconds.
+
+Since 0.2.
 
 It returns a clip at once, and the clip fills as the sketch draws. One frame is kept for each frame the
 sketch draws while the camera is ready, so a full clip holds seconds times the frame rate. The clip is held
@@ -6325,6 +6345,8 @@ Camera.save(path: 'str') -> 'None'
 
 Save the latest frame as a photo.
 
+Since 0.2.
+
 The file type comes from the name: .png, or .jpg (a .jpg needs Pillow: pip install funground[extras]). It
 writes a new file. Before the first frame the photo is black.
 
@@ -6351,6 +6373,8 @@ Camera.start(width: 'int' = 640, height: 'int' = 480, mirror: 'bool' = True) -> 
 ```
 
 Open the camera.
+
+Since 0.2.
 
 The computer or the browser may ask your permission first. Frames are scaled to width and height, so your
 layout never depends on the camera. Call it again with other numbers to change the size. The camera closes
@@ -6382,6 +6406,8 @@ Camera.stop() -> 'None'
 
 Let go of the camera, so its light goes off.
 
+Since 0.2.
+
 A recording that is still going ends early, and what it kept stays. After stop(), is_ready() is False and
 f.image(cam) draws nothing, until you call start() again. funground calls it when a sketch ends.
 
@@ -6400,6 +6426,8 @@ Camera.width  # property
 
 The width of every frame, in pixels: the size asked in start(), or 640 before that.
 
+Since 0.2.
+
 ```py
 print(cam.width, cam.height)
 ```
@@ -6414,6 +6442,8 @@ Clip(width: 'int', height: 'int', fps: 'int', total: 'int', canvas) -> 'None'
 ```
 
 A few seconds of camera frames, kept in memory.
+
+Since 0.2.
 
 You get one from cam.record(). It fills while the sketch draws. When clip.done is True it is full. len(clip)
 is how many frames it holds, clip.frame(i) is one of them as a picture, and clip.save("me.gif") writes it as
@@ -6434,6 +6464,8 @@ Clip.done  # property
 
 Whether the recording is over, so nothing more will be added.
 
+Since 0.2.
+
 It is True when the clip is full, or when clip.stop() or cam.stop() ended the recording early. Check
 len(clip) to see how many frames it holds.
 
@@ -6453,6 +6485,8 @@ Clip.fps  # property
 
 How many frames a second the clip plays: the sketch's frame rate when it was recorded.
 
+Since 0.2.
+
 ```py
 print(clip.fps)
 ```
@@ -6467,6 +6501,8 @@ Clip.frame(i: 'int') -> "'Picture'"
 ```
 
 Make a picture from one frame of the clip.
+
+Since 0.2.
 
 | Argument | Meaning |
 |---|---|
@@ -6494,6 +6530,8 @@ Clip.is_paused() -> 'bool'
 
 Whether the recording is paused.
 
+Since 0.2.
+
 **Returns.** True after pause() until resume(), otherwise False.
 
 ```py
@@ -6510,6 +6548,8 @@ Clip.pause() -> 'None'
 ```
 
 Hold the recording: no frames are kept until resume().
+
+Since 0.2.
 
 The time a clip can hold only counts the frames it keeps, so a paused clip waits as long as you like. Pausing a
 clip that is done does nothing.
@@ -6529,6 +6569,8 @@ Clip.resume() -> 'None'
 
 Go on recording after pause().
 
+Since 0.2.
+
 ```py
 clip.resume()
 ```
@@ -6543,6 +6585,8 @@ Clip.save(path: 'str') -> 'None'
 ```
 
 Write the frames kept so far to a file.
+
+Since 0.2.
 
 The file type comes from the name. A .gif is an endless animation and works everywhere. An .mp4 is a movie:
 it works on a computer with the video extra (pip install funground[video]), not in the browser. It writes a
@@ -6571,6 +6615,8 @@ Clip.stop() -> 'None'
 ```
 
 End the recording now, before its time is up.
+
+Since 0.2.
 
 The frames kept so far stay, and clip.done becomes True. The camera stays on. Use it for a record button that
 you press again to stop: record the longest clip you allow, and stop it when the button is pressed.
@@ -6760,6 +6806,8 @@ Picture.remove_background(empty: "'Picture'", tolerance: 'int' = 30) -> 'None'
 
 Make every pixel that looks the same as an empty picture see-through, in place.
 
+Since 0.2.
+
 Take a picture of the room with nobody in it, then compare each new picture with it. A pixel is the
 same when its red, green and blue each differ from the same pixel of the empty picture by at most the
 tolerance. What is left is whatever changed, such as you. Pixels that are kept are not changed. The
@@ -6796,6 +6844,8 @@ Picture.remove_color(color: 'Any', tolerance: 'int' = 40) -> 'None'
 ```
 
 Make every pixel that is close to a colour see-through, in place.
+
+Since 0.2.
 
 A pixel is close when its red, green and blue each differ from the colour by at most the tolerance.
 Draw something behind the picture and it shows through. Use it with a green cloth, a blue wall or a
@@ -7972,6 +8022,8 @@ PathBuilder.quad(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'float'
 
 Add a four-sided shape through four corners as a closed part of the path.
 
+Since 0.2.
+
 The corners are joined in the order you give them.
 
 | Argument | Meaning |
@@ -8112,6 +8164,8 @@ PathBuilder.square(x: 'float', y: 'float', size: 'float', *radii: 'float') -> "'
 
 Add a square as a closed part of the path.
 
+Since 0.2.
+
 | Argument | Meaning |
 |---|---|
 | `x`, `y` | the top left corner. |
@@ -8159,6 +8213,8 @@ PathBuilder.triangle(x1: 'float', y1: 'float', x2: 'float', y2: 'float', x3: 'fl
 ```
 
 Add a triangle through three corners as a closed part of the path.
+
+Since 0.2.
 
 | Argument | Meaning |
 |---|---|
