@@ -93,7 +93,13 @@ TestPyPI, not on PyPI. For another dry run, bump the dev version first (`0.1.0.d
    release notes that a school or a course that wants exactly what was tested installs with
    `pip install funground -c https://github.com/funground-hq/funground/releases/download/v0.1.0/tested-versions.txt`.
    Learners who just `pip install funground` get the newest versions inside `pyproject.toml`'s bounds.
-10. **Open the next version:** set it to `0.2.0.dev0`, with a new "Unreleased" section in the changelog.
+10. **Freeze the names of the release** (S-229): from the tagged commit, run
+    `.venv/Scripts/python tools/make_released_names.py --ref v0.1.0 --version 0.1.0`, then
+    `.venv/Scripts/python tools/make_api_reference.py`. `funground/released_names.json` now lists the release, and every
+    name that came after it says "Since 0.2" in the API reference, the editors' hints and `llms.txt`. A name in the
+    first release listed shows nothing. `tests/test_since.py` also needs the guide, the gallery and the Quick Reference
+    marked by hand (see [Adding a feature](Adding_a_feature.md), section 8).
+11. **Open the next version:** set it to `0.2.0.dev0`, with a new "Unreleased" section in the changelog.
 
 Tagging and publishing are irreversible and public. Per `docs/PROCESS.md`, they happen only in the main session,
 after the maintainer's go-ahead.
@@ -103,6 +109,7 @@ after the maintainer's go-ahead.
 | Symptom | Likely cause |
 |---|---|
 | "invalid-publisher" or 403 on upload | The pending publisher's fields do not match exactly: owner, repository, workflow file name or environment name |
+| The tag was pushed but no release run started | The tagged commit's message has `[skip ci]`, which skips every push workflow, tags included. Do not move the tag: run the workflow on it, `gh workflow run release --ref v0.1.0` (the ref is then the tag, so the PyPI step runs). Never put `[skip ci]` in a commit that will be tagged |
 | "File already exists" | That version was uploaded before; bump the version (PyPI never allows re-uploading a version) |
 | The smoke test cannot find the package | TestPyPI takes a minute to index; the step retries 5 times, 30 s apart |
 | Tag/version check fails | The tag is not `v` plus the `pyproject.toml` version |
