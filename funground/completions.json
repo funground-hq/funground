@@ -3335,6 +3335,7 @@
      "hex": "#9acd32"
     }
    ],
+   "since": "0.2",
    "star": true
   },
   {
@@ -3966,6 +3967,7 @@
      ]
     }
    ],
+   "since": "0.2",
    "star": true
   },
   {
@@ -4460,7 +4462,8 @@
      },
      {
       "word": "edges",
-      "meaning": "The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture."
+      "meaning": "The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture.",
+      "since": "0.2"
      }
     ]
    }
@@ -4894,6 +4897,7 @@
    "summary": "Make a camera object for the computer's default camera.",
    "url": "reference/API.md#fn-camera",
    "returns": "Camera",
+   "since": "0.2",
    "star": true
   },
   {
@@ -4903,6 +4907,7 @@
    "detail": "() -> list[str]",
    "summary": "Return the names of the computer's cameras.",
    "url": "reference/API.md#fn-cameras",
+   "since": "0.2",
    "star": true
   },
   {
@@ -4913,6 +4918,7 @@
    "summary": "Read an animated GIF or WebP file and return it as a clip.",
    "url": "reference/API.md#fn-load_clip",
    "returns": "Clip",
+   "since": "0.2",
    "star": true
   },
   {
@@ -6242,7 +6248,8 @@
      },
      {
       "word": "edges",
-      "meaning": "The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture."
+      "meaning": "The outlines: white where the brightness changes, black where it stays the same, like a line drawing of the picture.",
+      "since": "0.2"
      }
     ]
    }
@@ -9324,6 +9331,7 @@
   "Camera": {
    "summary": "A camera that your sketch can look through.",
    "url": "reference/API.md#cls-Camera",
+   "since": "0.2",
    "members": [
     {
      "name": "height",
@@ -9331,7 +9339,8 @@
      "signature": "height",
      "detail": "int",
      "summary": "The height of every frame, in pixels: the size asked in start(), or 480 before that.",
-     "url": "reference/API.md#cls-Camera-height"
+     "url": "reference/API.md#cls-Camera-height",
+     "since": "0.2"
     },
     {
      "name": "is_ready",
@@ -9339,7 +9348,8 @@
      "signature": "is_ready()",
      "detail": "() -> bool",
      "summary": "Whether a frame has arrived.",
-     "url": "reference/API.md#cls-Camera-is_ready"
+     "url": "reference/API.md#cls-Camera-is_ready",
+     "since": "0.2"
     },
     {
      "name": "picture",
@@ -9348,7 +9358,8 @@
      "detail": "() -> Picture",
      "summary": "Make a still picture from the latest frame.",
      "url": "reference/API.md#cls-Camera-picture",
-     "returns": "Picture"
+     "returns": "Picture",
+     "since": "0.2"
     },
     {
      "name": "record",
@@ -9357,7 +9368,8 @@
      "detail": "(seconds: float) -> Clip",
      "summary": "Start keeping the frames of the next few seconds.",
      "url": "reference/API.md#cls-Camera-record",
-     "returns": "Clip"
+     "returns": "Clip",
+     "since": "0.2"
     },
     {
      "name": "save",
@@ -9365,7 +9377,8 @@
      "signature": "save(path)",
      "detail": "(path: str) -> None",
      "summary": "Save the latest frame as a photo.",
-     "url": "reference/API.md#cls-Camera-save"
+     "url": "reference/API.md#cls-Camera-save",
+     "since": "0.2"
     },
     {
      "name": "start",
@@ -9373,7 +9386,8 @@
      "signature": "start(width=640, height=480, mirror=True)",
      "detail": "(width: int = 640, height: int = 480, mirror: bool = True) -> None",
      "summary": "Open the camera.",
-     "url": "reference/API.md#cls-Camera-start"
+     "url": "reference/API.md#cls-Camera-start",
+     "since": "0.2"
     },
     {
      "name": "stop",
@@ -9381,7 +9395,8 @@
      "signature": "stop()",
      "detail": "() -> None",
      "summary": "Let go of the camera, so its light goes off.",
-     "url": "reference/API.md#cls-Camera-stop"
+     "url": "reference/API.md#cls-Camera-stop",
+     "since": "0.2"
     },
     {
      "name": "width",
@@ -9389,13 +9404,15 @@
      "signature": "width",
      "detail": "int",
      "summary": "The width of every frame, in pixels: the size asked in start(), or 640 before that.",
-     "url": "reference/API.md#cls-Camera-width"
+     "url": "reference/API.md#cls-Camera-width",
+     "since": "0.2"
     }
    ]
   },
   "Clip": {
    "summary": "A few seconds of camera frames, kept in memory.",
    "url": "reference/API.md#cls-Clip",
+   "since": "0.2",
    "members": [
     {
      "name": "done",
@@ -9403,7 +9420,8 @@
      "signature": "done",
      "detail": "bool",
      "summary": "Whether the recording is over, so nothing more will be added.",
-     "url": "reference/API.md#cls-Clip-done"
+     "url": "reference/API.md#cls-Clip-done",
+     "since": "0.2"
     },
     {
      "name": "fps",
@@ -9411,7 +9429,8 @@
      "signature": "fps",
      "detail": "int",
      "summary": "How many frames a second the clip plays: the sketch's frame rate when it was recorded.",
-     "url": "reference/API.md#cls-Clip-fps"
+     "url": "reference/API.md#cls-Clip-fps",
+     "since": "0.2"
     },
     {
      "name": "frame",
@@ -9420,7 +9439,8 @@
      "detail": "(i: int) -> Picture",
      "summary": "Make a picture from one frame of the clip.",
      "url": "reference/API.md#cls-Clip-frame",
-     "returns": "Picture"
+     "returns": "Picture",
+     "since": "0.2"
     },
     {
      "name": "is_paused",
@@ -9428,7 +9448,8 @@
      "signature": "is_paused()",
      "detail": "() -> bool",
      "summary": "Whether the recording is paused.",
-     "url": "reference/API.md#cls-Clip-is_paused"
+     "url": "reference/API.md#cls-Clip-is_paused",
+     "since": "0.2"
     },
     {
      "name": "pause",
@@ -9436,7 +9457,8 @@
      "signature": "pause()",
      "detail": "() -> None",
      "summary": "Hold the recording: no frames are kept until resume().",
-     "url": "reference/API.md#cls-Clip-pause"
+     "url": "reference/API.md#cls-Clip-pause",
+     "since": "0.2"
     },
     {
      "name": "resume",
@@ -9444,7 +9466,8 @@
      "signature": "resume()",
      "detail": "() -> None",
      "summary": "Go on recording after pause().",
-     "url": "reference/API.md#cls-Clip-resume"
+     "url": "reference/API.md#cls-Clip-resume",
+     "since": "0.2"
     },
     {
      "name": "save",
@@ -9452,7 +9475,8 @@
      "signature": "save(path)",
      "detail": "(path: str) -> None",
      "summary": "Write the frames kept so far to a file.",
-     "url": "reference/API.md#cls-Clip-save"
+     "url": "reference/API.md#cls-Clip-save",
+     "since": "0.2"
     },
     {
      "name": "stop",
@@ -9460,7 +9484,8 @@
      "signature": "stop()",
      "detail": "() -> None",
      "summary": "End the recording now, before its time is up.",
-     "url": "reference/API.md#cls-Clip-stop"
+     "url": "reference/API.md#cls-Clip-stop",
+     "since": "0.2"
     }
    ]
   },
@@ -9516,7 +9541,8 @@
      "signature": "remove_background(empty, tolerance=30)",
      "detail": "(empty: Picture, tolerance: int = 30) -> None",
      "summary": "Make every pixel that looks the same as an empty picture see-through, in place.",
-     "url": "reference/API.md#cls-Picture-remove_background"
+     "url": "reference/API.md#cls-Picture-remove_background",
+     "since": "0.2"
     },
     {
      "name": "remove_color",
@@ -9524,7 +9550,8 @@
      "signature": "remove_color(color, tolerance=40)",
      "detail": "(color: Any, tolerance: int = 40) -> None",
      "summary": "Make every pixel that is close to a colour see-through, in place.",
-     "url": "reference/API.md#cls-Picture-remove_color"
+     "url": "reference/API.md#cls-Picture-remove_color",
+     "since": "0.2"
     },
     {
      "name": "resize",
@@ -9945,7 +9972,8 @@
      "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float, x4: float, y4: float) -> PathBuilder",
      "summary": "Add a four-sided shape through four corners as a closed part of the path.",
      "url": "reference/API.md#cls-PathBuilder-quad",
-     "returns": "PathBuilder"
+     "returns": "PathBuilder",
+     "since": "0.2"
     },
     {
      "name": "quad_to",
@@ -9999,7 +10027,8 @@
      "detail": "(x: float, y: float, size: float, *radii: float) -> PathBuilder",
      "summary": "Add a square as a closed part of the path.",
      "url": "reference/API.md#cls-PathBuilder-square",
-     "returns": "PathBuilder"
+     "returns": "PathBuilder",
+     "since": "0.2"
     },
     {
      "name": "translate",
@@ -10017,7 +10046,8 @@
      "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -> PathBuilder",
      "summary": "Add a triangle through three corners as a closed part of the path.",
      "url": "reference/API.md#cls-PathBuilder-triangle",
-     "returns": "PathBuilder"
+     "returns": "PathBuilder",
+     "since": "0.2"
     },
     {
      "name": "union",

@@ -171,6 +171,12 @@ that `f.<name>` appears for every name in `_PUBLIC_NAMES`. If you add a referenc
 `examples/reference/`, embed its source word for word in the Quick Reference, and make its picture
 with `tools/make_reference_images.py` (or `... 05_text` for one).
 
+A name that is not in the last release (`funground/released_names.json`) is marked "Since 0.2" in the API
+reference, `completions.json` and `llms.txt` by itself. In the Quick Reference, add `*(0.2)*` after the call in its
+row. In the guide, put the line `> **Since 0.2.** In Play now; on your computer with funground 0.2.` (the text is
+`MARKER` in `tools/since.py`) straight under the heading of every section whose code uses it; the gallery index
+gets it from `tools/make_gallery.py`. `tests/test_since.py` names every row and section that is missing one.
+
 ## 9. A CHANGELOG line
 
 Add a line to the "Unreleased" section of [CHANGELOG.md](../../CHANGELOG.md), under "Added" or

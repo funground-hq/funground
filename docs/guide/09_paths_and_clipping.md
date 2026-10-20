@@ -657,7 +657,7 @@ A picture can change itself. These are methods of a picture, written `g.copy()` 
 | `"posterize"`, value 2 to 255 | Each colour keeps only that many levels. You must give the value. |
 | `"erode"` | Each pixel takes the darkest value of its 3 by 3 neighbours, for each colour. Dark areas grow. |
 | `"dilate"` | The same with the brightest value. Bright areas grow. |
-| `"edges"` | The outlines: white where the brightness changes, black elsewhere, like a line drawing. Try it on the camera ([You as a line drawing](../gallery/README.md#you-as-a-line-drawing)). |
+| `"edges"` *(0.2)* | The outlines: white where the brightness changes, black elsewhere, like a line drawing. Try it on the camera ([You as a line drawing](../gallery/README.md#you-as-a-line-drawing)). |
 
 Alpha stays as it is, except with `"opaque"`. An unknown kind, or a value out of range, is an
 error that tells you what is allowed.
@@ -752,6 +752,8 @@ f.run()
 
 ### The camera
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 A picture can also come from your camera. `f.camera()` makes a camera object. **Nothing opens until you
 call `cam.start()`.** Then your computer (or the browser) asks for permission, and the camera's light comes on.
 Frames stay on your computer: funground never sends them anywhere. The camera is let go when you call
@@ -822,6 +824,8 @@ use the camera. In Visual Studio Code's panel the camera is not available. The g
 [mirror of dots](../gallery/README.md#pictures-and-images) and a photo booth. Both show a photo when there is no camera.
 
 ### Stand in front of any picture
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
 
 You can make part of a picture see-through, and then draw anything behind it. There are two ways to choose the part.
 

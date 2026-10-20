@@ -14,6 +14,8 @@ Wherever funground wants a colour, you can give it in any of these forms:
 
 ## Colour names from a list
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 A typing slip in a colour name is only found when the sketch runs. `f.COLORS` gives every named colour a name
 in capitals, so your editor can list them as you type `f.COLORS.` and underline a name that does not exist.
 `f.COLORS.TOMATO` is the word `"tomato"`, so the two do the same thing.

@@ -458,6 +458,8 @@ Source: [`examples/gallery/colour/05_cmyk_poster.py`](../../examples/gallery/col
 
 The same random shapes are drawn four times, each time with a different colour scheme. A scheme is a paper colour and a short list of ink colours that you choose. Random picks from your own list keep the surprise of randomness, but the picture still looks planned.
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 <details>
 <summary>How it works, and how to make it yours</summary>
 
@@ -2176,6 +2178,8 @@ Source: [`examples/gallery/images/05_svg.py`](../../examples/gallery/images/05_s
 
 You, drawn as a grid of white dots on black. Bright parts of you get big dots and dark parts get small ones. Move around and the dots follow. With no camera, it draws the same dots from a photo, so it always works.
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 <details>
 <summary>How it works, and how to make it yours</summary>
 
@@ -2204,6 +2208,8 @@ Source: [`examples/gallery/images/06_mirror_of_dots.py`](../../examples/gallery/
 ![Photo booth](images/images-07_photo_booth.png)
 
 The camera, live on the canvas, with buttons along the top. Record starts a take and Stop ends it; Pause holds it in between. While a take is recording, the picture has a red frame, a blinking light and a timer, and while it is paused the frame turns amber. Stop saves the take as take.gif, and the sound heard during it as take.wav. Photo saves a still picture, and - and + zoom in for a close-up. With no camera, it shows a photo.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
@@ -2234,6 +2240,8 @@ Source: [`examples/gallery/images/07_photo_booth.py`](../../examples/gallery/ima
 
 A short video, played back under your control. Drag across the picture to scrub through it, frame by frame. The arrow keys change the speed, and below zero it plays backwards. Space pauses. It plays your own take.gif when one is next to the sketch (save one with the photo booth), and a little film of a paper boat when there is none.
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 <details>
 <summary>How it works, and how to make it yours</summary>
 
@@ -2262,6 +2270,8 @@ Source: [`examples/gallery/images/08_play_a_take.py`](../../examples/gallery/ima
 
 The camera turned into lines, live. Wherever the picture changes from light to dark there is a line, so your face, your hands and the room become a moving drawing. Press Space to switch between white lines on black and dark lines on paper. With no camera, the photo is drawn in lines.
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 <details>
 <summary>How it works, and how to make it yours</summary>
 
@@ -2288,6 +2298,8 @@ Source: [`examples/gallery/images/09_line_drawing.py`](../../examples/gallery/im
 ![In front of a picture](images/images-10_in_front_of_a_picture.png)
 
 You, standing in front of a sunset. Press E while you are out of view, so the camera sees the empty room. Then step back in: whatever looks like the empty room becomes see-through, and the sunset shows behind you. With no camera, a drawn figure sways in a drawn room, so it always works.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
@@ -2374,6 +2386,8 @@ Source: [`examples/gallery/pixels/02_dots_by_brightness.py`](../../examples/gall
 
 Step 2's dots, drawn from your camera, again and again. Move, and the dots follow. With no camera it keeps using the photo, so the sketch still works.
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 <details>
 <summary>How it works, and how to make it yours</summary>
 
@@ -2400,6 +2414,8 @@ Source: [`examples/gallery/pixels/03_live_camera.py`](../../examples/gallery/pix
 ![From pixels to marks, step 4: grid and contrast](images/pixels-04_grid_and_contrast.png)
 
 Now the mouse holds the controls. Left and right change the size of the grid, from fine to coarse. Up and down change the contrast: at the top the dots are bold, with only big dots and paper, and at the bottom they are gentle and grey-looking.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
@@ -2428,6 +2444,8 @@ Source: [`examples/gallery/pixels/04_grid_and_contrast.py`](../../examples/galle
 
 The dots are only one choice. Press 1, 2 or 3 to change the mark: letters chosen by brightness, so the picture is written in characters; short lines that turn with brightness, like strokes of a pen; or the words of a sentence, one per cell, sized by darkness. Each mark gives the same photo a different voice.
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 <details>
 <summary>How it works, and how to make it yours</summary>
 
@@ -2454,6 +2472,8 @@ Source: [`examples/gallery/pixels/05_other_marks.py`](../../examples/gallery/pix
 ![From pixels to marks, step 6: a palette and a GIF](images/pixels-06_palette_and_gif.png)
 
 The dots get colour, but only from a palette of three colours you choose: dark cells take the first, middle ones the second and light ones the third, on a paper of your choice. Fewer colours make a stronger picture, like a print. Press G to keep two seconds of it as a GIF.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
@@ -3171,6 +3191,8 @@ Source: [`examples/gallery/projects/08_flow_field_print.py`](../../examples/gall
 ![Blow the words away](images/projects-09_blow_the_words_away.png)
 
 A cloud of words hangs in front of a mouth like fog, and breath blows it away. Make a take with the photo booth first: it saves take.gif and take.wav. This sketch plays the take over and over, and the words fly exactly where the sound in it was loud: when you blew. Click to put the cloud on the mouth. Press G to save one loop with the words as blow.gif. With no take it uses the live camera and microphone (hold Space to blow without one).
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
