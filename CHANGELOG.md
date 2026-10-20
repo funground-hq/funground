@@ -4,7 +4,7 @@ What changed in funground, newest first. Release numbers follow the
 [roadmap](docs/Roadmap.md). Decisions are cited as D-nnn from the
 [decision log](docs/design/Decision_Log.md).
 
-## 0.1.0 — 14 October 2026
+## 0.1.0 — 20 October 2026
 
 The first full release, after the alpha. New since then: a course, pages for AI assistants, upper bounds on library
 versions and a fix for `f.run(fps)`. The parts not yet tried by hand are in the
