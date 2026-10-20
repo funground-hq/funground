@@ -71,6 +71,8 @@ The alignment is part of the drawing state, so `with f.saved_state():` restores 
 
 ### Words from a list: `f.CONSTANTS`
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 The words `"center"`, `"baseline"` and the rest can be written from a list, so your editor suggests them and
 underlines a word that does not exist. `f.CONSTANTS` holds the lists in groups named after what they choose.
 For `text_align` the group is `ALIGN`.

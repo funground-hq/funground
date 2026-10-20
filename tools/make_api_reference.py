@@ -31,7 +31,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import since  # noqa: E402  (which release a name arrives in, S-229)
 import funground as f  # noqa: E402
 from funground import _colornames, api as _api, pages, synth  # noqa: E402
 from funground import analysis, marks, typography  # noqa: E402
@@ -349,11 +351,18 @@ def see_also(names: list[str], known: set[str], owner: tuple[str, set[str]] | No
     return "See also: " + ", ".join(parts) + "."
 
 
+def add_since(page: Page, version: str | None) -> None:
+    """The line "Since 0.2." under the summary of a name that is not in the first release (S-229)."""
+    if version:
+        page.add(since.api_line(version), "")
+
+
 def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | None, known: set[str],
-                 level: str = "###", owner: tuple[str, set[str]] | None = None) -> None:
+                 level: str = "###", owner: tuple[str, set[str]] | None = None, arrives: str | None = None) -> None:
     d = parse_doc(doc)
     page.add(f'<a id="{anchor}"></a>', f"{level} {heading}", "", "```py", sig, "```", "")
     page.add(d["summary"] or "*(no documentation yet)*", "")
+    add_since(page, arrives)
     if d["prose"]:
         page.add(d["prose"], "")
     if d["Arguments"]:
@@ -364,7 +373,8 @@ def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | Non
     for argument, meanings in WORD_MEANINGS.get(heading.strip("`"), []):
         page.add(f"**The words for `{argument}`.**", "", "| Word | What it does |", "|---|---|")
         for word, meaning in meanings.items():
-            page.add(f'| `"{word}"` | {esc(meaning)} |')
+            arrives_word = since.word_since(heading.strip("`").removeprefix("f."), argument, word)
+            page.add(f'| `"{word}"` | {esc(meaning)}' + (f" ({since.api_line(arrives_word)})" if arrives_word else "") + " |")
         page.add("")
     if d["Returns"]:
         page.add("**Returns.** " + " ".join(d["Returns"].split()), "")
@@ -505,6 +515,7 @@ def render_namespace(page: Page, name: str, known: set[str]) -> None:
     d = parse_doc(cls.__doc__)
     example = 'f.COLORS.TOMATO  # "tomato"' if name == "COLORS" else 'f.CONSTANTS.ALIGN.CENTER  # "center"'
     page.add(f'<a id="const-{name}"></a>', f"### `f.{name}`", "", "```py", example, "```", "", d["summary"], "")
+    add_since(page, since.name_since(name))
     if d["prose"]:
         page.add(d["prose"], "")
     if name == "COLORS":
@@ -583,7 +594,8 @@ def build() -> str:
             if inspect.isclass(obj):
                 p.add(f"- `{name}`: see [the {name} class](#cls-{name}).", "")
                 continue
-            render_entry(p, f"fn-{name}", f"`f.{name}`", signature_text("f.", name, obj), obj.__doc__, known)
+            render_entry(p, f"fn-{name}", f"`f.{name}`", signature_text("f.", name, obj), obj.__doc__, known,
+                         arrives=since.name_since(name))
 
     p.add('<a id="live-values"></a>', "## Live values", "",
           "These look like variables. Read them as `f.width`, `f.mouse_x` and so on. "
@@ -591,6 +603,7 @@ def build() -> str:
     for name in sorted(live):
         d = parse_doc(live_docs.get(name))
         p.add(f'<a id="live-{name}"></a>', f"### `f.{name}`", "", d["summary"] or "*(no documentation yet)*", "")
+        add_since(p, since.name_since(name))
         if d["prose"]:
             p.add(d["prose"], "")
         if d["Returns"]:
@@ -611,6 +624,7 @@ def build() -> str:
         d = parse_doc(cls.__doc__)
         p.add(f'<a id="cls-{name}"></a>', f"### `{name}`", "", "```py", sig, "```", "",
               d["summary"] or "*(no documentation yet)*", "")
+        add_since(p, since.class_since(name))
         if d["prose"]:
             p.add(d["prose"], "")
         if d["Arguments"]:
@@ -626,10 +640,11 @@ def build() -> str:
             anchor = f"cls-{name}-{mname}"
             if isinstance(member, property):
                 render_entry(p, anchor, f"`{name}.{mname}`", f"{name}.{mname}  # property", member.fget.__doc__,
-                             known, level="####", owner=owner)
+                             known, level="####", owner=owner, arrives=since.member_since(name, mname))
             else:
                 render_entry(p, anchor, f"`{name}.{mname}`", signature_text(f"{name}.", mname, member, True),
-                             member.__doc__, known, level="####", owner=owner)
+                             member.__doc__, known, level="####", owner=owner,
+                             arrives=since.member_since(name, mname))
 
     reference_tables(p)
     return p.text()
@@ -775,6 +790,8 @@ def class_members(cls: type, class_set: set[str]) -> list[dict]:
         returns = returned_class(annotation, function.__doc__, class_set)
         if returns:
             entry["returns"] = returns
+        if since.member_since(cls.__name__, name):
+            entry["since"] = since.member_since(cls.__name__, name)
         members.append(entry)
     return members
 
@@ -790,7 +807,8 @@ def completions_text() -> str:
     words: dict[str, dict] = {}
     for key, tables in WORD_MEANINGS.items():
         if key.startswith("f."):
-            words[key[2:]] = {arg: [{"word": w, "meaning": m} for w, m in table.items()] for arg, table in tables}
+            words[key[2:]] = {arg: [{"word": w, "meaning": m, **({"since": v} if (v := since.word_since(key[2:], arg, w)) else {})}
+                                    for w, m in table.items()] for arg, table in tables}
     names, color_params = [], []
     for name in f._PUBLIC_NAMES:
         entry: dict = {"name": name}
@@ -814,12 +832,15 @@ def completions_text() -> str:
             returns = None if is_class else returned_class(inspect.signature(obj).return_annotation, obj.__doc__, class_set)
             if returns:
                 entry["returns"] = returns
+        if since.name_since(name):
+            entry["since"] = since.name_since(name)
         entry["star"] = name not in star_out
         if name in words:
             entry["options"] = words[name]
         names.append(entry)
     colors = [{"name": n, "hex": hex_of(rgba)[:7]} for n, rgba in sorted(_colornames.NAMED_COLORS.items())]
     classes = {name: {"summary": first_sentence(parse_doc(cls.__doc__)["summary"]), "url": f"reference/API.md#cls-{name}",
+                      **({"since": since.class_since(name)} if since.class_since(name) else {}),
                       "members": class_members(cls, class_set)} for name, cls in all_classes()}
     data = {"version": f.__version__, "names": names, "colors": colors, "color_params": color_params, "classes": classes}
     return json.dumps(data, indent=1, ensure_ascii=False) + "\n"
