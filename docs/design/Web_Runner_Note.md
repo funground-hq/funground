@@ -94,6 +94,8 @@ the camera never becomes ready. A host has one camera: a sketch should make one 
 name is desktop-only (`f.camera("name")` raises, `f.cameras()` is `[]`), and so is `.mp4` for a clip (GIF works). Tests:
 `tests/test_camera.py` (here, with a fake page).
 
+**Keep (S-226, D-113 b).** `Session.keep(note)` runs what `f.keep(note)` does for the Session's own sketch: `studio/NNN.png`, `.py` and `.json` in the sketch's folder, where the `.py` is the code the Session was started with (a host holds it in memory, so there is no file to copy). The host calls it between frames, so the last frame drawn is complete and the files are written before `keep()` returns, whether the sketch still draws (the frame on screen is kept, as `f.keep()` does after `f.no_loop()`) or has stopped drawing (a script that has finished). Before an animated sketch's first frame the keep waits for that frame. After `stop()` it raises `RuntimeError` (the picture is gone). The runner's `runner.keep(note)` calls it and reports the files through `onFile`; Play's Keep this uses it. Tests: `tests/test_web_session.py`.
+
 ## Origins and safety (D-078)
 
 - The site (`funground-hq.github.io`) runs **our** code: gallery examples and guide sketches.

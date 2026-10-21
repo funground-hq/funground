@@ -31,7 +31,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from . import api, camera_input, global_style, microphone_input, sound, typography
+from . import api, camera_input, exploring, global_style, microphone_input, sound, typography
 from .platform.base import InputEvent
 from .platform.browser import BrowserPlatform, FrameCallback
 from .platform.browser_audio import MicrophoneCallback, SoundCallback
@@ -94,6 +94,8 @@ class Session:
         self._stopped = False
         self._font_mark = typography.file_font_mark()
         self._folder: Path | None = None            # the sketch's folder, known once start() is called
+        self._file: Path | None = None              # the sketch's file name in that folder (it need not exist on disk)
+        self._source: str | None = None             # the sketch's code, kept so keep() can save a copy
         self._modules_before: set[str] = set()
 
     @property
@@ -113,7 +115,9 @@ class Session:
         script (ends with f.show()) has presented its drawing(s) and is finished."""
         namespace = {"__name__": "__main__", "__file__": filename}
         self._font_mark = typography.file_font_mark()
-        self._folder = Path(filename).resolve().parent
+        self._file = Path(filename).resolve()
+        self._folder = self._file.parent
+        self._source = source
         self._modules_before = set(sys.modules)
         try:
             exec(compile(source, filename, "exec"), namespace)
@@ -125,6 +129,23 @@ class Session:
             global_style.explain_clash(error, namespace)  # a global-style script's error at the top level
             self.stop()
             raise
+
+    def keep(self, note: str = "") -> str:
+        """Keep this run's picture, as f.keep(note) does in the sketch: studio/NNN.png, .py and .json in the
+        sketch's folder (the code is the code this Session was started with). Returns the path without its ending.
+
+        The host calls this between frames, so the last frame drawn is complete: the files are written now, before
+        keep() returns, whether the sketch still draws (the frame on screen is kept, as when f.keep() runs after
+        f.no_loop()) or has stopped drawing (a script that has finished). Before the first frame of an animated
+        sketch there is nothing drawn yet, so the keep waits for that frame, which the next step() draws. Raises
+        RuntimeError when the run has been stopped or has ended, because its picture is gone."""
+        if self._stopped or self._file is None:
+            raise RuntimeError("The sketch is not running, so there is no picture to keep. Run it, then keep.")
+        base = exploring.keep_sketch(note, False, {}, str(self._file), self._source)
+        sketch = self._sketch
+        if not sketch._script and sketch.frame_count > 0:
+            sketch._run_frame_end(False)            # the frame on screen is complete: write now, not at the next frame's end
+        return base
 
     def push_event(self, kind: str, x: int = 0, y: int = 0, button: str | None = None, key: str | None = None,
                    key_code: int | None = None, delta: float = 0.0) -> None:
