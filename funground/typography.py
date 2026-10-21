@@ -16,6 +16,7 @@ import os
 import re
 import unicodedata
 from collections import OrderedDict
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from numbers import Real
 
@@ -29,6 +30,30 @@ from .geometry import Path
 
 FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 DEFAULT_FONT = os.path.join(FONT_DIR, "DejaVuSans.ttf")
+
+# The browser (S-211, D-114): the bundled fonts are not in the browser wheel. The host installs a fetcher,
+# `fetcher(file name) -> bytes`, and a bundled font is fetched and written the first time funground opens it.
+# On a computer no fetcher is installed and the fonts are the files of the package, so nothing here runs.
+_font_fetcher: Callable[[str], bytes] | None = None
+
+
+def set_font_fetcher(fetcher: Callable[[str], bytes] | None) -> None:
+    """Install (or, with None, remove) the function that supplies a bundled font that is missing from disk."""
+    global _font_fetcher
+    _font_fetcher = fetcher
+
+
+def _ensure_bundled(path: str) -> None:
+    """Make sure a bundled font file exists before it is read: fetch it when it is missing and a fetcher is installed."""
+    if _font_fetcher is None or os.path.exists(path):
+        return
+    folder = os.path.abspath(FONT_DIR)
+    if os.path.dirname(os.path.abspath(path)) != folder:
+        return
+    data = _font_fetcher(os.path.basename(path))
+    os.makedirs(folder, exist_ok=True)
+    with open(path, "wb") as fh:
+        fh.write(data)
 
 # Shaped texts kept per font (`FontResource._shape_one`): the glyphs of a text do not depend on the size,
 # so a text whose size changes every frame is shaped once. Room for a page of words, and little memory.
@@ -80,6 +105,7 @@ class FontResource:
     """One loaded font: HarfBuzz font + fontTools glyph set + outline cache."""
 
     def __init__(self, path: str = DEFAULT_FONT, face: int = 0) -> None:
+        _ensure_bundled(path)             # every bundled font is opened here (the browser fetches it on first use)
         self.path = path
         self.face = face                  # S-119: which font of a .ttc/.otc collection (0 for a plain file)
         self._tt = TTFont(path, fontNumber=face)
