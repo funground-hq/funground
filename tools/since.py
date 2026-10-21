@@ -24,6 +24,8 @@ MARKER = "> **Since {v}.** In Play now; on your computer with funground {v}."
 ROW_MARKER = "*({v})*"
 # A short sentence for the API reference and the notes for assistants.
 API_LINE = "Since {v}."
+# The same as a badge right under a heading of the API reference; the site styles the class (funground.css, .fg-since).
+API_BADGE = '<p class="fg-since">Since {v}.</p>'
 
 # Option words that arrive later than the function that takes them. Written by hand: tests/test_since.py checks each
 # word is still accepted, so an entry cannot outlive its word.
@@ -87,6 +89,10 @@ def row_marker(version: str) -> str:
 
 def api_line(version: str) -> str:
     return API_LINE.format(v=version)
+
+
+def api_badge(version: str) -> str:
+    return API_BADGE.format(v=version)
 
 
 # ---- finding later names in text (the guide, the gallery, the Quick Reference)
