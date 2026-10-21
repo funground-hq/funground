@@ -11,13 +11,15 @@ The starter and exercise sketches use short scripts. The comparison sketches use
 arrange several studies on one sheet. The core sketches use the base install. The optional GIF exporter needs funground[extras] or ffmpeg.
 Lesson 9's live sketches run continuously; close their window to finish.
 
+The three **Extend** sketches (`01_positions_variations.py`, `03_palettes_variations.py` and `05_rhythm_mark.py`) run the same experiment as the sketch before them, written with funground's studio tools: `f.variations` lays out the versions side by side with a label for each, and `f.mark` draws a shape once to place as often as you like. Try the plain sketch first. In Play, the lesson panel offers the Extend sketch after Compare.
+
 | Lesson | Start here | Completed experiments | Your assignment |
 |---|---|---|---|
-| 1 | [One circle](01_starter.py) | [Position](01_positions.py), [space](01_space.py), [grouping](01_grouping.py), [composition](01_composition.py) | [Three-shape starter](01_exercise.py) |
+| 1 | [One circle](01_starter.py) | [Position](01_positions.py), [space](01_space.py), [grouping](01_grouping.py), [composition](01_composition.py); Extend: [positions with f.variations](01_positions_variations.py) | [Three-shape starter](01_exercise.py) |
 | 2 | [Two circles](02_starter.py) | [Size](02_size.py), [value](02_value.py), [distance](02_distance.py), [hierarchy](02_hierarchy.py) | [Notice-card starter](02_exercise.py) |
-| 3 | [Starter](03_starter.py) | [Value](03_values.py), [palettes](03_palettes.py) | Follow the lesson brief; adapt the starter. |
+| 3 | [Starter](03_starter.py) | [Value](03_values.py), [palettes](03_palettes.py); Extend: [palettes with f.variations](03_palettes_variations.py) | Follow the lesson brief; adapt the starter. |
 | 4 | [Starter](04_starter.py) | [Reduction](04_reduction.py), [figure/ground](04_ground.py), [small sizes](04_small.py) | Follow the lesson brief; adapt the starter. |
-| 5 | [Starter](05_starter.py) | [Rhythm](05_rhythms.py), [patterns](05_patterns.py) | Follow the lesson brief; adapt the starter. |
+| 5 | [Starter](05_starter.py) | [Rhythm](05_rhythms.py), [patterns](05_patterns.py); Extend: [one mark, three rhythms](05_rhythm_mark.py) | Follow the lesson brief; adapt the starter. |
 | 6 | [Starter](06_starter.py) | [Alignment](06_alignment.py), [spacing](06_spacing.py) | Follow the lesson brief; adapt the starter. |
 | 7 | [Starter](07_starter.py) | [Cover directions](07_directions.py) | Follow the lesson brief; adapt the starter. |
 | 8 | [Starter](08_starter.py) | [Poster series](08_series.py) | Follow the lesson brief; adapt the starter. |

@@ -363,10 +363,10 @@ class _PendingKeep:
     drawn (Sketch._frame_end), so the picture, the copy and the record all describe that frame."""
 
     def __init__(self, canvas, folder: str, number: int, note: str, pdf: bool, settings: dict,
-                 source: str | None, home: str) -> None:
+                 source: str | None, home: str, text: str | None = None) -> None:
         self.canvas, self.folder, self.number = canvas, folder, number
         self.note, self.pdf, self.settings = note, pdf, settings
-        self.source, self.home = source, home
+        self.source, self.home, self.text = source, home, text
 
     @property
     def base(self) -> str:
@@ -390,7 +390,7 @@ class _PendingKeep:
                        canvas.height, canvas._platform.backing_scale, "live")
             written.append(".pdf")
         _finish(canvas, self.base, written, self.note, self.settings, self.source, self.home, ops,
-                page=None, frame_count=frame_count)
+                page=None, frame_count=frame_count, text=self.text)
 
 
 def _record(canvas, note, settings, source, home, ops, page, frame_count) -> dict:
@@ -420,9 +420,14 @@ def _record(canvas, note, settings, source, home, ops, page, frame_count) -> dic
     }
 
 
-def _finish(canvas, base, written, note, settings, source, home, ops, page, frame_count) -> None:
-    """Write the source copy and the record next to the picture, and say where they went."""
-    if source:
+def _finish(canvas, base, written, note, settings, source, home, ops, page, frame_count, text=None) -> None:
+    """Write the source copy and the record next to the picture, and say where they went. *text* is the sketch's
+    code when a host holds it in memory (web.Session); otherwise the copy is the file *source*."""
+    if text is not None:
+        with open(base + ".py", "w", encoding="utf-8", newline="") as fh:
+            fh.write(text)
+        written.append(".py")
+    elif source:
         shutil.copyfile(source, base + ".py")
         written.append(".py")
     with open(base + ".json", "w", encoding="utf-8") as fh:
@@ -441,15 +446,20 @@ def _finish(canvas, base, written, note, settings, source, home, ops, page, fram
 
 def keep(note: str, pdf: bool, settings: dict, caller) -> str:
     """f.keep(): see api.keep for the learner's description."""
+    marks.refuse_in_mark("f.keep()")
+    return keep_sketch(note, pdf, settings, sketch_file(caller))
+
+
+def keep_sketch(note: str, pdf: bool, settings: dict, source: str | None, text: str | None = None) -> str:
+    """Keep the canvas as drawn. *source* is the sketch's file (None: no file, the current folder is used).
+    A host that holds the code in memory and has no such file on disk (web.Session) passes the code as *text*."""
     from . import api
     from .export import save_frame, save_pixels
 
-    marks.refuse_in_mark("f.keep()")
     if not isinstance(note, str):
         raise TypeError(f"f.keep(): the note is text, such as f.keep(\"gap 35 reads as a rhythm\"), not {note!r}")
     canvas = api.canvas_sketch()
     canvas._require_window()
-    source = sketch_file(caller)
     home = os.path.dirname(source) if source else os.getcwd()
     folder = os.path.join(home, "studio")
     os.makedirs(folder, exist_ok=True)
@@ -460,7 +470,7 @@ def keep(note: str, pdf: bool, settings: dict, caller) -> str:
     base = os.path.join(folder, f"{number:03d}")
 
     if not canvas._script:                        # an animated sketch: everything at the end of the frame (E2)
-        canvas._frame_end.append(_PendingKeep(canvas, folder, number, note, pdf, settings, source, home))
+        canvas._frame_end.append(_PendingKeep(canvas, folder, number, note, pdf, settings, source, home, text))
         return base
 
     canvas._flush_pixel_patch()
@@ -472,5 +482,5 @@ def keep(note: str, pdf: bool, settings: dict, caller) -> str:
                    canvas._script_scale, "live")
         written.append(".pdf")
     _finish(canvas, base, written, note, settings, source, home, canvas.frame.ops, page=canvas.page_count(),
-            frame_count=None)
+            frame_count=None, text=text)
     return base
