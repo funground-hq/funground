@@ -25,8 +25,11 @@ files written to disk.
 """
 from __future__ import annotations
 
+import hashlib
 import sys
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 from . import api, camera_input, global_style, microphone_input, sound, typography
 from .platform.base import InputEvent
@@ -34,6 +37,23 @@ from .platform.browser import BrowserPlatform, FrameCallback
 from .platform.browser_audio import MicrophoneCallback, SoundCallback
 from .platform.browser_camera import CameraCallback
 from .sketch import Sketch
+
+
+def _checked_fetcher(fetch_font: Callable[[str], Any], fonts: dict[str, dict[str, Any]]) -> Callable[[str], bytes]:
+    """Wrap the host's `fetch_font` for typography: bytes out, and checked against the manifest's size and SHA-256."""
+    def fetch(name: str) -> bytes:
+        try:
+            result = fetch_font(name)
+        except Exception as error:                 # the network, or the host: one plain line, not a JavaScript trace
+            raise OSError(f"The font {name} could not be downloaded ({error}). Check the connection and run again.") from None
+        data = result.to_bytes() if hasattr(result, "to_bytes") else bytes(result)    # a JsProxy, or bytes
+        expected = fonts.get(name)
+        if expected is not None and len(data) != expected["size"]:
+            raise OSError(f"The font {name} does not match the runtime's manifest: {len(data)} bytes, expected {expected['size']}.")
+        if expected is not None and hashlib.sha256(data).hexdigest() != expected["sha256"]:
+            raise OSError(f"The font {name} does not match the runtime's manifest: its SHA-256 differs.")
+        return data
+    return fetch
 
 
 class Session:
@@ -53,11 +73,19 @@ class Session:
     frame as RGBA bytes, row by row, `width * height * 4` of them, at the size asked (a frame of another size is
     scaled). The sketch mirrors it when it asked for that. `camera_unavailable(reason)` tells the Session that the
     page could not open the camera: it prints one line, "The camera is not available: ...", for each start, and
-    the camera stays not ready. Without `on_camera` the camera never becomes ready."""
+    the camera stays not ready. Without `on_camera` the camera never becomes ready.
+
+    The bundled fonts are not in the browser's package (S-211, D-114): `fetch_font(file name)` is called the first
+    time funground opens one, and returns its bytes (bytes, or a JavaScript Uint8Array or ArrayBuffer). `fonts`
+    maps each file name to {"size": bytes, "sha256": hex} from the host's manifest; a font that differs raises
+    an OSError naming it. Without `fetch_font` the fonts are the files of the package, as on a computer."""
 
     def __init__(self, width: int, height: int, scale: float = 1.0, on_frame: FrameCallback | None = None,
                  on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None,
-                 on_camera: CameraCallback | None = None) -> None:
+                 on_camera: CameraCallback | None = None, fetch_font: Callable[[str], Any] | None = None,
+                 fonts: dict[str, dict[str, Any]] | None = None) -> None:
+        if fetch_font is not None:
+            typography.set_font_fetcher(_checked_fetcher(fetch_font, fonts or {}))
         self._platform = BrowserPlatform(width, height, scale, on_frame, on_sound, on_microphone, on_camera)
         sound.use_host_mixer(self._platform.mixer)
         microphone_input.use_host_input(self._platform.microphone)
