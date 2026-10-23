@@ -1,5 +1,5 @@
 {
- "about": "The course's experiments in Play (S-216, D-104): for each sketch, its lesson, the section it belongs to (the heading as written in the lesson), what to predict before running it and what to compare after. The words come from the lessons. Each lesson's keep note is its own. The site reads this file; nothing else does.",
+ "about": "The course's experiments in Play (S-216, D-104, S-226): for each sketch, its lesson, the section it belongs to (the heading as written in the lesson), what to predict before running it and what to compare after. An entry with \"stage\": \"extend\" is the Extend step (D-113 b), listed after the last experiment of its lesson, so stepping through the lesson meets it last: the same experiment as the sketch named in \"after\", written with funground's studio vocabulary (f.variations or f.mark). It has a \"lead\" line for its own panel, and an \"offer\" that is the text of the button the lesson's experiment shows after Compare. The words come from the lessons. Each lesson's keep note is its own. The site reads this file; nothing else does.",
  "lessons": {
   "1": {
    "title": "Look, frame and compose",
@@ -67,6 +67,18 @@
    "compare": "These are not answers to the assignment. What does each one change: the gaps between the marks, or the group's distance from an edge?"
   },
   {
+   "sketch": "01_positions_variations.py",
+   "stage": "extend",
+   "after": "01_positions.py",
+   "title": "Extend: let funground lay out the positions",
+   "lesson": "1",
+   "section": "4. Experiment A: change position, keep the mark",
+   "offer": "Extend: let funground lay out the versions",
+   "lead": "Now let funground lay out the versions. You write one study, with y as its parameter. f.variations draws it three times, from the same start, and labels each cell.",
+   "predict": "Only y changes, from 70 to 220 to 370. In which cell will the gap between the circle and the edge look most deliberate?",
+   "compare": "Add two more values to the list, so there are five versions. Does the extra choice help you decide, or does it only add noise? When you have chosen one, press Keep this and say why."
+  },
+  {
    "sketch": "03_starter.py",
    "title": "The reading-circle card",
    "lesson": "3",
@@ -91,6 +103,18 @@
    "compare": "Swap PAPER and INK: does the same accent still work? Then swap INK and ACCENT: is the important text still clear?"
   },
   {
+   "sketch": "03_palettes_variations.py",
+   "stage": "extend",
+   "after": "03_palettes.py",
+   "title": "Extend: let funground lay out the palettes",
+   "lesson": "3",
+   "section": "5. Experiment B: give the palette a character",
+   "offer": "Extend: let funground lay out the versions",
+   "lead": "Now let funground lay out the versions. You write one card, with the palette as its parameter. f.variations draws it once for each palette and labels each cell.",
+   "predict": "The layout is the same in all three cells. Which palette will still read when you squint?",
+   "compare": "Add a palette of your own to PALETTES and run again. Which would you keep, and what did it change? Press Keep this and say why."
+  },
+  {
    "sketch": "05_starter.py",
    "title": "One rule, made visible",
    "lesson": "5",
@@ -113,6 +137,18 @@
    "section": "5. Experiment B: repeat a rule in two dimensions",
    "predict": "The second panel alternates the direction of the same small mark. Will it read as one surface, or as stripes?",
    "compare": "Change only the rotation rule. Which version holds still, and which seems to move?"
+  },
+  {
+   "sketch": "05_rhythm_mark.py",
+   "stage": "extend",
+   "after": "05_rhythms.py",
+   "title": "Extend: one mark, placed along each rhythm",
+   "lesson": "5",
+   "section": "3. Experiment A: make a pause",
+   "offer": "Extend: draw the mark once and place it",
+   "lead": "Now draw the mark once. f.mark keeps a drawing as a value, and place() puts it down as often as you like.",
+   "predict": "The bead is drawn once and placed 21 times. If you change its colour in that one place, how many circles will change?",
+   "compare": "Change the bead's colour, then its size. Then add rotate=20 to the place() calls of the last row. Does the rhythm read differently when the marks turn?"
   }
  ]
 }

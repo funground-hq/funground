@@ -4,6 +4,8 @@ A fake host drives a Session with its own clock, as a browser page would. Nothin
 """
 from __future__ import annotations
 
+import json
+
 import pytest
 
 from conftest import EXAMPLES
@@ -282,3 +284,89 @@ def test_run_fps_wins_over_size_in_setup_on_the_desktop_too():
     sketch = api.use_sketch(Sketch(platform=HeadlessPlatform()))
     sketch.run_namespace({"setup": lambda: api.size(20, 20, fps=30), "draw": lambda: None}, max_frames=1)
     assert sketch.fps == 30                         # and size()'s own rate stays when run() gives none
+
+
+# ---- Session.keep (S-226, D-113 b): Play's "Keep this" runs f.keep(note) for the running sketch
+
+ANIMATED = ("import funground as f\n"
+            "def setup():\n    f.size(60, 40)\n"
+            "def draw():\n    f.background('tomato')\n    f.circle(30, 20, 10)\n"
+            "f.run()\n")
+
+
+def kept_files(folder, number="001"):
+    return sorted(p.name for p in (folder / "studio").glob(f"{number}.*"))
+
+
+def test_keep_writes_the_picture_the_code_and_the_record_at_once(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    session = Session(640, 480)
+    session.start(ANIMATED, "sketch.py")
+    session.step(0)
+    base = session.keep("I kept this one")
+    assert base == str(tmp_path / "studio" / "001")
+    assert kept_files(tmp_path) == ["001.json", "001.png", "001.py"]       # no further step() was needed
+    assert (tmp_path / "studio" / "001.py").read_text(encoding="utf-8") == ANIMATED
+    record = json.loads((tmp_path / "studio" / "001.json").read_text(encoding="utf-8"))
+    assert record["note"] == "I kept this one" and record["sketch"] == "sketch.py" and record["size"] == [60, 40]
+    assert record["frame_count"] == 0
+    session.step(FRAME)
+    session.keep()
+    assert kept_files(tmp_path, "002") == ["002.json", "002.png", "002.py"]  # numbered after the first
+    session.stop()
+
+
+def test_keep_after_a_script_has_finished_still_writes(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    session = Session(640, 480)
+    session.start("import funground as f\nf.size(40, 40)\nf.background('gold')\nf.show()\n", "poster.py")
+    assert not session.running
+    session.keep("script")
+    assert kept_files(tmp_path) == ["001.json", "001.png", "001.py"]
+    assert json.loads((tmp_path / "studio" / "001.json").read_text(encoding="utf-8"))["sketch"] == "poster.py"
+    session.stop()
+
+
+def test_keep_after_no_loop_keeps_the_frame_on_screen(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    session = Session(640, 480)
+    session.start("import funground as f\ndef setup():\n    f.size(40, 40)\n    f.no_loop()\n"
+                  "def draw():\n    f.background('navy')\nf.run()\n", "still.py")
+    session.step(0)
+    session.step(FRAME)
+    session.keep("still")
+    assert kept_files(tmp_path) == ["001.json", "001.png", "001.py"]
+    session.stop()
+
+
+def test_keep_before_the_first_frame_waits_for_it(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    session = Session(640, 480)
+    session.start(ANIMATED, "sketch.py")
+    session.keep("early")
+    assert not (tmp_path / "studio" / "001.png").exists()
+    session.step(0)
+    assert kept_files(tmp_path) == ["001.json", "001.png", "001.py"]
+    session.stop()
+
+
+def test_keep_when_the_run_is_over_says_so(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    session = Session(640, 480)
+    with pytest.raises(RuntimeError, match="not running"):
+        session.keep("never started")
+    session.start(ANIMATED, "sketch.py")
+    session.step(0)
+    session.stop()
+    with pytest.raises(RuntimeError, match="not running"):
+        session.keep("too late")
+    assert not (tmp_path / "studio").exists()
+
+
+def test_keep_in_a_folder_of_the_sketch_not_the_current_one(tmp_path):
+    session = Session(640, 480)
+    session.start(ANIMATED, str(tmp_path / "work" / "sketch.py"))
+    session.step(0)
+    session.keep("elsewhere")
+    assert kept_files(tmp_path / "work") == ["001.json", "001.png", "001.py"]
+    session.stop()
