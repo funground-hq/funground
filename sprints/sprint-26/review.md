@@ -60,7 +60,7 @@ test in site mode; `check_links.py` and strict MkDocs builds for the gallery wor
    was short of memory). Next: run it in groups, or speed up its loading.
 4. **A test script's element click scrolled the editor sideways** and looked like a product bug; it exposed a real
    one (the transparent gutter), fixed. Tests click at points now.
-5. The extension's suggestions and the github.dev check (P1) wait for the maintainer to publish 0.2.0.
+5. The extension's suggestions and the github.dev check (P1) wait for the maintainer to publish 0.2.0. **Update 23 Oct:** the maintainer published 0.2.0 on 19 Oct (the Marketplace lists 0.2.0 and 0.1.0); the github.dev check (P1) is still to do.
 
 ## Built by subagents
 
