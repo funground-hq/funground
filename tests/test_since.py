@@ -87,7 +87,7 @@ def test_the_api_reference_and_llms_say_so():
     api = read(ROOT / "docs" / "reference" / "API.md")
     for anchor in ("fn-camera", "cls-Picture-remove_color"):
         section = api.split(f'<a id="{anchor}"></a>')[1].split("<a id=")[0]
-        assert "\nSince 0.2.\n" in section
+        assert since.api_badge("0.2") in section.split("```")[0]          # the badge, before the signature
     circle = api.split('<a id="fn-circle"></a>')[1].split("<a id=")[0]
     assert "Since 0" not in circle
     assert "Since 0.2." in read(ROOT / "llms-full.txt")

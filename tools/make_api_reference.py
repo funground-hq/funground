@@ -352,17 +352,19 @@ def see_also(names: list[str], known: set[str], owner: tuple[str, set[str]] | No
 
 
 def add_since(page: Page, version: str | None) -> None:
-    """The line "Since 0.2." under the summary of a name that is not in the first release (S-229)."""
+    """The badge "Since 0.2." right under the heading of a name that is not in the first release (S-229), where a
+    reader looking for the name sees it first."""
     if version:
-        page.add(since.api_line(version), "")
+        page.add(since.api_badge(version), "")
 
 
 def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | None, known: set[str],
                  level: str = "###", owner: tuple[str, set[str]] | None = None, arrives: str | None = None) -> None:
     d = parse_doc(doc)
-    page.add(f'<a id="{anchor}"></a>', f"{level} {heading}", "", "```py", sig, "```", "")
-    page.add(d["summary"] or "*(no documentation yet)*", "")
+    page.add(f'<a id="{anchor}"></a>', f"{level} {heading}", "")
     add_since(page, arrives)
+    page.add("```py", sig, "```", "")
+    page.add(d["summary"] or "*(no documentation yet)*", "")
     if d["prose"]:
         page.add(d["prose"], "")
     if d["Arguments"]:
@@ -514,8 +516,9 @@ def render_namespace(page: Page, name: str, known: set[str]) -> None:
     cls = getattr(f, name)
     d = parse_doc(cls.__doc__)
     example = 'f.COLORS.TOMATO  # "tomato"' if name == "COLORS" else 'f.CONSTANTS.ALIGN.CENTER  # "center"'
-    page.add(f'<a id="const-{name}"></a>', f"### `f.{name}`", "", "```py", example, "```", "", d["summary"], "")
+    page.add(f'<a id="const-{name}"></a>', f"### `f.{name}`", "")
     add_since(page, since.name_since(name))
+    page.add("```py", example, "```", "", d["summary"], "")
     if d["prose"]:
         page.add(d["prose"], "")
     if name == "COLORS":
@@ -602,8 +605,9 @@ def build() -> str:
           "They always hold the current value, and you cannot set them.", "")
     for name in sorted(live):
         d = parse_doc(live_docs.get(name))
-        p.add(f'<a id="live-{name}"></a>', f"### `f.{name}`", "", d["summary"] or "*(no documentation yet)*", "")
+        p.add(f'<a id="live-{name}"></a>', f"### `f.{name}`", "")
         add_since(p, since.name_since(name))
+        p.add(d["summary"] or "*(no documentation yet)*", "")
         if d["prose"]:
             p.add(d["prose"], "")
         if d["Returns"]:
@@ -622,9 +626,9 @@ def build() -> str:
         except Exception:
             sig = f"{name}(...)"
         d = parse_doc(cls.__doc__)
-        p.add(f'<a id="cls-{name}"></a>', f"### `{name}`", "", "```py", sig, "```", "",
-              d["summary"] or "*(no documentation yet)*", "")
+        p.add(f'<a id="cls-{name}"></a>', f"### `{name}`", "")
         add_since(p, since.class_since(name))
+        p.add("```py", sig, "```", "", d["summary"] or "*(no documentation yet)*", "")
         if d["prose"]:
             p.add(d["prose"], "")
         if d["Arguments"]:
