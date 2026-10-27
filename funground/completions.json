@@ -3342,7 +3342,7 @@
    "name": "CONSTANTS",
    "kind": "namespace",
    "signature": "CONSTANTS",
-   "detail": "18 groups of words",
+   "detail": "19 groups of words",
    "summary": "Names for the words that choose an option, in groups, so an editor can list them and a typing slip is caught.",
    "url": "reference/API.md#const-CONSTANTS",
    "members": [
@@ -3861,6 +3861,18 @@
       {
        "name": "SHAPES",
        "value": "shapes"
+      }
+     ]
+    },
+    {
+     "name": "PROVIDERS",
+     "used_by": [
+      "load_font"
+     ],
+     "members": [
+      {
+       "name": "GOOGLE_FONTS",
+       "value": "google_fonts"
       }
      ]
     },
@@ -4653,9 +4665,9 @@
   {
    "name": "load_font",
    "kind": "function",
-   "signature": "load_font(path, face=0)",
-   "detail": "(path: str, face: int | str = 0) -> Font",
-   "summary": "Load a font file.",
+   "signature": "load_font(path, face=0, provider=None, weight=None, italic=False)",
+   "detail": "(path: str, face: int | str = 0, *, provider: CONSTANTS.PROVIDERS | None = None, weight: float | None = None, italic: bool = False) -> Font",
+   "summary": "Load a font from a file, a web address, or a family name.",
    "url": "reference/API.md#fn-load_font",
    "returns": "Font",
    "star": true

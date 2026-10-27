@@ -12,6 +12,7 @@ baseline = y + ascent * scale.
 from __future__ import annotations
 
 import bisect
+import io
 import os
 import re
 import unicodedata
@@ -24,7 +25,7 @@ import uharfbuzz as hb
 from fontTools.pens.basePen import BasePen
 from fontTools.ttLib import TTFont
 
-from . import ir
+from . import ir, web_fonts
 from .color import Color
 from .geometry import Path
 
@@ -104,18 +105,29 @@ class Glyph:
 class FontResource:
     """One loaded font: HarfBuzz font + fontTools glyph set + outline cache."""
 
-    def __init__(self, path: str = DEFAULT_FONT, face: int = 0) -> None:
+    def __init__(self, path: str = DEFAULT_FONT, face: int = 0, defaults: tuple = ()) -> None:
         _ensure_bundled(path)             # every bundled font is opened here (the browser fetches it on first use)
         self.path = path
         self.face = face                  # S-119: which font of a .ttc/.otc collection (0 for a plain file)
+        self.defaults = tuple(defaults)   # S-230: variation settings ((tag, value) pairs) a sketch's own settings override
         self._tt = TTFont(path, fontNumber=face)
+        unpacked = None
+        if self._tt.flavor == "woff":     # S-230: HarfBuzz cannot read a compressed WOFF; give it the unpacked font
+            self._tt.flavor = None
+            buffer = io.BytesIO()
+            self._tt.save(buffer)
+            self._tt.close()
+            unpacked = buffer.getvalue()
+            self._tt = TTFont(io.BytesIO(unpacked))
         self.units_per_em: int = self._tt["head"].unitsPerEm
         self.ascent: int = self._tt["hhea"].ascent
         self.descent: int = self._tt["hhea"].descent
         self._order = self._tt.getGlyphOrder()
         self._glyph_set = self._tt.getGlyphSet()
-        with open(path, "rb") as fh:
-            self._face = hb.Face(fh.read(), face)
+        if unpacked is None:
+            with open(path, "rb") as fh:
+                unpacked = fh.read()
+        self._face = hb.Face(unpacked, face)
         self._hb = hb.Font(self._face)
         self._hb.scale = (self.units_per_em, self.units_per_em)
         # S-090: a variable font's axes (tag -> (min, max)); empty for a static font.
@@ -171,8 +183,15 @@ class FontResource:
 
     def location(self, variations: tuple = ()) -> tuple:
         """The variation settings this font can use: only its own axes, sorted (S-090, T13).
-        An axis the font lacks is ignored, so a static font always gives ()."""
-        return tuple((tag, float(v)) for tag, v in variations if tag in self.axes)
+        An axis the font lacks is ignored, so a static font always gives (). A font loaded with a default
+        (`load_font(..., weight=700)` of a variable font, S-230) starts from it; each setting in *variations*
+        replaces the default of its axis."""
+        own = tuple((tag, float(v)) for tag, v in variations if tag in self.axes)
+        if not self.defaults:
+            return own
+        merged = {tag: float(v) for tag, v in self.defaults if tag in self.axes}
+        merged.update(own)
+        return tuple(sorted(merged.items()))
 
     def _at(self, location: tuple):
         """(HarfBuzz font, glyph set) at *location*; the plain ones for ()."""
@@ -665,6 +684,7 @@ def forget_file_fonts(mark: int) -> None:
     run reads those files again and gives their names afresh. The bundled fonts stay (S-157, D-083)."""
     for cache_key in list(_path_to_key)[mark:]:
         _registry.pop(_path_to_key.pop(cache_key), None)
+    web_fonts.forget()
 
 
 class Font:
@@ -866,7 +886,40 @@ def _face_index(resolved: str, face, who: str = "f.load_font()") -> int:
     raise ValueError(f"{who}: no face called {face!r} in this file (its styles: {listed})")
 
 
-def load_font(path: str, base_dir: str | None = None, face: int | str = 0) -> Font:
+def _refuse_woff2(path: str, name: str) -> None:
+    """A WOFF2 file needs the Brotli package, which funground does not use: say so in one plain line (S-230)."""
+    try:
+        with open(path, "rb") as fh:
+            magic = fh.read(4)
+    except OSError:
+        return
+    if magic == b"wOF2":
+        raise ValueError(f"f.load_font(): {name!r} is a WOFF2 file, which funground cannot read. "
+                         "Use the .ttf version of the font; most font sites offer it.")
+
+
+def check_font_file(path: str, shown: str, name: str) -> None:
+    """Raise ValueError unless the file at *path* is a font funground can read (WOFF2 has its own line). *shown* is
+    how the font is named in the error (its address), *name* its file name. Used on a download before it is kept."""
+    _refuse_woff2(path, name)
+    try:
+        resource = FontResource(path)
+    except Exception as exc:
+        raise ValueError(f"f.load_font(): {shown!r} is not a font funground can read ({exc})") from exc
+    resource._tt.close()                       # so the file can be renamed at once (Windows)
+
+
+def _check_weight(weight, italic) -> None:
+    if weight is not None and (isinstance(weight, bool) or not isinstance(weight, Real)):
+        raise TypeError(f"f.load_font(): weight is a number such as 400 or 700, not {weight!r}")
+    if weight is not None and not 1 <= weight <= 1000:
+        raise ValueError(f"f.load_font(): weight is a number from 1 to 1000 (400 is normal, 700 is bold), not {weight!r}")
+    if not isinstance(italic, bool):
+        raise TypeError(f"f.load_font(): italic is True or False, not {italic!r}")
+
+
+def load_font(path: str, base_dir: str | None = None, face: int | str = 0, *, provider: str | None = None,
+              weight: float | None = None, italic: bool = False) -> Font:
     """Load a TrueType/OpenType font file and return a `Font` (contract T11).
 
     A relative *path* is looked for next to the sketch file (*base_dir*) first, then in the
@@ -877,17 +930,42 @@ def load_font(path: str, base_dir: str | None = None, face: int | str = 0) -> Fo
     A .ttc or .otc file holds several fonts (S-119): *face* is the number of the one to use
     (0 is the first) or its style or full name, like "Bold" or "Nirmala UI Bold". Each face of a
     collection is its own font, with its own key ("name.ttc", then "name.ttc#1", ...).
+
+    A *path* that starts with http:// or https:// is an address (S-230): the file is downloaded once and kept in
+    `fonts/` beside the sketch (see `web_fonts`). With a *provider*, *path* is a family name and *weight* and
+    *italic* choose the file. A WOFF font is unpacked; a WOFF2 font is refused.
     """
-    resolved = _resolve_font_path(path, base_dir)
+    if provider is None:
+        if weight is not None or italic:
+            raise TypeError("f.load_font(): weight and italic choose a file from a family that a provider finds, "
+                            "so give provider= too, such as provider=f.CONSTANTS.PROVIDERS.GOOGLE_FONTS.")
+        defaults: tuple = ()
+    else:
+        web_fonts.check_provider(provider)
+        _check_weight(weight, italic)
+        if not isinstance(path, str) or not path.strip():
+            raise ValueError("f.load_font(): with a provider, give the family name, such as \"Lora\"")
+        path, wght = web_fonts.google_font(path.strip(), weight, italic, base_dir)
+        defaults = (("wght", wght),) if wght is not None else ()
+    if web_fonts.is_address(path):
+        address = web_fonts.raw_address(path)
+        file_name = web_fonts.file_name_of(address)
+        resolved = _note_read(web_fonts.font_path(
+            path, base_dir, lambda tmp: check_font_file(tmp, address, file_name)), "font")
+    else:
+        resolved = _resolve_font_path(path, base_dir)
+        _refuse_woff2(resolved, os.path.basename(resolved))
     number = _face_index(resolved, face)
-    cache_key = (os.path.normcase(resolved), number)
+    cache_key = (os.path.normcase(resolved), number, defaults)
     key = _path_to_key.get(cache_key)
     if key is None:
         try:
-            resource = FontResource(resolved, number)
+            resource = FontResource(resolved, number, defaults)
         except Exception as exc:
             raise ValueError(f"f.load_font(): {path!r} is not a font funground can read ({exc})") from exc
         name = os.path.basename(resolved) + (f"#{number}" if number else "")
+        if defaults:                                   # the default setting is part of the name: Lora[wght].ttf@wght=700
+            name += "@" + ",".join(f"{tag}={value:g}" for tag, value in defaults)
         key, n = name, 2
         while key in _registry:
             key = f"{name}~{n}"

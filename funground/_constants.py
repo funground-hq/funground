@@ -168,6 +168,11 @@ class CONSTANTS(metaclass=_NamespaceMeta):
         LIVE: Final = "live"
         SHAPES: Final = "shapes"
 
+    class PROVIDERS(metaclass=_NamespaceMeta):
+        """The font providers for load_font(): a family found by its name."""
+
+        GOOGLE_FONTS: Final = "google_fonts"
+
     class KEY(metaclass=_NamespaceMeta):
         """The named keys for key_down(), and the values f.key can hold for them."""
 

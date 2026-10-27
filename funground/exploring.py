@@ -393,11 +393,18 @@ class _PendingKeep:
                 page=None, frame_count=frame_count, text=self.text)
 
 
+def _web_fonts() -> dict[str, str]:
+    from . import web_fonts
+    from .typography import files_read
+
+    return web_fonts.sources_of(path for path, what in files_read.items() if what == "font")
+
+
 def _record(canvas, note, settings, source, home, ops, page, frame_count) -> dict:
     from . import __version__
 
     noise = canvas._noise
-    return {
+    record = {
         "note": note,
         "settings": _jsonable(settings),
         "controls": _controls(canvas),
@@ -418,6 +425,10 @@ def _record(canvas, note, settings, source, home, ops, page, frame_count) -> dic
         "files_read": _files_read(home),
         "not_captured": NOT_CAPTURED,
     }
+    web = _web_fonts()
+    if web:                                       # S-230: where each font from a web address came from
+        record["fonts"] = web
+    return record
 
 
 def _finish(canvas, base, written, note, settings, source, home, ops, page, frame_count, text=None) -> None:

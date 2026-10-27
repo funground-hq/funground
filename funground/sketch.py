@@ -1393,11 +1393,13 @@ class Sketch:
     # ---- fonts and styles (S-054, contract T11/T12)
     TEXT_STYLES = TEXT_STYLES          # one list, in typography (contract T12)
 
-    def load_font(self, path: str, base_dir: str | None = None, face: int | str = 0):
-        """Load a TrueType/OpenType font file (or one face of a .ttc collection); pass the result to f.text_font()."""
+    def load_font(self, path: str, base_dir: str | None = None, face: int | str = 0, *, provider: str | None = None,
+                  weight: float | None = None, italic: bool = False):
+        """Load a TrueType/OpenType font file (or one face of a .ttc collection), a font at a web address, or a
+        family found by a provider; pass the result to f.text_font()."""
         from .typography import load_font as _load_font
 
-        return _load_font(path, base_dir, face)
+        return _load_font(path, base_dir, face, provider=provider, weight=weight, italic=italic)
 
     def text_font(self, font, size: float | None = None, *, base_dir: str | None = None) -> None:
         """Use *font* (from f.load_font(), a path, or None for the built-in family) for later text."""
@@ -1411,7 +1413,7 @@ class Sketch:
             key = self.load_font(font, base_dir=base_dir).name
         else:
             raise TypeError(
-                f"f.text_font() needs a font from f.load_font(), a path, or None, not {type(font).__name__}"
+                f"f.text_font() needs a font from f.load_font(), a path or web address, or None, not {type(font).__name__}"
             )
         changes = {"font": key}
         if size is not None:

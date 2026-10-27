@@ -2126,16 +2126,16 @@ f.text_font(font: 'Font | str | None', size: 'float | None' = None) -> 'None'
 
 Choose the font for the text you draw after this.
 
-The choice is saved by push() and brought back by pop().
+The choice is saved by push() and brought back by pop(). A path or a web address is loaded first, as load_font() does.
 
 | Argument | Meaning |
 |---|---|
-| `font` | a font from load_font() or system_font(), a path to a font file, or None for the built-in family. |
+| `font` | a font from load_font() or system_font(), a path to a font file, the address of one (it starts with http:// or https://), or None for the built-in family. |
 | `size` | a text size to set at the same time. The default None keeps the size. |
 
 **Raises.**
 
-- `TypeError`: font is not a Font, a path or None.
+- `TypeError`: font is not a Font, a path, an address or None.
 
 ```py
 f.text_font(f.load_font("fonts/MyFont.ttf"), 24)
@@ -2148,30 +2148,37 @@ See also: [`load_font`](#fn-load_font), [`system_font`](#fn-system_font), [`text
 ### `f.load_font`
 
 ```py
-f.load_font(path: 'str', face: 'int | str' = 0) -> 'Font'
+f.load_font(path: 'str', face: 'int | str' = 0, *, provider: 'CONSTANTS.PROVIDERS | None' = None, weight: 'float | None' = None, italic: 'bool' = False) -> 'Font'
 ```
 
-Load a font file.
+Load a font from a file, a web address, or a family name.
 
-Pass the result to text_font(), text_fallback() and so on. A relative path is looked for next to your sketch file first, then in the current folder.
+Pass the result to text_font(), text_fallback() and so on. A relative path is looked for next to your sketch file first, then in the current folder. A web address (it starts with http:// or https://) is downloaded the first time. The copy is kept in a fonts folder beside your sketch, with a small file called sources.json that says where it came from, so the next run works without the internet. An address on github.com is read from raw.githubusercontent.com. With provider=f.CONSTANTS.PROVIDERS.GOOGLE_FONTS the first argument is a family name, such as "Lora", and weight and italic choose the file. If the font is a variable font and you give a weight, the text starts at that weight; f.font_variations() can still change it.
 
 | Argument | Meaning |
 |---|---|
-| `path` | a .ttf or .otf font file, or a .ttc collection. |
+| `path` | a .ttf or .otf font file, or a .ttc collection, or the address of one. With a provider: the family name. |
 | `face` | for a .ttc collection, which font to use: its number (0 is the first) or its style as a word, such as "Bold". The default is 0. |
+| `provider` | None (the default) means path is a file or an address. f.CONSTANTS.PROVIDERS.GOOGLE_FONTS finds the family called path in Google Fonts. |
+| `weight` | with a provider, how heavy the letters are, from 1 to 1000. 400 is normal and 700 is bold. The default None asks for normal. |
+| `italic` | with a provider, True for the slanted font of the family. The default is False. |
 
 **Returns.** A Font. Ask it font.family(), font.style(), font.variations(), font.features() and font.contains(text).
 
 **Raises.**
 
-- `FileNotFoundError`: the file is not found in either place.
+- `FileNotFoundError`: the file is not found in either place, the address answers 404, or Google Fonts has no family with that name.
+- `ConnectionError`: the font could not be downloaded. Run the sketch once while online; after that funground uses the copy.
+- `ValueError`: the file is not a font funground can read, or it is a WOFF2 file (use the .ttf version).
+- `TypeError`: weight or italic was given without a provider.
 
 ```py
 mono = f.load_font("fonts/DejaVuSansMono.ttf")
 f.text_font(mono)
+serif = f.load_font("Lora", provider=f.CONSTANTS.PROVIDERS.GOOGLE_FONTS, weight=700)
 ```
 
-See also: [`text_font`](#fn-text_font), [`system_font`](#fn-system_font), [`current_font`](#fn-current_font).
+See also: [`text_font`](#fn-text_font), [`system_font`](#fn-system_font), [`current_font`](#fn-current_font), [`font_variations`](#fn-font_variations).
 
 <a id="transforms-and-the-state-stack"></a>
 ## Transforms and the state stack
@@ -4805,7 +4812,7 @@ you like: ``f.text_align(f.CONSTANTS.ALIGN.CENTER)`` and ``f.text_align("center"
 The lists are fixed: you cannot add to them or change them. Iterate a group to get its words:
 ``list(f.CONSTANTS.BLEND)``. A group holds the words its functions accept.
 
-There are 18 groups. Each is named after what it chooses and holds the words that choice accepts. Iterate a group for its words: `list(f.CONSTANTS.BLEND)`. Words can mean different things in different groups: `LEFT` is a text alignment, a key and a mouse button.
+There are 19 groups. Each is named after what it chooses and holds the words that choice accepts. Iterate a group for its words: `list(f.CONSTANTS.BLEND)`. Words can mean different things in different groups: `LEFT` is a text alignment, a key and a mouse button.
 
 <a id="const-CONSTANTS-MODE"></a>
 #### `f.CONSTANTS.MODE`
@@ -5007,6 +5014,15 @@ How save() keeps text. Used by: `save`, `Picture.save`.
 |---|---|---|
 | `LIVE` | `"live"` |  |
 | `SHAPES` | `"shapes"` |  |
+
+<a id="const-CONSTANTS-PROVIDERS"></a>
+#### `f.CONSTANTS.PROVIDERS`
+
+The font providers for load_font(): a family found by its name. Used by: `load_font`.
+
+| Name | Word | What it does |
+|---|---|---|
+| `GOOGLE_FONTS` | `"google_fonts"` |  |
 
 <a id="const-CONSTANTS-KEY"></a>
 #### `f.CONSTANTS.KEY`
