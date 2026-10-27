@@ -147,7 +147,7 @@ ADDED_FUNCTIONS = {
     "cursor": "(kind: 'CursorKind' = 'arrow') -> 'None'",
     "no_cursor": "() -> 'None'",
     # S-054 fonts and styles
-    "load_font": "(path: 'str', face: 'int | str' = 0) -> 'Font'",
+    "load_font": "(path: 'str', face: 'int | str' = 0, *, provider: 'Provider | None' = None, weight: 'float | None' = None, italic: 'bool' = False) -> 'Font'",
     "text_font": "(font: 'Font | str | None', size: 'float | None' = None) -> 'None'",
     "text_style": "(style: 'TextStyle') -> 'None'",
     # S-052 off-screen graphics
