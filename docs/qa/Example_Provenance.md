@@ -251,3 +251,12 @@ against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagg
 `examples/gallery/images/10_in_front_of_a_picture.py` (story S-218, D-106: `remove_background` with an empty room,
 and a drawn figure when there is no camera) is an original CC0 example, written from the feature. `tools/check_originality.py`
 against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged. The background is `images/data/photo.jpg`, copied.
+
+## Moving the paper, steps 1 to 8 — 27 October 2026
+
+`examples/gallery/paper/01_where_is_zero.py` to `08_the_flower.py`, the guide project
+`docs/guide/projects/11_moving_the_paper.md` and its exercises (story S-237) are original CC0 work. They grew from the
+maintainer's own flower sketches of 23 to 27 October (a fan of `rotate(1)`, then petals from -90 to 90 with and
+without `push()` and `pop()`, and in CORNER mode), whose surprises became steps 4, 6 and 7. The `axes()` helper and
+the "move the paper, not the shape" framing are written for funground. `tools/check_originality.py` against the
+corpus files in `C:\Projects\funground-corpora`: nothing flagged.
