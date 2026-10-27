@@ -31,7 +31,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from . import api, camera_input, exploring, global_style, microphone_input, sound, typography
+from . import api, camera_input, exploring, global_style, microphone_input, sound, typography, web_fonts
 from .platform.base import InputEvent
 from .platform.browser import BrowserPlatform, FrameCallback
 from .platform.browser_audio import MicrophoneCallback, SoundCallback
@@ -53,6 +53,19 @@ def _checked_fetcher(fetch_font: Callable[[str], Any], fonts: dict[str, dict[str
         if expected is not None and hashlib.sha256(data).hexdigest() != expected["sha256"]:
             raise OSError(f"The font {name} does not match the runtime's manifest: its SHA-256 differs.")
         return data
+    return fetch
+
+
+def _checked_url_fetcher(fetch_url: Callable[[str], Any]) -> Callable[[str], bytes]:
+    """Wrap the host's `fetch_url` for web_fonts (S-230): bytes out, and any failure one plain ConnectionError."""
+    def fetch(address: str) -> bytes:
+        try:
+            result = fetch_url(address)
+            return result.to_bytes() if hasattr(result, "to_bytes") else bytes(result)      # a JsProxy, or bytes
+        except Exception:
+            raise ConnectionError(
+                f"f.load_font(): the browser could not download '{address}'. The site may not allow it, "
+                "or there is no connection. Download the file and use Add file.") from None
     return fetch
 
 
@@ -78,12 +91,18 @@ class Session:
     The bundled fonts are not in the browser's package (S-211, D-114): `fetch_font(file name)` is called the first
     time funground opens one, and returns its bytes (bytes, or a JavaScript Uint8Array or ArrayBuffer). `fonts`
     maps each file name to {"size": bytes, "sha256": hex} from the host's manifest; a font that differs raises
-    an OSError naming it. Without `fetch_font` the fonts are the files of the package, as on a computer."""
+    an OSError naming it. Without `fetch_font` the fonts are the files of the package, as on a computer.
+
+    A font at a web address (S-230) is downloaded by the host too: `fetch_url(address)` returns the bytes (bytes, or a
+    JavaScript Uint8Array or ArrayBuffer). When it fails, the sketch gets a ConnectionError that says to use Add file.
+    Without `fetch_url` funground downloads with urllib, as on a computer."""
 
     def __init__(self, width: int, height: int, scale: float = 1.0, on_frame: FrameCallback | None = None,
                  on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None,
                  on_camera: CameraCallback | None = None, fetch_font: Callable[[str], Any] | None = None,
-                 fonts: dict[str, dict[str, Any]] | None = None) -> None:
+                 fonts: dict[str, dict[str, Any]] | None = None,
+                 fetch_url: Callable[[str], Any] | None = None) -> None:
+        web_fonts.set_url_fetcher(_checked_url_fetcher(fetch_url) if fetch_url is not None else None)
         if fetch_font is not None:
             typography.set_font_fetcher(_checked_fetcher(fetch_font, fonts or {}))
         self._platform = BrowserPlatform(width, height, scale, on_frame, on_sound, on_microphone, on_camera)
@@ -198,6 +217,7 @@ class Session:
             sound.use_host_mixer(None)
             microphone_input.use_host_input(None)
             camera_input.use_host_camera(None)
+            web_fonts.set_url_fetcher(None)
             api.use_sketch(None)
             typography.forget_file_fonts(self._font_mark)
             self._forget_sketch_modules()

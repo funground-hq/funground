@@ -260,3 +260,5 @@ maintainer's own flower sketches of 23 to 27 October (a fan of `rotate(1)`, then
 without `push()` and `pop()`, and in CORNER mode), whose surprises became steps 4, 6 and 7. The `axes()` helper and
 the "move the paper, not the shape" framing are written for funground. `tools/check_originality.py` against the
 corpus files in `C:\Projects\funground-corpora`: nothing flagged.
+
+`examples/gallery/text/14_font_from_the_web.py` (story S-230) is original CC0 work: a short poster written from the feature it shows, `f.load_font()` given a web address. `tools/check_originality.py` against the corpus files in `C:\Projects\funground-corpora`: nothing flagged (closest file `src\friendly_errors\fes_core.js`, combined 0.16). Beside it, `fonts/Lora[wght].ttf` is Lora, downloaded by the sketch from google/fonts under the SIL Open Font License; `fonts/OFL.txt` is that licence and `fonts/sources.json` records the address.

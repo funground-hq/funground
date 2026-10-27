@@ -191,6 +191,50 @@ viewer. The PDF carries the letters of each font it uses, so it looks the same o
 Some fonts say they must not be put inside a file. Text in such a font is saved as letter shapes,
 so it looks right but cannot be selected. SVG files always save text as letter shapes.
 
+## Fonts from the web
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+You do not have to download a font file by hand. Give `f.load_font()` the address of the file, where you
+would give a path. An address starts with `https://`.
+
+```py
+lora = f.load_font("https://raw.githubusercontent.com/google/fonts/main/ofl/lora/Lora%5Bwght%5D.ttf")
+f.text_font(lora, 40)
+f.text("Letters from far away", 30, 30)
+```
+
+The first time, funground downloads the file. It keeps a copy in a folder called `fonts`, next to your
+sketch, and a small file there, `sources.json`, says where each font came from. The next time you run the
+sketch, funground uses the copy and does not need the internet. Share the `fonts` folder with the sketch,
+and keep the font's licence file in it. Most fonts on Google Fonts use the Open Font License, which lets you do that.
+
+On GitHub you can open a font file, copy the address from the browser's address bar and use it as it is.
+funground reads it from the right place for you.
+
+To find a family by its name, give a provider. `f.CONSTANTS.PROVIDERS.GOOGLE_FONTS` looks in the Google
+Fonts collection. `weight` is how heavy the letters are (400 is normal, 700 is bold) and `italic=True` asks for
+the slanted font:
+
+```py
+bold = f.load_font("Lora", provider=f.CONSTANTS.PROVIDERS.GOOGLE_FONTS, weight=700)
+slanted = f.load_font("Lora", provider=f.CONSTANTS.PROVIDERS.GOOGLE_FONTS, italic=True)
+```
+
+Lora is a variable font, so `weight=700` makes the text start at weight 700. `f.font_variations(wght=500)`
+still changes it.
+
+Some things to know:
+
+- The first run needs the internet. If there is none, funground says so and tells you to run the sketch once
+  while you are online.
+- `.ttf`, `.otf` and `.woff` files work. A `.woff2` file does not. Look for the `.ttf` version of the font.
+- In Play the copy is kept with your other files, and the website of the font must allow Play to download it.
+  If it does not, download the file yourself and use Add file.
+- `f.keep()` writes the address of each web font into the record of the kept sketch.
+
+The gallery example `text-14` sets a headline this way.
+
 ## Spacing, ligatures and variable fonts
 
 `f.text_tracking(pixels)` adds space after every letter. A negative number pulls the letters
