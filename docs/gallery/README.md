@@ -1397,6 +1397,221 @@ Three chequerboards: one leaning to the right, one climbing to the right, and on
 
 Source: [`examples/gallery/transforms/03_shear_and_matrices.py`](../../examples/gallery/transforms/03_shear_and_matrices.py)
 
+## Moving the paper
+
+### Moving the paper, step 1: where is (0, 0)?
+
+![Moving the paper, step 1: where is (0, 0)?](images/paper-01_where_is_zero.png)
+
+Two petals and the paper's own arrows. The orange arrow is the paper's x direction, the turquoise arrow its y direction, and the white dot is where both are 0. This is the first step of the project Moving the paper in the guide.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- axes() draws the arrows from (0, 0). Every step of the project has it, so you can always see where the paper is.
+- (0, 0) is the top-left corner of the canvas. x grows to the right, y grows downwards.
+- ellipse(x, y, width, height) puts the middle of the ellipse at (x, y). The first petal's middle is (0, 0), so three quarters of it are off the canvas: only the part to the right of and below the corner shows.
+- The second petal's middle is (300, 200), the middle of the canvas.
+
+**Make it yours**
+
+- Move the first petal to (60, 60). Which way did it move?
+- Change the second petal's width and height to 120 and 24. Which way does it lie now?
+- Draw a third petal at (600, 400). How much of it can you see, and why?
+
+</details>
+
+Source: [`examples/gallery/paper/01_where_is_zero.py`](../../examples/gallery/paper/01_where_is_zero.py)
+
+### Moving the paper, step 2: translate slides the paper
+
+![Moving the paper, step 2: translate slides the paper](images/paper-02_translate_slides_the_paper.png)
+
+The same petal as step 1, drawn with the same call, ellipse(0, 0, 24, 120), lands in the middle of the canvas. The petal did not move: the paper moved under the pen. This is step 2 of the project Moving the paper in the guide.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- The faded arrows show the paper before the move, with (0, 0) in the corner.
+- translate(300, 200) slides the paper 300 to the right and 200 down. Its (0, 0), the white dot, is now in the middle of the canvas.
+- Everything drawn after translate() is drawn on the moved paper, so (0, 0) now means the middle.
+- The bright arrows show the paper after the move. They still point the same way: sliding does not turn.
+
+**Make it yours**
+
+- Change translate(300, 200) to translate(100, 300). Where does the petal go?
+- Add a second translate(100, 0) after the first. Do the two moves add up?
+- Try a negative number: translate(-100, 0) after the first. Which way does the paper go?
+
+</details>
+
+Source: [`examples/gallery/paper/02_translate_slides_the_paper.py`](../../examples/gallery/paper/02_translate_slides_the_paper.py)
+
+### Moving the paper, step 3: rotate turns the paper around its (0, 0)
+
+![Moving the paper, step 3: rotate turns the paper around its (0, 0)](images/paper-03_rotate_turns_the_paper.png)
+
+A petal pointing up from the white dot, before and after the paper turns by 30 degrees. The petal swings around the dot, not around its own middle. This is step 3 of the project Moving the paper in the guide.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- translate(300, 240) first slides the paper so that its (0, 0) is in view.
+- ellipse(0, -60, 24, 120) is a petal 120 long whose middle is 60 above (0, 0): up is negative y. So the petal starts at the dot and points up.
+- The faded petal and arrows are the paper before the turn.
+- rotate(30) turns the paper 30 degrees clockwise around its (0, 0). Angles are in degrees, and a positive angle turns clockwise on the screen.
+- The same ellipse call, made again on the turned paper, draws the bright petal.
+
+**Make it yours**
+
+- Change 30 to 90, to 180, to -30 and to 360. Which way does a negative angle turn?
+- Remove the translate() line. The paper now turns around the top-left corner of the canvas: where did the petal go?
+- Change the petal to ellipse(0, 0, 24, 120). Why does the turn now look like a spin in place?
+
+</details>
+
+Source: [`examples/gallery/paper/03_rotate_turns_the_paper.py`](../../examples/gallery/paper/03_rotate_turns_the_paper.py)
+
+### Moving the paper, step 4: turns add up
+
+![Moving the paper, step 4: turns add up](images/paper-04_turns_add_up.png)
+
+Four petals from the same ellipse call, with rotate(30) between them. Each rotate turns the paper from where the last one left it, so the petals fan out 30 degrees apart. This is step 4 of the project Moving the paper in the guide.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- The first petal is drawn before any turn: straight up.
+- Each rotate(30) adds 30 degrees to the turns before it: 30, then 60, then 90 in all.
+- The arrows, drawn at the end, show the paper after all three turns: x points down and y points left.
+- translate() adds up in the same way: two translate(100, 0) are one translate(200, 0).
+
+**Make it yours**
+
+- Change the three 30s to 15. How wide is the fan now?
+- Write the same thing as a loop: for i in range(4), with a petal and a rotate(30) inside. Then try range(12).
+- What does a loop of rotate(1) and a petal, 180 times, draw? Predict first, then try it.
+
+</details>
+
+Source: [`examples/gallery/paper/04_turns_add_up.py`](../../examples/gallery/paper/04_turns_add_up.py)
+
+### Moving the paper, step 5: order matters
+
+![Moving the paper, step 5: order matters](images/paper-05_order_matters.png)
+
+The same two lines, translate(300, 160) and rotate(30), in two orders. Slide then turn puts the pink petal at (300, 160), tilted. Turn then slide puts the gold one somewhere else, because the paper slides along its own turned arrows. This is step 5 of the project Moving the paper in the guide.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- Pink, translate first: the paper slides to (300, 160), then turns there.
+- Gold, rotate first: the paper turns around the corner of the canvas (the faded arrows), then slides 300 along its turned x arrow and 160 along its turned y arrow. It ends lower and further left.
+- reset_matrix() puts the paper back where it started, so the second try begins from the corner. Step 6 shows push() and pop(), a tidier way to go back.
+
+**Make it yours**
+
+- Change both 30s to 0. Is there any difference between the two orders now? Why not?
+- Change both 30s to 90. Where does the gold petal go?
+- Add scale(2) in each order, once before translate() and once after. Does the order of scale and translate matter too?
+
+</details>
+
+Source: [`examples/gallery/paper/05_order_matters.py`](../../examples/gallery/paper/05_order_matters.py)
+
+### Moving the paper, step 6: push and pop
+
+![Moving the paper, step 6: push and pop](images/paper-06_push_and_pop.png)
+
+The same loop of petals twice. On the left, without push() and pop(), every turn adds to all the turns before it, and the petals end up bunched and lopsided. On the right, push() saves the paper before each turn and pop() puts it back, so every petal starts from the same unturned paper. This is step 6 of the project Moving the paper in the guide.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- The loop asks for turns of -90, -75, -60 ... 90 degrees, 15 apart.
+- Left: the turns add up. The paper is turned -90 in all, then -165 (-90 - 75), then -225, -270, -300, -315, -315, -300, -270, -225, -165, -90 and finally 0. Some petals land on top of each other and some directions get none.
+- Right: push() remembers the paper as it is, rotate() turns it for one petal, and pop() brings back the remembered paper. Each petal gets exactly the angle the loop asks for.
+- The arrows, drawn after the right-hand loop, show that pop() left the paper unturned.
+- push() also saves the fill, the stroke, the opacity and the other drawing settings, and pop() brings them back.
+
+**Make it yours**
+
+- On the right, move pop() above the ellipse line. What is drawn, and why?
+- On the left, change range(-90, 91, 15) to range(0, 181, 15). Is the left flower still lopsided?
+- Make the left flower right without push() and pop(): turn once to -90 before the loop, then rotate(15) each time.
+
+</details>
+
+Source: [`examples/gallery/paper/06_push_and_pop.py`](../../examples/gallery/paper/06_push_and_pop.py)
+
+### Moving the paper, step 7: where the shape sits on the paper
+
+![Moving the paper, step 7: where the shape sits on the paper](images/paper-07_where_the_shape_sits.png)
+
+The same call, ellipse(0, -60, 24, 120), in two drawing modes, before a turn (faded) and after a turn of 45 degrees. The white outline is the box around each ellipse. In the default mode (x, y) is the middle of the box; with ellipse_mode(CORNER) it is the box's top-left corner, so the same numbers put the petal somewhere else. This is step 7 of the project Moving the paper in the guide.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- Pink, the default mode: the middle of the box is (0, -60), so the petal runs from the white dot straight up.
+- Gold, CORNER mode: the top-left corner of the box is (0, -60), so the box reaches from x 0 to 24 and from y -60 to 60. The petal sits to the right of the y arrow and runs through the dot, half above it and half below.
+- Either way, rotate() turns the paper around its (0, 0), the white dot, and the box turns with the paper.
+- To draw the pink petal in CORNER mode, give the corner instead: ellipse(-12, -120, 24, 120). In general the corner is (x - width / 2, y - height / 2).
+- The drawing mode is saved by push() and brought back by pop(), like the colours. rect_mode() works the same way for rectangles, whose default is the corner.
+
+**Make it yours**
+
+- Change the gold call to ellipse(-12, -120, 24, 120). Does it now match the pink one?
+- Draw circle(0, 0, 30) in each mode. Where does the circle go in CORNER mode?
+- Try rect(0, -60, 24, 120) in each mode with rect_mode(). Which mode does rect() use when you do not choose one?
+
+</details>
+
+Source: [`examples/gallery/paper/07_where_the_shape_sits.py`](../../examples/gallery/paper/07_where_the_shape_sits.py)
+
+### Moving the paper, step 8: the flower
+
+![Moving the paper, step 8: the flower](images/paper-08_the_flower.png)
+
+Everything from the project in one picture: a half flower with petals from -90 to 90 degrees, a gold middle, a stem and two leaves. Each part slides and turns the paper for itself and puts it back with push() and pop(). This is the last step of the project Moving the paper in the guide.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- translate(300, 230) moves the paper's (0, 0) to the middle of the flower. Every number after it is measured from there: the stem runs from (0, 0) down to (0, 170).
+- Each leaf is a push(), a translate() down the stem, a rotate() and a pop(). The leaf is drawn pointing up from its own (0, 0), so the turn swings it out from the stem.
+- The petals are the loop from step 6: push(), rotate(angle), a petal pointing up, pop(). -90 points left, 0 up and 90 right.
+- The middle is drawn last, on the unturned paper, so it covers the ends of the petals.
+
+**Make it yours**
+
+- Change range(-90, 91, 15) to range(0, 360, 15) for a whole flower, then move the stem behind it.
+- Change PETALS to 20 or to 7: the angle between petals is worked out from it.
+- Draw a smaller ring of petals in another colour inside the first.
+- Put the whole flower in a function flower(x, y) and draw three of them in a row.
+
+</details>
+
+Source: [`examples/gallery/paper/08_the_flower.py`](../../examples/gallery/paper/08_the_flower.py)
+
 ## Paths and clipping
 
 ### A star from vertices

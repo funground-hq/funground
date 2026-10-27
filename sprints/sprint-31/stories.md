@@ -16,6 +16,7 @@ semantic contract; D-115 answered from S-227's results; how the book draws witho
 | S-230 | Fonts from the web: `load_font()` and `text_font()` take a `.ttf` or `.otf` address, kept for offline runs, also in Play | planned 23 Oct |
 | S-227 | Spike: help for the background cut-out (tidy mask, an editable outline, edges), the evidence for D-115 | planned 23 Oct |
 | S-225 | Spike: a layout model for a funground book, alongside (a study, a page system, one chapter as a PDF) | planned 23 Oct |
+| S-237 | Moving the paper: a step-by-step project for translate, rotate, push and pop, with exercises (added 27 Oct by the maintainer) | built 27 Oct |
 
 Order: S-230's measurements first (which hosts serve fonts with CORS, WOFF2 support, what no network gives), then its
 proposal to the maintainer; S-227 while the proposal waits; S-225 alongside, in pieces between heavy jobs. One heavy job
