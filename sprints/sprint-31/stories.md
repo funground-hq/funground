@@ -26,10 +26,10 @@ Next after this sprint: S-231, the models spike (E-37, added 23 Oct), which may 
 
 ## S-230 tasks
 
-- [ ] Measure: hosts that serve TTF/OTF with CORS (Google's fonts repository on GitHub, fonts.gstatic.com, others)
-- [ ] Measure: whether Cairo/FreeType and HarfBuzz read WOFF2 (unverified), on the desktop and in Pyodide
-- [ ] Measure: what a missing network gives today, and the one clear line it should give
-- [ ] Proposal to the maintainer: the argument's name, the provider words (`f.CONSTANTS.PROVIDERS.GOOGLE_FONTS`?), the contract row
+- [x] Measure: hosts that serve TTF/OTF with CORS (Google's fonts repository on GitHub, fonts.gstatic.com, others)
+- [x] Measure: whether Cairo/FreeType and HarfBuzz read WOFF2 (unverified), on the desktop and in Pyodide
+- [x] Measure: what a missing network gives today, and the one clear line it should give
+- [x] Proposal to the maintainer (D-119, `Web_Fonts_Note.md`, 27 Oct): the argument's name, the provider words (`f.CONSTANTS.PROVIDERS.GOOGLE_FONTS`?), the contract row
 - [ ] Build after the answer: desktop download and cache, Play through the runner (S-211's route), `f.keep()` records the address
 - [ ] Tests, gallery example with its golden, Quick Reference row, guide section, Since marker
 
