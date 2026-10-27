@@ -1,6 +1,6 @@
 # Web fonts (S-230, D-117, D-119)
 
-**Status:** measured 27 October 2026; the proposal (D-119) waits for the maintainer. Nothing is built.
+**Status:** measured 27 October 2026; the proposal accepted as D-119 the same day; being built (S-230).
 
 ## Problem
 
