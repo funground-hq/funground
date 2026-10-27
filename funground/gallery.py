@@ -60,6 +60,7 @@ AREAS = {
     "animation": "Animation and time",
     "motion": "Motion",
     "transforms": "Transforms",
+    "paper": "Moving the paper",
     "paths": "Paths and clipping",
     "randomness": "Randomness and noise",
     "maths": "Useful maths",
@@ -252,7 +253,7 @@ STILL = "A still picture: press Run to see it move."
 
 # ---- layout (all in window pixels; pure functions, so tests can aim clicks)
 SIDE_W = 240
-ROW_H = 25                        # 23 rows (All and the areas) end at y = 667 in a 720-pixel window: room to spare
+ROW_H = 24                        # 24 rows (All and the areas) end at y = 668 in a 720-pixel window: room for one more
 ROW_PAD = 4                       # the gap under each row is inside ROW_H
 AREA_TOP = 92
 SIDE_BOTTOM_PAD = 10              # the list stops this far above the window's bottom edge
