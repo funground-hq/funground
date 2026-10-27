@@ -1,0 +1,622 @@
+[
+ {
+  "color": [
+   0,
+   0,
+   128,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   1.0,
+   0.0,
+   0.0,
+   1.0,
+   300,
+   230
+  ]
+ },
+ {
+  "op": "Line",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": [
+    60,
+    179,
+    113,
+    255
+   ],
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "x1": 0,
+  "x2": 0,
+  "y1": 0,
+  "y2": 170
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   1.0,
+   0.0,
+   0.0,
+   1.0,
+   0,
+   90
+  ]
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.573576436351046,
+   -0.8191520442889918,
+   0.8191520442889918,
+   0.573576436351046,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 60,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    60,
+    179,
+    113,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 20,
+  "x": 0,
+  "y": -30
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   1.0,
+   0.0,
+   0.0,
+   1.0,
+   0,
+   125
+  ]
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.6427876096865394,
+   0.766044443118978,
+   -0.766044443118978,
+   0.6427876096865394,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 60,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    60,
+    179,
+    113,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 20,
+  "x": 0,
+  "y": -30
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   6.123233995736766e-17,
+   -1.0,
+   1.0,
+   6.123233995736766e-17,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.25881904510252074,
+   -0.9659258262890683,
+   0.9659258262890683,
+   0.25881904510252074,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.5000000000000001,
+   -0.8660254037844386,
+   0.8660254037844386,
+   0.5000000000000001,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.7071067811865476,
+   -0.7071067811865476,
+   0.7071067811865476,
+   0.7071067811865476,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.8660254037844387,
+   -0.49999999999999994,
+   0.49999999999999994,
+   0.8660254037844387,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.9659258262890683,
+   -0.25881904510252074,
+   0.25881904510252074,
+   0.9659258262890683,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   1.0,
+   0.0,
+   -0.0,
+   1.0,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.9659258262890683,
+   0.25881904510252074,
+   -0.25881904510252074,
+   0.9659258262890683,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.8660254037844387,
+   0.49999999999999994,
+   -0.49999999999999994,
+   0.8660254037844387,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.7071067811865476,
+   0.7071067811865476,
+   -0.7071067811865476,
+   0.7071067811865476,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.5000000000000001,
+   0.8660254037844386,
+   -0.8660254037844386,
+   0.5000000000000001,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   0.25881904510252074,
+   0.9659258262890683,
+   -0.9659258262890683,
+   0.25881904510252074,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "op": "Save"
+ },
+ {
+  "op": "Concat",
+  "transform": [
+   6.123233995736766e-17,
+   1.0,
+   -1.0,
+   6.123233995736766e-17,
+   0.0,
+   0.0
+  ]
+ },
+ {
+  "height": 140,
+  "op": "Ellipse",
+  "style": {
+   "fill": [
+    255,
+    192,
+    203,
+    255
+   ],
+   "opacity": 180,
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "width": 26,
+  "x": 0,
+  "y": -70.0
+ },
+ {
+  "op": "Restore"
+ },
+ {
+  "diameter": 36,
+  "op": "Circle",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 6,
+   "text_size": 20
+  },
+  "x": 0,
+  "y": 0
+ }
+]

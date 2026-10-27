@@ -67,6 +67,7 @@ the first applied to your shape.
 
 ## See also
 
+- Project: [Moving the paper](projects/11_moving_the_paper.md), the same ideas step by step, with exercises.
 - Gallery: [Transforms](../gallery/README.md#transforms).
 - Quick Reference: [7. Transforms and the state stack](../reference/Quick_Reference.md#7-transforms-and-the-state-stack).
 - Words: [transform, push and pop](glossary.md).

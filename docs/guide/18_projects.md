@@ -35,6 +35,7 @@ You do not have to do the projects in order. Pick the one that sounds like fun.
 | 8 | [Flow-field print](projects/08_flow_field_print.md) | Thousands of noise-guided lines, saved as a vector PDF for a big print | `noise`, `Vector`, `layer`, blend, PDF | Beginner+ |
 | 9 | [Generative posters](projects/09_generative_posters.md) | An A3 poster series from a grid of glowing shapes and a fitted headline, with the design ideas behind it: format, grid, variation, palette, hierarchy, space, type | `size("A3", margin=)`, `mm`, `grid`, `color_mode("hsb")`, `blend_mode`, `fit_text_size`, `new_page`, PDF | Beginner+ |
 | 10 | [From pixels to marks](projects/10_pixels_to_marks.md) | A photo, then your camera, redrawn as squares, dots, letters, lines and words, in six steps that open in Play | `get`, `map_range`, `camera`, `lerp_color`, `save_gif` | Beginner |
+| 11 | [Moving the paper](projects/11_moving_the_paper.md) | A flower, built in eight steps that open in Play, to see what `translate`, `rotate`, `push` and `pop` do to the paper you draw on; with exercises and answers | `translate`, `rotate`, `push`, `pop`, `saved_state`, `ellipse_mode`, `reset_matrix` | Beginner |
 
 **Previous:** [17. Ragas and talas](17_ragas_and_talas.md)
 
