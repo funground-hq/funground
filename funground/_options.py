@@ -28,5 +28,6 @@ MarkAnchor = Literal["origin", "center", "top-left", "top", "top-right", "left",
                      "bottom-right"]
 MarkStyle = Literal["own", "current"]
 SaveText = Literal["live", "shapes"]
+Provider = Literal["google_fonts"]
 KeyName = Literal["left", "right", "up", "down", "space", "enter", "escape"]
 PageName = Literal["A3", "A4", "A5", "B5", "Letter", "Legal", "Tabloid", "Square"]

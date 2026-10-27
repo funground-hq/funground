@@ -129,6 +129,7 @@ GROUP_PARAMS: dict[str, list[tuple[str, str]]] = {
     "ANCHOR": [("Mark.place", "anchor")],
     "MARK_STYLE": [("Mark.place", "style")],
     "SAVE_TEXT": [("save", "text"), ("Picture.save", "text")],
+    "PROVIDERS": [("load_font", "provider")],
     "KEY": [("key_down", "key"), ("key", "value")],
     "MOUSE": [("mouse_button", "value")],
     "PAGE": [("size", "width"), ("new_page", "width"), ("page_size", "name")],
@@ -302,6 +303,7 @@ ALIAS_GROUP = {"RectMode": "MODE", "EllipseMode": "MODE", "ImageMode": "MODE", "
                "BlendMode": "BLEND", "TextAlignX": "ALIGN", "TextAlignY": "ALIGN", "TextStyle": "STYLE",
                "StrokeCap": "CAP", "StrokeJoin": "JOIN", "CursorKind": "CURSOR", "FilterKind": "FILTER", "Wave": "WAVE",
                "Tuning": "TUNING", "MarkAnchor": "ANCHOR", "MarkStyle": "MARK_STYLE", "SaveText": "SAVE_TEXT",
+               "Provider": "PROVIDERS",
                "KeyName": "KEY", "PageName": "PAGE"}
 
 

@@ -26,7 +26,16 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
 - **Colour schemes** (gallery `colour-06`): the same random shapes in four schemes chosen from your own colour lists;
   the colour chapter says why picking from all 665 names gives a muddle.
 
+- **Fonts from the web** (S-230, D-119, contract T11): `f.load_font()` and `f.text_font()` take the address of a font
+  file where they take a path. The first run downloads it and keeps a copy in `fonts/` beside the sketch, with
+  `sources.json` saying where it came from, so the next run works offline. A `github.com` address works as copied.
+  `f.load_font("Lora", provider=f.CONSTANTS.PROVIDERS.GOOGLE_FONTS, weight=700)` finds a Google Fonts family by name
+  (`f.CONSTANTS` has a 19th group, `PROVIDERS`). `f.keep()` records each web font's address. Gallery example
+  `text-14`. The browser host can supply the download (`Session(fetch_url=...)`).
+
 ### Changed
+- **A `.woff` font now draws** (S-230): it loaded before but drew empty boxes. A `.woff2` font is refused with a plain
+  sentence that says to use the `.ttf`.
 - **`f.random_choice()` takes anything that can be listed**, such as `f.COLORS` or a set, and `f.random()` given
   something that is not a number says to use `random_choice` (found trying `f.random(f.COLORS)` in Play).
 - **The developer install is visible to editors** (S-198): `pip install -e ".[dev]" --config-settings

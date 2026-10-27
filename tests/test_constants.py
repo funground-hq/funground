@@ -14,7 +14,7 @@ import pytest
 import funground as f
 from conftest import ROOT
 from funground import _colornames, _options, color as _color_function, pages, synth  # noqa: F401
-from funground import marks, typography
+from funground import marks, typography, web_fonts
 from funground._namespaces import NAMESPACE_NAMES
 from funground.export import TEXT_MODES
 from funground.imaging import FILTER_KINDS
@@ -55,6 +55,7 @@ ACCEPTED: dict[tuple[str, str], tuple[tuple[str, ...], object]] = {
     ("melody", "tuning"): (("equal", "just"), _options.Tuning),          # no table in the code: an inline tuple
     ("Mark.place", "anchor"): (tuple(marks.ANCHORS), _options.MarkAnchor),
     ("Mark.place", "style"): (("own", "current"), _options.MarkStyle),   # no table in the code: an inline tuple
+    ("load_font", "provider"): (web_fonts.PROVIDER_WORDS, _options.Provider),
     ("save", "text"): (TEXT_MODES, _options.SaveText),
     ("Picture.save", "text"): (TEXT_MODES, _options.SaveText),
     ("key_down", "key"): (tuple(KEY_NAMES), _options.KeyName),
@@ -88,7 +89,7 @@ def test_colors_has_a_name_for_every_named_colour():
 
 def test_every_group_is_listed_in_the_tool_and_the_other_way_round():
     assert list(groups()) == list(tool.GROUP_PARAMS)
-    assert len(groups()) == 18
+    assert len(groups()) == 19
     assert all(isinstance(group, type) for group in groups().values())
 
 
@@ -211,7 +212,7 @@ def test_iteration_length_and_membership():
     assert list(f.CONSTANTS.MOUSE) == ["left", "center", "right"]
     assert len(f.CONSTANTS.BLEND) == 17 and "multiply" in f.CONSTANTS.BLEND and "wide" not in f.CONSTANTS.BLEND
     assert list(f.CONSTANTS) == list(groups().values())          # CONSTANTS yields its groups
-    assert len(f.CONSTANTS) == 18
+    assert len(f.CONSTANTS) == 19
     assert f.CONSTANTS.ANCHOR.TOP_LEFT == "top-left"
     assert f.CONSTANTS.PAGE.LETTER == "Letter" and f.CONSTANTS.PAGE.A4 == "A4"
     assert "COLORS" in repr(f.COLORS) and "ALIGN" in repr(f.CONSTANTS) and "BLEND" in repr(f.CONSTANTS)
