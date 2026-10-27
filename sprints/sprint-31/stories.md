@@ -13,7 +13,7 @@ semantic contract; D-115 answered from S-227's results; how the book draws witho
 
 | Story | Value | Status |
 |---|---|---|
-| S-230 | Fonts from the web: `load_font()` and `text_font()` take a `.ttf` or `.otf` address, kept for offline runs, also in Play | planned 23 Oct |
+| S-230 | Fonts from the web: `load_font()` and `text_font()` take a `.ttf` or `.otf` address, kept for offline runs, also in Play | live 28 Oct (funground #23, funground-web #17) |
 | S-227 | Spike: help for the background cut-out (tidy mask, an editable outline, edges), the evidence for D-115 | planned 23 Oct |
 | S-225 | Spike: a layout model for a funground book, alongside (a study, a page system, one chapter as a PDF) | planned 23 Oct |
 | S-237 | Moving the paper: a step-by-step project for translate, rotate, push and pop, with exercises (added 27 Oct by the maintainer) | built 27 Oct |
@@ -30,8 +30,8 @@ Next after this sprint: S-231, the models spike (E-37, added 23 Oct), which may 
 - [x] Measure: whether Cairo/FreeType and HarfBuzz read WOFF2 (unverified), on the desktop and in Pyodide
 - [x] Measure: what a missing network gives today, and the one clear line it should give
 - [x] Proposal to the maintainer (D-119, `Web_Fonts_Note.md`, 27 Oct): the argument's name, the provider words (`f.CONSTANTS.PROVIDERS.GOOGLE_FONTS`?), the contract row
-- [ ] Build after the answer: desktop download and cache, Play through the runner (S-211's route), `f.keep()` records the address
-- [ ] Tests, gallery example with its golden, Quick Reference row, guide section, Since marker
+- [x] Build after the answer: desktop download and cache, Play through the runner (S-211's route), `f.keep()` records the address
+- [x] Tests, gallery example with its golden, Quick Reference row, guide section, Since marker
 
 ## S-227 tasks
 
