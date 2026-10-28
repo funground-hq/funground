@@ -1,0 +1,74 @@
+scene            tol  stage                IoU     FP     FN parts       ms points
+----------------------------------------------------------------------------------
+plain_wall        30  S-218              0.690  11829   3883    47   63.954       
+plain_wall        30  a_tidy             0.731  11409   2092     1    8.730       
+plain_wall        30  b_outline          0.731  11249   2220     1   19.240    200
+plain_wall        30  bd_snapped         0.741  11364   1637     1   66.798    200
+plain_wall        30  a_tidy@click       0.731  11409   2092     1    4.526       
+plain_wall        30  b_outline@click    0.731  11249   2220     1   15.258    200
+plain_wall        30  bd_snapped@click   0.741  11364   1637     1   63.337    200
+plain_wall        50  S-218              0.284   4069  26607   152   66.688       
+plain_wall        50  a_tidy             0.290   3059  26662     1    6.948       
+plain_wall        50  b_outline          0.290   3045  26634     3   19.527    200
+plain_wall        50  bd_snapped         0.296   2811  26449     4   72.427    200
+plain_wall        50  a_tidy@click       0.290   3059  26662     1    8.075       
+plain_wall        50  b_outline@click    0.290   3045  26634     3   26.966    200
+plain_wall        50  bd_snapped@click   0.296   2811  26449     4  104.221    200
+plain_wall        15  S-218              0.620  19906   2393   475   53.566       
+plain_wall        15  a_tidy             0.645  19438   1245     1    7.265       
+plain_wall        15  b_outline          0.644  19196   1433     2   22.725    200
+plain_wall        15  bd_snapped         0.646  19000   1443     2   74.682    200
+plain_wall        15  a_tidy@click       0.645  19438   1245     1    5.940       
+plain_wall        15  b_outline@click    0.644  19196   1433     2   17.797    200
+plain_wall        15  bd_snapped@click   0.646  19000   1443     2   44.989    200
+striped_wall      30  S-218              0.478  20103  10653   234   47.790       
+striped_wall      30  a_tidy             0.000  17265  38777     1    7.242       
+striped_wall      30  b_outline          0.000  17292  38777     5   20.445    200
+striped_wall      30  bd_snapped         0.000  17392  38777     3   74.794    200
+striped_wall      30  a_tidy@click       0.564    503  16636     1    8.162       
+striped_wall      30  b_outline@click    0.563    382  16723     1   15.099    200
+striped_wall      30  bd_snapped@click   0.560    338  16870     1   72.992    200
+striped_wall      50  S-218              0.628    306  14224    50   51.272       
+striped_wall      50  a_tidy             0.509    144  18958     1    5.086       
+striped_wall      50  b_outline          0.509    135  18977     1    6.477    200
+striped_wall      50  bd_snapped         0.505    214  19078     1   62.432    200
+striped_wall      50  a_tidy@click       0.509    144  18958     1    8.249       
+striped_wall      50  b_outline@click    0.509    135  18977     1   10.248    200
+striped_wall      50  bd_snapped@click   0.505    214  19078     1   92.309    200
+striped_wall      15  S-218              0.407  41959   5915   429   62.277       
+striped_wall      15  a_tidy             0.000  40371  38777     1    7.085       
+striped_wall      15  b_outline          0.000  40292  38777     1   18.556    200
+striped_wall      15  bd_snapped         0.000  40501  38777     1   79.365    200
+striped_wall      15  a_tidy@click       0.816   1387   6021     1    8.466       
+striped_wall      15  b_outline@click    0.818   1128   6135     1   28.151    200
+striped_wall      15  bd_snapped@click   0.808    712   6855     2   80.389    200
+busy_background   30  S-218              0.874   5470    167    19   58.632       
+busy_background   30  a_tidy             0.967   1183    157     1    7.468       
+busy_background   30  b_outline          0.978    574    293     3   23.955    200
+busy_background   30  bd_snapped         0.965    851    545     1   75.194    200
+busy_background   30  a_tidy@click       0.967   1183    157     1    3.863       
+busy_background   30  b_outline@click    0.978    574    293     3   22.442    200
+busy_background   30  bd_snapped@click   0.965    851    545     1   73.637    200
+busy_background   50  S-218              0.869   4540   1167    36   49.102       
+busy_background   50  a_tidy             0.958    505   1182     1    6.657       
+busy_background   50  b_outline          0.954    469   1363     1   23.879    200
+busy_background   50  bd_snapped         0.950    776   1217     2   73.765    200
+busy_background   50  a_tidy@click       0.958    505   1182     1    5.819       
+busy_background   50  b_outline@click    0.954    469   1363     1   20.844    200
+busy_background   50  bd_snapped@click   0.950    776   1217     2   70.890    200
+busy_background   15  S-218              0.731  14384      4  1785   49.005       
+busy_background   15  a_tidy             0.858   6495      3     1    7.769       
+busy_background   15  b_outline          0.858   6421     76     1   26.740    200
+busy_background   15  bd_snapped         0.867   5674    286     2   70.379    200
+busy_background   15  a_tidy@click       0.858   6495      3     1    7.477       
+busy_background   15  b_outline@click    0.858   6421     76     1   26.467    200
+busy_background   15  bd_snapped@click   0.867   5674    286     2   52.412    200
+
+moving take (30 frames):
+  remove_ms    median   47.819  min   32.223  max   79.100
+  to_mask_ms   median   16.623  min   10.357  max   24.205
+  tidy_ms      median    6.234  min    4.230  max   11.473
+  outline_ms   median   22.157  min   12.338  max   44.741
+  iou_raw      median    0.702  min    0.643  max    0.743
+  iou_tidy     median    0.737  min    0.578  max    0.766
+  iou_outline  median    0.736  min    0.580  max    0.768

@@ -1,0 +1,771 @@
+{
+ "runs": 50,
+ "tolerances": [
+  30,
+  50,
+  15
+ ],
+ "pygame_ce": "2.5.8",
+ "scenes": {
+  "plain_wall": {
+   "person_pixels": 38777,
+   "tol30": {
+    "stages": {
+     "S-218": {
+      "iou": 0.6895,
+      "false_positive": 11829,
+      "false_negative": 3883,
+      "parts": 47,
+      "ms": 63.954
+     },
+     "a_tidy": {
+      "iou": 0.731,
+      "false_positive": 11409,
+      "false_negative": 2092,
+      "parts": 1,
+      "ms": 8.73,
+      "convert_to_mask_ms": 25.588,
+      "convert_from_mask_ms": 57.736
+     },
+     "b_outline": {
+      "iou": 0.7308,
+      "false_positive": 11249,
+      "false_negative": 2220,
+      "parts": 1,
+      "ms": 19.24,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9774,
+      "iou_funground_path": 0.7335
+     },
+     "bd_snapped": {
+      "iou": 0.7407,
+      "false_positive": 11364,
+      "false_negative": 1637,
+      "parts": 1,
+      "points": 200,
+      "ms": 66.798
+     },
+     "a_tidy@click": {
+      "iou": 0.731,
+      "false_positive": 11409,
+      "false_negative": 2092,
+      "parts": 1,
+      "ms": 4.526
+     },
+     "b_outline@click": {
+      "iou": 0.7308,
+      "false_positive": 11249,
+      "false_negative": 2220,
+      "parts": 1,
+      "ms": 15.258,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9774,
+      "iou_funground_path": 0.7335
+     },
+     "bd_snapped@click": {
+      "iou": 0.7407,
+      "false_positive": 11364,
+      "false_negative": 1637,
+      "parts": 1,
+      "points": 200,
+      "ms": 63.337
+     }
+    },
+    "by_points": {
+     "20": 0.7268,
+     "40": 0.7303,
+     "80": 0.7251,
+     "120": 0.7231,
+     "200": 0.7308,
+     "400": 0.7322
+    },
+    "by_points@click": {
+     "20": 0.7268,
+     "40": 0.7303,
+     "80": 0.7251,
+     "120": 0.7231,
+     "200": 0.7308,
+     "400": 0.7322
+    }
+   },
+   "tol50": {
+    "stages": {
+     "S-218": {
+      "iou": 0.284,
+      "false_positive": 4069,
+      "false_negative": 26607,
+      "parts": 152,
+      "ms": 66.688
+     },
+     "a_tidy": {
+      "iou": 0.2896,
+      "false_positive": 3059,
+      "false_negative": 26662,
+      "parts": 1,
+      "ms": 6.948,
+      "convert_to_mask_ms": 28.201,
+      "convert_from_mask_ms": 61.698
+     },
+     "b_outline": {
+      "iou": 0.2903,
+      "false_positive": 3045,
+      "false_negative": 26634,
+      "parts": 3,
+      "ms": 19.527,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9647,
+      "iou_funground_path": 0.2878
+     },
+     "bd_snapped": {
+      "iou": 0.2964,
+      "false_positive": 2811,
+      "false_negative": 26449,
+      "parts": 4,
+      "points": 200,
+      "ms": 72.427
+     },
+     "a_tidy@click": {
+      "iou": 0.2896,
+      "false_positive": 3059,
+      "false_negative": 26662,
+      "parts": 1,
+      "ms": 8.075
+     },
+     "b_outline@click": {
+      "iou": 0.2903,
+      "false_positive": 3045,
+      "false_negative": 26634,
+      "parts": 3,
+      "ms": 26.966,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9647,
+      "iou_funground_path": 0.2878
+     },
+     "bd_snapped@click": {
+      "iou": 0.2964,
+      "false_positive": 2811,
+      "false_negative": 26449,
+      "parts": 4,
+      "points": 200,
+      "ms": 104.221
+     }
+    },
+    "by_points": {
+     "20": 0.273,
+     "40": 0.2902,
+     "80": 0.2902,
+     "120": 0.2875,
+     "200": 0.2903,
+     "400": 0.2893
+    },
+    "by_points@click": {
+     "20": 0.273,
+     "40": 0.2902,
+     "80": 0.2902,
+     "120": 0.2875,
+     "200": 0.2903,
+     "400": 0.2893
+    }
+   },
+   "tol15": {
+    "stages": {
+     "S-218": {
+      "iou": 0.62,
+      "false_positive": 19906,
+      "false_negative": 2393,
+      "parts": 475,
+      "ms": 53.566
+     },
+     "a_tidy": {
+      "iou": 0.6447,
+      "false_positive": 19438,
+      "false_negative": 1245,
+      "parts": 1,
+      "ms": 7.265,
+      "convert_to_mask_ms": 17.398,
+      "convert_from_mask_ms": 62.705
+     },
+     "b_outline": {
+      "iou": 0.6442,
+      "false_positive": 19196,
+      "false_negative": 1433,
+      "parts": 2,
+      "ms": 22.725,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.978,
+      "iou_funground_path": 0.6477
+     },
+     "bd_snapped": {
+      "iou": 0.6462,
+      "false_positive": 19000,
+      "false_negative": 1443,
+      "parts": 2,
+      "points": 200,
+      "ms": 74.682
+     },
+     "a_tidy@click": {
+      "iou": 0.6447,
+      "false_positive": 19438,
+      "false_negative": 1245,
+      "parts": 1,
+      "ms": 5.94
+     },
+     "b_outline@click": {
+      "iou": 0.6442,
+      "false_positive": 19196,
+      "false_negative": 1433,
+      "parts": 2,
+      "ms": 17.797,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.978,
+      "iou_funground_path": 0.6477
+     },
+     "bd_snapped@click": {
+      "iou": 0.6462,
+      "false_positive": 19000,
+      "false_negative": 1443,
+      "parts": 2,
+      "points": 200,
+      "ms": 44.989
+     }
+    },
+    "by_points": {
+     "20": 0.6653,
+     "40": 0.6375,
+     "80": 0.6471,
+     "120": 0.6469,
+     "200": 0.6442,
+     "400": 0.6445
+    },
+    "by_points@click": {
+     "20": 0.6653,
+     "40": 0.6375,
+     "80": 0.6471,
+     "120": 0.6469,
+     "200": 0.6442,
+     "400": 0.6445
+    }
+   }
+  },
+  "striped_wall": {
+   "person_pixels": 38777,
+   "tol30": {
+    "stages": {
+     "S-218": {
+      "iou": 0.4776,
+      "false_positive": 20103,
+      "false_negative": 10653,
+      "parts": 234,
+      "ms": 47.79
+     },
+     "a_tidy": {
+      "iou": 0.0,
+      "false_positive": 17265,
+      "false_negative": 38777,
+      "parts": 1,
+      "ms": 7.242,
+      "convert_to_mask_ms": 18.587,
+      "convert_from_mask_ms": 63.364
+     },
+     "b_outline": {
+      "iou": 0.0,
+      "false_positive": 17292,
+      "false_negative": 38777,
+      "parts": 5,
+      "ms": 20.445,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9161,
+      "iou_funground_path": 0.0
+     },
+     "bd_snapped": {
+      "iou": 0.0,
+      "false_positive": 17392,
+      "false_negative": 38777,
+      "parts": 3,
+      "points": 200,
+      "ms": 74.794
+     },
+     "a_tidy@click": {
+      "iou": 0.5637,
+      "false_positive": 503,
+      "false_negative": 16636,
+      "parts": 1,
+      "ms": 8.162
+     },
+     "b_outline@click": {
+      "iou": 0.5632,
+      "false_positive": 382,
+      "false_negative": 16723,
+      "parts": 1,
+      "ms": 15.099,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9856,
+      "iou_funground_path": 0.5596
+     },
+     "bd_snapped@click": {
+      "iou": 0.5601,
+      "false_positive": 338,
+      "false_negative": 16870,
+      "parts": 1,
+      "points": 200,
+      "ms": 72.992
+     }
+    },
+    "by_points": {
+     "20": 0.0,
+     "40": 0.0,
+     "80": 0.0,
+     "120": 0.0,
+     "200": 0.0,
+     "400": 0.0
+    },
+    "by_points@click": {
+     "20": 0.5528,
+     "40": 0.5594,
+     "80": 0.5628,
+     "120": 0.5633,
+     "200": 0.5632,
+     "400": 0.5641
+    }
+   },
+   "tol50": {
+    "stages": {
+     "S-218": {
+      "iou": 0.6282,
+      "false_positive": 306,
+      "false_negative": 14224,
+      "parts": 50,
+      "ms": 51.272
+     },
+     "a_tidy": {
+      "iou": 0.5092,
+      "false_positive": 144,
+      "false_negative": 18958,
+      "parts": 1,
+      "ms": 5.086,
+      "convert_to_mask_ms": 14.184,
+      "convert_from_mask_ms": 44.658
+     },
+     "b_outline": {
+      "iou": 0.5088,
+      "false_positive": 135,
+      "false_negative": 18977,
+      "parts": 1,
+      "ms": 6.477,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9985,
+      "iou_funground_path": 0.5026
+     },
+     "bd_snapped": {
+      "iou": 0.5052,
+      "false_positive": 214,
+      "false_negative": 19078,
+      "parts": 1,
+      "points": 200,
+      "ms": 62.432
+     },
+     "a_tidy@click": {
+      "iou": 0.5092,
+      "false_positive": 144,
+      "false_negative": 18958,
+      "parts": 1,
+      "ms": 8.249
+     },
+     "b_outline@click": {
+      "iou": 0.5088,
+      "false_positive": 135,
+      "false_negative": 18977,
+      "parts": 1,
+      "ms": 10.248,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9985,
+      "iou_funground_path": 0.5026
+     },
+     "bd_snapped@click": {
+      "iou": 0.5052,
+      "false_positive": 214,
+      "false_negative": 19078,
+      "parts": 1,
+      "points": 200,
+      "ms": 92.309
+     }
+    },
+    "by_points": {
+     "20": 0.5029,
+     "40": 0.5069,
+     "80": 0.5061,
+     "120": 0.5076,
+     "200": 0.5088,
+     "400": 0.5092
+    },
+    "by_points@click": {
+     "20": 0.5029,
+     "40": 0.5069,
+     "80": 0.5061,
+     "120": 0.5076,
+     "200": 0.5088,
+     "400": 0.5092
+    }
+   },
+   "tol15": {
+    "stages": {
+     "S-218": {
+      "iou": 0.407,
+      "false_positive": 41959,
+      "false_negative": 5915,
+      "parts": 429,
+      "ms": 62.277
+     },
+     "a_tidy": {
+      "iou": 0.0,
+      "false_positive": 40371,
+      "false_negative": 38777,
+      "parts": 1,
+      "ms": 7.085,
+      "convert_to_mask_ms": 20.654,
+      "convert_from_mask_ms": 70.389
+     },
+     "b_outline": {
+      "iou": 0.0,
+      "false_positive": 40292,
+      "false_negative": 38777,
+      "parts": 1,
+      "ms": 18.556,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.966,
+      "iou_funground_path": 0.0
+     },
+     "bd_snapped": {
+      "iou": 0.0,
+      "false_positive": 40501,
+      "false_negative": 38777,
+      "parts": 1,
+      "points": 200,
+      "ms": 79.365
+     },
+     "a_tidy@click": {
+      "iou": 0.8156,
+      "false_positive": 1387,
+      "false_negative": 6021,
+      "parts": 1,
+      "ms": 8.466
+     },
+     "b_outline@click": {
+      "iou": 0.818,
+      "false_positive": 1128,
+      "false_negative": 6135,
+      "parts": 1,
+      "ms": 28.151,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9797,
+      "iou_funground_path": 0.812
+     },
+     "bd_snapped@click": {
+      "iou": 0.8084,
+      "false_positive": 712,
+      "false_negative": 6855,
+      "parts": 2,
+      "points": 200,
+      "ms": 80.389
+     }
+    },
+    "by_points": {
+     "20": 0.0,
+     "40": 0.0,
+     "80": 0.0,
+     "120": 0.0,
+     "200": 0.0,
+     "400": 0.0
+    },
+    "by_points@click": {
+     "20": 0.7889,
+     "40": 0.8081,
+     "80": 0.8174,
+     "120": 0.8235,
+     "200": 0.818,
+     "400": 0.8183
+    }
+   }
+  },
+  "busy_background": {
+   "person_pixels": 39166,
+   "tol30": {
+    "stages": {
+     "S-218": {
+      "iou": 0.8737,
+      "false_positive": 5470,
+      "false_negative": 167,
+      "parts": 19,
+      "ms": 58.632
+     },
+     "a_tidy": {
+      "iou": 0.9668,
+      "false_positive": 1183,
+      "false_negative": 157,
+      "parts": 1,
+      "ms": 7.468,
+      "convert_to_mask_ms": 15.461,
+      "convert_from_mask_ms": 50.08
+     },
+     "b_outline": {
+      "iou": 0.9782,
+      "false_positive": 574,
+      "false_negative": 293,
+      "parts": 3,
+      "ms": 23.955,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9753,
+      "iou_funground_path": 0.9721
+     },
+     "bd_snapped": {
+      "iou": 0.9651,
+      "false_positive": 851,
+      "false_negative": 545,
+      "parts": 1,
+      "points": 200,
+      "ms": 75.194
+     },
+     "a_tidy@click": {
+      "iou": 0.9668,
+      "false_positive": 1183,
+      "false_negative": 157,
+      "parts": 1,
+      "ms": 3.863
+     },
+     "b_outline@click": {
+      "iou": 0.9782,
+      "false_positive": 574,
+      "false_negative": 293,
+      "parts": 3,
+      "ms": 22.442,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9753,
+      "iou_funground_path": 0.9721
+     },
+     "bd_snapped@click": {
+      "iou": 0.9651,
+      "false_positive": 851,
+      "false_negative": 545,
+      "parts": 1,
+      "points": 200,
+      "ms": 73.637
+     }
+    },
+    "by_points": {
+     "20": 0.8836,
+     "40": 0.9537,
+     "80": 0.9809,
+     "120": 0.9784,
+     "200": 0.9782,
+     "400": 0.9706
+    },
+    "by_points@click": {
+     "20": 0.8836,
+     "40": 0.9537,
+     "80": 0.9809,
+     "120": 0.9784,
+     "200": 0.9782,
+     "400": 0.9706
+    }
+   },
+   "tol50": {
+    "stages": {
+     "S-218": {
+      "iou": 0.8694,
+      "false_positive": 4540,
+      "false_negative": 1167,
+      "parts": 36,
+      "ms": 49.102
+     },
+     "a_tidy": {
+      "iou": 0.9575,
+      "false_positive": 505,
+      "false_negative": 1182,
+      "parts": 1,
+      "ms": 6.657,
+      "convert_to_mask_ms": 15.93,
+      "convert_from_mask_ms": 64.713
+     },
+     "b_outline": {
+      "iou": 0.9538,
+      "false_positive": 469,
+      "false_negative": 1363,
+      "parts": 1,
+      "ms": 23.879,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.988,
+      "iou_funground_path": 0.9473
+     },
+     "bd_snapped": {
+      "iou": 0.9501,
+      "false_positive": 776,
+      "false_negative": 1217,
+      "parts": 2,
+      "points": 200,
+      "ms": 73.765
+     },
+     "a_tidy@click": {
+      "iou": 0.9575,
+      "false_positive": 505,
+      "false_negative": 1182,
+      "parts": 1,
+      "ms": 5.819
+     },
+     "b_outline@click": {
+      "iou": 0.9538,
+      "false_positive": 469,
+      "false_negative": 1363,
+      "parts": 1,
+      "ms": 20.844,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.988,
+      "iou_funground_path": 0.9473
+     },
+     "bd_snapped@click": {
+      "iou": 0.9501,
+      "false_positive": 776,
+      "false_negative": 1217,
+      "parts": 2,
+      "points": 200,
+      "ms": 70.89
+     }
+    },
+    "by_points": {
+     "20": 0.8639,
+     "40": 0.9357,
+     "80": 0.9532,
+     "120": 0.9518,
+     "200": 0.9538,
+     "400": 0.9572
+    },
+    "by_points@click": {
+     "20": 0.8639,
+     "40": 0.9357,
+     "80": 0.9532,
+     "120": 0.9518,
+     "200": 0.9538,
+     "400": 0.9572
+    }
+   },
+   "tol15": {
+    "stages": {
+     "S-218": {
+      "iou": 0.7313,
+      "false_positive": 14384,
+      "false_negative": 4,
+      "parts": 1785,
+      "ms": 49.005
+     },
+     "a_tidy": {
+      "iou": 0.8577,
+      "false_positive": 6495,
+      "false_negative": 3,
+      "parts": 1,
+      "ms": 7.769,
+      "convert_to_mask_ms": 16.061,
+      "convert_from_mask_ms": 64.529
+     },
+     "b_outline": {
+      "iou": 0.8575,
+      "false_positive": 6421,
+      "false_negative": 76,
+      "parts": 1,
+      "ms": 26.74,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9642,
+      "iou_funground_path": 0.8611
+     },
+     "bd_snapped": {
+      "iou": 0.8671,
+      "false_positive": 5674,
+      "false_negative": 286,
+      "parts": 2,
+      "points": 200,
+      "ms": 70.379
+     },
+     "a_tidy@click": {
+      "iou": 0.8577,
+      "false_positive": 6495,
+      "false_negative": 3,
+      "parts": 1,
+      "ms": 7.477
+     },
+     "b_outline@click": {
+      "iou": 0.8575,
+      "false_positive": 6421,
+      "false_negative": 76,
+      "parts": 1,
+      "ms": 26.467,
+      "points": 200,
+      "iou_vs_tidy_mask": 0.9642,
+      "iou_funground_path": 0.8611
+     },
+     "bd_snapped@click": {
+      "iou": 0.8671,
+      "false_positive": 5674,
+      "false_negative": 286,
+      "parts": 2,
+      "points": 200,
+      "ms": 52.412
+     }
+    },
+    "by_points": {
+     "20": 0.7906,
+     "40": 0.8195,
+     "80": 0.8359,
+     "120": 0.8593,
+     "200": 0.8575,
+     "400": 0.8616
+    },
+    "by_points@click": {
+     "20": 0.7906,
+     "40": 0.8195,
+     "80": 0.8359,
+     "120": 0.8593,
+     "200": 0.8575,
+     "400": 0.8616
+    }
+   }
+  }
+ },
+ "take": {
+  "frames": 30,
+  "summary": {
+   "remove_ms": {
+    "median": 47.819,
+    "max": 79.1,
+    "min": 32.223
+   },
+   "to_mask_ms": {
+    "median": 16.623,
+    "max": 24.205,
+    "min": 10.357
+   },
+   "tidy_ms": {
+    "median": 6.234,
+    "max": 11.473,
+    "min": 4.23
+   },
+   "outline_ms": {
+    "median": 22.157,
+    "max": 44.741,
+    "min": 12.338
+   },
+   "iou_raw": {
+    "median": 0.702,
+    "max": 0.743,
+    "min": 0.643
+   },
+   "iou_tidy": {
+    "median": 0.737,
+    "max": 0.766,
+    "min": 0.578
+   },
+   "iou_outline": {
+    "median": 0.736,
+    "max": 0.768,
+    "min": 0.58
+   }
+  }
+ }
+}
