@@ -1,0 +1,237 @@
+{
+ "opencv_4.14.0.94": {
+  "pose": {
+   "task": "pose",
+   "frames": 100,
+   "first_result_s": 0.18,
+   "median_ms": 104.39,
+   "p90_ms": 118.13,
+   "per_second": 10.3,
+   "found": {
+    "people": 1,
+    "landmarks": 33,
+    "extra_points": 6,
+    "has_z": true,
+    "has_world_3d": true,
+    "has_mask": true,
+    "conf": 1.0
+   },
+   "opencv": "4.14.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "pose_landmarks_only": {
+   "task": "pose_landmarks_only",
+   "frames": 100,
+   "first_result_s": 0.14,
+   "median_ms": 44.77,
+   "p90_ms": 54.81,
+   "per_second": 21.3,
+   "found": {
+    "people": 1,
+    "landmarks": 33,
+    "extra_points": 6,
+    "has_z": true,
+    "has_world_3d": true,
+    "has_mask": true,
+    "conf": 0.87
+   },
+   "opencv": "4.14.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "hand": {
+   "task": "hand",
+   "frames": 100,
+   "first_result_s": 0.11,
+   "median_ms": 74.88,
+   "p90_ms": 90.86,
+   "per_second": 13.0,
+   "found": {
+    "hands": 1,
+    "landmarks": 21,
+    "row_len": 132,
+    "conf": 0.99
+   },
+   "opencv": "4.14.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "hand_landmarks_only": {
+   "task": "hand_landmarks_only",
+   "frames": 100,
+   "first_result_s": 0.09,
+   "median_ms": 25.26,
+   "p90_ms": 28.33,
+   "per_second": 39.4,
+   "found": {
+    "hands": 1,
+    "landmarks": 21,
+    "row_len": 132,
+    "conf": 0.99
+   },
+   "opencv": "4.14.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "face": {
+   "task": "face",
+   "frames": 100,
+   "first_result_s": 0.07,
+   "median_ms": 41.33,
+   "p90_ms": 72.98,
+   "per_second": 20.6,
+   "found": {
+    "faces": 1,
+    "values_per_face": 15,
+    "points_per_face": 5,
+    "conf": 0.93
+   },
+   "opencv": "4.14.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "face_2026": {
+   "task": "face_2026",
+   "frames": 100,
+   "first_result_s": 0.04,
+   "median_ms": 38.05,
+   "p90_ms": 53.75,
+   "per_second": 23.5,
+   "found": {
+    "faces": 1,
+    "values_per_face": 15,
+    "points_per_face": 5,
+    "conf": 0.93
+   },
+   "opencv": "4.14.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "segment": {
+   "task": "segment",
+   "frames": 100,
+   "first_result_s": 0.08,
+   "median_ms": 29.16,
+   "p90_ms": 33.15,
+   "per_second": 33.5,
+   "found": {
+    "mask_shape": [
+     1,
+     480,
+     640
+    ],
+    "person_pixels": 22206,
+    "mask_pixels": 307200
+   },
+   "opencv": "4.14.0",
+   "threads": 8,
+   "python_socket_events": 0
+  }
+ },
+ "opencv_5.0.0.93": {
+  "hand": {
+   "task": "hand",
+   "frames": 100,
+   "first_result_s": 0.08,
+   "median_ms": 34.21,
+   "p90_ms": 43.16,
+   "per_second": 28.2,
+   "found": {
+    "hands": 1,
+    "landmarks": 21,
+    "row_len": 132,
+    "conf": 0.99
+   },
+   "opencv": "5.0.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "hand_landmarks_only": {
+   "task": "hand_landmarks_only",
+   "frames": 100,
+   "first_result_s": 0.07,
+   "median_ms": 17.86,
+   "p90_ms": 22.21,
+   "per_second": 53.8,
+   "found": {
+    "hands": 1,
+    "landmarks": 21,
+    "row_len": 132,
+    "conf": 0.99
+   },
+   "opencv": "5.0.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "face": {
+   "task": "face",
+   "frames": 100,
+   "first_result_s": 0.04,
+   "median_ms": 21.29,
+   "p90_ms": 23.74,
+   "per_second": 46.6,
+   "found": {
+    "faces": 1,
+    "values_per_face": 15,
+    "points_per_face": 5,
+    "conf": 0.93
+   },
+   "opencv": "5.0.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "face_2026": {
+   "task": "face_2026",
+   "frames": 100,
+   "first_result_s": 0.03,
+   "median_ms": 21.4,
+   "p90_ms": 24.24,
+   "per_second": 46.9,
+   "found": {
+    "faces": 1,
+    "values_per_face": 15,
+    "points_per_face": 5,
+    "conf": 0.93
+   },
+   "opencv": "5.0.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "segment": {
+   "task": "segment",
+   "frames": 100,
+   "first_result_s": 0.06,
+   "median_ms": 25.64,
+   "p90_ms": 33.53,
+   "per_second": 36.3,
+   "found": {
+    "mask_shape": [
+     1,
+     480,
+     640
+    ],
+    "person_pixels": 17370,
+    "mask_pixels": 307200
+   },
+   "opencv": "5.0.0",
+   "threads": 8,
+   "python_socket_events": 0
+  },
+  "pose": {
+   "error": "does not run: ValueError operands could not be broadcast together with shapes (2254,0) (2,) in mp_persondet._postprocess (OpenCV 5.0 returns the two output tensors in the other order)"
+  },
+  "pose_landmarks_only": {
+   "error": "does not run: ValueError operands could not be broadcast together with shapes (2254,0) (2,) in mp_persondet._postprocess (OpenCV 5.0 returns the two output tensors in the other order)"
+  },
+  "pose_with_output_order_fix": {
+   "median_ms": 97.68,
+   "p90_ms": 115.19,
+   "per_second": 10.4,
+   "note": "ad hoc: outputs re-ordered by last dimension before the Zoo postprocess"
+  }
+ },
+ "python": "3.14.7",
+ "numpy": "2.5.4",
+ "machine_threads": 8
+}
