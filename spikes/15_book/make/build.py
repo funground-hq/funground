@@ -71,8 +71,6 @@ if "--trim" in sys.argv:
     os.environ["FUNGROUND_HEADLESS"] = "1"
     sys.path.insert(0, HERE)
     import funground as f
-    import nocoords
-    nocoords.install()
 
 
 class Grid:
@@ -329,19 +327,14 @@ def label(g, message, x, line):
 
 # ---------------------------------------------------------------- components
 def big_panel(g, recto, name, caption):
-    """A sketch panel large, run into the bleed on the outer edge and the top. Square, so nothing is cropped."""
-    b = g.bleed
-    pb = min(g.lines - 2, int((g.W - g.inner + b - b - g.top) // LINE))
-    yb = g.Y(pb)
-    side = yb + b
-    x = g.W + b - side if recto else -b
-    put_picture(name, x, -b, side, side)
-    reg("big panel (bottom)", yb, yb)
-    if recto:
-        wobble([(x, 0), (x, yb), (g.W, yb)], INK, 1.6)
-    else:
-        wobble([(x + side, 0), (x + side, yb), (0, yb)], INK, 1.6)
-    label(g, caption, x if recto else g.colx(False, 0), pb + 1)
+    """A sketch panel large, inside the margins with its whole frame (a picture run into the bleed read as cut off)."""
+    side = min(g.snap(g.text_w), LINE * (g.lines - 2))
+    x = g.x0(recto) + (g.text_w - side) / 2
+    y = g.Y(0)
+    put_picture(name, x, y, side, side)
+    reg("big panel", y, y + side)
+    wobble_rect(x, y, side, side, INK, 1.6)
+    label(g, caption, x, side // LINE + 1)
 
 
 def predict_frame(g, recto, x, line):
@@ -361,9 +354,8 @@ def small_panel(g, name, x, line, side):
 def compare_strip(g, recto, line, study, param, values, fmt):
     """3 panels of 2 columns, made with f.variations: the same size, one value changed, each labelled."""
     side = g.snap(g.span(2))
-    with nocoords.canvas(600, 600):
-        with f.mark():                        # variations also draws its own sheet: record it and throw it away
-            results = f.variations(study, **{param: values})
+    with f.mark():                            # variations also draws its own sheet: record it and throw it away
+        results = f.variations(study, **{param: values})
     k = side / 600
     for i, (vals, mark) in enumerate(results):
         x = g.colx(recto, i * 2)
@@ -393,43 +385,22 @@ def try_this(g, recto, line, title, task):
 
 
 # ---------------------------------------------------------------- the chapter
-CODE_CIRCLE = '''import funground as f
+def sketch_source(name):
+    with open(os.path.join(HERE, "sketches", name + ".py"), encoding="utf-8") as fh:
+        return fh.read().rstrip()
 
-f.size(600, 600)
-f.background("oldlace")
-f.fill("tomato")
-f.circle()
-f.show()'''
 
-CODE_SQUARE = '''import funground as f
-
-f.size(600, 600)
-f.background("oldlace")
-f.fill("turquoise")
-f.square(size=300)
-f.fill("tomato")
-f.circle()
-f.show()'''
-
-CODE_RANDOM = '''import funground as f
-
-f.size(600, 600)
-f.background("oldlace")
-f.no_stroke()
-f.fill("tomato")
-f.circle(at="random", size=80)
-f.fill("gold")
-f.circle(at="random", size=80)
-f.fill("turquoise")
-f.circle(at="random", size=80)
-f.show()'''
+CODE_CIRCLE = sketch_source("1_1_circle")
+CODE_SQUARE = sketch_source("1_2_square")
+CODE_RANDOM = sketch_source("1_3_random")
 
 
 def study_square(size):
+    f.no_stroke()
     f.fill(TURQUOISE)
-    f.square(size=size)
+    f.square(300 - size / 2, 300 - size / 2, size)
     f.fill("tomato")
-    f.circle()
+    f.circle(300, 300, 200)
 
 
 def study_seed(seed):
@@ -437,7 +408,7 @@ def study_seed(seed):
     f.no_stroke()
     for color in ("tomato", "gold", "turquoise"):
         f.fill(color)
-        f.circle(at="random", size=80)
+        f.circle(f.random(600), f.random(600), 80)
 
 
 def page_opener_left(g):
@@ -478,8 +449,9 @@ def page_show_verso(g):
     code_block(g, "1_1_circle", CODE_CIRCLE, 7, notes=[
         (2, "The canvas: 600 wide, 600 high."),
         (3, "A colour is a word, in quotes."),
-        (5, "No numbers. The circle goes in the middle."),
-        (6, "Opens the window."),
+        (4, "No outline: the shape is filled only."),
+        (6, "300 across, 300 down: the middle. 200 wide."),
+        (7, "Opens the window."),
     ])
 
 
@@ -491,7 +463,7 @@ def page_predict_verso(g):
     heading(g, "Add a square", False)
     prose(g, "Two new lines are in gold. Read them. What will the picture look like?", 3,
           g.colx(False, 2), g.span(4), lines=3)
-    end = code_block(g, "1_2_square", CODE_SQUARE, 7, highlight=(4, 5))
+    end = code_block(g, "1_2_square", CODE_SQUARE, 7, highlight=(5, 6))
     side = g.snap(g.span(2))
     x = g.colx(False, 2)
     line = end + 2
@@ -518,18 +490,18 @@ def page_reveal_verso(g):
 def page_reveal_recto(g):
     x = g.x0(True)
     heading(g, "Change the size", True)
-    prose(g, "The square is 300 wide. Here are three sizes, side by side. Only size= changes.", 3, x, g.span(4), lines=3)
-    end = compare_strip(g, True, 7, study_square, "size", [220, 300, 400], lambda v: f"size={v}")
-    try_this(g, True, end + 2, "Try this", "Change size=300 to 500. Then give the circle a size of its own.")
+    prose(g, "The square is 300 wide. Here are three sizes, side by side. Only the size changes.", 3, x, g.span(4), lines=3)
+    end = compare_strip(g, True, 7, study_square, "size", [220, 300, 400], lambda v: f"size {v}")
+    try_this(g, True, end + 2, "Try this", "Change 300 to 500 in the square. Where does it start now?")
 
 
 def page_random_verso(g):
     heading(g, "Somewhere random", False)
-    prose(g, 'Say at="random" and the shape lands somewhere new. Each call picks its own place.', 3,
+    prose(g, "f.random() picks a number, so the circle lands somewhere new. Each call picks its own place.", 3,
           g.colx(False, 2), g.span(4), lines=3)
     end = code_block(g, "1_3_random", CODE_RANDOM, 7, notes=[
         (4, "No outline: fills only."),
-        (6, 'at="random" picks a place. size=80 is the width.'),
+        (6, "Any place across, any place down. 80 wide."),
         (8, "Same call. A new place."),
     ])
     label(g, "Compare: three seeds", g.colx(False, 0), end + 1)
