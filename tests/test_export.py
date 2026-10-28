@@ -117,3 +117,23 @@ def test_png_saves_what_is_on_screen_including_earlier_frames(tmp_path):
 
     assert rgb(10, 20) == (255, 0, 0) and rgb(40, 20) == (255, 0, 0) and rgb(70, 20) == (255, 0, 0)
     assert rgb(25, 20) == (255, 255, 255)
+
+
+def test_svg_keeps_an_opaque_background_as_a_plain_fill(tmp_path):
+    """S-249: background() was written as a mask and filter group, which load_svg drops (a black square)."""
+    frame = ir.Frame([ir.Clear(Color(253, 245, 230)), ir.Circle(20, 20, 10, GraphicsState(fill=Color(255, 0, 0)))])
+    svg = tmp_path / "f.svg"
+    save_frame(frame, str(svg), 40, 40)
+    text = svg.read_text(encoding="utf-8")
+    assert "<filter" not in text and "<mask" not in text
+    picture = p.load_svg(str(svg))
+    assert picture.get(1, 1) == Color(253, 245, 230)
+
+
+def test_a_see_through_background_still_replaces(tmp_path):
+    """A background with alpha below 255 replaces what was there; it does not blend with it."""
+    frame = ir.Frame([ir.Clear(Color(255, 0, 0)), ir.Clear(Color(0, 0, 255, 0))])
+    png = tmp_path / "f.png"
+    save_frame(frame, str(png), 10, 10)
+    surf = cairo.ImageSurface.create_from_png(str(png))
+    assert bytes(surf.get_data()[:4]) == b"\x00\x00\x00\x00"

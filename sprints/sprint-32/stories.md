@@ -17,7 +17,7 @@ S-238 needs the maintainer for anything created under their account (a GitHub Ap
 | S-247 | Move the camera out of `f`: `from funground import camera` (after S-246) | planned 28 Oct |
 | S-231 | Spike: which models, from which provider, on the web and on the desktop | planned 28 Oct |
 | S-238 | Spike: signing in to GitHub from Play, a static site (D-118) | planned 28 Oct |
-| Smaller, when they fit | S-249's SVG background bug (no API change); S-244 (a loaded font never chosen); S-245 (tidy the cut-out, decided in D-115) | planned 28 Oct |
+| Smaller, when they fit | S-249's SVG background bug (no API change); S-244 (a loaded font never chosen); S-245 (tidy the cut-out, decided in D-115) | SVG background done 28 Oct (full suite 2814 and 1749 passed, 1 skipped); the others planned |
 
 Order: the names proposal (D-123) first, with the internal module renames that free the names (no public change);
 the spikes' desk research alongside, in the background; S-246 after the maintainer's answer, then S-247; smaller
@@ -43,7 +43,7 @@ stories between heavy jobs. One heavy job at a time on this machine.
 
 ## S-231 tasks
 
-- [ ] Desk research: every provider and task, with sizes, licences of code and weights, platforms, worker or page
+- [x] Desk research: every provider and task, with sizes, licences of code and weights, platforms, worker or page (`spikes/16_models/research.md`)
 - [ ] Measurements on this machine (desktop frames per second; headless Chrome), one heavy job at a time; macOS and Linux marked unverified or measured in CI
 - [ ] How a model's answer reaches a Python sketch in Pyodide without `async`
 - [ ] The same 30-line pose sketch on the desktop and in Play
@@ -51,8 +51,8 @@ stories between heavy jobs. One heavy job at a time on this machine.
 
 ## S-238 tasks
 
-- [ ] Desk research: GitHub App user tokens from a browser, the exchange service, free hosts and their limits
+- [x] Desk research: GitHub App user tokens from a browser, the exchange service, free hosts and their limits (`spikes/17_github_signin/research.md`)
 - [ ] Option a (a pasted fine-grained token) prototyped against a sketchbook from `funground-hq/sketchbook`
-- [ ] Option b: the exchange service's code; the App and the host set up by or with the maintainer
+- [ ] Option b: the exchange service's code (written, `exchange/worker.js`); the App and the host set up by or with the maintainer
 - [ ] The maintainer's check on a phone and a laptop: sign in, list, open, save, new, sign out
 - [ ] A recommendation for D-118, with who owns the App and the service
