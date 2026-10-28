@@ -363,13 +363,13 @@ Day is unchanged: the 12 page PNGs and 6 spread PNGs of each trim have the same 
 ### Where book building goes (D-122, 28 Oct)
 
 **The maintainer's decision:** book building becomes a separate project, outside funground-hq. The content system, the
-web book, search and content management go to questConquest (Astro, MDX, React). funground keeps and improves its print
+web book, search and content management go to an external content platform. funground keeps and improves its print
 PDF.
 
 **What this changes in the review's estimate:** the "book tool" sprint (markdown source, page masters) is no longer
 funground's work. funground's share is now two stories:
 - **S-249:** the PDF gaps.
-- **S-248:** the content contract that funground's print build reads, tested on Chapter 1, with the web half done in
-  questConquest.
+- **S-248:** the content contract that funground's print build reads, tested on Chapter 1, with the web half done on
+  the external platform.
 
 `make/build.py` stays as the spike's evidence and the starting point for the print build.
