@@ -22,6 +22,7 @@ rewritten after acceptance.
 | [ADR-004-image-provider.md](ADR-004-image-provider.md) | pygame-ce reads image files; Pillow is optional. | You touch `imaging.py` or add an image format. |
 | [ADR-005-path-operations.md](ADR-005-path-operations.md) | Path booleans and stroke expansion use skia-pathops. | You touch `pathops.py` or path booleans. |
 | [ADR-006-simple-tones.md](ADR-006-simple-tones.md) | Simple tones and notes, without a real-time synthesis engine. | You touch `synth.py` or want a new kind of sound. |
+| [ADR-007-core-and-libraries.md](ADR-007-core-and-libraries.md) | A core on `f` and libraries imported as modules: `sound`, `sangeet`, `camera`; `ml` as its own package. | You add public names, or a field that might be a library. |
 
 ## Design notes, by subsystem
 

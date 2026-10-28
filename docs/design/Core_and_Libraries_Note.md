@@ -1,6 +1,8 @@
-# Core and libraries (D-120, pending)
+# Core and libraries (D-120)
 
-**Status:** proposed 28 October 2026, for the maintainer's decision. No code has changed.
+**Status:** proposed and accepted 28 October 2026 (D-120, option a; [ADR-007](ADR-007-core-and-libraries.md)). The
+maintainer's answers to the open questions are at the end; they change recommendation rule 2 (no aliases). Built as
+S-246 (sound and sangeet) and S-247 (camera); no code has changed yet.
 
 ## Problem
 
@@ -138,15 +140,22 @@ and one version for everything the course uses. Every call saying `sound.` is ho
 completions, the reference and `llms.txt` stay exact. What would change it: if learners found the module prefix harder
 than the import line alone, b would be the fallback; the course's first sound lesson is the place to see.
 
-## Open questions for the maintainer
+## Open questions, answered by the maintainer (28 Oct)
 
-1. The name of the Indian music library: `music` (broad, may later hold Western theory too), `hindustani` (exact, but
-   Carnatic is planned) or `indian_music`.
-2. Whether the course's lessons that use sound teach the import line from the first sound lesson (recommended), or
-   whether early lessons keep `f.` names until 0.3.
-3. Whether the alias period is one version (0.2) or two.
+The questions were: the Indian music library's name (`music`, `hindustani` or `indian_music`); whether the course's
+sound lessons teach the import line from the first sound lesson; and whether old names keep working for one version or
+two. The answers:
 
-## Where this lands if accepted
+1. **The Indian music library is `sangeet`** (`from funground import sangeet`, `sangeet.raga("yaman")`). It holds
+   Hindustani and, later, Carnatic music. The internal module `funground/hindustani.py` keeps its name or moves inside
+   the library; `sangeet` is not a public function name, so the naming trap does not apply.
+2. **Yes:** the course teaches `from funground import sound` from the first lesson that makes a sound.
+3. **No aliases.** "We have no users currently, so do not have to worry about breaking changes." Rule 2 above is
+   replaced: the 27 names leave `f` in 0.2 with no alias period. Rule 4 still holds: `f.note` gives one plain sentence
+   that names the import line, never a bare `AttributeError`. That sentence is the forgotten-import help, kept for good;
+   it is not an alias.
 
-A story per library move (sound with Indian music, then camera), an ADR recording the split, the Architecture section on
-modules updated, and E-37's models spike designed as the `ml` package.
+## Where this lands
+
+ADR-007 records the split. S-246 moves sound and sangeet; S-247 moves the camera. The Architecture section on modules is
+updated with S-246, and E-37's models spike (S-231) is designed as the `ml` package.
