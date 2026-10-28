@@ -6,12 +6,12 @@
  "lines": 41,
  "panel": 405,
  "bleed": 8.503937007874017,
- "drawn_seconds": 0.84,
+ "drawn_seconds": 0.88,
  "save_seconds": {
-  "print_pdf": 3.19,
-  "screen_pdf": 2.9,
-  "page_pngs": 0.75,
-  "spreads": 0.26
+  "print_pdf": 4.62,
+  "screen_pdf": 5.74,
+  "page_pngs": 1.32,
+  "spreads": 0.49
  },
  "placed": [
   {
@@ -247,6 +247,20 @@
   },
   {
    "page": 3,
+   "kind": "code number",
+   "y": 249.5,
+   "bottom": 264.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 3,
+   "kind": "code",
+   "y": 248.5,
+   "bottom": 263.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 3,
    "kind": "side note",
    "y": 171,
    "bottom": 201,
@@ -270,7 +284,14 @@
    "page": 3,
    "kind": "side note",
    "y": 246,
-   "bottom": 261,
+   "bottom": 276,
+   "nudge": 0.0
+  },
+  {
+   "page": 3,
+   "kind": "side note",
+   "y": 276,
+   "bottom": 291,
    "nudge": 0.0
   },
   {
@@ -282,8 +303,8 @@
   },
   {
    "page": 4,
-   "kind": "big panel (bottom)",
-   "y": 441,
+   "kind": "big panel",
+   "y": 36,
    "bottom": 441,
    "nudge": 0.0
   },
@@ -366,13 +387,6 @@
   },
   {
    "page": 5,
-   "kind": "highlight",
-   "y": 201,
-   "bottom": 216,
-   "nudge": 0.0
-  },
-  {
-   "page": 5,
    "kind": "code number",
    "y": 204.5,
    "bottom": 219.5,
@@ -405,6 +419,13 @@
    "y": 218.5,
    "bottom": 233.5,
    "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "highlight",
+   "y": 231,
+   "bottom": 246,
+   "nudge": 0.0
   },
   {
    "page": 5,
@@ -450,16 +471,30 @@
   },
   {
    "page": 5,
+   "kind": "code number",
+   "y": 279.5,
+   "bottom": 294.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 278.5,
+   "bottom": 293.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
    "kind": "small panel",
-   "y": 306,
-   "bottom": 426,
+   "y": 321,
+   "bottom": 441,
    "nudge": 0.0
   },
   {
    "page": 5,
    "kind": "label",
-   "y": 429,
-   "bottom": 444,
+   "y": 444,
+   "bottom": 459,
    "nudge": 3
   },
   {
@@ -492,8 +527,8 @@
   },
   {
    "page": 7,
-   "kind": "big panel (bottom)",
-   "y": 441,
+   "kind": "big panel",
+   "y": 36,
    "bottom": 441,
    "nudge": 0.0
   },
@@ -849,8 +884,8 @@
   },
   {
    "page": 10,
-   "kind": "big panel (bottom)",
-   "y": 441,
+   "kind": "big panel",
+   "y": 36,
    "bottom": 441,
    "nudge": 0.0
   },
@@ -974,6 +1009,10 @@
   {
    "kind": "side note",
    "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
+  },
+  {
+   "kind": "side note",
+   "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
   }
  ],
  "overflow": [],
@@ -1004,14 +1043,20 @@
   },
   {
    "sketch": "1_1_circle",
+   "text": "f.no_stroke()",
+   "chars": 13,
+   "measure": 44
+  },
+  {
+   "sketch": "1_1_circle",
    "text": "f.fill(\"tomato\")",
    "chars": 16,
    "measure": 44
   },
   {
    "sketch": "1_1_circle",
-   "text": "f.circle()",
-   "chars": 10,
+   "text": "f.circle(300, 300, 200)",
+   "chars": 23,
    "measure": 44
   },
   {
@@ -1046,14 +1091,20 @@
   },
   {
    "sketch": "1_2_square",
+   "text": "f.no_stroke()",
+   "chars": 13,
+   "measure": 44
+  },
+  {
+   "sketch": "1_2_square",
    "text": "f.fill(\"turquoise\")",
    "chars": 19,
    "measure": 44
   },
   {
    "sketch": "1_2_square",
-   "text": "f.square(size=300)",
-   "chars": 18,
+   "text": "f.square(150, 150, 300)",
+   "chars": 23,
    "measure": 44
   },
   {
@@ -1064,8 +1115,8 @@
   },
   {
    "sketch": "1_2_square",
-   "text": "f.circle()",
-   "chars": 10,
+   "text": "f.circle(300, 300, 200)",
+   "chars": 23,
    "measure": 44
   },
   {
@@ -1112,8 +1163,8 @@
   },
   {
    "sketch": "1_3_random",
-   "text": "f.circle(at=\"random\", size=80)",
-   "chars": 30,
+   "text": "f.circle(f.random(600), f.random(600), 80)",
+   "chars": 42,
    "measure": 44
   },
   {
@@ -1124,8 +1175,8 @@
   },
   {
    "sketch": "1_3_random",
-   "text": "f.circle(at=\"random\", size=80)",
-   "chars": 30,
+   "text": "f.circle(f.random(600), f.random(600), 80)",
+   "chars": 42,
    "measure": 44
   },
   {
@@ -1136,8 +1187,8 @@
   },
   {
    "sketch": "1_3_random",
-   "text": "f.circle(at=\"random\", size=80)",
-   "chars": 30,
+   "text": "f.circle(f.random(600), f.random(600), 80)",
+   "chars": 42,
    "measure": 44
   },
   {
@@ -1147,6 +1198,6 @@
    "measure": 44
   }
  ],
- "wobble_points": 1564,
+ "wobble_points": 1938,
  "pages": 12
 }

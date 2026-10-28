@@ -243,3 +243,20 @@ Gaps 3 and 9 to 14 are smaller, and wait for the whole-book decision.
 - ~~D-121's answer.~~ Answered 28 Oct: keep current behaviour (no new shape keywords; a package later if needed). The
   chapter's sketches use the proposed calls through the spike's shim and must be rewritten with today's calls before
   they are shown as the book.
+
+### Rebuilt after the maintainer's review (28 Oct)
+
+**What the maintainer saw:** pages 5, 8 and 11 looked cut off at the top. The pictures ran into the bleed with their frames
+cut there, which is finding 1 of the review.
+
+**What changed:**
+- **Pictures:** the big sketch panels now sit inside the margins with the whole frame drawn.
+- **Sketches:** rewritten with today's calls after D-121 (`f.circle(300, 300, 200)`, `f.square(150, 150, 300)`,
+  `f.circle(f.random(600), f.random(600), 80)`). They now use `f.no_stroke()`, for the maintainer to judge by eye.
+- **The code on the page:** it is now read from the sketch files, so the two cannot drift. `nocoords.py` is no longer
+  used and stays only as D-121's evidence.
+- **The grid check still passes:** 0 of 274 positions are off the line on Square, and 0 of 264 on B5.
+- **The longest code line is 42 characters,** against a measure of 56 on Square and 44 on B5.
+
+**Note for building on Windows:** writing a spread PNG while a viewer has the `out/` folder open fails at times with
+`OSError: [Errno 22]`. Running the build again gets past it.

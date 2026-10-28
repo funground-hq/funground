@@ -2,13 +2,13 @@
 
 | Trim | Build, whole process | Of which draw (fonts, pictures, layout) | Print PDF | Screen PDF | Pages |
 |---|---|---|---|---|---|
-| Square | 8.27 s | 0.86 s | 599 KB | 577 KB | 12 |
-| B5 | 8.87 s | 0.91 s | 602 KB | 585 KB | 12 |
+| Square | 8.53 s | 1.22 s | 563 KB | 538 KB | 12 |
+| B5 | 8.38 s | 0.88 s | 565 KB | 547 KB | 12 |
 
-Square inside the process (seconds): print_pdf 3.16, screen_pdf 2.92, page_pngs 0.65, spreads 0.22
-B5 inside the process (seconds): print_pdf 3.53, screen_pdf 3.01, page_pngs 0.73, spreads 0.26
+Square inside the process (seconds): print_pdf 5.56, screen_pdf 5.63, page_pngs 1.11, spreads 0.35
+B5 inside the process (seconds): print_pdf 4.62, screen_pdf 5.74, page_pngs 1.32, spreads 0.49
 
-The four sketches run first, one process each: 2.81 s in all (not in the trim times).
+The four sketches run first, one process each: 2.98 s in all (not in the trim times).
 
 ## 2. Grid check
 
@@ -17,15 +17,15 @@ B5: text area 41 lines; canvas side 405 pt; optical nudges inside a slot: captio
 
 | Trim | Items placed | Vertical positions checked (slot top and bottom, less nudge) | Off the 15 pt line | Result |
 |---|---|---|---|---|
-| Square | 133 | 264 | 0 | PASS |
-| B5 | 133 | 264 | 0 | PASS |
+| Square | 138 | 274 | 0 | PASS |
+| B5 | 138 | 274 | 0 | PASS |
 
 ## 3. Longest code line against the measure
 
 | Trim | Longest line, characters | Measure, characters (4 columns less the number gutter, at 9.5 pt) | Result |
 |---|---|---|---|
-| Square | 30 (f.circle(at="random", size=80)) | 56 | fits |
-| B5 | 30 (f.circle(at="random", size=80)) | 44 | fits |
+| Square | 42 (f.circle(f.random(600), f.random(600), 80)) | 56 | fits |
+| B5 | 42 (f.circle(f.random(600), f.random(600), 80)) | 44 | fits |
 
 ## 4. PDF page boxes (read with pypdf)
 
@@ -40,11 +40,11 @@ B5: text area 41 lines; canvas side 405 pt; optical nudges inside a slot: captio
 
 | File | Lines |
 |---|---|
-| build.py | 651 |
+| build.py | 623 |
 | nocoords.py | 87 |
-| run_sketch.py | 22 |
+| run_sketch.py | 19 |
 | measure.py | 214 |
-| sketches/*.py (4 files) | 43 |
+| sketches/*.py (4 files) | 45 |
 
 ## 6. CMYK change of each palette token
 
