@@ -2,13 +2,13 @@
 
 | Trim | Build, whole process | Of which draw (fonts, pictures, layout) | Print PDF | Screen PDF | Pages |
 |---|---|---|---|---|---|
-| Square | 8.53 s | 1.22 s | 563 KB | 538 KB | 12 |
-| B5 | 8.38 s | 0.88 s | 565 KB | 547 KB | 12 |
+| Square | 13.43 s | 0.9 s | 556 KB | 527 KB | 12 |
+| B5 | 14.17 s | 0.97 s | 556 KB | 536 KB | 12 |
 
-Square inside the process (seconds): print_pdf 5.56, screen_pdf 5.63, page_pngs 1.11, spreads 0.35
-B5 inside the process (seconds): print_pdf 4.62, screen_pdf 5.74, page_pngs 1.32, spreads 0.49
+Square inside the process (seconds): print_pdf 4.86, screen_pdf 5.68, page_pngs 1.14, spreads 0.35
+B5 inside the process (seconds): print_pdf 4.98, screen_pdf 5.93, page_pngs 1.28, spreads 0.45
 
-The four sketches run first, one process each: 2.98 s in all (not in the trim times).
+The four sketches run first, one process each: 2.78 s in all (not in the trim times).
 
 ## 2. Grid check
 
@@ -40,11 +40,11 @@ B5: text area 41 lines; canvas side 405 pt; optical nudges inside a slot: captio
 
 | File | Lines |
 |---|---|
-| build.py | 623 |
+| build.py | 812 |
 | nocoords.py | 87 |
 | run_sketch.py | 19 |
-| measure.py | 214 |
-| sketches/*.py (4 files) | 45 |
+| measure.py | 242 |
+| sketches/*.py (4 files) | 44 |
 
 ## 6. CMYK change of each palette token
 
@@ -66,4 +66,40 @@ Route: `spikes/11_cmyk` option d (littleCMS through Pillow, Windows' RSWOP.icm a
 | link / code-string (firebrick) | #b22222 | 16/98/84/7 | 3.5 | 1.9 |
 | code-number | #00706b | 80/29/46/16 | 9.7 | 5.2 |
 | code-comment | #6b6380 | 58/55/19/9 | 4.1 | 4.1 |
+
+## 7. Text contrast (WCAG 2.x)
+
+| Text colour | On ground | Ratio | 4.5 needed | Used for |
+|---|---|---|---|---|
+| #ba4d53 | #fdf5e6 | 4.5 | PASS | code number, contents |
+| #9932cc | #fee98a | 4.7 | PASS | code keyword (highlighted) |
+| #984595 | #fee98a | 4.8 | PASS | code number, code number (highlighted) |
+| #2b739b | #fdf5e6 | 4.8 | PASS | code number |
+| #a34999 | #fdf5e6 | 4.9 | PASS | code number |
+| #00706b | #fee98a | 4.9 | PASS | code number value (highlighted) |
+| #6b6380 | #fdf5e6 | 5.2 | PASS | code comment |
+| #9932cc | #fdf5e6 | 5.3 | PASS | code keyword |
+| #b22222 | #fee98a | 5.5 | PASS | code string (highlighted) |
+| #00706b | #fdf5e6 | 5.5 | PASS | code number value |
+| #5a4f7a | #fdd8c6 | 5.6 | PASS | folio, label |
+| #5a4f7a | #fdd9dc | 5.7 | PASS | folio |
+| #b22222 | #fdf5e6 | 6.2 | PASS | code string |
+| #5a4f7a | #d7f1e2 | 6.2 | PASS | folio, label |
+| #5a4f7a | #fdefb8 | 6.4 | PASS | folio, label |
+| #5a4f7a | #fdf5e6 | 6.8 | PASS | contents, folio, label, side note |
+| #191970 | #ffd700 | 10.6 | PASS | try this text, try this title |
+| #191970 | #fdd9dc | 11.4 | PASS | predict caption |
+| #191970 | #fee98a | 12.2 | PASS | code name (highlighted) |
+| #191970 | #fdf5e6 | 13.7 | PASS | caption, chapter title, code name, colophon fonts, contents, heading, prose |
+
+Lowest ratio: 4.5:1 (PASS).
+
+Picture-page grounds (accent mixed with oldlace, 20 per cent), and the shade of each accent used for line numbers, tie lines and contents numbers:
+
+| Accent | Hex | Ground tint | Shade for text | Shade on oldlace |
+|---|---|---|---|---|
+| tomato | #ff6347 | #fdd8c6 | #ba4d53 | 4.5 |
+| gold | #ffd700 | #fdefb8 | #806e3e | 4.6 |
+| turquoise | #40e0d0 | #d7f1e2 | #2b739b | 4.8 |
+| hotpink | #ff69b4 | #fdd9dc | #a34999 | 4.9 |
 

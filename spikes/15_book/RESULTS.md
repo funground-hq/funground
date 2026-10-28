@@ -260,3 +260,53 @@ cut there, which is finding 1 of the review.
 
 **Note for building on Windows:** writing a spread PNG while a viewer has the `out/` folder open fails at times with
 `OSError: [Errno 22]`. Running the build again gets past it.
+
+### Colour pass (28 Oct)
+
+**Why:** the maintainer read the PDFs and found the two-page spreads decent, the cover playful but crowded, and most pages
+too plain. Structure is unchanged; only the surface changed (`make/build.py`, `make/measure.py`, `sketches/1_0_opener.py`).
+
+**What changed:**
+- **Cover:** 8 circles (was 38 and a ring), bigger, with clear room between groups and one focal tomato ring. It keeps the
+  palette, `f.no_stroke()`, today's calls and a fixed `f.random_seed(3)` (it only nudges each circle a little). The sketch
+  is 14 lines. The picture no longer runs into the bleed. On B5 the cover is cropped to the middle of the canvas.
+- **One accent for each spread:** opener tomato, spread 2 turquoise, 3 hotpink, 4 gold, 5 tomato, 6 turquoise.
+- **Picture pages** (PDF pages 4, 6, 7 and 10): a ground of the accent mixed 20 per cent with oldlace, over the page and its bleed.
+  The sketch's own oldlace canvas stays in its ink hand-drawn frame, with the accent offset 9 pt behind the frame.
+- **Text pages** (PDF pages 2, 3, 5, 8, 11 and 12): a big hand-drawn shape in the accent (circle or tilted square) off the page corner,
+  beside the heading and above the code and the compare strip, never behind text.
+- **Headings** (and the chapter title): a gold marker stroke underneath, drawn before the words.
+- **Line numbers, tie lines and contents numbers:** a shade of the accent (accent mixed with ink until it reaches 4.5 to 1
+  on oldlace). Compare frames use the accent (a deeper gold on the gold spread).
+- **Spot shapes** beside each folio, echoing the lesson: a circle; a square and a circle; three squares in growing sizes;
+  scattered dots; a circle. The opener's right page has a tomato circle bleeding off the top corner, as on the cover, and two
+  small dots in the bottom margin.
+- **Predict and Your page frames:** still hand-wobbled, now in the accent with a tinted inside (Predict: 10 per cent of the
+  accent on warm white, on a tinted page; Your page: 22 per cent on oldlace).
+- **Try this:** now has padding inside the gold block.
+
+**Checks (from `make/measure.py`):**
+- Grid: 0 of 274 vertical positions off the 15 pt line, on both trims (138 items each). PASS.
+- Longest code line: 42 characters, against a measure of 56 (Square) and 44 (B5). Fits.
+- Contrast, every text colour against the ground it is on (new section 7, the build records each pair). Lowest 4.5:1, PASS:
+
+| Text | Ground | Ratio |
+|---|---|---|
+| Ink on oldlace | #fdf5e6 | 13.7 |
+| Ink on a hotpink tint (Predict caption) | #fdd9dc | 11.4 |
+| Ink on gold (Try this, the highlighted code lines) | #ffd700 | 10.6 |
+| Muted ink (folio, labels, notes) on oldlace | #fdf5e6 | 6.8 |
+| Muted ink on the turquoise, gold and tomato tints | #d7f1e2, #fdefb8, #fdd8c6 | 6.2, 6.4, 5.6 |
+| Muted ink on the hotpink tint | #fdd9dc | 5.7 |
+| Code: string, number, keyword, comment on oldlace | #fdf5e6 | 6.2, 5.5, 5.3, 5.2 |
+| Code on the highlight: keyword, number, string | #fee98a | 4.7, 4.9, 5.5 |
+| Accent shades for numbers (hotpink, turquoise, tomato) | on oldlace | 4.9, 4.8, 4.5 |
+
+- Gold's text shade (#806e3e, 4.6) is defined but not used: the gold spread has no code page.
+- The highlight behind the changed code lines is now gold mixed 40 per cent with oldlace (#fee98a), not full gold: orchid
+  on full gold was 4.1 and the number green 4.2. On the lighter highlight the lowest is 4.7. The line numbers on those rows
+  take a darker shade (4.8).
+- No text sits on tomato, hotpink or turquoise at full strength.
+- Both trims build (Square 13.4 s, B5 14.2 s). `build.py` is now about 810 lines (it was 623).
+
+**Not done:** CMYK check of the tints (hotpink and tomato tints will shift in print, like their tokens, section 6).

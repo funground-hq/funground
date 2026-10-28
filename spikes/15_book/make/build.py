@@ -15,6 +15,7 @@ The grid is the dict TRIMS plus LINE and GUT, below. Every vertical position goe
 """
 import glob
 import json
+import math
 import os
 import re
 import subprocess
@@ -45,6 +46,12 @@ STRING = "#b22222"       # code-string = link = firebrick
 NUMBER = "#00706b"       # code-number (day)
 COMMENT = "#6b6380"      # code-comment (day)
 GOLD, HOTPINK, TURQUOISE = "gold", "hotpink", "turquoise"
+PAPER_HEX = "#fdf5e6"    # oldlace
+WHITEISH = "#fffaf0"     # paper-code
+ACCENT_HEX = {"tomato": "#ff6347", "gold": "#ffd700", "turquoise": "#40e0d0", "hotpink": "#ff69b4"}
+SPREAD_ACCENT = ["tomato", "turquoise", "hotpink", "gold", "tomato", "turquoise"]    # one accent for each spread
+HIGHLIGHT = "#fee98a"    # the gold marker behind the changed code lines: gold mixed 40 per cent with oldlace
+TINT = 0.20              # share of the accent in a picture page's ground (the rest is oldlace)
 KEYWORDS = {"import", "from", "as", "def", "for", "in", "if", "else", "elif", "while", "return", "True", "False", "None"}
 
 
@@ -110,7 +117,62 @@ PLACED = []      # every vertical position the build uses: (page, kind, y_slot_t
 NOTES = []       # things the grid cannot hold, with the reason
 OVERFLOW = []    # text that did not fit its box
 CODE_LINES = []  # (sketch, line text, characters)
-STATE = {"page": 0, "wob": 0}
+TEXTS = []       # (kind, text colour, ground colour): measure.py reads their contrast
+STATE = {"page": 0, "wob": 0, "ground": PAPER_HEX, "accent": "tomato"}
+
+
+# ---------------------------------------------------------------- colour maths (the page's accent, tints and shades)
+def rgb(hexv):
+    return tuple(int(hexv[i:i + 2], 16) for i in (1, 3, 5))
+
+
+def hexof(c):
+    return "#%02x%02x%02x" % tuple(int(round(v)) for v in c)
+
+
+def mix(a, b, share):
+    """share of a, the rest b (both hex)."""
+    return hexof([x * share + y * (1 - share) for x, y in zip(rgb(a), rgb(b))])
+
+
+def luminance(hexv):
+    def lin(v):
+        v /= 255
+        return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+    r, g, b = (lin(v) for v in rgb(hexv))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def contrast(a, b):
+    la, lb = sorted((luminance(a), luminance(b)), reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
+def accent():
+    return ACCENT_HEX[STATE["accent"]]
+
+
+def line_accent():
+    """For thin lines on oldlace: gold is too faint there, so it gets a deeper gold."""
+    return "#d9a300" if STATE["accent"] == "gold" else accent()
+
+
+def tint(share=TINT, base=PAPER_HEX):
+    return mix(accent(), base, share)
+
+
+def shade(on=PAPER_HEX):
+    """The accent made darker with ink until it reads as text (4.5 to 1) on oldlace (or on `on`)."""
+    a = accent()
+    for step in range(0, 101, 5):
+        c = mix(INK, a, step / 100)
+        if contrast(c, on) >= 4.5:
+            return c
+    return INK
+
+
+def note_text(kind, color):
+    TEXTS.append((kind, color, STATE["ground"]))
 
 
 def reg(kind, y, bottom=None, nudge=0.0):
@@ -138,6 +200,7 @@ def text_at(g, message, x, line, font, size, color=INK, nudge=0.0, kind="text"):
     y = g.Y(line)
     f.text(message, x, y + nudge)
     f.pop()
+    note_text(kind, color)
     reg(kind, y + nudge, y + LINE + nudge, nudge)       # what was drawn; the check takes the nudge off again
 
 
@@ -170,6 +233,7 @@ def prose(g, message, line, x, width, font="body", size=11, lead=LINE, color=INK
     y = g.Y(line)
     rest = f.text_box(message, x, y, width, n * lead, color)
     f.pop()
+    note_text(kind, color)
     if str(rest).strip():
         OVERFLOW.append(dict(page=STATE["page"], kind=kind, text=str(rest)[:40]))
     used = -(-n * lead // LINE)
@@ -179,13 +243,13 @@ def prose(g, message, line, x, width, font="body", size=11, lead=LINE, color=INK
     return used
 
 
-def wobble(points, color, width=1.6, amp=1.1, step=6.0, closed=False):
-    """A hand-drawn line through points. The wobble is f.noise() with a fixed seed, so every build is the same."""
+def wobble(points, color, width=1.6, amp=1.1, step=6.0, closed=False, fill=None):
+    """A hand-drawn line through points (or, with fill=, a filled shape; color None means no outline).
+    The wobble is f.noise() with a fixed seed, so every build is the same."""
     pts = list(points)
     segs = list(zip(pts, pts[1:] + ([pts[0]] if closed else [])))
     path = f.path()
     first = True
-    total = 0
     for (x1, y1), (x2, y2) in segs:
         d = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
         n = max(2, int(d / step))
@@ -200,19 +264,39 @@ def wobble(points, color, width=1.6, amp=1.1, step=6.0, closed=False):
                 first = False
             else:
                 path.line_to(px, py)
-            total += 1
     last = pts[0] if closed else pts[-1]
     path.line_to(*last)
     if closed:
         path.close()
     f.push()
-    f.no_fill()
-    f.stroke(color)
-    f.stroke_width(width)
-    f.stroke_cap("round")
-    f.stroke_join("round")
+    if fill:
+        f.fill(fill)
+    else:
+        f.no_fill()
+    if color:
+        f.stroke(color)
+        f.stroke_width(width)
+        f.stroke_cap("round")
+        f.stroke_join("round")
+    else:
+        f.no_stroke()
     f.draw_path(path)
     f.pop()
+
+
+def blob_circle(cx, cy, r, fill, amp=2.0, color=None, width=2.0):
+    """A hand-drawn filled circle."""
+    n = 56
+    pts = [(cx + r * math.cos(2 * math.pi * i / n), cy + r * math.sin(2 * math.pi * i / n)) for i in range(n)]
+    wobble(pts, color, width, amp=amp, step=r * 0.12 + 2, closed=True, fill=fill)
+
+
+def blob_square(x, y, side, fill, amp=2.0, color=None, width=2.0, tilt=0.0):
+    """A hand-drawn filled square, turned a little by tilt (degrees) about its middle."""
+    mx, my, a = x + side / 2, y + side / 2, math.radians(tilt)
+    pts = [(mx + (px - mx) * math.cos(a) - (py - my) * math.sin(a), my + (px - mx) * math.sin(a) + (py - my) * math.cos(a))
+           for px, py in ((x, y), (x + side, y), (x + side, y + side), (x, y + side))]
+    wobble(pts, color, width, amp=amp, step=8, closed=True, fill=fill)
 
 
 def wobble_rect(x, y, w, h, color, width=1.8):
@@ -261,6 +345,9 @@ NUMW = 20     # width of the line-number gutter in a code block
 def code_block(g, name, source, line0, highlight=(), notes=()):
     """The whole sketch with numbered lines on the verso: code in the inner 4 columns, notes in the outer 2."""
     rows = source.strip("\n").split("\n")
+    for kind, color in (("code keyword", KEYWORD), ("code string", STRING), ("code number value", NUMBER),
+                        ("code comment", COMMENT), ("code name", INK)):
+        note_text(kind, color)
     cx = g.colx(False, 2)
     cw = g.span(4)
     f.push()
@@ -272,13 +359,20 @@ def code_block(g, name, source, line0, highlight=(), notes=()):
         CODE_LINES.append(dict(sketch=name, text=src, chars=len(src), measure=measure))
         n = line0 + i
         if i in highlight:
+            STATE["ground"] = HIGHLIGHT
+            for kind, color in (("code keyword", KEYWORD), ("code string", STRING), ("code number value", NUMBER),
+                                ("code name", INK), ("code number", shade(HIGHLIGHT))):
+                note_text(kind + " (highlighted)", color)
+            STATE["ground"] = PAPER_HEX
             f.push()
             f.no_stroke()
-            f.fill(GOLD)
+            f.fill(HIGHLIGHT)
             f.rect(cx - 4, g.Y(n), cw + 4, LINE)
             f.pop()
             reg("highlight", g.Y(n), g.Y(n) + LINE)
-        text_at(g, str(i + 1).rjust(2), cx, n, "mono", 8, MUTED, nudge=3.5, kind="code number")
+        STATE["ground"] = HIGHLIGHT if i in highlight else PAPER_HEX
+        text_at(g, str(i + 1).rjust(2), cx, n, "mono", 8, shade(STATE["ground"]), nudge=3.5, kind="code number")
+        STATE["ground"] = PAPER_HEX
         if src.strip():
             f.push()
             f.text_align("left", "top")
@@ -295,7 +389,7 @@ def code_block(g, name, source, line0, highlight=(), notes=()):
         next_free = top_line + used
         ty = g.Y(top_line) + 6.5
         cy = g.Y(want) + 8
-        wobble([(nx + nw + 3, ty), (cx - 3, cy)], MUTED, width=1, amp=0.7, step=5)
+        wobble([(nx + nw + 3, ty), (cx - 3, cy)], shade(), width=1, amp=0.7, step=5)
     return line0 + len(rows)
 
 
@@ -308,21 +402,87 @@ def folio(g, recto):
     f.pop()
     x = g.x0(False) if not recto else g.W - g.outer - w
     text_at(g, label, x, g.lines + 1, "body", 8, MUTED, nudge=2, kind="folio")
+    spots(g, recto, x, w)
+
+
+def marker(x, y, width, thick=8):
+    """A gold marker stroke, like the site's underline: wobbly, a little longer than the words."""
+    wobble([(x - 3, y), (x + width + 4, y - 1.5)], "#ffd700", width=thick, amp=1.4, step=9)
 
 
 def heading(g, message, recto, line=0):
+    x = g.x0(recto) if recto else g.colx(False, 2)
+    f.push()
+    f.text_font(FONTS["display"], 22)
+    w = f.text_width(message)
+    f.pop()
+    y = g.Y(line)
+    marker(x, y + 25, w)                      # under the words, drawn first
     f.push()
     f.text_font(FONTS["display"], 22)
     f.fill(INK)
     f.text_align("left", "top")
-    y = g.Y(line)
-    f.text(message, g.x0(recto) if recto else g.colx(False, 2), y)
+    f.text(message, x, y)
     f.pop()
+    note_text("heading", INK)
     reg("heading 22/30", y, y + 2 * LINE)
 
 
 def label(g, message, x, line):
     text_at(g, message, x, line, "mono", 8, MUTED, nudge=3, kind="label")
+
+
+# ---------------------------------------------------------------- colour around the page
+def ground(g):
+    """A picture page: the spread's accent, lightened, over the whole page and into the bleed."""
+    b = g.bleed
+    STATE["ground"] = tint()
+    f.push()
+    f.no_stroke()
+    f.fill(STATE["ground"])
+    f.rect(-b, -b, g.W + 2 * b, g.H + 2 * b)
+    f.pop()
+
+
+def heading_shape(g, recto, kind):
+    """A big hand-drawn shape in the accent, half off the page, beside the heading: never behind its text."""
+    col = accent()
+    if not recto:                                   # top outer corner of a verso; its right edge stops short of the heading
+        right = g.colx(False, 2) - 24
+        cx = right * 0.25
+        r = right - cx
+        if kind == "circle":
+            blob_circle(cx, -10, r, col, amp=2.5)
+        else:
+            side = right + 40
+            blob_square(-40, 120 - side, side, col, amp=2.2, tilt=7)
+    else:                                           # top outer corner of a recto; stays above the compare strip
+        if kind == "circle":
+            blob_circle(g.W + 20, -30, 140, col, amp=2.5)
+        else:
+            blob_square(g.W - 120, -40, 150, col, amp=2.2, tilt=7)
+
+
+SPOTS = {0: ["c"], 1: ["c"], 2: ["s", "c"], 3: ["s", "S", "L"], 4: ["c", "d", "D"], 5: ["c"]}   # by spread: the lesson in small
+
+
+def spots(g, recto, fx, fw):
+    """A few small hand-wobbled shapes beside the folio, echoing the spread's lesson. Never touching text."""
+    y = g.Y(g.lines + 1) + 6.5
+    r = 7.5
+    items = []
+    for code in SPOTS[(STATE["page"] - 1) // 2]:
+        size = {"c": 15, "s": 14, "S": 10, "L": 18, "d": 8, "D": 11}[code]
+        items.append((code, size))
+    x = fx + fw + 20 if not recto else fx - 20
+    for code, size in items:
+        if recto:
+            x -= size
+        if code in "sSL":
+            blob_square(x, y - size / 2, size, accent(), amp=0.6, tilt=5)
+        else:
+            blob_circle(x + size / 2, y + (3 if code == "D" else -2 if code == "d" else 0), size / 2, accent(), amp=0.6)
+        x = x + size + 9 if not recto else x - 9
 
 
 # ---------------------------------------------------------------- components
@@ -331,6 +491,7 @@ def big_panel(g, recto, name, caption):
     side = min(g.snap(g.text_w), LINE * (g.lines - 2))
     x = g.x0(recto) + (g.text_w - side) / 2
     y = g.Y(0)
+    blob_square(x + 9, y + 9, side, accent(), amp=1.4)       # the accent, offset behind the frame: colour around the picture
     put_picture(name, x, y, side, side)
     reg("big panel", y, y + side)
     wobble_rect(x, y, side, side, INK, 1.6)
@@ -339,7 +500,9 @@ def big_panel(g, recto, name, caption):
 
 def predict_frame(g, recto, x, line):
     side = g.panel()
-    wobble_rect(x, g.Y(line), side, side, HOTPINK, 2.2)
+    y = g.Y(line)
+    wobble([(x, y), (x + side, y), (x + side, y + side), (x, y + side)], accent(), 2.4, closed=True,
+           fill=mix(accent(), WHITEISH, 0.10), step=6)
     reg("predict frame", g.Y(line), g.Y(line) + side)
     return line + side // LINE
 
@@ -366,22 +529,24 @@ def compare_strip(g, recto, line, study, param, values, fmt):
         f.scale(k)
         mark.place(0, 0)
         f.pop()
-        wobble_rect(x, y, side, side, TURQUOISE, 2.0)
+        wobble_rect(x, y, side, side, line_accent(), 2.0)
         reg("compare panel", y, y + side)
         label(g, fmt(vals[param]), x, line + side // LINE)
     return line + side // LINE + 1
 
 
 def try_this(g, recto, line, title, task):
-    x, w = g.x0(recto), g.span(4)
+    x, w = g.x0(recto) + 6, g.span(4) - 12
+    STATE["ground"] = ACCENT_HEX["gold"]
     f.push()
     f.no_stroke()
     f.fill(GOLD)
-    f.rect(x - 8, g.Y(line), w + 16, 4 * LINE)
+    f.rect(x - 14, g.Y(line), w + 28, 4 * LINE)
     f.pop()
     reg("try this block", g.Y(line), g.Y(line) + 4 * LINE)
     text_at(g, title, x, line, "bold", 11, INK, nudge=1.5, kind="try this title")
     prose(g, task, line + 1, x, w, lines=3, kind="try this text")
+    STATE["ground"] = PAPER_HEX
 
 
 # ---------------------------------------------------------------- the chapter
@@ -419,13 +584,22 @@ def page_opener_left(g):
 
 def page_opener_right(g):
     x, w = g.x0(True), g.span(4)
+    blob_circle(g.W + 20, -20, 175 if g.name == "Square" else 150, ACCENT_HEX["tomato"], amp=3.0)   # echoes the cover
+    blob_circle(g.x0(True) + 12, g.Y(g.lines - 4), 11, ACCENT_HEX["gold"], amp=0.8)
+    blob_circle(g.x0(True) + 40, g.Y(g.lines - 3) + 4, 7, ACCENT_HEX["turquoise"], amp=0.6)
     label(g, "Chapter 1", x, 2)
+    f.push()
+    f.text_font(FONTS["display"], 48)
+    tw = f.text_width(CHAPTER)
+    f.pop()
+    marker(x - 2, g.Y(3) + 52, tw, thick=13)
     f.push()
     f.text_font(FONTS["display"], 48)
     f.fill(INK)
     f.text_align("left", "top")
     f.text(CHAPTER, x - 2, g.Y(3))
     f.pop()
+    note_text("chapter title", INK)
     reg("chapter title 48/60", g.Y(3), g.Y(3) + 4 * LINE)
     prose(g, "Draw a shape. Then change one thing about it, and see what happens.", 8, x, w, lines=3)
     label(g, "In this chapter", x, 13)
@@ -433,7 +607,7 @@ def page_opener_right(g):
              ("1.3", "Somewhere random", "10"), ("1.4", "Your page", "12")]
     for i, (num, title, page) in enumerate(items):
         line = 14 + i
-        text_at(g, num, x, line, "mono", 8, MUTED, nudge=3, kind="contents")
+        text_at(g, num, x, line, "mono", 8, shade(), nudge=3, kind="contents")
         text_at(g, title, x + 28, line, "body", 11, INK, nudge=1.5, kind="contents")
         f.push()
         f.text_font(FONTS["mono"], 8)
@@ -443,6 +617,7 @@ def page_opener_right(g):
 
 
 def page_show_verso(g):
+    heading_shape(g, False, "circle")
     heading(g, "One circle", False)
     prose(g, "This is a whole sketch. Run it, and a circle appears in the middle of the canvas.", 3,
           g.colx(False, 2), g.span(4), lines=3)
@@ -456,10 +631,12 @@ def page_show_verso(g):
 
 
 def page_show_recto(g):
+    ground(g)
     big_panel(g, True, "1_1_circle", "1.1 circle.py")
 
 
 def page_predict_verso(g):
+    heading_shape(g, False, "square")
     heading(g, "Add a square", False)
     prose(g, "Two new lines are in gold. Read them. What will the picture look like?", 3,
           g.colx(False, 2), g.span(4), lines=3)
@@ -472,6 +649,7 @@ def page_predict_verso(g):
 
 
 def page_predict_recto(g):
+    ground(g)
     x = g.x0(True)
     end = predict_frame(g, True, x, 0)
     f.push()
@@ -480,15 +658,18 @@ def page_predict_recto(g):
     f.text_align("left", "top")
     f.text("What will change? Draw it.", x, g.Y(end + 1))
     f.pop()
+    note_text("predict caption", INK)
     reg("predict caption", g.Y(end + 1), g.Y(end + 2))
 
 
 def page_reveal_verso(g):
+    ground(g)
     big_panel(g, False, "1_2_square", "1.2 square.py")
 
 
 def page_reveal_recto(g):
     x = g.x0(True)
+    heading_shape(g, True, "square")
     heading(g, "Change the size", True)
     prose(g, "The square is 300 wide. Here are three sizes, side by side. Only the size changes.", 3, x, g.span(4), lines=3)
     end = compare_strip(g, True, 7, study_square, "size", [220, 300, 400], lambda v: f"size {v}")
@@ -496,6 +677,7 @@ def page_reveal_recto(g):
 
 
 def page_random_verso(g):
+    heading_shape(g, False, "circle")
     heading(g, "Somewhere random", False)
     prose(g, "f.random() picks a number, so the circle lands somewhere new. Each call picks its own place.", 3,
           g.colx(False, 2), g.span(4), lines=3)
@@ -509,16 +691,19 @@ def page_random_verso(g):
 
 
 def page_random_recto(g):
+    ground(g)
     big_panel(g, True, "1_3_random", "1.3 random.py")
 
 
 def page_your_verso(g):
+    heading_shape(g, False, "circle")
     heading(g, "Your page", False)
     prose(g, "Draw any shape. Change its colour, its size, and where it goes. Which change surprised you most?", 3,
           g.colx(False, 2), g.span(4), lines=4)
     side = g.panel()
     x = g.W - g.inner - side
-    wobble_rect(x, g.Y(8), side, side, HOTPINK, 2.2)
+    wobble([(x, g.Y(8)), (x + side, g.Y(8)), (x + side, g.Y(8) + side), (x, g.Y(8) + side)], accent(), 2.4,
+           closed=True, fill=tint(0.22), step=6)
     reg("your canvas frame", g.Y(8), g.Y(8) + side)
     end = 8 + side // LINE
     text_at(g, "Your canvas. Draw here, then try it in Play.", x, end + 1, "bold", 11, INK, nudge=1.5, kind="caption")
@@ -526,6 +711,7 @@ def page_your_verso(g):
 
 def page_colophon(g):
     x, w = g.x0(True), g.span(4)
+    heading_shape(g, True, "circle")
     heading(g, "Colophon", True)
     fs = f.FormattedString()
     fs.append("Set in ", font=FONTS["body"], size=11)
@@ -545,6 +731,7 @@ def page_colophon(g):
     f.fill(INK)
     rest = f.text_box(fs, x, g.Y(3), w, (n + 1) * LINE)
     f.pop()
+    note_text("colophon fonts", INK)
     if str(rest).strip():
         OVERFLOW.append(dict(page=STATE["page"], kind="colophon fonts", text=str(rest)[:40]))
     reg("prose", g.Y(3), g.Y(3) + (n + 1) * LINE)
@@ -576,6 +763,8 @@ def build_trim(name):
     PICS = {n: f.load_image(os.path.join(OUT, "sketch", n + ".png")) for n in SKETCHES}
     for i, (page, recto, _kind) in enumerate(PAGES):
         STATE["page"] = i + 1
+        STATE["accent"] = SPREAD_ACCENT[i // 2]
+        STATE["ground"] = PAPER_HEX
         if i:
             f.new_page()
         f.background(PAPER)
@@ -598,7 +787,7 @@ def build_trim(name):
                  spreads=round(time.time() - t4, 2))
     report = dict(trim=name, W=g.W, H=g.H, colw=g.colw, lines=g.lines, panel=g.panel(), bleed=g.bleed,
                   drawn_seconds=round(drawn, 2), save_seconds=saves, placed=PLACED, notes=NOTES, overflow=OVERFLOW, code=CODE_LINES,
-                  wobble_points=STATE["wob"], pages=len(PAGES))
+                  wobble_points=STATE["wob"], pages=len(PAGES), texts=sorted(set(TEXTS)))
     with open(os.path.join(OUT, f"report_{name}.json"), "w") as fh:
         json.dump(report, fh, indent=1)
 

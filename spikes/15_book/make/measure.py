@@ -131,6 +131,33 @@ def cmyk_delta_e():
     return rows
 
 
+def contrast_section():
+    """WCAG 2.x contrast of every text colour against the ground it sits on (the build records each pair)."""
+    import build
+    say("## 7. Text contrast (WCAG 2.x)")
+    say()
+    pairs = {}
+    for trim in ("Square", "B5"):
+        rep = json.load(open(os.path.join(OUT, f"report_{trim}.json")))
+        for kind, color, ground in rep["texts"]:
+            pairs.setdefault((color, ground), set()).add(kind)
+    rows, worst = [], 99
+    for (color, ground), kinds in sorted(pairs.items(), key=lambda kv: build.contrast(*kv[0])):
+        ratio = build.contrast(color, ground)
+        worst = min(worst, ratio)
+        rows.append((color, ground, f"{ratio:.1f}", "PASS" if ratio >= 4.5 else "FAIL", ", ".join(sorted(kinds))))
+    table(["Text colour", "On ground", "Ratio", "4.5 needed", "Used for"], rows)
+    say(f"Lowest ratio: {worst:.1f}:1 ({'PASS' if worst >= 4.5 else 'FAIL'}).")
+    say()
+    say("Picture-page grounds (accent mixed with oldlace, 20 per cent), and the shade of each accent used for line numbers, tie lines and contents numbers:")
+    say()
+    rows = []
+    for name, hexv in build.ACCENT_HEX.items():
+        build.STATE["accent"] = name
+        rows.append((name, hexv, build.tint(), build.shade(), f"{build.contrast(build.shade(), build.PAPER_HEX):.1f}"))
+    table(["Accent", "Hex", "Ground tint", "Shade for text", "Shade on oldlace"], rows)
+
+
 def main():
     from pypdf import PdfReader
     timing = json.load(open(os.path.join(OUT, "timing.json")))
@@ -207,6 +234,7 @@ def main():
         table(["Token (day)", "Hex", "CMYK % (C/M/Y/K)", "dE76", "dE2000"], cmyk_delta_e())
     except Exception as exc:                                   # noqa: BLE001
         say(f"SKIPPED: {type(exc).__name__}: {exc}")
+    contrast_section()
     with open(os.path.join(OUT, "measurements.md"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(out) + "\n")
 

@@ -6,12 +6,12 @@
  "lines": 41,
  "panel": 405,
  "bleed": 8.503937007874017,
- "drawn_seconds": 0.88,
+ "drawn_seconds": 0.97,
  "save_seconds": {
-  "print_pdf": 4.62,
-  "screen_pdf": 5.74,
-  "page_pngs": 1.32,
-  "spreads": 0.49
+  "print_pdf": 4.98,
+  "screen_pdf": 5.93,
+  "page_pngs": 1.28,
+  "spreads": 0.45
  },
  "placed": [
   {
@@ -1198,6 +1198,183 @@
    "measure": 44
   }
  ],
- "wobble_points": 1938,
- "pages": 12
+ "wobble_points": 5121,
+ "pages": 12,
+ "texts": [
+  [
+   "caption",
+   "#191970",
+   "#fdf5e6"
+  ],
+  [
+   "chapter title",
+   "#191970",
+   "#fdf5e6"
+  ],
+  [
+   "code comment",
+   "#6b6380",
+   "#fdf5e6"
+  ],
+  [
+   "code keyword",
+   "#9932cc",
+   "#fdf5e6"
+  ],
+  [
+   "code keyword (highlighted)",
+   "#9932cc",
+   "#fee98a"
+  ],
+  [
+   "code name",
+   "#191970",
+   "#fdf5e6"
+  ],
+  [
+   "code name (highlighted)",
+   "#191970",
+   "#fee98a"
+  ],
+  [
+   "code number",
+   "#2b739b",
+   "#fdf5e6"
+  ],
+  [
+   "code number",
+   "#984595",
+   "#fee98a"
+  ],
+  [
+   "code number",
+   "#a34999",
+   "#fdf5e6"
+  ],
+  [
+   "code number",
+   "#ba4d53",
+   "#fdf5e6"
+  ],
+  [
+   "code number (highlighted)",
+   "#984595",
+   "#fee98a"
+  ],
+  [
+   "code number value",
+   "#00706b",
+   "#fdf5e6"
+  ],
+  [
+   "code number value (highlighted)",
+   "#00706b",
+   "#fee98a"
+  ],
+  [
+   "code string",
+   "#b22222",
+   "#fdf5e6"
+  ],
+  [
+   "code string (highlighted)",
+   "#b22222",
+   "#fee98a"
+  ],
+  [
+   "colophon fonts",
+   "#191970",
+   "#fdf5e6"
+  ],
+  [
+   "contents",
+   "#191970",
+   "#fdf5e6"
+  ],
+  [
+   "contents",
+   "#5a4f7a",
+   "#fdf5e6"
+  ],
+  [
+   "contents",
+   "#ba4d53",
+   "#fdf5e6"
+  ],
+  [
+   "folio",
+   "#5a4f7a",
+   "#d7f1e2"
+  ],
+  [
+   "folio",
+   "#5a4f7a",
+   "#fdd8c6"
+  ],
+  [
+   "folio",
+   "#5a4f7a",
+   "#fdd9dc"
+  ],
+  [
+   "folio",
+   "#5a4f7a",
+   "#fdefb8"
+  ],
+  [
+   "folio",
+   "#5a4f7a",
+   "#fdf5e6"
+  ],
+  [
+   "heading",
+   "#191970",
+   "#fdf5e6"
+  ],
+  [
+   "label",
+   "#5a4f7a",
+   "#d7f1e2"
+  ],
+  [
+   "label",
+   "#5a4f7a",
+   "#fdd8c6"
+  ],
+  [
+   "label",
+   "#5a4f7a",
+   "#fdefb8"
+  ],
+  [
+   "label",
+   "#5a4f7a",
+   "#fdf5e6"
+  ],
+  [
+   "predict caption",
+   "#191970",
+   "#fdd9dc"
+  ],
+  [
+   "prose",
+   "#191970",
+   "#fdf5e6"
+  ],
+  [
+   "side note",
+   "#5a4f7a",
+   "#fdf5e6"
+  ],
+  [
+   "try this text",
+   "#191970",
+   "#ffd700"
+  ],
+  [
+   "try this title",
+   "#191970",
+   "#ffd700"
+  ]
+ ]
 }
