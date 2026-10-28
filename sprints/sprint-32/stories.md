@@ -44,7 +44,7 @@ stories between heavy jobs. One heavy job at a time on this machine.
 ## S-231 tasks
 
 - [x] Desk research: every provider and task, with sizes, licences of code and weights, platforms, worker or page (`spikes/16_models/research.md`)
-- [ ] Measurements on this machine (desktop frames per second; headless Chrome), one heavy job at a time; macOS and Linux marked unverified or measured in CI. Web done 28 Oct (`spikes/16_models/web/results.md`): MediaPipe runs in a module worker; pose lite 11/s on CPU, about 40/s on GPU; no analytics hosts
+- [ ] Measurements on this machine (desktop frames per second; headless Chrome), one heavy job at a time; macOS and Linux marked unverified or measured in CI. Web done 28 Oct (`spikes/16_models/web/results.md`): MediaPipe runs in a module worker; pose lite 11/s on CPU, about 40/s on GPU; no analytics hosts. Desktop done 28 Oct (`spikes/16_models/desktop/results.md`): 4 to 7 times faster than the web; the Python package logs usage to Google (play.googleapis.com) with no switch found
 - [ ] How a model's answer reaches a Python sketch in Pyodide without `async`
 - [ ] The same 30-line pose sketch on the desktop and in Play
 - [ ] A recommendation per platform, and a first API (as the `ml` package, D-120) for the maintainer

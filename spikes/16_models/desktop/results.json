@@ -1,0 +1,70 @@
+{
+ "pose_lite": {
+  "task": "pose_lite",
+  "frames": 100,
+  "first_result_s": 0.77,
+  "median_ms": 12.92,
+  "p90_ms": 15.75,
+  "per_second": 74.1,
+  "found": 33,
+  "mediapipe": "1.2.0"
+ },
+ "pose_full": {
+  "task": "pose_full",
+  "frames": 100,
+  "first_result_s": 0.2,
+  "median_ms": 17.98,
+  "p90_ms": 25.08,
+  "per_second": 52.9,
+  "found": 33,
+  "mediapipe": "1.2.0"
+ },
+ "hand": {
+  "task": "hand",
+  "frames": 100,
+  "first_result_s": 0.2,
+  "median_ms": 10.3,
+  "p90_ms": 16.0,
+  "per_second": 84.6,
+  "found": 21,
+  "mediapipe": "1.2.0"
+ },
+ "face": {
+  "task": "face",
+  "frames": 100,
+  "first_result_s": 0.07,
+  "median_ms": 11.2,
+  "p90_ms": 13.44,
+  "per_second": 87.7,
+  "found": 478,
+  "mediapipe": "1.2.0"
+ },
+ "convert": {
+  "task": "convert",
+  "frames": 500,
+  "median_ms": 2.43,
+  "p90_ms": 4.35,
+  "per_second": 366.8,
+  "mediapipe": "1.2.0"
+ },
+ "segment": {
+  "task": "segment",
+  "frames": 100,
+  "first_result_s": 0.05,
+  "median_ms": 6.25,
+  "p90_ms": 6.97,
+  "per_second": 156.0,
+  "found": 307200,
+  "mediapipe": "1.2.0"
+ },
+ "classify": {
+  "task": "classify",
+  "frames": 100,
+  "first_result_s": 0.07,
+  "median_ms": 13.8,
+  "p90_ms": 16.21,
+  "per_second": 70.0,
+  "found": "sandbar 0.17",
+  "mediapipe": "1.2.0"
+ }
+}
