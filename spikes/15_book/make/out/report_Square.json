@@ -1,0 +1,1152 @@
+{
+ "trim": "Square",
+ "W": 600,
+ "H": 600,
+ "colw": 76.0,
+ "lines": 34,
+ "panel": 330,
+ "bleed": 8.503937007874017,
+ "drawn_seconds": 1.1,
+ "save_seconds": {
+  "print_pdf": 3.27,
+  "screen_pdf": 2.9,
+  "page_pngs": 0.58,
+  "spreads": 0.2
+ },
+ "placed": [
+  {
+   "page": 1,
+   "kind": "full-bleed picture (top at the bleed edge)",
+   "y": 600,
+   "bottom": 600,
+   "nudge": 0.0
+  },
+  {
+   "page": 2,
+   "kind": "label",
+   "y": 69,
+   "bottom": 84,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "chapter title 48/60",
+   "y": 81,
+   "bottom": 141,
+   "nudge": 0.0
+  },
+  {
+   "page": 2,
+   "kind": "prose",
+   "y": 156,
+   "bottom": 201,
+   "nudge": 0.0
+  },
+  {
+   "page": 2,
+   "kind": "label",
+   "y": 234,
+   "bottom": 249,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 249,
+   "bottom": 264,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 247.5,
+   "bottom": 262.5,
+   "nudge": 1.5
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 249,
+   "bottom": 264,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 264,
+   "bottom": 279,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 262.5,
+   "bottom": 277.5,
+   "nudge": 1.5
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 264,
+   "bottom": 279,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 279,
+   "bottom": 294,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 277.5,
+   "bottom": 292.5,
+   "nudge": 1.5
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 279,
+   "bottom": 294,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 294,
+   "bottom": 309,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 292.5,
+   "bottom": 307.5,
+   "nudge": 1.5
+  },
+  {
+   "page": 2,
+   "kind": "contents",
+   "y": 294,
+   "bottom": 309,
+   "nudge": 3
+  },
+  {
+   "page": 2,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 3,
+   "kind": "heading 22/30",
+   "y": 36,
+   "bottom": 66,
+   "nudge": 0.0
+  },
+  {
+   "page": 3,
+   "kind": "prose",
+   "y": 81,
+   "bottom": 126,
+   "nudge": 0.0
+  },
+  {
+   "page": 3,
+   "kind": "code number",
+   "y": 144.5,
+   "bottom": 159.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 3,
+   "kind": "code",
+   "y": 143.5,
+   "bottom": 158.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 3,
+   "kind": "code number",
+   "y": 159.5,
+   "bottom": 174.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 3,
+   "kind": "code number",
+   "y": 174.5,
+   "bottom": 189.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 3,
+   "kind": "code",
+   "y": 173.5,
+   "bottom": 188.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 3,
+   "kind": "code number",
+   "y": 189.5,
+   "bottom": 204.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 3,
+   "kind": "code",
+   "y": 188.5,
+   "bottom": 203.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 3,
+   "kind": "code number",
+   "y": 204.5,
+   "bottom": 219.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 3,
+   "kind": "code",
+   "y": 203.5,
+   "bottom": 218.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 3,
+   "kind": "code number",
+   "y": 219.5,
+   "bottom": 234.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 3,
+   "kind": "code",
+   "y": 218.5,
+   "bottom": 233.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 3,
+   "kind": "code number",
+   "y": 234.5,
+   "bottom": 249.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 3,
+   "kind": "code",
+   "y": 233.5,
+   "bottom": 248.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 3,
+   "kind": "side note",
+   "y": 171,
+   "bottom": 186,
+   "nudge": 0.0
+  },
+  {
+   "page": 3,
+   "kind": "side note",
+   "y": 186,
+   "bottom": 201,
+   "nudge": 0.0
+  },
+  {
+   "page": 3,
+   "kind": "side note",
+   "y": 216,
+   "bottom": 246,
+   "nudge": 0.0
+  },
+  {
+   "page": 3,
+   "kind": "side note",
+   "y": 246,
+   "bottom": 261,
+   "nudge": 0.0
+  },
+  {
+   "page": 3,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 4,
+   "kind": "big panel (bottom)",
+   "y": 516,
+   "bottom": 516,
+   "nudge": 0.0
+  },
+  {
+   "page": 4,
+   "kind": "label",
+   "y": 534,
+   "bottom": 549,
+   "nudge": 3
+  },
+  {
+   "page": 4,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 5,
+   "kind": "heading 22/30",
+   "y": 36,
+   "bottom": 66,
+   "nudge": 0.0
+  },
+  {
+   "page": 5,
+   "kind": "prose",
+   "y": 81,
+   "bottom": 126,
+   "nudge": 0.0
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 144.5,
+   "bottom": 159.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 143.5,
+   "bottom": 158.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 159.5,
+   "bottom": 174.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 174.5,
+   "bottom": 189.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 173.5,
+   "bottom": 188.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 189.5,
+   "bottom": 204.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 188.5,
+   "bottom": 203.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "highlight",
+   "y": 201,
+   "bottom": 216,
+   "nudge": 0.0
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 204.5,
+   "bottom": 219.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 203.5,
+   "bottom": 218.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "highlight",
+   "y": 216,
+   "bottom": 231,
+   "nudge": 0.0
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 219.5,
+   "bottom": 234.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 218.5,
+   "bottom": 233.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 234.5,
+   "bottom": 249.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 233.5,
+   "bottom": 248.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 249.5,
+   "bottom": 264.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 248.5,
+   "bottom": 263.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "code number",
+   "y": 264.5,
+   "bottom": 279.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 5,
+   "kind": "code",
+   "y": 263.5,
+   "bottom": 278.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 5,
+   "kind": "small panel",
+   "y": 306,
+   "bottom": 456,
+   "nudge": 0.0
+  },
+  {
+   "page": 5,
+   "kind": "label",
+   "y": 459,
+   "bottom": 474,
+   "nudge": 3
+  },
+  {
+   "page": 5,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 6,
+   "kind": "predict frame",
+   "y": 36,
+   "bottom": 366,
+   "nudge": 0.0
+  },
+  {
+   "page": 6,
+   "kind": "predict caption",
+   "y": 381,
+   "bottom": 396,
+   "nudge": 0.0
+  },
+  {
+   "page": 6,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 7,
+   "kind": "big panel (bottom)",
+   "y": 516,
+   "bottom": 516,
+   "nudge": 0.0
+  },
+  {
+   "page": 7,
+   "kind": "label",
+   "y": 534,
+   "bottom": 549,
+   "nudge": 3
+  },
+  {
+   "page": 7,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 8,
+   "kind": "heading 22/30",
+   "y": 36,
+   "bottom": 66,
+   "nudge": 0.0
+  },
+  {
+   "page": 8,
+   "kind": "prose",
+   "y": 81,
+   "bottom": 126,
+   "nudge": 0.0
+  },
+  {
+   "page": 8,
+   "kind": "compare panel",
+   "y": 141,
+   "bottom": 291,
+   "nudge": 0.0
+  },
+  {
+   "page": 8,
+   "kind": "label",
+   "y": 294,
+   "bottom": 309,
+   "nudge": 3
+  },
+  {
+   "page": 8,
+   "kind": "compare panel",
+   "y": 141,
+   "bottom": 291,
+   "nudge": 0.0
+  },
+  {
+   "page": 8,
+   "kind": "label",
+   "y": 294,
+   "bottom": 309,
+   "nudge": 3
+  },
+  {
+   "page": 8,
+   "kind": "compare panel",
+   "y": 141,
+   "bottom": 291,
+   "nudge": 0.0
+  },
+  {
+   "page": 8,
+   "kind": "label",
+   "y": 294,
+   "bottom": 309,
+   "nudge": 3
+  },
+  {
+   "page": 8,
+   "kind": "try this block",
+   "y": 336,
+   "bottom": 396,
+   "nudge": 0.0
+  },
+  {
+   "page": 8,
+   "kind": "try this title",
+   "y": 337.5,
+   "bottom": 352.5,
+   "nudge": 1.5
+  },
+  {
+   "page": 8,
+   "kind": "try this text",
+   "y": 351,
+   "bottom": 396,
+   "nudge": 0.0
+  },
+  {
+   "page": 8,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 9,
+   "kind": "heading 22/30",
+   "y": 36,
+   "bottom": 66,
+   "nudge": 0.0
+  },
+  {
+   "page": 9,
+   "kind": "prose",
+   "y": 81,
+   "bottom": 126,
+   "nudge": 0.0
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 144.5,
+   "bottom": 159.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 143.5,
+   "bottom": 158.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 159.5,
+   "bottom": 174.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 174.5,
+   "bottom": 189.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 173.5,
+   "bottom": 188.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 189.5,
+   "bottom": 204.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 188.5,
+   "bottom": 203.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 204.5,
+   "bottom": 219.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 203.5,
+   "bottom": 218.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 219.5,
+   "bottom": 234.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 218.5,
+   "bottom": 233.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 234.5,
+   "bottom": 249.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 233.5,
+   "bottom": 248.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 249.5,
+   "bottom": 264.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 248.5,
+   "bottom": 263.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 264.5,
+   "bottom": 279.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 263.5,
+   "bottom": 278.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 279.5,
+   "bottom": 294.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 278.5,
+   "bottom": 293.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 294.5,
+   "bottom": 309.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 293.5,
+   "bottom": 308.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "code number",
+   "y": 309.5,
+   "bottom": 324.5,
+   "nudge": 3.5
+  },
+  {
+   "page": 9,
+   "kind": "code",
+   "y": 308.5,
+   "bottom": 323.5,
+   "nudge": 2.5
+  },
+  {
+   "page": 9,
+   "kind": "side note",
+   "y": 201,
+   "bottom": 216,
+   "nudge": 0.0
+  },
+  {
+   "page": 9,
+   "kind": "side note",
+   "y": 231,
+   "bottom": 261,
+   "nudge": 0.0
+  },
+  {
+   "page": 9,
+   "kind": "side note",
+   "y": 261,
+   "bottom": 276,
+   "nudge": 0.0
+  },
+  {
+   "page": 9,
+   "kind": "label",
+   "y": 339,
+   "bottom": 354,
+   "nudge": 3
+  },
+  {
+   "page": 9,
+   "kind": "compare panel",
+   "y": 351,
+   "bottom": 501,
+   "nudge": 0.0
+  },
+  {
+   "page": 9,
+   "kind": "label",
+   "y": 504,
+   "bottom": 519,
+   "nudge": 3
+  },
+  {
+   "page": 9,
+   "kind": "compare panel",
+   "y": 351,
+   "bottom": 501,
+   "nudge": 0.0
+  },
+  {
+   "page": 9,
+   "kind": "label",
+   "y": 504,
+   "bottom": 519,
+   "nudge": 3
+  },
+  {
+   "page": 9,
+   "kind": "compare panel",
+   "y": 351,
+   "bottom": 501,
+   "nudge": 0.0
+  },
+  {
+   "page": 9,
+   "kind": "label",
+   "y": 504,
+   "bottom": 519,
+   "nudge": 3
+  },
+  {
+   "page": 9,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 10,
+   "kind": "big panel (bottom)",
+   "y": 516,
+   "bottom": 516,
+   "nudge": 0.0
+  },
+  {
+   "page": 10,
+   "kind": "label",
+   "y": 534,
+   "bottom": 549,
+   "nudge": 3
+  },
+  {
+   "page": 10,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 11,
+   "kind": "heading 22/30",
+   "y": 36,
+   "bottom": 66,
+   "nudge": 0.0
+  },
+  {
+   "page": 11,
+   "kind": "prose",
+   "y": 81,
+   "bottom": 141,
+   "nudge": 0.0
+  },
+  {
+   "page": 11,
+   "kind": "your canvas frame",
+   "y": 156,
+   "bottom": 486,
+   "nudge": 0.0
+  },
+  {
+   "page": 11,
+   "kind": "caption",
+   "y": 502.5,
+   "bottom": 517.5,
+   "nudge": 1.5
+  },
+  {
+   "page": 11,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  },
+  {
+   "page": 12,
+   "kind": "heading 22/30",
+   "y": 36,
+   "bottom": 66,
+   "nudge": 0.0
+  },
+  {
+   "page": 12,
+   "kind": "prose",
+   "y": 81,
+   "bottom": 141,
+   "nudge": 0.0
+  },
+  {
+   "page": 12,
+   "kind": "prose",
+   "y": 156,
+   "bottom": 186,
+   "nudge": 0.0
+  },
+  {
+   "page": 12,
+   "kind": "prose",
+   "y": 201,
+   "bottom": 231,
+   "nudge": 0.0
+  },
+  {
+   "page": 12,
+   "kind": "prose",
+   "y": 246,
+   "bottom": 261,
+   "nudge": 0.0
+  },
+  {
+   "page": 12,
+   "kind": "folio",
+   "y": 563,
+   "bottom": 578,
+   "nudge": 2
+  }
+ ],
+ "notes": [
+  {
+   "kind": "side note",
+   "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
+  },
+  {
+   "kind": "side note",
+   "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
+  },
+  {
+   "kind": "side note",
+   "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
+  },
+  {
+   "kind": "side note",
+   "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
+  },
+  {
+   "kind": "side note",
+   "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
+  },
+  {
+   "kind": "side note",
+   "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
+  },
+  {
+   "kind": "side note",
+   "why": "leading 11 is not a multiple of 15: only the first line sits on the grid"
+  }
+ ],
+ "overflow": [],
+ "code": [
+  {
+   "sketch": "1_1_circle",
+   "text": "import funground as f",
+   "chars": 21,
+   "measure": 56
+  },
+  {
+   "sketch": "1_1_circle",
+   "text": "",
+   "chars": 0,
+   "measure": 56
+  },
+  {
+   "sketch": "1_1_circle",
+   "text": "f.size(600, 600)",
+   "chars": 16,
+   "measure": 56
+  },
+  {
+   "sketch": "1_1_circle",
+   "text": "f.background(\"oldlace\")",
+   "chars": 23,
+   "measure": 56
+  },
+  {
+   "sketch": "1_1_circle",
+   "text": "f.fill(\"tomato\")",
+   "chars": 16,
+   "measure": 56
+  },
+  {
+   "sketch": "1_1_circle",
+   "text": "f.circle()",
+   "chars": 10,
+   "measure": 56
+  },
+  {
+   "sketch": "1_1_circle",
+   "text": "f.show()",
+   "chars": 8,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "import funground as f",
+   "chars": 21,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "",
+   "chars": 0,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "f.size(600, 600)",
+   "chars": 16,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "f.background(\"oldlace\")",
+   "chars": 23,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "f.fill(\"turquoise\")",
+   "chars": 19,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "f.square(size=300)",
+   "chars": 18,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "f.fill(\"tomato\")",
+   "chars": 16,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "f.circle()",
+   "chars": 10,
+   "measure": 56
+  },
+  {
+   "sketch": "1_2_square",
+   "text": "f.show()",
+   "chars": 8,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "import funground as f",
+   "chars": 21,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "",
+   "chars": 0,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.size(600, 600)",
+   "chars": 16,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.background(\"oldlace\")",
+   "chars": 23,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.no_stroke()",
+   "chars": 13,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.fill(\"tomato\")",
+   "chars": 16,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.circle(at=\"random\", size=80)",
+   "chars": 30,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.fill(\"gold\")",
+   "chars": 14,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.circle(at=\"random\", size=80)",
+   "chars": 30,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.fill(\"turquoise\")",
+   "chars": 19,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.circle(at=\"random\", size=80)",
+   "chars": 30,
+   "measure": 56
+  },
+  {
+   "sketch": "1_3_random",
+   "text": "f.show()",
+   "chars": 8,
+   "measure": 56
+  }
+ ],
+ "wobble_points": 1685,
+ "pages": 12
+}
