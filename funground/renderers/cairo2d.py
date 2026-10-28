@@ -195,7 +195,8 @@ class CairoRenderer:
                 self._begin_composite(ctx, op, composite)
             if t is ir.Clear:
                 ctx.save(); self._reset_clip(ctx); self._source(ctx, op.color)
-                ctx.set_operator(cairo.OPERATOR_SOURCE); ctx.paint(); ctx.restore()
+                ctx.set_operator(cairo.OPERATOR_OVER if self._covers(op.color) else cairo.OPERATOR_SOURCE)
+                ctx.paint(); ctx.restore()
             elif t is ir.Save:
                 ctx.save(); depth += 1
             elif t is ir.Restore:
@@ -619,6 +620,14 @@ class CairoRenderer:
         ctx.restore()
 
     # ---- helpers
+    def _covers(self, c) -> bool:
+        """Whether painting ``c`` over everything hides what was there, so "over" gives the same pixels as "replace".
+
+        background() uses "over" then: SVG and PDF write "replace" as a mask and filter group, which load_svg and
+        some viewers drop, losing the background (S-249).
+        """
+        return self._erase is None and self._alpha == 1 and isinstance(c, Color) and c.a == 255
+
     def _source(self, ctx, c, stroke: bool = False) -> None:
         if self._erase is not None:                     # S-107: opaque black; DEST_OUT removes alpha = strength
             ctx.set_source_rgba(0, 0, 0, self._erase[1 if stroke else 0] / 255)
