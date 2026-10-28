@@ -1,7 +1,11 @@
 # Spike S-225: drawing without coordinates (proposal D-121)
 
-**Status:** this is a proposal for the maintainer's decision, and no product code has changed. If it is accepted, the
-design moves to `docs/design/` and a story builds it.
+**Status:** decided 28 Oct 2026 (D-121): **keep current behaviour.** The maintainer: "even a gets complex soon. I do not
+want to introduce more parameters. If really needed, creating a new package is the better cleaner option, but not now."
+No shape gains keywords. The spike's `make/nocoords.py` stays as spike evidence only. The test chapter's sketches print
+the proposed spelling, and must be rewritten with today's calls before any page is shown as the book. How Chapter 1 meets
+the brief ("no x and y") is open again for the book's writing. A separate package for the book's drawing is possible later,
+as a new decision. The proposal below is kept as it was asked.
 
 ## The brief
 

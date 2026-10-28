@@ -240,4 +240,6 @@ Gaps 3 and 9 to 14 are smaller, and wait for the whole-book decision.
 - The spreads on the site with Previous and Next.
 - Reading one page at a time, in a viewer the maintainer opens.
 - The choice between the two trims, which is the maintainer's choice from the spread pictures.
-- D-121's answer.
+- ~~D-121's answer.~~ Answered 28 Oct: keep current behaviour (no new shape keywords; a package later if needed). The
+  chapter's sketches use the proposed calls through the spike's shim and must be rewritten with today's calls before
+  they are shown as the book.
