@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Only this page's own scripts, and requests only to GitHub and the exchange service (set the exchange host in app.js). -->
+<meta http-equiv="Content-Security-Policy"
+  content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src https://api.github.com https://*.workers.dev http://localhost:*; base-uri 'none'; form-action 'none'">
+<title>Sketchbook sign-in spike</title>
+<style>
+  body { font: 16px/1.4 system-ui, sans-serif; max-width: 42rem; margin: 0 auto; padding: 1rem; }
+  fieldset { margin: 1rem 0; } label { display: block; margin: .5rem 0 .2rem; }
+  input, select, textarea, button { font: inherit; padding: .5rem; box-sizing: border-box; max-width: 100%; }
+  input[type=text], input[type=password] { width: 100%; }
+  textarea { width: 100%; height: 14rem; font-family: ui-monospace, monospace; }
+  button { margin: .3rem .3rem .3rem 0; min-height: 2.75rem; }
+  #log { background: #f4f4f4; padding: .5rem; font: 13px ui-monospace, monospace; max-height: 10rem; overflow: auto; white-space: pre-wrap; }
+  .hidden { display: none; } .bad { color: #b00020; } .ok { color: #0a6b2a; }
+</style>
+</head>
+<body>
+<h1>Sketchbook sign-in spike</h1>
+<p>S-238. A test page, not part of Play. Nothing here writes until you press Save or New.</p>
+<p id="status" role="status"></p>
+
+<section id="signedOut">
+  <fieldset>
+    <legend>Option a: paste a fine-grained token</legend>
+    <p>Create one at GitHub, Settings, Developer settings, Fine-grained tokens. One repository only, permission
+      "Contents: Read and write", short expiry.</p>
+    <label for="pat">Token</label>
+    <input id="pat" type="password" autocomplete="off" spellcheck="false">
+    <button id="usePat">Use this token</button>
+  </fieldset>
+  <fieldset>
+    <legend>Option b: sign in with GitHub</legend>
+    <p>Needs the exchange service (see <code>app.js</code>, <code>CONFIG</code>).</p>
+    <button id="signIn">Sign in with GitHub</button>
+    <button id="install">Choose repositories (install the App)</button>
+  </fieldset>
+</section>
+
+<section id="signedIn" class="hidden">
+  <p>Signed in as <strong id="who"></strong> <button id="signOut">Sign out</button></p>
+  <label for="repo">Sketchbook repository (owner/name)</label>
+  <input id="repo" type="text" list="repos" placeholder="your-name/sketchbook" autocapitalize="none" spellcheck="false">
+  <datalist id="repos"></datalist>
+  <button id="load">List sketches</button>
+
+  <label for="files">Sketches</label>
+  <select id="files" size="6"></select>
+  <button id="open">Open</button>
+  <button id="newSketch">New sketch</button>
+
+  <label for="editor" id="editorLabel">Code</label>
+  <textarea id="editor" spellcheck="false" autocapitalize="none"></textarea>
+  <label for="message">Commit message</label>
+  <input id="message" type="text" value="Update from Play (spike)">
+  <button id="save">Save as a commit</button>
+
+  <section id="conflict" class="hidden">
+    <h2>Changed on GitHub since you opened it</h2>
+    <p>Nothing was saved. Their version is below. Choose one.</p>
+    <textarea id="theirs" readonly></textarea>
+    <button id="keepMine">Save mine over theirs</button>
+    <button id="takeTheirs">Use theirs (lose my changes)</button>
+  </section>
+</section>
+
+<h2>Requests made</h2>
+<div id="log" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>
