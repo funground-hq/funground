@@ -46,5 +46,6 @@ Next after this sprint: S-231, the models spike (E-37, added 23 Oct), which may 
 - [x] A page system: trim with bleed, grid, type from the site's fonts, colour, components (`spikes/15_book/page_system.md`)
 - [x] The production route chosen and why (funground as the layout engine; page_system.md section 7)
 - [x] One chapter of 8 to 12 pages as a PDF, pictures by funground, a chapter opener drawn by a sketch (`spikes/15_book/make/`, RESULTS.md)
+- [ ] A night (midnightblue) version of the screen PDF, closer to Play (maintainer, 28 Oct)
 - [ ] The spreads on the site with Previous and Next
 - [ ] A proposal for drawing without coordinates, as a decision for the maintainer; the effort of a whole book

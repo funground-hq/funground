@@ -310,3 +310,21 @@ too plain. Structure is unchanged; only the surface changed (`make/build.py`, `m
 - Both trims build (Square 13.4 s, B5 14.2 s). `build.py` is now about 810 lines (it was 623).
 
 **Not done:** CMYK check of the tints (hotpink and tomato tints will shift in print, like their tokens, section 6).
+
+### The maintainer's verdict on the colour pass (28 Oct)
+
+"For now this will work, but ideally we can try, at least for the screen version, something closer to Play's navy blue
+version."
+
+**To try next: a night version of the screen PDF.** It uses the site's dark tokens from `design/tokens.json`:
+- the paper is midnightblue `#191970`;
+- the ink is oldlace `#fdf5e6`;
+- links and strings use lightsalmon `#ffa07a`.
+
+The print PDF stays on oldlace.
+
+**How:** the build takes a theme, so one layout gives both screen versions. The accents' tints become shades of navy
+rather than mixes with oldlace. Contrast is measured again for every text colour.
+
+**The sketch pictures** keep their own backgrounds, because they are the real output. The book's sketches could use
+`f.background("midnightblue")`, as many gallery examples do, but that changes the sketch, so it is a writing choice.
