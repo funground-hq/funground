@@ -1,0 +1,1700 @@
+{
+ "date": "2026-10-28T16:18:44.173Z",
+ "chrome": "156.0.8078.48",
+ "mediapipe": "@mediapipe/tasks-vision 1.2.0",
+ "jobs": [
+  {
+   "task": "pose_lite",
+   "mode": "main",
+   "delegate": "CPU",
+   "wall_s": 24.322,
+   "ok": true,
+   "result": {
+    "task": "pose_lite",
+    "delegate": "CPU",
+    "where": "main",
+    "import_ms": 238,
+    "fileset_ms": 247.59999990463257,
+    "created_ms": 3627.0999999046326,
+    "first_result_ms": 14414.700000047684,
+    "found": 33,
+    "frames": 100,
+    "fps": 10.843634786380395,
+    "median_ms": 91.79999995231628,
+    "p90_ms": 110.70000004768372,
+    "min_ms": 60.799999952316284,
+    "max_ms": 140.40000009536743,
+    "page_resources": [
+     {
+      "url": "http://127.0.0.1:56884/bench.js",
+      "transfer": 5135,
+      "encoded": 4835
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "http://127.0.0.1:56884/favicon.ico",
+      "transfer": 300,
+      "encoded": 0
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+      "transfer": 67217,
+      "encoded": 66917
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+      "transfer": 3244503,
+      "encoded": 3244203
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=pose_lite&mode=main&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46322,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 67345,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3245452,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 5781516,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "log: I1028 16:12:34.656000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:12:34.663000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:12:45.191000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:12:45.248999 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:12:45.449999 2195520 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:12:54.708999 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "pose_lite",
+   "mode": "worker",
+   "delegate": "CPU",
+   "wall_s": 14.828,
+   "ok": true,
+   "result": {
+    "task": "pose_lite",
+    "delegate": "CPU",
+    "where": "worker",
+    "import_ms": 222.10000014305115,
+    "fileset_ms": 224.40000009536743,
+    "created_ms": 3994.4000000953674,
+    "first_result_ms": 4987.299999952316,
+    "found": 33,
+    "frames": 100,
+    "fps": 11.060111707128243,
+    "median_ms": 89,
+    "p90_ms": 113,
+    "min_ms": 49.60000014305115,
+    "max_ms": 140.70000004768372,
+    "worker_resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+      "transfer": 81814,
+      "encoded": 81514
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+      "transfer": 3703714,
+      "encoded": 3703414
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=pose_lite&mode=worker&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/worker.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 0,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46320,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 81976,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3704732,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 5781524,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:13:00.196000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:13:00.203000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:13:00.883000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:13:00.959000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:13:01.190000 2195520 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:13:10.268999 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "pose_full",
+   "mode": "main",
+   "delegate": "CPU",
+   "wall_s": 21.457,
+   "ok": true,
+   "result": {
+    "task": "pose_full",
+    "delegate": "CPU",
+    "where": "main",
+    "import_ms": 218.10000014305115,
+    "fileset_ms": 219.40000009536743,
+    "created_ms": 7627.100000143051,
+    "first_result_ms": 8318.600000143051,
+    "found": 33,
+    "frames": 100,
+    "fps": 7.94533608771651,
+    "median_ms": 128.09999990463257,
+    "p90_ms": 156.80000019073486,
+    "min_ms": 67.79999995231628,
+    "max_ms": 172.59999990463257,
+    "page_resources": [
+     {
+      "url": "http://127.0.0.1:56884/bench.js",
+      "transfer": 5135,
+      "encoded": 4835
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+      "transfer": 67217,
+      "encoded": 66917
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+      "transfer": 3244503,
+      "encoded": 3244203
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=pose_full&mode=main&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46318,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 67367,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3246016,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 9403963,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:13:18.828999 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:13:18.832000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:13:19.143000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:13:19.232000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:13:19.515000 2195520 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:13:32.142000 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "pose_full",
+   "mode": "worker",
+   "delegate": "CPU",
+   "wall_s": 19.897,
+   "ok": true,
+   "result": {
+    "task": "pose_full",
+    "delegate": "CPU",
+    "where": "worker",
+    "import_ms": 253.59999990463257,
+    "fileset_ms": 255.20000004768372,
+    "created_ms": 5774.5,
+    "first_result_ms": 6564.700000047684,
+    "found": 33,
+    "frames": 100,
+    "fps": 8.113919428780072,
+    "median_ms": 123.79999995231628,
+    "p90_ms": 151.19999980926514,
+    "min_ms": 79.29999995231628,
+    "max_ms": 169.40000009536743,
+    "worker_resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+      "transfer": 81814,
+      "encoded": 81514
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+      "transfer": 3703714,
+      "encoded": 3703414
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=pose_full&mode=worker&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/worker.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 0,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46309,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 81952,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3705158,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 9403963,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:13:38.831000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:13:38.835000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:13:39.220999 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:13:39.328999 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:13:39.627000 2195520 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:13:51.977999 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "hand",
+   "mode": "main",
+   "delegate": "CPU",
+   "wall_s": 12.206,
+   "ok": true,
+   "result": {
+    "task": "hand",
+    "delegate": "CPU",
+    "where": "main",
+    "import_ms": 197.59999990463257,
+    "fileset_ms": 199.59999990463257,
+    "created_ms": 4784.099999904633,
+    "first_result_ms": 5417,
+    "found": 21,
+    "frames": 100,
+    "fps": 16.06425702811245,
+    "median_ms": 58.90000009536743,
+    "p90_ms": 84.60000014305115,
+    "min_ms": 35.60000014305115,
+    "max_ms": 122.09999990463257,
+    "page_resources": [
+     {
+      "url": "http://127.0.0.1:56884/bench.js",
+      "transfer": 5135,
+      "encoded": 4835
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+      "transfer": 67217,
+      "encoded": 66917
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+      "transfer": 3244503,
+      "encoded": 3244203
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/thumb_up.jpg",
+      "transfer": 80688,
+      "encoded": 80388
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=hand&mode=main&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46322,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 67353,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3245511,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 7824001,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/thumb_up.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 80402,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:13:57.951000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:13:57.952999 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:13:58.195000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:13:58.252000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:13:58.585999 2195520 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:14:04.830000 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "hand",
+   "mode": "worker",
+   "delegate": "CPU",
+   "wall_s": 14.781,
+   "ok": true,
+   "result": {
+    "task": "hand",
+    "delegate": "CPU",
+    "where": "worker",
+    "import_ms": 208.5,
+    "fileset_ms": 209.09999990463257,
+    "created_ms": 6189.200000047684,
+    "first_result_ms": 6603.799999952316,
+    "found": 21,
+    "frames": 100,
+    "fps": 13.463480309660047,
+    "median_ms": 70,
+    "p90_ms": 107.69999980926514,
+    "min_ms": 41.39999985694885,
+    "max_ms": 140.90000009536743,
+    "worker_resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+      "transfer": 81814,
+      "encoded": 81514
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+      "transfer": 3703714,
+      "encoded": 3703414
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/thumb_up.jpg",
+      "transfer": 80688,
+      "encoded": 80388
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=hand&mode=worker&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/worker.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 0,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46324,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 81941,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3705374,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 7823999,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/thumb_up.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 80402,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:14:12.264000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:14:12.267000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:14:12.387000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:14:12.428999 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:14:12.679000 2195520 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:14:20.134000 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "face",
+   "mode": "main",
+   "delegate": "CPU",
+   "wall_s": 8.29,
+   "ok": true,
+   "result": {
+    "task": "face",
+    "delegate": "CPU",
+    "where": "main",
+    "import_ms": 167.40000009536743,
+    "fileset_ms": 168.10000014305115,
+    "created_ms": 2751.800000190735,
+    "first_result_ms": 3092.300000190735,
+    "found": 478,
+    "frames": 100,
+    "fps": 21.325599250206334,
+    "median_ms": 46.59999990463257,
+    "p90_ms": 62.59999990463257,
+    "min_ms": 27.200000047683716,
+    "max_ms": 80.79999995231628,
+    "page_resources": [
+     {
+      "url": "http://127.0.0.1:56884/bench.js",
+      "transfer": 5135,
+      "encoded": 4835
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+      "transfer": 67217,
+      "encoded": 66917
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+      "transfer": 3244503,
+      "encoded": 3244203
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/portrait.jpg",
+      "transfer": 176861,
+      "encoded": 176561
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=face&mode=main&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46315,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 67343,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3245379,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 3761266,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/portrait.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 176575,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "warning: W1028 16:14:23.632000 2195520 face_landmarker_graph.cc:180] Sets FaceBlendshapesGraph acceleration to xnnpack by default.",
+    "log: I1028 16:14:23.736000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:14:23.737999 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:14:23.851000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:14:23.900000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:14:28.784999 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "face",
+   "mode": "worker",
+   "delegate": "CPU",
+   "wall_s": 9.173,
+   "ok": true,
+   "result": {
+    "task": "face",
+    "delegate": "CPU",
+    "where": "worker",
+    "import_ms": 160.40000009536743,
+    "fileset_ms": 161.60000014305115,
+    "created_ms": 3986.300000190735,
+    "first_result_ms": 4287.200000047684,
+    "found": 478,
+    "frames": 100,
+    "fps": 25.06516943964668,
+    "median_ms": 37.5,
+    "p90_ms": 53.200000047683716,
+    "min_ms": 24.5,
+    "max_ms": 68.5,
+    "worker_resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+      "transfer": 81814,
+      "encoded": 81514
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+      "transfer": 3703714,
+      "encoded": 3703414
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/portrait.jpg",
+      "transfer": 176861,
+      "encoded": 176561
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=face&mode=worker&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/worker.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 0,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46319,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 81948,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3704713,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 3761268,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/portrait.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 176575,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "warning: W1028 16:14:33.737999 2195520 face_landmarker_graph.cc:180] Sets FaceBlendshapesGraph acceleration to xnnpack by default.",
+    "log: I1028 16:14:33.804000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:14:33.806000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:14:33.927000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "warning: W1028 16:14:33.967000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:14:38.112999 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "segment",
+   "mode": "main",
+   "delegate": "CPU",
+   "wall_s": 4.903,
+   "ok": true,
+   "result": {
+    "task": "segment",
+    "delegate": "CPU",
+    "where": "main",
+    "import_ms": 158.59999990463257,
+    "fileset_ms": 159.90000009536743,
+    "created_ms": 1721.2000000476837,
+    "first_result_ms": 1869.7999999523163,
+    "found": 307200,
+    "frames": 100,
+    "fps": 39.7899092782519,
+    "median_ms": 20.600000143051147,
+    "p90_ms": 39.39999985694885,
+    "min_ms": 15.100000143051147,
+    "max_ms": 54.90000009536743,
+    "page_resources": [
+     {
+      "url": "http://127.0.0.1:56884/bench.js",
+      "transfer": 5135,
+      "encoded": 4835
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+      "transfer": 67217,
+      "encoded": 66917
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+      "transfer": 3244503,
+      "encoded": 3244203
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=segment&mode=main&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46314,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 67342,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3245366,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 250283,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:14:40.951000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:14:40.952999 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:14:41.030000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:14:43.627000 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "segment",
+   "mode": "worker",
+   "delegate": "CPU",
+   "wall_s": 5.631,
+   "ok": true,
+   "result": {
+    "task": "segment",
+    "delegate": "CPU",
+    "where": "worker",
+    "import_ms": 238.40000009536743,
+    "fileset_ms": 242.5,
+    "created_ms": 2122.9000000953674,
+    "first_result_ms": 2253.4000000953674,
+    "found": 307200,
+    "frames": 100,
+    "fps": 38.188344918522084,
+    "median_ms": 25.600000143051147,
+    "p90_ms": 37.799999952316284,
+    "min_ms": 13.700000047683716,
+    "max_ms": 48.09999990463257,
+    "worker_resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+      "transfer": 81814,
+      "encoded": 81514
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+      "transfer": 3703714,
+      "encoded": 3703414
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=segment&mode=worker&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/worker.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 0,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46325,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 81946,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3707991,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 250280,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:14:46.590000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:14:46.592000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:14:46.657999 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:14:49.355000 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "objects",
+   "mode": "main",
+   "delegate": "CPU",
+   "wall_s": 97.398,
+   "ok": true,
+   "result": {
+    "task": "objects",
+    "delegate": "CPU",
+    "where": "main",
+    "import_ms": 175,
+    "fileset_ms": 177.79999995231628,
+    "created_ms": 2989.2000000476837,
+    "first_result_ms": 3986.7000000476837,
+    "found": 2553,
+    "frames": 100,
+    "fps": 1.076614005887478,
+    "median_ms": 848.7999999523163,
+    "p90_ms": 1310.0999999046326,
+    "min_ms": 667.3000001907349,
+    "max_ms": 1606,
+    "page_resources": [
+     {
+      "url": "http://127.0.0.1:56884/bench.js",
+      "transfer": 5135,
+      "encoded": 4835
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+      "transfer": 67217,
+      "encoded": 66917
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+      "transfer": 3244503,
+      "encoded": 3244203
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/latest/efficientdet_lite0.tflite",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=objects&mode=main&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46322,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 67343,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3245743,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/latest/efficientdet_lite0.tflite",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 4605853,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:14:53.320000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:14:53.324000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:16:27.227000 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "objects",
+   "mode": "worker",
+   "delegate": "CPU",
+   "wall_s": 99.713,
+   "ok": true,
+   "result": {
+    "task": "objects",
+    "delegate": "CPU",
+    "where": "worker",
+    "import_ms": 201.79999995231628,
+    "fileset_ms": 202.70000004768372,
+    "created_ms": 4305.5,
+    "first_result_ms": 5530.399999856949,
+    "found": 2553,
+    "frames": 100,
+    "fps": 1.0711053271423445,
+    "median_ms": 886.5999999046326,
+    "p90_ms": 1166.7999999523163,
+    "min_ms": 660.4000000953674,
+    "max_ms": 1345.7999999523163,
+    "worker_resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+      "transfer": 81814,
+      "encoded": 81514
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+      "transfer": 3703714,
+      "encoded": 3703414
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/latest/efficientdet_lite0.tflite",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=objects&mode=worker&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/worker.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 0,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46317,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 81942,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3705266,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/latest/efficientdet_lite0.tflite",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 4605853,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:16:32.271000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:16:32.272999 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:18:06.872999 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "classify",
+   "mode": "main",
+   "delegate": "CPU",
+   "wall_s": 16.812,
+   "ok": true,
+   "result": {
+    "task": "classify",
+    "delegate": "CPU",
+    "where": "main",
+    "import_ms": 230.20000004768372,
+    "fileset_ms": 230.90000009536743,
+    "created_ms": 8509.700000047684,
+    "first_result_ms": 8770.5,
+    "found": "sandbar",
+    "frames": 100,
+    "fps": 13.259082471492974,
+    "median_ms": 72.20000004768372,
+    "p90_ms": 97.60000014305115,
+    "min_ms": 46.40000009536743,
+    "max_ms": 113.60000014305115,
+    "page_resources": [
+     {
+      "url": "http://127.0.0.1:56884/bench.js",
+      "transfer": 5135,
+      "encoded": 4835
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+      "transfer": 67217,
+      "encoded": 66917
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+      "transfer": 3244503,
+      "encoded": 3244203
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/latest/efficientnet_lite0.tflite",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=classify&mode=main&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46309,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 67334,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3245557,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/latest/efficientnet_lite0.tflite",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 18593018,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:18:16.377999 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:18:16.380999 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:18:16.496000 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:18:24.204000 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "classify",
+   "mode": "worker",
+   "delegate": "CPU",
+   "wall_s": 19.317,
+   "ok": true,
+   "result": {
+    "task": "classify",
+    "delegate": "CPU",
+    "where": "worker",
+    "import_ms": 195.29999995231628,
+    "fileset_ms": 197.5,
+    "created_ms": 10822.200000047684,
+    "first_result_ms": 11023.400000095367,
+    "found": "sandbar",
+    "frames": 100,
+    "fps": 13.008299295192245,
+    "median_ms": 76.90000009536743,
+    "p90_ms": 95.59999990463257,
+    "min_ms": 46.299999952316284,
+    "max_ms": 110.90000009536743,
+    "worker_resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+      "transfer": 81814,
+      "encoded": 81514
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+      "transfer": 3703714,
+      "encoded": 3703414
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/latest/efficientnet_lite0.tflite",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:56884/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:56884/page.html?task=classify&mode=worker&delegate=CPU",
+     "host": "127.0.0.1:56884",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/worker.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 0,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:56884/bench.js",
+     "host": "127.0.0.1:56884",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46314,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 81944,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3705349,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/latest/efficientnet_lite0.tflite",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 18593022,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:56884/img/pose.jpg",
+     "host": "127.0.0.1:56884",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:18:35.790000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:18:35.792999 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "error: INFO: Created TensorFlow Lite XNNPACK delegate for CPU.",
+    "warning: W1028 16:18:35.884999 2195520 inference_feedback_manager.cc:121] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:18:43.692999 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  }
+ ]
+}

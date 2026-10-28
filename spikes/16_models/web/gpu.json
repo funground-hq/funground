@@ -1,0 +1,250 @@
+{
+ "date": "2026-10-28T16:19:33.290Z",
+ "chrome": "156.0.8078.48",
+ "mediapipe": "@mediapipe/tasks-vision 1.2.0",
+ "jobs": [
+  {
+   "task": "pose_lite",
+   "mode": "main",
+   "delegate": "GPU",
+   "wall_s": 19.936,
+   "ok": true,
+   "result": {
+    "task": "pose_lite",
+    "delegate": "GPU",
+    "where": "main",
+    "import_ms": 177.79999995231628,
+    "fileset_ms": 179.20000004768372,
+    "created_ms": 4794.200000047684,
+    "first_result_ms": 16802.700000047684,
+    "found": 33,
+    "frames": 100,
+    "fps": 38.81535535529669,
+    "median_ms": 25.600000143051147,
+    "p90_ms": 29.899999856948853,
+    "min_ms": 18,
+    "max_ms": 43.299999952316284,
+    "page_resources": [
+     {
+      "url": "http://127.0.0.1:62926/bench.js",
+      "transfer": 5135,
+      "encoded": 4835
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "http://127.0.0.1:62926/favicon.ico",
+      "transfer": 300,
+      "encoded": 0
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+      "transfer": 67217,
+      "encoded": 66917
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+      "transfer": 3244503,
+      "encoded": 3244203
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:62926/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:62926/page.html?task=pose_lite&mode=main&delegate=GPU",
+     "host": "127.0.0.1:62926",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:62926/bench.js",
+     "host": "127.0.0.1:62926",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46313,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 67343,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3245417,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 5781522,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:62926/img/pose.jpg",
+     "host": "127.0.0.1:62926",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "log: I1028 16:19:00.252999 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:19:00.260000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "warning: W1028 16:19:12.276000 2195520 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:19:14.884000 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  },
+  {
+   "task": "pose_lite",
+   "mode": "worker",
+   "delegate": "GPU",
+   "wall_s": 17.627,
+   "ok": true,
+   "result": {
+    "task": "pose_lite",
+    "delegate": "GPU",
+    "where": "worker",
+    "import_ms": 211.40000009536743,
+    "fileset_ms": 212.29999995231628,
+    "created_ms": 6151.799999952316,
+    "first_result_ms": 13493.100000143051,
+    "found": 33,
+    "frames": 100,
+    "fps": 42.44302024703862,
+    "median_ms": 23.59999990463257,
+    "p90_ms": 26.100000143051147,
+    "min_ms": 18.5,
+    "max_ms": 30.100000143051147,
+    "worker_resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+      "transfer": 45798,
+      "encoded": 45498
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+      "transfer": 81814,
+      "encoded": 81514
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+      "transfer": 3703714,
+      "encoded": 3703414
+     },
+     {
+      "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+      "transfer": 0,
+      "encoded": 0
+     },
+     {
+      "url": "http://127.0.0.1:62926/img/pose.jpg",
+      "transfer": 44400,
+      "encoded": 44100
+     }
+    ]
+   },
+   "requests": [
+    {
+     "url": "http://127.0.0.1:62926/page.html?task=pose_lite&mode=worker&delegate=GPU",
+     "host": "127.0.0.1:62926",
+     "type": "document",
+     "bytes": 1117,
+     "header_bytes": 156
+    },
+    {
+     "url": "http://127.0.0.1:62926/bench.js",
+     "host": "127.0.0.1:62926",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:62926/worker.js",
+     "host": "127.0.0.1:62926",
+     "type": "script",
+     "bytes": 0,
+     "header_bytes": 162
+    },
+    {
+     "url": "http://127.0.0.1:62926/bench.js",
+     "host": "127.0.0.1:62926",
+     "type": "script",
+     "bytes": 4848,
+     "header_bytes": 162
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/vision_bundle.mjs",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 46311,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.js",
+     "host": "cdn.jsdelivr.net",
+     "type": "script",
+     "bytes": 81955,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm/vision_wasm_module_internal.wasm",
+     "host": "cdn.jsdelivr.net",
+     "type": "fetch",
+     "bytes": 3704659,
+     "header_bytes": 0
+    },
+    {
+     "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+     "host": "storage.googleapis.com",
+     "type": "fetch",
+     "bytes": 5781523,
+     "header_bytes": 0
+    },
+    {
+     "url": "http://127.0.0.1:62926/img/pose.jpg",
+     "host": "127.0.0.1:62926",
+     "type": "fetch",
+     "bytes": 44113,
+     "header_bytes": 157
+    }
+   ],
+   "logs": [
+    "log: I1028 16:19:22.814000 2195520 gl_context.cc:408] GL version: 3.0 (OpenGL ES 3.0 (WebGL 2.0 (OpenGL ES 3.0 Chromium))), renderer: WebKit WebGL",
+    "warning: W1028 16:19:22.816000 2195520 gl_context.cc:1135] OpenGL error checking is disabled",
+    "log: Graph successfully started running.",
+    "warning: W1028 16:19:30.153999 2195520 landmark_projection_calculator.cc:81] Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI. Provide IMAGE_DIMENSIONS or use PROJECTION_MATRIX.",
+    "log: Graph finished closing successfully.",
+    "log: I1028 16:19:32.537999 2195520 gl_context_webgl.cc:149] Successfully destroyed WebGL context with handle 1"
+   ]
+  }
+ ]
+}
