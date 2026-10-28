@@ -49,6 +49,8 @@ versions and a fix for `f.run(fps)`. The parts not yet tried by hand are in the
 [release notes](docs/releases/0.1.0.md).
 
 ### Fixed
+- **A saved SVG keeps its background** (S-249, found by the book spike): `f.background()` in an opaque colour is
+  written as a plain fill, not a mask and filter group, so `f.load_svg()` and other programs no longer show it black.
 - **`f.run(fps=...)` works** (maintainer's report, 13 Oct): `f.size()` in `setup()` no longer resets the rate to 60, so
   `run()`'s rate wins as the contract says (R3); in the browser, frames are now paced to the rate instead of
   following the display's refresh.
