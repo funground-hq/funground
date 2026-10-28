@@ -1,0 +1,25 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>MediaPipe measure</title>
+<!-- measure.mjs opens this with ?task=pose_lite&mode=main|worker&delegate=CPU|GPU and reads window.__done. -->
+<script type="module">
+import { bench } from "./bench.js";
+
+const q = new URLSearchParams(location.search);
+const params = { task: q.get("task"), delegate: q.get("delegate") ?? "CPU", frames: Number(q.get("frames") ?? 100), base: location.origin };
+window.__done = null;
+try {
+  if (q.get("mode") === "worker") {
+    const worker = new Worker("worker.js", { type: "module" });
+    worker.onerror = (e) => { window.__done = { ok: false, error: `worker error: ${e.message}` }; };
+    worker.onmessage = (e) => { window.__done = e.data; };
+    worker.postMessage(params);
+  } else {
+    const result = await bench(params);
+    result.page_resources = performance.getEntriesByType("resource").map((e) => ({ url: e.name, transfer: e.transferSize, encoded: e.encodedBodySize }));
+    window.__done = { ok: true, result };
+  }
+} catch (error) {
+  window.__done = { ok: false, error: String(error?.stack ?? error) };
+}
+</script>
