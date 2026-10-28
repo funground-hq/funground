@@ -42,7 +42,7 @@ Next after this sprint: S-231, the models spike (E-37, added 23 Oct), which may 
 
 ## S-225 tasks
 
-- [ ] A study of at least six books (chosen in the spike, with reasons): what each teaches, what funground takes or leaves
+- [x] A study of at least six books (chosen in the spike, with reasons): what each teaches, what funground takes or leaves (`spikes/15_book/study.md`, ten books)
 - [ ] A page system: trim with bleed, grid, type from the site's fonts, colour, components
 - [ ] The production route chosen and why
 - [ ] One chapter of 8 to 12 pages as a PDF, pictures by funground, a chapter opener drawn by a sketch
