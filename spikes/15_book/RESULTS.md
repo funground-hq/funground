@@ -359,3 +359,17 @@ Day is unchanged: the 12 page PNGs and 6 spread PNGs of each trim have the same 
 - Grid: 0 of 274 vertical positions off the 15 pt line, on both trims, in both themes.
 - Contrast, night: lowest 4.7:1, PASS (keyword on the highlight; the rest are 5.0 or more).
 - Build, night: Square about 8 to 11 s, B5 about 8 to 11 s, comparison spread about 1.5 to 3 s each.
+
+### Where book building goes (D-122, 28 Oct)
+
+**The maintainer's decision:** book building becomes a separate project, outside funground-hq. The content system, the
+web book, search and content management go to questConquest (Astro, MDX, React). funground keeps and improves its print
+PDF.
+
+**What this changes in the review's estimate:** the "book tool" sprint (markdown source, page masters) is no longer
+funground's work. funground's share is now two stories:
+- **S-249:** the PDF gaps.
+- **S-248:** the content contract that funground's print build reads, tested on Chapter 1, with the web half done in
+  questConquest.
+
+`make/build.py` stays as the spike's evidence and the starting point for the print build.
