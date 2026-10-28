@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><title>S-231 ORT-web</title>
+<script type="module">
+// Starts the module worker with the job from the query string and exposes the answer as window.__done for measure.mjs.
+const p = new URLSearchParams(location.search);
+const w = new Worker("worker.js", { type: "module" });
+window.__done = null;
+w.onmessage = (e) => { window.__done = e.data; };
+w.onerror = (e) => { window.__done = { ok: false, error: "worker error: " + e.message }; };
+w.postMessage({ task: p.get("task"), ep: p.get("ep"), threads: +p.get("threads"), version: p.get("version"), base: location.origin });
+</script>

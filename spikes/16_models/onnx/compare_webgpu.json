@@ -1,0 +1,23 @@
+[
+ {
+  "task": "movenet",
+  "points": 17,
+  "max_px": 5.26,
+  "mean_px": 1.8,
+  "worst_point": 9
+ },
+ {
+  "task": "pose",
+  "points": 33,
+  "max_px": 4.65,
+  "mean_px": 1.59,
+  "worst_point": 25
+ },
+ {
+  "task": "pose_tracked",
+  "points": 33,
+  "max_px": 4.64,
+  "mean_px": 1.59,
+  "worst_point": 25
+ }
+]

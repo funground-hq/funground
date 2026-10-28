@@ -1,0 +1,20 @@
+{
+ "desktop_vs_web_cosine": {
+  "embed": 0.9999768441273081,
+  "embed_dino": 0.9882012813950694
+ },
+ "embed_cosine_to_cats": {
+  "cats_flipped": 1.0,
+  "cats_darker": 1.0,
+  "city": 0.997,
+  "yoga": 0.998,
+  "portrait": 0.998
+ },
+ "embed_dino_cosine_to_cats": {
+  "cats_flipped": 0.961,
+  "cats_darker": 0.989,
+  "city": 0.049,
+  "yoga": -0.02,
+  "portrait": 0.092
+ }
+}

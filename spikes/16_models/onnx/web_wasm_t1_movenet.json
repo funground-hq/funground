@@ -1,0 +1,186 @@
+{
+ "date": "2026-10-28T17:38:42.017Z",
+ "chrome": "156.0.8078.48",
+ "ort_web": "1.31.1",
+ "jobs": [
+  {
+   "task": "movenet",
+   "ep": "wasm",
+   "threads": 1,
+   "iso": false,
+   "ok": true,
+   "result": {
+    "task": "movenet",
+    "ep": "wasm",
+    "threads": 1,
+    "version": "1.31.1",
+    "where": "worker",
+    "isolated": false,
+    "import_ms": 741,
+    "model_bytes": 9413268,
+    "created_ms": 2326.4000000953674,
+    "first_result_ms": 2485,
+    "frames": 100,
+    "fps": 14.20394017261918,
+    "median_ms": 69.59999990463257,
+    "p90_ms": 87.79999995231628,
+    "last": [
+     [
+      302.3785400390625,
+      203.55140686035156,
+      0.5666545033454895
+     ],
+     [
+      307.2670364379883,
+      195.5733299255371,
+      0.4321991205215454
+     ],
+     [
+      295.46199798583984,
+      197.39263534545898,
+      0.5042375922203064
+     ],
+     [
+      319.64000701904297,
+      201.00372314453125,
+      0.40351131558418274
+     ],
+     [
+      296.212158203125,
+      201.23794555664062,
+      0.4099278450012207
+     ],
+     [
+      341.7451477050781,
+      230.83181381225586,
+      0.6153997182846069
+     ],
+     [
+      291.9688034057617,
+      233.87313842773438,
+      0.5653760433197021
+     ],
+     [
+      385.19046783447266,
+      228.26263427734375,
+      0.35402989387512207
+     ],
+     [
+      229.8705291748047,
+      227.5491714477539,
+      0.21808883547782898
+     ],
+     [
+      439.3150329589844,
+      224.93078231811523,
+      0.4738576114177704
+     ],
+     [
+      197.31929779052734,
+      220.2638816833496,
+      0.4742783010005951
+     ],
+     [
+      331.2917709350586,
+      332.2044372558594,
+      0.4520569443702698
+     ],
+     [
+      302.3053741455078,
+      330.8308410644531,
+      0.47270068526268005
+     ],
+     [
+      388.03897857666016,
+      389.93419647216797,
+      0.45098361372947693
+     ],
+     [
+      230.60531616210938,
+      345.0489044189453,
+      0.442793071269989
+     ],
+     [
+      449.4316101074219,
+      446.19701385498047,
+      0.573384702205658
+     ],
+     [
+      216.99079513549805,
+      447.9551696777344,
+      0.5500845313072205
+     ]
+    ],
+    "found": 17,
+    "resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/ort.wasm.mjs",
+      "encoded": 147796,
+      "transfer": 148096
+     },
+     {
+      "url": "http://127.0.0.1:57969/models/movenet.onnx",
+      "encoded": 9413268,
+      "transfer": 9413568
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/ort-wasm-simd-threaded.mjs",
+      "encoded": 9397,
+      "transfer": 9697
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/ort-wasm-simd-threaded.wasm",
+      "encoded": 3195270,
+      "transfer": 3195570
+     },
+     {
+      "url": "http://127.0.0.1:57969/frames/pose.png",
+      "encoded": 259420,
+      "transfer": 259720
+     }
+    ]
+   },
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "requests": [
+    {
+     "url": "/page.html?task=movenet&ep=wasm&threads=1&version=1.31.1",
+     "bytes": 633
+    },
+    {
+     "url": "/worker.js",
+     "bytes": 0
+    },
+    {
+     "url": "/glue_web.js",
+     "bytes": 11025
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/ort.wasm.mjs",
+     "bytes": 148732
+    },
+    {
+     "url": "/models/movenet.onnx",
+     "bytes": 9413283
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/ort-wasm-simd-threaded.mjs",
+     "bytes": 9761
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/ort-wasm-simd-threaded.wasm",
+     "bytes": 3199231
+    },
+    {
+     "url": "/frames/pose.png",
+     "bytes": 259434
+    }
+   ],
+   "logs": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+   ]
+  }
+ ]
+}

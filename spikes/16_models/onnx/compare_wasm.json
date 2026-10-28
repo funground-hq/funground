@@ -1,0 +1,113 @@
+[
+ {
+  "task": "classify",
+  "desktop": [
+   [
+    "tabby, tabby cat",
+    0.7655404806137085
+   ],
+   [
+    "Egyptian cat",
+    0.09889644384384155
+   ],
+   [
+    "tiger cat",
+    0.06299467384815216
+   ]
+  ],
+  "web": [
+   [
+    "tabby, tabby cat",
+    0.7956969830060622
+   ],
+   [
+    "Egyptian cat",
+    0.10758281786856307
+   ],
+   [
+    "tiger cat",
+    0.0491262771303572
+   ]
+  ],
+  "same_top5": false,
+  "max_prob_diff": 0.0302
+ },
+ {
+  "task": "hand",
+  "points": 21,
+  "max_px": 2.17,
+  "mean_px": 1.07,
+  "worst_point": 5
+ },
+ {
+  "task": "hand_tracked",
+  "points": 21,
+  "max_px": 2.17,
+  "mean_px": 1.07,
+  "worst_point": 5
+ },
+ {
+  "task": "humanseg",
+  "desktop_found": 21666,
+  "web_found": 2589,
+  "note": "pixel counts (desktop at 640x480, web at model size)"
+ },
+ {
+  "task": "movenet",
+  "points": 17,
+  "max_px": 5.26,
+  "mean_px": 1.8,
+  "worst_point": 9
+ },
+ {
+  "task": "objects",
+  "desktop_n": 14,
+  "web_n": 14,
+  "labels_desktop": [
+   "car",
+   "car",
+   "car",
+   "car",
+   "car",
+   "car",
+   "person",
+   "traffic light"
+  ],
+  "labels_web": [
+   "bicycle",
+   "bicycle",
+   "car",
+   "car",
+   "car",
+   "car",
+   "car",
+   "car"
+  ]
+ },
+ {
+  "task": "pose",
+  "points": 33,
+  "max_px": 4.65,
+  "mean_px": 1.59,
+  "worst_point": 25
+ },
+ {
+  "task": "pose_tracked",
+  "points": 33,
+  "max_px": 4.65,
+  "mean_px": 1.59,
+  "worst_point": 25
+ },
+ {
+  "task": "selfie",
+  "desktop_found": 21907,
+  "web_found": 4642,
+  "note": "pixel counts (desktop at 640x480, web at model size)"
+ },
+ {
+  "task": "yunet",
+  "points": 5,
+  "max_px": 0.0,
+  "mean_px": 0.0
+ }
+]
