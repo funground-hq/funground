@@ -2,23 +2,29 @@
 
 | Trim | Build, whole process | Of which draw (fonts, pictures, layout) | Print PDF | Screen PDF | Pages |
 |---|---|---|---|---|---|
-| Square | 13.43 s | 0.9 s | 556 KB | 527 KB | 12 |
-| B5 | 14.17 s | 0.97 s | 556 KB | 536 KB | 12 |
+| Square | 14.13 s | 1.0 s | 556 KB | 527 KB | 12 |
+| B5 | 14.45 s | 0.93 s | 556 KB | 536 KB | 12 |
 
-Square inside the process (seconds): print_pdf 4.86, screen_pdf 5.68, page_pngs 1.14, spreads 0.35
-B5 inside the process (seconds): print_pdf 4.98, screen_pdf 5.93, page_pngs 1.28, spreads 0.45
+Square inside the process (seconds): print_pdf 5.09, screen_pdf 6.09, page_pngs 1.09, spreads 0.33
+B5 inside the process (seconds): print_pdf 4.94, screen_pdf 6.25, page_pngs 1.33, spreads 0.47
+Square night: whole process 10.65 s, draw 1.62 s, screen PDF 528 KB; comparison spread 2b 2.8 s.
+B5 night: whole process 11.26 s, draw 1.08 s, screen PDF 537 KB; comparison spread 2b 1.87 s.
 
-The four sketches run first, one process each: 2.78 s in all (not in the trim times).
+The sketches run first, one process each: 5.74 s in all (not in the trim times).
 
 ## 2. Grid check
 
-Square: text area 34 lines; canvas side 330 pt; optical nudges inside a slot: caption +[1.5], code +[2.5], code number +[3.5], contents +[1.5, 3], folio +[2], label +[3], try this title +[1.5]; exempt: ['full-bleed picture (top at the bleed edge)']
-B5: text area 41 lines; canvas side 405 pt; optical nudges inside a slot: caption +[1.5], code +[2.5], code number +[3.5], contents +[1.5, 3], folio +[2], label +[3], try this title +[1.5]; exempt: ['full-bleed picture (top at the bleed edge)']
+Square day: text area 34 lines; canvas side 330 pt; optical nudges inside a slot: caption +[1.5], code +[2.5], code number +[3.5], contents +[1.5, 3], folio +[2], label +[3], try this title +[1.5]; exempt: ['full-bleed picture (top at the bleed edge)']
+B5 day: text area 41 lines; canvas side 405 pt; optical nudges inside a slot: caption +[1.5], code +[2.5], code number +[3.5], contents +[1.5, 3], folio +[2], label +[3], try this title +[1.5]; exempt: ['full-bleed picture (top at the bleed edge)']
+Square night: text area 34 lines; canvas side 330 pt; optical nudges inside a slot: caption +[1.5], code +[2.5], code number +[3.5], contents +[1.5, 3], folio +[2], label +[3], try this title +[1.5]; exempt: ['full-bleed picture (top at the bleed edge)']
+B5 night: text area 41 lines; canvas side 405 pt; optical nudges inside a slot: caption +[1.5], code +[2.5], code number +[3.5], contents +[1.5, 3], folio +[2], label +[3], try this title +[1.5]; exempt: ['full-bleed picture (top at the bleed edge)']
 
 | Trim | Items placed | Vertical positions checked (slot top and bottom, less nudge) | Off the 15 pt line | Result |
 |---|---|---|---|---|
-| Square | 138 | 274 | 0 | PASS |
-| B5 | 138 | 274 | 0 | PASS |
+| Square day | 138 | 274 | 0 | PASS |
+| B5 day | 138 | 274 | 0 | PASS |
+| Square night | 138 | 274 | 0 | PASS |
+| B5 night | 138 | 274 | 0 | PASS |
 
 ## 3. Longest code line against the measure
 
@@ -33,18 +39,20 @@ B5: text area 41 lines; canvas side 405 pt; optical nudges inside a slot: captio
 |---|---|---|---|
 | Square print | 12 | MediaBox=[0.0, 0.0, 651.0, 651.0] TrimBox=[25.5, 25.5, 625.5, 625.5] BleedBox=[17.0, 17.0, 634.0, 634.0] | AtkinsonHyperlegibleNext-Regular-wght400, AtkinsonHyperlegibleNext-Regular-wght700, BricolageGrotesque-96ptExtraBold-wght700, JetBrainsMono-Regular-wght400 |
 | Square screen | 12 | MediaBox=[0.0, 0.0, 600.0, 600.0] TrimBox=[] BleedBox=[] | AtkinsonHyperlegibleNext-Regular-wght400, AtkinsonHyperlegibleNext-Regular-wght700, BricolageGrotesque-96ptExtraBold-wght700, JetBrainsMono-Regular-wght400 |
+| Square screen_night | 12 | MediaBox=[0.0, 0.0, 600.0, 600.0] TrimBox=[] BleedBox=[] | AtkinsonHyperlegibleNext-Regular-wght400, AtkinsonHyperlegibleNext-Regular-wght700, BricolageGrotesque-96ptExtraBold-wght700, JetBrainsMono-Regular-wght400 |
 | B5 print | 12 | MediaBox=[0.0, 0.0, 550.0, 760.0] TrimBox=[25.5, 25.5, 524.5, 734.5] BleedBox=[17.0, 17.0, 533.0, 743.0] | AtkinsonHyperlegibleNext-Regular-wght400, AtkinsonHyperlegibleNext-Regular-wght700, BricolageGrotesque-96ptExtraBold-wght700, JetBrainsMono-Regular-wght400 |
 | B5 screen | 12 | MediaBox=[0.0, 0.0, 499.0, 709.0] TrimBox=[] BleedBox=[] | AtkinsonHyperlegibleNext-Regular-wght400, AtkinsonHyperlegibleNext-Regular-wght700, BricolageGrotesque-96ptExtraBold-wght700, JetBrainsMono-Regular-wght400 |
+| B5 screen_night | 12 | MediaBox=[0.0, 0.0, 499.0, 709.0] TrimBox=[] BleedBox=[] | AtkinsonHyperlegibleNext-Regular-wght400, AtkinsonHyperlegibleNext-Regular-wght700, BricolageGrotesque-96ptExtraBold-wght700, JetBrainsMono-Regular-wght400 |
 
 ## 5. Script length
 
 | File | Lines |
 |---|---|
-| build.py | 812 |
+| build.py | 879 |
 | nocoords.py | 87 |
 | run_sketch.py | 19 |
-| measure.py | 242 |
-| sketches/*.py (4 files) | 44 |
+| measure.py | 252 |
+| sketches/*.py (5 files, the night comparison included) | 52 |
 
 ## 6. CMYK change of each palette token
 
@@ -67,7 +75,7 @@ Route: `spikes/11_cmyk` option d (littleCMS through Pillow, Windows' RSWOP.icm a
 | code-number | #00706b | 80/29/46/16 | 9.7 | 5.2 |
 | code-comment | #6b6380 | 58/55/19/9 | 4.1 | 4.1 |
 
-## 7. Text contrast (WCAG 2.x)
+## 7. Text contrast, day theme (WCAG 2.x)
 
 | Text colour | On ground | Ratio | 4.5 needed | Used for |
 |---|---|---|---|---|
@@ -94,12 +102,47 @@ Route: `spikes/11_cmyk` option d (littleCMS through Pillow, Windows' RSWOP.icm a
 
 Lowest ratio: 4.5:1 (PASS).
 
-Picture-page grounds (accent mixed with oldlace, 20 per cent), and the shade of each accent used for line numbers, tie lines and contents numbers:
+Picture-page grounds (accent mixed 20 per cent with #fdf5e6), and the shade of each accent used for line numbers, tie lines and contents numbers:
 
-| Accent | Hex | Ground tint | Shade for text | Shade on oldlace |
+| Accent | Hex | Ground tint | Shade for text | Shade on #fdf5e6 |
 |---|---|---|---|---|
 | tomato | #ff6347 | #fdd8c6 | #ba4d53 | 4.5 |
 | gold | #ffd700 | #fdefb8 | #806e3e | 4.6 |
 | turquoise | #40e0d0 | #d7f1e2 | #2b739b | 4.8 |
 | hotpink | #ff69b4 | #fdd9dc | #a34999 | 4.9 |
+
+## 8. Text contrast, night theme (WCAG 2.x)
+
+| Text colour | On ground | Ratio | 4.5 needed | Used for |
+|---|---|---|---|---|
+| #ff7ebc | #3e375f | 4.7 | PASS | code number, code number (highlighted) |
+| #ee82ee | #3e375f | 4.7 | PASS | code keyword (highlighted) |
+| #ff6347 | #191970 | 5.0 | PASS | code number, contents |
+| #ffa07a | #3e375f | 5.5 | PASS | code string (highlighted) |
+| #c4c0e6 | #214183 | 5.6 | PASS | folio, label |
+| #ff69b4 | #191970 | 5.6 | PASS | code number |
+| #c4c0e6 | #473f5a | 5.7 | PASS | folio, label |
+| #a9a4d6 | #191970 | 6.3 | PASS | code comment |
+| #c4c0e6 | #47297e | 6.4 | PASS | folio |
+| #ee82ee | #191970 | 6.4 | PASS | code keyword |
+| #40e0d0 | #3e375f | 6.7 | PASS | code number value (highlighted) |
+| #c4c0e6 | #472868 | 6.8 | PASS | folio, label |
+| #ffa07a | #191970 | 7.5 | PASS | code string |
+| #c4c0e6 | #191970 | 8.5 | PASS | contents, folio, label, side note |
+| #40e0d0 | #191970 | 9.0 | PASS | code number, code number value |
+| #fdf5e6 | #3e375f | 10.1 | PASS | code name (highlighted) |
+| #fdf5e6 | #47297e | 10.3 | PASS | predict caption |
+| #191970 | #ffd700 | 10.6 | PASS | try this text, try this title |
+| #fdf5e6 | #191970 | 13.7 | PASS | caption, chapter title, code name, colophon fonts, contents, heading, prose |
+
+Lowest ratio: 4.7:1 (PASS).
+
+Picture-page grounds (accent mixed 20 per cent with #191970), and the shade of each accent used for line numbers, tie lines and contents numbers:
+
+| Accent | Hex | Ground tint | Shade for text | Shade on #191970 |
+|---|---|---|---|---|
+| tomato | #ff6347 | #472868 | #ff6347 | 5.0 |
+| gold | #ffd700 | #473f5a | #ffd700 | 10.6 |
+| turquoise | #40e0d0 | #214183 | #40e0d0 | 9.0 |
+| hotpink | #ff69b4 | #47297e | #ff69b4 | 5.6 |
 

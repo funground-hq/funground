@@ -1,17 +1,18 @@
 {
  "trim": "Square",
+ "theme": "day",
  "W": 600,
  "H": 600,
  "colw": 76.0,
  "lines": 34,
  "panel": 330,
  "bleed": 8.503937007874017,
- "drawn_seconds": 0.9,
+ "drawn_seconds": 1.0,
  "save_seconds": {
-  "print_pdf": 4.86,
-  "screen_pdf": 5.68,
-  "page_pngs": 1.14,
-  "spreads": 0.35
+  "print_pdf": 5.09,
+  "screen_pdf": 6.09,
+  "page_pngs": 1.09,
+  "spreads": 0.33
  },
  "placed": [
   {

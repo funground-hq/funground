@@ -328,3 +328,34 @@ rather than mixes with oldlace. Contrast is measured again for every text colour
 
 **The sketch pictures** keep their own backgrounds, because they are the real output. The book's sketches could use
 `f.background("midnightblue")`, as many gallery examples do, but that changes the sketch, so it is a writing choice.
+
+## Night version (28 Oct)
+
+The maintainer asked for a screen version closer to Play's navy one. The build now has `--theme day|night` (both by default).
+Every colour the layout uses is in one table, `THEMES` in `build.py`; night is a second column of that table, not a set of `if`s.
+Day is unchanged: the 12 page PNGs and 6 spread PNGs of each trim have the same MD5 as before the change.
+
+**Files** (in `make/out/`): `chapter_<trim>_screen_night.pdf` (no print PDF for night), `spread_<trim>_night_<n>.png`,
+`spread_<trim>_night_2b.png` (comparison), `report_<trim>_night.json`.
+
+**Night colours** (the site's dark tokens): paper `#191970`, ink `#fdf5e6`, muted ink `#c4c0e6`; code strings `#ffa07a`, keywords
+`#ee82ee`, numbers `#40e0d0`, comments `#a9a4d6`. Accents per spread stay as they are.
+- Picture-page ground: the accent mixed 20 per cent with `#191970` (tomato `#472868`, turquoise `#214183`, hotpink `#47297e`,
+  gold `#473f5a`). Corner shapes, spot shapes and the Predict and Your page frames use the full accent.
+- Frames round pictures are navy (a cream frame vanished against the cream canvas). The offset block behind a picture frame is the
+  site's sticker shadow `#05052e`, not the accent.
+- Highlight behind the changed code lines: gold mixed 16 per cent with navy (`#3e375f`), plus a full gold bar at its left edge.
+  A stronger gold mix failed 4.5 for the keyword colour; the first try (30 per cent) gave 3.5.
+- Try this keeps its gold block with the dark navy text (cream on gold would fail). Headings keep the gold marker under the words.
+- Line-number and contents shades: the accents already reach 4.5 on navy (5.0 to 10.6), so they are used as they are.
+
+**Sketch pictures, two ways:**
+- (a) The main night build: the sketches as they are, oldlace canvases in their frames.
+- (b) Spread 2 only, `out/spread_<trim>_night_2b.png`: the sketch `sketches/1_1_circle_night.py`, identical to `1_1_circle.py` but
+  for `f.background("midnightblue")`. Its code is printed from that file (line 4 reads `"midnightblue"`). Not in the PDF.
+  The sketch canvas is the same navy as the page, so on this spread only the shadow and the circle show its edge.
+
+**Checks** (`make/measure.py`, sections 2 and 8):
+- Grid: 0 of 274 vertical positions off the 15 pt line, on both trims, in both themes.
+- Contrast, night: lowest 4.7:1, PASS (keyword on the highlight; the rest are 5.0 or more).
+- Build, night: Square about 8 to 11 s, B5 about 8 to 11 s, comparison spread about 1.5 to 3 s each.

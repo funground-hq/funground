@@ -1,15 +1,19 @@
 """S-225 spike: build the test chapter ("One shape", 12 pages) with funground as the layout engine.
 
-    .venv/Scripts/python.exe spikes/15_book/make/build.py
+    .venv/Scripts/python.exe spikes/15_book/make/build.py [--theme day|night]
 
 With no arguments this runs every sketch (one process each, see run_sketch.py), then builds each trim in its own
-process (`build.py --trim Square`, `--trim B5`) and times them.
+process for each theme (`build.py --trim Square --theme day`, and so on) and times them. `--theme` builds one theme only.
+Day is the oldlace book. Night is a screen-only version on the site's dark tokens; it has no print PDF.
 Output goes to spikes/15_book/make/out/:
     sketch/<name>.png, .svg                the sketches' own pictures
-    chapter_<trim>_print.pdf               bleed 3 mm and crop marks
-    chapter_<trim>_screen.pdf              no bleed, no marks
-    spread_<trim>_<n>.png                  both pages of a spread side by side
-    report_<trim>.json                     what the grid check and measure.py read
+    chapter_<trim>_print.pdf               day only: bleed 3 mm and crop marks
+    chapter_<trim>_screen.pdf              day: no bleed, no marks
+    chapter_<trim>_screen_night.pdf        night
+    spread_<trim>_<n>.png                  both pages of a spread side by side (day)
+    spread_<trim>_night_<n>.png            the same for night
+    spread_<trim>_night_2b.png             night, spread 2 only, with the sketch drawn on midnightblue (a comparison)
+    report_<trim>.json, report_<trim>_night.json     what the grid check and measure.py read
 
 The grid is the dict TRIMS plus LINE and GUT, below. Every vertical position goes through Grid.Y(line).
 """
@@ -26,6 +30,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out")
 PY = sys.executable
 SKETCHES = ["1_0_opener", "1_1_circle", "1_2_square", "1_3_random"]
+VARIANT = "1_1_circle_night"      # the comparison sketch for night spread 2: same code, midnightblue background
 
 # ---------------------------------------------------------------- the grid: a handful of numbers, in one place
 LINE = 15            # pt: body 11 on 15, and every vertical distance in the book
@@ -38,38 +43,71 @@ TRIMS = {            # name -> funground page name and margins (pt)
 BLEED_MM = 3
 CHAPTER = "One shape"
 
-INK = "#191970"          # tokens.json: ink (day)
-MUTED = "#5a4f7a"        # ink-muted
-PAPER = "oldlace"
-KEYWORD = "#9932cc"      # code-keyword = orchid (day)
-STRING = "#b22222"       # code-string = link = firebrick
-NUMBER = "#00706b"       # code-number (day)
-COMMENT = "#6b6380"      # code-comment (day)
+# ---------------------------------------------------------------- the themes: every colour the layout uses is in this table
+# Day is the print and screen book. Night is a screen-only version on the site's dark tokens (tokens.json, "dark").
+THEMES = {
+    "day": dict(
+        paper="oldlace", paper_hex="#fdf5e6", code_ground="#fffaf0",     # paper, and the ground inside the Predict frame
+        ink="#191970", muted="#5a4f7a", on_gold="#191970", frame="#191970",   # frame: the line round a picture
+        keyword="#9932cc", string="#b22222", number="#00706b", comment="#6b6380",
+        highlight="#fee98a",         # the gold marker behind the changed code lines: gold mixed 40 per cent with oldlace
+        tint=0.20,                   # share of the accent in a picture page's ground (the rest is the paper)
+        tint_base="#fdf5e6", predict_share=0.10, line_gold="#d9a300",
+        highlight_bar=False,
+        offset=None,                 # the block behind a picture frame: None means the accent
+    ),
+    "night": dict(
+        paper="#191970", paper_hex="#191970", code_ground="#10104a",
+        ink="#fdf5e6", muted="#c4c0e6", on_gold="#191970", frame="#191970",   # navy: the sketch canvas inside is oldlace
+        keyword="#ee82ee", string="#ffa07a", number="#40e0d0", comment="#a9a4d6",
+        highlight="#3e375f", highlight_bar=True,   # gold mixed 16 per cent with the navy (pale code needs 4.5), and a full gold bar beside it
+        tint=0.20, tint_base="#191970", predict_share=0.10, line_gold="#ffd700",
+        offset="#05052e",            # the site's sticker shadow on night
+    ),
+}
+THEME = "day"
+
+
+def set_theme(name):
+    """Point the colour names below at one theme's table. Everything else reads them when it draws."""
+    global THEME, INK, MUTED, PAPER, PAPER_HEX, WHITEISH, KEYWORD, STRING, NUMBER, COMMENT, HIGHLIGHT, TINT, ON_GOLD
+    t = THEMES[name]
+    THEME = name
+    INK, MUTED, PAPER, PAPER_HEX, WHITEISH = t["ink"], t["muted"], t["paper"], t["paper_hex"], t["code_ground"]
+    KEYWORD, STRING, NUMBER, COMMENT = t["keyword"], t["string"], t["number"], t["comment"]
+    HIGHLIGHT, TINT, ON_GOLD = t["highlight"], t["tint"], t["on_gold"]
+    STATE["ground"] = PAPER_HEX
+
+
 GOLD, HOTPINK, TURQUOISE = "gold", "hotpink", "turquoise"
-PAPER_HEX = "#fdf5e6"    # oldlace
-WHITEISH = "#fffaf0"     # paper-code
 ACCENT_HEX = {"tomato": "#ff6347", "gold": "#ffd700", "turquoise": "#40e0d0", "hotpink": "#ff69b4"}
 SPREAD_ACCENT = ["tomato", "turquoise", "hotpink", "gold", "tomato", "turquoise"]    # one accent for each spread
-HIGHLIGHT = "#fee98a"    # the gold marker behind the changed code lines: gold mixed 40 per cent with oldlace
-TINT = 0.20              # share of the accent in a picture page's ground (the rest is oldlace)
 KEYWORDS = {"import", "from", "as", "def", "for", "in", "if", "else", "elif", "while", "return", "True", "False", "None"}
 
 
-def run_all():
-    """Orchestrator: sketches, then each trim in its own process."""
+def run_all(themes):
+    """Orchestrator: sketches, then each trim and theme in its own process (night also builds its comparison spread)."""
     os.makedirs(os.path.join(OUT, "sketch"), exist_ok=True)
-    timing = {}
+    path = os.path.join(OUT, "timing.json")
+    timing = json.load(open(path)) if os.path.exists(path) else {}      # keep the other theme numbers
     t0 = time.time()
-    for name in SKETCHES:
+    for name in SKETCHES + ([VARIANT] if "night" in themes else []):
         subprocess.run([PY, os.path.join(HERE, "run_sketch.py"), os.path.join(HERE, "sketches", name + ".py"),
                         os.path.join(OUT, "sketch")], check=True)
     timing["sketches"] = round(time.time() - t0, 2)
-    for trim in TRIMS:
-        t0 = time.time()
-        subprocess.run([PY, os.path.abspath(__file__), "--trim", trim], check=True)
-        timing[trim] = round(time.time() - t0, 2)
-        print(f"{trim}: {timing[trim]} s")
-    with open(os.path.join(OUT, "timing.json"), "w") as fh:
+    for theme in themes:
+        for trim in TRIMS:
+            t0 = time.time()
+            subprocess.run([PY, os.path.abspath(__file__), "--trim", trim, "--theme", theme], check=True)
+            key = trim if theme == "day" else f"{trim}_night"
+            timing[key] = round(time.time() - t0, 2)
+            print(f"{key}: {timing[key]} s")
+            if theme == "night":
+                t0 = time.time()
+                subprocess.run([PY, os.path.abspath(__file__), "--trim", trim, "--theme", "night", "--variant"], check=True)
+                timing[key + "_2b"] = round(time.time() - t0, 2)
+                print(f"{key}_2b: {timing[key + '_2b']} s")
+    with open(path, "w") as fh:
         json.dump(timing, fh, indent=1)
 
 
@@ -118,7 +156,8 @@ NOTES = []       # things the grid cannot hold, with the reason
 OVERFLOW = []    # text that did not fit its box
 CODE_LINES = []  # (sketch, line text, characters)
 TEXTS = []       # (kind, text colour, ground colour): measure.py reads their contrast
-STATE = {"page": 0, "wob": 0, "ground": PAPER_HEX, "accent": "tomato"}
+STATE = {"page": 0, "wob": 0, "ground": "#fdf5e6", "accent": "tomato"}
+set_theme("day")
 
 
 # ---------------------------------------------------------------- colour maths (the page's accent, tints and shades)
@@ -153,16 +192,18 @@ def accent():
 
 
 def line_accent():
-    """For thin lines on oldlace: gold is too faint there, so it gets a deeper gold."""
-    return "#d9a300" if STATE["accent"] == "gold" else accent()
+    """For thin lines on the paper: gold is too faint on oldlace, so it gets a deeper gold there."""
+    return THEMES[THEME]["line_gold"] if STATE["accent"] == "gold" else accent()
 
 
-def tint(share=TINT, base=PAPER_HEX):
-    return mix(accent(), base, share)
+def tint(share=None, base=None):
+    """The accent mixed into the paper (day) or into the navy (night)."""
+    return mix(accent(), base or THEMES[THEME]["tint_base"], TINT if share is None else share)
 
 
-def shade(on=PAPER_HEX):
-    """The accent made darker with ink until it reads as text (4.5 to 1) on oldlace (or on `on`)."""
+def shade(on=None):
+    """The accent mixed toward the ink until it reads as text (4.5 to 1) on the paper (or on `on`)."""
+    on = on or PAPER_HEX
     a = accent()
     for step in range(0, 101, 5):
         c = mix(INK, a, step / 100)
@@ -191,8 +232,9 @@ def load_fonts():
 
 
 # ---------------------------------------------------------------- small drawing helpers
-def text_at(g, message, x, line, font, size, color=INK, nudge=0.0, kind="text"):
+def text_at(g, message, x, line, font, size, color=None, nudge=0.0, kind="text"):
     """One line of text, its slot starting on `line`. nudge is the small optical offset inside the slot."""
+    color = color or INK
     f.push()
     f.text_font(FONTS[font], size)
     f.fill(color)
@@ -223,8 +265,9 @@ def wrap_count(message, width, font, size):
     return n
 
 
-def prose(g, message, line, x, width, font="body", size=11, lead=LINE, color=INK, lines=None, kind="prose"):
+def prose(g, message, line, x, width, font="body", size=11, lead=LINE, color=None, lines=None, kind="prose"):
     """Wrapped, ranged left, no hyphenation. Returns the number of grid lines it takes."""
+    color = color or INK
     n = lines or wrap_count(message, width, font, size)
     f.push()
     f.text_font(FONTS[font], size)
@@ -368,6 +411,9 @@ def code_block(g, name, source, line0, highlight=(), notes=()):
             f.no_stroke()
             f.fill(HIGHLIGHT)
             f.rect(cx - 4, g.Y(n), cw + 4, LINE)
+            if THEMES[THEME]["highlight_bar"]:
+                f.fill(GOLD)
+                f.rect(cx - 4, g.Y(n), 3, LINE)
             f.pop()
             reg("highlight", g.Y(n), g.Y(n) + LINE)
         STATE["ground"] = HIGHLIGHT if i in highlight else PAPER_HEX
@@ -491,10 +537,10 @@ def big_panel(g, recto, name, caption):
     side = min(g.snap(g.text_w), LINE * (g.lines - 2))
     x = g.x0(recto) + (g.text_w - side) / 2
     y = g.Y(0)
-    blob_square(x + 9, y + 9, side, accent(), amp=1.4)       # the accent, offset behind the frame: colour around the picture
+    blob_square(x + 9, y + 9, side, THEMES[THEME]["offset"] or accent(), amp=1.4)   # offset behind the frame: colour around the picture
     put_picture(name, x, y, side, side)
     reg("big panel", y, y + side)
-    wobble_rect(x, y, side, side, INK, 1.6)
+    wobble_rect(x, y, side, side, THEMES[THEME]["frame"], 1.6)
     label(g, caption, x, side // LINE + 1)
 
 
@@ -502,7 +548,7 @@ def predict_frame(g, recto, x, line):
     side = g.panel()
     y = g.Y(line)
     wobble([(x, y), (x + side, y), (x + side, y + side), (x, y + side)], accent(), 2.4, closed=True,
-           fill=mix(accent(), WHITEISH, 0.10), step=6)
+           fill=mix(accent(), WHITEISH, THEMES[THEME]["predict_share"]), step=6)
     reg("predict frame", g.Y(line), g.Y(line) + side)
     return line + side // LINE
 
@@ -510,7 +556,7 @@ def predict_frame(g, recto, x, line):
 def small_panel(g, name, x, line, side):
     put_picture(name, x, g.Y(line), side, side)
     reg("small panel", g.Y(line), g.Y(line) + side)
-    wobble_rect(x, g.Y(line), side, side, INK, 1.4)
+    wobble_rect(x, g.Y(line), side, side, THEMES[THEME]["frame"], 1.4)
     return line + side // LINE
 
 
@@ -544,8 +590,8 @@ def try_this(g, recto, line, title, task):
     f.rect(x - 14, g.Y(line), w + 28, 4 * LINE)
     f.pop()
     reg("try this block", g.Y(line), g.Y(line) + 4 * LINE)
-    text_at(g, title, x, line, "bold", 11, INK, nudge=1.5, kind="try this title")
-    prose(g, task, line + 1, x, w, lines=3, kind="try this text")
+    text_at(g, title, x, line, "bold", 11, ON_GOLD, nudge=1.5, kind="try this title")
+    prose(g, task, line + 1, x, w, lines=3, color=ON_GOLD, kind="try this text")
     STATE["ground"] = PAPER_HEX
 
 
@@ -555,7 +601,8 @@ def sketch_source(name):
         return fh.read().rstrip()
 
 
-CODE_CIRCLE = sketch_source("1_1_circle")
+CIRCLE = "1_1_circle"            # the sketch on spread 2; the night comparison swaps in VARIANT
+CODE_CIRCLE = sketch_source(CIRCLE)
 CODE_SQUARE = sketch_source("1_2_square")
 CODE_RANDOM = sketch_source("1_3_random")
 
@@ -621,7 +668,7 @@ def page_show_verso(g):
     heading(g, "One circle", False)
     prose(g, "This is a whole sketch. Run it, and a circle appears in the middle of the canvas.", 3,
           g.colx(False, 2), g.span(4), lines=3)
-    code_block(g, "1_1_circle", CODE_CIRCLE, 7, notes=[
+    code_block(g, CIRCLE, CODE_CIRCLE, 7, notes=[
         (2, "The canvas: 600 wide, 600 high."),
         (3, "A colour is a word, in quotes."),
         (4, "No outline: the shape is filled only."),
@@ -632,7 +679,7 @@ def page_show_verso(g):
 
 def page_show_recto(g):
     ground(g)
-    big_panel(g, True, "1_1_circle", "1.1 circle.py")
+    big_panel(g, True, CIRCLE, "1.1 circle.py")
 
 
 def page_predict_verso(g):
@@ -753,19 +800,28 @@ PAGES = [  # (function, kind of page; True = recto)
 ]
 
 
-def build_trim(name):
-    global FONTS, PICS
+def build_trim(name, theme="day", variant=False):
+    """One trim in one theme. variant: only spread 2, with the comparison sketch (night, picture and code), as a PNG."""
+    global FONTS, PICS, CIRCLE, CODE_CIRCLE
     t0 = time.time()
+    set_theme(theme)
+    suffix = "" if theme == "day" else "_night"
+    pages = PAGES
+    first = 0
+    if variant:
+        CIRCLE, CODE_CIRCLE = VARIANT, sketch_source(VARIANT)
+        first, pages = 2, PAGES[2:4]
     f.size(*f.page_size(TRIMS[name]["page"]))
     g = Grid(name)
     f.noise_seed(11)
     FONTS = load_fonts()
-    PICS = {n: f.load_image(os.path.join(OUT, "sketch", n + ".png")) for n in SKETCHES}
-    for i, (page, recto, _kind) in enumerate(PAGES):
+    PICS = {n: f.load_image(os.path.join(OUT, "sketch", n + ".png")) for n in SKETCHES + ([VARIANT] if variant else [])}
+    for k, (page, recto, _kind) in enumerate(pages):
+        i = first + k
         STATE["page"] = i + 1
         STATE["accent"] = SPREAD_ACCENT[i // 2]
         STATE["ground"] = PAPER_HEX
-        if i:
+        if k:
             f.new_page()
         f.background(PAPER)
         page(g)
@@ -773,40 +829,51 @@ def build_trim(name):
             folio(g, recto)
     drawn = time.time() - t0
     base = os.path.join(OUT, f"chapter_{name}")
-    t1 = time.time()
-    f.save(base + "_print.pdf", bleed=g.bleed, marks=True)
-    t2 = time.time()
-    f.save(base + "_screen.pdf")
-    t3 = time.time()
-    pngdir = os.path.join(OUT, "pages")
+    pngdir = os.path.join(OUT, "pages" + suffix + ("_2b" if variant else ""))
     os.makedirs(pngdir, exist_ok=True)
+    t1 = t2 = t3 = time.time()
+    if not variant:
+        if theme == "day":
+            f.save(base + "_print.pdf", bleed=g.bleed, marks=True)
+            t2 = time.time()
+            f.save(base + "_screen.pdf")
+        else:
+            t2 = time.time()
+            f.save(base + "_screen_night.pdf")
+        t3 = time.time()
     f.save(os.path.join(pngdir, f"{name}.png"), dpi=800 * 72 / g.W)      # each page 800 px wide: a spread is 1600
     t4 = time.time()
-    spreads(name)
-    saves = dict(print_pdf=round(t2 - t1, 2), screen_pdf=round(t3 - t2, 2), page_pngs=round(t4 - t3, 2),
-                 spreads=round(time.time() - t4, 2))
-    report = dict(trim=name, W=g.W, H=g.H, colw=g.colw, lines=g.lines, panel=g.panel(), bleed=g.bleed,
+    if variant:
+        spreads(name, pngdir, len(pages), f"spread_{name}_night_2b.png")
+        return
+    spreads(name, pngdir, len(pages), None, f"spread_{name}{suffix}_")
+    saves = dict(print_pdf=round(t2 - t1, 2) if theme == "day" else 0, screen_pdf=round(t3 - t2, 2),
+                 page_pngs=round(t4 - t3, 2), spreads=round(time.time() - t4, 2))
+    report = dict(trim=name, theme=theme, W=g.W, H=g.H, colw=g.colw, lines=g.lines, panel=g.panel(), bleed=g.bleed,
                   drawn_seconds=round(drawn, 2), save_seconds=saves, placed=PLACED, notes=NOTES, overflow=OVERFLOW, code=CODE_LINES,
                   wobble_points=STATE["wob"], pages=len(PAGES), texts=sorted(set(TEXTS)))
-    with open(os.path.join(OUT, f"report_{name}.json"), "w") as fh:
+    with open(os.path.join(OUT, f"report_{name}{suffix}.json"), "w") as fh:
         json.dump(report, fh, indent=1)
 
 
-def spreads(name):
+def spreads(name, pngdir, count, single, prefix=None):
+    """Put the page PNGs side by side. `single` names the one spread to write (the comparison); else prefix + number."""
     from PIL import Image
-    files = sorted(glob.glob(os.path.join(OUT, "pages", f"{name}_*.png")),
+    files = sorted(glob.glob(os.path.join(pngdir, f"{name}_*.png")),
                    key=lambda p: int(re.search(r"_(\d+)\.png$", p).group(1)))
-    assert len(files) == len(PAGES), (len(files), files)
+    assert len(files) == count, (len(files), files)
     for k in range(0, len(files), 2):
         a, b = Image.open(files[k]).convert("RGB"), Image.open(files[k + 1]).convert("RGB")
         sheet = Image.new("RGB", (a.width + b.width, max(a.height, b.height)), "white")
         sheet.paste(a, (0, 0))
         sheet.paste(b, (a.width, 0))
-        sheet.save(os.path.join(OUT, f"spread_{name}_{k // 2 + 1}.png"))
+        sheet.save(os.path.join(OUT, single or f"{prefix}{k // 2 + 1}.png"))
 
 
 if __name__ == "__main__":
+    theme = sys.argv[sys.argv.index("--theme") + 1] if "--theme" in sys.argv else None
+    assert theme in (None, "day", "night"), theme
     if "--trim" in sys.argv:
-        build_trim(sys.argv[sys.argv.index("--trim") + 1])
+        build_trim(sys.argv[sys.argv.index("--trim") + 1], theme or "day", "--variant" in sys.argv)
     else:
-        run_all()
+        run_all([theme] if theme else ["day", "night"])

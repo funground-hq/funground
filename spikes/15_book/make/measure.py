@@ -131,14 +131,17 @@ def cmyk_delta_e():
     return rows
 
 
-def contrast_section():
+def contrast_section(theme, number):
     """WCAG 2.x contrast of every text colour against the ground it sits on (the build records each pair)."""
     import build
-    say("## 7. Text contrast (WCAG 2.x)")
+    build.set_theme(theme)
+    suffix = "" if theme == "day" else "_night"
+    base = build.THEMES[theme]["tint_base"]
+    say(f"## {number}. Text contrast, {theme} theme (WCAG 2.x)")
     say()
     pairs = {}
     for trim in ("Square", "B5"):
-        rep = json.load(open(os.path.join(OUT, f"report_{trim}.json")))
+        rep = json.load(open(os.path.join(OUT, f"report_{trim}{suffix}.json")))
         for kind, color, ground in rep["texts"]:
             pairs.setdefault((color, ground), set()).add(kind)
     rows, worst = [], 99
@@ -149,13 +152,14 @@ def contrast_section():
     table(["Text colour", "On ground", "Ratio", "4.5 needed", "Used for"], rows)
     say(f"Lowest ratio: {worst:.1f}:1 ({'PASS' if worst >= 4.5 else 'FAIL'}).")
     say()
-    say("Picture-page grounds (accent mixed with oldlace, 20 per cent), and the shade of each accent used for line numbers, tie lines and contents numbers:")
+    say(f"Picture-page grounds (accent mixed {round(build.TINT * 100)} per cent with {base}), and the shade of each accent used for line numbers, "
+        f"tie lines and contents numbers:")
     say()
     rows = []
     for name, hexv in build.ACCENT_HEX.items():
         build.STATE["accent"] = name
         rows.append((name, hexv, build.tint(), build.shade(), f"{build.contrast(build.shade(), build.PAPER_HEX):.1f}"))
-    table(["Accent", "Hex", "Ground tint", "Shade for text", "Shade on oldlace"], rows)
+    table(["Accent", "Hex", "Ground tint", "Shade for text", f"Shade on {build.PAPER_HEX}"], rows)
 
 
 def main():
@@ -173,18 +177,23 @@ def main():
     for trim in ("Square", "B5"):
         rep = json.load(open(os.path.join(OUT, f"report_{trim}.json")))
         say(f"{trim} inside the process (seconds): " + ", ".join(f"{k} {v}" for k, v in rep["save_seconds"].items()))
+    for trim in ("Square", "B5"):
+        rep = json.load(open(os.path.join(OUT, f"report_{trim}_night.json")))
+        say(f"{trim} night: whole process {timing[trim + '_night']} s, draw {rep['drawn_seconds']} s, screen PDF "
+            f"{os.path.getsize(os.path.join(OUT, f'chapter_{trim}_screen_night.pdf')) / 1024:.0f} KB; "
+            f"comparison spread 2b {timing[trim + '_night_2b']} s.")
     say()
-    say(f"The four sketches run first, one process each: {timing['sketches']} s in all (not in the trim times).")
+    say(f"The sketches run first, one process each: {timing['sketches']} s in all (not in the trim times).")
     say()
 
     say("## 2. Grid check")
     say()
     rows = []
-    for trim in ("Square", "B5"):
-        rep = json.load(open(os.path.join(OUT, f"report_{trim}.json")))
+    for trim, theme, suffix in (("Square", "day", ""), ("B5", "day", ""), ("Square", "night", "_night"), ("B5", "night", "_night")):
+        rep = json.load(open(os.path.join(OUT, f"report_{trim}{suffix}.json")))
         checked, bad, exempt, nudges = grid_check(rep)
-        rows.append((trim, len(rep["placed"]), checked, len(bad), "PASS" if not bad else "FAIL: " + str(bad[:3])))
-        say(f"{trim}: text area {rep['lines']} lines; canvas side {rep['panel']} pt; "
+        rows.append((f"{trim} {theme}", len(rep["placed"]), checked, len(bad), "PASS" if not bad else "FAIL: " + str(bad[:3])))
+        say(f"{trim} {theme}: text area {rep['lines']} lines; canvas side {rep['panel']} pt; "
             f"optical nudges inside a slot: " + ", ".join(f"{k} +{sorted(v)}" for k, v in sorted(nudges.items())) +
             f"; exempt: {sorted(set(exempt))}")
     say()
@@ -204,7 +213,7 @@ def main():
     say()
     rows = []
     for trim in ("Square", "B5"):
-        for kind in ("print", "screen"):
+        for kind in ("print", "screen", "screen_night"):
             r = PdfReader(os.path.join(OUT, f"chapter_{trim}_{kind}.pdf"))
             boxes = set()
             fonts = set()
@@ -220,7 +229,7 @@ def main():
     say()
     rows = [(n, lines_of(os.path.join(HERE, n))) for n in ("build.py", "nocoords.py", "run_sketch.py", "measure.py")]
     sk = sum(lines_of(os.path.join(HERE, "sketches", s)) for s in os.listdir(os.path.join(HERE, "sketches")) if s.endswith(".py"))
-    rows.append(("sketches/*.py (4 files)", sk))
+    rows.append(("sketches/*.py (5 files, the night comparison included)", sk))
     table(["File", "Lines"], rows)
 
     say("## 6. CMYK change of each palette token")
@@ -234,7 +243,8 @@ def main():
         table(["Token (day)", "Hex", "CMYK % (C/M/Y/K)", "dE76", "dE2000"], cmyk_delta_e())
     except Exception as exc:                                   # noqa: BLE001
         say(f"SKIPPED: {type(exc).__name__}: {exc}")
-    contrast_section()
+    contrast_section("day", 7)
+    contrast_section("night", 8)
     with open(os.path.join(OUT, "measurements.md"), "w", encoding="utf-8") as fh:
         fh.write("\n".join(out) + "\n")
 
