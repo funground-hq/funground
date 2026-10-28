@@ -1,0 +1,655 @@
+{
+ "date": "2026-10-28T17:45:20.377Z",
+ "chrome": "156.0.8078.48",
+ "transformers_js": "4.3.2",
+ "jobs": [
+  {
+   "spec": "classify:cdn:fp32",
+   "ok": true,
+   "result": {
+    "task": "classify",
+    "mode": "cdn",
+    "dtype": "fp32",
+    "model": "onnx-community/mobilenetv4_conv_small.e2400_r224_in1k",
+    "pipeline": "image-classification",
+    "isolated": false,
+    "import_ms": 357.19999980926514,
+    "created_ms": 3172.5999999046326,
+    "first_result_ms": 3749.399999856949,
+    "runs": 30,
+    "fps": 21.63253533388486,
+    "median_ms": 44.299999952316284,
+    "p90_ms": 59.89999985694885,
+    "found": [
+     [
+      "tabby, tabby cat",
+      0.772
+     ],
+     [
+      "Egyptian cat",
+      0.133
+     ],
+     [
+      "tiger cat",
+      0.057
+     ]
+    ],
+    "resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+      "encoded": 141444
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/preprocessor_config.json",
+      "encoded": 441
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/config.json",
+      "encoded": 69895
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/onnx/model.onnx",
+      "encoded": 15086122
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+      "encoded": 5547312
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+      "encoded": 19524
+     },
+     {
+      "url": "http://127.0.0.1:60466/frames/cats.png",
+      "encoded": 697827
+     }
+    ]
+   },
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 1
+   },
+   "requests": [
+    {
+     "url": "/tjs_page.html?task=classify&mode=cdn&dtype=fp32&runs=30&device=",
+     "bytes": 678,
+     "status": 200
+    },
+    {
+     "url": "/tjs_worker.js",
+     "bytes": 0,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     "bytes": 142363,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/preprocessor_config.json",
+     "bytes": 453,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/config.json",
+     "bytes": 69909,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/onnx/model.onnx",
+     "bytes": 15086137,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     "bytes": 19907,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     "bytes": 5554056,
+     "status": 200
+    },
+    {
+     "url": "blob:/834ec463-15c6-4382-a298-cc998dd9a9da",
+     "bytes": -73,
+     "status": 200
+    },
+    {
+     "url": "/frames/cats.png",
+     "bytes": 697841,
+     "status": 200
+    }
+   ],
+   "logs": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+   ]
+  },
+  {
+   "spec": "objects:cdn:q8",
+   "ok": true,
+   "result": {
+    "task": "objects",
+    "mode": "cdn",
+    "dtype": "q8",
+    "model": "onnx-community/dfine_n_coco-ONNX",
+    "pipeline": "object-detection",
+    "isolated": false,
+    "import_ms": 230.29999995231628,
+    "created_ms": 3744.2999999523163,
+    "first_result_ms": 5979.5,
+    "runs": 30,
+    "fps": 0.4043715257756807,
+    "median_ms": 2641.0999999046326,
+    "p90_ms": 2774.4000000953674,
+    "found": [
+     [
+      "person",
+      0.46,
+      550,
+      194,
+      592,
+      247
+     ],
+     [
+      "person",
+      0.65,
+      31,
+      352,
+      80,
+      422
+     ],
+     [
+      "traffic light",
+      0.5,
+      377,
+      48,
+      402,
+      81
+     ],
+     [
+      "traffic light",
+      0.49,
+      19,
+      111,
+      37,
+      140
+     ],
+     [
+      "traffic light",
+      0.61,
+      24,
+      110,
+      40,
+      136
+     ],
+     [
+      "bicycle",
+      0.44,
+      452,
+      345,
+      562,
+      398
+     ],
+     [
+      "traffic light",
+      0.55,
+      207,
+      41,
+      231,
+      75
+     ],
+     [
+      "traffic light",
+      0.65,
+      24,
+      109,
+      41,
+      135
+     ],
+     [
+      "traffic light",
+      0.47,
+      575,
+      97,
+      603,
+      140
+     ],
+     [
+      "traffic light",
+      0.44,
+      70,
+      139,
+      97,
+      168
+     ],
+     [
+      "traffic light",
+      0.42,
+      377,
+      49,
+      402,
+      81
+     ],
+     [
+      "traffic light",
+      0.44,
+      69,
+      140,
+      97,
+      168
+     ]
+    ],
+    "n": 24,
+    "resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+      "encoded": 141444
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/dfine_n_coco-ONNX/preprocessor_config.json",
+      "encoded": 444
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/dfine_n_coco-ONNX/config.json",
+      "encoded": 6597
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/dfine_n_coco-ONNX/onnx/model_quantized.onnx",
+      "encoded": 4477908
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+      "encoded": 5547312
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+      "encoded": 19524
+     },
+     {
+      "url": "http://127.0.0.1:60466/frames/city-streets.png",
+      "encoded": 453411
+     }
+    ]
+   },
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 1
+   },
+   "requests": [
+    {
+     "url": "/tjs_page.html?task=objects&mode=cdn&dtype=q8&runs=30&device=",
+     "bytes": 678,
+     "status": 200
+    },
+    {
+     "url": "/tjs_worker.js",
+     "bytes": 0,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     "bytes": 142372,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/dfine_n_coco-ONNX/preprocessor_config.json",
+     "bytes": 456,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/dfine_n_coco-ONNX/config.json",
+     "bytes": 6610,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/dfine_n_coco-ONNX/onnx/model_quantized.onnx",
+     "bytes": 4477923,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     "bytes": 19956,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     "bytes": 5553976,
+     "status": 200
+    },
+    {
+     "url": "blob:/d25497da-5519-4282-b014-a3ff54fd4153",
+     "bytes": -73,
+     "status": 200
+    },
+    {
+     "url": "/frames/city-streets.png",
+     "bytes": 453425,
+     "status": 200
+    }
+   ],
+   "logs": []
+  },
+  {
+   "spec": "objects:cdn:fp32",
+   "ok": true,
+   "result": {
+    "task": "objects",
+    "mode": "cdn",
+    "dtype": "fp32",
+    "model": "onnx-community/dfine_n_coco-ONNX",
+    "pipeline": "object-detection",
+    "isolated": false,
+    "import_ms": 255.40000009536743,
+    "created_ms": 3659.2999999523163,
+    "first_result_ms": 5016.700000047684,
+    "runs": 30,
+    "fps": 1.452228929378482,
+    "median_ms": 694.1000001430511,
+    "p90_ms": 776.8999998569489,
+    "found": [
+     [
+      "car",
+      0.46,
+      451,
+      284,
+      639,
+      356
+     ],
+     [
+      "person",
+      0.68,
+      32,
+      352,
+      81,
+      423
+     ],
+     [
+      "traffic light",
+      0.59,
+      20,
+      110,
+      38,
+      140
+     ],
+     [
+      "traffic light",
+      0.56,
+      25,
+      110,
+      39,
+      135
+     ],
+     [
+      "bicycle",
+      0.42,
+      452,
+      338,
+      561,
+      402
+     ],
+     [
+      "traffic light",
+      0.56,
+      26,
+      110,
+      39,
+      135
+     ],
+     [
+      "bicycle",
+      0.44,
+      455,
+      362,
+      557,
+      404
+     ],
+     [
+      "car",
+      0.44,
+      449,
+      284,
+      638,
+      359
+     ],
+     [
+      "car",
+      0.42,
+      435,
+      106,
+      504,
+      151
+     ],
+     [
+      "car",
+      0.42,
+      435,
+      106,
+      504,
+      151
+     ],
+     [
+      "bicycle",
+      0.51,
+      357,
+      379,
+      448,
+      443
+     ],
+     [
+      "traffic light",
+      0.49,
+      23,
+      110,
+      40,
+      136
+     ]
+    ],
+    "n": 16,
+    "resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+      "encoded": 141444
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/dfine_n_coco-ONNX/preprocessor_config.json",
+      "encoded": 444
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/dfine_n_coco-ONNX/config.json",
+      "encoded": 6597
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/onnx-community/dfine_n_coco-ONNX/onnx/model.onnx",
+      "encoded": 15258358
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+      "encoded": 5547312
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+      "encoded": 19524
+     },
+     {
+      "url": "http://127.0.0.1:60466/frames/city-streets.png",
+      "encoded": 453411
+     }
+    ]
+   },
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 1
+   },
+   "requests": [
+    {
+     "url": "/tjs_page.html?task=objects&mode=cdn&dtype=fp32&runs=30&device=",
+     "bytes": 678,
+     "status": 200
+    },
+    {
+     "url": "/tjs_worker.js",
+     "bytes": 0,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     "bytes": 142363,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/dfine_n_coco-ONNX/preprocessor_config.json",
+     "bytes": 456,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/dfine_n_coco-ONNX/config.json",
+     "bytes": 6610,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/dfine_n_coco-ONNX/onnx/model.onnx",
+     "bytes": 15258373,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     "bytes": 19908,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     "bytes": 5554038,
+     "status": 200
+    },
+    {
+     "url": "blob:/6b1ef560-8c14-46ec-856d-c718bb8517ea",
+     "bytes": -73,
+     "status": 200
+    },
+    {
+     "url": "/frames/city-streets.png",
+     "bytes": 453425,
+     "status": 200
+    }
+   ],
+   "logs": []
+  },
+  {
+   "spec": "segment:cdn:q8",
+   "ok": true,
+   "result": {
+    "task": "segment",
+    "mode": "cdn",
+    "dtype": "q8",
+    "model": "Xenova/modnet",
+    "pipeline": "background-removal",
+    "isolated": false,
+    "import_ms": 222.20000004768372,
+    "created_ms": 3150.2000000476837,
+    "first_result_ms": 5827,
+    "runs": 30,
+    "fps": 0.43889293645738686,
+    "median_ms": 2298.100000143051,
+    "p90_ms": 2415,
+    "found": {
+     "type": "t",
+     "width": 640,
+     "height": 480,
+     "channels": 4
+    },
+    "resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+      "encoded": 141444
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/Xenova/modnet/preprocessor_config.json",
+      "encoded": 365
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/Xenova/modnet/config.json",
+      "encoded": 83
+     },
+     {
+      "url": "http://127.0.0.1:60466/hf/Xenova/modnet/onnx/model_quantized.onnx",
+      "encoded": 6632188
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+      "encoded": 5547312
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+      "encoded": 19524
+     },
+     {
+      "url": "http://127.0.0.1:60466/frames/pose.png",
+      "encoded": 259420
+     }
+    ]
+   },
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 1
+   },
+   "requests": [
+    {
+     "url": "/tjs_page.html?task=segment&mode=cdn&dtype=q8&runs=30&device=",
+     "bytes": 678,
+     "status": 200
+    },
+    {
+     "url": "/tjs_worker.js",
+     "bytes": 0,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     "bytes": 142370,
+     "status": 200
+    },
+    {
+     "url": "/hf/Xenova/modnet/preprocessor_config.json",
+     "bytes": 377,
+     "status": 200
+    },
+    {
+     "url": "/hf/Xenova/modnet/config.json",
+     "bytes": 94,
+     "status": 200
+    },
+    {
+     "url": "/hf/Xenova/modnet/onnx/model_quantized.onnx",
+     "bytes": 6632203,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     "bytes": 19906,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     "bytes": 5554046,
+     "status": 200
+    },
+    {
+     "url": "blob:/26b6974f-2c41-4112-81b0-dea43f45ff75",
+     "bytes": -73,
+     "status": 200
+    },
+    {
+     "url": "/frames/pose.png",
+     "bytes": 259434,
+     "status": 200
+    }
+   ],
+   "logs": []
+  }
+ ]
+}

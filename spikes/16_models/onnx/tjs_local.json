@@ -1,0 +1,229 @@
+{
+ "date": "2026-10-28T17:46:01.957Z",
+ "chrome": "156.0.8078.48",
+ "transformers_js": "4.3.2",
+ "jobs": [
+  {
+   "spec": "classify:local:fp32",
+   "ok": true,
+   "result": {
+    "task": "classify",
+    "mode": "local",
+    "dtype": "fp32",
+    "model": "onnx-community/mobilenetv4_conv_small.e2400_r224_in1k",
+    "pipeline": "image-classification",
+    "isolated": false,
+    "import_ms": 101.29999995231628,
+    "created_ms": 1329.0999999046326,
+    "first_result_ms": 1715.3999998569489,
+    "runs": 10,
+    "fps": 18.733608086224894,
+    "median_ms": 53.200000047683716,
+    "p90_ms": 66.90000009536743,
+    "found": [
+     [
+      "tabby, tabby cat",
+      0.772
+     ],
+     [
+      "Egyptian cat",
+      0.133
+     ],
+     [
+      "tiger cat",
+      0.057
+     ]
+    ],
+    "resources": [
+     {
+      "url": "http://127.0.0.1:50116/tjs/transformers.min.js",
+      "encoded": 587917
+     },
+     {
+      "url": "http://127.0.0.1:50116/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/preprocessor_config.json",
+      "encoded": 441
+     },
+     {
+      "url": "http://127.0.0.1:50116/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/config.json",
+      "encoded": 69895
+     },
+     {
+      "url": "http://127.0.0.1:50116/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/onnx/model.onnx",
+      "encoded": 15086122
+     },
+     {
+      "url": "http://127.0.0.1:50116/tjs/ort-wasm-simd-threaded.asyncify.mjs",
+      "encoded": 53057
+     },
+     {
+      "url": "http://127.0.0.1:50116/tjs/ort-wasm-simd-threaded.asyncify.wasm",
+      "encoded": 26861777
+     },
+     {
+      "url": "http://127.0.0.1:50116/frames/cats.png",
+      "encoded": 697827
+     }
+    ]
+   },
+   "hosts": {
+    "127.0.0.1 (ours)": 9
+   },
+   "requests": [
+    {
+     "url": "/tjs_page.html?task=classify&mode=local&dtype=fp32&runs=10&device=",
+     "bytes": 678,
+     "status": 200
+    },
+    {
+     "url": "/tjs_worker.js",
+     "bytes": 0,
+     "status": 200
+    },
+    {
+     "url": "/tjs/transformers.min.js",
+     "bytes": 587931,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/preprocessor_config.json",
+     "bytes": 453,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/config.json",
+     "bytes": 69909,
+     "status": 200
+    },
+    {
+     "url": "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/onnx/model.onnx",
+     "bytes": 15086137,
+     "status": 200
+    },
+    {
+     "url": "/tjs/ort-wasm-simd-threaded.asyncify.mjs",
+     "bytes": 53070,
+     "status": 200
+    },
+    {
+     "url": "/tjs/ort-wasm-simd-threaded.asyncify.wasm",
+     "bytes": 26861793,
+     "status": 200
+    },
+    {
+     "url": "/frames/cats.png",
+     "bytes": 697841,
+     "status": 200
+    }
+   ],
+   "logs": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+   ]
+  },
+  {
+   "spec": "segment:local:q8",
+   "ok": true,
+   "result": {
+    "task": "segment",
+    "mode": "local",
+    "dtype": "q8",
+    "model": "Xenova/modnet",
+    "pipeline": "background-removal",
+    "isolated": false,
+    "import_ms": 88.70000004768372,
+    "created_ms": 1795.2000000476837,
+    "first_result_ms": 4115.099999904633,
+    "runs": 10,
+    "fps": 0.44384476085456415,
+    "median_ms": 2269.9000000953674,
+    "p90_ms": 2588.5,
+    "found": {
+     "type": "t",
+     "width": 640,
+     "height": 480,
+     "channels": 4
+    },
+    "resources": [
+     {
+      "url": "http://127.0.0.1:50116/tjs/transformers.min.js",
+      "encoded": 587917
+     },
+     {
+      "url": "http://127.0.0.1:50116/hf/Xenova/modnet/preprocessor_config.json",
+      "encoded": 365
+     },
+     {
+      "url": "http://127.0.0.1:50116/hf/Xenova/modnet/config.json",
+      "encoded": 83
+     },
+     {
+      "url": "http://127.0.0.1:50116/hf/Xenova/modnet/onnx/model_quantized.onnx",
+      "encoded": 6632188
+     },
+     {
+      "url": "http://127.0.0.1:50116/tjs/ort-wasm-simd-threaded.asyncify.mjs",
+      "encoded": 53057
+     },
+     {
+      "url": "http://127.0.0.1:50116/tjs/ort-wasm-simd-threaded.asyncify.wasm",
+      "encoded": 26861777
+     },
+     {
+      "url": "http://127.0.0.1:50116/frames/pose.png",
+      "encoded": 259420
+     }
+    ]
+   },
+   "hosts": {
+    "127.0.0.1 (ours)": 9
+   },
+   "requests": [
+    {
+     "url": "/tjs_page.html?task=segment&mode=local&dtype=q8&runs=10&device=",
+     "bytes": 678,
+     "status": 200
+    },
+    {
+     "url": "/tjs_worker.js",
+     "bytes": 0,
+     "status": 200
+    },
+    {
+     "url": "/tjs/transformers.min.js",
+     "bytes": 587931,
+     "status": 200
+    },
+    {
+     "url": "/hf/Xenova/modnet/preprocessor_config.json",
+     "bytes": 377,
+     "status": 200
+    },
+    {
+     "url": "/hf/Xenova/modnet/config.json",
+     "bytes": 94,
+     "status": 200
+    },
+    {
+     "url": "/hf/Xenova/modnet/onnx/model_quantized.onnx",
+     "bytes": 6632203,
+     "status": 200
+    },
+    {
+     "url": "/tjs/ort-wasm-simd-threaded.asyncify.mjs",
+     "bytes": 53070,
+     "status": 200
+    },
+    {
+     "url": "/tjs/ort-wasm-simd-threaded.asyncify.wasm",
+     "bytes": 26861793,
+     "status": 200
+    },
+    {
+     "url": "/frames/pose.png",
+     "bytes": 259434,
+     "status": 200
+    }
+   ],
+   "logs": []
+  }
+ ]
+}

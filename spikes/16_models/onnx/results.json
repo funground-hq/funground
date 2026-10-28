@@ -1,0 +1,2076 @@
+{
+ "date": "2026-10-28",
+ "chrome": "156.0.8078.48",
+ "ort_web": "1.31.1",
+ "onnxruntime_python": "1.31.1",
+ "telemetry_runs": [
+  {
+   "mode": "default",
+   "returncode": 0,
+   "marks_rel_s": {
+    "start": 0.0,
+    "imported": 0.23,
+    "session": 0.29,
+    "100runs": 0.88,
+    "closed": 0.88,
+    "exiting": 2.88
+   },
+   "net_modules_loaded": [
+    "crypt32.dll",
+    "onnxruntime_providers_shared.dll",
+    "onnxruntime_pybind11_state.pyd",
+    "ws2_32.dll"
+   ],
+   "exit_to_end_s": 0.04,
+   "connections": []
+  },
+  {
+   "mode": "disabled",
+   "returncode": 0,
+   "marks_rel_s": {
+    "start": 0.0,
+    "imported": 0.22,
+    "session": 0.28,
+    "100runs": 0.75,
+    "closed": 0.75,
+    "exiting": 2.76
+   },
+   "net_modules_loaded": [
+    "crypt32.dll",
+    "onnxruntime_providers_shared.dll",
+    "onnxruntime_pybind11_state.pyd",
+    "ws2_32.dll"
+   ],
+   "exit_to_end_s": 0.05,
+   "connections": []
+  },
+  {
+   "mode": "default",
+   "returncode": 0,
+   "marks_rel_s": {
+    "start": 0.0,
+    "imported": 0.21,
+    "session": 0.27,
+    "100runs": 0.83,
+    "closed": 0.83,
+    "exiting": 2.83
+   },
+   "net_modules_loaded": [
+    "crypt32.dll",
+    "onnxruntime_providers_shared.dll",
+    "onnxruntime_pybind11_state.pyd",
+    "ws2_32.dll"
+   ],
+   "exit_to_end_s": 0.05,
+   "connections": []
+  },
+  {
+   "mode": "disabled",
+   "returncode": 0,
+   "marks_rel_s": {
+    "start": 0.0,
+    "imported": 0.22,
+    "session": 0.28,
+    "100runs": 0.82,
+    "closed": 0.82,
+    "exiting": 2.82
+   },
+   "net_modules_loaded": [
+    "crypt32.dll",
+    "onnxruntime_providers_shared.dll",
+    "onnxruntime_pybind11_state.pyd",
+    "ws2_32.dll"
+   ],
+   "exit_to_end_s": 0.06,
+   "connections": []
+  },
+  {
+   "mode": "default",
+   "returncode": 0,
+   "marks_rel_s": {
+    "start": 0.0,
+    "imported": 0.46,
+    "session": 0.53,
+    "100runs": 1.06,
+    "closed": 1.06,
+    "exiting": 3.06
+   },
+   "net_modules_loaded": [
+    "crypt32.dll",
+    "onnxruntime_providers_shared.dll",
+    "onnxruntime_pybind11_state.pyd",
+    "ws2_32.dll"
+   ],
+   "exit_to_end_s": 0.04,
+   "connections": []
+  },
+  {
+   "mode": "disabled",
+   "returncode": 0,
+   "marks_rel_s": {
+    "start": 0.0,
+    "imported": 0.41,
+    "session": 0.47,
+    "100runs": 1.03,
+    "closed": 1.03,
+    "exiting": 3.03
+   },
+   "net_modules_loaded": [
+    "crypt32.dll",
+    "onnxruntime_providers_shared.dll",
+    "onnxruntime_pybind11_state.pyd",
+    "ws2_32.dll"
+   ],
+   "exit_to_end_s": 0.05,
+   "connections": []
+  },
+  {
+   "mode": "default",
+   "returncode": 0,
+   "marks_rel_s": {
+    "start": 0.0,
+    "imported": 0.23,
+    "session": 0.28,
+    "100runs": 0.81,
+    "closed": 0.81,
+    "exiting": 60.81
+   },
+   "net_modules_loaded": [
+    "crypt32.dll",
+    "onnxruntime_providers_shared.dll",
+    "onnxruntime_pybind11_state.pyd",
+    "ws2_32.dll"
+   ],
+   "exit_to_end_s": 0.11,
+   "connections": []
+  }
+ ],
+ "desktop_ort": {
+  "classify": {
+   "task": "classify",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.131,
+   "first_result_s": 0.129,
+   "median_ms": 11.58,
+   "p90_ms": 13.37,
+   "per_second": 85.7,
+   "found": 5,
+   "unit": "items",
+   "threads": 8
+  },
+  "classify_int8": {
+   "task": "classify_int8",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.348,
+   "first_result_s": 0.25,
+   "median_ms": 90.9,
+   "p90_ms": 134.23,
+   "per_second": 10.2,
+   "found": 5,
+   "unit": "items",
+   "threads": 8
+  },
+  "classify_t1": {
+   "task": "classify",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.11,
+   "first_result_s": 0.103,
+   "median_ms": 9.88,
+   "p90_ms": 11.11,
+   "per_second": 98.0,
+   "found": 5,
+   "unit": "items",
+   "threads": 1
+  },
+  "embed": {
+   "task": "embed",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.133,
+   "first_result_s": 0.136,
+   "median_ms": 8.55,
+   "p90_ms": 10.25,
+   "per_second": 117.1,
+   "found": 1000,
+   "unit": "points",
+   "threads": 8
+  },
+  "embed_dino": {
+   "task": "embed_dino",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.12,
+   "first_result_s": 0.287,
+   "median_ms": 109.98,
+   "p90_ms": 144.81,
+   "per_second": 8.9,
+   "found": 384,
+   "unit": "points",
+   "threads": 8
+  },
+  "hand": {
+   "task": "hand",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.108,
+   "first_result_s": 0.123,
+   "median_ms": 16.01,
+   "p90_ms": 17.13,
+   "per_second": 62.4,
+   "found": 21,
+   "unit": "points",
+   "threads": 8
+  },
+  "hand_tracked": {
+   "task": "hand_tracked",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.108,
+   "first_result_s": 0.099,
+   "median_ms": 6.44,
+   "p90_ms": 6.88,
+   "per_second": 161.9,
+   "found": 21,
+   "unit": "points",
+   "threads": 8
+  },
+  "hand_tracked_t1": {
+   "task": "hand_tracked",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.117,
+   "first_result_s": 0.116,
+   "median_ms": 6.71,
+   "p90_ms": 7.59,
+   "per_second": 145.5,
+   "found": 21,
+   "unit": "points",
+   "threads": 1
+  },
+  "humanseg": {
+   "task": "humanseg",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.34,
+   "first_result_s": 0.098,
+   "median_ms": 15.68,
+   "p90_ms": 17.33,
+   "per_second": 64.2,
+   "found": 21666,
+   "unit": "person pixels",
+   "threads": 8
+  },
+  "movenet": {
+   "task": "movenet",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.125,
+   "first_result_s": 0.111,
+   "median_ms": 7.99,
+   "p90_ms": 9.42,
+   "per_second": 126.2,
+   "found": 17,
+   "unit": "points",
+   "threads": 8
+  },
+  "movenet_int8": {
+   "task": "movenet_int8",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.131,
+   "first_result_s": 0.247,
+   "median_ms": 116.57,
+   "p90_ms": 153.0,
+   "per_second": 8.4,
+   "found": 17,
+   "unit": "points",
+   "threads": 8
+  },
+  "movenet_t1": {
+   "task": "movenet",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.11,
+   "first_result_s": 0.109,
+   "median_ms": 11.4,
+   "p90_ms": 12.0,
+   "per_second": 87.6,
+   "found": 17,
+   "unit": "points",
+   "threads": 1
+  },
+  "objects": {
+   "task": "objects",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.338,
+   "first_result_s": 0.658,
+   "median_ms": 160.4,
+   "p90_ms": 191.72,
+   "per_second": 6.1,
+   "found": 14,
+   "unit": "items",
+   "threads": 8
+  },
+  "objects_int8": {
+   "task": "objects_int8",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.124,
+   "first_result_s": 1.493,
+   "median_ms": 933.89,
+   "p90_ms": 1366.37,
+   "per_second": 1.0,
+   "found": 15,
+   "unit": "items",
+   "threads": 8
+  },
+  "pose": {
+   "task": "pose",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.366,
+   "first_result_s": 0.321,
+   "median_ms": 32.37,
+   "p90_ms": 44.94,
+   "per_second": 28.2,
+   "found": 33,
+   "unit": "points",
+   "threads": 8
+  },
+  "pose_t1": {
+   "task": "pose",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.136,
+   "first_result_s": 0.194,
+   "median_ms": 39.07,
+   "p90_ms": 62.66,
+   "per_second": 23.3,
+   "found": 33,
+   "unit": "points",
+   "threads": 1
+  },
+  "pose_tracked": {
+   "task": "pose_tracked",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.128,
+   "first_result_s": 0.213,
+   "median_ms": 17.87,
+   "p90_ms": 26.1,
+   "per_second": 51.7,
+   "found": 33,
+   "unit": "points",
+   "threads": 8
+  },
+  "pose_tracked_t1": {
+   "task": "pose_tracked",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.114,
+   "first_result_s": 0.163,
+   "median_ms": 21.9,
+   "p90_ms": 24.22,
+   "per_second": 45.2,
+   "found": 33,
+   "unit": "points",
+   "threads": 1
+  },
+  "selfie": {
+   "task": "selfie",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.609,
+   "first_result_s": 0.162,
+   "median_ms": 11.51,
+   "p90_ms": 13.53,
+   "per_second": 87.7,
+   "found": 21907,
+   "unit": "person pixels (mask > 0.5)",
+   "threads": 8
+  },
+  "selfie_t1": {
+   "task": "selfie",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.119,
+   "first_result_s": 0.077,
+   "median_ms": 10.55,
+   "p90_ms": 11.56,
+   "per_second": 93.6,
+   "found": 21907,
+   "unit": "person pixels (mask > 0.5)",
+   "threads": 1
+  },
+  "yunet": {
+   "task": "yunet",
+   "onnxruntime": "1.31.1",
+   "import_s": 0.119,
+   "first_result_s": 0.086,
+   "median_ms": 17.65,
+   "p90_ms": 20.19,
+   "per_second": 56.3,
+   "found": 1,
+   "unit": "face",
+   "threads": 8
+  }
+ },
+ "web_wasm_1thread": [
+  {
+   "task": "pose",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 518.5,
+   "model_bytes": 17547397,
+   "created_ms": 2411.2999999523163,
+   "first_result_ms": 2735.0999999046326,
+   "frames": 100,
+   "fps": 5.286865311832645,
+   "median_ms": 184.09999990463257,
+   "p90_ms": 217,
+   "found": 33,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 17818472,
+    "cdn.jsdelivr.net": 3354939
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "pose_tracked",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 230.09999990463257,
+   "model_bytes": 17547397,
+   "created_ms": 2306.199999809265,
+   "first_result_ms": 2670.199999809265,
+   "frames": 100,
+   "fps": 12.615908660821296,
+   "median_ms": 78.89999985694885,
+   "p90_ms": 97.29999995231628,
+   "found": 33,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 17818472,
+    "cdn.jsdelivr.net": 3357747
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "hand",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 262.2000000476837,
+   "model_bytes": 8005355,
+   "created_ms": 1626.5,
+   "first_result_ms": 1966.8999998569489,
+   "frames": 100,
+   "fps": 7.938335013674343,
+   "median_ms": 121.59999990463257,
+   "p90_ms": 161.79999995231628,
+   "found": 21,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 8382413,
+    "cdn.jsdelivr.net": 3357743
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "hand_tracked",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 207.69999980926514,
+   "model_bytes": 8005355,
+   "created_ms": 1442.1999998092651,
+   "first_result_ms": 1633.5999999046326,
+   "frames": 100,
+   "fps": 14.634217727482877,
+   "median_ms": 68.20000004768372,
+   "p90_ms": 97.79999995231628,
+   "found": 21,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 8382413,
+    "cdn.jsdelivr.net": 3357772
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "selfie",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 295.19999980926514,
+   "model_bytes": 462352,
+   "created_ms": 1522.8999998569489,
+   "first_result_ms": 1642.5999999046326,
+   "frames": 100,
+   "fps": 32.287227172433305,
+   "median_ms": 27.700000047683716,
+   "p90_ms": 49.10000014305115,
+   "found": 4642,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 733411,
+    "cdn.jsdelivr.net": 3357725
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "humanseg",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 302.40000009536743,
+   "model_bytes": 6163938,
+   "created_ms": 1732.7000000476837,
+   "first_result_ms": 1931,
+   "frames": 100,
+   "fps": 8.715280501375371,
+   "median_ms": 110.70000004768372,
+   "p90_ms": 148.40000009536743,
+   "found": 2589,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 6434998,
+    "cdn.jsdelivr.net": 3357713
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "yunet",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 285.7999999523163,
+   "model_bytes": 232589,
+   "created_ms": 2221.5999999046326,
+   "first_result_ms": 2418.0999999046326,
+   "frames": 100,
+   "fps": 6.822306212303261,
+   "median_ms": 140.70000004768372,
+   "p90_ms": 181.89999985694885,
+   "found": 1,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 702527,
+    "cdn.jsdelivr.net": 3355384
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "movenet",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 313.09999990463257,
+   "model_bytes": 9413268,
+   "created_ms": 1646.3999998569489,
+   "first_result_ms": 1793.5999999046326,
+   "frames": 100,
+   "fps": 14.400092160392072,
+   "median_ms": 71.79999995231628,
+   "p90_ms": 83.59999990463257,
+   "found": 17,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 9684328,
+    "cdn.jsdelivr.net": 3357741
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "classify",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 201.39999985694885,
+   "model_bytes": 15086122,
+   "created_ms": 1497.8999998569489,
+   "first_result_ms": 1597,
+   "frames": 100,
+   "fps": 25.259541792824624,
+   "median_ms": 38.59999990463257,
+   "p90_ms": 56.200000047683716,
+   "found": 5,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 15865498,
+    "cdn.jsdelivr.net": 3357765
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "embed",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 281.7999999523163,
+   "model_bytes": 15086122,
+   "created_ms": 1638.0999999046326,
+   "first_result_ms": 1739.7999999523163,
+   "frames": 100,
+   "fps": 26.41589180117266,
+   "median_ms": 35.10000014305115,
+   "p90_ms": 54.200000047683716,
+   "found": 1000,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 15795589,
+    "cdn.jsdelivr.net": 3357778
+   },
+   "file": "web_wasm_t1.json"
+  },
+  {
+   "task": "objects",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 279.59999990463257,
+   "model_bytes": 15258358,
+   "created_ms": 2276.5999999046326,
+   "first_result_ms": 3112.7999999523163,
+   "frames": 100,
+   "fps": 1.6255748439029156,
+   "median_ms": 615.0999999046326,
+   "p90_ms": 686.3000001907349,
+   "found": 14,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 15730019,
+    "cdn.jsdelivr.net": 3357740
+   },
+   "file": "web_wasm_t1_objects.json"
+  },
+  {
+   "task": "movenet",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 741,
+   "model_bytes": 9413268,
+   "created_ms": 2326.4000000953674,
+   "first_result_ms": 2485,
+   "frames": 100,
+   "fps": 14.20394017261918,
+   "median_ms": 69.59999990463257,
+   "p90_ms": 87.79999995231628,
+   "found": 17,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 9684375,
+    "cdn.jsdelivr.net": 3357724
+   },
+   "file": "web_wasm_t1_movenet.json"
+  },
+  {
+   "task": "embed",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 308.39999985694885,
+   "model_bytes": 15086122,
+   "created_ms": 1617.6999998092651,
+   "first_result_ms": 1712.5999999046326,
+   "frames": 100,
+   "fps": 24.404529481239603,
+   "median_ms": 41,
+   "p90_ms": 54.60000014305115,
+   "found": 1000,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 15795927,
+    "cdn.jsdelivr.net": 3357729
+   },
+   "file": "web_wasm_t1_embed.json"
+  },
+  {
+   "task": "embed_dino",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 202.90000009536743,
+   "model_bytes": 24446700,
+   "created_ms": 1713.4000000953674,
+   "first_result_ms": 2157,
+   "frames": 100,
+   "fps": 2.0261412747226064,
+   "median_ms": 495.40000009536743,
+   "p90_ms": 554.5,
+   "found": 384,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 25156506,
+    "cdn.jsdelivr.net": 3357785
+   },
+   "file": "web_wasm_t1_embed.json"
+  },
+  {
+   "task": "pose_tracked",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 228.79999995231628,
+   "model_bytes": 17547397,
+   "created_ms": 1613.5,
+   "first_result_ms": 1795.1000001430511,
+   "frames": 100,
+   "fps": 14.571736659777587,
+   "median_ms": 71.59999990463257,
+   "p90_ms": 86.39999985694885,
+   "found": 33,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 17818758,
+    "cdn.jsdelivr.net": 3357799
+   },
+   "file": "web_wasm_t1_recheck.json"
+  },
+  {
+   "task": "movenet",
+   "ep": "wasm",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 281.90000009536743,
+   "model_bytes": 9413268,
+   "created_ms": 1605.2000000476837,
+   "first_result_ms": 1746.9000000953674,
+   "frames": 100,
+   "fps": 16.732761073038148,
+   "median_ms": 61,
+   "p90_ms": 76,
+   "found": 17,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 9684614,
+    "cdn.jsdelivr.net": 3357728
+   },
+   "file": "web_wasm_t1_recheck.json"
+  }
+ ],
+ "web_wasm_4threads_isolated": [
+  {
+   "task": "pose",
+   "ep": "wasm",
+   "threads": 4,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": true,
+   "import_ms": 247.49000000953674,
+   "model_bytes": 17547397,
+   "created_ms": 1877.005000114441,
+   "first_result_ms": 2074.2249999046326,
+   "frames": 100,
+   "fps": 7.510261834008071,
+   "median_ms": 119.16499996185303,
+   "p90_ms": 171.61500000953674,
+   "found": 33,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 4
+   },
+   "wire_bytes_by_host": {
+    "ours": 17818472,
+    "cdn.jsdelivr.net": 3357756,
+    "blob": -383
+   },
+   "file": "web_wasm_t4_iso.json"
+  },
+  {
+   "task": "pose_tracked",
+   "ep": "wasm",
+   "threads": 4,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": true,
+   "import_ms": 225.4099998474121,
+   "model_bytes": 17547397,
+   "created_ms": 2446.6349999904633,
+   "first_result_ms": 2617.9049999713898,
+   "frames": 100,
+   "fps": 14.868816151997187,
+   "median_ms": 67.71000003814697,
+   "p90_ms": 80.46000003814697,
+   "found": 33,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 4
+   },
+   "wire_bytes_by_host": {
+    "ours": 17818472,
+    "cdn.jsdelivr.net": 3355437,
+    "blob": -383
+   },
+   "file": "web_wasm_t4_iso.json"
+  },
+  {
+   "task": "hand",
+   "ep": "wasm",
+   "threads": 4,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": true,
+   "import_ms": 220.64000010490417,
+   "model_bytes": 8005355,
+   "created_ms": 1540.1650002002716,
+   "first_result_ms": 1803.125,
+   "frames": 100,
+   "fps": 9.498412577754916,
+   "median_ms": 103.875,
+   "p90_ms": 134.6600000858307,
+   "found": 21,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 4
+   },
+   "wire_bytes_by_host": {
+    "ours": 8382413,
+    "cdn.jsdelivr.net": 3357768,
+    "blob": -383
+   },
+   "file": "web_wasm_t4_iso.json"
+  },
+  {
+   "task": "hand_tracked",
+   "ep": "wasm",
+   "threads": 4,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": true,
+   "import_ms": 231.3950002193451,
+   "model_bytes": 8005355,
+   "created_ms": 1558.6600000858307,
+   "first_result_ms": 1730.8600001335144,
+   "frames": 100,
+   "fps": 27.50808393759002,
+   "median_ms": 35.480000019073486,
+   "p90_ms": 51.045000076293945,
+   "found": 21,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 4
+   },
+   "wire_bytes_by_host": {
+    "ours": 8382413,
+    "cdn.jsdelivr.net": 3357719,
+    "blob": -383
+   },
+   "file": "web_wasm_t4_iso.json"
+  },
+  {
+   "task": "selfie",
+   "ep": "wasm",
+   "threads": 4,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": true,
+   "import_ms": 268.039999961853,
+   "model_bytes": 462352,
+   "created_ms": 2157.859999895096,
+   "first_result_ms": 2257.0299999713898,
+   "frames": 100,
+   "fps": 39.2011587872796,
+   "median_ms": 27.424999952316284,
+   "p90_ms": 36.50999999046326,
+   "found": 4642,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3,
+    "": 4
+   },
+   "wire_bytes_by_host": {
+    "ours": 733411,
+    "cdn.jsdelivr.net": 3355450,
+    "blob": -383
+   },
+   "file": "web_wasm_t4_iso.json"
+  },
+  {
+   "task": "movenet",
+   "ep": "wasm",
+   "threads": 4,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": true,
+   "import_ms": 214.54999995231628,
+   "model_bytes": 9413268,
+   "created_ms": 1518.5699999332428,
+   "first_result_ms": 1654.5650000572205,
+   "frames": 100,
+   "fps": 19.80143124703924,
+   "median_ms": 47.62999987602234,
+   "p90_ms": 64.94000005722046,
+   "found": 17,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3,
+    "": 4
+   },
+   "wire_bytes_by_host": {
+    "ours": 9684328,
+    "cdn.jsdelivr.net": 3357805,
+    "blob": -383
+   },
+   "file": "web_wasm_t4_iso.json"
+  }
+ ],
+ "web_webgpu": [
+  {
+   "task": "pose",
+   "ep": "webgpu",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 294,
+   "gpu": {
+    "vendor": "intel",
+    "architecture": "gen-12lp",
+    "device": "",
+    "description": ""
+   },
+   "model_bytes": 17547397,
+   "created_ms": 4725.900000095367,
+   "first_result_ms": 7417.200000047684,
+   "frames": 100,
+   "fps": 10.321089081472246,
+   "median_ms": 94.70000004768372,
+   "p90_ms": 107.20000004768372,
+   "found": 33,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 17818758,
+    "cdn.jsdelivr.net": 6176657
+   },
+   "file": "web_gpu.json"
+  },
+  {
+   "task": "pose_tracked",
+   "ep": "webgpu",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 274.2999999523163,
+   "gpu": {
+    "vendor": "intel",
+    "architecture": "gen-12lp",
+    "device": "",
+    "description": ""
+   },
+   "model_bytes": 17547397,
+   "created_ms": 3507.2000000476837,
+   "first_result_ms": 6254.5,
+   "frames": 100,
+   "fps": 19.831432821021316,
+   "median_ms": 49.700000047683716,
+   "p90_ms": 56.60000014305115,
+   "found": 33,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 17818758,
+    "cdn.jsdelivr.net": 6181598
+   },
+   "file": "web_gpu.json"
+  },
+  {
+   "task": "movenet",
+   "ep": "webgpu",
+   "threads": 1,
+   "version": "1.31.1",
+   "where": "worker",
+   "isolated": false,
+   "import_ms": 199.70000004768372,
+   "gpu": {
+    "vendor": "intel",
+    "architecture": "gen-12lp",
+    "device": "",
+    "description": ""
+   },
+   "model_bytes": 9413268,
+   "created_ms": 3025.2999999523163,
+   "first_result_ms": 5148.900000095367,
+   "frames": 100,
+   "fps": 23.12352587573538,
+   "median_ms": 41.299999952316284,
+   "p90_ms": 50,
+   "found": 17,
+   "hosts": {
+    "127.0.0.1 (ours)": 5,
+    "cdn.jsdelivr.net": 3
+   },
+   "wire_bytes_by_host": {
+    "ours": 9684614,
+    "cdn.jsdelivr.net": 6181642
+   },
+   "file": "web_gpu.json"
+  }
+ ],
+ "agreement_desktop_vs_web": [
+  {
+   "task": "classify",
+   "desktop": [
+    [
+     "tabby, tabby cat",
+     0.7655404806137085
+    ],
+    [
+     "Egyptian cat",
+     0.09889644384384155
+    ],
+    [
+     "tiger cat",
+     0.06299467384815216
+    ]
+   ],
+   "web": [
+    [
+     "tabby, tabby cat",
+     0.7956969830060622
+    ],
+    [
+     "Egyptian cat",
+     0.10758281786856307
+    ],
+    [
+     "tiger cat",
+     0.0491262771303572
+    ]
+   ],
+   "same_top5": false,
+   "max_prob_diff": 0.0302
+  },
+  {
+   "task": "hand",
+   "points": 21,
+   "max_px": 2.17,
+   "mean_px": 1.07,
+   "worst_point": 5
+  },
+  {
+   "task": "hand_tracked",
+   "points": 21,
+   "max_px": 2.17,
+   "mean_px": 1.07,
+   "worst_point": 5
+  },
+  {
+   "task": "humanseg",
+   "desktop_found": 21666,
+   "web_found": 2589,
+   "note": "pixel counts (desktop at 640x480, web at model size)"
+  },
+  {
+   "task": "movenet",
+   "points": 17,
+   "max_px": 5.26,
+   "mean_px": 1.8,
+   "worst_point": 9
+  },
+  {
+   "task": "objects",
+   "desktop_n": 14,
+   "web_n": 14,
+   "labels_desktop": [
+    "car",
+    "car",
+    "car",
+    "car",
+    "car",
+    "car",
+    "person",
+    "traffic light"
+   ],
+   "labels_web": [
+    "bicycle",
+    "bicycle",
+    "car",
+    "car",
+    "car",
+    "car",
+    "car",
+    "car"
+   ]
+  },
+  {
+   "task": "pose",
+   "points": 33,
+   "max_px": 4.65,
+   "mean_px": 1.59,
+   "worst_point": 25
+  },
+  {
+   "task": "pose_tracked",
+   "points": 33,
+   "max_px": 4.65,
+   "mean_px": 1.59,
+   "worst_point": 25
+  },
+  {
+   "task": "selfie",
+   "desktop_found": 21907,
+   "web_found": 4642,
+   "note": "pixel counts (desktop at 640x480, web at model size)"
+  },
+  {
+   "task": "yunet",
+   "points": 5,
+   "max_px": 0.0,
+   "mean_px": 0.0
+  }
+ ],
+ "embeddings": {
+  "desktop_vs_web_cosine": {
+   "embed": 0.9999768441273081,
+   "embed_dino": 0.9882012813950694
+  },
+  "embed_cosine_to_cats": {
+   "cats_flipped": 1.0,
+   "cats_darker": 1.0,
+   "city": 0.997,
+   "yoga": 0.998,
+   "portrait": 0.998
+  },
+  "embed_dino_cosine_to_cats": {
+   "cats_flipped": 0.961,
+   "cats_darker": 0.989,
+   "city": 0.049,
+   "yoga": -0.02,
+   "portrait": 0.092
+  }
+ },
+ "transformers_js": [
+  {
+   "spec": "classify:remote:q8",
+   "ok": true,
+   "hosts": {
+    "127.0.0.1 (ours)": 3,
+    "cdn.jsdelivr.net": 3,
+    "huggingface.co": 8,
+    "us.aws.cdn.hf.co": 1,
+    "": 1
+   },
+   "task": "classify",
+   "mode": "remote",
+   "dtype": "q8",
+   "model": "onnx-community/mobilenetv4_conv_small.e2400_r224_in1k",
+   "pipeline": "image-classification",
+   "isolated": false,
+   "import_ms": 326.2999999523163,
+   "created_ms": 6962.099999904633,
+   "first_result_ms": 7516.5,
+   "runs": 30,
+   "fps": 15.007503751875937,
+   "median_ms": 67.29999995231628,
+   "p90_ms": 79.60000014305115,
+   "found": [
+    [
+     "knee pad",
+     0.452
+    ],
+    [
+     "ocarina, sweet potato",
+     0.226
+    ],
+    [
+     "cello, violoncello",
+     0.137
+    ]
+   ],
+   "non_200": [
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/config.json",
+     307
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/tokenizer_config.jso",
+     404
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/preprocessor_config.",
+     307
+    ],
+    [
+     "https://huggingface.co/api/resolve-cache/models/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/3ba07f12",
+     206
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/preprocessor_config.",
+     307
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/onnx/model_quantized",
+     302
+    ]
+   ],
+   "requests": [
+    [
+     "/tjs_page.html?task=classify&mode=remote&dtype=q8&runs=30&device=",
+     200,
+     678
+    ],
+    [
+     "/tjs_worker.js",
+     200,
+     0
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     200,
+     142367
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/config.json",
+     307,
+     310
+    ],
+    [
+     "https://huggingface.co/api/resolve-cache/models/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/3ba07f12712fa58fd6b3d661f990",
+     200,
+     20766
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/tokenizer_config.json",
+     404,
+     705
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/preprocessor_config.json",
+     307,
+     336
+    ],
+    [
+     "https://huggingface.co/api/resolve-cache/models/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/3ba07f12712fa58fd6b3d661f990",
+     206,
+     730
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/preprocessor_config.json",
+     307,
+     336
+    ],
+    [
+     "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/onnx/model_quantized.onnx",
+     302,
+     1056
+    ],
+    [
+     "https://huggingface.co/api/resolve-cache/models/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/3ba07f12712fa58fd6b3d661f990",
+     200,
+     1152
+    ],
+    [
+     "https://us.aws.cdn.hf.co/xet-bridge-us/667158d98e70a1c0fa44c59b/bbbfbff574f0df837125e5e81232a32407988b66760243a660608f5d8d039fad?u",
+     200,
+     3934538
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     200,
+     19910
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     200,
+     5554008
+    ],
+    [
+     "blob:/9e26b3f3-06c8-4f28-ba18-0646e6f0aabc",
+     200,
+     -73
+    ],
+    [
+     "/frames/cats.png",
+     200,
+     697841
+    ]
+   ]
+  },
+  {
+   "spec": "classify:cdn:fp32",
+   "ok": true,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 1
+   },
+   "task": "classify",
+   "mode": "cdn",
+   "dtype": "fp32",
+   "model": "onnx-community/mobilenetv4_conv_small.e2400_r224_in1k",
+   "pipeline": "image-classification",
+   "isolated": false,
+   "import_ms": 357.19999980926514,
+   "created_ms": 3172.5999999046326,
+   "first_result_ms": 3749.399999856949,
+   "runs": 30,
+   "fps": 21.63253533388486,
+   "median_ms": 44.299999952316284,
+   "p90_ms": 59.89999985694885,
+   "found": [
+    [
+     "tabby, tabby cat",
+     0.772
+    ],
+    [
+     "Egyptian cat",
+     0.133
+    ],
+    [
+     "tiger cat",
+     0.057
+    ]
+   ],
+   "non_200": [],
+   "requests": [
+    [
+     "/tjs_page.html?task=classify&mode=cdn&dtype=fp32&runs=30&device=",
+     200,
+     678
+    ],
+    [
+     "/tjs_worker.js",
+     200,
+     0
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     200,
+     142363
+    ],
+    [
+     "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/preprocessor_config.json",
+     200,
+     453
+    ],
+    [
+     "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/config.json",
+     200,
+     69909
+    ],
+    [
+     "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/onnx/model.onnx",
+     200,
+     15086137
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     200,
+     19907
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     200,
+     5554056
+    ],
+    [
+     "blob:/834ec463-15c6-4382-a298-cc998dd9a9da",
+     200,
+     -73
+    ],
+    [
+     "/frames/cats.png",
+     200,
+     697841
+    ]
+   ]
+  },
+  {
+   "spec": "objects:cdn:q8",
+   "ok": true,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 1
+   },
+   "task": "objects",
+   "mode": "cdn",
+   "dtype": "q8",
+   "model": "onnx-community/dfine_n_coco-ONNX",
+   "pipeline": "object-detection",
+   "isolated": false,
+   "import_ms": 230.29999995231628,
+   "created_ms": 3744.2999999523163,
+   "first_result_ms": 5979.5,
+   "runs": 30,
+   "fps": 0.4043715257756807,
+   "median_ms": 2641.0999999046326,
+   "p90_ms": 2774.4000000953674,
+   "found": [
+    [
+     "person",
+     0.46,
+     550,
+     194,
+     592,
+     247
+    ],
+    [
+     "person",
+     0.65,
+     31,
+     352,
+     80,
+     422
+    ],
+    [
+     "traffic light",
+     0.5,
+     377,
+     48,
+     402,
+     81
+    ],
+    [
+     "traffic light",
+     0.49,
+     19,
+     111,
+     37,
+     140
+    ],
+    [
+     "traffic light",
+     0.61,
+     24,
+     110,
+     40,
+     136
+    ],
+    [
+     "bicycle",
+     0.44,
+     452,
+     345,
+     562,
+     398
+    ],
+    [
+     "traffic light",
+     0.55,
+     207,
+     41,
+     231,
+     75
+    ],
+    [
+     "traffic light",
+     0.65,
+     24,
+     109,
+     41,
+     135
+    ],
+    [
+     "traffic light",
+     0.47,
+     575,
+     97,
+     603,
+     140
+    ],
+    [
+     "traffic light",
+     0.44,
+     70,
+     139,
+     97,
+     168
+    ],
+    [
+     "traffic light",
+     0.42,
+     377,
+     49,
+     402,
+     81
+    ],
+    [
+     "traffic light",
+     0.44,
+     69,
+     140,
+     97,
+     168
+    ]
+   ],
+   "n": 24,
+   "non_200": [],
+   "requests": [
+    [
+     "/tjs_page.html?task=objects&mode=cdn&dtype=q8&runs=30&device=",
+     200,
+     678
+    ],
+    [
+     "/tjs_worker.js",
+     200,
+     0
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     200,
+     142372
+    ],
+    [
+     "/hf/onnx-community/dfine_n_coco-ONNX/preprocessor_config.json",
+     200,
+     456
+    ],
+    [
+     "/hf/onnx-community/dfine_n_coco-ONNX/config.json",
+     200,
+     6610
+    ],
+    [
+     "/hf/onnx-community/dfine_n_coco-ONNX/onnx/model_quantized.onnx",
+     200,
+     4477923
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     200,
+     19956
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     200,
+     5553976
+    ],
+    [
+     "blob:/d25497da-5519-4282-b014-a3ff54fd4153",
+     200,
+     -73
+    ],
+    [
+     "/frames/city-streets.png",
+     200,
+     453425
+    ]
+   ]
+  },
+  {
+   "spec": "objects:cdn:fp32",
+   "ok": true,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 1
+   },
+   "task": "objects",
+   "mode": "cdn",
+   "dtype": "fp32",
+   "model": "onnx-community/dfine_n_coco-ONNX",
+   "pipeline": "object-detection",
+   "isolated": false,
+   "import_ms": 255.40000009536743,
+   "created_ms": 3659.2999999523163,
+   "first_result_ms": 5016.700000047684,
+   "runs": 30,
+   "fps": 1.452228929378482,
+   "median_ms": 694.1000001430511,
+   "p90_ms": 776.8999998569489,
+   "found": [
+    [
+     "car",
+     0.46,
+     451,
+     284,
+     639,
+     356
+    ],
+    [
+     "person",
+     0.68,
+     32,
+     352,
+     81,
+     423
+    ],
+    [
+     "traffic light",
+     0.59,
+     20,
+     110,
+     38,
+     140
+    ],
+    [
+     "traffic light",
+     0.56,
+     25,
+     110,
+     39,
+     135
+    ],
+    [
+     "bicycle",
+     0.42,
+     452,
+     338,
+     561,
+     402
+    ],
+    [
+     "traffic light",
+     0.56,
+     26,
+     110,
+     39,
+     135
+    ],
+    [
+     "bicycle",
+     0.44,
+     455,
+     362,
+     557,
+     404
+    ],
+    [
+     "car",
+     0.44,
+     449,
+     284,
+     638,
+     359
+    ],
+    [
+     "car",
+     0.42,
+     435,
+     106,
+     504,
+     151
+    ],
+    [
+     "car",
+     0.42,
+     435,
+     106,
+     504,
+     151
+    ],
+    [
+     "bicycle",
+     0.51,
+     357,
+     379,
+     448,
+     443
+    ],
+    [
+     "traffic light",
+     0.49,
+     23,
+     110,
+     40,
+     136
+    ]
+   ],
+   "n": 16,
+   "non_200": [],
+   "requests": [
+    [
+     "/tjs_page.html?task=objects&mode=cdn&dtype=fp32&runs=30&device=",
+     200,
+     678
+    ],
+    [
+     "/tjs_worker.js",
+     200,
+     0
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     200,
+     142363
+    ],
+    [
+     "/hf/onnx-community/dfine_n_coco-ONNX/preprocessor_config.json",
+     200,
+     456
+    ],
+    [
+     "/hf/onnx-community/dfine_n_coco-ONNX/config.json",
+     200,
+     6610
+    ],
+    [
+     "/hf/onnx-community/dfine_n_coco-ONNX/onnx/model.onnx",
+     200,
+     15258373
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     200,
+     19908
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     200,
+     5554038
+    ],
+    [
+     "blob:/6b1ef560-8c14-46ec-856d-c718bb8517ea",
+     200,
+     -73
+    ],
+    [
+     "/frames/city-streets.png",
+     200,
+     453425
+    ]
+   ]
+  },
+  {
+   "spec": "segment:cdn:q8",
+   "ok": true,
+   "hosts": {
+    "127.0.0.1 (ours)": 6,
+    "cdn.jsdelivr.net": 3,
+    "": 1
+   },
+   "task": "segment",
+   "mode": "cdn",
+   "dtype": "q8",
+   "model": "Xenova/modnet",
+   "pipeline": "background-removal",
+   "isolated": false,
+   "import_ms": 222.20000004768372,
+   "created_ms": 3150.2000000476837,
+   "first_result_ms": 5827,
+   "runs": 30,
+   "fps": 0.43889293645738686,
+   "median_ms": 2298.100000143051,
+   "p90_ms": 2415,
+   "found": {
+    "type": "t",
+    "width": 640,
+    "height": 480,
+    "channels": 4
+   },
+   "non_200": [],
+   "requests": [
+    [
+     "/tjs_page.html?task=segment&mode=cdn&dtype=q8&runs=30&device=",
+     200,
+     678
+    ],
+    [
+     "/tjs_worker.js",
+     200,
+     0
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     200,
+     142370
+    ],
+    [
+     "/hf/Xenova/modnet/preprocessor_config.json",
+     200,
+     377
+    ],
+    [
+     "/hf/Xenova/modnet/config.json",
+     200,
+     94
+    ],
+    [
+     "/hf/Xenova/modnet/onnx/model_quantized.onnx",
+     200,
+     6632203
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     200,
+     19906
+    ],
+    [
+     "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     200,
+     5554046
+    ],
+    [
+     "blob:/26b6974f-2c41-4112-81b0-dea43f45ff75",
+     200,
+     -73
+    ],
+    [
+     "/frames/pose.png",
+     200,
+     259434
+    ]
+   ]
+  },
+  {
+   "spec": "classify:local:fp32",
+   "ok": true,
+   "hosts": {
+    "127.0.0.1 (ours)": 9
+   },
+   "task": "classify",
+   "mode": "local",
+   "dtype": "fp32",
+   "model": "onnx-community/mobilenetv4_conv_small.e2400_r224_in1k",
+   "pipeline": "image-classification",
+   "isolated": false,
+   "import_ms": 101.29999995231628,
+   "created_ms": 1329.0999999046326,
+   "first_result_ms": 1715.3999998569489,
+   "runs": 10,
+   "fps": 18.733608086224894,
+   "median_ms": 53.200000047683716,
+   "p90_ms": 66.90000009536743,
+   "found": [
+    [
+     "tabby, tabby cat",
+     0.772
+    ],
+    [
+     "Egyptian cat",
+     0.133
+    ],
+    [
+     "tiger cat",
+     0.057
+    ]
+   ],
+   "non_200": [],
+   "requests": [
+    [
+     "/tjs_page.html?task=classify&mode=local&dtype=fp32&runs=10&device=",
+     200,
+     678
+    ],
+    [
+     "/tjs_worker.js",
+     200,
+     0
+    ],
+    [
+     "/tjs/transformers.min.js",
+     200,
+     587931
+    ],
+    [
+     "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/preprocessor_config.json",
+     200,
+     453
+    ],
+    [
+     "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/config.json",
+     200,
+     69909
+    ],
+    [
+     "/hf/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/onnx/model.onnx",
+     200,
+     15086137
+    ],
+    [
+     "/tjs/ort-wasm-simd-threaded.asyncify.mjs",
+     200,
+     53070
+    ],
+    [
+     "/tjs/ort-wasm-simd-threaded.asyncify.wasm",
+     200,
+     26861793
+    ],
+    [
+     "/frames/cats.png",
+     200,
+     697841
+    ]
+   ]
+  },
+  {
+   "spec": "segment:local:q8",
+   "ok": true,
+   "hosts": {
+    "127.0.0.1 (ours)": 9
+   },
+   "task": "segment",
+   "mode": "local",
+   "dtype": "q8",
+   "model": "Xenova/modnet",
+   "pipeline": "background-removal",
+   "isolated": false,
+   "import_ms": 88.70000004768372,
+   "created_ms": 1795.2000000476837,
+   "first_result_ms": 4115.099999904633,
+   "runs": 10,
+   "fps": 0.44384476085456415,
+   "median_ms": 2269.9000000953674,
+   "p90_ms": 2588.5,
+   "found": {
+    "type": "t",
+    "width": 640,
+    "height": 480,
+    "channels": 4
+   },
+   "non_200": [],
+   "requests": [
+    [
+     "/tjs_page.html?task=segment&mode=local&dtype=q8&runs=10&device=",
+     200,
+     678
+    ],
+    [
+     "/tjs_worker.js",
+     200,
+     0
+    ],
+    [
+     "/tjs/transformers.min.js",
+     200,
+     587931
+    ],
+    [
+     "/hf/Xenova/modnet/preprocessor_config.json",
+     200,
+     377
+    ],
+    [
+     "/hf/Xenova/modnet/config.json",
+     200,
+     94
+    ],
+    [
+     "/hf/Xenova/modnet/onnx/model_quantized.onnx",
+     200,
+     6632203
+    ],
+    [
+     "/tjs/ort-wasm-simd-threaded.asyncify.mjs",
+     200,
+     53070
+    ],
+    [
+     "/tjs/ort-wasm-simd-threaded.asyncify.wasm",
+     200,
+     26861793
+    ],
+    [
+     "/frames/pose.png",
+     200,
+     259434
+    ]
+   ]
+  }
+ ],
+ "glue_lines": {
+  "python": {
+   "header": 3,
+   "shared": 30,
+   "detector (pose person detector and palm detector share this)": 13,
+   "pose: person detector + 33-point landmark model (OpenCV Zoo files, MediaPipe weights)": 21,
+   "hand: palm detector + 21-point landmark model": 18,
+   "single-stage models": 56,
+   "TOTAL": 141
+  },
+  "javascript": {
+   "sigmoid": 1,
+   "warp": 12,
+   "tensor": 8,
+   "anchors": 10,
+   "roi": 5,
+   "letterbox": 1,
+   "run": 1,
+   "detect": 16,
+   "Pose": 17,
+   "Hand": 16,
+   "movenet": 6,
+   "stretch": 5,
+   "selfie": 4,
+   "humanseg": 5,
+   "yunet": 19,
+   "imagenetInput": 6,
+   "classify": 5,
+   "embed": 5,
+   "objects": 9,
+   "TOTAL": 151
+  }
+ }
+}

@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><title>S-231 Transformers.js</title>
+<script type="module">
+// Starts the module worker with the job from the query string; the answer appears as window.__done for measure_tjs.mjs.
+const p = new URLSearchParams(location.search);
+const w = new Worker("tjs_worker.js", { type: "module" });
+window.__done = null;
+w.onmessage = (e) => { window.__done = e.data; };
+w.onerror = (e) => { window.__done = { ok: false, error: "worker error: " + e.message }; };
+w.postMessage({ task: p.get("task"), mode: p.get("mode"), dtype: p.get("dtype"), runs: +p.get("runs"), device: p.get("device") || undefined, base: location.origin });
+</script>

@@ -1,0 +1,170 @@
+{
+ "date": "2026-10-28T17:40:44.364Z",
+ "chrome": "156.0.8078.48",
+ "transformers_js": "4.3.2",
+ "jobs": [
+  {
+   "spec": "classify:remote:q8",
+   "ok": true,
+   "result": {
+    "task": "classify",
+    "mode": "remote",
+    "dtype": "q8",
+    "model": "onnx-community/mobilenetv4_conv_small.e2400_r224_in1k",
+    "pipeline": "image-classification",
+    "isolated": false,
+    "import_ms": 326.2999999523163,
+    "created_ms": 6962.099999904633,
+    "first_result_ms": 7516.5,
+    "runs": 30,
+    "fps": 15.007503751875937,
+    "median_ms": 67.29999995231628,
+    "p90_ms": 79.60000014305115,
+    "found": [
+     [
+      "knee pad",
+      0.452
+     ],
+     [
+      "ocarina, sweet potato",
+      0.226
+     ],
+     [
+      "cello, violoncello",
+      0.137
+     ]
+    ],
+    "resources": [
+     {
+      "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+      "encoded": 141444
+     },
+     {
+      "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/config.json",
+      "encoded": 0
+     },
+     {
+      "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/tokenizer_config.json",
+      "encoded": 0
+     },
+     {
+      "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/preprocessor_config.json",
+      "encoded": 0
+     },
+     {
+      "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/preprocessor_config.json",
+      "encoded": 0
+     },
+     {
+      "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/onnx/model_quantized.onnx",
+      "encoded": 0
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+      "encoded": 5547312
+     },
+     {
+      "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+      "encoded": 19524
+     },
+     {
+      "url": "http://127.0.0.1:65448/frames/cats.png",
+      "encoded": 697827
+     }
+    ]
+   },
+   "hosts": {
+    "127.0.0.1 (ours)": 3,
+    "cdn.jsdelivr.net": 3,
+    "huggingface.co": 8,
+    "us.aws.cdn.hf.co": 1,
+    "": 1
+   },
+   "requests": [
+    {
+     "url": "/tjs_page.html?task=classify&mode=remote&dtype=q8&runs=30&device=",
+     "bytes": 678,
+     "status": 200
+    },
+    {
+     "url": "/tjs_worker.js",
+     "bytes": 0,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.3.2/dist/transformers.min.js",
+     "bytes": 142367,
+     "status": 200
+    },
+    {
+     "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/config.json",
+     "bytes": 310,
+     "status": 307
+    },
+    {
+     "url": "https://huggingface.co/api/resolve-cache/models/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/3ba07f12712fa58fd6b3d661f9909c9e332c5005/config.json?%2Fonnx-community%2Fmobilenetv4_conv_small.e2400_r224_in1k%2Fresolve%2Fmain%2Fconfig.json=&etag=%22ba8dadc63152bb7d554e322aa90ae272a0b8b0cd%22",
+     "bytes": 20766,
+     "status": 200
+    },
+    {
+     "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/tokenizer_config.json",
+     "bytes": 705,
+     "status": 404
+    },
+    {
+     "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/preprocessor_config.json",
+     "bytes": 336,
+     "status": 307
+    },
+    {
+     "url": "https://huggingface.co/api/resolve-cache/models/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/3ba07f12712fa58fd6b3d661f9909c9e332c5005/preprocessor_config.json?%2Fonnx-community%2Fmobilenetv4_conv_small.e2400_r224_in1k%2Fresolve%2Fmain%2Fpreprocessor_config.json=&etag=%226e787e1b99198923e91dcaa9538091f7f8838e97%22",
+     "bytes": 730,
+     "status": 206
+    },
+    {
+     "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/preprocessor_config.json",
+     "bytes": 336,
+     "status": 307
+    },
+    {
+     "url": "https://huggingface.co/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/resolve/main/onnx/model_quantized.onnx",
+     "bytes": 1056,
+     "status": 302
+    },
+    {
+     "url": "https://huggingface.co/api/resolve-cache/models/onnx-community/mobilenetv4_conv_small.e2400_r224_in1k/3ba07f12712fa58fd6b3d661f9909c9e332c5005/preprocessor_config.json?%2Fonnx-community%2Fmobilenetv4_conv_small.e2400_r224_in1k%2Fresolve%2Fmain%2Fpreprocessor_config.json=&etag=%226e787e1b99198923e91dcaa9538091f7f8838e97%22",
+     "bytes": 1152,
+     "status": 200
+    },
+    {
+     "url": "https://us.aws.cdn.hf.co/xet-bridge-us/667158d98e70a1c0fa44c59b/bbbfbff574f0df837125e5e81232a32407988b66760243a660608f5d8d039fad?user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model_quantized.onnx%3B+filename%3D%22model_quantized.onnx%22%3B&xip=apY-p6a5rY4&X-Xet-Cas-Uid=public&Expires=1793212835&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjY3MTU4ZDk4ZTcwYTFjMGZhNDRjNTliL2JiYmZiZmY1NzRmMGRmODM3MTI1ZTVlODEyMzJhMzI0MDc5ODhiNjY3NjAyNDNhNjYwNjA4ZjVkOGQwMzlmYWRcXD91c2VyX2lkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3bW9kZWxfcXVhbnRpemVkLm9ubnglM0IrZmlsZW5hbWUlM0QlMjJtb2RlbF9xdWFudGl6ZWQub25ueCUyMiUzQiZ4aXA9YXBZLXA2YTVyWTQmWC1YZXQtQ2FzLVVpZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5MzIxMjgzNX19fV19&Signature=MEUCICXyvZfmMJSCnU40jluVRIp%7EO1pBuSnvByh%7E7FOkhS9AAiEAqUrK-ltJ3HDRXk80gLkZ2e1hTBMeQCM6tgNg3-k7j5A_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256",
+     "bytes": 3934538,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.mjs",
+     "bytes": 19910,
+     "status": 200
+    },
+    {
+     "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.0-dev.20260914-8d85527a0/dist/ort-wasm-simd-threaded.asyncify.wasm",
+     "bytes": 5554008,
+     "status": 200
+    },
+    {
+     "url": "blob:/9e26b3f3-06c8-4f28-ba18-0646e6f0aabc",
+     "bytes": -73,
+     "status": 200
+    },
+    {
+     "url": "/frames/cats.png",
+     "bytes": 697841,
+     "status": 200
+    }
+   ],
+   "logs": [
+    "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+   ]
+  }
+ ]
+}
