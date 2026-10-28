@@ -390,3 +390,19 @@ sketchbook most likely give nothing there (unverified in a browser). A generated
 it can read files. A prototype completion, hover and signature provider for the funground extension, fed by
 `completions.json` (104 KB), gives `f.`, colours and option words against a stand-in VS Code API. Recommendation:
 the extension supplies suggestions (route B); stubs only if the browser check shows they are read.
+
+## 14. Help for the background cut-out (S-227, 28 Oct 2026) — `14_cutout/`
+
+Three helpers were measured on synthetic photos and a moving take: (a) tidy the mask (largest part, holes filled),
+(b) an outline a learner drags, cut out with `clip`, (d) edges pulling the outline to the picture. (a) passes on a quiet
+machine (median 1.9 to 4.4 ms at 640 x 480; about twice that when the machine is busy) and (b) passes; (d) pulls points
+off the person's edge and costs 22 to 80 ms. Recommendation and outcome: a and b, not d (D-115), built as S-245.
+Details: `14_cutout/README.md`.
+
+## 15. A funground book (S-225, 28 Oct 2026) — `15_book/`
+
+A study of ten books, a page system (Square and B5 trims, a 6-column grid on a 15 pt line, the site's fonts and colours)
+and a 12-page test chapter laid out and drawn by funground, day and night, print and screen. Every vertical position is
+on the line, contrast is at least 4.5:1, and a build takes about 10 s a trim. It found seven gaps in funground's PDF
+(S-249). Outcomes: D-121 (no new shape keywords), D-122 (book building on an external content platform; funground keeps
+print, with a content contract, S-248). The spreads are on the site (`docs/book/`). Details: `15_book/RESULTS.md`.

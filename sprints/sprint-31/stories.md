@@ -14,9 +14,9 @@ semantic contract; D-115 answered from S-227's results; how the book draws witho
 | Story | Value | Status |
 |---|---|---|
 | S-230 | Fonts from the web: `load_font()` and `text_font()` take a `.ttf` or `.otf` address, kept for offline runs, also in Play | live 28 Oct (funground #23, funground-web #17) |
-| S-227 | Spike: help for the background cut-out (tidy mask, an editable outline, edges), the evidence for D-115 | planned 23 Oct |
-| S-225 | Spike: a layout model for a funground book, alongside (a study, a page system, one chapter as a PDF) | planned 23 Oct |
-| S-237 | Moving the paper: a step-by-step project for translate, rotate, push and pop, with exercises (added 27 Oct by the maintainer) | built 27 Oct |
+| S-227 | Spike: help for the background cut-out (tidy mask, an editable outline, edges), the evidence for D-115 | done 28 Oct (funground #26; D-115 accepted) |
+| S-225 | Spike: a layout model for a funground book, alongside (a study, a page system, one chapter as a PDF) | done 28 Oct (funground #30 to #38; D-121, D-122) |
+| S-237 | Moving the paper: a step-by-step project for translate, rotate, push and pop, with exercises (added 27 Oct by the maintainer) | done 27 Oct |
 
 Order: S-230's measurements first (which hosts serve fonts with CORS, WOFF2 support, what no network gives), then its
 proposal to the maintainer; S-227 while the proposal waits; S-225 alongside, in pieces between heavy jobs. One heavy job
@@ -46,6 +46,6 @@ Next after this sprint: S-231, the models spike (E-37, added 23 Oct), which may 
 - [x] A page system: trim with bleed, grid, type from the site's fonts, colour, components (`spikes/15_book/page_system.md`)
 - [x] The production route chosen and why (funground as the layout engine; page_system.md section 7)
 - [x] One chapter of 8 to 12 pages as a PDF, pictures by funground, a chapter opener drawn by a sketch (`spikes/15_book/make/`, RESULTS.md)
-- [ ] A night (midnightblue) version of the screen PDF, closer to Play (maintainer, 28 Oct)
-- [ ] The spreads on the site with Previous and Next
-- [ ] A proposal for drawing without coordinates, as a decision for the maintainer; the effort of a whole book
+- [x] A night (midnightblue) version of the screen PDF, closer to Play (maintainer, 28 Oct; funground #37)
+- [x] The spreads on the site with Previous and Next (`docs/book/`, made by `make/site_pages.py`)
+- [x] A proposal for drawing without coordinates, as a decision for the maintainer (D-121: keep); the effort of a whole book (RESULTS.md; D-122)
