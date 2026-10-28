@@ -100,3 +100,9 @@ specks of room that look like you, and holes in you that look like the room.
 
 Recommendation: a and b as a spike after S-218 (S-227), with the names for the maintainer; d only if b's outline is
 visibly off. Machine-learning person masks stay a later spike.
+
+**Spike S-227 (28 Oct), the evidence:** `spikes/14_cutout/README.md`. On three drawn scenes with noise, light and
+shadow, tidying raised IoU from 0.874 to 0.967 where the specks were loose, kept attached shadows, and chose the wrong part
+once in three (a detached shadow larger than the cut-up person; a point on the person fixed it). An 80-point outline fits
+as well as 200 and a 57-line sketch drags and clips with it using only existing names. Snapping to edges did not help.
+Recommendation to the maintainer: a and b as `tidy=` / `at=` keywords and `g.outline(points=80)`; not d.

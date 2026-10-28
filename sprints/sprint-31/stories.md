@@ -35,10 +35,10 @@ Next after this sprint: S-231, the models spike (E-37, added 23 Oct), which may 
 
 ## S-227 tasks
 
-- [ ] (a) Tidy the mask: largest connected part, holes filled; under 5 ms at 640 x 480
-- [ ] (b) The outline as an `f.path()` over the picture, points a learner drags, cut out with `clip`; at most 200 points, a sketch under 60 lines
-- [ ] (d) Edges pulling the outline to the picture's own outlines
-- [ ] Three test photos and the fake camera; results in `spikes/`; a recommendation with API names for D-115
+- [x] (a) Tidy the mask: largest connected part, holes filled; under 5 ms at 640 x 480
+- [x] (b) The outline as an `f.path()` over the picture, points a learner drags, cut out with `clip`; at most 200 points, a sketch under 60 lines
+- [x] (d) Edges pulling the outline to the picture's own outlines
+- [x] Three test photos and the fake camera; results in `spikes/`; a recommendation with API names for D-115
 
 ## S-225 tasks
 
