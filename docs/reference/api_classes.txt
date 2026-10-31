@@ -1,7 +1,7 @@
 sound._engine.Sound
 sound._microphone.Microphone
-camera_input.Camera
-camera_input.Clip
+camera._device.Camera
+camera._device.Clip
 picture.Picture
 vector.Vector
 formatted.FormattedString

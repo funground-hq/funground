@@ -4,7 +4,7 @@ You, drawn as a grid of white dots on black. Bright parts of you get big dots an
 Move around and the dots follow. With no camera, it draws the same dots from a photo, so it always works.
 
 How it works:
-- f.camera() makes a camera object, and cam.start(400, 300) opens it. The computer asks your permission first.
+- camera.open() makes a camera object, and cam.start(400, 300) opens it. The computer asks your permission first.
   It opens only here, and the light goes off when the sketch ends.
 - cam.picture() is a still copy of the latest frame. It is an ordinary picture, so picture.get(x, y) gives the
   colour at one point.
@@ -21,6 +21,7 @@ Make it yours:
 - Call cam.start(400, 300, mirror=False) to see what the camera sees, not a mirror.
 """
 import funground as f
+from funground import camera
 
 WIDTH, HEIGHT = 400, 300
 STEP = 10                                    # one dot for every 10 x 10 pixels
@@ -31,9 +32,9 @@ cam = None
 def open_camera():
     """The camera, started, or None when this computer has none or will not share it."""
     try:
-        camera = f.camera()
-        camera.start(WIDTH, HEIGHT)
-        return camera
+        cam = camera.open()
+        cam.start(WIDTH, HEIGHT)
+        return cam
     except RuntimeError:
         return None
 

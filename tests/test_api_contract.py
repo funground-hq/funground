@@ -8,7 +8,7 @@ from __future__ import annotations
 import inspect
 
 import funground as p
-from funground import sangeet, sound
+from funground import camera, sangeet, sound
 
 V05_FUNCTIONS = {
     "background": "(color: 'Color', *more: 'float') -> 'None'",
@@ -153,7 +153,7 @@ ADDED_FUNCTIONS = {
     "text_style": "(style: 'TextStyle') -> 'None'",
     # S-052 off-screen graphics
     "create_graphics": "(width: 'int', height: 'int') -> 'Picture'",
-    "image": "(picture: 'Picture | Camera', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'",
+    "image": "(picture: 'Picture | FrameSource', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'",
     # S-076 script mode
     "show": "() -> 'None'",
     # S-077 images
@@ -165,10 +165,6 @@ ADDED_FUNCTIONS = {
     # S-110 making sound
     # S-112/S-113
     # S-108 microphone
-    # S-172 camera
-    "camera": "(name: 'str | None' = None) -> 'Camera'",
-    "cameras": "() -> 'list[str]'",
-    "load_clip": "(path: 'str') -> 'Clip'",
     # S-115 ragas
     # S-111 drawing sound
     # S-090 tracking, features, variations
@@ -268,6 +264,13 @@ SANGEET_FUNCTIONS = {
     "match_ragas": "(histogram: 'Any') -> 'list[tuple[str, float]]'",
 }
 
+# S-247 (D-120, D-123): the camera library. The signatures did not change; two names have new spellings.
+CAMERA_FUNCTIONS = {
+    "open": "(name: 'str | None' = None) -> 'Camera'",
+    "names": "() -> 'list[str]'",
+    "load_clip": "(path: 'str') -> 'Clip'",
+}
+
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
 # S-045 added pmouse_x/y, mouse_button, key, key_code and is_key_pressed.
 NAMESPACES = {"COLORS", "CONSTANTS"}
@@ -295,7 +298,10 @@ def test_the_libraries_have_the_expected_signatures():
         assert str(inspect.signature(getattr(sound, name))) == expected, name
     for name, expected in SANGEET_FUNCTIONS.items():
         assert str(inspect.signature(getattr(sangeet, name))) == expected, name
+    for name, expected in CAMERA_FUNCTIONS.items():
+        assert str(inspect.signature(getattr(camera, name))) == expected, name
     assert set(sound.__all__) == set(SOUND_FUNCTIONS) and set(sangeet.__all__) == set(SANGEET_FUNCTIONS)
+    assert set(camera.__all__) == set(CAMERA_FUNCTIONS)
 
 
 def test_run_keeps_v05_call_forms():

@@ -7,7 +7,7 @@ How it works:
 - The drawing from step 2 moved into draw(), which runs many times a second.
 - cam.picture() gives the camera's latest frame as a picture, so the rest of the code does not change at all:
   only the line that chooses the picture is new.
-- f.camera() and cam.start() open the camera. If there is none, the try and except keep the photo instead.
+- camera.open() and cam.start() open the camera. If there is none, the try and except keep the photo instead.
 - f.run(fps=15) asks for 15 frames a second: the dots are a lot of work, and 15 is plenty.
 
 Make it yours:
@@ -17,6 +17,7 @@ Make it yours:
 - Use squares, or the photo's own colours, as in the earlier steps.
 """
 import funground as f
+from funground import camera
 
 CELL = 12
 WIDTH, HEIGHT = 400, 300
@@ -29,7 +30,7 @@ def setup():
     f.size(WIDTH, HEIGHT)
     f.no_stroke()
     try:
-        cam = f.camera()
+        cam = camera.open()
         cam.start(WIDTH, HEIGHT)
     except RuntimeError:
         cam = None

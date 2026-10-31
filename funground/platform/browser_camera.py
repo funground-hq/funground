@@ -1,7 +1,7 @@
 """The camera for a host that owns the device (story S-172, Web_Runner_Note.md).
 
 The page opens the camera (with the browser's permission) and pushes each frame to `HostCamera.push`; funground keeps
-the latest. `camera_input` reads it as it reads a desktop camera, so nothing else differs. pygame is not imported.
+the latest. the camera library reads it as it reads a desktop camera, so nothing else differs. pygame is not imported.
 
 `on_camera(command, fields)` is told what the sketch wants:
 
@@ -32,7 +32,7 @@ class HostCamera:
         self._reported = False                   # this start's unavailable line has been printed
         self._latest: tuple[bytes, int, int] | None = None     # RGBA pixels, width, height; None once read
 
-    # ---- what camera_input calls (the device interface)
+    # ---- what the camera library calls (the device interface)
     def start(self, width: int, height: int) -> None:
         self._started = True
         self._opened = True
