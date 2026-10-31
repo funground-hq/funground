@@ -14,7 +14,7 @@ S-238 needs the maintainer for anything created under their account (a GitHub Ap
 | Story | Value | Status |
 |---|---|---|
 | S-246 | Move sound and sangeet out of `f`: `from funground import sound`, `from funground import sangeet` | built 1 Nov: funground side (full suite 2765 and 1758 passed, 1 skipped); Play's runner next |
-| S-247 | Move the camera out of `f`: `from funground import camera` (after S-246) | planned 28 Oct |
+| S-247 | Move the camera out of `f`: `from funground import camera` (after S-246) | built 1 Nov: funground side; Play's runner next |
 | S-231 | Spike: which models, from which provider, on the web and on the desktop | planned 28 Oct |
 | S-238 | Spike: signing in to GitHub from Play, a static site (D-118) | planned 28 Oct |
 | Smaller, when they fit | S-249's SVG background bug (no API change); S-244 (a loaded font never chosen); S-245 (tidy the cut-out, decided in D-115) | SVG background done 28 Oct (full suite 2814 and 1749 passed, 1 skipped); the others planned |
@@ -37,9 +37,9 @@ stories between heavy jobs. One heavy job at a time on this machine.
 ## S-247 tasks
 
 - [x] Names for `camera` to the maintainer (in D-123)
-- [ ] `camera_input.py` into the library; Play's `camera.js` path
-- [ ] Contract rows, examples, guide, reference, completions, `llms.txt`; the moved names' sentence on `f`
-- [ ] `f` has 184 names; camera goldens unchanged; the camera sketch on the desktop and in Play
+- [x] `camera_input.py` into the library (`funground/camera/_device.py`); [ ] Play's `camera.js` path
+- [x] Contract rows, examples, guide, reference, completions, `llms.txt`; the moved names' sentence on `f`
+- [ ] `f` has 183 names; camera goldens unchanged; the camera sketch on the desktop and in Play
 
 ## S-231 tasks
 

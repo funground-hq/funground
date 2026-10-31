@@ -90,11 +90,13 @@ show()
 
 ## Libraries
 
-Sound and the music of India are libraries, not names on `f`. Sound needs `from funground import sound`; music of
-India needs `from funground import sangeet`. Then write `sound.note("C4", 1).play()` or
-`sangeet.tala("Teentaal")`. The 0.1 spellings on `f` do not exist now: the error says what to write.
-Two names lost a word on the way: `create_sound` is now `sound.create`, and `load_sound` is now `sound.load`.
-The reference has a section for each library.
+Sound, the music of India and the camera are libraries, not names on `f`. Sound needs `from funground import sound`;
+music of India needs `from funground import sangeet`; the camera needs `from funground import camera`. Then write
+`sound.note("C4", 1).play()`, `sangeet.tala("Teentaal")` or `cam = camera.open()`. The 0.1 spellings on `f` do not
+exist now: the error says what to write. Two names lost a word on the way: `create_sound` is now `sound.create`, and
+`load_sound` is now `sound.load`. The camera's names are `camera.open()`, `camera.names()` and `camera.load_clip()`
+(the old `camera`, `cameras` and `load_clip` on `f` do not exist). Name the camera object `cam`, never `camera`, which would hide
+the library. The reference has a section for each library.
 
 ## Versions
 

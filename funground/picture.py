@@ -13,11 +13,10 @@ carry across flushes the same way its pixels do.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Protocol, runtime_checkable
 
 from . import ir
 from ._options import SaveText
-from .camera_input import Camera
 from .platform.base import InputState
 from .renderers.cairo2d import CairoRenderer
 from .sketch import Sketch
@@ -65,6 +64,16 @@ HISTORY_LIMIT = 10_000
 
 def _resets_history(op: ir.Op) -> bool:
     return isinstance(op, ir.Clear) and op.color.a in _HISTORY_RESET_ALPHAS
+
+
+@runtime_checkable
+class FrameSource(Protocol):
+    """Something that f.image() draws as its latest picture, such as a camera (contract I4; ADR-007, S-247).
+
+    The core defines this and a library satisfies it, so the core never imports the library. ``_current_picture()``
+    gives the Picture to draw, or None when there is nothing to draw yet."""
+
+    def _current_picture(self) -> Picture | None: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -605,7 +614,7 @@ def draw_image(target: Sketch, picture: Any, x: float, y: float,
     A camera (contract I4) is drawn as its latest frame, which is one picture of its own; before the first frame
     nothing is drawn.
     """
-    if isinstance(picture, Camera):
+    if isinstance(picture, FrameSource):
         picture = picture._current_picture()
         if picture is None:
             return

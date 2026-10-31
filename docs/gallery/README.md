@@ -2430,7 +2430,7 @@ You, drawn as a grid of white dots on black. Bright parts of you get big dots an
 
 **How it works**
 
-- f.camera() makes a camera object, and cam.start(400, 300) opens it. The computer asks your permission first. It opens only here, and the light goes off when the sketch ends.
+- camera.open() makes a camera object, and cam.start(400, 300) opens it. The computer asks your permission first. It opens only here, and the light goes off when the sketch ends.
 - cam.picture() is a still copy of the latest frame. It is an ordinary picture, so picture.get(x, y) gives the colour at one point.
 - Looking at a grid of points, one every 10 pixels, is quick. Looking at every pixel of every frame would not be.
 - The size of each dot comes from the brightness: red, green and blue added up, divided by 765 (3 x 255).
@@ -2461,11 +2461,11 @@ The camera, live on the canvas, with buttons along the top. Record starts a take
 
 **How it works**
 
-- f.camera() makes a camera object, and cam.start() opens it. f.image(cam, ...) draws its latest frame, here only its middle part when zoomed in.
+- camera.open() makes a camera object, and cam.start() opens it. f.image(cam, ...) draws its latest frame, here only its middle part when zoomed in.
 - cam.record(MAX_TAKE) starts a clip that keeps one frame for each frame the sketch draws. clip.pause() and clip.resume() hold and continue it, and clip.stop() ends it. clip.save("take.gif") writes the animated GIF.
 - mic.capture(seconds) gives the sound of the last few seconds as a sound. The sketch takes one piece of sound each time a recording stretch ends (Pause or Stop), joins them with sound.sequence() and saves take.wav, so the sound fits the frames even when you paused.
 - The buttons are rectangles the sketch draws. mouse_pressed() checks which one the mouse is inside.
-- cam.save("photo.png") writes a still photo. f.cameras() lists the cameras, and the sketch prints them. With no camera or no microphone the sketch still runs.
+- cam.save("photo.png") writes a still photo. camera.names() lists the cameras, and the sketch prints them. With no camera or no microphone the sketch still runs.
 
 **Make it yours**
 
@@ -2492,7 +2492,7 @@ A short video, played back under your control. Drag across the picture to scrub 
 
 **How it works**
 
-- f.load_clip("take.gif") reads an animated GIF into a clip: len(clip) counts its frames, clip.frame(i) gives frame i as a picture, and clip.fps is how fast it was made to play.
+- camera.load_clip("take.gif") reads an animated GIF into a clip: len(clip) counts its frames, clip.frame(i) gives frame i as a picture, and clip.fps is how fast it was made to play.
 - The sketch keeps a playhead, a number that can sit between two frames. Each frame of the sketch moves it on by speed * clip.fps / 30, so speed 1 plays the clip at its own pace, 2 twice as fast, -1 backwards.
 - int(playhead) % len(clip) picks the frame to show, so the clip loops both ways.
 - While the mouse is pressed, f.map_range() turns the mouse's x into a frame number: that is scrubbing.
@@ -2640,7 +2640,7 @@ Step 2's dots, drawn from your camera, again and again. Move, and the dots follo
 
 - The drawing from step 2 moved into draw(), which runs many times a second.
 - cam.picture() gives the camera's latest frame as a picture, so the rest of the code does not change at all: only the line that chooses the picture is new.
-- f.camera() and cam.start() open the camera. If there is none, the try and except keep the photo instead.
+- camera.open() and cam.start() open the camera. If there is none, the try and except keep the photo instead.
 - f.run(fps=15) asks for 15 frames a second: the dots are a lot of work, and 15 is plenty.
 
 **Make it yours**
@@ -3444,7 +3444,7 @@ A cloud of words hangs in front of a mouth like fog, and breath blows it away. M
 
 **How it works**
 
-- f.load_clip("take.gif") and sound.load("take.wav") read the take. Each frame of the clip is drawn in turn with clip.frame(i), and the sound plays alongside, starting again with the clip so the two stay together.
+- camera.load_clip("take.gif") and sound.load("take.wav") read the take. Each frame of the clip is drawn in turn with clip.frame(i), and the sound plays alongside, starting again with the clip so the two stay together.
 - Before it starts, the sketch works out how loud the sound is during each frame of the clip, from take_audio.samples(), and turns it into a breath from 0 to 1. Frame i always gets breath i, so the words move at exactly the right moments, every loop.
 - Each word is an object of class Word with its home in the cloud, its speed and how much of it is left. A breath pushes the words near the mouth away; then they fade and drift back. f.noise() makes the fog come and go.
 - f.save_gif() keeps one whole loop, from its first frame, as blow.gif.

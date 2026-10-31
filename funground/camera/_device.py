@@ -1,19 +1,20 @@
-"""Camera input (S-172; contracts I4 and I5; D-089; Camera_Note.md).
+"""The camera's device, frames, Camera and Clip (S-172; contracts I4 and I5; D-089; Camera_Note.md; S-247).
 
-With ``imaging.py`` and the sound library this is one of the few funground modules that uses pygame. It is the only one
-that uses ``pygame.camera``, and all access to it is in ``_camera_module()``, ``_device_names()`` and
-``_DesktopDevice``. pygame is imported when a camera is asked for, never when funground is imported.
+This file is inside the camera library (``funground/camera/``, ADR-007) and is named with an underscore: a sketch uses
+``camera.open()``, not this file. With ``imaging.py`` and the sound library this is one of the few funground modules that
+uses pygame. It is the only one that uses ``pygame.camera``, and all access to it is in ``_camera_module()``,
+``_device_names()`` and ``_DesktopDevice``. pygame is imported when a camera is asked for, never when funground is imported.
 
 A *device* is whatever delivers frames. The desktop's device wraps ``pygame.camera``; the web runner's device is the
-page (``platform/browser_camera.HostCamera``, wired with ``use_host_camera``); tests use a fake. All three answer:
+page (``platform/browser_camera.HostCamera``, which the web runner puts in ``host_services.camera``); tests use a fake. All three answer:
 
     start(width, height)              open it; RuntimeError if it cannot be opened
     read(width, height, mirror)       a new frame as ``width * height * 4`` bytes of BGRA (Cairo's layout), scaled to
                                       the asked size and mirrored if asked, or None when no new frame has arrived
     stop()                            let it go
 
-A Camera never waits for a device. Before each ``draw()`` the sketch calls ``take_frames()``, which reads each started
-camera once; the camera keeps that frame until the next draw, so every use in one frame sees the same picture. A
+A Camera never waits for a device. Before each ``draw()`` the sketch calls ``take_frames()`` (through the core's
+``frame_inputs`` registry, where the library registers it), which reads each started camera once; the camera keeps that frame until the next draw, so every use in one frame sees the same picture. A
 camera owns one Picture whose pixels are replaced by each new frame, so the IR names one picture with a new version
 (contract P3).
 """
@@ -23,18 +24,20 @@ import os
 import sys
 from typing import TYPE_CHECKING
 
+from .. import host_services
+
 if TYPE_CHECKING:
-    from .picture import Picture
+    from ..picture import Picture
 
 DEFAULT_SIZE = (640, 480)
 MAX_SECONDS = 10
 
-_MAC = ("f.camera(): the desktop camera works on Windows and Linux. On a Mac, run the sketch on the website (press "
+_MAC = ("camera.open(): the desktop camera works on Windows and Linux. On a Mac, run the sketch on the website (press "
         "Play) to use the camera")
 
 
 def _no_device_message(extra: str = "") -> str:
-    return ("f.camera(): " + (extra or "no camera was found on this computer")
+    return ("camera.open(): " + (extra or "no camera was found on this computer")
             + ". Check that one is plugged in and that no other program is using it. On Windows, allow camera "
               "access in Settings, Privacy & security, Camera.")
 
@@ -43,17 +46,12 @@ def _is_headless() -> bool:
     return os.environ.get("FUNGROUND_HEADLESS", "").lower() in ("1", "true", "yes")
 
 
-# ---- a host's camera (the web runner)
-_host_camera = None          # the host's camera while a web Session runs (platform/browser_camera.py), else None
-
-
-def use_host_camera(host) -> None:
-    """Use a host's camera (the web runner, Web_Runner_Note.md) instead of pygame's, or with None back to pygame.
+def _host_camera():
+    """The host's camera while a web Session runs (platform/browser_camera.py, through host_services), else None.
 
     The host opens the device and pushes frames to ``host.push(...)``; a Camera reads them through the host's
     ``read``. See platform/browser_camera.HostCamera."""
-    global _host_camera
-    _host_camera = host
+    return host_services.camera
 
 
 # ---- the one place that touches pygame.camera
@@ -61,7 +59,7 @@ def _camera_module():
     try:
         import pygame.camera as module
     except ImportError:
-        raise RuntimeError("f.camera(): this copy of pygame has no camera support. Update it with: "
+        raise RuntimeError("camera.open(): this copy of pygame has no camera support. Update it with: "
                            "pip install --upgrade pygame-ce") from None
     module.init()
     return module
@@ -132,7 +130,7 @@ def stop_all() -> None:
 
 def cameras() -> list[str]:
     """The names of the computer's cameras. Empty when headless, in the browser (it picks the camera) and on a Mac."""
-    if _host_camera is not None or _is_headless() or sys.platform == "darwin":
+    if _host_camera() is not None or _is_headless() or sys.platform == "darwin":
         return []
     return _device_names()
 
@@ -142,11 +140,11 @@ def make(name: str | None = None, canvas=None) -> "Camera":
 
     *canvas* is a function that returns the sketch the camera's pictures belong to."""
     if name is not None and (not isinstance(name, str) or not name):
-        raise ValueError(f"f.camera(): name must be text such as 'USB', not {name!r}")
-    if _host_camera is not None:
+        raise ValueError(f"camera.open(): name must be text such as 'USB', not {name!r}")
+    if _host_camera() is not None:
         if name is not None:
-            raise RuntimeError("f.camera(name): choosing a camera by name only works in the desktop version. "
-                               "In the browser, use f.camera() and choose the camera in the browser's own settings.")
+            raise RuntimeError("camera.open(name): choosing a camera by name only works in the desktop version. "
+                               "In the browser, use camera.open() and choose the camera in the browser's own settings.")
         return Camera(None, canvas)
     if _is_headless():
         return Camera(None, canvas, silent=True)
@@ -173,7 +171,7 @@ def _whole(value, what: str, who: str) -> int:
 class Camera:
     """A camera that your sketch can look through.
 
-    You get one from f.camera(). Nothing opens until you call start(). Then the computer (or the browser) asks
+    You get one from camera.open(). Nothing opens until you call start(). Then the computer (or the browser) asks
     permission the first time, and frames begin to arrive.
 
     Use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives you a still copy, to read
@@ -187,12 +185,20 @@ class Camera:
     nothing and is never ready.
 
     Example:
-        cam = f.camera()
+        cam = camera.open()
         cam.start()
         f.image(cam, 0, 0)
 
-    See also: camera, cameras, Clip, image
+    See also: open, names, Clip, image
     """
+
+    def __getattr__(self, name: str):
+        # Only reached for a name the camera does not have. `camera = camera.open()` hides the library, and the next
+        # `camera.open()` lands here (D-123).
+        if name in ("open", "names", "load_clip"):
+            raise AttributeError(f"camera.{name}() is called on the library: name the camera something else, "
+                                 "such as cam = camera.open()")
+        raise AttributeError(f"{type(self).__name__!r} object has no attribute {name!r}")
 
     def __init__(self, device_name: str | None, canvas=None, silent: bool = False) -> None:
         self._device_name = device_name
@@ -245,7 +251,7 @@ class Camera:
             RuntimeError: if the camera is busy, or the computer will not let funground use it.
 
         Example:
-            cam = f.camera()
+            cam = camera.open()
             cam.start(320, 240)
 
         See also: stop, is_ready, picture
@@ -259,7 +265,7 @@ class Camera:
         self._width, self._height, self._mirror = width, height, mirror
         if not self._silent:
             if self._device is None:
-                self._device = _host_camera if _host_camera is not None else _DesktopDevice(self._device_name)
+                self._device = _host_camera() or _DesktopDevice(self._device_name)
             self._device.start(width, height)
         self._started = True
         _started.append(self)
@@ -325,7 +331,7 @@ class Camera:
             picture._write_pixels(frame)
 
     def _new_picture(self, sketch, bgra: bytes):
-        from .picture import Picture
+        from ..picture import Picture
 
         picture = Picture.from_pixels(self._width, self._height, bgra, sketch._next_graphics_name())
         picture._sketch._name_root = sketch._name_root or sketch
@@ -375,7 +381,7 @@ class Camera:
         if ending == ".png":
             self.picture().save(path)
         elif ending in (".jpg", ".jpeg"):
-            from .export import motion
+            from ..export import motion
 
             image = motion._pillow()
             if image is None:
@@ -430,7 +436,7 @@ class Camera:
 
 def load_clip(path: str, canvas) -> "Clip":
     """A clip read from an animated GIF or WebP at *path* (an existing file; contract I5, D-109)."""
-    from . import imaging
+    from .. import imaging
 
     width, height, frames, delays = imaging.decode_animation(path)
     clip = Clip(width, height, _fps_of(delays), len(frames), canvas)
@@ -579,7 +585,7 @@ class Clip:
             raise TypeError(f"clip.frame() needs a whole number, not {i!r}")
         if not -len(self._frames) <= i < len(self._frames):
             raise IndexError(f"clip.frame({i}): this clip has {len(self._frames)} frames")
-        from .picture import Picture
+        from ..picture import Picture
 
         sketch = self._canvas()
         picture = Picture.from_pixels(self._width, self._height, self._frames[i], sketch._next_graphics_name())
@@ -605,11 +611,11 @@ class Clip:
 
         See also: frame, done
         """
-        from .export import motion
+        from ..export import motion
 
-        works = ".gif" if _host_camera is not None else ".gif or .mp4"
+        works = ".gif" if _host_camera() is not None else ".gif or .mp4"
         ending = os.path.splitext(path)[1].lower() if isinstance(path, str) else ""
-        if ending not in (".gif", ".mp4") or (ending == ".mp4" and _host_camera is not None):
+        if ending not in (".gif", ".mp4") or (ending == ".mp4" and _host_camera() is not None):
             raise ValueError(f"clip.save(): the file name must end in {works}, not {path!r}")
         if not self._frames:
             raise ValueError("clip.save(): the clip has no frames yet. Wait until len(clip) is more than 0, "

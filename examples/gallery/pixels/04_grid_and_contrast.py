@@ -18,6 +18,7 @@ Make it yours:
 - Keep a picture you like with f.keep(), which also saves the settings.
 """
 import funground as f
+from funground import camera
 
 WIDTH, HEIGHT = 400, 300
 photo = f.load_image("data/photo.jpg")      # used when there is no camera
@@ -29,7 +30,7 @@ def setup():
     f.size(WIDTH, HEIGHT)
     f.no_stroke()
     try:
-        cam = f.camera()
+        cam = camera.open()
         cam.start(WIDTH, HEIGHT)
     except RuntimeError:
         cam = None

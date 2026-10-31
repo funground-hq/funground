@@ -18,6 +18,7 @@ Make it yours:
 - Try f.filter("edges") on your own drawings, not only on the camera.
 """
 import funground as f
+from funground import camera
 
 WIDTH, HEIGHT = 400, 300
 photo = f.load_image("data/photo.jpg")       # drawn in lines when there is no camera
@@ -27,9 +28,9 @@ on_paper = False
 
 def open_camera():
     try:
-        camera = f.camera()
-        camera.start(WIDTH, HEIGHT)
-        return camera
+        cam = camera.open()
+        cam.start(WIDTH, HEIGHT)
+        return cam
     except RuntimeError:
         return None
 

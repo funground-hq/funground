@@ -80,9 +80,9 @@ first gesture is not started later; a refused microphone does not raise at `star
 desktop-only (`f.microphone("name")` raises, `f.microphones()` is `[]`). Tests: `tests/test_web_sound.py`
 (here) and `tools/test_sound.py` (`funground-web`, headless Chrome with a fake microphone).
 
-**Camera (S-172).** The same shape as the microphone, with pictures instead of samples. `camera_input` keeps the
-latest frame; under a host its device is a `HostCamera` (`platform/browser_camera.py`, installed by
-`camera_input.use_host_camera`). `cam.start(width, height, mirror)` makes the host an `on_camera("start", {"width",
+**Camera (S-172).** The same shape as the microphone, with pictures instead of samples. the camera library
+(`camera/_device.py`) keeps the latest frame; under a host its device is a `HostCamera`
+(`platform/browser_camera.py`, which `Session` puts in `host_services.camera`, S-247). `cam.start(width, height, mirror)` makes the host an `on_camera("start", {"width",
 "height"})` request; `"stop"` and `"close"` (the run ended) follow. The page opens `getUserMedia({video})`, draws
 frames at the asked size on an `OffscreenCanvas` and the worker passes each to `Session.push_camera(pixels, width,
 height)`: RGBA bytes, row by row, `width * height * 4` of them (a frame of another size is scaled). Frames the sketch
@@ -90,8 +90,8 @@ has not used are replaced, never queued; the sketch takes the latest once before
 Python on both platforms. If the page cannot open the camera (refused, none, busy) it calls
 `Session.camera_unavailable(reason)`, which prints one line, `The camera is not available: {reason}.`, once for each
 start; the camera stays not ready, so `f.image(cam)` draws nothing and `cam.picture()` is black. Without `on_camera`
-the camera never becomes ready. A host has one camera: a sketch should make one `f.camera()`. Choosing a camera by
-name is desktop-only (`f.camera("name")` raises, `f.cameras()` is `[]`), and so is `.mp4` for a clip (GIF works). Tests:
+the camera never becomes ready. A host has one camera: a sketch should make one `camera.open()`. Choosing a camera by
+name is desktop-only (`camera.open("name")` raises, `camera.names()` is `[]`), and so is `.mp4` for a clip (GIF works). Tests:
 `tests/test_camera.py` (here, with a fake page).
 
 **Keep (S-226, D-113 b).** `Session.keep(note)` runs what `f.keep(note)` does for the Session's own sketch: `studio/NNN.png`, `.py` and `.json` in the sketch's folder, where the `.py` is the code the Session was started with (a host holds it in memory, so there is no file to copy). The host calls it between frames, so the last frame drawn is complete and the files are written before `keep()` returns, whether the sketch still draws (the frame on screen is kept, as `f.keep()` does after `f.no_loop()`) or has stopped drawing (a script that has finished). Before an animated sketch's first frame the keep waits for that frame. After `stop()` it raises `RuntimeError` (the picture is gone). The runner's `runner.keep(note)` calls it and reports the files through `onFile`; Play's Keep this uses it. Tests: `tests/test_web_session.py`.

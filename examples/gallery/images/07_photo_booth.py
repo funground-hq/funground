@@ -6,7 +6,7 @@ it is paused the frame turns amber. Stop saves the take as take.gif, and the sou
 Photo saves a still picture, and - and + zoom in for a close-up. With no camera, it shows a photo.
 
 How it works:
-- f.camera() makes a camera object, and cam.start() opens it. f.image(cam, ...) draws its latest frame, here
+- camera.open() makes a camera object, and cam.start() opens it. f.image(cam, ...) draws its latest frame, here
   only its middle part when zoomed in.
 - cam.record(MAX_TAKE) starts a clip that keeps one frame for each frame the sketch draws. clip.pause() and
   clip.resume() hold and continue it, and clip.stop() ends it. clip.save("take.gif") writes the animated GIF.
@@ -14,7 +14,7 @@ How it works:
   each time a recording stretch ends (Pause or Stop), joins them with sound.sequence() and saves take.wav, so the
   sound fits the frames even when you paused.
 - The buttons are rectangles the sketch draws. mouse_pressed() checks which one the mouse is inside.
-- cam.save("photo.png") writes a still photo. f.cameras() lists the cameras, and the sketch prints them. With
+- cam.save("photo.png") writes a still photo. camera.names() lists the cameras, and the sketch prints them. With
   no camera or no microphone the sketch still runs.
 
 Make it yours:
@@ -26,6 +26,7 @@ Make it yours:
 """
 import funground as f
 from funground import sound
+from funground import camera
 
 WIDTH, HEIGHT = 400, 300
 FPS = 15
@@ -47,9 +48,9 @@ saving = 0                                   # frames until the take is saved: 2
 def open_camera():
     """The camera, started, or None when this computer has none or will not share it."""
     try:
-        camera = f.camera()
-        camera.start(WIDTH, HEIGHT)
-        return camera
+        cam = camera.open()
+        cam.start(WIDTH, HEIGHT)
+        return cam
     except RuntimeError:
         return None
 
@@ -67,7 +68,7 @@ def setup():
     global cam, mic
     f.size(WIDTH, HEIGHT)
     f.text_align("center", "center")
-    print("Cameras:", f.cameras())
+    print("Cameras:", camera.names())
     cam = open_camera()
     mic = open_microphone()
 

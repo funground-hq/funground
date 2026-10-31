@@ -19,6 +19,7 @@ Make it yours:
 - Make the GIF longer, and remember that a long GIF is slow to save.
 """
 import funground as f
+from funground import camera
 
 WIDTH, HEIGHT = 400, 300
 CELL = 12
@@ -35,7 +36,7 @@ def setup():
     f.size(WIDTH, HEIGHT)
     f.no_stroke()
     try:
-        cam = f.camera()
+        cam = camera.open()
         cam.start(WIDTH, HEIGHT)
     except RuntimeError:
         cam = None

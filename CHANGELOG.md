@@ -19,6 +19,12 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
   `f` raises one plain sentence that says which import line and which call to write, for example "f.note() has moved
   to the sound library: add `from funground import sound` and write sound.note()." Sketches from 0.1 that make sound
   need those two changes.
+- **The camera is a library** (S-247, D-120, D-123, ADR-007). The camera is new in 0.2, so no released sketch uses
+  it, but notes and lessons written during 0.2 do. `f.camera(name=None)` is `camera.open(name=None)`, `f.cameras()` is
+  `camera.names()` and `f.load_clip(path)` is `camera.load_clip(path)`. Write `from funground import camera`, then
+  `cam = camera.open()`. Name the camera object `cam`, not `camera`. The arguments and meaning are the same. `f` has 183
+  names. Calling an old name on `f` raises one plain sentence that names the new call: an `AttributeError` before the
+  import line, and a `TypeError` after it (the library can be called, only to say this).
 
 ### Added
 - **Editors know funground** (S-130, S-195): the package is typed (`py.typed`, a literal `__all__`, typed live

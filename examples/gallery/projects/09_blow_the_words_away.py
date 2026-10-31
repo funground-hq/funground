@@ -6,7 +6,7 @@ the sound in it was loud: when you blew. Click to put the cloud on the mouth. Pr
 words as blow.gif. With no take it uses the live camera and microphone (hold Space to blow without one).
 
 How it works:
-- f.load_clip("take.gif") and sound.load("take.wav") read the take. Each frame of the clip is drawn in turn with
+- camera.load_clip("take.gif") and sound.load("take.wav") read the take. Each frame of the clip is drawn in turn with
   clip.frame(i), and the sound plays alongside, starting again with the clip so the two stay together.
 - Before it starts, the sketch works out how loud the sound is during each frame of the clip, from
   take_audio.samples(), and turns it into a breath from 0 to 1. Frame i always gets breath i, so the words move at
@@ -26,6 +26,7 @@ import math
 
 import funground as f
 from funground import sound
+from funground import camera
 
 WIDTH, HEIGHT = 480, 360
 TEXT = ("every breath carries a word away into the morning mist "
@@ -37,7 +38,7 @@ BLOW = 3.5              # how hard a full breath pushes a word next to the mouth
 def load_take():
     """The photo booth's take next to this sketch, as (clip, sound), or (None, None) when there is none."""
     try:
-        clip = f.load_clip("take.gif")
+        clip = camera.load_clip("take.gif")
     except FileNotFoundError:
         return None, None
     try:
@@ -150,9 +151,9 @@ def draw_haze(time):
 
 def open_camera():
     try:
-        camera = f.camera()
-        camera.start(WIDTH, HEIGHT)
-        return camera
+        cam = camera.open()
+        cam.start(WIDTH, HEIGHT)
+        return cam
     except RuntimeError:
         return None
 
