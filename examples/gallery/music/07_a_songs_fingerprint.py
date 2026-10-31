@@ -6,9 +6,9 @@ Click to play the song, and a line shows where it is. The picture is also saved 
 fingerprint.png. With no sound device, the song plays silently.
 
 How it works:
-- f.melody() makes the tune, and makes the bass again with wave="sine" and volume=0.35. f.mix()
+- sound.melody() makes the tune, and makes the bass again with wave="sine" and volume=0.35. sound.mix()
   adds the two into one song. The bass is quiet, so the sum does not clip.
-- f.spectrogram(song, WIDTH, HEIGHT) turns the whole sound into a picture. Its brightest colour is
+- sound.spectrogram(song, WIDTH, HEIGHT) turns the whole sound into a picture. Its brightest colour is
   the fill colour at that moment, so setup() calls f.fill() first.
 - fingerprint.save("fingerprint.png") writes the picture, and f.image() draws it.
 - The picture runs from 40 Hz to 16,000 Hz. pitch_height() uses a log to find where a note name
@@ -25,6 +25,7 @@ Make it yours:
 - Make the picture bigger: raise WIDTH and HEIGHT, and the size in f.size().
 """
 import funground as f
+from funground import sound
 
 TEMPO = 140
 LEAD = "C5 E5 G5 E5 C5:2  D5 F5 A5 F5 D5:2  E5 G5 B5 G5 E5:2  C5:4"
@@ -32,8 +33,8 @@ BASS = "C3:6 D3:6 E3:6 C3:4"
 
 # The tune in melody's soft voice, and a quieter sine bass, so the two together do not need
 # mix() to squash them.
-song = f.mix(f.melody(LEAD, tempo=TEMPO),
-             f.melody(BASS, tempo=TEMPO, wave="sine", volume=0.35))
+song = sound.mix(sound.melody(LEAD, tempo=TEMPO),
+             sound.melody(BASS, tempo=TEMPO, wave="sine", volume=0.35))
 LEFT, TOP, WIDTH, HEIGHT = 50, 50, 440, 220
 fingerprint = None
 
@@ -42,7 +43,7 @@ def setup():
     global fingerprint
     f.size(520, 320)
     f.fill(255, 150, 60)                      # the brightest colour in the picture
-    fingerprint = f.spectrogram(song, WIDTH, HEIGHT)
+    fingerprint = sound.spectrogram(song, WIDTH, HEIGHT)
     fingerprint.save("fingerprint.png")
     f.text_size(12)
 
@@ -50,7 +51,7 @@ def setup():
 def pitch_height(name):
     """How far down the picture a note is (the picture runs from 40 Hz to 16 kHz)."""
     from math import log
-    return TOP + HEIGHT * (1 - log(f.note_to_frequency(name) / 40) / log(16000 / 40))
+    return TOP + HEIGHT * (1 - log(sound.note_to_frequency(name) / 40) / log(16000 / 40))
 
 
 def draw():

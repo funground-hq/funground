@@ -1,6 +1,6 @@
 """Camera input (S-172; contracts I4 and I5; D-089; Camera_Note.md).
 
-With ``imaging.py`` and ``sound.py`` this is one of the few funground modules that uses pygame. It is the only one
+With ``imaging.py`` and the sound library this is one of the few funground modules that uses pygame. It is the only one
 that uses ``pygame.camera``, and all access to it is in ``_camera_module()``, ``_device_names()`` and
 ``_DesktopDevice``. pygame is imported when a camera is asked for, never when funground is imported.
 
@@ -23,8 +23,6 @@ import os
 import sys
 from typing import TYPE_CHECKING
 
-from .sound import _is_headless
-
 if TYPE_CHECKING:
     from .picture import Picture
 
@@ -39,6 +37,10 @@ def _no_device_message(extra: str = "") -> str:
     return ("f.camera(): " + (extra or "no camera was found on this computer")
             + ". Check that one is plugged in and that no other program is using it. On Windows, allow camera "
               "access in Settings, Privacy & security, Camera.")
+
+
+def _is_headless() -> bool:
+    return os.environ.get("FUNGROUND_HEADLESS", "").lower() in ("1", "true", "yes")
 
 
 # ---- a host's camera (the web runner)

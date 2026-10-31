@@ -271,7 +271,7 @@ Call `f.load_pixels()`, change `f.pixels`, then call `f.update_pixels()`, in tha
 FileNotFoundError: f.load_image(): no image file found at 'C:\sketches\photo.png' or 'C:\Users\you\photo.png'
 ```
 
-`f.load_image()`, `f.load_font()`, `f.load_sound()` and `f.load_svg()` all give a message like this one.
+`f.load_image()`, `f.load_font()`, `sound.load()` and `f.load_svg()` all give a message like this one.
 It names **both** places funground looked: first next to your sketch file, then in the folder you ran
 Python from. To fix it:
 
@@ -391,35 +391,35 @@ A script has no loop to read a control. Rewrite the file as a sketch with `setup
 ### A tune is not understood
 
 ```
-ValueError: f.note(): 'H4' is not a note name. Try a letter A-G, an optional # or b, and an octave, like 'A4', 'C#5' or 'Bb3'
-ValueError: f.melody(): bad token 'H4': 'H4' is not a note name
-ValueError: f.tone(): wave must be one of sine, square, saw, triangle, soft, noise, not 'wobble'
-ValueError: f.tone(): volume must be at most 1, not 2
+ValueError: sound.note(): 'H4' is not a note name. Try a letter A-G, an optional # or b, and an octave, like 'A4', 'C#5' or 'Bb3'
+ValueError: sound.melody(): bad token 'H4': 'H4' is not a note name
+ValueError: sound.tone(): wave must be one of sine, square, saw, triangle, soft, noise, not 'wobble'
+ValueError: sound.tone(): volume must be at most 1, not 2
 ```
 
-`f.melody()` names the exact word it could not read (a **token**). Note names go from A to G, so `H4`
+`sound.melody()` names the exact word it could not read (a **token**). Note names go from A to G, so `H4`
 is not one. After the letter comes an optional `#` or `b`, then the octave number. The error for a
 wave lists the ones you can use. Volumes go from 0 to 1. See chapter [16](16_sound.md).
 
 ### A raga or a tala is not in the table
 
 ```
-ValueError: f.raga(): 'Nope' is not in funground's raga table. It has: Yaman, Bhupali, Bilawal, Khamaj, ...
-ValueError: f.tala(): 'Nope' is not in funground's tala table. It has: Teentaal, Ektaal, Jhaptaal, ...
+ValueError: sangeet.raga(): 'Nope' is not in funground's raga table. It has: Yaman, Bhupali, Bilawal, Khamaj, ...
+ValueError: sangeet.tala(): 'Nope' is not in funground's tala table. It has: Teentaal, Ektaal, Jhaptaal, ...
 ```
 
-The message lists every name that works. Capital letters do not matter, but spelling does: `f.ragas()` and
-`f.talas()` print the lists. See chapter [17](17_ragas_and_talas.md).
+The message lists every name that works. Capital letters do not matter, but spelling does: `sangeet.ragas()` and
+`sangeet.talas()` print the lists. See chapter [17](17_ragas_and_talas.md).
 
 ### No microphone
 
 ```
-RuntimeError: f.microphone(): no microphone was found on this computer. Check that one is plugged in. On a Mac, allow microphone access in System Settings, Privacy & Security, Microphone.
+RuntimeError: sound.microphone(): no microphone was found on this computer. Check that one is plugged in. On a Mac, allow microphone access in System Settings, Privacy & Security, Microphone.
 ```
 
 Check that a microphone is plugged in and that it is the default input. On a Mac, allow it in System
-Settings. On Windows, check Settings, Privacy, Microphone. `f.microphones()` lists the ones funground
-can see. If you pass part of a name, such as `f.microphone("USB")`, and no microphone has it, you get a
+Settings. On Windows, check Settings, Privacy, Microphone. `sound.microphones()` lists the ones funground
+can see. If you pass part of a name, such as `sound.microphone("USB")`, and no microphone has it, you get a
 similar message that lists the ones that do exist.
 
 If your microphone is not found by your computer, no sketch can use it. Test the microphone in another program first.
@@ -438,7 +438,7 @@ Run the command in the message in your virtual environment.
 
 No error, but you hear nothing. Check the computer's volume and the speakers. A sound loaded with
 no sound device (or with `FUNGROUND_HEADLESS=1`) plays in silence on purpose, and keeps time. Also
-check `sound.set_volume()` and that you called `play()` or `loop()`.
+check `song.set_volume()` and that you called `play()` or `loop()`.
 
 ### A microphone method that needs the whole sound
 

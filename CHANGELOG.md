@@ -8,6 +8,18 @@ What changed in funground, newest first. Release numbers follow the
 
 A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
 
+### Changed
+- **Sound and the music of India are libraries** (S-246, D-120, D-123, ADR-007). The 24 names `f.tone`, `f.note`,
+  `f.pluck`, `f.drone`, `f.melody`, `f.sequence`, `f.mix`, `f.chord_notes`, `f.note_to_frequency`,
+  `f.frequency_to_note`, `f.microphone`, `f.microphones`, `f.draw_wave`, `f.draw_spectrum`, `f.draw_pitch_line`,
+  `f.spectrogram`, `f.create_sound`, `f.load_sound`, `f.raga`, `f.ragas`, `f.match_ragas`, `f.tala`, `f.tala_info`
+  and `f.talas` moved. Write `from funground import sound` (or `sangeet`) and call `sound.note(...)`,
+  `sangeet.raga(...)`. Two spellings changed: `f.create_sound` is `sound.create`, and `f.load_sound` is `sound.load`.
+  Everything else keeps its name, arguments and meaning. `f` has 186 names. There is no alias: calling a moved name on
+  `f` raises one plain sentence that says which import line and which call to write, for example "f.note() has moved
+  to the sound library: add `from funground import sound` and write sound.note()." Sketches from 0.1 that make sound
+  need those two changes.
+
 ### Added
 - **Editors know funground** (S-130, S-195): the package is typed (`py.typed`, a literal `__all__`, typed live
   values), so VS Code lists every function with its arguments after `f.`, knows `f.width` is a number and accepts the

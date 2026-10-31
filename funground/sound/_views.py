@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import math
 
-from . import sound as _sound, synth
+from . import _engine as _sound, _synth as synth
 
 WAVE_SECONDS = 0.5            # how much of a microphone draw_wave() shows
 SPECTROGRAM_FLOOR_DB = -60.0  # a bin this quiet or quieter is black
@@ -34,7 +34,7 @@ def _box(who: str, x, y, w, h) -> tuple[float, float, float, float]:
 
 
 def _is_microphone(source) -> bool:
-    from .microphone_input import Microphone
+    from ._microphone import Microphone
 
     return isinstance(source, Microphone)
 
@@ -70,7 +70,7 @@ def _wave_numbers(source, who: str) -> list[float]:
 
 
 def draw_wave(sk, source, x, y, w, h) -> None:
-    who = "f.draw_wave()"
+    who = "sound.draw_wave()"
     x, y, w, h = _box(who, x, y, w, h)
     columns = max(1, round(w))
     is_sound = isinstance(source, _sound.Sound)
@@ -96,7 +96,7 @@ def draw_wave(sk, source, x, y, w, h) -> None:
 
 # ---- the spectrum
 def draw_spectrum(sk, source, x, y, w, h, bands) -> None:
-    who = "f.draw_spectrum()"
+    who = "sound.draw_spectrum()"
     x, y, w, h = _box(who, x, y, w, h)
     if not callable(getattr(source, "spectrum", None)):
         raise ValueError(f"{who}: the source must be a sound or a microphone, not {source!r}")
@@ -173,7 +173,7 @@ def spectrogram_columns(snd, width: int, height: int) -> list[list[float]]:
 
 def spectrogram(canvas, current, snd, width, height):
     """A picture of the whole sound. *canvas* makes the picture; *current* gives the fill."""
-    who = "f.spectrogram()"
+    who = "sound.spectrogram()"
     if not isinstance(snd, _sound.Sound):
         raise ValueError(f"{who}: give it a sound, not {snd!r}")
     for what, value in (("width", width), ("height", height)):
@@ -200,7 +200,7 @@ def spectrogram(canvas, current, snd, width, height):
 def _guides(low_hz: float, high_hz: float, sa: str | None):
     """(hz, label, main) for the notes (the white keys) or swaras (S R G m P D N) in the range."""
     out = []
-    who = "f.draw_pitch_line()"
+    who = "sound.draw_pitch_line()"
     if sa is None:
         for octave in range(-1, 10):
             for name in "CDEFGAB":
@@ -227,13 +227,13 @@ def _history(source) -> list:
         try:
             source._pitch_history = held
         except AttributeError:
-            raise ValueError("f.draw_pitch_line(): the source must be a sound or a microphone "
+            raise ValueError("sound.draw_pitch_line(): the source must be a sound or a microphone "
                              f"(something with pitch()), not {source!r}") from None
     return held
 
 
 def draw_pitch_line(sk, frame: int, source, x, y, w, h, seconds, low, high, sa) -> None:
-    who = "f.draw_pitch_line()"
+    who = "sound.draw_pitch_line()"
     x, y, w, h = _box(who, x, y, w, h)
     seconds = _number(seconds, who, "seconds")
     if seconds <= 0:

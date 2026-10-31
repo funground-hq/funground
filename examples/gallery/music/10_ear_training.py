@@ -10,8 +10,8 @@ How it works:
 - Sa is the home note, and a swara is a note named from it. SWARAS lists them by steps above Sa:
   S r R g G m M P d D n N. A small letter is komal (flat), and a capital M is tivra (sharp).
 - new_question() uses f.random_choice() to pick a step, never the same one twice in a row, and
-  builds the question. play_question() plays it with f.melody(), such as "S:2 G:3 -:1", and
-  sound.reverb(0.15).
+  builds the question. play_question() plays it with sound.melody(), such as "S:2 G:3 -:1", and
+  reverb(0.15).
 - mouse_pressed() checks the button rectangles. key_pressed() reads the swara letters, the arrow
   keys and Enter. Each calls answer(), which scores it.
 - Singing is read with mic.pitch(). sung_steps() turns the pitch into steps above the start and
@@ -33,6 +33,7 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
 SA = "D4"
 SWARAS = "S r R g G m M P d D n N".split()        # steps 0 to 11 above Sa
@@ -42,7 +43,7 @@ STARTS = ["C4", "D4", "E4", "F4", "G4"]           # the starting notes in interv
 HOLD = 20                                         # frames a sung note must stay the same
 
 try:
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
 except RuntimeError:
     mic = None                                    # no microphone: clicks and keys still work
@@ -80,7 +81,7 @@ def new_question():
     before = question.get("steps")
     steps = f.random_choice([n for n in range(low, low + 12) if n != before])
     start = SA if mode == 1 else f.random_choice(STARTS)
-    question = {"start": start, "start_hz": f.note_to_frequency(start), "steps": steps}
+    question = {"start": start, "start_hz": sound.note_to_frequency(start), "steps": steps}
     answered, picked, recent, held, held_note = False, None, [], 0, None
     message = "which swara is the second note?" if mode == 1 else "how far up is the second note?"
     play_question()
@@ -92,13 +93,13 @@ def play_question():
     steps = question["steps"]
     if mode == 1:
         words = f"S:2 {SWARAS[steps]}:3 -:1"
-        sound = f.melody(words, tempo=90, sa=SA, tuning="just").reverb(0.15)
+        question_sound = sound.melody(words, tempo=90, sa=SA, tuning="just").reverb(0.15)
     else:
-        second = f.frequency_to_note(question["start_hz"] * 2 ** (steps / 12))
-        sound = f.melody(f"{question['start']}:2 {second}:3 -:1", tempo=90).reverb(0.15)
+        second = sound.frequency_to_note(question["start_hz"] * 2 ** (steps / 12))
+        question_sound = sound.melody(f"{question['start']}:2 {second}:3 -:1", tempo=90).reverb(0.15)
     if playing:
         playing.stop()
-    playing = sound
+    playing = question_sound
     playing.set_volume(0.8)
     playing.play()
     quiet_until = f.millis() + int(playing.duration() * 1000) + 300
@@ -271,7 +272,7 @@ def draw():
         f.rect(450, y - 11, 170, 22, 5)
         f.fill("black" if shown else "#6f7fa8")
         if shown:
-            note = f.frequency_to_note(question["start_hz"] * 2 ** (step / 12))
+            note = sound.frequency_to_note(question["start_hz"] * 2 ** (step / 12))
             f.text(f"{'start' if step == 0 else 'answer'}: {note}", 458, y)
         else:
             f.text(str(step), 458, y)

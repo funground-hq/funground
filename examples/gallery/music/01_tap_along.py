@@ -5,7 +5,7 @@ it. Each press is scored: on time, a little early, or a little late. With no sou
 tune is silent but still keeps time.
 
 How it works:
-- f.melody(..., tempo=TEMPO) makes the tune. The last note is followed by a short rest, so the
+- sound.melody(..., tempo=TEMPO) makes the tune. The last note is followed by a short rest, so the
   tune is exactly 16 beats long and the loop keeps the beat.
 - tune.beats() lists the time of every beat in seconds. It is found by listening to the sound
   itself. tune.tempo() gives the speed that was heard.
@@ -20,18 +20,19 @@ How it works:
 Make it yours:
 - Change TEMPO to 70 for a slow beat, or 140 for a fast one.
 - Make the game stricter. Change ON_TIME from 0.07 to 0.04.
-- Change the notes in the f.melody() text. Keep the total length and the final rest.
+- Change the notes in the sound.melody() text. Keep the total length and the final rest.
 - Make the circle a square: swap f.circle() for f.rect() and move its corner.
 - Count a streak. Add a global called streak, add 1 when name is "on time" in key_pressed(),
   and set it to 0 otherwise.
 """
 # gallery: time-dependent
 import funground as f
+from funground import sound
 
 TEMPO = 104
 # The last note is followed by a short rest. A note rings on for a moment after it ends, and
 # the rest gives it room, so the tune stays exactly 16 beats long and the loop keeps the beat.
-tune = f.melody("C4 E4 G4 E4  A3 C4 E4 C4  F3 A3 C4 A3  G3 B3 D4:1.5 -:0.5", tempo=TEMPO)
+tune = sound.melody("C4 E4 G4 E4  A3 C4 E4 C4  F3 A3 C4 A3  G3 B3 D4:1.5 -:0.5", tempo=TEMPO)
 beats = tune.beats()              # beat times in seconds, found from the sound
 length = tune.duration()
 speed = tune.tempo()              # beats a minute, as heard (close to TEMPO)

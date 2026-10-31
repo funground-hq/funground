@@ -20,7 +20,7 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 ## C
 
 - **canvas**. The drawing area. Its size is set with `f.size()`. [Chapter 2](02_the_sketch.md)
-- **chord**. Two or more notes played together. `f.melody()` writes one as `[C4 E4 G4]`, and `sound.chord()` names the one it hears. [Chapter 16](16_sound.md#chords-and-keys)
+- **chord**. Two or more notes played together. `sound.melody()` writes one as `[C4 E4 G4]`, and `song.chord()` names the one it hears. [Chapter 16](16_sound.md#chords-and-keys)
 - **clip**. To keep drawing inside a path. Anything outside the path is not painted. [Chapter 9](09_paths_and_clipping.md#clipping)
 - **CMYK**. The four inks of a printer: cyan, magenta, yellow and black. `f.cmyk(c, m, y, k)` makes a colour from them, each from 0 to 100. [Chapter 4](04_colour.md#colour-for-print-cmyk)
 - **colour mode**. How numbers are read as a colour: `"rgb"`, `"hsb"` or `"hsl"`, and the largest value of each part. Set with `f.color_mode()`. [Chapter 4](04_colour.md#colour-mode)
@@ -32,7 +32,7 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 - **decibel (dB)**. A way to measure loudness on a scale where each step of 20 is ten times the sound level. A quiet room is about -65 dB in funground's microphone examples. [Chapter 16](16_sound.md#listening-with-the-microphone)
 - **dpi**. Dots per inch: how many pixels a picture has in an inch of paper. 300 is usual for print. `f.save("x.png", dpi=300)`. [Chapter 13](13_saving_your_work.md#a-300-dpi-png)
 - **draw**. The function `draw()` that funground calls once for every frame. [Chapter 2](02_the_sketch.md)
-- **drone / tanpura**. A steady background note, or the instrument that plays it. A tanpura sounds Sa and Pa over and over, so a singer always has Sa to hold on to. `f.drone()` makes one. [Chapter 17](17_ragas_and_talas.md#the-drone)
+- **drone / tanpura**. A steady background note, or the instrument that plays it. A tanpura sounds Sa and Pa over and over, so a singer always has Sa to hold on to. `sound.drone()` makes one. [Chapter 17](17_ragas_and_talas.md#the-drone)
 
 ## E
 
@@ -67,7 +67,7 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 ## M
 
 - **meend**. A smooth glide from one note to another, written `S~G`. [Chapter 17](17_ragas_and_talas.md#meend-and-kan)
-- **microphone**. Your computer's sound input. `f.microphone()` listens to it and tells you its level, spectrum and pitch. [Chapter 16](16_sound.md#listening-with-the-microphone)
+- **microphone**. Your computer's sound input. `sound.microphone()` listens to it and tells you its level, spectrum and pitch. [Chapter 16](16_sound.md#listening-with-the-microphone)
 
 ## N
 
@@ -84,14 +84,14 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 - **path**. A shape built from lines and curves, made with `f.path()`. You can draw it, clip with it, and join or cut paths. [Chapter 9](09_paths_and_clipping.md#reusable-paths)
 - **PDF**. A file for documents and print. funground saves the shapes and text, so it stays sharp at any size. [Chapter 13](13_saving_your_work.md)
 - **picture**. A canvas of its own that you can draw on and then place with `f.image()`. Made with `f.create_graphics()`, `f.load_image()` or `f.load_svg()`. [Chapter 9](09_paths_and_clipping.md#drawing-off-screen)
-- **pitch**. How high or low a note sounds. `sound.pitch()` gives the frequency of the note it hears. [Chapter 16](16_sound.md#which-note-is-it)
+- **pitch**. How high or low a note sounds. `song.pitch()` gives the frequency of the note it hears. [Chapter 16](16_sound.md#which-note-is-it)
 - **pixel**. One tiny dot of the canvas. The canvas is a grid of them. [Chapter 9](09_paths_and_clipping.md#pixels)
 - **push and pop**. `f.push()` saves the transform and style, and `f.pop()` brings them back. `with f.saved_state():` does both for you. [Chapter 8](08_transforms.md)
 
 ## R
 
 - **raga**. A set of notes with its own rules and mood, used to make Hindustani music. funground knows a raga's notes and a few facts, not the raga itself. [Chapter 17](17_ragas_and_talas.md)
-- **reverb**. The ringing of a room after a sound ends. `sound.reverb()` adds it. [Chapter 16](16_sound.md#a-room-for-the-sound)
+- **reverb**. The ringing of a room after a sound ends. `song.reverb()` adds it. [Chapter 16](16_sound.md#a-room-for-the-sound)
 
 ## S
 
@@ -117,7 +117,7 @@ Stuck on an error message instead? See [When something goes wrong](errors.md).
 - **tanpura**. See *drone*.
 - **tempo**. The speed of the beat, in beats a minute. [Chapter 16](16_sound.md#beats-and-tempo)
 - **thaat**. The parent scale a raga belongs to, in Bhatkhande's system of ten. [Chapter 17](17_ragas_and_talas.md#the-raga-table)
-- **theka**. The pattern of bols that sets out a tala, one bol to a beat. `f.tala()` plays it. [Chapter 17](17_ragas_and_talas.md#talas)
+- **theka**. The pattern of bols that sets out a tala, one bol to a beat. `sangeet.tala()` plays it. [Chapter 17](17_ragas_and_talas.md#talas)
 - **trim**. The size of a printed page after it has been cut. In funground the canvas is the trim. [Chapter 13](13_saving_your_work.md#preparing-a-file-for-print)
 - **transform**. A change that moves, turns or resizes everything drawn after it: `f.translate()`, `f.rotate()` and `f.scale()`. [Chapter 8](08_transforms.md)
 

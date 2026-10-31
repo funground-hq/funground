@@ -6,12 +6,12 @@ tune. The bar at the bottom is how loud you are, so you can see it hears you. No
 no microphone, the sketch still runs and waits.
 
 How it works:
-- f.microphone() makes the microphone, and mic.start() begins listening. f.microphones() lists
+- sound.microphone() makes the microphone, and mic.start() begins listening. sound.microphones() lists
   the ones the computer has, and the first is named at the top.
 - mic.pitch() gives the pitch of the one note it hears, in hertz, or None when it is quiet.
   mic.level() says how loud it is, from 0 to 1. Laptop microphones can be very quiet, so the bar
   at the bottom uses decibels (loudness()) and still moves for a soft voice.
-- f.frequency_to_note() turns the pitch into a name. cents_off() then measures how far the pitch is
+- sound.frequency_to_note() turns the pitch into a name. cents_off() then measures how far the pitch is
   from that note. A cent is one hundredth of a semitone, so 50 cents is halfway to the next note.
 - The needle moves a third of the way to its target each frame, which smooths the shaking.
 - f.arc() draws the dial, and sin() and cos() put the needle at the right angle. 50 cents is 45
@@ -31,9 +31,10 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
-mic = f.microphone()
-listen_to = (f.microphones() or ["no microphone"])[0]     # shown at the top
+mic = sound.microphone()
+listen_to = (sound.microphones() or ["no microphone"])[0]     # shown at the top
 needle = 0.0              # cents sharp (+) or flat (-), smoothed
 name = "-"
 quiet_frames = 0
@@ -47,7 +48,7 @@ def loudness(level):
 
 def cents_off(hz, note_name):
     """How far the pitch is from the named note, in hundredths of a semitone."""
-    return 1200 * math.log2(hz / f.note_to_frequency(note_name))
+    return 1200 * math.log2(hz / sound.note_to_frequency(note_name))
 
 
 def setup():
@@ -66,7 +67,7 @@ def draw():
             needle *= 0.9
     else:
         quiet_frames = 0
-        name = f.frequency_to_note(hz)
+        name = sound.frequency_to_note(hz)
         target = max(-50, min(50, cents_off(hz, name)))
         needle += (target - needle) * 0.3
 

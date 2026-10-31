@@ -43,10 +43,10 @@ are the minimums in `pyproject.toml`. Licences are in [THIRD_PARTY_LICENSES.md](
 
 - **Playing and mixing** go through pygame-ce's mixer, which uses SDL's audio.
 - **The microphone** goes through pygame-ce's `pygame._sdl2.audio` module (see
-  `funground/microphone_input.py`). That module is marked experimental by pygame-ce.
+  `funground/sound/_microphone.py`). That module is marked experimental by pygame-ce.
 - **Making sound, analysing it and the effects** are funground's own pure-Python code. They use only
   Python's `math`, `cmath` and `random`: no numpy and no audio library. The files are
-  `funground/synth.py`, `analysis.py`, `sound.py`, `sound_views.py` and `hindustani.py`.
+  `funground/sound/` (`_synth.py` and the others), `analysis.py` and `funground/sangeet/_tables.py`.
 
 **The methods.** These are textbook or published methods. We list each one with a reference. The
 code is funground's own; where it differs from the paper, the design notes say so

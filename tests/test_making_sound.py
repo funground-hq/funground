@@ -1,7 +1,7 @@
 """Making sound (S-110; contract A3; D-055, D-056; ADR-006).
 
 Sounds here are computed, so no files are needed. Time is driven by replacing
-`funground.sound.clock`, as in test_sound.py, so nothing sleeps.
+`funground.sound._engine.clock`, as in test_sound.py, so nothing sleeps.
 """
 from __future__ import annotations
 
@@ -11,7 +11,8 @@ import wave
 import pytest
 
 import funground as f
-from funground import sound as sound_module, synth
+from funground import sound
+from funground.sound import _engine as sound_module, _synth as synth
 
 RATE = 44100
 
@@ -48,13 +49,13 @@ def pitch_at(snd, clock, seconds):
 
 # ---- create_sound and samples
 def test_create_sound_round_trip_and_clipping():
-    snd = f.create_sound([0.0, 0.5, -0.5, 2.0, -3.0], rate=8000)
+    snd = sound.create([0.0, 0.5, -0.5, 2.0, -3.0], rate=8000)
     assert snd.samples() == [0.0, 0.5, -0.5, 1.0, -1.0]
     assert snd.duration() == pytest.approx(5 / 8000, abs=1e-4)
 
 
 def test_created_sound_is_an_ordinary_sound(clock):
-    snd = f.create_sound([math.sin(i / 10) for i in range(RATE)])
+    snd = sound.create([math.sin(i / 10) for i in range(RATE)])
     assert snd.duration() == pytest.approx(1.0, abs=0.001)
     snd.play()
     clock.advance(0.25)
@@ -72,26 +73,26 @@ def test_created_sound_is_an_ordinary_sound(clock):
 
 
 def test_create_sound_resamples_to_the_mixer_rate(clock):
-    snd = f.create_sound([0.5] * 22050, rate=22050)      # one second at 22 050 a second
+    snd = sound.create([0.5] * 22050, rate=22050)      # one second at 22 050 a second
     assert snd.duration() == pytest.approx(1.0, abs=0.001)
     assert len(snd.samples()) == 22050                    # samples() gives back what it was given
 
 
 @pytest.mark.parametrize("bad", [[], ["a"], None, [float("nan")], [0, float("inf")]])
 def test_create_sound_rejects_bad_samples(bad):
-    with pytest.raises(ValueError, match="create_sound"):
-        f.create_sound(bad)
+    with pytest.raises(ValueError, match="sound.create"):
+        sound.create(bad)
 
 
 def test_create_sound_rejects_bad_rate():
     with pytest.raises(ValueError, match="rate"):
-        f.create_sound([0.0], rate=10)
+        sound.create([0.0], rate=10)
 
 
 def test_loaded_sounds_have_samples_too(tmp_path):
     path = tmp_path / "x.wav"
-    f.tone(440, 0.2).save(str(path))
-    loaded = f.load_sound(str(path))
+    sound.tone(440, 0.2).save(str(path))
+    loaded = sound.load(str(path))
     values = loaded.samples()
     assert len(values) == pytest.approx(0.2 * RATE, abs=2)
     assert 0.45 < max(values) <= 0.5 + 1e-4                   # made at the default volume, 0.5 (A9)
@@ -104,31 +105,31 @@ STEADY = dict(volume=1, attack=0, decay=0, sustain=1, release=0)     # the bare 
 def test_rms_of_each_wave():
     # Square, saw and triangle are built from their harmonics (A9) and scaled to peak 1, so their
     # RMS is a little below the sharp-cornered shapes' (1, 0.577, 0.577); sine and noise are as before.
-    assert rms(f.tone(440, 1, "sine", **STEADY).samples()) == pytest.approx(0.7071, abs=0.002)
-    assert rms(f.tone(440, 1, "square", **STEADY).samples()) == pytest.approx(0.844, abs=0.01)
-    assert rms(f.tone(440, 1, "saw", **STEADY).samples()) == pytest.approx(0.496, abs=0.01)
-    assert rms(f.tone(440, 1, "triangle", **STEADY).samples()) == pytest.approx(0.582, abs=0.01)
-    assert rms(f.tone(440, 1, "soft", **STEADY).samples()) == pytest.approx(0.649, abs=0.01)
-    assert rms(f.tone(440, 1, "noise", **STEADY).samples()) == pytest.approx(0.577, abs=0.02)
+    assert rms(sound.tone(440, 1, "sine", **STEADY).samples()) == pytest.approx(0.7071, abs=0.002)
+    assert rms(sound.tone(440, 1, "square", **STEADY).samples()) == pytest.approx(0.844, abs=0.01)
+    assert rms(sound.tone(440, 1, "saw", **STEADY).samples()) == pytest.approx(0.496, abs=0.01)
+    assert rms(sound.tone(440, 1, "triangle", **STEADY).samples()) == pytest.approx(0.582, abs=0.01)
+    assert rms(sound.tone(440, 1, "soft", **STEADY).samples()) == pytest.approx(0.649, abs=0.01)
+    assert rms(sound.tone(440, 1, "noise", **STEADY).samples()) == pytest.approx(0.577, abs=0.02)
     for wave_name in ("sine", "square", "saw", "triangle", "soft", "noise"):
-        assert max(abs(v) for v in f.tone(440, 1, wave_name, **STEADY).samples()) == pytest.approx(1.0, abs=0.01)
+        assert max(abs(v) for v in sound.tone(440, 1, wave_name, **STEADY).samples()) == pytest.approx(1.0, abs=0.01)
 
 
 def test_volume_scales_the_tone():
-    loud = f.tone(440, 0.5, volume=1, attack=0, release=0).samples()
-    quiet = f.tone(440, 0.5, volume=0.25, attack=0, release=0).samples()
+    loud = sound.tone(440, 0.5, volume=1, attack=0, release=0).samples()
+    quiet = sound.tone(440, 0.5, volume=0.25, attack=0, release=0).samples()
     assert max(quiet) == pytest.approx(0.25 * max(loud), rel=1e-6)
 
 
 def test_default_sounds_have_headroom():
     """A9: tone, note, pluck, melody and drone peak at about 0.5 by default."""
-    for snd in (f.tone(440, 1.0), f.note("A4", 1.0, "square"), f.pluck("A3", 1.0), f.drone("D3", 3),
-                f.melody("C4 - E4 -")):
+    for snd in (sound.tone(440, 1.0), sound.note("A4", 1.0, "square"), sound.pluck("A3", 1.0), sound.drone("D3", 3),
+                sound.melody("C4 - E4 -")):
         peak = max(abs(v) for v in snd.samples())
         assert 0.45 <= peak <= 0.5 + 1e-6, snd
     # Legato notes overlap: a note's attack can land on the release of the note before, so a
     # melody's peak can reach about 0.8 (here 0.76). That still leaves room below 1.
-    peak = max(abs(v) for v in f.melody("C4 E4 G4 C5").samples())
+    peak = max(abs(v) for v in sound.melody("C4 E4 G4 C5").samples())
     assert 0.5 < peak <= 0.8
 
 
@@ -157,7 +158,7 @@ def _outside_the_harmonics(values, hz):
 @pytest.mark.parametrize("wave_name", ["square", "saw", "triangle", "soft"])
 def test_band_limited_waves_do_not_alias(wave_name):
     hz = 3000                                    # 4 410 samples are exactly 300 periods
-    values = f.tone(hz, 0.2, wave_name, **STEADY).samples()[1000:1000 + 4410]
+    values = sound.tone(hz, 0.2, wave_name, **STEADY).samples()[1000:1000 + 4410]
     assert _outside_the_harmonics(values, hz) < 1e-4
     if wave_name == "square":
         assert _outside_the_harmonics(_naive_square(hz, 4410), hz) > 0.03     # the old square: about 5 %
@@ -166,7 +167,7 @@ def test_band_limited_waves_do_not_alias(wave_name):
 @pytest.mark.parametrize("wave_name", ["sine", "square", "saw", "triangle"])
 @pytest.mark.parametrize("hz", [220, 440, 880])
 def test_pitch_and_spectrum_match_the_frequency(clock, wave_name, hz):
-    snd = f.tone(hz, 1.0, wave_name)
+    snd = sound.tone(hz, 1.0, wave_name)
     assert pitch_at(snd, clock, 0.5) == pytest.approx(hz, rel=0.005)
     snd.play()
     clock.advance(0.5)
@@ -178,16 +179,16 @@ def test_pitch_and_spectrum_match_the_frequency(clock, wave_name, hz):
 
 
 def test_noise_has_no_pitch_and_silence_has_none(clock):
-    assert pitch_at(f.tone(300, 1.0, "noise"), clock, 0.5) is None
-    assert pitch_at(f.create_sound([0.0] * RATE), clock, 0.5) is None
+    assert pitch_at(sound.tone(300, 1.0, "noise"), clock, 0.5) is None
+    assert pitch_at(sound.create([0.0] * RATE), clock, 0.5) is None
 
 
 def test_pitch_is_none_when_not_playing_or_too_quiet(clock):
-    snd = f.tone(440, 1.0)
+    snd = sound.tone(440, 1.0)
     assert snd.pitch() is None                                  # not playing
-    assert pitch_at(f.tone(440, 1.0, volume=0.0005), clock, 0.5) is None   # below the loudness limit (RMS 0.001)
-    assert pitch_at(f.tone(440, 1.0, volume=0.004), clock, 0.5) == pytest.approx(440, rel=0.005)   # RMS 0.003: a quiet laptop microphone
-    assert pitch_at(f.tone(440, 1.0, volume=0.05), clock, 0.5) == pytest.approx(440, rel=0.005)
+    assert pitch_at(sound.tone(440, 1.0, volume=0.0005), clock, 0.5) is None   # below the loudness limit (RMS 0.001)
+    assert pitch_at(sound.tone(440, 1.0, volume=0.004), clock, 0.5) == pytest.approx(440, rel=0.005)   # RMS 0.003: a quiet laptop microphone
+    assert pitch_at(sound.tone(440, 1.0, volume=0.05), clock, 0.5) == pytest.approx(440, rel=0.005)
 
 
 def test_quiet_noise_and_hiss_still_have_no_pitch():
@@ -204,7 +205,7 @@ def test_quiet_noise_and_hiss_still_have_no_pitch():
 
 
 def test_attack_and_release_shape_the_ends():
-    v = f.tone(440, 1.0, "square", volume=1, attack=0.1, release=0.2, sustain=1).samples()
+    v = sound.tone(440, 1.0, "square", volume=1, attack=0.1, release=0.2, sustain=1).samples()
     assert v[0] == 0.0 and abs(v[-1]) < 1e-3
     assert max(abs(x) for x in v[:4410]) <= 1.0
     assert max(abs(x) for x in v[2000:2400]) == pytest.approx(0.881, abs=0.02)   # half way up the attack
@@ -231,18 +232,18 @@ def test_envelope_attack_decay_sustain_release():
 
 
 def test_tone_takes_decay_and_sustain():
-    v = f.tone(440, 1.0, "sine", volume=1, attack=0.01, decay=0.1, sustain=0.25, release=0.1).samples()
+    v = sound.tone(440, 1.0, "sine", volume=1, attack=0.01, decay=0.1, sustain=0.25, release=0.1).samples()
     assert max(abs(x) for x in v[400:600]) == pytest.approx(1.0, abs=0.02)    # the top of the attack
     assert max(abs(x) for x in v[22000:23000]) == pytest.approx(0.25, abs=0.01)
-    plain = f.tone(440, 1.0, "sine", volume=1, sustain=1).samples()
+    plain = sound.tone(440, 1.0, "sine", volume=1, sustain=1).samples()
     assert max(abs(x) for x in plain[22000:23000]) == pytest.approx(1.0, abs=0.01)
     for bad in (dict(sustain=1.5), dict(sustain=-0.1), dict(decay=-1)):
         with pytest.raises(ValueError, match="sustain|decay"):
-            f.tone(440, 1.0, **bad)
+            sound.tone(440, 1.0, **bad)
 
 
 def test_fades_that_do_not_fit_are_made_shorter():
-    v = f.tone(440, 0.04, "square").samples()                   # default fades add up to 0.16 s
+    v = sound.tone(440, 0.04, "square").samples()                   # default fades add up to 0.16 s
     assert len(v) == round(0.04 * RATE)
     assert abs(v[0]) < 0.01 and abs(v[-1]) < 0.01
 
@@ -258,62 +259,62 @@ def test_fades_that_do_not_fit_are_made_shorter():
 ])
 def test_tone_errors(kwargs, text):
     with pytest.raises(ValueError, match=text):
-        f.tone(**kwargs)
+        sound.tone(**kwargs)
 
 
 # ---- notes and names
 def test_note_frequencies():
-    assert f.note_to_frequency("A4") == pytest.approx(440.0)
-    assert f.note_to_frequency("C4") == pytest.approx(261.6256, abs=1e-3)
-    assert f.note_to_frequency("C#5") == f.note_to_frequency("Db5")
-    assert f.note_to_frequency("Bb3") == pytest.approx(233.0819, abs=1e-3)
-    assert f.note_to_frequency("A5") == pytest.approx(880.0)
+    assert sound.note_to_frequency("A4") == pytest.approx(440.0)
+    assert sound.note_to_frequency("C4") == pytest.approx(261.6256, abs=1e-3)
+    assert sound.note_to_frequency("C#5") == sound.note_to_frequency("Db5")
+    assert sound.note_to_frequency("Bb3") == pytest.approx(233.0819, abs=1e-3)
+    assert sound.note_to_frequency("A5") == pytest.approx(880.0)
 
 
 def test_note_makes_the_same_tone(clock):
-    a = f.note("A4", 0.5, "square", volume=0.8).samples()
-    b = f.tone(440, 0.5, "square", volume=0.8).samples()
+    a = sound.note("A4", 0.5, "square", volume=0.8).samples()
+    b = sound.tone(440, 0.5, "square", volume=0.8).samples()
     assert a == b
 
 
 @pytest.mark.parametrize("bad", ["H4", "A", "4", "a4", "C##4", "", 440])
 def test_bad_note_names(bad):
     with pytest.raises(ValueError):
-        f.note_to_frequency(bad)
+        sound.note_to_frequency(bad)
     with pytest.raises(ValueError, match="note"):
-        f.note(bad, 1)
+        sound.note(bad, 1)
 
 
 def test_frequency_to_note():
-    assert f.frequency_to_note(440) == "A4"
-    assert f.frequency_to_note(261.63) == "C4"
-    assert f.frequency_to_note(466.16) == "A#4"
-    assert f.frequency_to_note(450) == "A4"            # the nearest semitone
-    assert f.frequency_to_note(27.5) == "A0"
-    assert f.frequency_to_note(29) == "A#0"
+    assert sound.frequency_to_note(440) == "A4"
+    assert sound.frequency_to_note(261.63) == "C4"
+    assert sound.frequency_to_note(466.16) == "A#4"
+    assert sound.frequency_to_note(450) == "A4"            # the nearest semitone
+    assert sound.frequency_to_note(27.5) == "A0"
+    assert sound.frequency_to_note(29) == "A#0"
     for name in ["C2", "F#3", "A#4", "B5", "D#6"]:
-        assert f.frequency_to_note(f.note_to_frequency(name)) == name
+        assert sound.frequency_to_note(sound.note_to_frequency(name)) == name
     for bad in (0, -5, "A4", True):
         with pytest.raises(ValueError):
-            f.frequency_to_note(bad)
+            sound.frequency_to_note(bad)
 
 
 def test_sargam_names_both_ways():
-    assert f.note_to_frequency("S", sa="C4") == pytest.approx(261.6256, abs=1e-3)
-    assert f.note_to_frequency("P", sa="C4") == pytest.approx(261.6256 * 2 ** (7 / 12), abs=1e-3)
-    assert f.note_to_frequency("S'", sa="C4") == pytest.approx(523.2511, abs=1e-3)
-    assert f.note_to_frequency("N,", sa="C4") == pytest.approx(261.6256 * 2 ** (11 / 12) / 2, abs=1e-3)
-    assert f.frequency_to_note(f.note_to_frequency("G", sa="D4"), sa="D4") == "G"
-    assert f.frequency_to_note(f.note_to_frequency("m,", sa="C4"), sa="C4") == "m,"
-    assert f.frequency_to_note(f.note_to_frequency("d'", sa="C4"), sa="C4") == "d'"
-    assert f.frequency_to_note(300, sa="C4") == "R"        # 2.3 semitones above Sa
+    assert sound.note_to_frequency("S", sa="C4") == pytest.approx(261.6256, abs=1e-3)
+    assert sound.note_to_frequency("P", sa="C4") == pytest.approx(261.6256 * 2 ** (7 / 12), abs=1e-3)
+    assert sound.note_to_frequency("S'", sa="C4") == pytest.approx(523.2511, abs=1e-3)
+    assert sound.note_to_frequency("N,", sa="C4") == pytest.approx(261.6256 * 2 ** (11 / 12) / 2, abs=1e-3)
+    assert sound.frequency_to_note(sound.note_to_frequency("G", sa="D4"), sa="D4") == "G"
+    assert sound.frequency_to_note(sound.note_to_frequency("m,", sa="C4"), sa="C4") == "m,"
+    assert sound.frequency_to_note(sound.note_to_frequency("d'", sa="C4"), sa="C4") == "d'"
+    assert sound.frequency_to_note(300, sa="C4") == "R"        # 2.3 semitones above Sa
     with pytest.raises(ValueError, match="swara"):
-        f.note_to_frequency("T", sa="C4")
+        sound.note_to_frequency("T", sa="C4")
 
 
 # ---- pluck
 def test_pluck_is_a_normal_sound_that_dies_away(clock):
-    snd = f.pluck("A3", 2.0)
+    snd = sound.pluck("A3", 2.0)
     values = snd.samples()
     assert len(values) == 2 * RATE
     assert max(abs(v) for v in values) <= 0.5 + 1e-9               # the default volume (A9)
@@ -325,12 +326,12 @@ def test_pluck_is_a_normal_sound_that_dies_away(clock):
 
 @pytest.mark.parametrize("hz", [80, 110, 196, 330, 659, 880, 1000])
 def test_pluck_pitch_across_the_range(clock, hz):
-    assert pitch_at(f.pluck(hz, 1.0), clock, 0.15) == pytest.approx(hz, rel=0.005)
+    assert pitch_at(sound.pluck(hz, 1.0), clock, 0.15) == pytest.approx(hz, rel=0.005)
 
 
 def _brightness(values):
     """The spectral centroid of 2 048 samples, in hertz: where the middle of the sound's energy is."""
-    from funground import sound as s
+    from funground.sound import _engine as s
     n = s.FFT_SIZE
     total = weighted = 0.0
     for start in (0, n):
@@ -358,20 +359,20 @@ def test_pluck_is_warmer_than_raw_noise(hz):
 
 
 def test_pluck_accepts_names_and_numbers_and_checks_them():
-    assert len(f.pluck(110.0, 0.1).samples()) == round(0.1 * RATE)
+    assert len(sound.pluck(110.0, 0.1).samples()) == round(0.1 * RATE)
     for bad in ("Z9", 5, 99999, True):
         with pytest.raises(ValueError):
-            f.pluck(bad, 1)
+            sound.pluck(bad, 1)
 
 
 # ---- the sketch's random generator
 def test_noise_and_pluck_repeat_after_random_seed():
     f.random_seed(7)
-    a = (f.tone(200, 0.2, "noise").samples(), f.pluck("E3", 0.2).samples())
+    a = (sound.tone(200, 0.2, "noise").samples(), sound.pluck("E3", 0.2).samples())
     f.random_seed(7)
-    b = (f.tone(200, 0.2, "noise").samples(), f.pluck("E3", 0.2).samples())
+    b = (sound.tone(200, 0.2, "noise").samples(), sound.pluck("E3", 0.2).samples())
     f.random_seed(8)
-    c = f.tone(200, 0.2, "noise").samples()
+    c = sound.tone(200, 0.2, "noise").samples()
     assert a == b
     assert a[0] != c
 
@@ -383,16 +384,16 @@ TAIL = RELEASE                                # so a melody ending on a note is 
 
 def test_melody_length_is_beats_times_tempo():
     # A melody lasts its beats, plus the last note's release when it ends on a note.
-    assert len(f.melody("C4 E4 G4:2 - C4:0.5", tempo=120).samples()) == round(5.5 * 0.5 * RATE) + TAIL
-    assert len(f.melody("C4 D4 E4", tempo=60).samples()) == 3 * RATE + TAIL
-    assert len(f.melody("C4:1 D4:1 E4:1", tempo=100).samples()) == round(3 * 0.6 * RATE) + TAIL
-    assert len(f.melody("C4 D4 -", tempo=60).samples()) == 3 * RATE           # a final rest holds the tail
+    assert len(sound.melody("C4 E4 G4:2 - C4:0.5", tempo=120).samples()) == round(5.5 * 0.5 * RATE) + TAIL
+    assert len(sound.melody("C4 D4 E4", tempo=60).samples()) == 3 * RATE + TAIL
+    assert len(sound.melody("C4:1 D4:1 E4:1", tempo=100).samples()) == round(3 * 0.6 * RATE) + TAIL
+    assert len(sound.melody("C4 D4 -", tempo=60).samples()) == 3 * RATE           # a final rest holds the tail
     # no drift over a long tune with beats that do not divide into whole samples
-    assert len(f.melody(" ".join(["A4:0.3"] * 100), tempo=97).samples()) == round(30 * 60 / 97 * RATE) + TAIL
+    assert len(sound.melody(" ".join(["A4:0.3"] * 100), tempo=97).samples()) == round(30 * 60 / 97 * RATE) + TAIL
 
 
 def test_rests_are_silent():
-    v = f.melody("- A4 -", tempo=60).samples()
+    v = sound.melody("- A4 -", tempo=60).samples()
     assert len(v) == 3 * RATE
     assert all(x == 0.0 for x in v[:RATE])                                  # before the note
     assert all(x == 0.0 for x in v[2 * RATE + TAIL:])                       # after its release
@@ -401,56 +402,56 @@ def test_rests_are_silent():
 
 def test_melody_notes_are_legato():
     """A9: no silent gap between notes. Each note's release rings on over the next note."""
-    v = f.melody("C4 E4 G4 E4 C4", tempo=120).samples()
+    v = sound.melody("C4 E4 G4 E4 C4", tempo=120).samples()
     window = round(0.005 * RATE)
     body = rms(v[round(0.2 * RATE):round(0.3 * RATE)])          # the first note, sustained
     quietest = min(rms(v[i:i + window]) for i in range(RATE // 4, 2 * RATE, window // 10))
     assert quietest > 0.6 * body                 # about 0.8 here; the old envelope dipped to 0.05
-    c4 = synth.voice_samples(f.note_to_frequency("C4"), RATE // 2, RELEASE)
-    assert v[RATE // 2:RATE // 2 + RELEASE] != f.melody("- E4", tempo=120).samples()[RATE // 2:RATE // 2 + RELEASE]
+    c4 = synth.voice_samples(sound.note_to_frequency("C4"), RATE // 2, RELEASE)
+    assert v[RATE // 2:RATE // 2 + RELEASE] != sound.melody("- E4", tempo=120).samples()[RATE // 2:RATE // 2 + RELEASE]
     assert rms(c4[RATE // 2:RATE // 2 + 1000]) > 0.5 * rms(c4[RATE // 4:RATE // 2])   # C4 still sounds after E4 starts
 
 
 def test_a_note_in_a_melody_is_a_note():
     # A note of one beat (0.5 s) whose release rings on after it is a note 0.65 s long.
-    v = f.melody("A4", tempo=120, wave="square").samples()
-    assert v == f.note("A4", (RATE // 2 + TAIL) / RATE, "square").samples()
+    v = sound.melody("A4", tempo=120, wave="square").samples()
+    assert v == sound.note("A4", (RATE // 2 + TAIL) / RATE, "square").samples()
 
 
 def test_melody_volume_and_wave():
-    loud = f.melody("A4 - C5", volume=1).samples()
-    quiet = f.melody("A4 - C5", volume=0.2).samples()
+    loud = sound.melody("A4 - C5", volume=1).samples()
+    quiet = sound.melody("A4 - C5", volume=0.2).samples()
     assert max(quiet) == pytest.approx(0.2 * max(loud), rel=1e-6)
-    assert f.melody("A4").samples() == f.melody("A4", wave="soft").samples()   # soft is the default
+    assert sound.melody("A4").samples() == sound.melody("A4", wave="soft").samples()   # soft is the default
     with pytest.raises(ValueError, match="volume"):
-        f.melody("A4", volume=2)
+        sound.melody("A4", volume=2)
 
 
 def test_a_chord_is_a_mix():
-    chord = f.melody("[C4 E4 G4]:2", tempo=120).samples()
-    expected = f.mix(*[f.melody(f"{n}:2", tempo=120) for n in ("C4", "E4", "G4")]).samples()
+    chord = sound.melody("[C4 E4 G4]:2", tempo=120).samples()
+    expected = sound.mix(*[sound.melody(f"{n}:2", tempo=120) for n in ("C4", "E4", "G4")]).samples()
     assert chord == pytest.approx(expected, abs=1 / 32767)
     assert max(abs(v) for v in chord) <= 0.9
 
 
 def test_sargam_equal_and_just(clock):
-    sa = f.note_to_frequency("C4")
-    equal = f.melody("S R G m P D N S'", tempo=120, sa="C4")
-    just = f.melody("S R G m P D N S'", tempo=120, sa="C4", tuning="just")
+    sa = sound.note_to_frequency("C4")
+    equal = sound.melody("S R G m P D N S'", tempo=120, sa="C4")
+    just = sound.melody("S R G m P D N S'", tempo=120, sa="C4", tuning="just")
     steps = [0, 2, 4, 5, 7, 9, 11, 12]
     ratios = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2]
     for snd, freqs in ((equal, [sa * 2 ** (s / 12) for s in steps]), (just, [sa * r for r in ratios])):
         values = snd.samples()
         for i, hz in enumerate(freqs):
-            note = f.create_sound(values[i * 22050 + 2000:(i + 1) * 22050 - 2000])
+            note = sound.create(values[i * 22050 + 2000:(i + 1) * 22050 - 2000])
             assert pitch_at(note, clock, 0.4) == pytest.approx(hz, rel=0.003), (i, hz)
 
 
 def test_sargam_komal_tivra_and_octave_marks():
-    sa = f.note_to_frequency("D4")
+    sa = sound.note_to_frequency("D4")
     for token, expected in {"r": 2 ** (1 / 12), "g": 2 ** (3 / 12), "M": 2 ** (6 / 12), "d": 2 ** (8 / 12),
                             "n": 2 ** (10 / 12), "S'": 2.0, "S,": 0.5, "P'": 2 * 2 ** (7 / 12), "G,": 2 ** (4 / 12) / 2}.items():
-        assert f.note_to_frequency(token, sa="D4") == pytest.approx(sa * expected)
+        assert sound.note_to_frequency(token, sa="D4") == pytest.approx(sa * expected)
 
 
 def test_the_just_ratios():
@@ -477,10 +478,10 @@ def test_the_just_ratios():
 ])
 def test_melody_bad_tokens_are_named(text, kwargs, token):
     if token is None:
-        f.melody(text, **kwargs)
+        sound.melody(text, **kwargs)
         return
     with pytest.raises(ValueError) as info:
-        f.melody(text, **kwargs)
+        sound.melody(text, **kwargs)
     assert repr(token) in str(info.value)
 
 
@@ -489,17 +490,17 @@ def test_melody_other_errors():
                    dict(text="C4", wave="x"), dict(text="C4", tuning="odd"),
                    dict(text="C4", tuning="just"), dict(text="S", sa="Q9")):
         with pytest.raises(ValueError):
-            f.melody(**kwargs)
+            sound.melody(**kwargs)
 
 
 # ---- sequence and mix
 def test_sequence_and_mix_lengths():
-    a = f.tone(440, 1.0, attack=0, release=0)
-    b = f.tone(660, 0.5, attack=0, release=0)
-    seq = f.sequence(a, b)
+    a = sound.tone(440, 1.0, attack=0, release=0)
+    b = sound.tone(660, 0.5, attack=0, release=0)
+    seq = sound.sequence(a, b)
     assert seq.duration() == pytest.approx(1.5, abs=0.001)
     assert seq.samples() == a.samples() + b.samples()
-    mixed = f.mix(a, b)
+    mixed = sound.mix(a, b)
     assert mixed.duration() == pytest.approx(1.0, abs=0.001)
     assert len(mixed.samples()) == RATE
 
@@ -508,35 +509,35 @@ def test_mix_limits_the_peak_softly():
     """A9: a quiet sum is unchanged; a loud one goes through a soft limiter that keeps it at or
     below 0.9: samples up to 0.7 pass, louder ones bend smoothly (and a sum above 1.2 is first
     scaled down to 1.2)."""
-    quiet = f.create_sound([0.2, -0.2, 0.2])
-    assert f.mix(quiet, quiet).samples() == pytest.approx([0.4, -0.4, 0.4])
-    loud = f.create_sound([0.9, -0.9, 0.9])
+    quiet = sound.create([0.2, -0.2, 0.2])
+    assert sound.mix(quiet, quiet).samples() == pytest.approx([0.4, -0.4, 0.4])
+    loud = sound.create([0.9, -0.9, 0.9])
     top = 0.7 + 0.2 * math.tanh(2.5)                         # 1.8 scaled to 1.2, then bent: 0.897
-    assert f.mix(loud, loud).samples() == pytest.approx([top, -top, top], abs=1e-4)
-    values = f.mix(f.create_sound([0.5, 0.3, -0.3]), f.create_sound([0.3, 0.3, -0.1])).samples()
+    assert sound.mix(loud, loud).samples() == pytest.approx([top, -top, top], abs=1e-4)
+    values = sound.mix(sound.create([0.5, 0.3, -0.3]), sound.create([0.3, 0.3, -0.1])).samples()
     assert values[1] == pytest.approx(0.6, abs=1e-4)          # below the knee: kept
     assert values[0] == pytest.approx(0.7 + 0.2 * math.tanh(0.5), abs=1e-4)   # 0.8, bent to 0.792
 
 
 def test_mix_of_five_sounds_peaks_at_most_0_9():
-    parts = [f.note(n, 1.0, "saw") for n in ("C4", "E4", "G4", "B4", "D5")]
+    parts = [sound.note(n, 1.0, "saw") for n in ("C4", "E4", "G4", "B4", "D5")]
     assert sum(max(abs(v) for v in p.samples()) for p in parts) > 2.0        # the plain sum would clip
-    values = f.mix(*parts).samples()
+    values = sound.mix(*parts).samples()
     assert 0.85 < max(abs(v) for v in values) <= 0.9
 
 
 def test_combining_checks_its_arguments():
-    for fn in (f.sequence, f.mix):
+    for fn in (sound.sequence, sound.mix):
         with pytest.raises(ValueError):
             fn()
         with pytest.raises(ValueError, match="sound"):
-            fn(f.tone(440, 0.1), "A4")
+            fn(sound.tone(440, 0.1), "A4")
 
 
 def test_combining_sounds_made_at_other_rates(clock):
-    slow = f.create_sound([0.5] * 8000, rate=8000)          # one second
-    fast = f.create_sound([0.25] * 44100)
-    assert f.sequence(slow, fast).duration() == pytest.approx(2.0, abs=0.001)
+    slow = sound.create([0.5] * 8000, rate=8000)          # one second
+    fast = sound.create([0.25] * 44100)
+    assert sound.sequence(slow, fast).duration() == pytest.approx(2.0, abs=0.001)
 
 
 # ---- pan
@@ -594,14 +595,14 @@ def test_pan_sets_the_channels_left_and_right_volume(clock):
 @pytest.mark.parametrize("bad", [-1.5, 2, "left", None, True])
 def test_pan_range(bad):
     with pytest.raises(ValueError, match="pan"):
-        f.tone(440, 0.1).pan(bad)
+        sound.tone(440, 0.1).pan(bad)
 
 
 def test_pan_works_on_loaded_sounds_and_does_not_change_analysis(clock, tmp_path):
     path = tmp_path / "t.wav"
-    f.tone(440, 1.0).save(str(path))
-    loaded = f.load_sound(str(path))
-    made = f.tone(440, 1.0)
+    sound.tone(440, 1.0).save(str(path))
+    loaded = sound.load(str(path))
+    made = sound.tone(440, 1.0)
     for snd in (loaded, made):
         snd.play()
         clock.advance(0.5)
@@ -613,7 +614,7 @@ def test_pan_works_on_loaded_sounds_and_does_not_change_analysis(clock, tmp_path
 
 # ---- save
 def test_save_round_trip(tmp_path):
-    original = f.tone(330, 0.3, "triangle", volume=0.8)
+    original = sound.tone(330, 0.3, "triangle", volume=0.8)
     path = tmp_path / "out.wav"
     original.save(str(path))
     with wave.open(str(path), "rb") as w:
@@ -627,12 +628,12 @@ def test_save_round_trip(tmp_path):
     left = [v / 32767 for v in data[0::channels]]
     assert len(left) == len(original.samples())
     assert left == pytest.approx(original.samples(), abs=2 / 32767)
-    again = f.load_sound(str(path))
+    again = sound.load(str(path))
     assert again.duration() == pytest.approx(0.3, abs=0.001)
 
 
 def test_save_keeps_pan(tmp_path):
-    snd = f.tone(330, 0.1)
+    snd = sound.tone(330, 0.1)
     snd.pan(1)
     snd.save(str(tmp_path / "p.wav"))
     with wave.open(str(tmp_path / "p.wav"), "rb") as w:
@@ -645,7 +646,7 @@ def test_save_keeps_pan(tmp_path):
 
 
 def test_save_errors(tmp_path):
-    snd = f.tone(330, 0.1)
+    snd = sound.tone(330, 0.1)
     with pytest.raises(ValueError, match="save"):
         snd.save("")
     with pytest.raises(ValueError, match="save"):
@@ -654,7 +655,7 @@ def test_save_errors(tmp_path):
 
 # ---- reverb (A9)
 def test_reverb_adds_a_tail_and_amount_0_is_dry():
-    dry = f.tone(440, 1.0, "soft")
+    dry = sound.tone(440, 1.0, "soft")
     body = rms(dry.samples()[RATE // 2:3 * RATE // 4])
     assert dry.reverb(0).samples() == dry.samples()
     after = []
@@ -670,17 +671,17 @@ def test_reverb_adds_a_tail_and_amount_0_is_dry():
 
 def test_reverb_works_on_any_sound_and_checks_amount(tmp_path):
     path = tmp_path / "t.wav"
-    f.tone(440, 0.3).save(str(path))
-    wet = f.load_sound(str(path)).reverb(0.5)
+    sound.tone(440, 0.3).save(str(path))
+    wet = sound.load(str(path)).reverb(0.5)
     assert wet.duration() == pytest.approx(0.3 + 0.75, abs=0.002)
     for bad in (-0.1, 1.5, "big", None, True):
         with pytest.raises(ValueError, match="reverb"):
-            f.tone(440, 0.1).reverb(bad)
+            sound.tone(440, 0.1).reverb(bad)
 
 
 def test_reverb_of_five_seconds_is_quick():
     import time
-    snd = f.melody("C4 E4 G4 C5 " * 5, tempo=120)              # 10 beats a bar: 5 seconds
+    snd = sound.melody("C4 E4 G4 C5 " * 5, tempo=120)              # 10 beats a bar: 5 seconds
     start = time.perf_counter()
     snd.reverb(1)
     assert time.perf_counter() - start < 2.0                 # about 0.3 s here; the limit is generous
@@ -688,18 +689,18 @@ def test_reverb_of_five_seconds_is_quick():
 
 # ---- the names
 def test_public_names_exist():
-    for name in ("create_sound", "tone", "note", "pluck", "melody", "sequence", "mix",
+    for name in ("create", "load", "tone", "note", "pluck", "melody", "sequence", "mix",
                  "note_to_frequency", "frequency_to_note"):
-        assert name in f._PUBLIC_NAMES and callable(getattr(f, name))
+        assert name in sound.__all__ and callable(getattr(sound, name))
 
 
 def test_three_second_tone_is_quick():
     import time
     start = time.perf_counter()
-    f.tone(440, 3.0, "sine")
-    f.pluck("A3", 3.0)
+    sound.tone(440, 3.0, "sine")
+    sound.pluck("A3", 3.0)
     assert time.perf_counter() - start < 1.0                 # about 0.1 s here; the limit is generous
     for wave_name in ("square", "saw", "triangle", "soft"):
         start = time.perf_counter()
-        f.tone(330, 3.0, wave_name)
+        sound.tone(330, 3.0, wave_name)
         assert time.perf_counter() - start < 0.5             # about 0.05 s here (S-118 aims for 0.2)

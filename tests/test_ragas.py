@@ -14,11 +14,14 @@ from pathlib import Path
 import pytest
 
 import funground as f
-from funground import hindustani as ragas, synth
+from funground import sound
+from funground import sangeet
+from funground.sangeet import _tables as ragas
+from funground.sound import _synth as synth
 
 RATE = 44100
 SA = "D4"
-DATA = Path(ragas.__file__).with_name("data") / "ragas.json"
+DATA = Path(ragas.__file__).resolve().parent.parent / "data" / "ragas.json"
 
 
 def cents(hz, ref):
@@ -27,16 +30,16 @@ def cents(hz, ref):
 
 # ---- the table
 def test_the_table_lists_ragas_and_talas():
-    names = f.ragas()
+    names = sangeet.ragas()
     assert len(names) >= 12
     for name in ("Yaman", "Bhupali", "Deshkar", "Bhairav", "Bhairavi"):
         assert name in names
-    assert f.talas() == ["Teentaal", "Ektaal", "Jhaptaal", "Rupak", "Dadra", "Keherwa"]
+    assert sangeet.talas() == ["Teentaal", "Ektaal", "Jhaptaal", "Rupak", "Dadra", "Keherwa"]
 
 
 def test_raga_lookup_ignores_capitals_and_is_read_only():
-    yaman = f.raga("yAMAN")
-    assert yaman is f.raga("Yaman")
+    yaman = sangeet.raga("yAMAN")
+    assert yaman is sangeet.raga("Yaman")
     assert yaman.thaat == "Kalyan"
     assert yaman.swaras == ("S", "R", "G", "M", "P", "D", "N")
     assert (yaman.vadi, yaman.samvadi) == ("G", "N")
@@ -45,20 +48,20 @@ def test_raga_lookup_ignores_capitals_and_is_read_only():
     assert "Yaman" in str(yaman)
 
 
-@pytest.mark.parametrize("call", [f.raga, f.tala_info])
+@pytest.mark.parametrize("call", [sangeet.raga, sangeet.tala_info])
 def test_an_unknown_name_lists_the_table(call):
     with pytest.raises(ValueError) as info:
         call("Nonesuch")
     assert "Nonesuch" in str(info.value)
-    names = f.ragas() if call is f.raga else f.talas()
+    names = sangeet.ragas() if call is sangeet.raga else sangeet.talas()
     assert all(name in str(info.value) for name in names)
     with pytest.raises(ValueError):
         call(5)
 
 
-@pytest.mark.parametrize("name", f.ragas())
+@pytest.mark.parametrize("name", sangeet.ragas())
 def test_every_raga_is_consistent_and_playable(name):
-    r = f.raga(name)
+    r = sangeet.raga(name)
     assert r.thaat and r.time and r.sources
     assert len(r.sources) >= 2, "every raga cites at least two sources"
     assert r.swaras[0] == "S" and len(set(r.swaras)) == len(r.swaras)
@@ -66,15 +69,15 @@ def test_every_raga_is_consistent_and_playable(name):
     assert list(r.swaras) == sorted(r.swaras, key=synth.SARGAM.index)
     assert r.vadi in r.swaras and r.samvadi in r.swaras and r.vadi != r.samvadi
     for phrase in (r.aroha, r.avaroha, r.pakad):
-        f.melody(phrase, sa=SA)                                  # parses and plays
+        sound.melody(phrase, sa=SA)                                  # parses and plays
         for token in phrase.split():
             assert token.rstrip("',") in r.swaras, f"{name}: {token} is not one of its swaras"
     assert r.aroha.split()[-1] == "S'" and r.avaroha.split()[0] == "S'" and r.avaroha.split()[-1] == "S"
 
 
-@pytest.mark.parametrize("name", f.talas())
+@pytest.mark.parametrize("name", sangeet.talas())
 def test_every_tala_is_consistent_and_playable(name):
-    t = f.tala_info(name)
+    t = sangeet.tala_info(name)
     assert len(t.bols) == t.beats == sum(t.vibhag)
     assert t.sam == 1
     starts = [1 + sum(t.vibhag[:i]) for i in range(len(t.vibhag))]
@@ -85,12 +88,12 @@ def test_every_tala_is_consistent_and_playable(name):
 
 
 def test_tala_facts():
-    assert (f.tala_info("teentaal").tali, f.tala_info("teentaal").khali) == ((1, 5, 13), (9,))
-    assert f.tala_info("Ektaal").vibhag == (2, 2, 2, 2, 2, 2)
-    assert f.tala_info("Jhaptaal").vibhag == (2, 3, 2, 3)
-    rupak = f.tala_info("Rupak")
+    assert (sangeet.tala_info("teentaal").tali, sangeet.tala_info("teentaal").khali) == ((1, 5, 13), (9,))
+    assert sangeet.tala_info("Ektaal").vibhag == (2, 2, 2, 2, 2, 2)
+    assert sangeet.tala_info("Jhaptaal").vibhag == (2, 3, 2, 3)
+    rupak = sangeet.tala_info("Rupak")
     assert rupak.vibhag == (3, 2, 2) and rupak.khali == (1,) and rupak.tali == (4, 6)   # sam is khali
-    assert f.tala_info("Dadra").beats == 6 and f.tala_info("Keherwa").beats == 8
+    assert sangeet.tala_info("Dadra").beats == 6 and sangeet.tala_info("Keherwa").beats == 8
 
 
 def test_the_data_file_cites_each_entry():
@@ -105,11 +108,11 @@ def test_the_data_file_cites_each_entry():
 # ---- the drone
 def test_drone_length_and_no_clicks():
     f.random_seed(1)
-    d = f.drone("D3", 6)
+    d = sound.drone("D3", 6)
     v = d.samples()
     assert len(v) == round(6 * RATE)
     assert max(abs(x) for x in v) == pytest.approx(0.5)          # the default volume (A9)
-    assert max(abs(x) for x in f.drone("D3", 2, volume=0.2).samples()) == pytest.approx(0.2)
+    assert max(abs(x) for x in sound.drone("D3", 2, volume=0.2).samples()) == pytest.approx(0.2)
     # A click is a jump from one sample to the next far bigger than the wave's own steepness. The
     # brightest part of a pluck moves by up to about 0.2 a sample; a click would be near 0.8.
     assert max(abs(v[i + 1] - v[i]) for i in range(len(v) - 1)) < 0.25
@@ -119,19 +122,19 @@ def test_drone_length_and_no_clicks():
 def test_drone_patterns_and_errors():
     f.random_seed(2)
     for pattern in ("m S' S' S", "N S' S' S", "P S"):
-        assert f.drone("C3", 2, pattern).duration() == pytest.approx(2, abs=0.01)
-    assert f.drone(146.83, 1).duration() == pytest.approx(1, abs=0.01)     # sa may be hertz
+        assert sound.drone("C3", 2, pattern).duration() == pytest.approx(2, abs=0.01)
+    assert sound.drone(146.83, 1).duration() == pytest.approx(1, abs=0.01)     # sa may be hertz
     for kwargs in (dict(sa="Q3", seconds=2), dict(sa="D3", seconds=0), dict(sa="D3", seconds=2, pattern=""),
                    dict(sa="D3", seconds=2, pattern="P X"), dict(sa=5, seconds=2)):
         with pytest.raises(ValueError):
-            f.drone(**kwargs)
+            sound.drone(**kwargs)
 
 
 def test_drone_plays_its_strings():
     f.random_seed(3)
     sa = synth.note_to_frequency("D3")
     for pattern, ratio in (("P", 1.5), ("S'", 2.0), ("m", 4 / 3)):     # one string, tuned just
-        v = f.drone("D3", 2, pattern).samples()
+        v = sound.drone("D3", 2, pattern).samples()
         assert abs(cents(synth.find_pitch(v[RATE:RATE + 2048], RATE), sa * ratio)) < 10
 
 
@@ -140,7 +143,7 @@ TAIL = round(0.15 * RATE)                  # a melody's last note rings on for i
 
 
 def test_meend_glides_smoothly():
-    v = f.melody("S~G:2", tempo=60, sa=SA).samples()
+    v = sound.melody("S~G:2", tempo=60, sa=SA).samples()
     assert len(v) == 2 * RATE + TAIL
     sa = synth.note_to_frequency(SA)
     heard = []
@@ -154,12 +157,12 @@ def test_meend_glides_smoothly():
 
 
 def test_meend_works_with_note_names_and_downwards():
-    v = f.melody("G4~C4", tempo=60).samples()[:RATE]
+    v = sound.melody("G4~C4", tempo=60).samples()[:RATE]
     assert abs(cents(synth.find_pitch(v[-4096:-2048], RATE), synth.note_to_frequency("C4"))) < 25
 
 
 def test_kan_touches_the_grace_note_for_60_ms():
-    v = f.melody("(R)G", tempo=60, sa=SA).samples()
+    v = sound.melody("(R)G", tempo=60, sa=SA).samples()
     assert len(v) == RATE + TAIL
     sa = synth.note_to_frequency(SA)
     window = round(0.02 * RATE)
@@ -170,7 +173,7 @@ def test_kan_touches_the_grace_note_for_60_ms():
 
     assert heard(0.015) == 2 and heard(0.035) == 2                # Re
     assert heard(0.065) == 4 and heard(0.3) == 4                  # then Ga
-    v2 = f.melody("(D4)E4 E4", tempo=60).samples()
+    v2 = sound.melody("(D4)E4 E4", tempo=60).samples()
     assert abs(cents(synth.find_pitch(v2[600:600 + window], RATE), synth.note_to_frequency("D4"))) < 25
 
 
@@ -179,15 +182,15 @@ def test_kan_touches_the_grace_note_for_60_ms():
                                          ("S~Z", "S~Z"), ("(Z)G", "(Z)G")])
 def test_bad_ornaments_are_named(text, token):
     with pytest.raises(ValueError) as info:
-        f.melody(text, sa=SA)
+        sound.melody(text, sa=SA)
     assert repr(token) in str(info.value)
 
 
 # ---- the tala
 def test_tala_length():
     for name, tempo, cycles in (("Teentaal", 80, 1), ("Rupak", 120, 2), ("Ektaal", 60, 1)):
-        beats = f.tala_info(name).beats
-        assert len(f.tala(name, tempo=tempo, cycles=cycles).samples()) == round(beats * 60 / tempo * cycles * RATE)
+        beats = sangeet.tala_info(name).beats
+        assert len(sangeet.tala(name, tempo=tempo, cycles=cycles).samples()) == round(beats * 60 / tempo * cycles * RATE)
 
 
 def _onsets(v, frame=round(0.005 * RATE)):
@@ -199,7 +202,7 @@ def _onsets(v, frame=round(0.005 * RATE)):
 def test_tala_strokes_fall_on_the_beats():
     tempo = 90
     beat = 60 / tempo
-    v = f.tala("Teentaal", tempo=tempo).samples()
+    v = sangeet.tala("Teentaal", tempo=tempo).samples()
     onsets = _onsets(v)
     for b in range(1, 16):                                       # every beat has a stroke
         assert any(abs(t - b * beat) < 0.012 for t in onsets), b
@@ -208,7 +211,7 @@ def test_tala_strokes_fall_on_the_beats():
 
 
 def test_tala_accents_the_sam_and_softens_the_khali():
-    v = f.tala("Teentaal", tempo=60).samples()
+    v = sangeet.tala("Teentaal", tempo=60).samples()
 
     def loud(b):
         i = (b - 1) * RATE
@@ -222,57 +225,57 @@ def test_tala_errors():
     for kwargs in (dict(name="Nonesuch"), dict(name="Rupak", tempo=0), dict(name="Rupak", cycles=0),
                    dict(name="Rupak", cycles=1.5)):
         with pytest.raises(ValueError):
-            f.tala(**kwargs)
+            sangeet.tala(**kwargs)
 
 
 # ---- listening
 @pytest.fixture(scope="module")
 def yaman_phrase():
-    r = f.raga("Yaman")
-    return f.melody(f"{r.aroha} {r.avaroha} {r.pakad}", tempo=150, sa=SA, tuning="just")
+    r = sangeet.raga("Yaman")
+    return sound.melody(f"{r.aroha} {r.avaroha} {r.pakad}", tempo=150, sa=SA, tuning="just")
 
 
 def test_tonic_over_a_drone():
     f.random_seed(4)
-    phrase = f.melody("S R G:2 R S:2 N, D, P,:2 S:3 G M P:2 M G R S:3", tempo=100, sa=SA, tuning="just")
+    phrase = sound.melody("S R G:2 R S:2 N, D, P,:2 S:3 G M P:2 M G R S:3", tempo=100, sa=SA, tuning="just")
     # The drone sits under the voice, as a tanpura does. (At the same volume as the phrase, the
     # pitch tracker hears the drone's Sa and Pa together as their common low Sa, D2: the right
     # swara, two octaves down. S-118 made the phrase's default quieter next to the drone.)
-    sound = f.mix(phrase, f.drone("D3", phrase.duration(), volume=0.3))
-    sa = sound.tonic()
+    song = sound.mix(phrase, sound.drone("D3", phrase.duration(), volume=0.3))
+    sa = song.tonic()
     assert sa is not None and abs(cents(sa, synth.note_to_frequency(SA))) < 30
 
 
 def test_tonic_of_silence_is_none():
-    assert f.create_sound([0.0] * RATE).tonic() is None
+    assert sound.create([0.0] * RATE).tonic() is None
 
 
 def test_swara_histogram_of_yaman(yaman_phrase):
     h = yaman_phrase.swara_histogram(SA)
     assert len(h) == 12 and sum(h) == pytest.approx(1)
-    on = sum(h[synth.SARGAM.index(s)] for s in f.raga("Yaman").swaras)
+    on = sum(h[synth.SARGAM.index(s)] for s in sangeet.raga("Yaman").swaras)
     # 0.92 here. The legato notes of S-118 overlap, and a moment with two notes sounding can be
     # heard as another swara (with the old separated notes it was 0.96).
     assert on > 0.9
     assert yaman_phrase.swara_histogram(synth.note_to_frequency(SA)) == h        # sa in hertz
-    assert f.create_sound([0.0] * RATE).swara_histogram(SA) == [0.0] * 12
+    assert sound.create([0.0] * RATE).swara_histogram(SA) == [0.0] * 12
     with pytest.raises(ValueError):
         yaman_phrase.swara_histogram("nonsense")
 
 
 def test_match_ranks_yaman_first(yaman_phrase):
-    ranked = f.match_ragas(yaman_phrase.swara_histogram(SA))
+    ranked = sangeet.match_ragas(yaman_phrase.swara_histogram(SA))
     assert ranked[0][0] == "Yaman"
-    assert len(ranked) == len(f.ragas())
+    assert len(ranked) == len(sangeet.ragas())
     assert all(0 <= score <= 1 for _, score in ranked)
     assert [s for _, s in ranked] == sorted((s for _, s in ranked), reverse=True)
 
 
 def test_match_ranks_bhupali_first_and_shows_the_limit():
-    r = f.raga("Bhupali")
-    h = f.melody(f"{r.aroha} {r.avaroha} {r.pakad}", tempo=150, sa=SA).swara_histogram(SA)
-    ranked = dict(f.match_ragas(h))
-    assert f.match_ragas(h)[0][0] == "Bhupali"
+    r = sangeet.raga("Bhupali")
+    h = sound.melody(f"{r.aroha} {r.avaroha} {r.pakad}", tempo=150, sa=SA).swara_histogram(SA)
+    ranked = dict(sangeet.match_ragas(h))
+    assert sangeet.match_ragas(h)[0][0] == "Bhupali"
     # Bhupali and Deshkar use the same five swaras: the scores are almost the same, which is the
     # documented limit of comparing note sets.
     assert ranked["Bhupali"] - ranked["Deshkar"] < 0.05
@@ -282,4 +285,4 @@ def test_match_ranks_bhupali_first_and_shows_the_limit():
 def test_match_errors():
     for bad in ([0.1] * 11, [0.0] * 12, [-1] + [0.1] * 11, "abc", None, [math.nan] * 12):
         with pytest.raises(ValueError):
-            f.match_ragas(bad)
+            sangeet.match_ragas(bad)

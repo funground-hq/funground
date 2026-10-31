@@ -12,9 +12,9 @@ How it works:
 - rebuild() makes one second of sound from the shape. For each of the 44,100 numbers, it works out
   where that moment falls in the shape and blends two neighbouring points. PITCH = 220 repeats a
   second is the note A3.
-- f.create_sound(numbers) turns the list into a sound, and sound.loop() plays it. The sketch removes
+- sound.create(numbers) turns the list into a sound, and wave_sound.loop() plays it. The sketch removes
   the average first, so the wave does not sit above zero.
-- f.draw_spectrum(sound, ...) draws the bars on the right.
+- sound.draw_spectrum(sound, ...) draws the bars on the right.
 - f.create_button() makes the four buttons. button.clicked() is true on the frame it is pressed,
   and preset() builds the shape.
 - f.begin_shape(), f.vertex() and f.end_shape() draw the shape, and the same shape again four times
@@ -32,6 +32,7 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
 N = 48                       # points across one period
 RATE = 44100
@@ -40,7 +41,7 @@ BX, BY, BW, BH = 20, 66, 300, 160          # the drawing box
 SX, SW = 340, 280                          # the spectrum box (same top and height)
 
 shape = [math.sin(2 * math.pi * i / N) for i in range(N)]     # heights from -1 (bottom) to 1 (top)
-sound = None
+wave_sound = None
 dirty = False                # the shape changed and the sound is out of date
 last = None                  # where the mouse was a moment ago, while drawing
 buttons = {}
@@ -66,7 +67,7 @@ def preset(name):
 
 def rebuild():
     """Make one second of sound by repeating the shape, and play it on a loop."""
-    global sound, dirty
+    global wave_sound, dirty
     dirty = False
     mean = sum(shape) / N                       # a wave that sits above zero would only push the speaker
     period = [v - mean for v in shape]
@@ -81,11 +82,11 @@ def rebuild():
         i = int(place)
         a, b = period[i], period[(i + 1) % N]
         numbers.append(a + (b - a) * (place - i))       # a line between two points
-    if sound:
-        sound.stop()
-    sound = f.create_sound(numbers)
-    sound.set_volume(0.8)
-    sound.loop()
+    if wave_sound:
+        wave_sound.stop()
+    wave_sound = sound.create(numbers)
+    wave_sound.set_volume(0.8)
+    wave_sound.loop()
 
 
 def paint(x, y):
@@ -172,7 +173,7 @@ def draw():
     f.fill("#1b2742")
     f.rect(SX, BY, SW, BH, 6)
     f.fill("orange")
-    f.draw_spectrum(sound, SX + 6, BY + 8, SW - 12, BH - 16, bands=48)
+    sound.draw_spectrum(wave_sound, SX + 6, BY + 8, SW - 12, BH - 16, bands=48)
 
     f.fill("#9fb4d8")
     f.text("one period (drag here)", BX, BY + BH + 6)

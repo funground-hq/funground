@@ -9,9 +9,9 @@ How it works:
   start of some groups (tali) and wave at the start of others (khali). Beat 1 is the sam, where
   the cycle begins and lands. A bol is the syllable a tabla player says for one beat, and the
   theka is the whole pattern of bols.
-- f.talas() lists the six talas. f.tala_info(name) gives .beats, .vibhag, .tali, .khali, .sam
+- sangeet.talas() lists the six talas. sangeet.tala_info(name) gives .beats, .vibhag, .tali, .khali, .sam
   and .bols.
-- f.tala(info.name, tempo=TEMPO) makes one cycle with simple drum sounds. choose() stops the old
+- sangeet.tala(info.name, tempo=TEMPO) makes one cycle with simple drum sounds. choose() stops the old
   cycle, makes a new one and loops it.
 - Each frame, cycle.current_time() divided by the length of a beat says which beat is playing.
 - Each bol sits at an angle on the circle, found with math.cos() and math.sin(). The beat that
@@ -30,9 +30,10 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sangeet
 
 TEMPO = 80
-NAMES = f.talas()
+NAMES = sangeet.talas()
 info = None
 cycle = None
 
@@ -41,8 +42,8 @@ def choose(index):
     global info, cycle
     if cycle:
         cycle.stop()
-    info = f.tala_info(NAMES[index])
-    cycle = f.tala(info.name, tempo=TEMPO)
+    info = sangeet.tala_info(NAMES[index])
+    cycle = sangeet.tala(info.name, tempo=TEMPO)
     cycle.loop()
 
 
