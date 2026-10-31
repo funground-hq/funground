@@ -88,6 +88,14 @@ show()
 - **In the browser** (the Play page, or beside github.dev) the same code runs unchanged. Files from `f.save()`
   stay inside the page; `input()`, MP4 export and choosing a microphone by name work on a computer only.
 
+## Libraries
+
+Sound and the music of India are libraries, not names on `f`. Sound needs `from funground import sound`; music of
+India needs `from funground import sangeet`. Then write `sound.note("C4", 1).play()` or
+`sangeet.tala("Teentaal")`. The 0.1 spellings on `f` do not exist now: the error says what to write.
+Two names lost a word on the way: `create_sound` is now `sound.create`, and `load_sound` is now `sound.load`.
+The reference has a section for each library.
+
 ## Versions
 
 A name with "Since 0.2." under it in the reference needs funground 0.2 or newer. A person with an older funground

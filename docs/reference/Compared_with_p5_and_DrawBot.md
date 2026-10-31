@@ -164,11 +164,11 @@ unless a row says Processing.
 
 | | funground | p5 | DrawBot |
 |---|---|---|---|
-| Sound playback | In the core: `f.load_sound` (WAV, OGG, MP3) | The p5.sound add-on; Processing has its official Sound library | No |
+| Sound playback | In the core: `sound.load` (WAV, OGG, MP3) | The p5.sound add-on; Processing has its official Sound library | No |
 | Making sound | `tone`, `note`, `pluck`, `melody`, `drone`, `mix`, `sequence`, `reverb`, all computed in Python before playing. No live oscillator (row A3) | p5.sound has live oscillators and envelopes | No |
 | Sound analysis | `level`, `spectrum`, `pitch`, `onsets`, `tempo`, `chord`, `key` on a sound or a microphone (rows A2, A5, A6) | Amplitude and FFT in p5.sound | No |
-| Microphone | `f.microphone()` gives level, spectrum, pitch and `capture(seconds)` (row A4) | `p5.AudioIn` in p5.sound | No |
-| Indian ragas and talas | A small cited table of 13 ragas and 6 talas. `f.raga`, `f.tala`, `f.drone`, sargam in `melody`, `match_ragas` (row A8) | No, as far as we know | No |
+| Microphone | `sound.microphone()` gives level, spectrum, pitch and `capture(seconds)` (row A4) | `p5.AudioIn` in p5.sound | No |
+| Indian ragas and talas | A small cited table of 13 ragas and 6 talas. `sangeet.raga`, `sangeet.tala`, `sound.drone`, sargam in `melody`, `match_ragas` (row A8) | No, as far as we know | No |
 | Draw the sound | `draw_wave`, `draw_spectrum`, `spectrogram`, `draw_pitch_line` (row A7) | You draw it yourself from the analysis | No |
 
 ### Controls, sharing and teaching

@@ -1,7 +1,7 @@
 """Sound playback and analysis (S-098, S-099; contract A1, A2; D-046).
 
 WAV files are made here with the `wave` module. Time is driven by replacing
-`funground.sound.clock`, so nothing sleeps and every number is exact.
+`funground.sound._engine.clock`, so nothing sleeps and every number is exact.
 """
 from __future__ import annotations
 
@@ -15,7 +15,9 @@ from pathlib import Path
 import pytest
 
 import funground as f
-from funground import api, sound as sound_module
+from funground import sound
+from funground import api
+from funground.sound import _engine as sound_module
 
 RATE = 44100
 
@@ -62,12 +64,12 @@ def tone(tmp_path):
 
 # ---- loading and the files it finds (A1)
 def test_load_sound_reports_duration(tone):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     assert s.duration() == pytest.approx(2.0, abs=0.01)
 
 
 def test_stereo_file_loads(tmp_path):
-    s = f.load_sound(str(write_wav(tmp_path / "st.wav", 0.5, 440.0, channels=2)))
+    s = sound.load(str(write_wav(tmp_path / "st.wav", 0.5, 440.0, channels=2)))
     assert s.duration() == pytest.approx(0.5, abs=0.01)
 
 
@@ -79,14 +81,14 @@ def test_file_found_next_to_the_sketch(tmp_path, monkeypatch):
     elsewhere.mkdir()
     monkeypatch.chdir(elsewhere)
     namespace = {"__file__": str(folder / "sketch.py")}
-    exec(compile("import funground as f\nsnd = f.load_sound('beep.wav')", "sketch.py", "exec"), namespace)
+    exec(compile("import funground as f\nfrom funground import sound\nsnd = sound.load('beep.wav')", "sketch.py", "exec"), namespace)
     assert namespace["snd"].duration() == pytest.approx(0.5, abs=0.01)
 
 
 def test_file_found_in_the_current_folder(tmp_path, monkeypatch):
     write_wav(tmp_path / "here.wav", 0.25)
     monkeypatch.chdir(tmp_path)
-    assert f.load_sound("here.wav").duration() == pytest.approx(0.25, abs=0.01)
+    assert sound.load("here.wav").duration() == pytest.approx(0.25, abs=0.01)
 
 
 def test_missing_file_names_both_places(tmp_path, monkeypatch):
@@ -95,7 +97,7 @@ def test_missing_file_names_both_places(tmp_path, monkeypatch):
     folder.mkdir()
     namespace = {"__file__": str(folder / "sketch.py")}
     with pytest.raises(FileNotFoundError) as info:
-        exec(compile("import funground as f\nf.load_sound('nope.wav')", "sketch.py", "exec"), namespace)
+        exec(compile("import funground as f\nfrom funground import sound\nsound.load('nope.wav')", "sketch.py", "exec"), namespace)
     message = str(info.value)
     assert str(folder / "nope.wav") in message and str(tmp_path / "nope.wav") in message
 
@@ -104,12 +106,12 @@ def test_not_a_sound_is_a_value_error(tmp_path):
     bad = tmp_path / "bad.wav"
     bad.write_bytes(b"this is not a sound file at all")
     with pytest.raises(ValueError, match="not a sound"):
-        f.load_sound(str(bad))
+        sound.load(str(bad))
 
 
 # ---- playback state (A1)
 def test_play_pause_stop_and_is_playing(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     assert not s.is_playing()
     s.play()
     assert s.is_playing()
@@ -132,7 +134,7 @@ def test_play_pause_stop_and_is_playing(tone, clock):
 
 
 def test_play_again_while_playing_starts_again(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.play()
     clock.advance(1.0)
     s.play()
@@ -142,7 +144,7 @@ def test_play_again_while_playing_starts_again(tone, clock):
 
 
 def test_pause_when_not_playing_does_nothing(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.pause()
     assert not s.is_playing() and s.current_time() == 0.0
     s.play()
@@ -153,7 +155,7 @@ def test_pause_when_not_playing_does_nothing(tone, clock):
 
 
 def test_is_playing_turns_false_at_the_end(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.play()
     clock.advance(1.9)
     assert s.is_playing()
@@ -165,7 +167,7 @@ def test_is_playing_turns_false_at_the_end(tone, clock):
 
 
 def test_loop_wraps_and_keeps_playing(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.loop()
     clock.advance(2.5)
     assert s.is_playing()
@@ -177,7 +179,7 @@ def test_loop_wraps_and_keeps_playing(tone, clock):
 
 
 def test_play_after_loop_does_not_loop(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.loop()
     s.play()
     clock.advance(2.5)
@@ -185,7 +187,7 @@ def test_play_after_loop_does_not_loop(tone, clock):
 
 
 def test_loop_resumes_after_pause(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.loop()
     clock.advance(1.0)
     s.pause()
@@ -197,7 +199,7 @@ def test_loop_resumes_after_pause(tone, clock):
 
 
 def test_several_sounds_play_together(tone, tmp_path, clock):
-    a, b = f.load_sound(str(tone)), f.load_sound(str(write_wav(tmp_path / "b.wav", 1.0, 880.0)))
+    a, b = sound.load(str(tone)), sound.load(str(write_wav(tmp_path / "b.wav", 1.0, 880.0)))
     a.play()
     b.play()
     clock.advance(1.5)
@@ -205,7 +207,7 @@ def test_several_sounds_play_together(tone, tmp_path, clock):
 
 
 def test_set_volume(tone):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     assert s.get_volume() == 1.0
     s.set_volume(0.25)
     assert s.get_volume() == 0.25
@@ -219,7 +221,7 @@ def test_set_volume(tone):
 
 # ---- analysis (A2)
 def test_level_and_spectrum_are_zero_when_not_playing(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     assert s.level() == 0.0
     assert s.spectrum() == [0.0] * 32
     assert s.spectrum(7) == [0.0] * 7
@@ -230,7 +232,7 @@ def test_level_and_spectrum_are_zero_when_not_playing(tone, clock):
 
 
 def test_silent_sound_has_level_zero(tmp_path, clock):
-    s = f.load_sound(str(write_wav(tmp_path / "quiet.wav", 1.0, None)))
+    s = sound.load(str(write_wav(tmp_path / "quiet.wav", 1.0, None)))
     s.play()
     clock.advance(0.5)
     assert s.level() == 0.0
@@ -238,21 +240,21 @@ def test_silent_sound_has_level_zero(tmp_path, clock):
 
 
 def test_full_scale_tone_has_level_of_about_0_707(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.play()
     clock.advance(0.5)
     assert s.level() == pytest.approx(0.707, abs=0.01)
 
 
 def test_half_scale_tone_is_half_as_loud(tmp_path, clock):
-    s = f.load_sound(str(write_wav(tmp_path / "half.wav", 1.0, 440.0, amplitude=0.5)))
+    s = sound.load(str(write_wav(tmp_path / "half.wav", 1.0, 440.0, amplitude=0.5)))
     s.play()
     clock.advance(0.5)
     assert s.level() == pytest.approx(0.354, abs=0.01)
 
 
 def test_stereo_is_mixed_to_mono(tmp_path, clock):
-    s = f.load_sound(str(write_wav(tmp_path / "st.wav", 1.0, 440.0, channels=2)))
+    s = sound.load(str(write_wav(tmp_path / "st.wav", 1.0, 440.0, channels=2)))
     s.play()
     clock.advance(0.5)
     assert s.level() == pytest.approx(0.707, abs=0.01)
@@ -267,7 +269,7 @@ def test_level_follows_the_position(tmp_path, clock):
         w.setframerate(RATE)
         loud = b"".join(struct.pack("<h", int(32767 * math.sin(2 * math.pi * 440 * i / RATE))) for i in range(RATE))
         w.writeframes(loud + b"\x00\x00" * RATE)
-    s = f.load_sound(str(path))
+    s = sound.load(str(path))
     s.play()
     clock.advance(0.5)
     assert s.level() > 0.6
@@ -281,7 +283,7 @@ def band_of(hz: float, bands: int) -> int:
 
 
 def test_spectrum_length_and_range(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.play()
     clock.advance(0.5)
     for bands in (1, 2, 8, 32, 100, 256):
@@ -292,7 +294,7 @@ def test_spectrum_length_and_range(tone, clock):
 
 
 def test_spectrum_bands_must_be_1_to_256(tone):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     for bad in (0, -1, 257, 2.5, "8", None):
         with pytest.raises(ValueError):
             s.spectrum(bad)
@@ -300,7 +302,7 @@ def test_spectrum_bands_must_be_1_to_256(tone):
 
 @pytest.mark.parametrize("bands", [8, 16])
 def test_440_hz_peaks_in_its_band(tone, clock, bands):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.play()
     clock.advance(0.5)
     values = s.spectrum(bands)
@@ -310,8 +312,8 @@ def test_440_hz_peaks_in_its_band(tone, clock, bands):
 
 
 def test_4_khz_peaks_higher_than_440_hz(tmp_path, clock):
-    low = f.load_sound(str(write_wav(tmp_path / "low.wav", 1.0, 440.0)))
-    high = f.load_sound(str(write_wav(tmp_path / "high.wav", 1.0, 4000.0)))
+    low = sound.load(str(write_wav(tmp_path / "low.wav", 1.0, 440.0)))
+    high = sound.load(str(write_wav(tmp_path / "high.wav", 1.0, 4000.0)))
     for s in (low, high):
         s.play()
     clock.advance(0.5)
@@ -322,14 +324,14 @@ def test_4_khz_peaks_higher_than_440_hz(tmp_path, clock):
 
 
 def test_quiet_tone_gives_a_smaller_spectrum(tmp_path, clock):
-    s = f.load_sound(str(write_wav(tmp_path / "q.wav", 1.0, 440.0, amplitude=0.25)))
+    s = sound.load(str(write_wav(tmp_path / "q.wav", 1.0, 440.0, amplitude=0.25)))
     s.play()
     clock.advance(0.5)
     assert max(s.spectrum(8)) == pytest.approx(0.25, abs=0.06)
 
 
 def test_analysis_at_the_very_start_does_not_fail(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.play()
     assert s.level() == 0.0                                  # nothing before the start yet
     s.spectrum()
@@ -339,7 +341,7 @@ def test_analysis_at_the_very_start_does_not_fail(tone, clock):
 
 
 def test_analysis_of_a_very_short_looping_sound(tmp_path, clock):
-    s = f.load_sound(str(write_wav(tmp_path / "tiny.wav", 0.01, 440.0)))
+    s = sound.load(str(write_wav(tmp_path / "tiny.wav", 0.01, 440.0)))
     s.loop()
     clock.advance(0.5)
     s.level()
@@ -347,7 +349,7 @@ def test_analysis_of_a_very_short_looping_sound(tmp_path, clock):
 
 
 def test_analysis_is_cached_once_per_frame(tone, clock, monkeypatch):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     sketch = api.active_sketch()
     s.play()
     clock.advance(0.5)
@@ -369,7 +371,7 @@ def test_analysis_is_cached_once_per_frame(tone, clock, monkeypatch):
 
 
 def test_spectrum_time_is_small(tone, clock):
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.play()
     clock.advance(0.5)
     sketch = api.active_sketch()
@@ -386,7 +388,7 @@ def test_spectrum_time_is_small(tone, clock):
 # ---- devices and headless (A1)
 def test_headless_sound_plays_silently_and_keeps_time(tone, clock, monkeypatch):
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     assert s._silent
     s.play()
     clock.advance(0.5)
@@ -413,7 +415,7 @@ def test_no_device_falls_back_to_a_silent_sound(tone, clock, monkeypatch):
 
     pygame.mixer.quit()
     monkeypatch.setattr(pygame.mixer, "init", fake_init)
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     assert s._silent and not sound_module._audible
     assert attempts[-1] == "dummy"
     s.play()
@@ -426,7 +428,7 @@ def test_no_device_falls_back_to_a_silent_sound(tone, clock, monkeypatch):
 def test_device_calls_when_audible(tone, clock, monkeypatch):
     """With a device the real mixer sound is played, paused, resumed and stopped."""
     monkeypatch.delenv("FUNGROUND_HEADLESS", raising=False)
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s._silent = False
     log = []
 
@@ -475,7 +477,7 @@ def test_sound_adds_nothing_to_the_ir_or_pixels(tone, clock):
     f.background("white")
     before_ops = list(sketch.frame.ops)
     before_pixels = bytes(sketch._renderer.pixels().data)
-    s = f.load_sound(str(tone))
+    s = sound.load(str(tone))
     s.play()
     clock.advance(0.5)
     s.level()
@@ -493,7 +495,8 @@ def test_works_in_an_animated_sketch(tone, tmp_path):
     sketch = tmp_path / "s.py"
     sketch.write_text(
         "import funground as f\n"
-        f"snd = f.load_sound({str(tone)!r})\n"
+        "from funground import sound\n"
+        f"snd = sound.load({str(tone)!r})\n"
         "def setup():\n    f.size(60, 40)\n    snd.loop()\n"
         "def draw():\n    f.background('white')\n    f.rect(0, 0, 10 + 30 * snd.level(), 10)\n"
         "f.run()\n",

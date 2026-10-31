@@ -5,49 +5,51 @@ way down) play over a drone, and each swara lights up as it sounds. The text giv
 vadi, samvadi, pakad and time of day, and the three ragas with the most similar swaras.
 
 How it works:
-- f.ragas() lists the names funground knows. f.raga(name) gives one raga, with .thaat, .swaras,
+- sangeet.ragas() lists the names funground knows. sangeet.raga(name) gives one raga, with .thaat, .swaras,
   .aroha, .avaroha, .vadi, .samvadi, .time and .pakad.
-- f.drone() makes a steady background note, and f.melody() turns a string of swara names into a
+- sound.drone() makes a steady background note, and sound.melody() turns a string of swara names into a
   tune. Sa is the home note and "-" is a rest.
 - The tune and the drone each use .reverb() and .loop(). The room() helper adds the echo's tail
   back onto the start, so the loop has no gap.
 - Every frame, tune.current_time() divided by the length of a beat says which swara is sounding.
   That one is drawn in gold.
 - f.create_slider() picks the raga, and choose() builds a new tune when the slider moves.
-- f.match_ragas() takes how often each of the 12 swaras is used. It gives back the ragas whose
+- sangeet.match_ragas() takes how often each of the 12 swaras is used. It gives back the ragas whose
   swaras are most alike, best first.
 
 Make it yours:
 - Change SA from "C#4" to another note, such as "D4". The whole tune and its lights move to that
   key.
 - Change TEMPO to make the tune slower or faster.
-- Change tuning="just" to tuning="equal" in f.melody() and listen for the small differences.
+- Change tuning="just" to tuning="equal" in sound.melody() and listen for the small differences.
 - Play the pakad instead: build the tune from raga.pakad.split() instead of the aroha and avaroha.
 - Change the background colour to fit raga.time, for example a dark blue for night ragas and a warm
   one for morning.
 """
 # gallery: time-dependent
 import funground as f
+from funground import sound
+from funground import sangeet
 
 SA = "C#4"
 TEMPO = 100
 BEAT = 60 / TEMPO
 SWARAS = "S r R g G m M P d D n N".split()
-NAMES = f.ragas()
+NAMES = sangeet.ragas()
 
 
-def room(sound, amount):
-    """sound.reverb(amount), with the echo that runs past the end added back onto the start,
+def room(clip, amount):
+    """clip.reverb(amount), with the echo that runs past the end added back onto the start,
     so the sound still loops with no gap."""
-    length = len(sound.samples())
-    wet = sound.reverb(amount).samples()
+    length = len(clip.samples())
+    wet = clip.reverb(amount).samples()
     looped = wet[:length]
     for i, value in enumerate(wet[length:]):
         looped[i % length] += value
-    return f.create_sound(looped)
+    return sound.create(looped)
 
 
-drone = room(f.drone("C#3", 7), 0.4)      # reverb on the drone, and it still loops with no gap
+drone = room(sound.drone("C#3", 7), 0.4)      # reverb on the drone, and it still loops with no gap
 drone.set_volume(0.6)                     # under the tune, as a tanpura sits under a singer
 raga = None
 tune = None
@@ -60,9 +62,9 @@ def choose(index):
     global raga, tune, tokens, alike
     if tune:
         tune.stop()
-    raga = f.raga(NAMES[index])
+    raga = sangeet.raga(NAMES[index])
     tokens = raga.aroha.split() + ["-"] + raga.avaroha.split() + ["-", "-"]
-    tune = f.melody(" ".join(tokens), tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
+    tune = sound.melody(" ".join(tokens), tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
     tune.set_volume(0.8)
     tune.loop()
     # how often each of the 12 swaras is in the tune, to compare with every raga
@@ -70,7 +72,7 @@ def choose(index):
     for token in tokens:
         if token != "-":
             counts[SWARAS.index(token.rstrip("',"))] += 1
-    alike = f.match_ragas(counts)[:3]
+    alike = sangeet.match_ragas(counts)[:3]
 
 
 def setup():

@@ -16,7 +16,7 @@ How it works:
   f.polygon() and with paths joined by | and -.
 - A layer cannot be read back, so the sketch keeps its own list of sample points inside each symbol.
   A point is cleared when a scratch passes close to it (f.distance()). At 60% cleared, the symbol is found.
-- f.pluck() makes the chime, and sound.play() plays it. Three notes rise as you find them. f.melody()
+- sound.pluck() makes the chime, and the sound's play() plays it. Three notes rise as you find them. sound.melody()
   plays a little tune for a win.
 - f.mouse_x, f.mouse_y and f.is_mouse_pressed give the scratch. f.key reads N in key_pressed().
 
@@ -30,6 +30,7 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
 W, H = 640, 440
 CARD = (50, 90, 540, 250)                  # x, y, width, height of the card
@@ -43,9 +44,9 @@ COLOURS = {"star": (255, 190, 40), "heart": (230, 60, 90), "moon": (90, 120, 230
 DEMO_FRAMES = 30                           # the card scratches itself a little, to show how
 
 # Sounds made from numbers, soft and quiet.
-CHIMES = [f.pluck("C5", 0.7, volume=0.4), f.pluck("E5", 0.7, volume=0.4), f.pluck("G5", 0.7, volume=0.4)]
-win_tune = f.melody("C5 E5 G5 C6:2", tempo=200, volume=0.35)
-miss_sound = f.pluck("D4", 0.8, volume=0.3)
+CHIMES = [sound.pluck("C5", 0.7, volume=0.4), sound.pluck("E5", 0.7, volume=0.4), sound.pluck("G5", 0.7, volume=0.4)]
+win_tune = sound.melody("C5 E5 G5 C6:2", tempo=200, volume=0.35)
+miss_sound = sound.pluck("D4", 0.8, volume=0.3)
 
 card_number = 1
 symbols = []                               # one name for each hiding place
@@ -55,10 +56,10 @@ last = None                                # where the last scratch stamp was, o
 touched = False                            # has the player used the mouse on this card?
 
 
-def play(sound):
+def play(sound_to_play):
     """Play a sound. With no sound device this does nothing, so the game never stops."""
     try:
-        sound.play()
+        sound_to_play.play()
     except Exception:
         pass
 

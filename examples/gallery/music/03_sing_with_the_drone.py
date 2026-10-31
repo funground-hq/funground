@@ -6,7 +6,7 @@ microphone, the drone still plays and the line waits.
 
 How it works:
 - Sa is the home note of Indian music, and the drone holds it. SA = "D3" is a comfortable Sa for
-  many voices. f.drone(SA, 7) makes a sound like a tanpura: plucked strings that play Pa, Sa, Sa,
+  many voices. sound.drone(SA, 7) makes a sound like a tanpura: plucked strings that play Pa, Sa, Sa,
   Sa and ring on. Pa is the fifth note above Sa.
 - Reverb makes the strings warmer, but it adds a tail, and the loop would pause. room() folds the
   tail back onto the start, so the loop has no gap.
@@ -14,16 +14,16 @@ How it works:
   above Sa: 100 cents is one semitone, so Pa is 700 and the next Sa up is 1200.
 - GUIDES holds the lines to sing to. y_for() turns cents into a height on the screen.
 - line keeps the last 280 readings. A None is a gap, where the line breaks.
-- f.frequency_to_note(hz, sa=SA) names the swara you sing, for example "P" or "G".
+- sound.frequency_to_note(hz, sa=SA) names the swara you sing, for example "P" or "G".
   The small bar at the top right shows how loud the microphone hears you, in decibels (loudness()),
   so you can see it hears you even if your microphone is quiet.
 
 Make it yours:
 - Change SA to "C3" or "A3" to suit your voice. The lines move with it.
 - Add a guide line for Ga, the third swara. Add (400, "G", "tomato") to GUIDES.
-- Change the drone for a raga without Pa. Use f.drone(SA, 7, pattern="m S' S' S"), with Ma on the
+- Change the drone for a raga without Pa. Use sound.drone(SA, 7, pattern="m S' S' S"), with Ma on the
   first string.
-- Change 0.4 in room(f.drone(...), 0.4) to 0 for a dry drone, or to 0.7 for a big room.
+- Change 0.4 in room(sound.drone(...), 0.4) to 0 for a dry drone, or to 0.7 for a big room.
 - Change the pink line's colour and f.stroke_width(). Change the -70 and 50 in loudness() if the
   bar moves too much or too little.
 """
@@ -31,26 +31,27 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
 SA = "D3"                                  # a comfortable Sa for many voices; try "C3" or "A3"
-SA_HZ = f.note_to_frequency(SA)
+SA_HZ = sound.note_to_frequency(SA)
 
 
-def room(sound, amount):
-    """sound.reverb(amount), with the echo that runs past the end added back onto the start,
+def room(clip, amount):
+    """clip.reverb(amount), with the echo that runs past the end added back onto the start,
     so the sound still loops with no gap."""
-    length = len(sound.samples())
-    wet = sound.reverb(amount).samples()
+    length = len(clip.samples())
+    wet = clip.reverb(amount).samples()
     looped = wet[:length]
     for i, value in enumerate(wet[length:]):
         looped[i % length] += value
-    return f.create_sound(looped)
+    return sound.create(looped)
 
 
 # Two rounds of the strings. A drone loops without a gap; room() keeps it that way with reverb,
 # which makes the strings sound warmer and fuller.
-drone = room(f.drone(SA, 7), 0.4)
-mic = f.microphone()
+drone = room(sound.drone(SA, 7), 0.4)
+mic = sound.microphone()
 line = []                                  # cents above Sa for each frame, or None when quiet
 
 # The lines to sing to: (cents above Sa, swara, colour)
@@ -104,7 +105,7 @@ def draw():
 
     f.no_stroke()
     f.fill("white")
-    sung = f.frequency_to_note(hz, sa=SA) if hz else "-"
+    sung = sound.frequency_to_note(hz, sa=SA) if hz else "-"
     f.text(f"Sa is {SA}.   You sing: {sung}", 40, 25)
 
     # the microphone light: it moves whenever the microphone hears anything

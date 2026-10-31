@@ -92,6 +92,14 @@ show()
 - **In the browser** (the Play page, or beside github.dev) the same code runs unchanged. Files from `f.save()`
   stay inside the page; `input()`, MP4 export and choosing a microphone by name work on a computer only.
 
+### Libraries
+
+Sound and the music of India are libraries, not names on `f`. Sound needs `from funground import sound`; music of
+India needs `from funground import sangeet`. Then write `sound.note("C4", 1).play()` or
+`sangeet.tala("Teentaal")`. The 0.1 spellings on `f` do not exist now: the error says what to write.
+Two names lost a word on the way: `create_sound` is now `sound.create`, and `load_sound` is now `sound.load`.
+The reference has a section for each library.
+
 ### Versions
 
 A name with "Since 0.2." under it in the reference needs funground 0.2 or newer. A person with an older funground
@@ -102,6 +110,26 @@ A name with "Since 0.2." under it in the reference needs funground 0.2 or newer.
 
 Look the name up in the API reference (it lists every public name, its arguments and an example) and the
 comparison with p5 and DrawBot. Do not invent a function: if a name is not in the reference, it does not exist.
+
+## Libraries
+
+### The sound library
+
+`from funground import sound`. Tones, notes, sound files, the microphone and drawings of sound. New in 0.2 as a library; in 0.1 these were on `f`.
+
+Names: `sound.load`, `sound.create`, `sound.tone`, `sound.note`, `sound.pluck`, `sound.melody`, `sound.sequence`, `sound.mix`, `sound.drone`, `sound.note_to_frequency`, `sound.frequency_to_note`, `sound.chord_notes`, `sound.microphone`, `sound.microphones`, `sound.draw_wave`, `sound.draw_spectrum`, `sound.spectrogram`, `sound.draw_pitch_line`.
+
+Renamed: `f.create_sound` is `sound.create`, `f.load_sound` is `sound.load`.
+
+[Reference](https://github.com/funground-hq/funground/blob/main/docs/reference/API.md#the-sound-library)
+
+### The sangeet library
+
+`from funground import sangeet`. Ragas and talas of Hindustani music. New in 0.2 as a library; in 0.1 these were on `f`.
+
+Names: `sangeet.ragas`, `sangeet.raga`, `sangeet.talas`, `sangeet.tala_info`, `sangeet.tala`, `sangeet.match_ragas`.
+
+[Reference](https://github.com/funground-hq/funground/blob/main/docs/reference/API.md#the-sangeet-library)
 
 ## Docs
 

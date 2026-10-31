@@ -8,15 +8,15 @@ that the sound itself gives, on top.
 How it works:
 - MELODY is text. parse() reads it with a regular expression into notes: the token, the start
   beat, how many beats, and the pitches. A - is a rest, [ ] is a chord, and :2 is two beats.
-- pitch_number() uses f.note_to_frequency() to turn a note name into a semitone number, where 69 is
+- pitch_number() uses sound.note_to_frequency() to turn a note name into a semitone number, where 69 is
   A4. The roll's top and bottom come from the lowest and highest note.
-- The same MELODY goes to f.melody() to make the sound, so the roll and the sound always agree.
+- The same MELODY goes to sound.melody() to make the sound, so the roll and the sound always agree.
   That works because the notes were written in code. A roll from a recording would need machine
   learning.
 - now = tune.current_time() is the clock. Each bar's x is HEAD + (start * BEAT - now) * PPS, so the
   bars slide left past the line at HEAD. The bars are drawn twice, so the start of the next time
   round is in view.
-- f.create_checkbox() makes the box. When it is ticked, f.draw_pitch_line(tune, ...) draws the one
+- f.create_checkbox() makes the box. When it is ticked, sound.draw_pitch_line(tune, ...) draws the one
   note that tune.pitch() hears. A chord has no single pitch, so it leaves a gap.
 
 Make it yours:
@@ -31,6 +31,7 @@ import math
 import re
 
 import funground as f
+from funground import sound
 
 MELODY = ("E4 G4 C5:2 B4 G4 E4:2 - F4 A4 D5:2 C5 A4 F4:2 - "
           "G4:0.5 A4:0.5 B4 C5 D5 E5:2 D5:0.5 C5:0.5 B4 G4 [C4 E4 G4 C5]:4 -:2")
@@ -60,8 +61,8 @@ def parse(text):
 
 
 def pitch_number(name):
-    """A note name as a number of semitones, from f.note_to_frequency(): 69 is A4 (440 Hz)."""
-    return round(69 + 12 * math.log2(f.note_to_frequency(name) / 440))
+    """A note name as a number of semitones, from sound.note_to_frequency(): 69 is A4 (440 Hz)."""
+    return round(69 + 12 * math.log2(sound.note_to_frequency(name) / 440))
 
 
 notes, total_beats = parse(MELODY)
@@ -70,7 +71,7 @@ LOW, HIGH = min(ALL), max(ALL)
 ROWS = HIGH - LOW + 1
 ROW = 238 / ROWS                 # height of one row
 LENGTH = total_beats * BEAT      # seconds in one time round
-tune = f.melody(MELODY, tempo=TEMPO).reverb(0.2)
+tune = sound.melody(MELODY, tempo=TEMPO).reverb(0.2)
 tune.set_volume(0.8)
 
 
@@ -145,12 +146,12 @@ def draw():
         if ROLL_X <= gx <= ROLL_X + ROLL_W and beat % 4 == 0:
             f.line(gx, ROLL_Y, gx, ROLL_Y + ROWS * ROW)
 
-    # the pitch that sound.pitch() hears, over the past, which sits left of the playhead
+    # the pitch that pitch() hears, over the past, which sits left of the playhead
     if heard_box.checked():
         f.no_fill()
         f.stroke("#ff6ec7")
         f.stroke_width(3)
-        f.draw_pitch_line(tune, ROLL_X, ROLL_Y + ROW / 2, HEAD - ROLL_X, (ROWS - 1) * ROW,
+        sound.draw_pitch_line(tune, ROLL_X, ROLL_Y + ROW / 2, HEAD - ROLL_X, (ROWS - 1) * ROW,
                           seconds=(HEAD - ROLL_X) / PPS, low=note_name(LOW), high=note_name(HIGH))
 
     # the playhead

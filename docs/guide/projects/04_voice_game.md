@@ -51,16 +51,17 @@ bird_y += (target - bird_y) * 0.14
 The bird. `mic.level()` is how loud the sound is, from 0 to 1. Laptop microphones can be very
 quiet: a voice may only read 0.01. So the code turns the level into decibels, which show small
 sounds as clearly as big ones, and the bird's height comes from that. Loud should mean up. The bird moves a part of the way each frame, so it glides and does not
-jump. The space bar adds a hop. A computer with no microphone gives an error from `f.microphone()`,
+jump. The space bar adds a hop. A computer with no microphone gives an error from `sound.microphone()`,
 so the sketch catches it and carries on with the keyboard.
 
 ```python
 import math
 
 import funground as f
+from funground import sound
 
 try:
-    mic = f.microphone()
+    mic = sound.microphone()
 except RuntimeError:                  # no microphone on this computer
     mic = None
 bird_y = 300.0
@@ -171,9 +172,9 @@ touching = math.hypot(BIRD_X - near_x, bird_y - near_y) < BIRD_R
 Quiet is nicer, so give each a `volume`.
 
 ```py
-sound_point = f.note("G5", 0.18, volume=0.35)          # a short bright note for a point
-sound_crash = f.tone(120, 0.45, wave="triangle", volume=0.45, release=0.3)   # a low thud
-sound_start = f.pluck("C5", 0.5, volume=0.4)           # a plucked string to begin
+sound_point = sound.note("G5", 0.18, volume=0.35)          # a short bright note for a point
+sound_crash = sound.tone(120, 0.45, wave="triangle", volume=0.45, release=0.3)   # a low thud
+sound_start = sound.pluck("C5", 0.5, volume=0.4)           # a plucked string to begin
 
 sound_point.play()
 ```
@@ -184,16 +185,17 @@ Here is the game in short: gates, a crash, a score, a best score and a space bar
 import math
 
 import funground as f
+from funground import sound
 
 W, H = 480, 360
 BIRD_X, BIRD_R, GATE_W, GAP = 100, 14, 56, 130
 
 try:
-    mic = f.microphone()
+    mic = sound.microphone()
 except RuntimeError:
     mic = None
-sound_point = f.note("G5", 0.18, volume=0.35)
-sound_crash = f.tone(120, 0.45, wave="triangle", volume=0.45, release=0.3)
+sound_point = sound.note("G5", 0.18, volume=0.35)
+sound_crash = sound.tone(120, 0.45, wave="triangle", volume=0.45, release=0.3)
 
 bird_y, hop, score, best = 200.0, 0.0, 0, 0
 playing = False

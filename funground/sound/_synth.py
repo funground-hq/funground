@@ -1,7 +1,7 @@
 """Making sound from numbers (S-110, S-118; contracts A3 and A9; D-055, D-056, D-064; ADR-006).
 
 This module is plain Python (``math`` and ``random`` only) and does not touch the sound device. It
-computes lists of samples: numbers from -1 to 1 at 44 100 a second. ``sound.py`` turns a list into a
+computes lists of samples: numbers from -1 to 1 at 44 100 a second. ``_engine.py`` turns a list into a
 playable sound.
 
 Everything here is computed before it plays. Square, saw, triangle and soft waves are built from their
@@ -89,7 +89,7 @@ def _swara(token: str, who: str) -> tuple[int, int]:
     return SARGAM.index(m.group(1)), octave
 
 
-def note_to_frequency(name: str, sa: str | None = None, who: str = "f.note_to_frequency()") -> float:
+def note_to_frequency(name: str, sa: str | None = None, who: str = "sound.note_to_frequency()") -> float:
     """Frequency in hertz of a note name ("A4" is 440), or, with *sa*, of a swara above that Sa."""
     if sa is None:
         return _midi_to_hz(_midi(name, who))
@@ -100,7 +100,7 @@ def note_to_frequency(name: str, sa: str | None = None, who: str = "f.note_to_fr
 
 def frequency_to_note(hz: float, sa: str | None = None) -> str:
     """The name of the nearest note ("A4"), or, with *sa*, of the nearest swara ("G'")."""
-    who = "f.frequency_to_note()"
+    who = "sound.frequency_to_note()"
     if isinstance(hz, bool) or not isinstance(hz, (int, float)) or not math.isfinite(hz) or hz <= 0:
         raise ValueError(f"{who}: the frequency must be a number above 0, not {hz!r}")
     if sa is None:
@@ -291,9 +291,9 @@ def tone_samples(frequency: float, seconds: float, wave: str = "sine", volume: f
 
 
 def tone(frequency, seconds, wave="sine", volume=DEFAULT_VOLUME, attack=DEFAULT_ATTACK,
-         release=DEFAULT_RELEASE, rng=None, who: str = "f.tone()", decay=DEFAULT_DECAY,
+         release=DEFAULT_RELEASE, rng=None, who: str = "sound.tone()", decay=DEFAULT_DECAY,
          sustain=DEFAULT_SUSTAIN) -> list[float]:
-    """Check the arguments of f.tone(), then make the samples."""
+    """Check the arguments of sound.tone(), then make the samples."""
     frequency = _number(frequency, who, "the frequency", 0, low_open=True)
     if frequency >= RATE / 2:
         raise ValueError(f"{who}: the frequency must be below {RATE // 2} Hz, not {frequency!r}")
@@ -319,7 +319,7 @@ def soft_burst(ring: int, rng, passes: int) -> list[float]:
     return [(v - mean) / peak for v in burst]
 
 
-def pluck(frequency, seconds, volume=DEFAULT_VOLUME, rng=None, who: str = "f.pluck()") -> list[float]:
+def pluck(frequency, seconds, volume=DEFAULT_VOLUME, rng=None, who: str = "sound.pluck()") -> list[float]:
     """A plucked string (Karplus-Strong). A burst of random numbers, smoothed a little so the string
     sounds warm rather than metallic (S-118), goes round a loop that averages neighbours (so the
     high notes die first) and loses a little each trip."""
@@ -382,7 +382,7 @@ def _split(text: str, who: str) -> list[str]:
 
 
 def melody_samples(text, tempo=120, wave="soft", sa=None, tuning="equal", rng=None,
-                   who: str = "f.melody()", volume=DEFAULT_VOLUME) -> list[float]:
+                   who: str = "sound.melody()", volume=DEFAULT_VOLUME) -> list[float]:
     """Read a melody string and make its samples (contracts A3, A8 and A9)."""
     if not isinstance(text, str):
         raise ValueError(f"{who}: the melody must be a string like 'C4 E4 G4:2 -', not {text!r}")
@@ -635,25 +635,6 @@ def reverb_samples(values: list[float], amount: float, rate: int = RATE) -> list
     after = max(max(out), -min(out))
     if after > before > 0:
         out = [v * before / after for v in out]
-    return out
-
-
-def resample(values: list[float], src: int, dst: int) -> list[float]:
-    """Change a list of samples from *src* to *dst* samples a second (linear interpolation)."""
-    if src == dst or not values:
-        return list(values)
-    n = max(1, round(len(values) * dst / src))
-    last = len(values) - 1
-    ratio = src / dst
-    out = []
-    for i in range(n):
-        pos = i * ratio
-        j = int(pos)
-        if j >= last:
-            out.append(values[last])
-        else:
-            frac = pos - j
-            out.append(values[j] * (1.0 - frac) + values[j + 1] * frac)
     return out
 
 

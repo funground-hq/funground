@@ -13,7 +13,7 @@ S-238 needs the maintainer for anything created under their account (a GitHub Ap
 
 | Story | Value | Status |
 |---|---|---|
-| S-246 | Move sound and sangeet out of `f`: `from funground import sound`, `from funground import sangeet` | names proposed (D-123, pending) |
+| S-246 | Move sound and sangeet out of `f`: `from funground import sound`, `from funground import sangeet` | built 1 Nov: funground side (full suite 2765 and 1758 passed, 1 skipped); Play's runner next |
 | S-247 | Move the camera out of `f`: `from funground import camera` (after S-246) | planned 28 Oct |
 | S-231 | Spike: which models, from which provider, on the web and on the desktop | planned 28 Oct |
 | S-238 | Spike: signing in to GitHub from Play, a static site (D-118) | planned 28 Oct |
@@ -26,11 +26,11 @@ stories between heavy jobs. One heavy job at a time on this machine.
 ## S-246 tasks
 
 - [x] Names proposal for `sound` and `sangeet` to the maintainer (D-123), with a pending row (`Library_Names_Note.md`)
-- [ ] Rename the internal modules so `sound` and `sangeet` are free (`sound.py`, `synth.py`, `sound_views.py`, `microphone_input.py`, `hindustani.py`); naming trap checked
-- [ ] The libraries as subpackages that import the core, never the reverse; `tests/test_boundaries.py` rows
-- [ ] A moved name on `f` gives one plain sentence naming the import line
-- [ ] Contract rows respelt; examples, guide 16 and 17, course lessons; the import line from the first sound lesson
-- [ ] Reference, completions and `llms.txt` per library (`tools/make_api_reference.py`)
+- [x] Rename the internal modules so `sound` and `sangeet` are free (`sound.py`, `synth.py`, `sound_views.py`, `microphone_input.py`, `hindustani.py`); naming trap checked
+- [x] The libraries as subpackages that import the core, never the reverse; `tests/test_boundaries.py` rows
+- [x] A moved name on `f` gives one plain sentence naming the import line
+- [x] Contract rows respelt; examples, guide 16 and 17, course lessons; the import line from the first sound lesson
+- [x] Reference, completions and `llms.txt` per library (`tools/make_api_reference.py`)
 - [ ] Play's runner and its checks with the new spelling (funground-web)
 - [ ] Architecture's section on modules; the whole suite; the same sound sketch on the desktop and in Play
 

@@ -13,7 +13,8 @@ from pathlib import Path
 import pytest
 
 import funground
-from funground import api, microphone_input as mi
+from funground import api
+from funground.sound import _microphone as mi
 
 from conftest import ROOT
 
@@ -125,7 +126,7 @@ def test_the_game_without_a_microphone_still_says_so(monkeypatch):
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
     def no_mic(name=None, frame_source=None):
         raise RuntimeError("none")
-    monkeypatch.setattr(funground, "microphone", no_mic)
+    monkeypatch.setattr(funground.sound, "microphone", no_mic)
     ns = _run(GALLERY / "projects" / "04_voice_game.py", 5)
     assert ns["mic"] is None and ns["voice"] == 0.0
 
@@ -229,7 +230,7 @@ def test_without_a_microphone_space_starts_the_game(monkeypatch):
 
     def no_mic(name=None, frame_source=None):
         raise RuntimeError("none")
-    monkeypatch.setattr(funground, "microphone", no_mic)
+    monkeypatch.setattr(funground.sound, "microphone", no_mic)
     ns = _run(GAME, 20)
     assert ns["state"] == "setup"
     ns = _run(GAME, 20, at={10: press(" ")})

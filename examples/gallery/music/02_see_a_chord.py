@@ -5,10 +5,10 @@ The chord's name is at the top, and the notes of the chord are lit on a small ke
 sound device, the chords stay silent and the bars stay flat.
 
 How it works:
-- PROGRESSION is a list of chord names. f.chord_notes("Am") lists the note names in a chord.
+- PROGRESSION is a list of chord names. sound.chord_notes("Am") lists the note names in a chord.
   voicing() adds octave numbers to them, going up from octave 3.
-- Each chord is f.mix() of f.note() sounds. The notes are quiet, so the sum does not clip.
-  f.sequence() puts the chords one after another, and sound.reverb(0.2) adds a little room.
+- Each chord is sound.mix() of sound.note() sounds. The notes are quiet, so the sum does not clip.
+  sound.sequence() puts the chords one after another, and reverb(0.2) adds a little room.
 - song.chroma() gives 12 numbers for C, C#, D ... B. Each says how strong that note name is now,
   in any octave. The bars are those twelve numbers.
 - shown[i] moves a third of the way to the new number each frame, so the bars glide.
@@ -26,6 +26,7 @@ Make it yours:
 """
 # gallery: time-dependent
 import funground as f
+from funground import sound
 
 PROGRESSION = ["C", "Am", "F", "G7", "Dm7", "Bdim", "Fmaj7", "C"]
 SECONDS = 1.6
@@ -34,11 +35,11 @@ BLACK = {1, 3, 6, 8, 10}
 
 
 def voicing(chord):
-    """The chord's notes with octaves, going up from octave 3, as the names f.note() wants."""
+    """The chord's notes with octaves, going up from octave 3, as the names sound.note() wants."""
     out = []
     octave = 3
     previous = -1
-    for name in f.chord_notes(chord):
+    for name in sound.chord_notes(chord):
         step = NAMES.index(name)
         if step <= previous:
             octave += 1
@@ -50,11 +51,11 @@ def voicing(chord):
 def make_chord(chord):
     # Three or four notes are added together, so each one is quiet (0.2): the sum stays below
     # the loudest a sound can be, and mix() does not have to squash it.
-    notes = [f.note(n, SECONDS, "triangle", 0.2) for n in voicing(chord)]
-    return f.mix(*notes)
+    notes = [sound.note(n, SECONDS, "triangle", 0.2) for n in voicing(chord)]
+    return sound.mix(*notes)
 
 
-song = f.sequence(*[make_chord(c) for c in PROGRESSION]).reverb(0.2)    # a little room
+song = sound.sequence(*[make_chord(c) for c in PROGRESSION]).reverb(0.2)    # a little room
 shown = [0.0] * 12            # the bars, smoothed so they glide
 heard = None                  # the chord name now
 
@@ -76,7 +77,7 @@ def draw():
         shown[i] += (now[i] - shown[i]) * 0.3
     lit = set()
     if heard:
-        lit = {NAMES.index(n) for n in f.chord_notes(heard)}
+        lit = {NAMES.index(n) for n in sound.chord_notes(heard)}
 
     f.background("#14181f")
     f.fill("white")

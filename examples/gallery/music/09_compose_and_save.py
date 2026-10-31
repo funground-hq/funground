@@ -8,10 +8,10 @@ writes my_tune.wav, and "save poster" writes a PDF of the grid.
 How it works:
 - cells[row][beat] is a grid of True and False. mouse_pressed() turns a mouse position into a row
   and a beat, and flips that square.
-- rebuild() turns the grid into text for f.melody(): "-" for an empty beat, and a chord such as
+- rebuild() turns the grid into text for sound.melody(): "-" for an empty beat, and a chord such as
   "[C4 E4]" for squares in the same column. In sargam mode, it adds sa=SA, tuning="just". Sa is the
   home note, and a swara is a note named from it.
-- A soft low pulse on every fourth beat comes from f.tone() and f.sequence(). f.mix() adds the
+- A soft low pulse on every fourth beat comes from sound.tone() and sound.sequence(). sound.mix() adds the
   pulse to the notes. room() adds a little reverb, then folds its tail back onto the start, so the
   loop has no gap.
 - A tune is made again 30 frames after your last click, so quick clicking does not rebuild it every
@@ -30,11 +30,12 @@ Make it yours:
 """
 # gallery: time-dependent
 import funground as f
+from funground import sound
 
 COLUMNS = 16
 ROWS = 8
 STEP = 0.3                      # seconds in one beat
-TEMPO = 60 / STEP               # f.melody() counts beats a minute
+TEMPO = 60 / STEP               # sound.melody() counts beats a minute
 RATE = 44100
 LOOP = round(COLUMNS * STEP * RATE)            # the loop, in numbers
 PENTATONIC = ["C4", "D4", "E4", "G4", "A4", "C5", "D5", "E5"]
@@ -53,13 +54,13 @@ status = ""
 status_until = 0
 
 
-def room(sound):
+def room(clip):
     """A light reverb that rings on past the end, folded back onto the start so the loop has no gap."""
-    wet = sound.reverb(0.2).samples()
+    wet = clip.reverb(0.2).samples()
     looped = wet[:LOOP] + [0.0] * (LOOP - len(wet))
     for i, value in enumerate(wet[LOOP:]):
         looped[i % LOOP] += value
-    return f.create_sound(looped)
+    return sound.create(looped)
 
 
 def rebuild(start=False):
@@ -76,15 +77,15 @@ def rebuild(start=False):
         else:
             words.append("[" + " ".join(chosen) + "]")
     if sargam:
-        notes = f.melody(" ".join(words), tempo=TEMPO, sa=SA, tuning="just")
+        notes = sound.melody(" ".join(words), tempo=TEMPO, sa=SA, tuning="just")
     else:
-        notes = f.melody(" ".join(words), tempo=TEMPO)
+        notes = sound.melody(" ".join(words), tempo=TEMPO)
     # the pulse: a soft low note on every fourth beat, a silence on the others
-    quiet = f.create_sound([0.0] * round(STEP * RATE))
-    low = f.note_to_frequency("C3")
-    pulse = f.sequence(*[f.tone(low, STEP, "sine", 0.3) if beat % 4 == 0 else quiet
+    quiet = sound.create([0.0] * round(STEP * RATE))
+    low = sound.note_to_frequency("C3")
+    pulse = sound.sequence(*[sound.tone(low, STEP, "sine", 0.3) if beat % 4 == 0 else quiet
                          for beat in range(COLUMNS)])
-    together = f.mix(notes, pulse)
+    together = sound.mix(notes, pulse)
     was_playing = tune is not None and tune.is_playing()
     if tune:
         tune.stop()

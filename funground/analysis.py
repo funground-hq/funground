@@ -1,7 +1,8 @@
 """Music analysis: onsets, tempo, beats, chroma, chords and key (S-112, S-113; contract A5, A6; D-061).
 
 This module is plain Python (``math`` and ``cmath`` only). It does not touch pygame, the sound device
-or the sketch. ``sound.py`` gives its sounds and microphones the methods that call these functions.
+or the sketch. The sound library gives its sounds and microphones the methods that call these functions. It also
+holds ``resample``, which the sound library and the browser's mixer (``platform/browser_audio.py``) both use.
 
 Speed: a pure Python FFT is slow, so everything here first lowers the sample rate to about 11 025 a
 second (it averages groups of samples). That is plenty for rhythm and for notes up to 2 kHz, and it
@@ -384,7 +385,7 @@ def chord_notes(name: str) -> list[str]:
 
 
 def _split_chord(name) -> tuple[int, str]:
-    who = "f.chord_notes()"
+    who = "sound.chord_notes()"
     kinds = ", ".join(repr(s) for s in CHORD_QUALITIES if s)
     if not isinstance(name, str) or not name.strip():
         raise ValueError(f"{who}: give a chord name such as 'C', 'Am', 'G7' or 'Fmaj7', not {name!r}")
@@ -449,3 +450,22 @@ def _correlation(a, b) -> float:
     num = sum((x - ma) * (y - mb) for x, y in zip(a, b))
     den = math.sqrt(sum((x - ma) ** 2 for x in a) * sum((y - mb) ** 2 for y in b))
     return num / den if den > 0 else 0.0
+
+
+def resample(values: list[float], src: int, dst: int) -> list[float]:
+    """Change a list of samples from *src* to *dst* samples a second (linear interpolation)."""
+    if src == dst or not values:
+        return list(values)
+    n = max(1, round(len(values) * dst / src))
+    last = len(values) - 1
+    ratio = src / dst
+    out = []
+    for i in range(n):
+        pos = i * ratio
+        j = int(pos)
+        if j >= last:
+            out.append(values[last])
+        else:
+            frac = pos - j
+            out.append(values[j] * (1.0 - frac) + values[j + 1] * frac)
+    return out

@@ -1,9 +1,9 @@
 """Sound and the microphone for a host that owns the audio device (story S-137, Web_Runner_Note.md).
 
 funground makes every sound itself, in Python, and keeps its own clock (contract A1, A2). The only thing it asks
-of a device is to play a buffer, stop it, pause it and change its volume. `sound.py` asks pygame.mixer for
+of a device is to play a buffer, stop it, pause it and change its volume. the sound library asks pygame.mixer for
 exactly that, through a few calls; `HostMixer` answers the same calls, and hands each to the host as a command
-instead. So `sound.py` is unchanged below its choice of mixer, and pygame is not imported.
+instead. So the sound library is unchanged below its choice of mixer, and pygame is not imported.
 
 The host callback is `on_sound(command, voice, fields, samples)`:
 
@@ -33,12 +33,12 @@ import weakref
 from array import array
 from collections.abc import Callable
 
-from .. import synth
+from .. import analysis
 
 SoundCallback = Callable[[str, int, dict, "memoryview | None"], None]
 MicrophoneCallback = Callable[[str], None]
 
-RATE = 44100                          # the mixer's format, as pygame's mixer is opened (sound._open_mixer)
+RATE = 44100                          # the mixer's format, as pygame's mixer is opened (sound/_engine._open_mixer)
 CHANNELS = 2
 _TO_FLOAT = 1 / 32768.0               # 16-bit samples to the range -1 to 1
 
@@ -124,7 +124,7 @@ class HostSound:
 
 
 class HostMixer:
-    """The part of pygame.mixer that sound.py uses, with the host as the device."""
+    """The part of pygame.mixer that the sound library uses, with the host as the device."""
 
     def __init__(self, on_sound: SoundCallback | None = None) -> None:
         self._on_sound = on_sound
@@ -167,7 +167,7 @@ def _read_wav(path: str) -> bytes:
     pcm.frombytes(raw)
     sides = [pcm[c::channels] for c in range(channels)]
     if rate != RATE:
-        sides = [array("h", [round(v * 32768) for v in synth.resample([s / 32768 for s in side], rate, RATE)])
+        sides = [array("h", [round(v * 32768) for v in analysis.resample([s / 32768 for s in side], rate, RATE)])
                  for side in sides]
     out = array("h", bytes(2 * CHANNELS * len(sides[0])))
     for c in range(CHANNELS):
@@ -176,7 +176,7 @@ def _read_wav(path: str) -> bytes:
 
 
 class _CaptureDevice:
-    """What SDL's capture device is to microphone_input: pause(0) listens, pause(1) stops, close() lets go."""
+    """What SDL's capture device is to the sound library: pause(0) listens, pause(1) stops, close() lets go."""
 
     def __init__(self, host: "HostMicrophone", callback: Callable[[array], None]) -> None:
         self._host = host
@@ -203,7 +203,7 @@ class HostMicrophone:
         self._device: _CaptureDevice | None = None
 
     def open_capture(self, callback: Callable[[array], None]) -> tuple[_CaptureDevice, int]:
-        """The same answer as microphone_input._open_capture: (a device, its rate). Nothing is heard until pause(0)."""
+        """The same answer as sound/_microphone._open_capture: (a device, its rate). Nothing is heard until pause(0)."""
         self._device = _CaptureDevice(self, callback)
         return self._device, RATE
 

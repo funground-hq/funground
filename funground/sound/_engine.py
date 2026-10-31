@@ -16,8 +16,9 @@ import os
 import time
 from array import array
 
-from . import analysis, synth
-from .typography import _resolve_path
+from .. import analysis, host_services
+from ..typography import _resolve_path
+from . import _synth as synth
 
 # The time source, in seconds. It is the same clock the sketch's millis() uses
 # (time.perf_counter). Tests replace it to drive time without sleeping.
@@ -30,31 +31,22 @@ MAX_BANDS = 256
 
 _audible = True              # False once opening a real sound device has failed
 _mixer_ready = False
-_host_mixer = None           # the host's mixer while a web Session runs (platform/browser_audio.py), else None
 
 
 def _is_headless() -> bool:
     return os.environ.get("FUNGROUND_HEADLESS", "").lower() in ("1", "true", "yes")
 
 
-def use_host_mixer(mixer) -> None:
-    """Play through a host's mixer (the web runner, Web_Runner_Note.md) instead of pygame's, or with None back to pygame.
-
-    The mixer offers the few calls this module makes on pygame.mixer (see platform/browser_audio.HostMixer), so
-    nothing else in this module knows about the host, and pygame is not imported."""
-    global _host_mixer
-    _host_mixer = mixer
-
-
 def _open_output(who: str):
     """The mixer sounds are made for, and whether they play silently: (mixer, silent)."""
-    if _host_mixer is not None:
-        return _host_mixer, False
+    host = host_services.mixer        # a web page's mixer (platform/browser_audio.HostMixer), else None: pygame's
+    if host is not None:
+        return host, False
     headless = _is_headless()
     return _open_mixer(headless, who), headless or not _audible
 
 
-def _open_mixer(headless: bool, who: str = "f.load_sound()"):
+def _open_mixer(headless: bool, who: str = "sound.load()"):
     """Start pygame's mixer once. Returns the module. Falls back to SDL's silent 'dummy'
     driver (which still decodes files) when there is no device, or when headless."""
     global _audible, _mixer_ready
@@ -99,16 +91,16 @@ def _open_mixer(headless: bool, who: str = "f.load_sound()"):
 def load(path: str, base_dir: str | None, frame_source=None) -> "Sound":
     """Find, open and decode a sound file (contract A1). *frame_source* is a function giving
     the sketch's frame number, used to analyse at most once per frame."""
-    resolved = _resolve_path(path, base_dir, "f.load_sound()", "sound")
-    mixer, silent = _open_output("f.load_sound()")
+    resolved = _resolve_path(path, base_dir, "sound.load()", "sound")
+    mixer, silent = _open_output("sound.load()")
     try:
         device_sound = mixer.Sound(resolved)
     except Exception as exc:
-        raise ValueError(f"f.load_sound(): {path!r} is not a sound funground can read ({exc})") from exc
+        raise ValueError(f"sound.load(): {path!r} is not a sound funground can read ({exc})") from exc
     return Sound(device_sound, mixer, silent=silent, frame_source=frame_source)
 
 
-def create(samples, rate: int = 44100, frame_source=None, who: str = "f.create_sound()") -> "Sound":
+def create(samples, rate: int = 44100, frame_source=None, who: str = "sound.create()") -> "Sound":
     """A sound from a list of numbers from -1 to 1 (contract A3). Numbers outside are clipped."""
     if isinstance(rate, bool) or not isinstance(rate, int) or not 8000 <= rate <= 192000:
         raise ValueError(f"{who}: rate must be a whole number from 8000 to 192000, not {rate!r}")
@@ -131,7 +123,7 @@ def _from_samples(values: list[float], rate: int, frame_source, who: str) -> "So
         values = [-1.0 if v < -1.0 else 1.0 if v > 1.0 else v for v in values]
     mixer, silent = _open_output(who)
     mixer_rate, _, channels = mixer.get_init()
-    data = synth.resample(values, rate, mixer_rate) if mixer_rate != rate else values
+    data = analysis.resample(values, rate, mixer_rate) if mixer_rate != rate else values
     mono = array("h", [int(round(v * 32767)) for v in data])
     if channels == 1:
         pcm = mono
@@ -179,7 +171,7 @@ class _Analysis:
     same way on a Sound and on a Microphone. They tell you about the sound as it is now, so call them in
     draw(). They give 0, a list of zeros, None or False when nothing is playing or listening.
 
-    The numbers are worked out in plain Python, in analysis.py and hindustani.py.
+    The numbers are worked out in plain Python, in analysis.py and _swaras.py.
     """
 
     # Contract A2, A3, A5, A6 (sounds) and A4 (microphones). A class using this provides
@@ -209,7 +201,7 @@ class _Analysis:
             a number from 0 to 1.
 
         Example:
-            snd = f.load_sound("song.wav")   # your own file
+            snd = sound.load("song.wav")   # your own file
             snd.loop()
             f.circle(200, 200, 50 + 300 * snd.level())
 
@@ -241,7 +233,7 @@ class _Analysis:
             ValueError: if bands is not a whole number from 1 to 256.
 
         Example:
-            snd = f.tone(220, 2)
+            snd = sound.tone(220, 2)
             snd.play()
             for i, strength in enumerate(snd.spectrum(16)):
                 f.rect(20 + i * 24, 380, 20, -300 * strength)
@@ -302,11 +294,11 @@ class _Analysis:
             the frequency in hertz, or None.
 
         Example:
-            mic = f.microphone()
+            mic = sound.microphone()
             mic.start()
             hz = mic.pitch()
             if hz:
-                f.text(f.frequency_to_note(hz), 20, 40)
+                f.text(sound.frequency_to_note(hz), 20, 40)
 
         See also: chroma, chord, level
         """
@@ -404,7 +396,7 @@ class _Analysis:
     def _pitch_track(self) -> list:
         """The pitch through the whole sound, or through the last 10 seconds a microphone heard
         (hindustani.pitch_track). A sound's track is kept, as its samples do not change."""
-        from . import hindustani as ragas
+        from . import _swaras as ragas
 
         if isinstance(self, Sound):
             if "track" not in self._cache:
@@ -425,11 +417,11 @@ class _Analysis:
         Example:
             sa = recording.tonic()
             if sa:
-                print(f.frequency_to_note(sa))
+                print(sound.frequency_to_note(sa))
 
         See also: swara_histogram, pitch, match_ragas
         """
-        from . import hindustani as ragas
+        from . import _swaras as ragas
 
         return ragas.tonic(self._pitch_track())
 
@@ -448,11 +440,11 @@ class _Analysis:
 
         Example:
             hist = recording.swara_histogram("D4")
-            print(f.match_ragas(hist)[0])
+            print(sangeet.match_ragas(hist)[0])
 
         See also: tonic, match_ragas
         """
-        from . import hindustani as ragas
+        from . import _swaras as ragas
 
         sa_hz = ragas._sa_hz(sa, f"{self._name}.swara_histogram()")
         return ragas.swara_histogram(self._pitch_track(), sa_hz)
@@ -461,8 +453,8 @@ class _Analysis:
 class Sound(_Analysis):
     """A sound that you can play, listen to and change.
 
-    You get one from f.load_sound() (a file), f.create_sound() (a list of numbers), f.tone(), f.note(),
-    f.pluck(), f.melody(), f.drone() and f.tala() (made for you), f.sequence() and f.mix() (made from
+    You get one from sound.load() (a file), sound.create() (a list of numbers), sound.tone(), sound.note(),
+    sound.pluck(), sound.melody(), sound.drone() and sangeet.tala() (made for you), sound.sequence() and sound.mix() (made from
     other sounds), and mic.capture() (made from what a microphone heard). All of them are the same kind
     of object.
 
@@ -474,7 +466,7 @@ class Sound(_Analysis):
     Methods that make something new (reverb) give you a new sound and leave this one alone.
 
     Example:
-        beep = f.tone(440, 1)
+        beep = sound.tone(440, 1)
         beep.play()
         f.circle(200, 200, 50 + 300 * beep.level())
 
@@ -541,7 +533,7 @@ class Sound(_Analysis):
             ValueError: if position is not a number from -1 to 1.
 
         Example:
-            snd = f.tone(440, 1)
+            snd = sound.tone(440, 1)
             snd.pan(-1)     # left speaker only
             snd.play()
 
@@ -574,7 +566,7 @@ class Sound(_Analysis):
         looping stops by itself at the end.
 
         Example:
-            beep = f.tone(440, 1)
+            beep = sound.tone(440, 1)
             beep.play()
 
         See also: loop, pause, stop, is_playing
@@ -585,7 +577,7 @@ class Sound(_Analysis):
         """Play the sound over and over, until you call stop() or pause().
 
         Example:
-            drone = f.drone("D3", 8)
+            drone = sound.drone("D3", 8)
             drone.loop()
 
         See also: play, stop, pause
@@ -596,7 +588,7 @@ class Sound(_Analysis):
         """Stop the sound and go back to its start.
 
         Example:
-            snd = f.tone(440, 5)
+            snd = sound.tone(440, 5)
             snd.play()
             snd.stop()
 
@@ -613,7 +605,7 @@ class Sound(_Analysis):
         Nothing happens if the sound is not playing.
 
         Example:
-            snd = f.tone(440, 5)
+            snd = sound.tone(440, 5)
             snd.play()
             snd.pause()
             snd.play()     # carries on
@@ -641,7 +633,7 @@ class Sound(_Analysis):
             ValueError: if volume is not a number from 0 to 1.
 
         Example:
-            snd = f.tone(440, 1)
+            snd = sound.tone(440, 1)
             snd.set_volume(0.3)
             snd.play()
 
@@ -660,7 +652,7 @@ class Sound(_Analysis):
             a number from 0 to 1. It is 1 until you change it.
 
         Example:
-            snd = f.tone(440, 1)
+            snd = sound.tone(440, 1)
             snd.set_volume(0.5)
             print(snd.get_volume())
 
@@ -692,7 +684,7 @@ class Sound(_Analysis):
             the length in seconds.
 
         Example:
-            snd = f.tone(440, 2)
+            snd = sound.tone(440, 2)
             print(snd.duration())     # 2.0 or a little more
 
         See also: current_time
@@ -708,7 +700,7 @@ class Sound(_Analysis):
             the time in seconds from the start of the sound.
 
         Example:
-            snd = f.melody("C4 E4 G4")
+            snd = sound.melody("C4 E4 G4")
             snd.loop()
             f.rect(0, 190, 400 * snd.current_time() / snd.duration(), 20)
 
@@ -764,7 +756,7 @@ class Sound(_Analysis):
             a list of times in seconds from the start, earliest first.
 
         Example:
-            song = f.melody("C4 E4 G4 C5")
+            song = sound.melody("C4 E4 G4 C5")
             print(song.onsets())
 
         See also: is_onset, tempo, beats
@@ -780,7 +772,7 @@ class Sound(_Analysis):
             the speed in beats a minute, from 60 to 200, or None when there is no clear pulse.
 
         Example:
-            song = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
+            song = sound.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
             print(song.tempo())
 
         See also: beats, onsets
@@ -796,7 +788,7 @@ class Sound(_Analysis):
             a list of times in seconds from the start, or an empty list when there is no clear pulse.
 
         Example:
-            song = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
+            song = sound.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
             beats = song.beats()
             song.play()
 
@@ -813,7 +805,7 @@ class Sound(_Analysis):
             a name like "G major" or "E minor", or None when no key stands out.
 
         Example:
-            song = f.melody("C4 E4 G4 C5 G4 E4 C4")
+            song = sound.melody("C4 E4 G4 C5 G4 E4 C4")
             print(song.key())
 
         See also: chord, chroma
@@ -878,7 +870,7 @@ class Sound(_Analysis):
             a list of numbers from -1 to 1.
 
         Example:
-            wave = f.tone(220, 1).samples()
+            wave = sound.tone(220, 1).samples()
             for x in range(399):
                 f.line(x, 100 - 80 * wave[x * 4], x + 1, 100 - 80 * wave[x * 4 + 4])
 
@@ -899,8 +891,8 @@ class Sound(_Analysis):
     def _samples_at(self, rate: int) -> list[float]:
         """The same numbers at *rate* samples a second."""
         if self._made is not None:
-            return synth.resample(self._made[0], self._made[1], rate)
-        return synth.resample(self.samples(), self._rate, rate)
+            return analysis.resample(self._made[0], self._made[1], rate)
+        return analysis.resample(self.samples(), self._rate, rate)
 
     def reverb(self, amount: float = 0.3) -> "Sound":
         """Make a new sound that is this sound played in a room.
@@ -921,7 +913,7 @@ class Sound(_Analysis):
             ValueError: if amount is not a number from 0 to 1.
 
         Example:
-            dry = f.pluck("G3", 1.5)
+            dry = sound.pluck("G3", 1.5)
             wet = dry.reverb(0.5)
             wet.play()
 
@@ -944,7 +936,7 @@ class Sound(_Analysis):
             ValueError: if path is empty or not text, or the file cannot be written.
 
         Example:
-            f.melody("C4 E4 G4").save("tune.wav")    # writes a new file
+            sound.melody("C4 E4 G4").save("tune.wav")    # writes a new file
 
         See also: samples, create_sound
         """
@@ -978,18 +970,18 @@ def _to_mono(samples: array, channels: int) -> list[float]:
 
 def sequence(sounds, frame_source=None) -> "Sound":
     """Sounds one after another, as a new sound (contract A3)."""
-    parts = _check_sounds(sounds, "f.sequence()")
+    parts = _check_sounds(sounds, "sound.sequence()")
     out: list[float] = []
     for s in parts:
         out.extend(s._samples_at(synth.RATE))
-    return _from_samples(out, synth.RATE, frame_source, "f.sequence()")
+    return _from_samples(out, synth.RATE, frame_source, "sound.sequence()")
 
 
 def mix(sounds, frame_source=None) -> "Sound":
     """Sounds together, as a new sound. A soft limiter keeps the peak at or below 0.9 (A9)."""
-    parts = _check_sounds(sounds, "f.mix()")
+    parts = _check_sounds(sounds, "sound.mix()")
     return _from_samples(synth.mix_samples([s._samples_at(synth.RATE) for s in parts]),
-                         synth.RATE, frame_source, "f.mix()")
+                         synth.RATE, frame_source, "sound.mix()")
 
 
 def _check_sounds(sounds, who: str) -> list:
@@ -1002,6 +994,6 @@ def _check_sounds(sounds, who: str) -> list:
     return sounds
 
 
-def make(values: list[float], frame_source=None, who: str = "f.tone()") -> "Sound":
+def make(values: list[float], frame_source=None, who: str = "sound.tone()") -> "Sound":
     """A sound from samples that synth.py computed (already from -1 to 1, at 44 100)."""
     return _from_samples(values, synth.RATE, frame_source, who)

@@ -7,26 +7,27 @@ note that is sounding. With no sound device, the sketch still runs, in silence.
 How it works:
 - TUNE is a list of (note, beats) pairs. The code joins it into text such as "E4:1 G4:1 A4:2".
   A note is a name like "E4", a dash is a rest, and :2 means two beats.
-- f.melody(text, tempo=TEMPO) turns that text into a sound. sound.reverb(0.2) puts it in a small
+- sound.melody(text, tempo=TEMPO) turns that text into a sound. reverb(0.2) puts it in a small
   room.
 - tune.samples() gives the wave as a list of numbers. The loop in draw() draws the few that are
   around the place where tune.current_time() says the sound is now.
-- f.mix() adds three quiet, long notes into one chord. f.note() and f.tone() make them. Each is
+- sound.mix() adds three quiet, long notes into one chord. sound.note() and sound.tone() make them. Each is
   quiet, so the sum stays below the loudest a sound can be.
 - The bars use the same TUNE list. A note is gold while tune.current_time() is inside it.
-- tune.pitch() gives the pitch that is sounding, and f.frequency_to_note() turns it into a name.
+- tune.pitch() gives the pitch that is sounding, and sound.frequency_to_note() turns it into a name.
 
 Make it yours:
 - Change TEMPO to play the tune slower or faster.
 - Change the notes in TUNE, or add ("C5", 2) at the end. The sound and the bars both follow.
-- Change the chord. Try "F3" and "A3" in place of "E3" and "G3" in f.mix().
+- Change the chord. Try "F3" and "A3" in place of "E3" and "G3" in sound.mix().
 - Change 0.2 in .reverb(0.2) to 0.6 for a bigger room.
-- Use a sharper voice: f.melody(text, tempo=TEMPO, wave="square").
+- Use a sharper voice: sound.melody(text, tempo=TEMPO, wave="square").
 """
 # gallery: time-dependent
 import math
 
 import funground as f
+from funground import sound
 
 TEMPO = 126
 TUNE = [("E4", 1), ("G4", 1), ("A4", 2), ("-", 1), ("B4", 1), ("A4", 1), ("G4", 1),
@@ -35,23 +36,23 @@ TUNE = [("E4", 1), ("G4", 1), ("A4", 2), ("-", 1), ("B4", 1), ("A4", 1), ("G4", 
 text = " ".join(f"{name}:{beats}" for name, beats in TUNE)
 # melody() plays a gentle "soft" voice unless you ask for another wave. A little reverb makes
 # it sound as if it is played in a room rather than inside the computer.
-tune = f.melody(text, tempo=TEMPO).reverb(0.2)
+tune = sound.melody(text, tempo=TEMPO).reverb(0.2)
 numbers = tune.samples()                          # the wave, as a list of numbers
 
 # A soft chord underneath, added together from three long, slow notes. Each note is quiet, so
 # the three added together stay well below the loudest a sound can be.
 length = tune.duration()
-pad = f.mix(f.note("E3", length, volume=0.25, attack=1, release=1),
-            f.note("G3", length, volume=0.25, attack=1, release=1),
-            f.tone(f.note_to_frequency("B3"), length, "sine", 0.25, attack=1, release=1))
+pad = sound.mix(sound.note("E3", length, volume=0.25, attack=1, release=1),
+            sound.note("G3", length, volume=0.25, attack=1, release=1),
+            sound.tone(sound.note_to_frequency("B3"), length, "sine", 0.25, attack=1, release=1))
 pad.set_volume(0.5)
 total_beats = sum(beats for _, beats in TUNE)
-low = f.note_to_frequency("C4")
+low = sound.note_to_frequency("C4")
 
 
 def semitones(name):
     """How many steps a note is above middle C."""
-    return 12 * math.log2(f.note_to_frequency(name) / low)
+    return 12 * math.log2(sound.note_to_frequency(name) / low)
 
 
 def setup():
@@ -98,7 +99,7 @@ def draw():
     f.fill("white")
     f.text_size(18)
     hz = tune.pitch()
-    f.text(f"{f.frequency_to_note(hz)}  {hz:.0f} Hz" if hz else "rest", 20, 385)
+    f.text(f"{sound.frequency_to_note(hz)}  {hz:.0f} Hz" if hz else "rest", 20, 385)
 
 
 f.run()

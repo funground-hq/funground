@@ -1,5 +1,5 @@
-sound.Sound
-microphone_input.Microphone
+sound._engine.Sound
+sound._microphone.Microphone
 camera_input.Camera
 camera_input.Clip
 picture.Picture
@@ -20,5 +20,5 @@ controls.Checkbox
 controls.Button
 color.Color
 paint.Gradient
-hindustani.Raga
-hindustani.Tala
+sangeet._tables.Raga
+sangeet._tables.Tala
