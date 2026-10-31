@@ -54,7 +54,7 @@ class BrowserPlatform(HeadlessPlatform):
         self._on_frame = on_frame
         self._now = 0.0                          # the host's clock, in seconds
         self._previous: float | None = None      # the clock at the previous tick
-        self.mixer = HostMixer(on_sound)         # what sound.py plays through, instead of pygame's mixer
+        self.mixer = HostMixer(on_sound)         # what the sound library plays through, instead of pygame's mixer
         self.microphone = HostMicrophone(on_microphone)
         self.camera = HostCamera(on_camera)
 

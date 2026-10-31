@@ -3,7 +3,11 @@
 This chapter is for anyone learning Hindustani (North Indian) classical music, or curious about it.
 funground can play a drone to sing with, play a raga's notes and a tala's drum pattern, and listen
 to a recording to say which notes were sung. It builds on [Sargam](16_sound.md#sargam) in chapter 16:
-`f.melody(text, sa="D4")` reads the swaras `S r R g G m M P d D n N`.
+`sound.melody(text, sa="D4")` reads the swaras `S r R g G m M P d D n N`.
+
+The raga and tala names live in the sangeet library: `from funground import sangeet`. Every call then
+says `sangeet.`. Sounds come from the sound library, so a sketch that plays a drone also writes
+`from funground import sound`.
 
 A word of warning first. A raga is much more than its notes. It has its own way of moving between
 them, its ornaments, its resting notes and its mood, and these are learnt from a teacher by
@@ -11,12 +15,12 @@ listening. funground knows a raga's notes and a few facts about it. That is a st
 
 ## The raga table
 
-funground has a small table of well-known ragas, the kind a learner meets early. `f.ragas()` lists
-their names. `f.raga(name)` gives one of them. Capitals do not matter, so `f.raga("yaman")` works,
+funground has a small table of well-known ragas, the kind a learner meets early. `sangeet.ragas()` lists
+their names. `sangeet.raga(name)` gives one of them. Capitals do not matter, so `sangeet.raga("yaman")` works,
 and a name that is not in the table gives a `ValueError` that lists the ones that are.
 
 ```py
-yaman = f.raga("Yaman")
+yaman = sangeet.raga("Yaman")
 yaman.thaat         # 'Kalyan'
 yaman.swaras        # ('S', 'R', 'G', 'M', 'P', 'D', 'N')
 yaman.aroha         # "N, R G M P D N S'"   the way up
@@ -31,7 +35,7 @@ yaman.sources       # where each fact was checked
 - The **thaat** is the parent scale it belongs to, in Bhatkhande's system of ten.
 - The **swaras** are the notes it uses. Small `r g d n` are komal (flat). `M` is tivra (sharp) Ma.
 - The **aroha**, **avaroha** and **pakad** are sargam strings you can give straight to
-  `f.melody(..., sa=...)`.
+  `sound.melody(..., sa=...)`.
 - The **vadi** is the most important note and the **samvadi** the second.
 - The **time** is the prahar, the three-hour part of the day or night, that the raga belongs to.
 
@@ -61,13 +65,13 @@ differently by different teachers. Where that happens, the table gives the most 
 
 ## The drone
 
-A tanpura plays Sa and Pa over and over, so a singer always has Sa to hold on to. `f.drone(sa,
+A tanpura plays Sa and Pa over and over, so a singer always has Sa to hold on to. `sound.drone(sa,
 seconds)` makes a sound like one: plucked strings that ring on, one after another. Give it Sa as a
 note name such as `"D3"`. It loops smoothly, with no gap, when you call `loop()`.
 
 The strings are given by `pattern`, which is `"P S' S' S"` unless you say otherwise: Pa, then
 upper Sa twice, then Sa. For a raga without Pa, a tanpura's first string is tuned to another note,
-often Ma or Ni, and you can do the same: `f.drone("D3", 8, pattern="m S' S' S")` or
+often Ma or Ni, and you can do the same: `sound.drone("D3", 8, pattern="m S' S' S")` or
 `pattern="N S' S' S"`. Ask your teacher which suits the raga. The strings are tuned in just
 intonation, so Pa is exactly 3/2 of Sa, as a tanpura is tuned by ear.
 
@@ -78,11 +82,13 @@ Here is Yaman's aroha and avaroha over a drone, with each swara lit as it plays.
 
 ```python
 import funground as f
+from funground import sound
+from funground import sangeet
 
 SA = "D4"
-tokens = (f.raga("Yaman").aroha + " - " + f.raga("Yaman").avaroha + " -").split()
-tune = f.melody(" ".join(tokens), tempo=90, sa=SA, tuning="just")
-drone = f.drone("D3", tune.duration(), volume=0.4)
+tokens = (sangeet.raga("Yaman").aroha + " - " + sangeet.raga("Yaman").avaroha + " -").split()
+tune = sound.melody(" ".join(tokens), tempo=90, sa=SA, tuning="just")
+drone = sound.drone("D3", tune.duration(), volume=0.4)
 
 
 def setup():
@@ -107,10 +113,10 @@ It is an approximation. A real tanpura's buzzing richness comes from its curved 
 that is very hard to copy.
 
 **Reverb helps a drone.** A tanpura is heard in a room, and its strings ring on into each other.
-`sound.reverb(amount)` (chapter 16) gives the drone that room, and it sounds warmer and fuller:
+`song.reverb(amount)` (chapter 16) gives the drone that room, and it sounds warmer and fuller:
 
 ```py
-drone = f.drone("D3", 7).reverb(0.4)
+drone = sound.drone("D3", 7).reverb(0.4)
 ```
 
 The room rings on after the end, so the new sound is longer, and a loop of it has a short pause
@@ -120,7 +126,7 @@ is plenty.
 
 ## Meend and kan
 
-Indian music moves between notes as much as it lands on them. `f.melody` has two ornaments for this.
+Indian music moves between notes as much as it lands on them. `sound.melody` has two ornaments for this.
 
 - **Meend** is a glide. `S~G` slides smoothly from S to G over the token's beats. `G~R:2` slides
   down over two beats.
@@ -128,8 +134,8 @@ Indian music moves between notes as much as it lands on them. `f.melody` has two
   60 thousandths of a second, then plays G.
 
 ```py
-f.melody("S R (R)G:2 G~R:2 S", sa="D4")       # a kan on Ga, then a meend down to Re
-f.melody("C4~E4:2 (D4)E4", tempo=80)           # they work with note names too
+sound.melody("S R (R)G:2 G~R:2 S", sa="D4")       # a kan on Ga, then a meend down to Re
+sound.melody("C4~E4:2 (D4)E4", tempo=80)           # they work with note names too
 ```
 
 Both keep the wave unbroken as the pitch changes, so there is no click. A gamaka, a shake around a
@@ -142,7 +148,7 @@ vibhags. You clap at the start of some groups (tali) and wave at the start of ot
 is the sam, where the cycle begins and lands; it is marked X. A wave is marked 0. The theka is the
 pattern of bols, the syllables that name the tabla strokes, one bol a beat.
 
-`f.talas()` lists the six in the table. `f.tala_info(name)` gives one of them: `beats`, `vibhag` (the
+`sangeet.talas()` lists the six in the table. `sangeet.tala_info(name)` gives one of them: `beats`, `vibhag` (the
 group sizes), `tali` and `khali` (beat numbers, counted from 1), `sam` and `bols`.
 
 | Tala | Beats | Vibhag | Tali (claps) | Khali (waves) | Theka |
@@ -157,7 +163,7 @@ group sizes), `tali` and `khali` (beat numbers, counted from 1), `sam` and `bols
 Rupak is the odd one out: its sam is a wave, not a clap. Spellings of the bols differ between books
 (Dhi or Dhin, Tu or Tun), and so do a few bols, which `notes` points out.
 
-`f.tala(name, tempo=80, cycles=1)` plays the theka with simple drum sounds. Dha is a low drum and a
+`sangeet.tala(name, tempo=80, cycles=1)` plays the theka with simple drum sounds. Dha is a low drum and a
 high ring together; Na and Ta ring high; Ge is low; Ka and Ke are short dry slaps; Tin and Tun ring
 longer. A bol written as one word, like DhaGe or TiRaKiTa, shares its beat between its strokes. The
 sam is played louder and the khali vibhag more softly. The sound lasts exactly `beats * 60 / tempo *
@@ -165,9 +171,10 @@ cycles` seconds, so it loops in time.
 
 ```python
 import funground as f
+from funground import sangeet
 
-info = f.tala_info("Jhaptaal")
-cycle = f.tala("Jhaptaal", tempo=100)
+info = sangeet.tala_info("Jhaptaal")
+cycle = sangeet.tala("Jhaptaal", tempo=100)
 
 
 def setup():
@@ -207,15 +214,15 @@ These work on any sound, and on a microphone too (what it heard in the last 10 s
 - **`x.swara_histogram(sa)`** gives 12 numbers, one for each swara `S r R g G m M P d D n N` above
   `sa` (a note name, or the hertz from `tonic()`): the share of the time each one sounded, in any
   octave, within half a semitone of it. They add up to 1.
-- **`f.match_ragas(histogram)`** compares those 12 numbers with every raga in the table and gives
+- **`sangeet.match_ragas(histogram)`** compares those 12 numbers with every raga in the table and gives
   `(name, score)` pairs, best first, with scores from 0 to 1. A raga scores well when the music stays
   on its swaras, uses all of them, and stresses its vadi and samvadi.
 
 ```py
-recording = f.load_sound("my_singing.wav")
+recording = sound.load("my_singing.wav")
 sa = recording.tonic()                    # or the Sa you know, like "C#4"
 shares = recording.swara_histogram(sa)
-print(f.match_ragas(shares)[:3])          # for example [('Yaman', 0.85), ('Desh', 0.56), ...]
+print(sangeet.match_ragas(shares)[:3])          # for example [('Yaman', 0.85), ('Desh', 0.56), ...]
 ```
 
 **What it cannot tell apart.** `match_ragas` compares sets of notes. It is a learning aid, not a
@@ -265,8 +272,8 @@ The full list, with what each was used for, is in [CREDITS.md](../../CREDITS.md#
 
 ## Try it
 
-1. Print `f.raga("Bhupali").swaras` and `f.raga("Bhupali").aroha`, then play the aroha with `f.melody()`.
-2. Play Teentaal with `f.tala("Teentaal", tempo=100)` and clap on the tali beats.
+1. Print `sangeet.raga("Bhupali").swaras` and `sangeet.raga("Bhupali").aroha`, then play the aroha with `sound.melody()`.
+2. Play Teentaal with `sangeet.tala("Teentaal", tempo=100)` and clap on the tali beats.
 3. Play a raga's aroha over a drone, with `sa="C4"` in the melody and `"C3"` for the drone.
 
 **Previous:** [16. Sound](16_sound.md) · **Next:** [18. Projects](18_projects.md)

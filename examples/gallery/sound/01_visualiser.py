@@ -5,7 +5,7 @@ left and high notes on the right. The wide bar below shows how loud it is. With 
 the sketch still runs, in silence.
 
 How it works:
-- f.load_sound("data/tune.wav") reads a sound file. The path is found next to this file.
+- sound.load("data/tune.wav") reads a sound file. The path is found next to this file.
 - In setup(), tune.set_volume() sets how loud it is, and tune.loop() plays it again and again.
 - tune.spectrum(BANDS) gives a list of 24 numbers from 0 to 1, one for each range of pitch. The
   for loop draws one bar for each number. A stronger range gives a taller bar.
@@ -18,12 +18,13 @@ Make it yours:
 - Change the two colours in f.lerp_color(), or the background colour.
 - Change the 1.5 in tune.level() * 1.5 to make the white bar more or less sensitive.
 - Draw circles instead of bars: use f.circle(20 + i * bar_width + bar_width / 2, 200, 120 * strength).
-- Play another sound. Put your own .wav file next to this one and change the name in f.load_sound().
+- Play another sound. Put your own .wav file next to this one and change the name in sound.load().
 """
 # gallery: time-dependent
 import funground as f
+from funground import sound
 
-tune = f.load_sound("data/tune.wav")      # found next to this file
+tune = sound.load("data/tune.wav")      # found next to this file
 BANDS = 24
 
 

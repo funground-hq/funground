@@ -5,11 +5,11 @@ wave, the middle one is the spectrum, and the bottom one is the note you sing, s
 Nothing is recorded or played back. With no microphone, the sketch still runs and shows quiet.
 
 How it works:
-- f.microphone() makes the microphone, and mic.start() in setup() begins listening.
-- f.draw_wave(mic, x, y, w, h) draws the wave: how the air moves over the last half second.
-- f.draw_spectrum(mic, x, y, w, h, bands=40) draws a bar for each range of pitch, low on the left
+- sound.microphone() makes the microphone, and mic.start() in setup() begins listening.
+- sound.draw_wave(mic, x, y, w, h) draws the wave: how the air moves over the last half second.
+- sound.draw_spectrum(mic, x, y, w, h, bands=40) draws a bar for each range of pitch, low on the left
   and high on the right.
-- f.draw_pitch_line(mic, x, y, w, h, seconds=6, low="C3", high="C6") draws the note you sing,
+- sound.draw_pitch_line(mic, x, y, w, h, seconds=6, low="C3", high="C6") draws the note you sing,
   scrolling across. It leaves a gap when you are quiet.
 - These functions draw with the current fill and stroke. So the code sets f.fill() and f.stroke()
   before each one, to give each view its own colour.
@@ -28,8 +28,9 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
-mic = f.microphone()
+mic = sound.microphone()
 
 
 def setup():
@@ -58,18 +59,18 @@ def draw():
     f.fill(60, 150, 220, 160)
     f.stroke(120, 200, 255)
     f.stroke_width(1)
-    f.draw_wave(mic, 20, 30, 480, 90)
+    sound.draw_wave(mic, 20, 30, 480, 90)
 
     label("the spectrum", 135)
     f.fill(250, 170, 60)
     f.no_stroke()
-    f.draw_spectrum(mic, 20, 155, 480, 90, bands=40)
+    sound.draw_spectrum(mic, 20, 155, 480, 90, bands=40)
 
     label("the pitch line", 255)
     f.no_fill()
     f.stroke(120, 235, 150)
     f.stroke_width(3)
-    f.draw_pitch_line(mic, 20, 292, 480, 136, seconds=6, low="C3", high="C6")
+    sound.draw_pitch_line(mic, 20, 292, 480, 136, seconds=6, low="C3", high="C6")
 
     f.no_stroke()                              # the microphone light: it moves for any sound it hears
     f.fill(60, 70, 90)

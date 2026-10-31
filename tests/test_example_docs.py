@@ -29,11 +29,12 @@ import pytest
 
 import funground
 from funground import gallery
+from funground import sound as sound_library
 from funground.geometry import Path as GeometryPath
-from funground.microphone_input import Microphone
+from funground.sound._microphone import Microphone
 from funground.paths import PathBuilder
 from funground.picture import Picture
-from funground.sound import Sound
+from funground.sound._engine import Sound
 
 from conftest import ROOT
 
@@ -68,6 +69,7 @@ def names_written_in(doc: str) -> tuple[set[str], set[tuple[str, str]]]:
     """The ``f.<name>`` names, and the ``<object>.<method>`` pairs, a docstring mentions."""
     module_names = set(re.findall(r"\bf\.([A-Za-z_]\w*)", doc))
     pairs = set(re.findall(r"\b(" + "|".join(OBJECTS) + r")\.([A-Za-z_]\w*)", doc))
+    pairs = {(kind, name) for kind, name in pairs if not (kind == "sound" and name in sound_library.__all__)}   # the library (S-246)
     return module_names, pairs
 
 

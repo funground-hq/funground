@@ -11,7 +11,7 @@ How it works:
 - cam.record(MAX_TAKE) starts a clip that keeps one frame for each frame the sketch draws. clip.pause() and
   clip.resume() hold and continue it, and clip.stop() ends it. clip.save("take.gif") writes the animated GIF.
 - mic.capture(seconds) gives the sound of the last few seconds as a sound. The sketch takes one piece of sound
-  each time a recording stretch ends (Pause or Stop), joins them with f.sequence() and saves take.wav, so the
+  each time a recording stretch ends (Pause or Stop), joins them with sound.sequence() and saves take.wav, so the
   sound fits the frames even when you paused.
 - The buttons are rectangles the sketch draws. mouse_pressed() checks which one the mouse is inside.
 - cam.save("photo.png") writes a still photo. f.cameras() lists the cameras, and the sketch prints them. With
@@ -25,6 +25,7 @@ Make it yours:
 - Load take.gif and take.wav in another sketch and make the video react to the sound.
 """
 import funground as f
+from funground import sound
 
 WIDTH, HEIGHT = 400, 300
 FPS = 15
@@ -55,7 +56,7 @@ def open_camera():
 
 def open_microphone():
     try:
-        microphone = f.microphone()
+        microphone = sound.microphone()
         microphone.start()
         return microphone
     except RuntimeError:
@@ -98,7 +99,7 @@ def finish_take():
     else:
         take.save("take.gif")
         if sounds:
-            f.sequence(*sounds).save("take.wav")
+            sound.sequence(*sounds).save("take.wav")
         message = "Saved take.gif" + (" and take.wav." if sounds else ".")
     take = None
 

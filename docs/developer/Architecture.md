@@ -51,9 +51,9 @@ draw-op IR is the contract. Cairo draws. pygame-ce runs the window. Learners nev
 
  Beside the ops pipeline, not part of it:
 
- +------------------+   sound.py, synth.py, analysis.py, hindustani.py, microphone_input.py,
- |  sound and music |   sound_views.py: Sound objects, microphones, ragas. They play, listen and
- +------------------+   analyse. They add nothing to the IR. The drawing views (sound_views.py)
+ +------------------+   funground/sound/ and funground/sangeet/ (libraries a sketch imports),
+ |  sound and music |   analysis.py: Sound objects, microphones, ragas. They play, listen and
+ +------------------+   analyse. They add nothing to the IR. The drawing views (sound/_views.py)
                         draw with ordinary drawing calls.
  +------------------+   funground/gallery.py    the Examples Gallery browser (a funground sketch)
  |  gallery package |   funground/examples/     the examples, mapped into the package at build time
@@ -74,6 +74,19 @@ Read it top to bottom for one drawing call:
 7. `f.save("x.png")` writes those pixels. `f.save("x.pdf")` replays the ops onto a PDF surface.
 
 ### The modules
+
+**Core and libraries (ADR-007, S-246).** `f` holds the core. A **library** is a subpackage that a sketch imports
+(`from funground import sound`) and that imports the core. The core never imports a library, and
+`tests/test_boundaries.py` checks it. A library keeps its code in modules whose names start with an underscore
+(`sound/_engine.py`), so no module can take the name of a public function. There are two today:
+
+- `funground/sound/`: the sound library, 18 names. `_engine.py` (the `Sound` class and the mixer), `_synth.py` (sound
+  from numbers), `_swaras.py` (the drone and the singing analysis), `_microphone.py` and `_views.py`.
+- `funground/sangeet/`: the sangeet library, 6 names (ragas and talas). `_tables.py` holds the table. sangeet imports
+  sound to make sounds; sound never imports sangeet.
+
+What a host supplies (a web page's mixer and microphone) is set in `funground/host_services.py`, a plain registry in the
+core. `web.py` sets it, the sound library reads it. On a computer it is empty and pygame is used.
 
 | Module | What it does |
 |---|---|
@@ -96,12 +109,12 @@ Read it top to bottom for one drawing call:
 | `funground/export/motion.py` | GIF and MP4 files (M1, D-048): Pillow for a GIF when installed, else ffmpeg; MP4 always through ffmpeg (D-045). The only module that finds or runs ffmpeg. |
 | `funground/marks.py` | `Mark`, a drawing kept as a value (S-132, K1-K3): the recorder behind `with f.mark()`, placement, the current-style rewrite and the guard that refuses layers, controls, saves and pixel calls inside a block. No backend; bounds come from the renderer's `ink_bounds`. |
 | `funground/controls.py` | Sliders, checkboxes and buttons and their panel (U1, D-047). Plain Python; no pygame. |
-| `funground/sound.py` | `Sound` objects: playback on a clock, level, spectrum, pitch, rhythm and harmony methods. The only user of `pygame.mixer`. |
-| `funground/synth.py` | Sound from numbers (A3, A9): waves, envelopes, notes, plucks, melodies. Plain Python, no device. |
+| `funground/sound/_engine.py` | `Sound` objects: playback on a clock, level, spectrum, pitch, rhythm and harmony methods. The only user of `pygame.mixer`. |
+| `funground/sound/_synth.py` | Sound from numbers (A3, A9): waves, envelopes, notes, plucks, melodies. Plain Python, no device. |
 | `funground/analysis.py` | Onsets, tempo, beats, chroma, chords, key (A5, A6). Plain Python. |
-| `funground/hindustani.py`, `funground/data/ragas.json` | Ragas and talas: drone, tala, tonic, swara histogram, raga matching (A8). The table names its sources. |
-| `funground/microphone_input.py` | `Microphone` (A4, D-058). Uses pygame's experimental `pygame._sdl2.audio`, in three small functions. |
-| `funground/sound_views.py` | Ready-made drawings of a sound or microphone: wave, spectrum, spectrogram, pitch line (A7). |
+| `funground/sangeet/_tables.py`, `funground/data/ragas.json` | Ragas and talas: drone, tala, tonic, swara histogram, raga matching (A8). The table names its sources. |
+| `funground/sound/_microphone.py` | `Microphone` (A4, D-058). Uses pygame's experimental `pygame._sdl2.audio`, in three small functions. |
+| `funground/sound/_views.py` | Ready-made drawings of a sound or microphone: wave, spectrum, spectrogram, pitch line (A7). |
 | `funground/gallery.py` | The Examples Gallery browser, `python -m funground.gallery`. Holds `AREAS`, the locator and the explanation reader. |
 | `funground/fonts/` | The bundled fonts: DejaVu Sans, and the Noto fallback fonts (emoji, symbols, Devanagari). |
 | `funground/capabilities.py` | `Capability`, `FungroundError`, `FungroundWarning`, `missing_capability()`. |
@@ -169,7 +182,7 @@ every file in `funground/`. Its `ALLOWED` table is the truth:
 | Library | May be imported by | Why there |
 |---|---|---|
 | pygame-ce (`pygame`), window and images | `funground/platform/`, `funground/imaging.py` | pygame-ce is the window, input and timing layer, and it decodes image files. It draws nothing (D-008, a test checks for `pygame.draw` and `pygame.font`). `imaging.py` reads image files with it so that no second image library is needed (ADR-004, D-028). |
-| pygame-ce audio (`pygame.mixer`, `pygame._sdl2.audio`) | `funground/sound.py`, `funground/microphone_input.py` | Sound playback and microphone input (D-046, D-058). One file for each. `microphone_input.py` uses pygame-ce's experimental module, kept in three small functions so a change is easy to follow. |
+| pygame-ce audio (`pygame.mixer`, `pygame._sdl2.audio`) | `funground/sound/_engine.py`, `funground/sound/_microphone.py` | Sound playback and microphone input (D-046, D-058). One file for each. `microphone_input.py` uses pygame-ce's experimental module, kept in three small functions so a change is easy to follow. |
 | Cairo (`cairo`, pycairo) | `funground/renderers/`, `funground/export/` | Cairo is the renderer and the PDF and SVG writer. Keeping it in two folders means one place to change if the renderer changes (ADR-001, ADR-002, D-011). |
 | pypdf | `funground/export/` | To rewrite Cairo's PDF so that text is real, searchable text and layers are real layers (D-043, D-053). It belongs with the other file-writing code. |
 | imageio-ffmpeg (`imageio_ffmpeg`) | `funground/export/` | The optional `funground[video]` extra: an ffmpeg program for MP4 export, found by `find_ffmpeg()` in `export/motion.py` (D-045). |
@@ -188,7 +201,7 @@ Not every third-party library is a backend. `fontTools` and `uharfbuzz` (shaping
 `typography.py`) are not in the table, because they produce plain funground geometry, not drawing.
 Pillow is optional. `imaging.py` reaches for it for rarer filters, and `export/motion.py` for GIFs;
 each imports it inside one small function and falls back when it is missing. The plain-Python modules
-(`synth.py`, `analysis.py`, `hindustani.py`, `controls.py`) import no backend at all.
+(`sound/_synth.py`, `analysis.py`, `sangeet/_tables.py`, `controls.py`) import no backend at all.
 
 **To add a provider**, add its directory or file to `ALLOWED` in the same change. A new runtime
 dependency is a decision for the maintainer (D-034) and needs a decision-log row and, if it is
@@ -313,29 +326,29 @@ LGPL-2.1 (the funground licence is the same family), credited in the file header
 another project is in the package. Do not copy more. See the "Examples are original" rule in
 [PROCESS](../PROCESS.md).
 
-### Sound and music: `sound.py`, `synth.py`, `analysis.py`, `hindustani.py`, `microphone_input.py`
+### Sound and music: the `sound` and `sangeet` libraries and `analysis.py`
 
 Sound is a subsystem beside the drawing pipeline. It adds nothing to the IR.
 
-- `synth.py` makes lists of samples (numbers from -1 to 1 at 44 100 a second) from maths: waves built
+- `sound/_synth.py` makes lists of samples (numbers from -1 to 1 at 44 100 a second) from maths: waves built
   from harmonics so they do not alias, envelopes, notes, plucks, melodies and sargam strings. No
-  device and no pygame. `hindustani.py` does the same for ragas and talas, from the table in
+  device and no pygame. `sangeet/_tables.py` does the same for ragas and talas, from the table in
   `data/ragas.json`.
-- `sound.py` turns samples into a `Sound`. A sound keeps its own state (playing, paused, stopped,
+- `sound/_engine.py` turns samples into a `Sound`. A sound keeps its own state (playing, paused, stopped,
   position) on a clock, not on the audio device, so `is_playing()`, the position and the analysis
   behave the same with or without a device (A2). With `FUNGROUND_HEADLESS=1` it is silent but in time.
   The base class `_Analysis` (level, spectrum, pitch) is shared with the microphone.
 - `analysis.py` is the rhythm and harmony code (onsets, tempo, beats, chroma, chords, key). It first
   lowers the sample rate to about 11 025 a second, because a pure-Python FFT is slow. `Sound` gets
   the methods that call it.
-- `microphone_input.py` listens on SDL's audio thread into a ring buffer of the last 10 seconds. A lock
+- `sound/_microphone.py` listens on SDL's audio thread into a ring buffer of the last 10 seconds. A lock
   guards the buffer. The microphone is never played back. A quiet laptop microphone is a design case:
   `pitch()` hears down to -60 dB, and the microphone examples measure dB above the room.
-- `sound_views.py` draws a sound or microphone (wave, spectrum, spectrogram, pitch line) with ordinary
+- `sound/_views.py` draws a sound or microphone (wave, spectrum, spectrogram, pitch line) with ordinary
   drawing calls on the sketch it is given, so the views work in layers, pictures, PDF and SVG. Only
   the spectrogram is made of pixels.
-- `api.py` imports these modules inside the functions that use them, so `import funground` stays
-  fast and a learner who never makes a sound never loads them. Mind the naming trap in section 5.
+- The core does not import them. `from funground import sound` loads them, so `import funground` stays fast and a
+  learner who never makes a sound never loads them. Mind the naming trap in section 5.
 
 Notes: [Sound_Making_Note.md](../design/Sound_Making_Note.md) (making sound, quality, the
 microphone, drawing sound), [Music_Analysis_Note.md](../design/Music_Analysis_Note.md),
@@ -498,12 +511,12 @@ differs from the two lists plus the live values.
 
 `funground/__init__.py` has `f.<name>` for every public function. Suppose a submodule has the same
 name as a public function. When something imports the submodule lazily (`from . import ragas` inside a
-function), Python sets `funground.ragas` to the **module**. That replaces the function `f.ragas`, and
-the learner's next `f.ragas()` fails with "module is not callable". This happened twice in Sprint 14,
-with `ragas` and `microphone`. The modules were renamed `hindustani.py` and `microphone_input.py`.
+function), Python sets `funground.ragas` to the **module**. That replaces the function `sangeet.ragas`, and
+the learner's next `sangeet.ragas()` fails with "module is not callable". This happened twice in Sprint 14,
+with `ragas` and `microphone`. The modules were renamed, and in 0.2 they became the underscore modules of the sound and sangeet libraries.
 
-Before you add a module, check its name against `_PUBLIC_NAMES`. `sound.py` is safe only because there is no
-public function `f.sound`. When in doubt, give the file a longer name.
+Before you add a module, check its name against `_PUBLIC_NAMES`. The `sound` and `sangeet` packages are safe because there is no
+public function `f.sound` or `f.sangeet`, and their own modules start with an underscore. When in doubt, give the file a longer name.
 
 ### The layers rule: drawing uses `active_sketch()`, everything else `canvas_sketch()`
 
@@ -543,7 +556,7 @@ are in [THIRD_PARTY_LICENSES.md](../../THIRD_PARTY_LICENSES.md); check it when y
 | pypdf (>= 5) | Rewrites Cairo's PDF so text and layers are real (D-043, D-053) | BSD-3-Clause | `export/` |
 
 The sound, music, controls and motion modules need nothing beyond these and the standard library.
-`synth.py`, `analysis.py` and `hindustani.py` are plain Python.
+`sound/_synth.py`, `analysis.py` and `sangeet/_tables.py` are plain Python.
 
 Optional, in the `pyproject.toml` extras:
 

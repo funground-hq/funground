@@ -1,7 +1,7 @@
 """Microphone input (S-108; contract A4; D-058).
 
 The real microphone is never opened here. Tests replace the device functions in
-`funground.microphone_input` and play the microphone a known sound with `mic._feed(...)`.
+`funground.sound._microphone` and play the microphone a known sound with `mic._feed(...)`.
 """
 from __future__ import annotations
 
@@ -11,7 +11,9 @@ from array import array
 import pytest
 
 import funground as f
-from funground import api, microphone_input as mi, sound as sound_module
+from funground import sound
+from funground import api
+from funground.sound import _engine as sound_module, _microphone as mi
 
 RATE = 44100
 
@@ -50,16 +52,16 @@ def fake(monkeypatch):
 
 
 def test_microphones_lists_the_device_names(fake):
-    assert f.microphones() == ["Fake USB mic", "Other input"]
+    assert sound.microphones() == ["Fake USB mic", "Other input"]
 
 
 def test_microphones_is_empty_when_headless(monkeypatch, fake):
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
-    assert f.microphones() == []
+    assert sound.microphones() == []
 
 
 def test_start_stop_and_is_listening(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     assert not mic.is_listening()
     mic.start()
     assert mic.is_listening()
@@ -74,22 +76,22 @@ def test_start_stop_and_is_listening(fake):
 
 
 def test_name_picks_the_input_whose_name_contains_it(fake):
-    f.microphone("other").start()
+    sound.microphone("other").start()
     assert fake["opened"][0][0] == "Other input"
 
 
 def test_unknown_name_is_a_plain_error(fake):
     with pytest.raises(RuntimeError, match="no microphone has 'zzz'.*Fake USB mic"):
-        f.microphone("zzz")
+        sound.microphone("zzz")
 
 
 def test_a_bad_name_is_a_value_error(fake):
     with pytest.raises(ValueError):
-        f.microphone("")
+        sound.microphone("")
 
 
 def test_a_sine_gives_level_spectrum_and_pitch(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     mic._feed(sine(440))
     assert mic.level() == pytest.approx(0.5 / math.sqrt(2), abs=0.02)
@@ -99,19 +101,19 @@ def test_a_sine_gives_level_spectrum_and_pitch(fake):
     ratio = (16000 / 40) ** (1 / 32)
     assert 40 * ratio ** peak <= 440 < 40 * ratio ** (peak + 1)
     assert mic.pitch() == pytest.approx(440, rel=0.01)
-    assert f.frequency_to_note(mic.pitch()) == "A4"
+    assert sound.frequency_to_note(mic.pitch()) == "A4"
 
 
 def test_the_analysis_is_the_same_code_as_a_sounds(fake):
-    mic = f.microphone()
-    snd = f.create_sound(sine(300, 0.3))
+    mic = sound.microphone()
+    snd = sound.create(sine(300, 0.3))
     assert type(mic).level is type(snd).level
     assert type(mic).spectrum is type(snd).spectrum
     assert type(mic).pitch is type(snd).pitch
 
 
 def test_silence_gives_zero_and_none(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     mic._feed([0.0] * 5000)
     assert mic.level() == 0.0
@@ -120,13 +122,13 @@ def test_silence_gives_zero_and_none(fake):
 
 
 def test_nothing_heard_yet_is_silence(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     assert mic.level() == 0.0 and mic.pitch() is None and mic.spectrum(4) == [0.0] * 4
 
 
 def test_not_listening_gives_zeros_and_none(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic._feed(sine(440))
     assert mic.level() == 0.0
     assert mic.spectrum(5) == [0.0] * 5
@@ -140,11 +142,11 @@ def test_not_listening_gives_zeros_and_none(fake):
 
 def test_spectrum_checks_bands(fake):
     with pytest.raises(ValueError, match="microphone.spectrum"):
-        f.microphone().spectrum(0)
+        sound.microphone().spectrum(0)
 
 
 def test_ring_buffer_wraps_and_keeps_the_newest(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     size = mi.BUFFER_SECONDS * RATE
     mic._feed([0.1] * (size - 10))
@@ -157,7 +159,7 @@ def test_ring_buffer_wraps_and_keeps_the_newest(fake):
 
 
 def test_start_forgets_what_was_heard_before(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     mic._feed(sine(440))
     mic.stop()
@@ -166,7 +168,7 @@ def test_start_forgets_what_was_heard_before(fake):
 
 
 def test_capture_is_a_sound_of_what_was_fed(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     values = sine(220, 1.0)
     mic._feed(values)
@@ -178,7 +180,7 @@ def test_capture_is_a_sound_of_what_was_fed(fake):
 
 
 def test_capture_works_after_stop_and_pads_with_silence(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     mic._feed([0.5] * 1000)
     mic.stop()
@@ -189,7 +191,7 @@ def test_capture_works_after_stop_and_pads_with_silence(fake):
 
 
 def test_capture_more_than_ten_seconds_is_an_error(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     with pytest.raises(ValueError, match="at most 10"):
         mic.capture(11)
     for bad in (0, -1, "2", True):
@@ -198,11 +200,11 @@ def test_capture_more_than_ten_seconds_is_an_error(fake):
 
 
 def test_capture_of_ten_seconds_is_allowed(fake):
-    assert len(f.microphone().capture(10).samples()) == 10 * RATE
+    assert len(sound.microphone().capture(10).samples()) == 10 * RATE
 
 
 def test_the_audio_thread_path_stores_a_chunk(fake):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     fake["opened"][0][1].callback(array("f", [0.25] * 4))
     assert mic._latest(4) == [0.25] * 4
@@ -211,7 +213,7 @@ def test_the_audio_thread_path_stores_a_chunk(fake):
 def test_headless_gives_a_silent_microphone(monkeypatch):
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
     monkeypatch.setattr(mi, "_device_names", lambda: pytest.fail("no device is asked for"))
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     assert mic.is_listening()
     assert mic.level() == 0.0 and mic.pitch() is None and mic.spectrum(3) == [0.0] * 3
@@ -223,7 +225,7 @@ def test_no_device_is_a_plain_error_with_the_mac_hint(monkeypatch):
     monkeypatch.delenv("FUNGROUND_HEADLESS", raising=False)
     monkeypatch.setattr(mi, "_device_names", lambda: [])
     with pytest.raises(RuntimeError, match="no microphone was found.*System Settings"):
-        f.microphone()
+        sound.microphone()
 
 
 def test_a_refused_device_is_a_plain_error(monkeypatch, fake):
@@ -231,7 +233,7 @@ def test_a_refused_device_is_a_plain_error(monkeypatch, fake):
         raise RuntimeError(mi._no_device_message("the microphone could not be opened (denied)"))
 
     monkeypatch.setattr(mi, "_open_capture", refuse)
-    mic = f.microphone()
+    mic = sound.microphone()
     with pytest.raises(RuntimeError, match="could not be opened.*System Settings"):
         mic.start()
     assert not mic.is_listening()
@@ -295,7 +297,7 @@ def test_a_microphone_adds_nothing_to_the_ir_or_pixels(fake):
     f.background("white")
     before_ops = list(sketch.frame.ops)
     before_pixels = bytes(sketch._renderer.pixels().data)
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     mic._feed(sine(440))
     mic.level()

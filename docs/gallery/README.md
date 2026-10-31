@@ -2463,7 +2463,7 @@ The camera, live on the canvas, with buttons along the top. Record starts a take
 
 - f.camera() makes a camera object, and cam.start() opens it. f.image(cam, ...) draws its latest frame, here only its middle part when zoomed in.
 - cam.record(MAX_TAKE) starts a clip that keeps one frame for each frame the sketch draws. clip.pause() and clip.resume() hold and continue it, and clip.stop() ends it. clip.save("take.gif") writes the animated GIF.
-- mic.capture(seconds) gives the sound of the last few seconds as a sound. The sketch takes one piece of sound each time a recording stretch ends (Pause or Stop), joins them with f.sequence() and saves take.wav, so the sound fits the frames even when you paused.
+- mic.capture(seconds) gives the sound of the last few seconds as a sound. The sketch takes one piece of sound each time a recording stretch ends (Pause or Stop), joins them with sound.sequence() and saves take.wav, so the sound fits the frames even when you paused.
 - The buttons are rectangles the sketch draws. mouse_pressed() checks which one the mouse is inside.
 - cam.save("photo.png") writes a still photo. f.cameras() lists the cameras, and the sketch prints them. With no camera or no microphone the sketch still runs.
 
@@ -2754,7 +2754,7 @@ A tune plays over and over, and you see it. Each bar is one range of pitch, low 
 
 **How it works**
 
-- f.load_sound("data/tune.wav") reads a sound file. The path is found next to this file.
+- sound.load("data/tune.wav") reads a sound file. The path is found next to this file.
 - In setup(), tune.set_volume() sets how loud it is, and tune.loop() plays it again and again.
 - tune.spectrum(BANDS) gives a list of 24 numbers from 0 to 1, one for each range of pitch. The for loop draws one bar for each number. A stronger range gives a taller bar.
 - f.lerp_color() mixes deepskyblue into hotpink, a little more for each bar along the row.
@@ -2766,7 +2766,7 @@ A tune plays over and over, and you see it. Each bar is one range of pitch, low 
 - Change the two colours in f.lerp_color(), or the background colour.
 - Change the 1.5 in tune.level() * 1.5 to make the white bar more or less sensitive.
 - Draw circles instead of bars: use f.circle(20 + i * bar_width + bar_width / 2, 200, 120 * strength).
-- Play another sound. Put your own .wav file next to this one and change the name in f.load_sound().
+- Play another sound. Put your own .wav file next to this one and change the name in sound.load().
 
 </details>
 
@@ -2784,19 +2784,19 @@ A tune is written as a short list in the code. The same list makes the sound and
 **How it works**
 
 - TUNE is a list of (note, beats) pairs. The code joins it into text such as "E4:1 G4:1 A4:2". A note is a name like "E4", a dash is a rest, and :2 means two beats.
-- f.melody(text, tempo=TEMPO) turns that text into a sound. sound.reverb(0.2) puts it in a small room.
+- sound.melody(text, tempo=TEMPO) turns that text into a sound. reverb(0.2) puts it in a small room.
 - tune.samples() gives the wave as a list of numbers. The loop in draw() draws the few that are around the place where tune.current_time() says the sound is now.
-- f.mix() adds three quiet, long notes into one chord. f.note() and f.tone() make them. Each is quiet, so the sum stays below the loudest a sound can be.
+- sound.mix() adds three quiet, long notes into one chord. sound.note() and sound.tone() make them. Each is quiet, so the sum stays below the loudest a sound can be.
 - The bars use the same TUNE list. A note is gold while tune.current_time() is inside it.
-- tune.pitch() gives the pitch that is sounding, and f.frequency_to_note() turns it into a name.
+- tune.pitch() gives the pitch that is sounding, and sound.frequency_to_note() turns it into a name.
 
 **Make it yours**
 
 - Change TEMPO to play the tune slower or faster.
 - Change the notes in TUNE, or add ("C5", 2) at the end. The sound and the bars both follow.
-- Change the chord. Try "F3" and "A3" in place of "E3" and "G3" in f.mix().
+- Change the chord. Try "F3" and "A3" in place of "E3" and "G3" in sound.mix().
 - Change 0.2 in .reverb(0.2) to 0.6 for a bigger room.
-- Use a sharper voice: f.melody(text, tempo=TEMPO, wave="square").
+- Use a sharper voice: sound.melody(text, tempo=TEMPO, wave="square").
 
 </details>
 
@@ -2814,9 +2814,9 @@ A short phrase in sargam (note names used in Indian music) plays over a drone. A
 **How it works**
 
 - Sa is the home note, the one the music is built on. Here it is D4. A swara is a note named from Sa: S r R g G m M P d D n N. A small letter is komal (flat), and a capital M is tivra (sharp).
-- f.melody(PHRASE, sa=SA, tuning="just") reads swaras instead of note names. A ' after a swara is the octave above, and a comma is the octave below. "just" tuning uses pure ratios from Sa.
-- A drone is a steady background that holds Sa and Pa. This one imitates a tanpura, the stringed instrument that plays it. f.pluck() makes plucked strings, f.sequence() joins them one after another, and sound.reverb() gives them a room to ring in.
-- The hum is made from numbers: f.create_sound() turns a list of three added sine waves into a sound.
+- sound.melody(PHRASE, sa=SA, tuning="just") reads swaras instead of note names. A ' after a swara is the octave above, and a comma is the octave below. "just" tuning uses pure ratios from Sa.
+- A drone is a steady background that holds Sa and Pa. This one imitates a tanpura, the stringed instrument that plays it. sound.pluck() makes plucked strings, sound.sequence() joins them one after another, and reverb() gives them a room to ring in.
+- The hum is made from numbers: sound.create() turns a list of three added sine waves into a sound.
 - phrase.pitch() gives the pitch now. swara_height() uses a % 12 to fold it into one octave, so the voice always lands on a row of the ladder.
 - The pink line takes the middle of the last five readings, so it is calm, and it breaks at rests.
 
@@ -2843,9 +2843,9 @@ Sing or play one note into your microphone. The big letters show its name, like 
 
 **How it works**
 
-- f.microphone() makes the microphone, and mic.start() begins listening. f.microphones() lists the ones the computer has, and the first is named at the top.
+- sound.microphone() makes the microphone, and mic.start() begins listening. sound.microphones() lists the ones the computer has, and the first is named at the top.
 - mic.pitch() gives the pitch of the one note it hears, in hertz, or None when it is quiet. mic.level() says how loud it is, from 0 to 1. Laptop microphones can be very quiet, so the bar at the bottom uses decibels (loudness()) and still moves for a soft voice.
-- f.frequency_to_note() turns the pitch into a name. cents_off() then measures how far the pitch is from that note. A cent is one hundredth of a semitone, so 50 cents is halfway to the next note.
+- sound.frequency_to_note() turns the pitch into a name. cents_off() then measures how far the pitch is from that note. A cent is one hundredth of a semitone, so 50 cents is halfway to the next note.
 - The needle moves a third of the way to its target each frame, which smooths the shaking.
 - f.arc() draws the dial, and sin() and cos() put the needle at the right angle. 50 cents is 45 degrees.
 - A note needs 20 quiet frames before the name goes back to "-", so a short gap does not wipe it.
@@ -2875,7 +2875,7 @@ A tune plays over and over. The circle lights up on each beat. Press the space b
 
 **How it works**
 
-- f.melody(..., tempo=TEMPO) makes the tune. The last note is followed by a short rest, so the tune is exactly 16 beats long and the loop keeps the beat.
+- sound.melody(..., tempo=TEMPO) makes the tune. The last note is followed by a short rest, so the tune is exactly 16 beats long and the loop keeps the beat.
 - tune.beats() lists the time of every beat in seconds. It is found by listening to the sound itself. tune.tempo() gives the speed that was heard.
 - Each frame, tune.current_time() minus the last beat is how long ago the beat was. The glow fades over a quarter of a second, and f.lerp_color() sets the colour.
 - key_pressed() runs when a key goes down, and f.key says which. distance_to_beat() finds the nearest beat. It also tries the beats of the loop before and after.
@@ -2886,7 +2886,7 @@ A tune plays over and over. The circle lights up on each beat. Press the space b
 
 - Change TEMPO to 70 for a slow beat, or 140 for a fast one.
 - Make the game stricter. Change ON_TIME from 0.07 to 0.04.
-- Change the notes in the f.melody() text. Keep the total length and the final rest.
+- Change the notes in the sound.melody() text. Keep the total length and the final rest.
 - Make the circle a square: swap f.circle() for f.rect() and move its corner.
 - Count a streak. Add a global called streak, add 1 when name is "on time" in key_pressed(), and set it to 0 otherwise.
 
@@ -2905,8 +2905,8 @@ Chords play one after another. The twelve bars show how strong each note name is
 
 **How it works**
 
-- PROGRESSION is a list of chord names. f.chord_notes("Am") lists the note names in a chord. voicing() adds octave numbers to them, going up from octave 3.
-- Each chord is f.mix() of f.note() sounds. The notes are quiet, so the sum does not clip. f.sequence() puts the chords one after another, and sound.reverb(0.2) adds a little room.
+- PROGRESSION is a list of chord names. sound.chord_notes("Am") lists the note names in a chord. voicing() adds octave numbers to them, going up from octave 3.
+- Each chord is sound.mix() of sound.note() sounds. The notes are quiet, so the sum does not clip. sound.sequence() puts the chords one after another, and reverb(0.2) adds a little room.
 - song.chroma() gives 12 numbers for C, C#, D ... B. Each says how strong that note name is now, in any octave. The bars are those twelve numbers.
 - shown[i] moves a third of the way to the new number each frame, so the bars glide.
 - song.chord() names the chord that fits what is sounding. It gives nothing between chords, so the sketch keeps the last name.
@@ -2935,19 +2935,19 @@ A drone plays, and you sing along. The microphone hears you, and your pitch is d
 
 **How it works**
 
-- Sa is the home note of Indian music, and the drone holds it. SA = "D3" is a comfortable Sa for many voices. f.drone(SA, 7) makes a sound like a tanpura: plucked strings that play Pa, Sa, Sa, Sa and ring on. Pa is the fifth note above Sa.
+- Sa is the home note of Indian music, and the drone holds it. SA = "D3" is a comfortable Sa for many voices. sound.drone(SA, 7) makes a sound like a tanpura: plucked strings that play Pa, Sa, Sa, Sa and ring on. Pa is the fifth note above Sa.
 - Reverb makes the strings warmer, but it adds a tail, and the loop would pause. room() folds the tail back onto the start, so the loop has no gap.
 - mic.pitch() gives your pitch in hertz, or None when you are quiet. The code turns it into cents above Sa: 100 cents is one semitone, so Pa is 700 and the next Sa up is 1200.
 - GUIDES holds the lines to sing to. y_for() turns cents into a height on the screen.
 - line keeps the last 280 readings. A None is a gap, where the line breaks.
-- f.frequency_to_note(hz, sa=SA) names the swara you sing, for example "P" or "G". The small bar at the top right shows how loud the microphone hears you, in decibels (loudness()), so you can see it hears you even if your microphone is quiet.
+- sound.frequency_to_note(hz, sa=SA) names the swara you sing, for example "P" or "G". The small bar at the top right shows how loud the microphone hears you, in decibels (loudness()), so you can see it hears you even if your microphone is quiet.
 
 **Make it yours**
 
 - Change SA to "C3" or "A3" to suit your voice. The lines move with it.
 - Add a guide line for Ga, the third swara. Add (400, "G", "tomato") to GUIDES.
-- Change the drone for a raga without Pa. Use f.drone(SA, 7, pattern="m S' S' S"), with Ma on the first string.
-- Change 0.4 in room(f.drone(...), 0.4) to 0 for a dry drone, or to 0.7 for a big room.
+- Change the drone for a raga without Pa. Use sound.drone(SA, 7, pattern="m S' S' S"), with Ma on the first string.
+- Change 0.4 in room(sound.drone(...), 0.4) to 0 for a dry drone, or to 0.7 for a big room.
 - Change the pink line's colour and f.stroke_width(). Change the -70 and 50 in loudness() if the bar moves too much or too little.
 
 </details>
@@ -2965,18 +2965,18 @@ Pick a raga with the slider or the left and right keys. Its aroha (the way up) a
 
 **How it works**
 
-- f.ragas() lists the names funground knows. f.raga(name) gives one raga, with .thaat, .swaras, .aroha, .avaroha, .vadi, .samvadi, .time and .pakad.
-- f.drone() makes a steady background note, and f.melody() turns a string of swara names into a tune. Sa is the home note and "-" is a rest.
+- sangeet.ragas() lists the names funground knows. sangeet.raga(name) gives one raga, with .thaat, .swaras, .aroha, .avaroha, .vadi, .samvadi, .time and .pakad.
+- sound.drone() makes a steady background note, and sound.melody() turns a string of swara names into a tune. Sa is the home note and "-" is a rest.
 - The tune and the drone each use .reverb() and .loop(). The room() helper adds the echo's tail back onto the start, so the loop has no gap.
 - Every frame, tune.current_time() divided by the length of a beat says which swara is sounding. That one is drawn in gold.
 - f.create_slider() picks the raga, and choose() builds a new tune when the slider moves.
-- f.match_ragas() takes how often each of the 12 swaras is used. It gives back the ragas whose swaras are most alike, best first.
+- sangeet.match_ragas() takes how often each of the 12 swaras is used. It gives back the ragas whose swaras are most alike, best first.
 
 **Make it yours**
 
 - Change SA from "C#4" to another note, such as "D4". The whole tune and its lights move to that key.
 - Change TEMPO to make the tune slower or faster.
-- Change tuning="just" to tuning="equal" in f.melody() and listen for the small differences.
+- Change tuning="just" to tuning="equal" in sound.melody() and listen for the small differences.
 - Play the pakad instead: build the tune from raga.pakad.split() instead of the aroha and avaroha.
 - Change the background colour to fit raga.time, for example a dark blue for night ragas and a warm one for morning.
 
@@ -2996,8 +2996,8 @@ A tala is a cycle of beats that comes round again and again. Here the bols sit r
 **How it works**
 
 - A tala is a repeating pattern of beats. The beats fall in groups called vibhags. You clap at the start of some groups (tali) and wave at the start of others (khali). Beat 1 is the sam, where the cycle begins and lands. A bol is the syllable a tabla player says for one beat, and the theka is the whole pattern of bols.
-- f.talas() lists the six talas. f.tala_info(name) gives .beats, .vibhag, .tali, .khali, .sam and .bols.
-- f.tala(info.name, tempo=TEMPO) makes one cycle with simple drum sounds. choose() stops the old cycle, makes a new one and loops it.
+- sangeet.talas() lists the six talas. sangeet.tala_info(name) gives .beats, .vibhag, .tali, .khali, .sam and .bols.
+- sangeet.tala(info.name, tempo=TEMPO) makes one cycle with simple drum sounds. choose() stops the old cycle, makes a new one and loops it.
 - Each frame, cycle.current_time() divided by the length of a beat says which beat is playing.
 - Each bol sits at an angle on the circle, found with math.cos() and math.sin(). The beat that is playing glows gold.
 - marks() decides the sign over each beat: X for the sam, 0 for a wave and 2, 3, ... for the other claps. key_pressed() reads the keys 1 to 6.
@@ -3025,10 +3025,10 @@ Sing, hum or talk to the microphone and watch three views of the same sound. The
 
 **How it works**
 
-- f.microphone() makes the microphone, and mic.start() in setup() begins listening.
-- f.draw_wave(mic, x, y, w, h) draws the wave: how the air moves over the last half second.
-- f.draw_spectrum(mic, x, y, w, h, bands=40) draws a bar for each range of pitch, low on the left and high on the right.
-- f.draw_pitch_line(mic, x, y, w, h, seconds=6, low="C3", high="C6") draws the note you sing, scrolling across. It leaves a gap when you are quiet.
+- sound.microphone() makes the microphone, and mic.start() in setup() begins listening.
+- sound.draw_wave(mic, x, y, w, h) draws the wave: how the air moves over the last half second.
+- sound.draw_spectrum(mic, x, y, w, h, bands=40) draws a bar for each range of pitch, low on the left and high on the right.
+- sound.draw_pitch_line(mic, x, y, w, h, seconds=6, low="C3", high="C6") draws the note you sing, scrolling across. It leaves a gap when you are quiet.
 - These functions draw with the current fill and stroke. So the code sets f.fill() and f.stroke() before each one, to give each view its own colour.
 - label() is a small helper that writes a title above each view. The small bar at the top right shows how loud the microphone hears you, in decibels (loudness()), even for a quiet microphone.
 
@@ -3055,8 +3055,8 @@ A short song is turned into a picture. Time goes across, pitch goes up, and the 
 
 **How it works**
 
-- f.melody() makes the tune, and makes the bass again with wave="sine" and volume=0.35. f.mix() adds the two into one song. The bass is quiet, so the sum does not clip.
-- f.spectrogram(song, WIDTH, HEIGHT) turns the whole sound into a picture. Its brightest colour is the fill colour at that moment, so setup() calls f.fill() first.
+- sound.melody() makes the tune, and makes the bass again with wave="sine" and volume=0.35. sound.mix() adds the two into one song. The bass is quiet, so the sum does not clip.
+- sound.spectrogram(song, WIDTH, HEIGHT) turns the whole sound into a picture. Its brightest colour is the fill colour at that moment, so setup() calls f.fill() first.
 - fingerprint.save("fingerprint.png") writes the picture, and f.image() draws it.
 - The picture runs from 40 Hz to 16,000 Hz. pitch_height() uses a log to find where a note name sits, so the side labels C3, C4, C5 and C6 are in the right place.
 - mouse_pressed() calls song.play(). While song.is_playing(), the line sits at song.current_time() / song.duration() of the way across.
@@ -3086,8 +3086,8 @@ Every sound is a wave, and the shape of the wave decides how it sounds. Drag the
 
 - shape is a list of N=48 heights, from -1 to 1. mouse_pressed(), mouse_dragged() and mouse_released() change them. paint() moves the point nearest the mouse. The drag code fills the points the mouse jumped over, so a fast drag leaves no gaps.
 - rebuild() makes one second of sound from the shape. For each of the 44,100 numbers, it works out where that moment falls in the shape and blends two neighbouring points. PITCH = 220 repeats a second is the note A3.
-- f.create_sound(numbers) turns the list into a sound, and sound.loop() plays it. The sketch removes the average first, so the wave does not sit above zero.
-- f.draw_spectrum(sound, ...) draws the bars on the right.
+- sound.create(numbers) turns the list into a sound, and wave_sound.loop() plays it. The sketch removes the average first, so the wave does not sit above zero.
+- sound.draw_spectrum(sound, ...) draws the bars on the right.
 - f.create_button() makes the four buttons. button.clicked() is true on the frame it is pressed, and preset() builds the shape.
 - f.begin_shape(), f.vertex() and f.end_shape() draw the shape, and the same shape again four times at the bottom. That repeated wave is what the speaker follows.
 
@@ -3115,8 +3115,8 @@ Click the squares to write a tune. Time goes across, with 16 beats. Pitch goes u
 **How it works**
 
 - cells[row][beat] is a grid of True and False. mouse_pressed() turns a mouse position into a row and a beat, and flips that square.
-- rebuild() turns the grid into text for f.melody(): "-" for an empty beat, and a chord such as "[C4 E4]" for squares in the same column. In sargam mode, it adds sa=SA, tuning="just". Sa is the home note, and a swara is a note named from it.
-- A soft low pulse on every fourth beat comes from f.tone() and f.sequence(). f.mix() adds the pulse to the notes. room() adds a little reverb, then folds its tail back onto the start, so the loop has no gap.
+- rebuild() turns the grid into text for sound.melody(): "-" for an empty beat, and a chord such as "[C4 E4]" for squares in the same column. In sargam mode, it adds sa=SA, tuning="just". Sa is the home note, and a swara is a note named from it.
+- A soft low pulse on every fourth beat comes from sound.tone() and sound.sequence(). sound.mix() adds the pulse to the notes. room() adds a little reverb, then folds its tail back onto the start, so the loop has no gap.
 - A tune is made again 30 frames after your last click, so quick clicking does not rebuild it every time.
 - f.create_button() and f.create_checkbox() make the controls. tune.is_playing() and tune.current_time() / STEP find the beat that is sounding.
 - tune.save("my_tune.wav") writes the sound. f.save("grid_poster.pdf") writes the picture, after drawing the grid again on white.
@@ -3145,7 +3145,7 @@ The sketch plays two notes. The first is your starting note. The second is a mys
 **How it works**
 
 - Sa is the home note, and a swara is a note named from it. SWARAS lists them by steps above Sa: S r R g G m M P d D n N. A small letter is komal (flat), and a capital M is tivra (sharp).
-- new_question() uses f.random_choice() to pick a step, never the same one twice in a row, and builds the question. play_question() plays it with f.melody(), such as "S:2 G:3 -:1", and sound.reverb(0.15).
+- new_question() uses f.random_choice() to pick a step, never the same one twice in a row, and builds the question. play_question() plays it with sound.melody(), such as "S:2 G:3 -:1", and reverb(0.15).
 - mouse_pressed() checks the button rectangles. key_pressed() reads the swara letters, the arrow keys and Enter. Each calls answer(), which scores it.
 - Singing is read with mic.pitch(). sung_steps() turns the pitch into steps above the start and folds it into one octave with % 12. listen() takes the middle of the last five readings, and HOLD steady frames count as an answer.
 - The microphone waits until the notes have finished (f.millis() and quiet_until), so it does not hear the question. The small bar at the bottom left shows how loud the microphone hears you, in decibels (loudness()), so you can see it hears you even if it is quiet.
@@ -3175,10 +3175,10 @@ The tune is a string of notes, shown at the top. The sketch reads the string its
 **How it works**
 
 - MELODY is text. parse() reads it with a regular expression into notes: the token, the start beat, how many beats, and the pitches. A - is a rest, [ ] is a chord, and :2 is two beats.
-- pitch_number() uses f.note_to_frequency() to turn a note name into a semitone number, where 69 is A4. The roll's top and bottom come from the lowest and highest note.
-- The same MELODY goes to f.melody() to make the sound, so the roll and the sound always agree. That works because the notes were written in code. A roll from a recording would need machine learning.
+- pitch_number() uses sound.note_to_frequency() to turn a note name into a semitone number, where 69 is A4. The roll's top and bottom come from the lowest and highest note.
+- The same MELODY goes to sound.melody() to make the sound, so the roll and the sound always agree. That works because the notes were written in code. A roll from a recording would need machine learning.
 - now = tune.current_time() is the clock. Each bar's x is HEAD + (start * BEAT - now) * PPS, so the bars slide left past the line at HEAD. The bars are drawn twice, so the start of the next time round is in view.
-- f.create_checkbox() makes the box. When it is ticked, f.draw_pitch_line(tune, ...) draws the one note that tune.pitch() hears. A chord has no single pitch, so it leaves a gap.
+- f.create_checkbox() makes the box. When it is ticked, sound.draw_pitch_line(tune, ...) draws the one note that tune.pitch() hears. A chord has no single pitch, so it leaves a gap.
 
 **Make it yours**
 
@@ -3265,12 +3265,12 @@ Pick a raga with the slider or the left and right keys. The page shows its thaat
 
 **How it works**
 
-- The program is five small parts. Data comes from f.ragas() and f.raga(). Sounds come from make_drone() and make_tune(). Singing is read by listen_to_voice(). Results come from work_out_the_singing(). The drawing is in draw(), show_notes() and show_results().
+- The program is five small parts. Data comes from sangeet.ragas() and sangeet.raga(). Sounds come from make_drone() and make_tune(). Singing is read by listen_to_voice(). Results come from work_out_the_singing(). The drawing is in draw(), show_notes() and show_results().
 - A variable called mode (idle, listen, sing, thinking or result) says what the page is doing. update() reads the buttons and the slider and changes the mode. draw() paints what the mode says.
-- make_tune() joins raga.aroha and raga.avaroha, with a rest between. A meend, a glide, runs into the last note, written with ~. f.melody(..., sa=SA, tuning="just") plays it. Sa is the home note.
-- make_drone() uses f.drone(). A drone is the steady tanpura note under the singer. A raga with no Pa gets Ni on the first string. Each sound is made once and kept in a dictionary.
+- make_tune() joins raga.aroha and raga.avaroha, with a rest between. A meend, a glide, runs into the last note, written with ~. sound.melody(..., sa=SA, tuning="just") plays it. Sa is the home note.
+- make_drone() uses sound.drone(). A drone is the steady tanpura note under the singer. A raga with no Pa gets Ni on the first string. Each sound is made once and kept in a dictionary.
 - The ladder has a row for each swara. A row is dark if the raga leaves that swara out. The vadi and samvadi have a coloured border. The lit row follows tune.current_time().
-- When you sing, mic.pitch() is folded into one octave and smoothed. A row turns red for a swara the raga does not use. While you sing, a small bar at the bottom shows how loud the microphone hears you, in decibels (loudness()), so you can see it hears you. On "stop", mic.capture(seconds).swara_histogram(SA) counts the swaras, and f.match_ragas(shares)[:3] gives the closest three ragas. It compares notes only. A raga is also its way of moving between them.
+- When you sing, mic.pitch() is folded into one octave and smoothed. A row turns red for a swara the raga does not use. While you sing, a small bar at the bottom shows how loud the microphone hears you, in decibels (loudness()), so you can see it hears you. On "stop", mic.capture(seconds).swara_histogram(SA) counts the swaras, and sangeet.match_ragas(shares)[:3] gives the closest three ragas. It compares notes only. A raga is also its way of moving between them.
 
 **Make it yours**
 
@@ -3299,7 +3299,7 @@ A little bird flies through gates, and your voice is the control. First comes a 
 - listen() turns the microphone into one number from 0 to 1. Microphones differ a lot, so the game measures loudness in decibels (db()) and compares it with the room. For the first CALIBRATE frames (a second), it listens to the quiet room and keeps the middle reading, the median, as the floor. After that, it smooths mic.level() and measures how many decibels you are above the floor.
 - settings() gives the two marks, "starts at" and "full at", from the sliders that f.create_slider() made. Below "starts at" the result is 0, and at "full at" it is 1. f.constrain() keeps it between. The arrow keys move the sliders too, and key_pressed() reads them. update() shows the sliders on the setup screen only: .visible() hides them while you play, and they keep their values.
 - The setup screen draws a tall bar of your loudness, the two marks, and a practice bird that eases toward the height your voice gives. The small "mic" bar shows the raw decibels in every state. Loudness controls the bird, not pitch, because mic.pitch() gives nothing for breath or noise.
-- The bird eases toward a target height, set by voice. Gates are dictionaries in a list. They slide left, and score goes up when one passes. hits() finds the nearest point of each gate box to the bird. The sounds come from f.pluck(), f.note() and f.tone(), and sound.play() plays them.
+- The bird eases toward a target height, set by voice. Gates are dictionaries in a list. They slide left, and score goes up when one passes. hits() finds the nearest point of each gate box to the bird. The sounds come from sound.pluck(), sound.note() and sound.tone(), and play() plays them.
 
 **Make it yours**
 
@@ -3386,7 +3386,7 @@ A silver foil hides three symbols. Hold the mouse button down and scratch the fo
 - To scratch, the sketch calls f.erase() inside the foil layer and then draws circles along the mouse's path. Drawing now removes the foil and does not paint it, so the card under it shows through. f.no_erase() is not needed: every `with` block starts with painting again.
 - The symbols are on the canvas under the layer. f.random_seed(card) and f.random_choice() pick the same three symbols for the same card number. Stars, hearts, moons and diamonds are drawn with f.polygon() and with paths joined by | and -.
 - A layer cannot be read back, so the sketch keeps its own list of sample points inside each symbol. A point is cleared when a scratch passes close to it (f.distance()). At 60% cleared, the symbol is found.
-- f.pluck() makes the chime, and sound.play() plays it. Three notes rise as you find them. f.melody() plays a little tune for a win.
+- sound.pluck() makes the chime, and the sound's play() plays it. Three notes rise as you find them. sound.melody() plays a little tune for a win.
 - f.mouse_x, f.mouse_y and f.is_mouse_pressed give the scratch. f.key reads N in key_pressed().
 
 **Make it yours**
@@ -3444,8 +3444,8 @@ A cloud of words hangs in front of a mouth like fog, and breath blows it away. M
 
 **How it works**
 
-- f.load_clip("take.gif") and f.load_sound("take.wav") read the take. Each frame of the clip is drawn in turn with clip.frame(i), and the sound plays alongside, starting again with the clip so the two stay together.
-- Before it starts, the sketch works out how loud the sound is during each frame of the clip, from sound.samples(), and turns it into a breath from 0 to 1. Frame i always gets breath i, so the words move at exactly the right moments, every loop.
+- f.load_clip("take.gif") and sound.load("take.wav") read the take. Each frame of the clip is drawn in turn with clip.frame(i), and the sound plays alongside, starting again with the clip so the two stay together.
+- Before it starts, the sketch works out how loud the sound is during each frame of the clip, from take_audio.samples(), and turns it into a breath from 0 to 1. Frame i always gets breath i, so the words move at exactly the right moments, every loop.
 - Each word is an object of class Word with its home in the cloud, its speed and how much of it is left. A breath pushes the words near the mouth away; then they fade and drift back. f.noise() makes the fog come and go.
 - f.save_gif() keeps one whole loop, from its first frame, as blow.gif.
 

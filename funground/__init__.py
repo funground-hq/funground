@@ -86,33 +86,9 @@ from .api import (
     load_font,
     load_image,
     load_pixels,
-    load_sound,
-    create_sound,
-    tone,
-    note,
-    pluck,
-    melody,
-    sequence,
-    mix,
-    note_to_frequency,
-    frequency_to_note,
-    chord_notes,
-    microphone,
-    microphones,
     camera,
     cameras,
     load_clip,
-    ragas,
-    raga,
-    talas,
-    tala_info,
-    tala,
-    drone,
-    match_ragas,
-    draw_wave,
-    draw_spectrum,
-    spectrogram,
-    draw_pitch_line,
     load_svg,
     loop,
     mag,
@@ -307,33 +283,9 @@ __all__ = [
     "load_font",
     "load_image",
     "load_pixels",
-    "load_sound",
-    "create_sound",
-    "tone",
-    "note",
-    "pluck",
-    "melody",
-    "sequence",
-    "mix",
-    "note_to_frequency",
-    "frequency_to_note",
-    "chord_notes",
-    "microphone",
-    "microphones",
     "camera",
     "cameras",
     "load_clip",
-    "ragas",
-    "raga",
-    "talas",
-    "tala_info",
-    "tala",
-    "drone",
-    "match_ragas",
-    "draw_wave",
-    "draw_spectrum",
-    "spectrogram",
-    "draw_pitch_line",
     "load_svg",
     "loop",
     "mag",
@@ -471,10 +423,37 @@ _RENAMED = {
 }
 
 
+# D-120, ADR-007, D-123: the sound and sangeet names left ``f`` in 0.2 for libraries that a sketch imports. This one table
+# gives every moved name its sentence (the library it went to, and the name it has there). Nothing here is an alias: 0.1
+# code that calls ``f.note()`` is told what to write instead. The names stay in funground/released_names.json, which
+# records 0.1.
+_MOVED = {
+    "create_sound": ("sound", "create"), "load_sound": ("sound", "load"),
+    "tone": ("sound", "tone"), "note": ("sound", "note"), "pluck": ("sound", "pluck"), "drone": ("sound", "drone"),
+    "melody": ("sound", "melody"), "sequence": ("sound", "sequence"), "mix": ("sound", "mix"),
+    "chord_notes": ("sound", "chord_notes"), "note_to_frequency": ("sound", "note_to_frequency"),
+    "frequency_to_note": ("sound", "frequency_to_note"), "microphone": ("sound", "microphone"),
+    "microphones": ("sound", "microphones"), "draw_wave": ("sound", "draw_wave"),
+    "draw_spectrum": ("sound", "draw_spectrum"), "draw_pitch_line": ("sound", "draw_pitch_line"),
+    "spectrogram": ("sound", "spectrogram"),
+    "raga": ("sangeet", "raga"), "ragas": ("sangeet", "ragas"), "match_ragas": ("sangeet", "match_ragas"),
+    "tala": ("sangeet", "tala"), "tala_info": ("sangeet", "tala_info"), "talas": ("sangeet", "talas"),
+}
+
+
+def moved_message(name: str) -> str:
+    """The one sentence for a name that moved to a library: where it went and what to write."""
+    library, new_name = _MOVED[name]
+    return (f"f.{name}() has moved to the {library} library: add `from funground import {library}` "
+            f"and write {library}.{new_name}().")
+
+
 def __getattr__(name: str):
-    """Expose live values without copying stale integers into this module."""
+    """Expose live values without copying stale integers into this module, and explain names that moved."""
     if name in _api.LIVE_NAMES:
         return _api.live_value(name)
     if name in _RENAMED:
         raise AttributeError(_RENAMED[name])
+    if name in _MOVED:
+        raise AttributeError(moved_message(name))
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

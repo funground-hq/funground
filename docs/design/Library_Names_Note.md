@@ -1,6 +1,6 @@
 # The names in the sound, sangeet and camera libraries (D-123)
 
-**Status:** proposed 28 October 2026 (D-123, pending). Needed before S-246 and S-247 are built. Follows D-120 and
+**Status:** proposed 28 October 2026; accepted 29 October 2026 (D-123, option a, with the callable module type for `f.camera()`). Needed before S-246 and S-247 are built. Follows D-120 and
 [ADR-007](ADR-007-core-and-libraries.md), whose rule 5 says the names of each library go to the maintainer before
 building.
 

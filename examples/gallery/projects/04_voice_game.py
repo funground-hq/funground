@@ -24,7 +24,7 @@ How it works:
   Loudness controls the bird, not pitch, because mic.pitch() gives nothing for breath or noise.
 - The bird eases toward a target height, set by voice. Gates are dictionaries in a list. They slide
   left, and score goes up when one passes. hits() finds the nearest point of each gate box to the
-  bird. The sounds come from f.pluck(), f.note() and f.tone(), and sound.play() plays them.
+  bird. The sounds come from sound.pluck(), sound.note() and sound.tone(), and play() plays them.
 
 Make it yours:
 - Change GAP from 150 to 200 for an easier game, or to 120 for a harder one.
@@ -39,6 +39,7 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
 W, H = 640, 420
 GROUND = 370                               # where the grass starts
@@ -56,16 +57,16 @@ BUTTON = (265, 318, 210, 44)               # the "start game" button on the setu
 LOW, HIGH = 50, GROUND - 28                # the bird stays between these heights
 
 try:
-    mic = f.microphone()
-    mic_name = (f.microphones() or ["microphone"])[0]
+    mic = sound.microphone()
+    mic_name = (sound.microphones() or ["microphone"])[0]
 except RuntimeError:                       # no microphone on this computer: space still works
     mic = None
     mic_name = ""
 
 # Sound effects: all made from numbers, and made quiet enough to be pleasant.
-sound_start = f.pluck("C5", 0.5, volume=0.4)
-sound_point = f.note("G5", 0.18, volume=0.35)
-sound_crash = f.tone(120, 0.45, wave="triangle", volume=0.45, release=0.3)
+sound_start = sound.pluck("C5", 0.5, volume=0.4)
+sound_point = sound.note("G5", 0.18, volume=0.35)
+sound_crash = sound.tone(120, 0.45, wave="triangle", volume=0.45, release=0.3)
 
 state = "setup"                            # setup, ready, play or over
 start_at = None                            # the slider for where the bird starts to lift (made in setup())

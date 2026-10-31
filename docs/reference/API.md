@@ -4,7 +4,7 @@ Every public name in funground, with its signature, arguments and an example. Th
 
 Related pages: the [Quick Reference](Quick_Reference.md) (every function by topic, with pictures), the [guide](../guide/README.md) (learn step by step), [When something goes wrong](../guide/errors.md), the [glossary](../guide/glossary.md), [funground compared with p5 and DrawBot](Compared_with_p5_and_DrawBot.md) and the [documentation front door](../README.md).
 
-In the examples, `import funground as f` is understood.
+In the examples, `import funground as f` is understood. A library's examples also understand its own import line, such as `from funground import sound`.
 
 ## Contents
 
@@ -28,13 +28,11 @@ In the examples, `import funground as f` is understood.
 - [Saving](#saving): [`save`](#fn-save), [`save_frames`](#fn-save_frames), [`save_gif`](#fn-save_gif), [`save_movie`](#fn-save_movie)
 - [Ground](#ground): [`area`](#fn-area), [`grid`](#fn-grid), [`mm`](#fn-mm), [`inch`](#fn-inch), [`ground`](#fn-ground)
 - [Motion and pages](#motion-and-pages): [`frame_duration`](#fn-frame_duration), [`new_page`](#fn-new_page), [`page_size`](#fn-page_size), [`page_count`](#fn-page_count)
-- [Sound](#sound): [`load_sound`](#fn-load_sound), [`create_sound`](#fn-create_sound), [`tone`](#fn-tone), [`note`](#fn-note), [`pluck`](#fn-pluck), [`melody`](#fn-melody), [`sequence`](#fn-sequence), [`mix`](#fn-mix), [`drone`](#fn-drone), [`note_to_frequency`](#fn-note_to_frequency), [`frequency_to_note`](#fn-frequency_to_note), [`chord_notes`](#fn-chord_notes)
-- [Music analysis and the microphone](#music-analysis-and-the-microphone): [`microphone`](#fn-microphone), [`microphones`](#fn-microphones)
 - [Camera](#camera): [`camera`](#fn-camera), [`cameras`](#fn-cameras), [`load_clip`](#fn-load_clip)
-- [Drawing sound](#drawing-sound): [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`spectrogram`](#fn-spectrogram), [`draw_pitch_line`](#fn-draw_pitch_line)
-- [Ragas and talas](#ragas-and-talas): [`ragas`](#fn-ragas), [`raga`](#fn-raga), [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`match_ragas`](#fn-match_ragas)
 - [Classes](#classes): [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString)
 - [Names for colours and options](#names-for-colours-and-options): [`COLORS`](#const-COLORS), [`CONSTANTS`](#const-CONSTANTS)
+- [The sound library](#the-sound-library): [`load`](#fn-sound-load), [`create`](#fn-sound-create), [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`pluck`](#fn-sound-pluck), [`melody`](#fn-sound-melody), [`sequence`](#fn-sound-sequence), [`mix`](#fn-sound-mix), [`drone`](#fn-sound-drone), [`note_to_frequency`](#fn-sound-note_to_frequency), [`frequency_to_note`](#fn-sound-frequency_to_note), [`chord_notes`](#fn-sound-chord_notes), [`microphone`](#fn-sound-microphone), [`microphones`](#fn-sound-microphones), [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`spectrogram`](#fn-sound-spectrogram), [`draw_pitch_line`](#fn-sound-draw_pitch_line)
+- [The sangeet library](#the-sangeet-library): [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga), [`talas`](#fn-sangeet-talas), [`tala_info`](#fn-sangeet-tala_info), [`tala`](#fn-sangeet-tala), [`match_ragas`](#fn-sangeet-match_ragas)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
@@ -2700,7 +2698,7 @@ It is drawn as it is at this moment: later drawing on the picture does not chang
 
 | Argument | Meaning |
 |---|---|
-| `picture` | a Picture, from load_image(), load_svg(), create_graphics(), get() or spectrogram(), or a camera from camera(). A camera draws its latest frame, and nothing before the first one arrives. |
+| `picture` | a Picture, from load_image(), load_svg(), create_graphics(), get() or sound.spectrogram(), or a camera from camera(). A camera draws its latest frame, and nothing before the first one arrives. |
 | `x`, `y` | where to put it, by default the top-left corner. |
 | `width`, `height` | the size to stretch it to. The default None uses the picture's own size. |
 | `sx`, `sy`, `sw`, `sh` | give all four to draw only that part of the picture (in its own pixels) into the box. A part that reaches outside the picture is clipped and keeps its place. sw and sh must be above 0. |
@@ -4023,415 +4021,6 @@ print(f.page_count())
 
 See also: [`new_page`](#fn-new_page).
 
-<a id="sound"></a>
-## Sound
-
-<a id="fn-load_sound"></a>
-### `f.load_sound`
-
-```py
-f.load_sound(path: 'str') -> 'Sound'
-```
-
-Read a sound file and return a sound.
-
-A relative path is looked for next to your sketch file first, then in the current folder. With no sound device (or FUNGROUND_HEADLESS=1) it plays silently and keeps time.
-
-| Argument | Meaning |
-|---|---|
-| `path` | a WAV, OGG or MP3 file. |
-
-**Returns.** A Sound: play(), loop(), stop(), pause(), set_volume(v), is_playing(), duration(), current_time(), level(), spectrum(bands), pitch(), pan(p), reverb(amount), samples() and save(path).
-
-**Raises.**
-
-- `FileNotFoundError`: the file is not found in either place.
-- `ValueError`: the file is not sound.
-
-```py
-beep = f.load_sound("beep.wav")
-beep.play()
-```
-
-See also: [`create_sound`](#fn-create_sound), [`tone`](#fn-tone), [`note`](#fn-note), [`draw_wave`](#fn-draw_wave).
-
-<a id="fn-create_sound"></a>
-### `f.create_sound`
-
-```py
-f.create_sound(samples: 'Any', rate: 'int' = 44100) -> 'Sound'
-```
-
-Make a sound from a list of numbers.
-
-It is an ordinary sound. sound.samples() gives the numbers back.
-
-| Argument | Meaning |
-|---|---|
-| `samples` | a list of numbers from -1 to 1, one channel. Numbers outside that range are clipped. |
-| `rate` | how many numbers make one second. The default is 44100. |
-
-**Returns.** A Sound: play(), loop(), stop(), level(), spectrum(bands), samples() and so on.
-
-**Raises.**
-
-- `ValueError`: the list is empty or has things that are not numbers.
-
-```py
-import math
-s = f.create_sound([math.sin(i / 9) for i in range(44100)])
-s.play()
-```
-
-See also: [`tone`](#fn-tone), [`load_sound`](#fn-load_sound), [`mix`](#fn-mix).
-
-<a id="fn-tone"></a>
-### `f.tone`
-
-```py
-f.tone(frequency: 'float', seconds: 'float', wave: 'CONSTANTS.WAVE' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'
-```
-
-Make a sound that is one steady tone.
-
-The loudness follows an envelope. It rises to full over the attack, falls to the sustain level over the decay, holds, and fades out over the last release seconds. If attack and release do not fit, they are made shorter. Noise repeats after random_seed().
-
-| Argument | Meaning |
-|---|---|
-| `frequency` | the pitch, in hertz. |
-| `seconds` | how long the sound lasts. |
-| `wave` | "sine" (the default), "soft", "triangle", "square", "saw" or "noise". |
-| `volume` | from 0 to 1. The default 0.5 is half, so sounds can play together without clipping. |
-| `attack` | seconds to rise to full. The default is 0.01. |
-| `release` | seconds to fade out at the end. The default is 0.15. |
-| `decay` | seconds to fall to the sustain level. The default is 0.15. |
-| `sustain` | the level held after the decay, 0 to 1. The default is 0.7. |
-
-**The words for `wave`.**
-
-| Word | What it does |
-|---|---|
-| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
-| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
-| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
-| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
-| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
-| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
-
-**Returns.** A Sound: play(), loop(), stop(), level() and so on.
-
-```py
-f.tone(440, 1, "square").play()
-```
-
-See also: [`note`](#fn-note), [`pluck`](#fn-pluck), [`melody`](#fn-melody), [`create_sound`](#fn-create_sound).
-
-<a id="fn-note"></a>
-### `f.note`
-
-```py
-f.note(name: 'str', seconds: 'float', wave: 'CONSTANTS.WAVE' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'
-```
-
-Make a sound that is one named note.
-
-It takes the same options as tone().
-
-| Argument | Meaning |
-|---|---|
-| `name` | a note name such as "A4" (440 hertz), "C#5" or "Bb3". |
-| `seconds` | how long the sound lasts. |
-| `wave` | "sine" (the default), "soft", "triangle", "square", "saw" or "noise". |
-| `volume` | from 0 to 1. The default is 0.5. |
-| `attack` | seconds to rise to full. The default is 0.01. |
-| `release` | seconds to fade out at the end. The default is 0.15. |
-| `decay` | seconds to fall to the sustain level. The default is 0.15. |
-| `sustain` | the level held after the decay, 0 to 1. The default is 0.7. |
-
-**The words for `wave`.**
-
-| Word | What it does |
-|---|---|
-| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
-| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
-| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
-| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
-| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
-| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
-
-**Returns.** A Sound: play(), loop(), stop(), level() and so on.
-
-**Raises.**
-
-- `ValueError`: the note name is not understood.
-
-```py
-f.note("C4", 2, attack=0.5, sustain=1).play()
-```
-
-See also: [`tone`](#fn-tone), [`melody`](#fn-melody), [`note_to_frequency`](#fn-note_to_frequency).
-
-<a id="fn-pluck"></a>
-### `f.pluck`
-
-```py
-f.pluck(name_or_frequency: 'float | str', seconds: 'float', volume: 'float' = 0.5) -> 'Sound'
-```
-
-Make a sound like a plucked string.
-
-It dies away by itself. It repeats after random_seed().
-
-| Argument | Meaning |
-|---|---|
-| `name_or_frequency` | a note name such as "E3", or a frequency in hertz. |
-| `seconds` | how long the sound lasts. |
-| `volume` | from 0 to 1. The default is 0.5. |
-
-**Returns.** A Sound: play(), loop(), stop(), reverb() and so on.
-
-```py
-f.pluck("E3", 2).play()
-```
-
-See also: [`tone`](#fn-tone), [`note`](#fn-note), [`drone`](#fn-drone).
-
-<a id="fn-melody"></a>
-### `f.melody`
-
-```py
-f.melody(text: 'str', tempo: 'float' = 120, wave: 'CONSTANTS.WAVE' = 'soft', sa: 'str | None' = None, tuning: 'CONSTANTS.TUNING' = 'equal', volume: 'float' = 0.5) -> 'Sound'
-```
-
-Make a sound from a string of notes.
-
-Separate the tokens with spaces. A token is a note name, "-" for a rest, or "[C4 E4 G4]" for a chord. Add ":2" after a token for how many beats it lasts (1 if left off). Notes are smooth: each one fades out over 0.15 seconds while the next begins, so the sound lasts that much longer than its beats when it ends on a note. With sa given, the notes are sargam: S r R g G m M P d D n N, with ' for the octave above and a comma for the octave below. In sargam, "S~G" glides from S to G over the token's beats, and "(R)G" touches R for about 60 milliseconds and then plays G.
-
-| Argument | Meaning |
-|---|---|
-| `text` | the notes, such as "C4 E4 G4:2 - [C4 E4 G4]:4". |
-| `tempo` | beats a minute. The default is 120. |
-| `wave` | the tone, as for tone(). The default is "soft". |
-| `sa` | a note name such as "C4" that makes the notes sargam, with that note as Sa. The default None reads note names. |
-| `tuning` | "equal" (the default) or "just". "just" uses just-intonation ratios from Sa, and needs sa. |
-| `volume` | from 0 to 1. The default is 0.5. |
-
-**The words for `wave`.**
-
-| Word | What it does |
-|---|---|
-| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
-| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
-| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
-| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
-| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
-| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
-
-**Returns.** A Sound: play(), loop(), stop() and so on.
-
-**Raises.**
-
-- `ValueError`: a token cannot be read. The message names it.
-
-```py
-f.melody("C4 E4 G4:2 -", tempo=100).play()
-```
-
-See also: [`note`](#fn-note), [`sequence`](#fn-sequence), [`mix`](#fn-mix), [`raga`](#fn-raga).
-
-<a id="fn-sequence"></a>
-### `f.sequence`
-
-```py
-f.sequence(*sounds: 'Sound') -> 'Sound'
-```
-
-Make a new sound that plays the given sounds one after another.
-
-| Argument | Meaning |
-|---|---|
-| `sounds` | the sounds to join, in order. |
-
-**Returns.** A Sound that lasts as long as all of them together.
-
-```py
-f.sequence(f.note("C4", 1), f.note("E4", 1)).play()
-```
-
-See also: [`mix`](#fn-mix), [`melody`](#fn-melody).
-
-<a id="fn-mix"></a>
-### `f.mix`
-
-```py
-f.mix(*sounds: 'Sound') -> 'Sound'
-```
-
-Make a new sound that plays the given sounds together.
-
-A soft limiter keeps the loudest moments at or below 0.9, so the sum never clips. Quiet sums are not changed.
-
-| Argument | Meaning |
-|---|---|
-| `sounds` | the sounds to play together. |
-
-**Returns.** A Sound as long as the longest of them.
-
-```py
-f.mix(f.note("C4", 2), f.note("E4", 2), f.note("G4", 2)).play()
-```
-
-See also: [`sequence`](#fn-sequence), [`chord_notes`](#fn-chord_notes).
-
-<a id="fn-drone"></a>
-### `f.drone`
-
-```py
-f.drone(sa: 'float | str', seconds: 'float', pattern: 'str' = "P S' S' S", volume: 'float' = 0.5) -> 'Sound'
-```
-
-Make a tanpura-like drone.
-
-It is plucked strings that ring on, played in turn over and over. It loops smoothly with sound.loop(). It repeats after random_seed().
-
-| Argument | Meaning |
-|---|---|
-| `sa` | the base note: a note name such as "D3", or a frequency in hertz. |
-| `seconds` | how long the sound lasts. |
-| `pattern` | the strings to pluck, as swaras. The default is "P S' S' S". It may start with m or N instead of P. |
-| `volume` | its loudest point, 0 to 1. The default is 0.5. |
-
-**Returns.** A Sound: loop(), play(), reverb() and so on.
-
-```py
-f.drone("D3", 8).loop()
-```
-
-See also: [`pluck`](#fn-pluck), [`tala`](#fn-tala), [`raga`](#fn-raga).
-
-<a id="fn-note_to_frequency"></a>
-### `f.note_to_frequency`
-
-```py
-f.note_to_frequency(name: 'str', sa: 'str | None' = None) -> 'float'
-```
-
-Return the frequency of a note, in hertz.
-
-| Argument | Meaning |
-|---|---|
-| `name` | a note name such as "A4". With sa given, a swara such as "G" or "N,". |
-| `sa` | a note name such as "C4" that the swara is counted from. The default None reads an ordinary note name. |
-
-**Returns.** The frequency in hertz. note_to_frequency("A4") is 440.
-
-**Raises.**
-
-- `ValueError`: the name is not understood.
-
-```py
-print(f.note_to_frequency("A4"))
-```
-
-See also: [`frequency_to_note`](#fn-frequency_to_note), [`note`](#fn-note), [`tone`](#fn-tone).
-
-<a id="fn-frequency_to_note"></a>
-### `f.frequency_to_note`
-
-```py
-f.frequency_to_note(hz: 'float', sa: 'str | None' = None) -> 'str'
-```
-
-Return the name of the note nearest to a frequency.
-
-Sharps are used, such as "C#5".
-
-| Argument | Meaning |
-|---|---|
-| `hz` | the frequency, in hertz. |
-| `sa` | a note name such as "C4". With it, the answer is the nearest swara, such as "G'". The default None gives an ordinary note name. |
-
-**Returns.** A note name, such as "A4".
-
-```py
-print(f.frequency_to_note(440))
-```
-
-See also: [`note_to_frequency`](#fn-note_to_frequency).
-
-<a id="fn-chord_notes"></a>
-### `f.chord_notes`
-
-```py
-f.chord_notes(name: 'str') -> 'list[str]'
-```
-
-Return the note names in a chord.
-
-| Argument | Meaning |
-|---|---|
-| `name` | a note (with # or b), followed by nothing, m, dim, aug, 7, maj7 or m7. For example "C", "Am" or "Bdim". |
-
-**Returns.** A list of note names, with sharps. chord_notes("C") is ["C", "E", "G"], and chord_notes("Am") is ["A", "C", "E"].
-
-**Raises.**
-
-- `ValueError`: the chord name is not understood.
-
-```py
-print(f.chord_notes("Am"))
-```
-
-See also: [`mix`](#fn-mix), [`note`](#fn-note).
-
-<a id="music-analysis-and-the-microphone"></a>
-## Music analysis and the microphone
-
-<a id="fn-microphone"></a>
-### `f.microphone`
-
-```py
-f.microphone(name: 'str | None' = None) -> 'Microphone'
-```
-
-Make a microphone object for the computer's default input.
-
-Call mic.start() to listen. While it listens, mic.level(), mic.spectrum(bands) and mic.pitch() work as they do on a sound. mic.capture(seconds) returns the last few seconds as a sound. It is never played back. With FUNGROUND_HEADLESS=1 it is silent and hears nothing. On a Mac, allow microphone access in System Settings.
-
-| Argument | Meaning |
-|---|---|
-| `name` | part of the name of the input to use. The default None uses the default input. See microphones(). |
-
-**Returns.** A Microphone: start(), stop(), is_listening(), level(), spectrum(bands), pitch(), capture(seconds), is_onset(), chroma() and chord().
-
-**Raises.**
-
-- `RuntimeError`: there is no microphone, or access is refused.
-
-```py
-mic = f.microphone()
-mic.start()
-```
-
-See also: [`microphones`](#fn-microphones), [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`draw_pitch_line`](#fn-draw_pitch_line).
-
-<a id="fn-microphones"></a>
-### `f.microphones`
-
-```py
-f.microphones() -> 'list[str]'
-```
-
-Return the names of the computer's microphones (inputs).
-
-**Returns.** A list of names. Give part of one to microphone().
-
-```py
-print(f.microphones())
-```
-
-See also: [`microphone`](#fn-microphone).
-
 <a id="camera"></a>
 ## Camera
 
@@ -4521,245 +4110,7 @@ take = f.load_clip("take.gif")
 f.image(take.frame(f.frame_count % len(take)), 0, 0)
 ```
 
-See also: [`camera`](#fn-camera), [`load_image`](#fn-load_image), [`load_sound`](#fn-load_sound).
-
-<a id="drawing-sound"></a>
-## Drawing sound
-
-<a id="fn-draw_wave"></a>
-### `f.draw_wave`
-
-```py
-f.draw_wave(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'
-```
-
-Draw the wave of a sound, a microphone or a list of numbers.
-
-It is drawn inside a box, with the current fill, stroke and transform. For a sound it shows the whole sound, with a line at the place it is playing. For a microphone it shows the last half second. A sound's shape is worked out once for each width, so it is quick.
-
-| Argument | Meaning |
-|---|---|
-| `source` | a Sound, a Microphone or a list of numbers. |
-| `x`, `y` | the top-left corner of the box. |
-| `w`, `h` | the width and height of the box, in pixels. |
-
-```py
-f.draw_wave(song, 20, 20, 400, 80)
-```
-
-See also: [`draw_spectrum`](#fn-draw_spectrum), [`spectrogram`](#fn-spectrogram), [`draw_pitch_line`](#fn-draw_pitch_line).
-
-<a id="fn-draw_spectrum"></a>
-### `f.draw_spectrum`
-
-```py
-f.draw_spectrum(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'
-```
-
-Draw bars for a spectrum, as it is now.
-
-The bars stand on the bottom of a box, in the current style.
-
-| Argument | Meaning |
-|---|---|
-| `source` | a Sound or a Microphone. |
-| `x`, `y` | the top-left corner of the box. |
-| `w`, `h` | the width and height of the box, in pixels. |
-| `bands` | how many bars. The default is 32. |
-
-```py
-f.draw_spectrum(mic, 20, 120, 400, 80)
-```
-
-See also: [`draw_wave`](#fn-draw_wave), [`spectrogram`](#fn-spectrogram).
-
-<a id="fn-spectrogram"></a>
-### `f.spectrogram`
-
-```py
-f.spectrogram(sound: 'Sound', width: 'int', height: 'int') -> 'Picture'
-```
-
-Make a picture of a whole sound.
-
-Time goes across. Pitch goes up (about 40 hertz to 16 kilohertz, spaced like notes). Louder is brighter. The brightest colour is the current fill. It takes a moment (about a second for 10 seconds of sound at 400 by 200), so make it once, in setup().
-
-| Argument | Meaning |
-|---|---|
-| `sound` | the Sound to look at. |
-| `width`, `height` | the size of the picture, in pixels. |
-
-**Returns.** A Picture. Draw it with image(), or save it.
-
-```py
-pic = f.spectrogram(song, 400, 200)
-f.image(pic, 20, 20)
-```
-
-See also: [`draw_wave`](#fn-draw_wave), [`draw_spectrum`](#fn-draw_spectrum), [`image`](#fn-image).
-
-<a id="fn-draw_pitch_line"></a>
-### `f.draw_pitch_line`
-
-```py
-f.draw_pitch_line(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'
-```
-
-Draw the pitch of a sound or microphone as a scrolling line.
-
-Call it once in every frame, because it reads source.pitch() each time. The line scrolls left. Faint guide lines are labelled with note names, or with swaras when sa is given. The line has a gap where pitch() is None.
-
-| Argument | Meaning |
-|---|---|
-| `source` | a Sound or a Microphone. |
-| `x`, `y` | the top-left corner of the box. |
-| `w`, `h` | the width and height of the box, in pixels. |
-| `seconds` | how much time the box shows. The default is 5. |
-| `low` | the note at the bottom. The default is "C3". |
-| `high` | the note at the top. The default is "C6". |
-| `sa` | a note name such as "C4". With it the guide lines are swaras. The default None uses note names. |
-
-```py
-f.draw_pitch_line(mic, 20, 20, 400, 150)
-```
-
-See also: [`draw_wave`](#fn-draw_wave), [`microphone`](#fn-microphone), [`frequency_to_note`](#fn-frequency_to_note).
-
-<a id="ragas-and-talas"></a>
-## Ragas and talas
-
-<a id="fn-ragas"></a>
-### `f.ragas`
-
-```py
-f.ragas() -> 'list[str]'
-```
-
-Return the names of the ragas in funground's small built-in table.
-
-For example "Yaman" and "Bhupali".
-
-**Returns.** A list of names.
-
-See also: [`raga`](#fn-raga), [`match_ragas`](#fn-match_ragas), [`talas`](#fn-talas).
-
-<a id="fn-raga"></a>
-### `f.raga`
-
-```py
-f.raga(name: 'str') -> 'Raga'
-```
-
-Return one raga from the built-in table.
-
-| Argument | Meaning |
-|---|---|
-| `name` | the raga's name. Capitals do not matter. |
-
-**Returns.** A read-only record with name, thaat, swaras, aroha, avaroha and pakad (sargam strings for melody(sa=...)), vadi, samvadi, time, notes and sources.
-
-**Raises.**
-
-- `ValueError`: the name is not in the table. The message lists the table.
-
-```py
-f.melody(f.raga("Yaman").aroha, sa="D4").play()
-```
-
-See also: [`ragas`](#fn-ragas), [`melody`](#fn-melody), [`match_ragas`](#fn-match_ragas).
-
-<a id="fn-talas"></a>
-### `f.talas`
-
-```py
-f.talas() -> 'list[str]'
-```
-
-Return the names of the talas in the built-in table.
-
-They are Teentaal, Ektaal, Jhaptaal, Rupak, Dadra and Keherwa.
-
-**Returns.** A list of names.
-
-See also: [`tala_info`](#fn-tala_info), [`tala`](#fn-tala), [`ragas`](#fn-ragas).
-
-<a id="fn-tala_info"></a>
-### `f.tala_info`
-
-```py
-f.tala_info(name: 'str') -> 'Tala'
-```
-
-Return one tala from the built-in table.
-
-| Argument | Meaning |
-|---|---|
-| `name` | the tala's name. Capitals do not matter. |
-
-**Returns.** A read-only record with name, beats, vibhag (the divisions), tali (claps) and khali (waves) as beat numbers, sam (beat 1), bols (the theka, one bol a beat), notes and sources.
-
-**Raises.**
-
-- `ValueError`: the name is not in the table.
-
-```py
-print(f.tala_info("Rupak").khali)
-```
-
-See also: [`talas`](#fn-talas), [`tala`](#fn-tala).
-
-<a id="fn-tala"></a>
-### `f.tala`
-
-```py
-f.tala(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1) -> 'Sound'
-```
-
-Make a sound of a tala's theka played with simple drum sounds.
-
-The sam is accented, and the khali part is softer. The sound is exactly beats * 60 / tempo * cycles seconds long.
-
-| Argument | Meaning |
-|---|---|
-| `name` | the tala's name, such as "Teentaal". See talas(). |
-| `tempo` | beats a minute. The default is 80. |
-| `cycles` | how many times round the tala. The default is 1. |
-
-**Returns.** A Sound: play(), loop() and so on.
-
-**Raises.**
-
-- `ValueError`: the name is not in the table.
-
-```py
-f.tala("Teentaal", tempo=100).loop()
-```
-
-See also: [`talas`](#fn-talas), [`tala_info`](#fn-tala_info), [`drone`](#fn-drone).
-
-<a id="fn-match_ragas"></a>
-### `f.match_ragas`
-
-```py
-f.match_ragas(histogram: 'Any') -> 'list[tuple[str, float]]'
-```
-
-Rank the table's ragas by how well their swaras fit a histogram.
-
-It compares note sets only, so ragas with the same swaras score almost the same (for example Bhupali and Deshkar). It is a learning aid, not a judge.
-
-| Argument | Meaning |
-|---|---|
-| `histogram` | twelve numbers, as from sound.swara_histogram(sa). |
-
-**Returns.** A list of (name, score) pairs, best first, with scores from 0 to 1.
-
-```py
-h = song.swara_histogram("C#4")
-print(f.match_ragas(h)[0])
-```
-
-See also: [`ragas`](#fn-ragas), [`raga`](#fn-raga).
+See also: [`camera`](#fn-camera), [`load_image`](#fn-load_image).
 
 <a id="classes"></a>
 ## Classes
@@ -4956,7 +4307,7 @@ The filters for filter() and apply_filter(). Used by: `filter`, `apply_filter`.
 <a id="const-CONSTANTS-WAVE"></a>
 #### `f.CONSTANTS.WAVE`
 
-The sound waves for tone(), note() and melody(). Used by: `tone`, `note`, `melody`.
+The sound waves for tone(), note() and melody(). Used by: `sound.tone`, `sound.note`, `sound.melody`.
 
 | Name | Word | What it does |
 |---|---|---|
@@ -4970,7 +4321,7 @@ The sound waves for tone(), note() and melody(). Used by: `tone`, `note`, `melod
 <a id="const-CONSTANTS-TUNING"></a>
 #### `f.CONSTANTS.TUNING`
 
-The tuning for melody(). Used by: `melody`.
+The tuning for melody(). Used by: `sound.melody`.
 
 | Name | Word | What it does |
 |---|---|---|
@@ -5071,6 +4422,666 @@ f.blend_mode(f.CONSTANTS.BLEND.MULTIPLY)
 ```
 
 See also: [`text_align`](#fn-text_align), [`blend_mode`](#fn-blend_mode), [`rect_mode`](#fn-rect_mode), [`COLORS`](#const-COLORS).
+
+<a id="the-sound-library"></a>
+## The sound library
+
+```py
+from funground import sound
+```
+
+New in 0.2 as a library; in 0.1 these were on `f`.
+
+Two names lost the word the library already says:
+
+- `f.create_sound` is now `sound.create`.
+- `f.load_sound` is now `sound.load`.
+
+<a id="fn-sound-load"></a>
+### `sound.load`
+
+```py
+sound.load(path: 'str') -> 'Sound'
+```
+
+Read a sound file and return a sound.
+
+A relative path is looked for next to your sketch file first, then in the current folder. With no sound device (or FUNGROUND_HEADLESS=1) it plays silently and keeps time.
+
+| Argument | Meaning |
+|---|---|
+| `path` | a WAV, OGG or MP3 file. |
+
+**Returns.** A Sound: play(), loop(), stop(), pause(), set_volume(v), is_playing(), duration(), current_time(), level(), spectrum(bands), pitch(), pan(p), reverb(amount), samples() and save(path).
+
+**Raises.**
+
+- `FileNotFoundError`: the file is not found in either place.
+- `ValueError`: the file is not sound.
+
+```py
+beep = sound.load("beep.wav")
+beep.play()
+```
+
+See also: [`create`](#fn-sound-create), [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`draw_wave`](#fn-sound-draw_wave).
+
+<a id="fn-sound-create"></a>
+### `sound.create`
+
+```py
+sound.create(samples: 'Any', rate: 'int' = 44100) -> 'Sound'
+```
+
+Make a sound from a list of numbers.
+
+It is an ordinary sound. Its samples() method gives the numbers back.
+
+| Argument | Meaning |
+|---|---|
+| `samples` | a list of numbers from -1 to 1, one channel. Numbers outside that range are clipped. |
+| `rate` | how many numbers make one second. The default is 44100. |
+
+**Returns.** A Sound: play(), loop(), stop(), level(), spectrum(bands), samples() and so on.
+
+**Raises.**
+
+- `ValueError`: the list is empty or has things that are not numbers.
+
+```py
+import math
+s = sound.create([math.sin(i / 9) for i in range(44100)])
+s.play()
+```
+
+See also: [`tone`](#fn-sound-tone), [`load`](#fn-sound-load), [`mix`](#fn-sound-mix).
+
+<a id="fn-sound-tone"></a>
+### `sound.tone`
+
+```py
+sound.tone(frequency: 'float', seconds: 'float', wave: 'CONSTANTS.WAVE' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'
+```
+
+Make a sound that is one steady tone.
+
+The loudness follows an envelope. It rises to full over the attack, falls to the sustain level over the decay, holds, and fades out over the last release seconds. If attack and release do not fit, they are made shorter. Noise repeats after random_seed().
+
+| Argument | Meaning |
+|---|---|
+| `frequency` | the pitch, in hertz. |
+| `seconds` | how long the sound lasts. |
+| `wave` | "sine" (the default), "soft", "triangle", "square", "saw" or "noise". |
+| `volume` | from 0 to 1. The default 0.5 is half, so sounds can play together without clipping. |
+| `attack` | seconds to rise to full. The default is 0.01. |
+| `release` | seconds to fade out at the end. The default is 0.15. |
+| `decay` | seconds to fall to the sustain level. The default is 0.15. |
+| `sustain` | the level held after the decay, 0 to 1. The default is 0.7. |
+
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
+
+**Returns.** A Sound: play(), loop(), stop(), level() and so on.
+
+```py
+sound.tone(440, 1, "square").play()
+```
+
+See also: [`note`](#fn-sound-note), [`pluck`](#fn-sound-pluck), [`melody`](#fn-sound-melody), [`create`](#fn-sound-create).
+
+<a id="fn-sound-note"></a>
+### `sound.note`
+
+```py
+sound.note(name: 'str', seconds: 'float', wave: 'CONSTANTS.WAVE' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'
+```
+
+Make a sound that is one named note.
+
+It takes the same options as tone().
+
+| Argument | Meaning |
+|---|---|
+| `name` | a note name such as "A4" (440 hertz), "C#5" or "Bb3". |
+| `seconds` | how long the sound lasts. |
+| `wave` | "sine" (the default), "soft", "triangle", "square", "saw" or "noise". |
+| `volume` | from 0 to 1. The default is 0.5. |
+| `attack` | seconds to rise to full. The default is 0.01. |
+| `release` | seconds to fade out at the end. The default is 0.15. |
+| `decay` | seconds to fall to the sustain level. The default is 0.15. |
+| `sustain` | the level held after the decay, 0 to 1. The default is 0.7. |
+
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
+
+**Returns.** A Sound: play(), loop(), stop(), level() and so on.
+
+**Raises.**
+
+- `ValueError`: the note name is not understood.
+
+```py
+sound.note("C4", 2, attack=0.5, sustain=1).play()
+```
+
+See also: [`tone`](#fn-sound-tone), [`melody`](#fn-sound-melody), [`note_to_frequency`](#fn-sound-note_to_frequency).
+
+<a id="fn-sound-pluck"></a>
+### `sound.pluck`
+
+```py
+sound.pluck(name_or_frequency: 'float | str', seconds: 'float', volume: 'float' = 0.5) -> 'Sound'
+```
+
+Make a sound like a plucked string.
+
+It dies away by itself. It repeats after random_seed().
+
+| Argument | Meaning |
+|---|---|
+| `name_or_frequency` | a note name such as "E3", or a frequency in hertz. |
+| `seconds` | how long the sound lasts. |
+| `volume` | from 0 to 1. The default is 0.5. |
+
+**Returns.** A Sound: play(), loop(), stop(), reverb() and so on.
+
+```py
+sound.pluck("E3", 2).play()
+```
+
+See also: [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`drone`](#fn-sound-drone).
+
+<a id="fn-sound-melody"></a>
+### `sound.melody`
+
+```py
+sound.melody(text: 'str', tempo: 'float' = 120, wave: 'CONSTANTS.WAVE' = 'soft', sa: 'str | None' = None, tuning: 'CONSTANTS.TUNING' = 'equal', volume: 'float' = 0.5) -> 'Sound'
+```
+
+Make a sound from a string of notes.
+
+Separate the tokens with spaces. A token is a note name, "-" for a rest, or "[C4 E4 G4]" for a chord. Add ":2" after a token for how many beats it lasts (1 if left off). Notes are smooth: each one fades out over 0.15 seconds while the next begins, so the sound lasts that much longer than its beats when it ends on a note. With sa given, the notes are sargam: S r R g G m M P d D n N, with ' for the octave above and a comma for the octave below. In sargam, "S~G" glides from S to G over the token's beats, and "(R)G" touches R for about 60 milliseconds and then plays G.
+
+| Argument | Meaning |
+|---|---|
+| `text` | the notes, such as "C4 E4 G4:2 - [C4 E4 G4]:4". |
+| `tempo` | beats a minute. The default is 120. |
+| `wave` | the tone, as for tone(). The default is "soft". |
+| `sa` | a note name such as "C4" that makes the notes sargam, with that note as Sa. The default None reads note names. |
+| `tuning` | "equal" (the default) or "just". "just" uses just-intonation ratios from Sa, and needs sa. |
+| `volume` | from 0 to 1. The default is 0.5. |
+
+**The words for `wave`.**
+
+| Word | What it does |
+|---|---|
+| `"sine"` | A pure, smooth tone with no overtones, like a tuning fork or a whistle. |
+| `"square"` | Hollow and buzzy, like an old video game or a clarinet's low notes. |
+| `"saw"` | Bright and brassy, the richest in overtones: a classic synthesiser sound. |
+| `"triangle"` | Between sine and square: soft but a little reedy, like a flute. |
+| `"soft"` | A sine with a few gentle overtones: warm and round, good for melodies. |
+| `"noise"` | Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored. |
+
+**Returns.** A Sound: play(), loop(), stop() and so on.
+
+**Raises.**
+
+- `ValueError`: a token cannot be read. The message names it.
+
+```py
+sound.melody("C4 E4 G4:2 -", tempo=100).play()
+```
+
+See also: [`note`](#fn-sound-note), [`sequence`](#fn-sound-sequence), [`mix`](#fn-sound-mix), [`sangeet.raga`](#fn-sangeet-raga).
+
+<a id="fn-sound-sequence"></a>
+### `sound.sequence`
+
+```py
+sound.sequence(*sounds: 'Sound') -> 'Sound'
+```
+
+Make a new sound that plays the given sounds one after another.
+
+| Argument | Meaning |
+|---|---|
+| `sounds` | the sounds to join, in order. |
+
+**Returns.** A Sound that lasts as long as all of them together.
+
+```py
+sound.sequence(sound.note("C4", 1), sound.note("E4", 1)).play()
+```
+
+See also: [`mix`](#fn-sound-mix), [`melody`](#fn-sound-melody).
+
+<a id="fn-sound-mix"></a>
+### `sound.mix`
+
+```py
+sound.mix(*sounds: 'Sound') -> 'Sound'
+```
+
+Make a new sound that plays the given sounds together.
+
+A soft limiter keeps the loudest moments at or below 0.9, so the sum never clips. Quiet sums are not changed.
+
+| Argument | Meaning |
+|---|---|
+| `sounds` | the sounds to play together. |
+
+**Returns.** A Sound as long as the longest of them.
+
+```py
+sound.mix(sound.note("C4", 2), sound.note("E4", 2), sound.note("G4", 2)).play()
+```
+
+See also: [`sequence`](#fn-sound-sequence), [`chord_notes`](#fn-sound-chord_notes).
+
+<a id="fn-sound-drone"></a>
+### `sound.drone`
+
+```py
+sound.drone(sa: 'float | str', seconds: 'float', pattern: 'str' = "P S' S' S", volume: 'float' = 0.5) -> 'Sound'
+```
+
+Make a tanpura-like drone.
+
+It is plucked strings that ring on, played in turn over and over. It loops smoothly with the sound's loop() method. It repeats after random_seed().
+
+| Argument | Meaning |
+|---|---|
+| `sa` | the base note: a note name such as "D3", or a frequency in hertz. |
+| `seconds` | how long the sound lasts. |
+| `pattern` | the strings to pluck, as swaras. The default is "P S' S' S". It may start with m or N instead of P. |
+| `volume` | its loudest point, 0 to 1. The default is 0.5. |
+
+**Returns.** A Sound: loop(), play(), reverb() and so on.
+
+```py
+sound.drone("D3", 8).loop()
+```
+
+See also: [`pluck`](#fn-sound-pluck), [`sangeet.tala`](#fn-sangeet-tala), [`sangeet.raga`](#fn-sangeet-raga).
+
+<a id="fn-sound-note_to_frequency"></a>
+### `sound.note_to_frequency`
+
+```py
+sound.note_to_frequency(name: 'str', sa: 'str | None' = None) -> 'float'
+```
+
+Return the frequency of a note, in hertz.
+
+| Argument | Meaning |
+|---|---|
+| `name` | a note name such as "A4". With sa given, a swara such as "G" or "N,". |
+| `sa` | a note name such as "C4" that the swara is counted from. The default None reads an ordinary note name. |
+
+**Returns.** The frequency in hertz. note_to_frequency("A4") is 440.
+
+**Raises.**
+
+- `ValueError`: the name is not understood.
+
+```py
+print(sound.note_to_frequency("A4"))
+```
+
+See also: [`frequency_to_note`](#fn-sound-frequency_to_note), [`note`](#fn-sound-note), [`tone`](#fn-sound-tone).
+
+<a id="fn-sound-frequency_to_note"></a>
+### `sound.frequency_to_note`
+
+```py
+sound.frequency_to_note(hz: 'float', sa: 'str | None' = None) -> 'str'
+```
+
+Return the name of the note nearest to a frequency.
+
+Sharps are used, such as "C#5".
+
+| Argument | Meaning |
+|---|---|
+| `hz` | the frequency, in hertz. |
+| `sa` | a note name such as "C4". With it, the answer is the nearest swara, such as "G'". The default None gives an ordinary note name. |
+
+**Returns.** A note name, such as "A4".
+
+```py
+print(sound.frequency_to_note(440))
+```
+
+See also: [`note_to_frequency`](#fn-sound-note_to_frequency).
+
+<a id="fn-sound-chord_notes"></a>
+### `sound.chord_notes`
+
+```py
+sound.chord_notes(name: 'str') -> 'list[str]'
+```
+
+Return the note names in a chord.
+
+| Argument | Meaning |
+|---|---|
+| `name` | a note (with # or b), followed by nothing, m, dim, aug, 7, maj7 or m7. For example "C", "Am" or "Bdim". |
+
+**Returns.** A list of note names, with sharps. chord_notes("C") is ["C", "E", "G"], and chord_notes("Am") is ["A", "C", "E"].
+
+**Raises.**
+
+- `ValueError`: the chord name is not understood.
+
+```py
+print(sound.chord_notes("Am"))
+```
+
+See also: [`mix`](#fn-sound-mix), [`note`](#fn-sound-note).
+
+<a id="fn-sound-microphone"></a>
+### `sound.microphone`
+
+```py
+sound.microphone(name: 'str | None' = None) -> 'Microphone'
+```
+
+Make a microphone object for the computer's default input.
+
+Call mic.start() to listen. While it listens, mic.level(), mic.spectrum(bands) and mic.pitch() work as they do on a sound. mic.capture(seconds) returns the last few seconds as a sound. It is never played back. With FUNGROUND_HEADLESS=1 it is silent and hears nothing. On a Mac, allow microphone access in System Settings.
+
+| Argument | Meaning |
+|---|---|
+| `name` | part of the name of the input to use. The default None uses the default input. See microphones(). |
+
+**Returns.** A Microphone: start(), stop(), is_listening(), level(), spectrum(bands), pitch(), capture(seconds), is_onset(), chroma() and chord().
+
+**Raises.**
+
+- `RuntimeError`: there is no microphone, or access is refused.
+
+```py
+mic = sound.microphone()
+mic.start()
+```
+
+See also: [`microphones`](#fn-sound-microphones), [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`draw_pitch_line`](#fn-sound-draw_pitch_line).
+
+<a id="fn-sound-microphones"></a>
+### `sound.microphones`
+
+```py
+sound.microphones() -> 'list[str]'
+```
+
+Return the names of the computer's microphones (inputs).
+
+**Returns.** A list of names. Give part of one to microphone().
+
+```py
+print(sound.microphones())
+```
+
+See also: [`microphone`](#fn-sound-microphone).
+
+<a id="fn-sound-draw_wave"></a>
+### `sound.draw_wave`
+
+```py
+sound.draw_wave(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'
+```
+
+Draw the wave of a sound, a microphone or a list of numbers.
+
+It is drawn inside a box, with the current fill, stroke and transform. For a sound it shows the whole sound, with a line at the place it is playing. For a microphone it shows the last half second. A sound's shape is worked out once for each width, so it is quick.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a Sound, a Microphone or a list of numbers. |
+| `x`, `y` | the top-left corner of the box. |
+| `w`, `h` | the width and height of the box, in pixels. |
+
+```py
+sound.draw_wave(song, 20, 20, 400, 80)
+```
+
+See also: [`draw_spectrum`](#fn-sound-draw_spectrum), [`spectrogram`](#fn-sound-spectrogram), [`draw_pitch_line`](#fn-sound-draw_pitch_line).
+
+<a id="fn-sound-draw_spectrum"></a>
+### `sound.draw_spectrum`
+
+```py
+sound.draw_spectrum(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'
+```
+
+Draw bars for a spectrum, as it is now.
+
+The bars stand on the bottom of a box, in the current style.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a Sound or a Microphone. |
+| `x`, `y` | the top-left corner of the box. |
+| `w`, `h` | the width and height of the box, in pixels. |
+| `bands` | how many bars. The default is 32. |
+
+```py
+sound.draw_spectrum(mic, 20, 120, 400, 80)
+```
+
+See also: [`draw_wave`](#fn-sound-draw_wave), [`spectrogram`](#fn-sound-spectrogram).
+
+<a id="fn-sound-spectrogram"></a>
+### `sound.spectrogram`
+
+```py
+sound.spectrogram(sound: 'Sound', width: 'int', height: 'int') -> 'Picture'
+```
+
+Make a picture of a whole sound.
+
+Time goes across. Pitch goes up (about 40 hertz to 16 kilohertz, spaced like notes). Louder is brighter. The brightest colour is the current fill. It takes a moment (about a second for 10 seconds of sound at 400 by 200), so make it once, in setup().
+
+| Argument | Meaning |
+|---|---|
+| `sound` | the Sound to look at. |
+| `width`, `height` | the size of the picture, in pixels. |
+
+**Returns.** A Picture. Draw it with image(), or save it.
+
+```py
+pic = sound.spectrogram(song, 400, 200)
+f.image(pic, 20, 20)
+```
+
+See also: [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`image`](#fn-image).
+
+<a id="fn-sound-draw_pitch_line"></a>
+### `sound.draw_pitch_line`
+
+```py
+sound.draw_pitch_line(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'
+```
+
+Draw the pitch of a sound or microphone as a scrolling line.
+
+Call it once in every frame, because it reads source.pitch() each time. The line scrolls left. Faint guide lines are labelled with note names, or with swaras when sa is given. The line has a gap where pitch() is None.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a Sound or a Microphone. |
+| `x`, `y` | the top-left corner of the box. |
+| `w`, `h` | the width and height of the box, in pixels. |
+| `seconds` | how much time the box shows. The default is 5. |
+| `low` | the note at the bottom. The default is "C3". |
+| `high` | the note at the top. The default is "C6". |
+| `sa` | a note name such as "C4". With it the guide lines are swaras. The default None uses note names. |
+
+```py
+sound.draw_pitch_line(mic, 20, 20, 400, 150)
+```
+
+See also: [`draw_wave`](#fn-sound-draw_wave), [`microphone`](#fn-sound-microphone), [`frequency_to_note`](#fn-sound-frequency_to_note).
+
+<a id="the-sangeet-library"></a>
+## The sangeet library
+
+```py
+from funground import sangeet
+```
+
+New in 0.2 as a library; in 0.1 these were on `f`.
+
+No name changed: `f.name` in 0.1 is `sangeet.name` now.
+
+<a id="fn-sangeet-ragas"></a>
+### `sangeet.ragas`
+
+```py
+sangeet.ragas() -> 'list[str]'
+```
+
+Return the names of the ragas in funground's small built-in table.
+
+For example "Yaman" and "Bhupali".
+
+**Returns.** A list of names.
+
+See also: [`raga`](#fn-sangeet-raga), [`match_ragas`](#fn-sangeet-match_ragas), [`talas`](#fn-sangeet-talas).
+
+<a id="fn-sangeet-raga"></a>
+### `sangeet.raga`
+
+```py
+sangeet.raga(name: 'str') -> 'Raga'
+```
+
+Return one raga from the built-in table.
+
+| Argument | Meaning |
+|---|---|
+| `name` | the raga's name. Capitals do not matter. |
+
+**Returns.** A read-only record with name, thaat, swaras, aroha, avaroha and pakad (sargam strings for melody(sa=...)), vadi, samvadi, time, notes and sources.
+
+**Raises.**
+
+- `ValueError`: the name is not in the table. The message lists the table.
+
+```py
+sound.melody(sangeet.raga("Yaman").aroha, sa="D4").play()
+```
+
+See also: [`ragas`](#fn-sangeet-ragas), [`sound.melody`](#fn-sound-melody), [`match_ragas`](#fn-sangeet-match_ragas).
+
+<a id="fn-sangeet-talas"></a>
+### `sangeet.talas`
+
+```py
+sangeet.talas() -> 'list[str]'
+```
+
+Return the names of the talas in the built-in table.
+
+They are Teentaal, Ektaal, Jhaptaal, Rupak, Dadra and Keherwa.
+
+**Returns.** A list of names.
+
+See also: [`tala_info`](#fn-sangeet-tala_info), [`tala`](#fn-sangeet-tala), [`ragas`](#fn-sangeet-ragas).
+
+<a id="fn-sangeet-tala_info"></a>
+### `sangeet.tala_info`
+
+```py
+sangeet.tala_info(name: 'str') -> 'Tala'
+```
+
+Return one tala from the built-in table.
+
+| Argument | Meaning |
+|---|---|
+| `name` | the tala's name. Capitals do not matter. |
+
+**Returns.** A read-only record with name, beats, vibhag (the divisions), tali (claps) and khali (waves) as beat numbers, sam (beat 1), bols (the theka, one bol a beat), notes and sources.
+
+**Raises.**
+
+- `ValueError`: the name is not in the table.
+
+```py
+print(sangeet.tala_info("Rupak").khali)
+```
+
+See also: [`talas`](#fn-sangeet-talas), [`tala`](#fn-sangeet-tala).
+
+<a id="fn-sangeet-tala"></a>
+### `sangeet.tala`
+
+```py
+sangeet.tala(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1) -> 'Sound'
+```
+
+Make a sound of a tala's theka played with simple drum sounds.
+
+The sam is accented, and the khali part is softer. The sound is exactly beats * 60 / tempo * cycles seconds long.
+
+| Argument | Meaning |
+|---|---|
+| `name` | the tala's name, such as "Teentaal". See talas(). |
+| `tempo` | beats a minute. The default is 80. |
+| `cycles` | how many times round the tala. The default is 1. |
+
+**Returns.** A Sound: play(), loop() and so on.
+
+**Raises.**
+
+- `ValueError`: the name is not in the table.
+
+```py
+sangeet.tala("Teentaal", tempo=100).loop()
+```
+
+See also: [`talas`](#fn-sangeet-talas), [`tala_info`](#fn-sangeet-tala_info), [`sound.drone`](#fn-sound-drone).
+
+<a id="fn-sangeet-match_ragas"></a>
+### `sangeet.match_ragas`
+
+```py
+sangeet.match_ragas(histogram: 'Any') -> 'list[tuple[str, float]]'
+```
+
+Rank the table's ragas by how well their swaras fit a histogram.
+
+It compares note sets only, so ragas with the same swaras score almost the same (for example Bhupali and Deshkar). It is a learning aid, not a judge.
+
+| Argument | Meaning |
+|---|---|
+| `histogram` | twelve numbers, as from the swara_histogram(sa) method of a sound. |
+
+**Returns.** A list of (name, score) pairs, best first, with scores from 0 to 1.
+
+```py
+h = song.swara_histogram("C#4")
+print(sangeet.match_ragas(h)[0])
+```
+
+See also: [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga).
 
 <a id="live-values"></a>
 ## Live values
@@ -5261,8 +5272,8 @@ Sound(device_sound, mixer, silent: 'bool', frame_source=None, made=None)
 
 A sound that you can play, listen to and change.
 
-You get one from f.load_sound() (a file), f.create_sound() (a list of numbers), f.tone(), f.note(),
-f.pluck(), f.melody(), f.drone() and f.tala() (made for you), f.sequence() and f.mix() (made from
+You get one from sound.load() (a file), sound.create() (a list of numbers), sound.tone(), sound.note(),
+sound.pluck(), sound.melody(), sound.drone() and sangeet.tala() (made for you), sound.sequence() and sound.mix() (made from
 other sounds), and mic.capture() (made from what a microphone heard). All of them are the same kind
 of object.
 
@@ -5274,7 +5285,7 @@ Methods that change a sound's state (play, loop, stop, pause, set_volume, pan) c
 Methods that make something new (reverb) give you a new sound and leave this one alone.
 
 ```py
-beep = f.tone(440, 1)
+beep = sound.tone(440, 1)
 beep.play()
 f.circle(200, 200, 50 + 300 * beep.level())
 ```
@@ -5293,7 +5304,7 @@ They are lined up with the onsets. It looks at the whole sound.
 **Returns.** a list of times in seconds from the start, or an empty list when there is no clear pulse.
 
 ```py
-song = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
+song = sound.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
 beats = song.beats()
 song.play()
 ```
@@ -5319,7 +5330,7 @@ guitar or a synth, not for a busy band.
 f.text(song.chord() or "-", 150, 100)
 ```
 
-See also: [`chroma`](#cls-Sound-chroma), [`key`](#cls-Sound-key), [`chord_notes`](#fn-chord_notes).
+See also: [`chroma`](#cls-Sound-chroma), [`key`](#cls-Sound-key), [`sound.chord_notes`](#fn-sound-chord_notes).
 
 <a id="cls-Sound-chroma"></a>
 #### `Sound.chroma`
@@ -5357,7 +5368,7 @@ A sound that is stopped is at 0. A paused sound stays where it stopped.
 **Returns.** the time in seconds from the start of the sound.
 
 ```py
-snd = f.melody("C4 E4 G4")
+snd = sound.melody("C4 E4 G4")
 snd.loop()
 f.rect(0, 190, 400 * snd.current_time() / snd.duration(), 20)
 ```
@@ -5376,7 +5387,7 @@ The length of the sound.
 **Returns.** the length in seconds.
 
 ```py
-snd = f.tone(440, 2)
+snd = sound.tone(440, 2)
 print(snd.duration())     # 2.0 or a little more
 ```
 
@@ -5394,7 +5405,7 @@ The loudness set by set_volume().
 **Returns.** a number from 0 to 1. It is 1 until you change it.
 
 ```py
-snd = f.tone(440, 1)
+snd = sound.tone(440, 1)
 snd.set_volume(0.5)
 print(snd.get_volume())
 ```
@@ -5456,7 +5467,7 @@ It adds up the chroma over the whole sound and says which key fits best. It is w
 **Returns.** a name like "G major" or "E minor", or None when no key stands out.
 
 ```py
-song = f.melody("C4 E4 G4 C5 G4 E4 C4")
+song = sound.melody("C4 E4 G4 C5 G4 E4 C4")
 print(song.key())
 ```
 
@@ -5477,7 +5488,7 @@ sound is not playing, or the microphone is not listening.
 **Returns.** a number from 0 to 1.
 
 ```py
-snd = f.load_sound("song.wav")   # your own file
+snd = sound.load("song.wav")   # your own file
 snd.loop()
 f.circle(200, 200, 50 + 300 * snd.level())
 ```
@@ -5494,7 +5505,7 @@ Sound.loop() -> 'None'
 Play the sound over and over, until you call stop() or pause().
 
 ```py
-drone = f.drone("D3", 8)
+drone = sound.drone("D3", 8)
 drone.loop()
 ```
 
@@ -5515,7 +5526,7 @@ seconds the first time. A microphone has no whole sound, so use mic.capture(seco
 **Returns.** a list of times in seconds from the start, earliest first.
 
 ```py
-song = f.melody("C4 E4 G4 C5")
+song = sound.melody("C4 E4 G4 C5")
 print(song.onsets())
 ```
 
@@ -5541,7 +5552,7 @@ It works on any sound. level() and spectrum() do not change with pan. save() kee
 - `ValueError`: if position is not a number from -1 to 1.
 
 ```py
-snd = f.tone(440, 1)
+snd = sound.tone(440, 1)
 snd.pan(-1)     # left speaker only
 snd.play()
 ```
@@ -5560,7 +5571,7 @@ Stop the sound and keep the place, so that play() carries on from there.
 Nothing happens if the sound is not playing.
 
 ```py
-snd = f.tone(440, 5)
+snd = sound.tone(440, 5)
 snd.play()
 snd.pause()
 snd.play()     # carries on
@@ -5584,11 +5595,11 @@ has none), or when nothing is playing or listening.
 **Returns.** the frequency in hertz, or None.
 
 ```py
-mic = f.microphone()
+mic = sound.microphone()
 mic.start()
 hz = mic.pitch()
 if hz:
-    f.text(f.frequency_to_note(hz), 20, 40)
+    f.text(sound.frequency_to_note(hz), 20, 40)
 ```
 
 See also: [`chroma`](#cls-Sound-chroma), [`chord`](#cls-Sound-chord), [`level`](#cls-Sound-level).
@@ -5606,7 +5617,7 @@ Playing a sound that is already playing starts it again from the start. A sound 
 looping stops by itself at the end.
 
 ```py
-beep = f.tone(440, 1)
+beep = sound.tone(440, 1)
 beep.play()
 ```
 
@@ -5638,12 +5649,12 @@ sound once, at the start, not in draw().
 - `ValueError`: if amount is not a number from 0 to 1.
 
 ```py
-dry = f.pluck("G3", 1.5)
+dry = sound.pluck("G3", 1.5)
 wet = dry.reverb(0.5)
 wet.play()
 ```
 
-See also: [`mix`](#fn-mix), [`sequence`](#fn-sequence).
+See also: [`sound.mix`](#fn-sound-mix), [`sound.sequence`](#fn-sound-sequence).
 
 <a id="cls-Sound-samples"></a>
 #### `Sound.samples`
@@ -5661,12 +5672,12 @@ The pan and the volume are not in the numbers.
 **Returns.** a list of numbers from -1 to 1.
 
 ```py
-wave = f.tone(220, 1).samples()
+wave = sound.tone(220, 1).samples()
 for x in range(399):
     f.line(x, 100 - 80 * wave[x * 4], x + 1, 100 - 80 * wave[x * 4 + 4])
 ```
 
-See also: [`create_sound`](#fn-create_sound), [`save`](#cls-Sound-save).
+See also: `create_sound`, [`save`](#cls-Sound-save).
 
 <a id="cls-Sound-save"></a>
 #### `Sound.save`
@@ -5688,10 +5699,10 @@ The pan is kept in the file. The volume is not.
 - `ValueError`: if path is empty or not text, or the file cannot be written.
 
 ```py
-f.melody("C4 E4 G4").save("tune.wav")    # writes a new file
+sound.melody("C4 E4 G4").save("tune.wav")    # writes a new file
 ```
 
-See also: [`samples`](#cls-Sound-samples), [`create_sound`](#fn-create_sound).
+See also: [`samples`](#cls-Sound-samples), `create_sound`.
 
 <a id="cls-Sound-set_volume"></a>
 #### `Sound.set_volume`
@@ -5713,7 +5724,7 @@ It does not change the numbers inside the sound, so level() and samples() are no
 - `ValueError`: if volume is not a number from 0 to 1.
 
 ```py
-snd = f.tone(440, 1)
+snd = sound.tone(440, 1)
 snd.set_volume(0.3)
 snd.play()
 ```
@@ -5744,7 +5755,7 @@ a list of zeros when the sound is not playing, or the microphone is not listenin
 - `ValueError`: if bands is not a whole number from 1 to 256.
 
 ```py
-snd = f.tone(220, 2)
+snd = sound.tone(220, 2)
 snd.play()
 for i, strength in enumerate(snd.spectrum(16)):
     f.rect(20 + i * 24, 380, 20, -300 * strength)
@@ -5762,7 +5773,7 @@ Sound.stop() -> 'None'
 Stop the sound and go back to its start.
 
 ```py
-snd = f.tone(440, 5)
+snd = sound.tone(440, 5)
 snd.play()
 snd.stop()
 ```
@@ -5790,10 +5801,10 @@ n and N. The numbers add up to 1, or are all 0 if nothing had a pitch.
 
 ```py
 hist = recording.swara_histogram("D4")
-print(f.match_ragas(hist)[0])
+print(sangeet.match_ragas(hist)[0])
 ```
 
-See also: [`tonic`](#cls-Sound-tonic), [`match_ragas`](#fn-match_ragas).
+See also: [`tonic`](#cls-Sound-tonic), [`sangeet.match_ragas`](#fn-sangeet-match_ragas).
 
 <a id="cls-Sound-tempo"></a>
 #### `Sound.tempo`
@@ -5809,7 +5820,7 @@ It looks at the whole sound, and is worked out once. A sound with no clear pulse
 **Returns.** the speed in beats a minute, from 60 to 200, or None when there is no clear pulse.
 
 ```py
-song = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
+song = sound.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
 print(song.tempo())
 ```
 
@@ -5833,10 +5844,10 @@ explains a strong Sa and Pa. It is a rough guide, not an answer. For a microphon
 ```py
 sa = recording.tonic()
 if sa:
-    print(f.frequency_to_note(sa))
+    print(sound.frequency_to_note(sa))
 ```
 
-See also: [`swara_histogram`](#cls-Sound-swara_histogram), [`pitch`](#cls-Sound-pitch), [`match_ragas`](#fn-match_ragas).
+See also: [`swara_histogram`](#cls-Sound-swara_histogram), [`pitch`](#cls-Sound-pitch), [`sangeet.match_ragas`](#fn-sangeet-match_ragas).
 
 <a id="cls-Microphone"></a>
 ### `Microphone`
@@ -5847,7 +5858,7 @@ Microphone(device_name: 'str | None', frame_source=None, silent: 'bool' = False)
 
 A microphone that your sketch can listen to.
 
-You get one from f.microphone(). Call start() to begin listening and stop() to end. While it listens,
+You get one from sound.microphone(). Call start() to begin listening and stop() to end. While it listens,
 level(), spectrum(), pitch(), is_onset(), chroma(), chord(), tonic() and swara_histogram() work as they
 do on a Sound. They tell you about the last fraction of a second. When it is not listening they give 0,
 a list of zeros, None or False.
@@ -5859,7 +5870,7 @@ The microphone is never played back, so there is no squeal from the speakers. No
 file unless you call save() on a capture. With FUNGROUND_HEADLESS=1 it is silent and hears nothing.
 
 ```py
-mic = f.microphone()
+mic = sound.microphone()
 mic.start()
 f.circle(200, 200, 20 + 400 * mic.level())
 ```
@@ -5904,7 +5915,7 @@ It is an ordinary Sound: play it, save it, or draw its wave with samples().
 - `ValueError`: if seconds is not more than 0 and at most 10.
 
 ```py
-mic = f.microphone()
+mic = sound.microphone()
 mic.start()
 recording = mic.capture(1)   # use it after about a second
 recording.save("heard.wav")  # writes a new file
@@ -5931,7 +5942,7 @@ guitar or a synth, not for a busy band.
 f.text(song.chord() or "-", 150, 100)
 ```
 
-See also: [`chroma`](#cls-Microphone-chroma), [`key`](#cls-Microphone-key), [`chord_notes`](#fn-chord_notes).
+See also: [`chroma`](#cls-Microphone-chroma), [`key`](#cls-Microphone-key), [`sound.chord_notes`](#fn-sound-chord_notes).
 
 <a id="cls-Microphone-chroma"></a>
 #### `Microphone.chroma`
@@ -6043,7 +6054,7 @@ sound is not playing, or the microphone is not listening.
 **Returns.** a number from 0 to 1.
 
 ```py
-snd = f.load_sound("song.wav")   # your own file
+snd = sound.load("song.wav")   # your own file
 snd.loop()
 f.circle(200, 200, 50 + 300 * snd.level())
 ```
@@ -6083,11 +6094,11 @@ has none), or when nothing is playing or listening.
 **Returns.** the frequency in hertz, or None.
 
 ```py
-mic = f.microphone()
+mic = sound.microphone()
 mic.start()
 hz = mic.pitch()
 if hz:
-    f.text(f.frequency_to_note(hz), 20, 40)
+    f.text(sound.frequency_to_note(hz), 20, 40)
 ```
 
 See also: [`chroma`](#cls-Microphone-chroma), [`chord`](#cls-Microphone-chord), [`level`](#cls-Microphone-level).
@@ -6116,7 +6127,7 @@ a list of zeros when the sound is not playing, or the microphone is not listenin
 - `ValueError`: if bands is not a whole number from 1 to 256.
 
 ```py
-snd = f.tone(220, 2)
+snd = sound.tone(220, 2)
 snd.play()
 for i, strength in enumerate(snd.spectrum(16)):
     f.rect(20 + i * 24, 380, 20, -300 * strength)
@@ -6140,7 +6151,7 @@ It forgets what it heard before. Calling it when it is already listening does no
 - `RuntimeError`: if there is no microphone, or the computer will not let funground use it.
 
 ```py
-mic = f.microphone()
+mic = sound.microphone()
 mic.start()
 ```
 
@@ -6183,10 +6194,10 @@ n and N. The numbers add up to 1, or are all 0 if nothing had a pitch.
 
 ```py
 hist = recording.swara_histogram("D4")
-print(f.match_ragas(hist)[0])
+print(sangeet.match_ragas(hist)[0])
 ```
 
-See also: [`tonic`](#cls-Microphone-tonic), [`match_ragas`](#fn-match_ragas).
+See also: [`tonic`](#cls-Microphone-tonic), [`sangeet.match_ragas`](#fn-sangeet-match_ragas).
 
 <a id="cls-Microphone-tempo"></a>
 #### `Microphone.tempo`
@@ -6223,10 +6234,10 @@ explains a strong Sa and Pa. It is a rough guide, not an answer. For a microphon
 ```py
 sa = recording.tonic()
 if sa:
-    print(f.frequency_to_note(sa))
+    print(sound.frequency_to_note(sa))
 ```
 
-See also: [`swara_histogram`](#cls-Microphone-swara_histogram), [`pitch`](#cls-Microphone-pitch), [`match_ragas`](#fn-match_ragas).
+See also: [`swara_histogram`](#cls-Microphone-swara_histogram), [`pitch`](#cls-Microphone-pitch), [`sangeet.match_ragas`](#fn-sangeet-match_ragas).
 
 <a id="cls-Camera"></a>
 ### `Camera`
@@ -6657,7 +6668,7 @@ A surface that you can draw on and then draw onto the canvas, save, copy or use 
 
 You get one from f.create_graphics(width, height) (an empty, see-through canvas), f.layer(name) (a
 layer that sits over the canvas), f.load_image(path) (a picture file), f.load_svg(path) (a vector
-file), f.get(x, y, w, h) (a copy of part of the canvas) and f.spectrogram() (a picture of a sound).
+file), f.get(x, y, w, h) (a copy of part of the canvas) and sound.spectrogram() (a picture of a sound).
 
 A picture has its own state and its own transform, and nothing about it is cleared between frames. It
 starts see-through. Draw on it with the same commands as f.: fill, stroke, circle, rect, line, text,
@@ -10317,11 +10328,11 @@ Raga(name: 'str', thaat: 'str', swaras: 'tuple[str, ...]', aroha: 'str', avaroha
 
 One raga from funground's small table. It is read-only.
 
-You get one from f.raga(name). Its parts are:
+You get one from sangeet.raga(name). Its parts are:
 name: the raga's name.
 thaat: the parent scale it belongs to.
 swaras: the notes it uses, as a tuple of letters such as ("S", "R", "G"). Small r, g, d and n are komal (flat). M is tivra (sharp) Ma.
-aroha: the way up, as a sargam string that f.melody(text, sa=...) can play.
+aroha: the way up, as a sargam string that sound.melody(text, sa=...) can play.
 avaroha: the way down, as a sargam string.
 pakad: a phrase that marks the raga, as a sargam string.
 vadi: the most important swara.
@@ -10334,9 +10345,9 @@ str(raga) gives a short summary. A raga is much more than its notes, and the tab
 the raga.
 
 ```py
-yaman = f.raga("Yaman")
+yaman = sangeet.raga("Yaman")
 print(yaman.thaat, yaman.swaras)
-f.melody(yaman.aroha, sa="D4").play()
+sound.melody(yaman.aroha, sa="D4").play()
 ```
 
 <a id="cls-Tala"></a>
@@ -10348,7 +10359,7 @@ Tala(name: 'str', beats: 'int', vibhag: 'tuple[int, ...]', tali: 'tuple[int, ...
 
 One tala from funground's small table. It is read-only.
 
-You get one from f.tala_info(name). Beats are counted from 1, so the sam is beat 1. Its parts are:
+You get one from sangeet.tala_info(name). Beats are counted from 1, so the sam is beat 1. Its parts are:
 name: the tala's name.
 beats: how many beats in one cycle.
 vibhag: the divisions, as a tuple of beat counts such as (4, 4, 4, 4).
@@ -10359,10 +10370,10 @@ bols: the theka, the drum syllables, one for each beat.
 notes: where the sources differ, and other things to know. It may be empty.
 sources: a tuple of texts that say where each fact was checked.
 
-str(tala) gives a short summary. Use f.tala(name) to hear the theka.
+str(tala) gives a short summary. Use sangeet.tala(name) to hear the theka.
 
 ```py
-teentaal = f.tala_info("Teentaal")
+teentaal = sangeet.tala_info("Teentaal")
 print(teentaal.beats, teentaal.bols)
 ```
 
@@ -10463,7 +10474,7 @@ For `f.page_size(name)`, in points (1/72 inch). Any capitals are accepted.
 
 ### Ragas
 
-From `f.ragas()` and `f.raga(name)`. See the [ragas and talas chapter](../guide/17_ragas_and_talas.md).
+From `sangeet.ragas()` and `sangeet.raga(name)`. See the [ragas and talas chapter](../guide/17_ragas_and_talas.md).
 
 | Name | Thaat | Time |
 |---|---|---|
@@ -10483,7 +10494,7 @@ From `f.ragas()` and `f.raga(name)`. See the [ragas and talas chapter](../guide/
 
 ### Talas
 
-From `f.talas()` and `f.tala_info(name)`.
+From `sangeet.talas()` and `sangeet.tala_info(name)`.
 
 | Name | Beats | Vibhag (divisions) |
 |---|---|---|

@@ -9,7 +9,7 @@ project works with the notes, and it says so on the screen.
 
 ## How it works
 
-**The data.** `f.ragas()` gives the names, and `f.raga(name)` gives the facts for one. The page is
+**The data.** `sangeet.ragas()` gives the names, and `sangeet.raga(name)` gives the facts for one. The page is
 drawn from them: `raga.swaras` says which rows of the ladder are dark, `raga.vadi` and `raga.samvadi`
 get a coloured border, and `raga.aroha` and `raga.avaroha` are the notes for the tune.
 
@@ -21,17 +21,17 @@ pure intervals.
 up = raga.aroha.split()
 down = raga.avaroha.split()
 tokens = up + ["-"] + down[:-2] + [down[-2] + "~" + down[-1] + ":2"] + ["-", "-"]
-tune = f.melody(" ".join(tokens), tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
+tune = sound.melody(" ".join(tokens), tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
 ```
 
-**The drone.** `f.drone()` makes the steady tanpura note. A raga with no Pa (Marwa) gets Ni on its
+**The drone.** `sound.drone()` makes the steady tanpura note. A raga with no Pa (Marwa) gets Ni on its
 first string, from the `pattern`. A reverb makes it warm, and the small `room()` function folds the
 echo back onto the start, so the loop has no gap. Sounds are made the first time they are needed
 and kept in a dictionary.
 
 ```py
 pattern = "P S' S' S" if "P" in raga.swaras else "N S' S' S"
-drones[pattern] = room(f.drone("D3", 7, pattern=pattern), 0.4)
+drones[pattern] = room(sound.drone("D3", 7, pattern=pattern), 0.4)
 ```
 
 **The playback.** The beat that is sounding comes from the clock of the tune itself, so the ladder
@@ -48,20 +48,22 @@ doing: `idle`, `listen`, `sing`, `thinking` or `result`.
 
 ## Stage 1: make it work
 
-Hear one raga. `f.raga("Bhupali")` gives its facts. Its aroha and avaroha are sargam strings, so
-they go straight into `f.melody`. A ladder of the twelve swaras lights the one that is sounding.
+Hear one raga. `sangeet.raga("Bhupali")` gives its facts. Its aroha and avaroha are sargam strings, so
+they go straight into `sound.melody`. A ladder of the twelve swaras lights the one that is sounding.
 Rows the raga does not use stay dark.
 
 ```python
 import funground as f
+from funground import sound
+from funground import sangeet
 
 SA = "D4"
 TEMPO = 80
 SWARAS = "SrRgGmMPdDnN"
-raga = f.raga("Bhupali")
+raga = sangeet.raga("Bhupali")
 steps = (raga.aroha + " - " + raga.avaroha).split()      # "-" is a rest
-tune = f.melody(" ".join(steps), tempo=TEMPO, sa=SA, tuning="just")
-drone = f.drone("D3", 8, volume=0.4)
+tune = sound.melody(" ".join(steps), tempo=TEMPO, sa=SA, tuning="just")
+drone = sound.drone("D3", 8, volume=0.4)
 
 
 def setup():
@@ -94,7 +96,7 @@ f.run()
 ```
 
 The drone is quieter than the tune, as a tanpura is under a singer. Change `"Bhupali"` to
-another name from `f.ragas()` and listen to how it changes.
+another name from `sangeet.ragas()` and listen to how it changes.
 
 ## Stage 2: make it yours
 
@@ -102,11 +104,11 @@ another name from `f.ragas()` and listen to how it changes.
 changes, make the tune again.
 
 ```py
-NAMES = f.ragas()
+NAMES = sangeet.ragas()
 picker = f.create_slider(0, len(NAMES) - 1, 0, step=1, label="raga")
 
 if NAMES[picker.value()] != raga.name:
-    raga = f.raga(NAMES[picker.value()])         # then make the tune and the drone again
+    raga = sangeet.raga(NAMES[picker.value()])         # then make the tune and the drone again
 ```
 
 **Show the facts.** The raga has `thaat`, `vadi`, `samvadi` and `time`. Draw them as text, and
@@ -118,7 +120,7 @@ glide from S to G. Glide into the last note of the avaroha:
 ```py
 down = raga.avaroha.split()
 ending = down[-2] + "~" + down[-1] + ":2"      # for example R~S:2, a glide over two beats
-tune = f.melody(" ".join(down[:-2] + [ending]), tempo=80, sa=SA, tuning="just")
+tune = sound.melody(" ".join(down[:-2] + [ending]), tempo=80, sa=SA, tuning="just")
 ```
 
 **Give it a room.** `.reverb(0.3)` on the tune and `.reverb(0.4)` on the drone make them sound
@@ -140,13 +142,15 @@ gallery example "A sargam phrase over a drone".
 import math
 
 import funground as f
+from funground import sound
+from funground import sangeet
 
 SA = "D4"
-SA_HZ = f.note_to_frequency(SA)
+SA_HZ = sound.note_to_frequency(SA)
 SWARAS = "SrRgGmMPdDnN"
-raga = f.raga("Bhupali")
-mic = f.microphone()
-drone = f.drone("D3", 8, volume=0.4)
+raga = sangeet.raga("Bhupali")
+mic = sound.microphone()
+drone = sound.drone("D3", 8, volume=0.4)
 trail = []                                       # the pitch line, in rows above Sa
 recent = []
 
@@ -203,13 +207,13 @@ does not move, lower `0.001` in the gate. If it jumps about in a noisy room, rai
 for example. (`0.001` is very quiet. Laptop microphones are.)
 
 **Count what you sang.** `mic.capture(seconds)` gives a sound of the last few seconds you sang.
-Count the swaras in it, and let `f.match_ragas` say which ragas use those notes.
+Count the swaras in it, and let `sangeet.match_ragas` say which ragas use those notes.
 
 ```py
 heard = mic.capture(10)                          # the last 10 seconds, as a sound
 shares = heard.swara_histogram(SA)               # 12 numbers: how long each swara sounded
 if sum(shares) > 0:                              # all zeros means nothing was heard
-    for name, score in f.match_ragas(shares)[:3]:
+    for name, score in sangeet.match_ragas(shares)[:3]:
         print(name, round(score, 2))
 ```
 
@@ -233,7 +237,7 @@ moment.
 ## Challenge cards
 
 - **Can you** change `SA` so the whole page suits your own voice? Use `"C#4"` or `"A3"`.
-- **Can you** add a tala? Play `f.tala("Teentaal", tempo=80)` under the tune, and light the beat.
+- **Can you** add a tala? Play `sangeet.tala("Teentaal", tempo=80)` under the tune, and light the beat.
 - **Can you** play the raga's `pakad` as well as the aroha and avaroha?
 - **Can you** show the time of day as a sun or a moon, drawn with shapes?
 - **Can you** keep the best match from each singing in a list, and show the last five?

@@ -6,11 +6,18 @@ of text. Then you can draw the wave, or see which note is playing.
 
 ## Playing a sound
 
-`f.load_sound("beep.wav")` reads a sound file. It can be a WAV, OGG or MP3 file. Like a picture, it
+Sound is a library: one line brings it in. Every call then says `sound.`
+
+```py
+import funground as f
+from funground import sound
+```
+
+`sound.load("beep.wav")` reads a sound file. It can be a WAV, OGG or MP3 file. Like a picture, it
 is looked for next to your sketch first, then in the current folder. You get a **sound** back.
 
 ```py
-beep = f.load_sound("beep.wav")
+beep = sound.load("beep.wav")
 
 beep.play()             # play from the start
 beep.loop()             # play over and over
@@ -32,8 +39,8 @@ A sound that is not looping stops by itself at the end, and `is_playing()` becom
 
 Two methods tell you what the sound is doing right now. Both are plain numbers from 0 to 1.
 
-- `sound.level()` is how loud it is. It is 0 when the sound is not playing.
-- `sound.spectrum(bands)` is a list of `bands` numbers, one for each range of pitch, from low notes
+- `song.level()` is how loud it is. It is 0 when the sound is not playing.
+- `song.spectrum(bands)` is a list of `bands` numbers, one for each range of pitch, from low notes
   to high notes. The default is 32 bands. A band is strong when the sound has a lot of that pitch.
 
 This sketch makes a short tune file for itself, so it runs as it is. Then it plays the tune and
@@ -45,6 +52,7 @@ import struct
 import wave
 
 import funground as f
+from funground import sound
 
 # Make a two-second file of two notes, so there is something to play.
 with wave.open("tune.wav", "wb") as out:
@@ -55,7 +63,7 @@ with wave.open("tune.wav", "wb") as out:
         note = 330 if i < 22050 else 880
         out.writeframes(struct.pack("<h", int(12000 * math.sin(2 * math.pi * note * i / 22050))))
 
-tune = f.load_sound("tune.wav")
+tune = sound.load("tune.wav")
 
 
 def setup():
@@ -80,28 +88,28 @@ The gallery has a bigger one: see the [Sound area](../gallery/README.md#sound).
 
 You do not need a file. A sound can be made from numbers.
 
-`f.tone(frequency, seconds)` makes one steady tone. The frequency is in hertz: how many times
+`sound.tone(frequency, seconds)` makes one steady tone. The frequency is in hertz: how many times
 the wave goes up and down each second. 440 is the note A. A sound made this way is an ordinary
 sound, so it has `play()`, `loop()`, `level()` and everything else above.
 
 ```py
-f.tone(440, 1).play()                          # one second of A
-f.tone(220, 2, "square", volume=0.3).play()    # a buzzier wave, and quieter
-f.tone(440, 1, attack=0.2, release=0.5).play() # fades in, then fades out
+sound.tone(440, 1).play()                          # one second of A
+sound.tone(220, 2, "square", volume=0.3).play()    # a buzzier wave, and quieter
+sound.tone(440, 1, attack=0.2, release=0.5).play() # fades in, then fades out
 ```
 
 The wave can be `"sine"` (pure and smooth), `"soft"` (gentle, like a recorder), `"triangle"`
 (a little brighter), `"square"` (hollow, like a clarinet), `"saw"` (bright and buzzy) or `"noise"`
 (a hiss). Noise is random, so `f.random_seed()` makes it the same every time.
 
-`f.pluck("E3", 2)` is a plucked string. It starts with a soft pluck and dies away by itself.
+`sound.pluck("E3", 2)` is a plucked string. It starts with a soft pluck and dies away by itself.
 
 ### Volume and headroom
 
 Sounds are made at half volume (`volume=0.5`) unless you ask for more. That leaves room
 (headroom) for a few sounds to play at the same time. When sounds add up to more than full
 volume, the speakers clip: the tops of the waves are cut off, and that sounds harsh. If you play
-one sound alone, you can turn it up with `volume=1` or `sound.set_volume()`.
+one sound alone, you can turn it up with `volume=1` or `song.set_volume()`.
 
 ### The shape of a note
 
@@ -114,9 +122,9 @@ together they are called the envelope:
 - `release`: how long the fade out at the end takes (0.15).
 
 ```py
-f.note("C4", 2, attack=0.5, sustain=1)                 # swells in slowly, then holds
-f.note("C4", 1, attack=0.005, decay=0.3, sustain=0)    # a short, struck sound
-f.note("C4", 2, "saw", attack=0.1, release=1)          # a long fade at the end
+sound.note("C4", 2, attack=0.5, sustain=1)                 # swells in slowly, then holds
+sound.note("C4", 1, attack=0.005, decay=0.3, sustain=0)    # a short, struck sound
+sound.note("C4", 2, "saw", attack=0.1, release=1)          # a long fade at the end
 ```
 
 Each part follows a smooth curve, fast at first and then slower, as real instruments do. The fades
@@ -126,16 +134,17 @@ too short for the attack and the release, they are made shorter.
 ### A room for the sound
 
 A sound made from numbers is completely dry: it stops the moment it ends. In a real room, the
-sound bounces off the walls and rings on for a moment. `sound.reverb(amount)` gives you a new sound
+sound bounces off the walls and rings on for a moment. `song.reverb(amount)` gives you a new sound
 in a room. `amount` goes from 0 (no room) to 1 (a large hall). The new sound is a little longer,
 because the room rings on after the end: up to 1.5 seconds at 1.
 
 ```python
 import funground as f
+from funground import sound
 
-dry = f.pluck("G3", 1.5)
+dry = sound.pluck("G3", 1.5)
 wet = dry.reverb(0.5)                     # the same pluck, in a room
-both = f.sequence(dry, wet)
+both = sound.sequence(dry, wet)
 
 
 def setup():
@@ -147,7 +156,7 @@ def draw():
     f.background("black")
     f.fill("deepskyblue")
     f.no_stroke()
-    f.draw_wave(both, 10, 50, 380, 100)   # the second half rings on for longer
+    sound.draw_wave(both, 10, 50, 380, 100)   # the second half rings on for longer
 
 
 f.run()
@@ -159,8 +168,8 @@ Make the sound once, at the start, not in `draw()`.
 ### The numbers inside a sound
 
 A sound is a long list of numbers from -1 to 1, one for each tiny slice of time. There are 44 100
-of them every second. `sound.samples()` gives you the list, so you can draw it. And
-`f.create_sound(numbers)` goes the other way: it turns a list into a sound. Numbers outside -1 to
+of them every second. `song.samples()` gives you the list, so you can draw it. And
+`sound.create(numbers)` goes the other way: it turns a list into a sound. Numbers outside -1 to
 1 are cut off at -1 or 1.
 
 This sketch makes a sound from a list of numbers, and draws the start of it. A sound made from a
@@ -170,12 +179,13 @@ list is just a sound, so the sketch plays it.
 import math
 
 import funground as f
+from funground import sound
 
 # Two sine waves added together make a richer sound.
 numbers = [0.5 * math.sin(2 * math.pi * 220 * i / 44100)
            + 0.25 * math.sin(2 * math.pi * 330 * i / 44100)
            for i in range(44100)]
-chord = f.create_sound(numbers)
+chord = sound.create(numbers)
 
 
 def setup():
@@ -196,28 +206,28 @@ f.run()
 
 ### Putting sounds together
 
-- `f.sequence(a, b, c)` makes a new sound that plays them one after another.
-- `f.mix(a, b, c)` makes a new sound that plays them all at once. A quiet sum is left alone. If the
+- `sound.sequence(a, b, c)` makes a new sound that plays them one after another.
+- `sound.mix(a, b, c)` makes a new sound that plays them all at once. A quiet sum is left alone. If the
   sum gets loud, its loudest moments are gently squashed (a soft limiter), so it never goes above 0.9
   and never clips. For the cleanest sound, give each part a lower `volume` so the limiter has little
   to do.
-- `sound.pan(-1)` moves a sound to the left speaker, `sound.pan(1)` to the right, and 0 is the
+- `song.pan(-1)` moves a sound to the left speaker, `song.pan(1)` to the right, and 0 is the
   middle. It works on sounds from files too. `level()` and `spectrum()` do not change with pan.
-- `sound.save("name.wav")` writes the sound to a WAV file. The pan is kept. The volume is not.
+- `song.save("name.wav")` writes the sound to a WAV file. The pan is kept. The volume is not.
 
 ## Notes and melodies
 
-`f.note("A4", 1)` is like `f.tone()`, with a note name instead of a frequency. A name is a letter
+`sound.note("A4", 1)` is like `sound.tone()`, with a note name instead of a frequency. A name is a letter
 from A to G, an optional `#` (sharp) or `b` (flat), and an octave number. `"C4"` is middle C,
 `"A4"` is 440 Hz and `"Bb3"` is B flat just below. The notes use equal temperament, the tuning of a
 piano.
 
-`f.note_to_frequency("C4")` gives the frequency, 261.63. `f.frequency_to_note(300)` goes back and
+`sound.note_to_frequency("C4")` gives the frequency, 261.63. `sound.frequency_to_note(300)` goes back and
 gives the nearest note, `"D4"`.
 
 ### A tune from text
 
-`f.melody()` turns a line of text into a sound. The parts are separated by spaces.
+`sound.melody()` turns a line of text into a sound. The parts are separated by spaces.
 
 - A note name plays that note.
 - `-` is a rest: silence.
@@ -235,8 +245,9 @@ beats, which is handy for a tune that loops in time.
 
 ```python
 import funground as f
+from funground import sound
 
-tune = f.melody("C4 C4 G4 G4 A4 A4 G4:2 - F4 F4 E4 E4 [D4 G4]:2 [C4 E4 G4]:3",
+tune = sound.melody("C4 C4 G4 G4 A4 A4 G4:2 - F4 F4 E4 E4 [D4 G4]:2 [C4 E4 G4]:3",
                 tempo=110).reverb(0.2)
 
 
@@ -265,18 +276,18 @@ ones, and `M` is the sharp (tivra) Ma. A `'` after a swara is the octave above, 
 octave below.
 
 ```py
-f.melody("S R G m P D N S'", sa="D4").play()        # a scale up from D
-f.melody("P, S R G:2 R S", sa="C4", tuning="just")  # the same, in just tuning
+sound.melody("S R G m P D N S'", sa="D4").play()        # a scale up from D
+sound.melody("P, S R G:2 R S", sa="C4", tuning="just")  # the same, in just tuning
 ```
 
 With `tuning="just"` each swara is a simple fraction of Sa's frequency, like 5/4 for G and
 3/2 for P. The notes then ring together more purely. With the default, `tuning="equal"`, the
-notes are the ones on a piano. `f.note_to_frequency("G", sa="D4")` and
-`f.frequency_to_note(hz, sa="D4")` work in swaras too.
+notes are the ones on a piano. `sound.note_to_frequency("G", sa="D4")` and
+`sound.frequency_to_note(hz, sa="D4")` work in swaras too.
 
 ### Which note is it?
 
-`sound.pitch()` listens to the sound at the place it is playing now and gives the frequency of the
+`song.pitch()` listens to the sound at the place it is playing now and gives the frequency of the
 note, in hertz. It gives `None` if the sound is quiet, if there is no clear note (noise has none),
 or if it is not playing. It listens to one voice or one instrument. It cannot tell the notes of a
 chord apart. It looks for pitches from 50 to 2000 Hz.
@@ -284,12 +295,12 @@ chord apart. It looks for pitches from 50 to 2000 Hz.
 ```py
 hz = tune.pitch()
 if hz:
-    f.text(f.frequency_to_note(hz), 20, 40)
+    f.text(sound.frequency_to_note(hz), 20, 40)
 ```
 
 ## Listening with the microphone
 
-A sound does not have to come from a file. `f.microphone()` listens to your computer's microphone.
+A sound does not have to come from a file. `sound.microphone()` listens to your computer's microphone.
 Call `mic.start()` to begin and `mic.stop()` to end. While it listens, `mic.level()`,
 `mic.spectrum()` and `mic.pitch()` work just as they do on a sound. They tell you about the last
 fraction of a second that it heard. When it is not listening they give `0`, a list of zeros, and
@@ -301,8 +312,9 @@ Here is a tuner. Sing or hum a note, or play one on an instrument.
 import math
 
 import funground as f
+from funground import sound
 
-mic = f.microphone()
+mic = sound.microphone()
 
 
 def setup():
@@ -316,7 +328,7 @@ def draw():
     hz = mic.pitch()
     f.fill("white")
     f.text_size(64)
-    f.text(f.frequency_to_note(hz) if hz else "-", 150, 90)
+    f.text(sound.frequency_to_note(hz) if hz else "-", 150, 90)
     f.fill("deepskyblue")
     db = 20 * math.log10(mic.level() + 1e-9)                 # decibels: a quiet room is about -65
     f.rect(20, 160, 260 * f.constrain((db + 70) / 50, 0, 1), 16)
@@ -326,8 +338,8 @@ f.run()
 ```
 
 `mic.pitch()` is `None` when it is quiet or when there is no clear note, so the sketch above shows a
-dash. `f.microphones()` lists the names of the microphones on your computer. Give part of a name to
-`f.microphone("USB")` to choose one.
+dash. `sound.microphones()` lists the names of the microphones on your computer. Give part of a name to
+`sound.microphone("USB")` to choose one.
 
 Laptop microphones can be very quiet. A voice may read only 0.01 on `mic.level()`, and a quiet room
 0.0005. So the microphone examples measure loudness against the room, in decibels. You can do the
@@ -342,8 +354,9 @@ to 10. It is an ordinary sound, so you can play it, save it, or draw its wave wi
 
 ```python
 import funground as f
+from funground import sound
 
-mic = f.microphone()
+mic = sound.microphone()
 recording = None
 
 
@@ -379,7 +392,7 @@ A few things to know:
 
 - The microphone is never played back, so there is no squeal from the speakers.
 - Nothing is recorded to a file unless you call `save()` on a capture.
-- With no microphone, or if the computer will not let funground use it, `f.microphone()` or
+- With no microphone, or if the computer will not let funground use it, `sound.microphone()` or
   `mic.start()` gives a `RuntimeError` that says so. On a Mac, allow microphone access in System
   Settings, Privacy and Security, Microphone.
 - With `FUNGROUND_HEADLESS=1` the microphone is silent and hears nothing, so a sketch still runs. A
@@ -393,16 +406,17 @@ Four ready-made functions draw sound for you. You could draw all of them yoursel
 `spectrum()` and `pitch()`. These just save you the work. Each one fills a box: you give its left,
 top, width and height.
 
-`f.draw_wave(source, x, y, w, h)` draws the wave. The source can be a sound (you see all of it, and
+`sound.draw_wave(source, x, y, w, h)` draws the wave. The source can be a sound (you see all of it, and
 a line shows where it is while it plays), a microphone (you see the last half second) or a list of
-numbers. `f.draw_spectrum(source, x, y, w, h)` draws bars for the spectrum, as it is right now. They
+numbers. `sound.draw_spectrum(source, x, y, w, h)` draws bars for the spectrum, as it is right now. They
 use your current fill, stroke and transform, like `f.rect()` does, so `f.fill("orange")` first
 changes the colour.
 
 ```python
 import funground as f
+from funground import sound
 
-song = f.melody("C4 E4 G4 C5:2 - G4 E4 C4:2", tempo=150, wave="triangle")
+song = sound.melody("C4 E4 G4 C5:2 - G4 E4 C4:2", tempo=150, wave="triangle")
 
 
 def setup():
@@ -414,16 +428,16 @@ def draw():
     f.background("black")
     f.fill("deepskyblue")
     f.stroke("white")
-    f.draw_wave(song, 10, 10, 400, 100)       # the whole song, and a line where it is now
+    sound.draw_wave(song, 10, 10, 400, 100)       # the whole song, and a line where it is now
     f.no_stroke()
     f.fill("orange")
-    f.draw_spectrum(song, 10, 130, 400, 100, bands=32)
+    sound.draw_spectrum(song, 10, 130, 400, 100, bands=32)
 
 
 f.run()
 ```
 
-`f.draw_pitch_line(source, x, y, w, h)` draws the pitch heard over the last few seconds, as a line
+`sound.draw_pitch_line(source, x, y, w, h)` draws the pitch heard over the last few seconds, as a line
 that scrolls. Low notes are at the bottom and high notes at the top. Faint lines are labelled with
 note names. Give `sa="C4"` and they are labelled with swaras instead. Where there is no clear pitch,
 the line has a gap. Call it once in every frame, because it looks at the pitch each time. Use
@@ -431,8 +445,9 @@ the line has a gap. Call it once in every frame, because it looks at the pitch e
 
 ```python
 import funground as f
+from funground import sound
 
-mic = f.microphone()
+mic = sound.microphone()
 
 
 def setup():
@@ -445,22 +460,23 @@ def draw():
     f.no_fill()
     f.stroke("limegreen")
     f.stroke_width(3)
-    f.draw_pitch_line(mic, 10, 10, 400, 220, seconds=8, low="C3", high="C6")
+    sound.draw_pitch_line(mic, 10, 10, 400, 220, seconds=8, low="C3", high="C6")
 
 
 f.run()
 ```
 
-`f.spectrogram(sound, width, height)` gives you a picture of a whole sound. Time goes across, pitch
+`sound.spectrogram(sound, width, height)` gives you a picture of a whole sound. Time goes across, pitch
 goes up, and the louder it is, the brighter it is. The brightest colour is your current fill, so
 set the fill first. It takes about a second for a ten second sound, so make it once, in `setup()`,
 not in `draw()`. Then draw it with `f.image()`, or save it.
 
 ```python
 import funground as f
+from funground import sound
 
-song = f.mix(f.melody("A3 C4 E4 A4:2 G4 E4 C4:2", tempo=130),
-             f.melody("A2:4 E2:4", tempo=130, wave="triangle"))
+song = sound.mix(sound.melody("A3 C4 E4 A4:2 G4 E4 C4:2", tempo=130),
+             sound.melody("A2:4 E2:4", tempo=130, wave="triangle"))
 picture = None
 
 
@@ -468,7 +484,7 @@ def setup():
     global picture
     f.size(420, 200)
     f.fill("gold")
-    picture = f.spectrogram(song, 400, 180)
+    picture = sound.spectrogram(song, 400, 180)
 
 
 def draw():
@@ -497,17 +513,18 @@ A sound can tell you where its beats are. Every method here listens to the whole
 works it all out the first time you ask. After that the answers are remembered. A three-minute
 song takes a few seconds the first time.
 
-- `sound.onsets()` is a list of times, in seconds, where a note or a hit begins.
-- `sound.tempo()` is the speed in beats a minute, from 60 to 200. It is `None` when the sound has
+- `song.onsets()` is a list of times, in seconds, where a note or a hit begins.
+- `song.tempo()` is the speed in beats a minute, from 60 to 200. It is `None` when the sound has
   no steady pulse, as with silence, hiss or one long note.
-- `sound.beats()` is a list of the times of the beats at that tempo. They line up with the onsets.
+- `song.beats()` is a list of the times of the beats at that tempo. They line up with the onsets.
 
 The next sketch plays a tune and flashes a circle on every beat.
 
 ```python
 import funground as f
+from funground import sound
 
-tune = f.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
+tune = sound.melody("C4 E4 G4 E4 A3 C4 E4 C4", tempo=100, wave="triangle")
 beats = tune.beats()            # for example [0.0, 0.6, 1.2, ...]
 print(round(tune.tempo()), "beats a minute")
 
@@ -528,7 +545,7 @@ def draw():
 f.run()
 ```
 
-`sound.is_onset()` is for the moment. It is `True` in the frame where a new note or hit is
+`song.is_onset()` is for the moment. It is `True` in the frame where a new note or hit is
 heard, so you can flash a light on each one. It works on a playing sound, and on a microphone, for
 what it heard most recently. It is `False` when nothing is playing or listening.
 
@@ -540,28 +557,29 @@ A microphone has no "whole sound". To find the beats of what it heard, take a pi
 
 ## Chords and keys
 
-`sound.chroma()` is twelve numbers from 0 to 1. They say how strong each note name is right now:
+`song.chroma()` is twelve numbers from 0 to 1. They say how strong each note name is right now:
 C, C#, D, D#, E, F, F#, G, G#, A, A#, B. Every octave counts as the same note name, so a low C and a
 high C add up. The strongest is 1. It works on a playing sound and on a microphone, and gives
 twelve zeros when nothing is playing or listening.
 
-`sound.chord()` names the chord that fits the chroma best. The name is a note and then nothing
+`song.chord()` names the chord that fits the chroma best. The name is a note and then nothing
 (major), `m` (minor), `dim`, `aug`, `7`, `maj7` or `m7`: "C", "Am", "Bdim", "G7", "Fmaj7". If no chord
 fits well it is `None`. One note on its own is not a chord, so it is `None` too. It is meant for
 clear chords on a piano, a guitar or a synth, not for a busy band.
 
-`f.chord_notes(name)` goes the other way. It gives the notes in a chord: `f.chord_notes("C")` is
-`["C", "E", "G"]`, and `f.chord_notes("Am")` is `["A", "C", "E"]`.
+`sound.chord_notes(name)` goes the other way. It gives the notes in a chord: `sound.chord_notes("C")` is
+`["C", "E", "G"]`, and `sound.chord_notes("Am")` is `["A", "C", "E"]`.
 
-`sound.key()` is for a whole sound. It adds up the chroma over the sound and says which key fits:
+`song.key()` is for a whole sound. It adds up the chroma over the sound and says which key fits:
 `"G major"` or `"E minor"`, or `None`. It is a good guess for a tune with a clear home note. It
 cannot see a key change in the middle.
 
 ```python
 import funground as f
+from funground import sound
 
 names = ["C", "Am", "F", "G7"]
-song = f.sequence(*[f.mix(*[f.note(n + "4", 1.0, "triangle") for n in f.chord_notes(c)])
+song = sound.sequence(*[sound.mix(*[sound.note(n + "4", 1.0, "triangle") for n in sound.chord_notes(c)])
                     for c in names])
 print(song.key())
 
@@ -597,8 +615,8 @@ run and change.
 ![Draw a wave and hear it](../gallery/images/music-08_draw_a_wave.png)
 
 Every sound is a wave, and the shape of the wave is its colour, or timbre. Drag the mouse in the box to
-draw one period of a wave. `f.create_sound()` repeats it 220 times a second, and the sketch plays it
-again when you let go. `f.draw_spectrum()` shows which pitches are in it. A smooth wave has one tall
+draw one period of a wave. `sound.create()` repeats it 220 times a second, and the sketch plays it
+again when you let go. `sound.draw_spectrum()` shows which pitches are in it. A smooth wave has one tall
 bar and a jagged one has many. Four buttons give you a sine, a square, a saw and a soft wave to start from.
 
 ### Compose and save
@@ -606,8 +624,8 @@ bar and a jagged one has many. Four buttons give you a sine, a square, a saw and
 ![Compose and save](../gallery/images/music-09_compose_and_save.png)
 
 Click squares on a grid: beats go across and notes go up. The notes come from a five-note scale, or from
-sargam if you tick the box, so nothing you write sounds wrong. The loop is `f.melody()` with a quiet pulse
-from `f.mix()` and a little reverb, and a line sweeps along it. "save WAV" writes the tune with `sound.save()`
+sargam if you tick the box, so nothing you write sounds wrong. The loop is `sound.melody()` with a quiet pulse
+from `sound.mix()` and a little reverb, and a line sweeps along it. "save WAV" writes the tune with `song.save()`
 and "save poster" writes the grid as a PDF with `f.save()`. Both files go in the folder the sketch runs in.
 
 ### Ear training
@@ -625,8 +643,8 @@ microphone, clicks and keys still work.
 ![A piano roll of a tune you wrote](../gallery/images/music-11_piano_roll.png)
 
 A melody string is read by the sketch and drawn as bars: time goes across and pitch goes up. The roll scrolls
-past a fixed line, and each note lights up as it sounds. Tick the box to lay `f.draw_pitch_line()` over it and
-see the pitch that `sound.pitch()` hears follow the bars. This only works because the notes were written in
+past a fixed line, and each note lights up as it sounds. Tick the box to lay `sound.draw_pitch_line()` over it and
+see the pitch that `song.pitch()` hears follow the bars. This only works because the notes were written in
 code. A piano roll from a recording would have to guess the notes, which needs machine learning.
 
 ## Good to know
@@ -669,8 +687,8 @@ names each method with its reference.
 
 ## Try it
 
-1. Play one second of the note A with `f.note("A4", 1)`. Then play it an octave higher.
-2. Write a short tune with `f.melody()`, with a rest and a chord in it, and draw its wave with `f.draw_wave()`.
+1. Play one second of the note A with `sound.note("A4", 1)`. Then play it an octave higher.
+2. Write a short tune with `sound.melody()`, with a rest and a chord in it, and draw its wave with `sound.draw_wave()`.
 3. Make a circle that gets bigger when you speak into the microphone. Hint: `mic.level()`.
 
 **Previous:** [15. Coming from DrawBot](15_coming_from_drawbot.md) · **Next:** [17. Ragas and talas](17_ragas_and_talas.md)
