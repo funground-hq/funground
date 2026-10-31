@@ -14,7 +14,7 @@ the same 30-line pose sketch on the desktop and in Play.
 | Hugging Face, desk | `huggingface/research.md` | Without torch, the route is `onnxruntime` with ONNX files. It is strong for naming a picture, objects, embeddings and speech, and has nothing first-class for pose, hands or the face mesh |
 | ONNX on both platforms | `onnx/results.md` | **The same .onnx files run in `onnxruntime` on the desktop and `onnxruntime-web` in Play's worker.** Desktop, with the box reused: pose 52/s, hand 162/s, selfie outline 88/s, 2.5 to 3.5 times faster than cv2.dnn. Play: pose 13 to 15/s on wasm (MediaPipe web 11/s on CPU) and 20/s on WebGPU. The points agree within 5 px between platforms (mean 1.6 px for pose). funground's own glue is 141 lines of Python and 151 of JavaScript for all twelve models, with the anchor tables generated. Telemetry: the Windows 1.31.1 wheel has no network code (ETW only, which stays on the computer); 0 connections in 7 runs. Microsoft's privacy page documents 1DS over HTTPS with `ORT_DISABLE_TELEMETRY=1` as the switch; Linux and macOS are not measured. Install about 109 MB with numpy. The int8 files are slower and one gave wrong answers here: use fp32 |
 
-## D-124: the route for models (pending, revised 29 Oct with the ONNX measurements)
+## D-124: the route for models (accepted 29 Oct: d, with the models from the Hugging Face Hub)
 
 **Context:** E-37's first stories (pose and hands, S-232; the person's outline, S-233) need a model provider on each
 platform. The sketch must be the same file on both (D-120, ADR-007), and the library is for learners, children
