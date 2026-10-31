@@ -6,10 +6,10 @@ the sound in it was loud: when you blew. Click to put the cloud on the mouth. Pr
 words as blow.gif. With no take it uses the live camera and microphone (hold Space to blow without one).
 
 How it works:
-- f.load_clip("take.gif") and f.load_sound("take.wav") read the take. Each frame of the clip is drawn in turn with
+- f.load_clip("take.gif") and sound.load("take.wav") read the take. Each frame of the clip is drawn in turn with
   clip.frame(i), and the sound plays alongside, starting again with the clip so the two stay together.
 - Before it starts, the sketch works out how loud the sound is during each frame of the clip, from
-  sound.samples(), and turns it into a breath from 0 to 1. Frame i always gets breath i, so the words move at
+  take_audio.samples(), and turns it into a breath from 0 to 1. Frame i always gets breath i, so the words move at
   exactly the right moments, every loop.
 - Each word is an object of class Word with its home in the cloud, its speed and how much of it is left. A breath
   pushes the words near the mouth away; then they fade and drift back. f.noise() makes the fog come and go.
@@ -25,6 +25,7 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
 WIDTH, HEIGHT = 480, 360
 TEXT = ("every breath carries a word away into the morning mist "
@@ -40,7 +41,7 @@ def load_take():
     except FileNotFoundError:
         return None, None
     try:
-        return clip, f.load_sound("take.wav")
+        return clip, sound.load("take.wav")
     except FileNotFoundError:
         return clip, None                              # a silent take: hold Space to blow
 
@@ -51,11 +52,11 @@ def breath_of(level):
     return f.constrain((20 * math.log10(level + 1e-9) + 45) / 25, 0, 1)
 
 
-def breaths_of(sound, frames, fps):
+def breaths_of(take_audio, frames, fps):
     """How hard the breath is during each frame of the take: the loudness of the sound for that frame."""
-    if sound is None:
+    if take_audio is None:
         return [0.0] * frames
-    samples = sound.samples()                          # 44 100 numbers for every second
+    samples = take_audio.samples()                          # 44 100 numbers for every second
     per_frame = 44100 / fps
     result = []
     for i in range(frames):
@@ -158,7 +159,7 @@ def open_camera():
 
 def open_microphone():
     try:
-        microphone = f.microphone()
+        microphone = sound.microphone()
         microphone.start()
         return microphone
     except RuntimeError:

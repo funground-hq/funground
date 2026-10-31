@@ -18,7 +18,9 @@ from pathlib import Path
 import pytest
 
 import funground as f
-from funground import microphone_input as mi, sound as sound_module
+from funground import sound
+from funground import host_services
+from funground.sound import _engine as sound_module, _microphone as mi
 from funground.web import Session
 
 RATE = 44100
@@ -75,12 +77,12 @@ def desktop_samples(make) -> list[float]:
 
 
 MAKERS = {
-    "tone": lambda: f.tone(440, 0.25),
-    "tone_square": lambda: f.tone(220, 0.2, wave="square", volume=0.8),
-    "melody": lambda: f.melody("C4 E4 G4:2 - C5", tempo=240),
-    "sargam_melody": lambda: f.melody("S R G m P", tempo=240, sa="D4"),
-    "raga_drone": lambda: f.drone("D3", 2),
-    "mix": lambda: f.mix(f.tone(440, 0.2), f.tone(660, 0.2)),
+    "tone": lambda: sound.tone(440, 0.25),
+    "tone_square": lambda: sound.tone(220, 0.2, wave="square", volume=0.8),
+    "melody": lambda: sound.melody("C4 E4 G4:2 - C5", tempo=240),
+    "sargam_melody": lambda: sound.melody("S R G m P", tempo=240, sa="D4"),
+    "raga_drone": lambda: sound.drone("D3", 2),
+    "mix": lambda: sound.mix(sound.tone(440, 0.2), sound.tone(660, 0.2)),
 }
 
 
@@ -102,7 +104,7 @@ def test_the_host_receives_the_samples_pygame_would_be_given(name, host, monkeyp
 
 
 def test_a_sound_is_sent_once_and_only_when_first_played(host):
-    snd = f.tone(440, 0.2)
+    snd = sound.tone(440, 0.2)
     snd.set_volume(0.5)
     snd.pan(-1)
     assert host.sounds == []                              # nothing to the host until something plays
@@ -114,7 +116,7 @@ def test_a_sound_is_sent_once_and_only_when_first_played(host):
 
 
 def test_play_loop_pause_resume_stop_volume_pan_commands(host):
-    snd = f.tone(440, 1)
+    snd = sound.tone(440, 1)
     snd.set_volume(0.25)
     snd.play()
     snd.pause()
@@ -134,7 +136,7 @@ def test_play_loop_pause_resume_stop_volume_pan_commands(host):
 
 
 def test_the_volume_and_pan_set_before_the_first_play_reach_the_host(host):
-    snd = f.tone(440, 1)
+    snd = sound.tone(440, 1)
     snd.set_volume(0.3)
     snd.pan(-0.5)
     snd.play()
@@ -146,7 +148,7 @@ def test_the_volume_and_pan_set_before_the_first_play_reach_the_host(host):
 
 
 def test_two_sounds_have_two_voices(host):
-    a, b = f.tone(440, 0.2), f.tone(660, 0.2)
+    a, b = sound.tone(440, 0.2), sound.tone(660, 0.2)
     a.play()
     b.play()
     voices = [v for c, v, _, _ in host.sounds if c == "play"]
@@ -154,7 +156,7 @@ def test_two_sounds_have_two_voices(host):
 
 
 def test_a_dropped_sound_is_freed(host):
-    snd = f.tone(440, 0.2)
+    snd = sound.tone(440, 0.2)
     snd.play()
     voice = host.sounds[0][1]
     del snd
@@ -163,15 +165,15 @@ def test_a_dropped_sound_is_freed(host):
 
 
 def test_the_session_stopping_stops_every_sound_and_hands_the_mixer_back(host):
-    f.tone(440, 1).loop()
+    sound.tone(440, 1).loop()
     host.session.stop()
     assert host.sounds[-1][:2] == ("stop_all", 0)
-    assert sound_module._host_mixer is None and mi._host_input is None
+    assert host_services.mixer is None and host_services.microphone is None
 
 
 def test_the_sound_clock_is_the_same_under_a_host(host, clock):
     """Contract A1 and A2: is_playing, current_time and the end of a sound come from the clock, not the device."""
-    snd = f.tone(440, 1)
+    snd = sound.tone(440, 1)
     assert not snd.is_playing()
     snd.play()
     clock[0] += 0.4
@@ -193,13 +195,13 @@ def test_the_sound_clock_is_the_same_under_a_host(host, clock):
 
 
 def test_analysis_is_the_same_under_a_host(host, clock, monkeypatch):
-    snd = f.tone(440, 1)
+    snd = sound.tone(440, 1)
     snd.play()
     clock[0] += 0.5
     under_host = (snd.level(), snd.pitch(), snd.spectrum(8))
     host.session.stop()
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
-    again = f.tone(440, 1)
+    again = sound.tone(440, 1)
     again.play()
     clock[0] += 0.5
     assert (again.level(), again.pitch(), again.spectrum(8)) == under_host
@@ -213,7 +215,7 @@ def test_a_wav_file_can_be_loaded_and_played(host, tmp_path):
         out.setsampwidth(2)
         out.setframerate(22050)
         out.writeframes(array("h", values).tobytes())
-    snd = f.load_sound(str(path))
+    snd = sound.load(str(path))
     assert snd.duration() == pytest.approx(0.1, abs=0.001)
     snd.play()
     samples = host.loaded()[0]
@@ -224,7 +226,7 @@ def test_a_file_that_is_not_a_16_bit_wav_says_so(host, tmp_path):
     path = tmp_path / "tune.mp3"
     path.write_bytes(b"not a wav file")
     with pytest.raises(ValueError, match="16-bit WAV"):
-        f.load_sound(str(path))
+        sound.load(str(path))
 
 
 def test_pygame_is_not_imported():
@@ -233,12 +235,13 @@ def test_pygame_is_not_imported():
     script = (
         "import sys; sys.path.insert(0, sys.argv[1])\n"
         "import funground as f\n"
+        "from funground import sound\n"
         "from funground.web import Session\n"
         "got = []\n"
         "s = Session(100, 100, on_sound=lambda *a: got.append(a[0]), on_microphone=lambda c: got.append('mic ' + c))\n"
-        "f.tone(440, 0.2).play(); f.melody('C4 E4').loop(); f.drone('D3', 1).play()\n"
-        "m = f.microphone(); m.start(); s.push_microphone([0.1] * 512); m.level(); m.capture(1).level()\n"
-        "f.size(100, 100); f.microphones(); f.draw_wave(f.tone(440, 0.1), 0, 0, 50, 20)\n"
+        "sound.tone(440, 0.2).play(); sound.melody('C4 E4').loop(); sound.drone('D3', 1).play()\n"
+        "m = sound.microphone(); m.start(); s.push_microphone([0.1] * 512); m.level(); m.capture(1).level()\n"
+        "f.size(100, 100); sound.microphones(); sound.draw_wave(sound.tone(440, 0.1), 0, 0, 50, 20)\n"
         "s.stop()\n"
         "assert 'pygame' not in sys.modules, 'pygame was imported'\n"
         "print(','.join(got))\n")
@@ -274,7 +277,7 @@ def readings(mic):
 @pytest.mark.parametrize("hz", [220, 440, 880])
 def test_pushed_chunks_read_the_same_as_the_desktop_path(host, hz):
     samples = sine(hz, 0.6)
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     pushed(host, samples)
     assert readings(mic) == readings(desktop_microphone(samples))
@@ -284,7 +287,7 @@ def test_pushed_chunks_read_the_same_as_the_desktop_path(host, hz):
 
 def test_chunks_of_any_size_read_the_same(host):
     samples = sine(330, 1.0) + [0.0] * 4000 + sine(330, 0.3, 0.8)
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     at = 0                                                  # the page batches 128-sample worklet blocks; sizes vary
     for size in (128, 1000, 777, 5000) * 100:
@@ -297,14 +300,14 @@ def test_chunks_of_any_size_read_the_same(host):
 
 def test_capture_is_the_same_sound(host):
     samples = sine(440, 1.0)
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     pushed(host, samples)
     assert mic.capture(1).samples() == desktop_microphone(samples).capture(1).samples()
 
 
 def test_not_listening_gives_zero_none_and_false(host):
-    mic = f.microphone()
+    mic = sound.microphone()
     assert not mic.is_listening()
     host.session.push_microphone(sine(440, 0.3))            # a host that pushes before start() is not heard
     assert (mic.level(), mic.pitch(), mic.is_onset()) == (0, None, False)
@@ -313,14 +316,14 @@ def test_not_listening_gives_zero_none_and_false(host):
 
 
 def test_until_the_page_delivers_a_started_microphone_hears_silence(host):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     assert host.microphone == ["start"]
     assert (mic.level(), mic.pitch(), mic.is_onset()) == (0, None, False)      # nothing pushed yet: the "not listening" values
 
 
 def test_start_stop_and_close_are_asked_of_the_page(host):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     mic.stop()
     assert not mic.is_listening()
@@ -332,7 +335,7 @@ def test_start_stop_and_close_are_asked_of_the_page(host):
 
 
 def test_a_second_start_asks_the_page_nothing(host):
-    mic = f.microphone()
+    mic = sound.microphone()
     mic.start()
     mic.start()
     assert host.microphone == ["start"]
@@ -340,5 +343,5 @@ def test_a_second_start_asks_the_page_nothing(host):
 
 def test_choosing_a_microphone_by_name_is_desktop_only(host):
     with pytest.raises(RuntimeError, match="only works in the desktop version"):
-        f.microphone("USB")
-    assert f.microphones() == []
+        sound.microphone("USB")
+    assert sound.microphones() == []

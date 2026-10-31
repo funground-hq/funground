@@ -57,12 +57,12 @@ if cleared >= FOUND_AT:
 symbols are chosen. So card 1 is always the same, and card 2 is always the same. That is what makes
 a game fair, and easy to test.
 
-**The sounds.** `f.pluck()` makes a soft plucked note. Three notes, C, E and G, rise as you find
-symbols. A win plays a short tune made with `f.melody()`. If the computer has no sound device,
+**The sounds.** `sound.pluck()` makes a soft plucked note. Three notes, C, E and G, rise as you find
+symbols. A win plays a short tune made with `sound.melody()`. If the computer has no sound device,
 `play()` quietly does nothing, so the game never stops.
 
 ```py
-CHIMES = [f.pluck("C5", 0.7, volume=0.4), f.pluck("E5", 0.7, volume=0.4), f.pluck("G5", 0.7, volume=0.4)]
+CHIMES = [sound.pluck("C5", 0.7, volume=0.4), sound.pluck("E5", 0.7, volume=0.4), sound.pluck("G5", 0.7, volume=0.4)]
 ```
 
 ## Stage 1: make it work
@@ -146,13 +146,13 @@ if sum(found) == 3 and len(set(symbols)) == 1:
     f.text("Three the same. You win!", W / 2, 378)
 ```
 
-**Make a sound.** `play(sound)` wraps `sound.play()` so that a computer with no sound device
+**Make a sound.** `play(sound_to_play)` wraps its `play()` so that a computer with no sound device
 carries on in silence.
 
 ```py
-def play(sound):
+def play(sound_to_play):
     try:
-        sound.play()
+        sound_to_play.play()
     except Exception:
         pass
 ```

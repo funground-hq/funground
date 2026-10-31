@@ -3720,9 +3720,9 @@
     {
      "name": "WAVE",
      "used_by": [
-      "tone",
-      "note",
-      "melody"
+      "sound.tone",
+      "sound.note",
+      "sound.melody"
      ],
      "members": [
       {
@@ -3760,7 +3760,7 @@
     {
      "name": "TUNING",
      "used_by": [
-      "melody"
+      "sound.melody"
      ],
      "members": [
       {
@@ -4692,216 +4692,6 @@
    "star": true
   },
   {
-   "name": "load_sound",
-   "kind": "function",
-   "signature": "load_sound(path)",
-   "detail": "(path: str) -> Sound",
-   "summary": "Read a sound file and return a sound.",
-   "url": "reference/API.md#fn-load_sound",
-   "returns": "Sound",
-   "star": true
-  },
-  {
-   "name": "create_sound",
-   "kind": "function",
-   "signature": "create_sound(samples, rate=44100)",
-   "detail": "(samples: Any, rate: int = 44100) -> Sound",
-   "summary": "Make a sound from a list of numbers.",
-   "url": "reference/API.md#fn-create_sound",
-   "returns": "Sound",
-   "star": true
-  },
-  {
-   "name": "tone",
-   "kind": "function",
-   "signature": "tone(frequency, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
-   "detail": "(frequency: float, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
-   "summary": "Make a sound that is one steady tone.",
-   "url": "reference/API.md#fn-tone",
-   "returns": "Sound",
-   "star": true,
-   "options": {
-    "wave": [
-     {
-      "word": "sine",
-      "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
-     },
-     {
-      "word": "square",
-      "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
-     },
-     {
-      "word": "saw",
-      "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
-     },
-     {
-      "word": "triangle",
-      "meaning": "Between sine and square: soft but a little reedy, like a flute."
-     },
-     {
-      "word": "soft",
-      "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
-     },
-     {
-      "word": "noise",
-      "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
-     }
-    ]
-   }
-  },
-  {
-   "name": "note",
-   "kind": "function",
-   "signature": "note(name, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
-   "detail": "(name: str, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
-   "summary": "Make a sound that is one named note.",
-   "url": "reference/API.md#fn-note",
-   "returns": "Sound",
-   "star": true,
-   "options": {
-    "wave": [
-     {
-      "word": "sine",
-      "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
-     },
-     {
-      "word": "square",
-      "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
-     },
-     {
-      "word": "saw",
-      "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
-     },
-     {
-      "word": "triangle",
-      "meaning": "Between sine and square: soft but a little reedy, like a flute."
-     },
-     {
-      "word": "soft",
-      "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
-     },
-     {
-      "word": "noise",
-      "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
-     }
-    ]
-   }
-  },
-  {
-   "name": "pluck",
-   "kind": "function",
-   "signature": "pluck(name_or_frequency, seconds, volume=0.5)",
-   "detail": "(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -> Sound",
-   "summary": "Make a sound like a plucked string.",
-   "url": "reference/API.md#fn-pluck",
-   "returns": "Sound",
-   "star": true
-  },
-  {
-   "name": "melody",
-   "kind": "function",
-   "signature": "melody(text, tempo=120, wave='soft', sa=None, tuning='equal', volume=0.5)",
-   "detail": "(text: str, tempo: float = 120, wave: CONSTANTS.WAVE = soft, sa: str | None = None, tuning: CONSTANTS.TUNING = equal, volume: float = 0.5) -> Sound",
-   "summary": "Make a sound from a string of notes.",
-   "url": "reference/API.md#fn-melody",
-   "returns": "Sound",
-   "star": true,
-   "options": {
-    "wave": [
-     {
-      "word": "sine",
-      "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
-     },
-     {
-      "word": "square",
-      "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
-     },
-     {
-      "word": "saw",
-      "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
-     },
-     {
-      "word": "triangle",
-      "meaning": "Between sine and square: soft but a little reedy, like a flute."
-     },
-     {
-      "word": "soft",
-      "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
-     },
-     {
-      "word": "noise",
-      "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
-     }
-    ]
-   }
-  },
-  {
-   "name": "sequence",
-   "kind": "function",
-   "signature": "sequence(*sounds)",
-   "detail": "(*sounds: Sound) -> Sound",
-   "summary": "Make a new sound that plays the given sounds one after another.",
-   "url": "reference/API.md#fn-sequence",
-   "returns": "Sound",
-   "star": true
-  },
-  {
-   "name": "mix",
-   "kind": "function",
-   "signature": "mix(*sounds)",
-   "detail": "(*sounds: Sound) -> Sound",
-   "summary": "Make a new sound that plays the given sounds together.",
-   "url": "reference/API.md#fn-mix",
-   "returns": "Sound",
-   "star": true
-  },
-  {
-   "name": "note_to_frequency",
-   "kind": "function",
-   "signature": "note_to_frequency(name, sa=None)",
-   "detail": "(name: str, sa: str | None = None) -> float",
-   "summary": "Return the frequency of a note, in hertz.",
-   "url": "reference/API.md#fn-note_to_frequency",
-   "star": true
-  },
-  {
-   "name": "frequency_to_note",
-   "kind": "function",
-   "signature": "frequency_to_note(hz, sa=None)",
-   "detail": "(hz: float, sa: str | None = None) -> str",
-   "summary": "Return the name of the note nearest to a frequency.",
-   "url": "reference/API.md#fn-frequency_to_note",
-   "star": true
-  },
-  {
-   "name": "chord_notes",
-   "kind": "function",
-   "signature": "chord_notes(name)",
-   "detail": "(name: str) -> list[str]",
-   "summary": "Return the note names in a chord.",
-   "url": "reference/API.md#fn-chord_notes",
-   "star": true
-  },
-  {
-   "name": "microphone",
-   "kind": "function",
-   "signature": "microphone(name=None)",
-   "detail": "(name: str | None = None) -> Microphone",
-   "summary": "Make a microphone object for the computer's default input.",
-   "url": "reference/API.md#fn-microphone",
-   "returns": "Microphone",
-   "star": true
-  },
-  {
-   "name": "microphones",
-   "kind": "function",
-   "signature": "microphones()",
-   "detail": "() -> list[str]",
-   "summary": "Return the names of the computer's microphones (inputs).",
-   "url": "reference/API.md#fn-microphones",
-   "star": true
-  },
-  {
    "name": "camera",
    "kind": "function",
    "signature": "camera(name=None)",
@@ -4931,110 +4721,6 @@
    "url": "reference/API.md#fn-load_clip",
    "returns": "Clip",
    "since": "0.2",
-   "star": true
-  },
-  {
-   "name": "ragas",
-   "kind": "function",
-   "signature": "ragas()",
-   "detail": "() -> list[str]",
-   "summary": "Return the names of the ragas in funground's small built-in table.",
-   "url": "reference/API.md#fn-ragas",
-   "star": true
-  },
-  {
-   "name": "raga",
-   "kind": "function",
-   "signature": "raga(name)",
-   "detail": "(name: str) -> Raga",
-   "summary": "Return one raga from the built-in table.",
-   "url": "reference/API.md#fn-raga",
-   "returns": "Raga",
-   "star": true
-  },
-  {
-   "name": "talas",
-   "kind": "function",
-   "signature": "talas()",
-   "detail": "() -> list[str]",
-   "summary": "Return the names of the talas in the built-in table.",
-   "url": "reference/API.md#fn-talas",
-   "star": true
-  },
-  {
-   "name": "tala_info",
-   "kind": "function",
-   "signature": "tala_info(name)",
-   "detail": "(name: str) -> Tala",
-   "summary": "Return one tala from the built-in table.",
-   "url": "reference/API.md#fn-tala_info",
-   "returns": "Tala",
-   "star": true
-  },
-  {
-   "name": "tala",
-   "kind": "function",
-   "signature": "tala(name, tempo=80, cycles=1)",
-   "detail": "(name: str, tempo: float = 80, cycles: int = 1) -> Sound",
-   "summary": "Make a sound of a tala's theka played with simple drum sounds.",
-   "url": "reference/API.md#fn-tala",
-   "returns": "Sound",
-   "star": true
-  },
-  {
-   "name": "drone",
-   "kind": "function",
-   "signature": "drone(sa, seconds, pattern=\"P S' S' S\", volume=0.5)",
-   "detail": "(sa: float | str, seconds: float, pattern: str = P S S S, volume: float = 0.5) -> Sound",
-   "summary": "Make a tanpura-like drone.",
-   "url": "reference/API.md#fn-drone",
-   "returns": "Sound",
-   "star": true
-  },
-  {
-   "name": "match_ragas",
-   "kind": "function",
-   "signature": "match_ragas(histogram)",
-   "detail": "(histogram: Any) -> list[tuple[str, float]]",
-   "summary": "Rank the table's ragas by how well their swaras fit a histogram.",
-   "url": "reference/API.md#fn-match_ragas",
-   "star": true
-  },
-  {
-   "name": "draw_wave",
-   "kind": "function",
-   "signature": "draw_wave(source, x, y, w, h)",
-   "detail": "(source: Any, x: float, y: float, w: float, h: float) -> None",
-   "summary": "Draw the wave of a sound, a microphone or a list of numbers.",
-   "url": "reference/API.md#fn-draw_wave",
-   "star": true
-  },
-  {
-   "name": "draw_spectrum",
-   "kind": "function",
-   "signature": "draw_spectrum(source, x, y, w, h, bands=32)",
-   "detail": "(source: Any, x: float, y: float, w: float, h: float, bands: int = 32) -> None",
-   "summary": "Draw bars for a spectrum, as it is now.",
-   "url": "reference/API.md#fn-draw_spectrum",
-   "star": true
-  },
-  {
-   "name": "spectrogram",
-   "kind": "function",
-   "signature": "spectrogram(sound, width, height)",
-   "detail": "(sound: Sound, width: int, height: int) -> Picture",
-   "summary": "Make a picture of a whole sound.",
-   "url": "reference/API.md#fn-spectrogram",
-   "returns": "Picture",
-   "star": true
-  },
-  {
-   "name": "draw_pitch_line",
-   "kind": "function",
-   "signature": "draw_pitch_line(source, x, y, w, h, seconds=5, low='C3', high='C6', sa=None)",
-   "detail": "(source: Any, x: float, y: float, w: float, h: float, seconds: float = 5, low: str = C3, high: str = C6, sa: str | None = None) -> None",
-   "summary": "Draw the pitch of a sound or microphone as a scrolling line.",
-   "url": "reference/API.md#fn-draw_pitch_line",
    "star": true
   },
   {
@@ -10994,5 +10680,301 @@
    "url": "reference/API.md#cls-Tala",
    "members": []
   }
+ },
+ "libraries": {
+  "sound": [
+   {
+    "name": "load",
+    "kind": "function",
+    "signature": "load(path)",
+    "detail": "(path: str) -> Sound",
+    "summary": "Read a sound file and return a sound.",
+    "url": "reference/API.md#fn-sound-load",
+    "returns": "Sound"
+   },
+   {
+    "name": "create",
+    "kind": "function",
+    "signature": "create(samples, rate=44100)",
+    "detail": "(samples: Any, rate: int = 44100) -> Sound",
+    "summary": "Make a sound from a list of numbers.",
+    "url": "reference/API.md#fn-sound-create",
+    "returns": "Sound"
+   },
+   {
+    "name": "tone",
+    "kind": "function",
+    "signature": "tone(frequency, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
+    "detail": "(frequency: float, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
+    "summary": "Make a sound that is one steady tone.",
+    "url": "reference/API.md#fn-sound-tone",
+    "returns": "Sound",
+    "options": {
+     "wave": [
+      {
+       "word": "sine",
+       "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
+      },
+      {
+       "word": "square",
+       "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
+      },
+      {
+       "word": "saw",
+       "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
+      },
+      {
+       "word": "triangle",
+       "meaning": "Between sine and square: soft but a little reedy, like a flute."
+      },
+      {
+       "word": "soft",
+       "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
+      },
+      {
+       "word": "noise",
+       "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
+      }
+     ]
+    }
+   },
+   {
+    "name": "note",
+    "kind": "function",
+    "signature": "note(name, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
+    "detail": "(name: str, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
+    "summary": "Make a sound that is one named note.",
+    "url": "reference/API.md#fn-sound-note",
+    "returns": "Sound",
+    "options": {
+     "wave": [
+      {
+       "word": "sine",
+       "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
+      },
+      {
+       "word": "square",
+       "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
+      },
+      {
+       "word": "saw",
+       "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
+      },
+      {
+       "word": "triangle",
+       "meaning": "Between sine and square: soft but a little reedy, like a flute."
+      },
+      {
+       "word": "soft",
+       "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
+      },
+      {
+       "word": "noise",
+       "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
+      }
+     ]
+    }
+   },
+   {
+    "name": "pluck",
+    "kind": "function",
+    "signature": "pluck(name_or_frequency, seconds, volume=0.5)",
+    "detail": "(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -> Sound",
+    "summary": "Make a sound like a plucked string.",
+    "url": "reference/API.md#fn-sound-pluck",
+    "returns": "Sound"
+   },
+   {
+    "name": "melody",
+    "kind": "function",
+    "signature": "melody(text, tempo=120, wave='soft', sa=None, tuning='equal', volume=0.5)",
+    "detail": "(text: str, tempo: float = 120, wave: CONSTANTS.WAVE = soft, sa: str | None = None, tuning: CONSTANTS.TUNING = equal, volume: float = 0.5) -> Sound",
+    "summary": "Make a sound from a string of notes.",
+    "url": "reference/API.md#fn-sound-melody",
+    "returns": "Sound",
+    "options": {
+     "wave": [
+      {
+       "word": "sine",
+       "meaning": "A pure, smooth tone with no overtones, like a tuning fork or a whistle."
+      },
+      {
+       "word": "square",
+       "meaning": "Hollow and buzzy, like an old video game or a clarinet's low notes."
+      },
+      {
+       "word": "saw",
+       "meaning": "Bright and brassy, the richest in overtones: a classic synthesiser sound."
+      },
+      {
+       "word": "triangle",
+       "meaning": "Between sine and square: soft but a little reedy, like a flute."
+      },
+      {
+       "word": "soft",
+       "meaning": "A sine with a few gentle overtones: warm and round, good for melodies."
+      },
+      {
+       "word": "noise",
+       "meaning": "Random hiss with no pitch, like wind, the sea or a drum's snare. The frequency is ignored."
+      }
+     ]
+    }
+   },
+   {
+    "name": "sequence",
+    "kind": "function",
+    "signature": "sequence(*sounds)",
+    "detail": "(*sounds: Sound) -> Sound",
+    "summary": "Make a new sound that plays the given sounds one after another.",
+    "url": "reference/API.md#fn-sound-sequence",
+    "returns": "Sound"
+   },
+   {
+    "name": "mix",
+    "kind": "function",
+    "signature": "mix(*sounds)",
+    "detail": "(*sounds: Sound) -> Sound",
+    "summary": "Make a new sound that plays the given sounds together.",
+    "url": "reference/API.md#fn-sound-mix",
+    "returns": "Sound"
+   },
+   {
+    "name": "drone",
+    "kind": "function",
+    "signature": "drone(sa, seconds, pattern=\"P S' S' S\", volume=0.5)",
+    "detail": "(sa: float | str, seconds: float, pattern: str = P S S S, volume: float = 0.5) -> Sound",
+    "summary": "Make a tanpura-like drone.",
+    "url": "reference/API.md#fn-sound-drone",
+    "returns": "Sound"
+   },
+   {
+    "name": "note_to_frequency",
+    "kind": "function",
+    "signature": "note_to_frequency(name, sa=None)",
+    "detail": "(name: str, sa: str | None = None) -> float",
+    "summary": "Return the frequency of a note, in hertz.",
+    "url": "reference/API.md#fn-sound-note_to_frequency"
+   },
+   {
+    "name": "frequency_to_note",
+    "kind": "function",
+    "signature": "frequency_to_note(hz, sa=None)",
+    "detail": "(hz: float, sa: str | None = None) -> str",
+    "summary": "Return the name of the note nearest to a frequency.",
+    "url": "reference/API.md#fn-sound-frequency_to_note"
+   },
+   {
+    "name": "chord_notes",
+    "kind": "function",
+    "signature": "chord_notes(name)",
+    "detail": "(name: str) -> list[str]",
+    "summary": "Return the note names in a chord.",
+    "url": "reference/API.md#fn-sound-chord_notes"
+   },
+   {
+    "name": "microphone",
+    "kind": "function",
+    "signature": "microphone(name=None)",
+    "detail": "(name: str | None = None) -> Microphone",
+    "summary": "Make a microphone object for the computer's default input.",
+    "url": "reference/API.md#fn-sound-microphone",
+    "returns": "Microphone"
+   },
+   {
+    "name": "microphones",
+    "kind": "function",
+    "signature": "microphones()",
+    "detail": "() -> list[str]",
+    "summary": "Return the names of the computer's microphones (inputs).",
+    "url": "reference/API.md#fn-sound-microphones"
+   },
+   {
+    "name": "draw_wave",
+    "kind": "function",
+    "signature": "draw_wave(source, x, y, w, h)",
+    "detail": "(source: Any, x: float, y: float, w: float, h: float) -> None",
+    "summary": "Draw the wave of a sound, a microphone or a list of numbers.",
+    "url": "reference/API.md#fn-sound-draw_wave"
+   },
+   {
+    "name": "draw_spectrum",
+    "kind": "function",
+    "signature": "draw_spectrum(source, x, y, w, h, bands=32)",
+    "detail": "(source: Any, x: float, y: float, w: float, h: float, bands: int = 32) -> None",
+    "summary": "Draw bars for a spectrum, as it is now.",
+    "url": "reference/API.md#fn-sound-draw_spectrum"
+   },
+   {
+    "name": "spectrogram",
+    "kind": "function",
+    "signature": "spectrogram(sound, width, height)",
+    "detail": "(sound: Sound, width: int, height: int) -> Picture",
+    "summary": "Make a picture of a whole sound.",
+    "url": "reference/API.md#fn-sound-spectrogram",
+    "returns": "Picture"
+   },
+   {
+    "name": "draw_pitch_line",
+    "kind": "function",
+    "signature": "draw_pitch_line(source, x, y, w, h, seconds=5, low='C3', high='C6', sa=None)",
+    "detail": "(source: Any, x: float, y: float, w: float, h: float, seconds: float = 5, low: str = C3, high: str = C6, sa: str | None = None) -> None",
+    "summary": "Draw the pitch of a sound or microphone as a scrolling line.",
+    "url": "reference/API.md#fn-sound-draw_pitch_line"
+   }
+  ],
+  "sangeet": [
+   {
+    "name": "ragas",
+    "kind": "function",
+    "signature": "ragas()",
+    "detail": "() -> list[str]",
+    "summary": "Return the names of the ragas in funground's small built-in table.",
+    "url": "reference/API.md#fn-sangeet-ragas"
+   },
+   {
+    "name": "raga",
+    "kind": "function",
+    "signature": "raga(name)",
+    "detail": "(name: str) -> Raga",
+    "summary": "Return one raga from the built-in table.",
+    "url": "reference/API.md#fn-sangeet-raga",
+    "returns": "Raga"
+   },
+   {
+    "name": "talas",
+    "kind": "function",
+    "signature": "talas()",
+    "detail": "() -> list[str]",
+    "summary": "Return the names of the talas in the built-in table.",
+    "url": "reference/API.md#fn-sangeet-talas"
+   },
+   {
+    "name": "tala_info",
+    "kind": "function",
+    "signature": "tala_info(name)",
+    "detail": "(name: str) -> Tala",
+    "summary": "Return one tala from the built-in table.",
+    "url": "reference/API.md#fn-sangeet-tala_info",
+    "returns": "Tala"
+   },
+   {
+    "name": "tala",
+    "kind": "function",
+    "signature": "tala(name, tempo=80, cycles=1)",
+    "detail": "(name: str, tempo: float = 80, cycles: int = 1) -> Sound",
+    "summary": "Make a sound of a tala's theka played with simple drum sounds.",
+    "url": "reference/API.md#fn-sangeet-tala",
+    "returns": "Sound"
+   },
+   {
+    "name": "match_ragas",
+    "kind": "function",
+    "signature": "match_ragas(histogram)",
+    "detail": "(histogram: Any) -> list[tuple[str, float]]",
+    "summary": "Rank the table's ragas by how well their swaras fit a histogram.",
+    "url": "reference/API.md#fn-sangeet-match_ragas"
+   }
+  ]
  }
 }

@@ -8,12 +8,12 @@ How it works:
 - Sa is the home note, the one the music is built on. Here it is D4. A swara is a note named
   from Sa: S r R g G m M P d D n N. A small letter is komal (flat), and a capital M is tivra
   (sharp).
-- f.melody(PHRASE, sa=SA, tuning="just") reads swaras instead of note names. A ' after a swara is
+- sound.melody(PHRASE, sa=SA, tuning="just") reads swaras instead of note names. A ' after a swara is
   the octave above, and a comma is the octave below. "just" tuning uses pure ratios from Sa.
 - A drone is a steady background that holds Sa and Pa. This one imitates a tanpura, the stringed
-  instrument that plays it. f.pluck() makes plucked strings, f.sequence() joins them one after
-  another, and sound.reverb() gives them a room to ring in.
-- The hum is made from numbers: f.create_sound() turns a list of three added sine waves into a
+  instrument that plays it. sound.pluck() makes plucked strings, sound.sequence() joins them one after
+  another, and reverb() gives them a room to ring in.
+- The hum is made from numbers: sound.create() turns a list of three added sine waves into a
   sound.
 - phrase.pitch() gives the pitch now. swara_height() uses a % 12 to fold it into one octave, so the
   voice always lands on a row of the ladder.
@@ -32,6 +32,7 @@ Make it yours:
 import math
 
 import funground as f
+from funground import sound
 
 SA = "D4"
 TEMPO = 80
@@ -39,7 +40,7 @@ PHRASE = "S R G:2 R S,:2 N,:1 D,:1 P,:2 - S:1 R:1 G:1 P:2 G:1 R:1 S:3"
 SWARAS = "SrRgGmMPdDnN"
 
 # The soft voice (melody's own) suits a sung line; reverb adds a room around it.
-phrase = f.melody(PHRASE, tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
+phrase = sound.melody(PHRASE, tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
 phrase.set_volume(0.7)
 
 # The drone: the four strings of a tanpura, plucked in turn, to last as long as the phrase.
@@ -47,15 +48,15 @@ phrase.set_volume(0.7)
 # shorter to keep the drone the same length as the phrase.
 strings = ["P,", "S", "S", "S,"]
 string_seconds = phrase.duration() / (2 * len(strings))
-plucks = [f.pluck(f.note_to_frequency(s, sa=SA), string_seconds - 0.45).reverb(0.3) for s in strings]
-cycle = f.sequence(*plucks)
-drone = f.sequence(cycle, cycle)
+plucks = [sound.pluck(sound.note_to_frequency(s, sa=SA), string_seconds - 0.45).reverb(0.3) for s in strings]
+cycle = sound.sequence(*plucks)
+drone = sound.sequence(cycle, cycle)
 drone.set_volume(0.6)
 
 # A quiet hum under it, made from numbers: three sine waves added up.
-hum_hz = f.note_to_frequency("S,", sa=SA)
-sa_hz = f.note_to_frequency("S", sa=SA)
-hum = f.create_sound([0.2 * (math.sin(2 * math.pi * hum_hz * t / 44100)
+hum_hz = sound.note_to_frequency("S,", sa=SA)
+sa_hz = sound.note_to_frequency("S", sa=SA)
+hum = sound.create([0.2 * (math.sin(2 * math.pi * hum_hz * t / 44100)
                              + 0.5 * math.sin(4 * math.pi * hum_hz * t / 44100)
                              + 0.25 * math.sin(6 * math.pi * hum_hz * t / 44100))
                       for t in range(int(phrase.duration() * 44100))])

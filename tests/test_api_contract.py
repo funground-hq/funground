@@ -8,6 +8,7 @@ from __future__ import annotations
 import inspect
 
 import funground as p
+from funground import sangeet, sound
 
 V05_FUNCTIONS = {
     "background": "(color: 'Color', *more: 'float') -> 'None'",
@@ -161,39 +162,15 @@ ADDED_FUNCTIONS = {
     "load_svg": "(path: 'str') -> 'Picture'",
     "svg_paths": "(path: 'str') -> 'list[PathBuilder]'",
     # S-098 sound
-    "load_sound": "(path: 'str') -> 'Sound'",
     # S-110 making sound
-    "create_sound": "(samples: 'Any', rate: 'int' = 44100) -> 'Sound'",
-    "tone": "(frequency: 'float', seconds: 'float', wave: 'Wave' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
-    "note": "(name: 'str', seconds: 'float', wave: 'Wave' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
-    "pluck": "(name_or_frequency: 'float | str', seconds: 'float', volume: 'float' = 0.5) -> 'Sound'",
-    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'Wave' = 'soft', sa: 'str | None' = None, tuning: 'Tuning' = 'equal', volume: 'float' = 0.5) -> 'Sound'",
-    "sequence": "(*sounds: 'Sound') -> 'Sound'",
-    "mix": "(*sounds: 'Sound') -> 'Sound'",
-    "note_to_frequency": "(name: 'str', sa: 'str | None' = None) -> 'float'",
-    "frequency_to_note": "(hz: 'float', sa: 'str | None' = None) -> 'str'",
     # S-112/S-113
-    "chord_notes": "(name: 'str') -> 'list[str]'",
     # S-108 microphone
-    "microphone": "(name: 'str | None' = None) -> 'Microphone'",
-    "microphones": "() -> 'list[str]'",
     # S-172 camera
     "camera": "(name: 'str | None' = None) -> 'Camera'",
     "cameras": "() -> 'list[str]'",
     "load_clip": "(path: 'str') -> 'Clip'",
     # S-115 ragas
-    "ragas": "() -> 'list[str]'",
-    "raga": "(name: 'str') -> 'Raga'",
-    "talas": "() -> 'list[str]'",
-    "tala_info": "(name: 'str') -> 'Tala'",
-    "tala": "(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1) -> 'Sound'",
-    "drone": "(sa: 'float | str', seconds: 'float', pattern: 'str' = \"P S' S' S\", volume: 'float' = 0.5) -> 'Sound'",
-    "match_ragas": "(histogram: 'Any') -> 'list[tuple[str, float]]'",
     # S-111 drawing sound
-    "draw_wave": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'",
-    "draw_spectrum": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'",
-    "spectrogram": "(sound: 'Sound', width: 'int', height: 'int') -> 'Picture'",
-    "draw_pitch_line": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'",
     # S-090 tracking, features, variations
     "text_tracking": "(pixels: 'float') -> 'None'",
     "text_features": "(**features: 'bool') -> 'None'",
@@ -261,6 +238,36 @@ ADDED_FUNCTIONS = {
     "text_on_path": "(message: 'object', path: 'PathBuilder', offset: 'float' = 0) -> 'str'",
 }
 
+# S-246 (D-120, D-123): the sound and sangeet libraries. The signatures did not change; two names lost their prefix.
+SOUND_FUNCTIONS = {
+    "load": "(path: 'str') -> 'Sound'",
+    "create": "(samples: 'Any', rate: 'int' = 44100) -> 'Sound'",
+    "tone": "(frequency: 'float', seconds: 'float', wave: 'Wave' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
+    "note": "(name: 'str', seconds: 'float', wave: 'Wave' = 'sine', volume: 'float' = 0.5, attack: 'float' = 0.01, release: 'float' = 0.15, decay: 'float' = 0.15, sustain: 'float' = 0.7) -> 'Sound'",
+    "pluck": "(name_or_frequency: 'float | str', seconds: 'float', volume: 'float' = 0.5) -> 'Sound'",
+    "melody": "(text: 'str', tempo: 'float' = 120, wave: 'Wave' = 'soft', sa: 'str | None' = None, tuning: 'Tuning' = 'equal', volume: 'float' = 0.5) -> 'Sound'",
+    "sequence": "(*sounds: 'Sound') -> 'Sound'",
+    "mix": "(*sounds: 'Sound') -> 'Sound'",
+    "note_to_frequency": "(name: 'str', sa: 'str | None' = None) -> 'float'",
+    "frequency_to_note": "(hz: 'float', sa: 'str | None' = None) -> 'str'",
+    "chord_notes": "(name: 'str') -> 'list[str]'",
+    "microphone": "(name: 'str | None' = None) -> 'Microphone'",
+    "microphones": "() -> 'list[str]'",
+    "drone": "(sa: 'float | str', seconds: 'float', pattern: 'str' = \"P S' S' S\", volume: 'float' = 0.5) -> 'Sound'",
+    "draw_wave": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float') -> 'None'",
+    "draw_spectrum": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', bands: 'int' = 32) -> 'None'",
+    "spectrogram": "(sound: 'Sound', width: 'int', height: 'int') -> 'Picture'",
+    "draw_pitch_line": "(source: 'Any', x: 'float', y: 'float', w: 'float', h: 'float', seconds: 'float' = 5, low: 'str' = 'C3', high: 'str' = 'C6', sa: 'str | None' = None) -> 'None'",
+}
+SANGEET_FUNCTIONS = {
+    "ragas": "() -> 'list[str]'",
+    "raga": "(name: 'str') -> 'Raga'",
+    "talas": "() -> 'list[str]'",
+    "tala_info": "(name: 'str') -> 'Tala'",
+    "tala": "(name: 'str', tempo: 'float' = 80, cycles: 'int' = 1) -> 'Sound'",
+    "match_ragas": "(histogram: 'Any') -> 'list[tuple[str, float]]'",
+}
+
 # D-016 renamed mouse_pressed -> is_mouse_pressed (approved change to the v0.5 contract);
 # S-045 added pmouse_x/y, mouse_button, key, key_code and is_key_pressed.
 NAMESPACES = {"COLORS", "CONSTANTS"}
@@ -281,6 +288,14 @@ def test_every_v05_function_is_present_with_its_signature():
 def test_added_functions_have_expected_signatures():
     for name, expected in ADDED_FUNCTIONS.items():
         assert _sig(name) == expected, f"{name}{_sig(name)} != {name}{expected}"
+
+
+def test_the_libraries_have_the_expected_signatures():
+    for name, expected in SOUND_FUNCTIONS.items():
+        assert str(inspect.signature(getattr(sound, name))) == expected, name
+    for name, expected in SANGEET_FUNCTIONS.items():
+        assert str(inspect.signature(getattr(sangeet, name))) == expected, name
+    assert set(sound.__all__) == set(SOUND_FUNCTIONS) and set(sangeet.__all__) == set(SANGEET_FUNCTIONS)
 
 
 def test_run_keeps_v05_call_forms():

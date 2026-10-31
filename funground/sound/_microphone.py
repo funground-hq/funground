@@ -1,21 +1,22 @@
 """Microphone input (S-108; contract A4; D-058).
 
-With ``sound.py`` this is the only funground module that uses pygame's audio. It uses
+With ``_engine.py`` this is the only funground module that uses pygame's audio. It uses
 ``pygame._sdl2.audio``, which is pygame-ce's *experimental* module (pygame-ce 2.5 or newer), so all
 access to it is in ``_sdl2_audio()``, ``_device_names()`` and ``_open_capture()``.
 
 A microphone listens on SDL's audio thread. The callback copies what it hears into a ring buffer of
 the last 10 seconds of mono samples. A lock guards the buffer, because the callback writes on that
 thread while the sketch reads on its own. The analysis (level, spectrum, pitch) is the same code that
-sounds use (``sound._Analysis``). The microphone is never played back.
+sounds use (``_engine._Analysis``). The microphone is never played back.
 """
 from __future__ import annotations
 
 from array import array
 from threading import Lock
 
-from . import sound as _sound
-from .sound import _Analysis, _is_headless
+from .. import host_services
+from . import _engine as _sound
+from ._engine import _Analysis, _is_headless
 
 BUFFER_SECONDS = 10
 RATE = 44100
@@ -26,22 +27,18 @@ _NEEDS_NEW_PYGAME = ("microphone input needs pygame-ce 2.5 or newer (its pygame.
 
 
 def _no_device_message(extra: str = "") -> str:
-    return ("f.microphone(): " + (extra or "no microphone was found on this computer")
+    return ("sound.microphone(): " + (extra or "no microphone was found on this computer")
             + ". Check that one is plugged in. On a Mac, allow microphone access in System Settings, "
               "Privacy & Security, Microphone.")
 
 
 # ---- a host's microphone (the web runner)
-_host_input = None           # the host's microphone while a web Session runs (platform/browser_audio.py), else None
-
-
-def use_host_input(host) -> None:
-    """Listen through a host's microphone (the web runner, Web_Runner_Note.md) instead of SDL's, or with None back to SDL.
+def _host_input():
+    """The host's microphone while a web Session runs, else None (funground/host_services.py).
 
     The host opens the device and pushes what it hears into `host.feed(samples)`; the Microphone's ring buffer and
     everything that reads it are unchanged. See platform/browser_audio.HostMicrophone."""
-    global _host_input
-    _host_input = host
+    return host_services.microphone
 
 
 # ---- the one place that touches the experimental module
@@ -71,8 +68,9 @@ def _open_capture(name: str | None, callback):
     """Open an input device that calls ``callback(samples)`` with a list of floats from -1 to 1.
     Returns ``(device, rate)``. The device has ``pause(0)`` to listen, ``pause(1)`` to stop and
     ``close()``."""
-    if _host_input is not None:
-        return _host_input.open_capture(callback)
+    host = _host_input()
+    if host is not None:
+        return host.open_capture(callback)
     audio = _sdl2_audio()
 
     def on_audio(device, view):
@@ -102,7 +100,7 @@ def _open_capture(name: str | None, callback):
 
 def microphones() -> list[str]:
     """The names of the computer's microphones (inputs). Empty when headless, and in the browser (it picks the input)."""
-    if _host_input is not None or _is_headless():
+    if _host_input() is not None or _is_headless():
         return []
     return _device_names()
 
@@ -110,11 +108,11 @@ def microphones() -> list[str]:
 def make(name: str | None = None, frame_source=None) -> "Microphone":
     """A microphone for the default input, or the first whose name contains *name* (A4)."""
     if name is not None and (not isinstance(name, str) or not name):
-        raise ValueError(f"f.microphone(): name must be text such as 'USB', not {name!r}")
-    if _host_input is not None:
+        raise ValueError(f"sound.microphone(): name must be text such as 'USB', not {name!r}")
+    if _host_input() is not None:
         if name is not None:
-            raise RuntimeError("f.microphone(name): choosing a microphone by name only works in the desktop version. "
-                               "In the browser, use f.microphone() and choose the input in the browser's own settings.")
+            raise RuntimeError("sound.microphone(name): choosing a microphone by name only works in the desktop version. "
+                               "In the browser, use sound.microphone() and choose the input in the browser's own settings.")
         return Microphone(None, frame_source)
     if _is_headless():
         return Microphone(None, frame_source, silent=True)
@@ -133,7 +131,7 @@ def make(name: str | None = None, frame_source=None) -> "Microphone":
 class Microphone(_Analysis):
     """A microphone that your sketch can listen to.
 
-    You get one from f.microphone(). Call start() to begin listening and stop() to end. While it listens,
+    You get one from sound.microphone(). Call start() to begin listening and stop() to end. While it listens,
     level(), spectrum(), pitch(), is_onset(), chroma(), chord(), tonic() and swara_histogram() work as they
     do on a Sound. They tell you about the last fraction of a second. When it is not listening they give 0,
     a list of zeros, None or False.
@@ -145,7 +143,7 @@ class Microphone(_Analysis):
     file unless you call save() on a capture. With FUNGROUND_HEADLESS=1 it is silent and hears nothing.
 
     Example:
-        mic = f.microphone()
+        mic = sound.microphone()
         mic.start()
         f.circle(200, 200, 20 + 400 * mic.level())
 
@@ -177,7 +175,7 @@ class Microphone(_Analysis):
             RuntimeError: if there is no microphone, or the computer will not let funground use it.
 
         Example:
-            mic = f.microphone()
+            mic = sound.microphone()
             mic.start()
 
         See also: stop, is_listening, capture
@@ -339,7 +337,7 @@ class Microphone(_Analysis):
             ValueError: if seconds is not more than 0 and at most 10.
 
         Example:
-            mic = f.microphone()
+            mic = sound.microphone()
             mic.start()
             recording = mic.capture(1)   # use it after about a second
             recording.save("heard.wav")  # writes a new file

@@ -86,12 +86,13 @@ jobs:
         run: |
           python - <<'EOF'
           import funground as f, pypdf
+          from funground import sound
           f.size(200, 100); f.background("white"); f.fill("navy"); f.text_size(20)
           f.text("Hello 0.1 नमस्ते", 10, 20); f.circle(150, 60, 40)
           f.save("smoke.pdf"); f.save("smoke.svg"); f.save("smoke.png")
           text = pypdf.PdfReader("smoke.pdf").pages[0].extract_text()
           assert "Hello" in text, text
-          tune = f.melody("S R G m P", sa="C4", tuning="just"); assert tune.duration() > 1
+          tune = sound.melody("S R G m P", sa="C4", tuning="just"); assert tune.duration() > 1
           print("smoke ok:", len(f.__all__), "names")
           EOF
           python -m funground.gallery --list | head -5

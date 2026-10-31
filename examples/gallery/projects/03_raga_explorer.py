@@ -6,21 +6,21 @@ plays its aroha (the way up) and avaroha (the way down) over a drone, lighting e
 lets you sing it, and then shows which ragas fit your notes best.
 
 How it works:
-- The program is five small parts. Data comes from f.ragas() and f.raga(). Sounds come from
+- The program is five small parts. Data comes from sangeet.ragas() and sangeet.raga(). Sounds come from
   make_drone() and make_tune(). Singing is read by listen_to_voice(). Results come from
   work_out_the_singing(). The drawing is in draw(), show_notes() and show_results().
 - A variable called mode (idle, listen, sing, thinking or result) says what the page is doing.
   update() reads the buttons and the slider and changes the mode. draw() paints what the mode says.
 - make_tune() joins raga.aroha and raga.avaroha, with a rest between. A meend, a glide, runs into
-  the last note, written with ~. f.melody(..., sa=SA, tuning="just") plays it. Sa is the home note.
-- make_drone() uses f.drone(). A drone is the steady tanpura note under the singer. A raga with no
+  the last note, written with ~. sound.melody(..., sa=SA, tuning="just") plays it. Sa is the home note.
+- make_drone() uses sound.drone(). A drone is the steady tanpura note under the singer. A raga with no
   Pa gets Ni on the first string. Each sound is made once and kept in a dictionary.
 - The ladder has a row for each swara. A row is dark if the raga leaves that swara out. The vadi
   and samvadi have a coloured border. The lit row follows tune.current_time().
 - When you sing, mic.pitch() is folded into one octave and smoothed. A row turns red for a swara the
   raga does not use. While you sing, a small bar at the bottom shows how loud the microphone hears
   you, in decibels (loudness()), so you can see it hears you. On "stop", mic.capture(seconds).swara_histogram(SA) counts the swaras, and
-  f.match_ragas(shares)[:3] gives the closest three ragas. It compares notes only. A raga is also
+  sangeet.match_ragas(shares)[:3] gives the closest three ragas. It compares notes only. A raga is also
   its way of moving between them.
 
 Make it yours:
@@ -35,13 +35,15 @@ import math
 import time
 
 import funground as f
+from funground import sound
+from funground import sangeet
 
 SA = "D4"                                  # Sa for the tune. Singing is folded, so any octave counts
-SA_HZ = f.note_to_frequency(SA)
+SA_HZ = sound.note_to_frequency(SA)
 TEMPO = 90
 BEAT = 60 / TEMPO
 SWARAS = "SrRgGmMPdDnN"
-NAMES = f.ragas()
+NAMES = sangeet.ragas()
 
 # the ladder: one row for each swara, S at the bottom
 LEFT, WIDTH = 24, 420
@@ -50,7 +52,7 @@ GATE = 0.001                               # the microphone must be at least thi
 CHARTS = 470                               # where the right-hand panel starts
 
 try:
-    mic = f.microphone()
+    mic = sound.microphone()
 except RuntimeError:                       # no microphone on this computer: the page still works
     mic = None
 
@@ -58,22 +60,22 @@ drones = {}                                # sounds are made when first needed, 
 tunes = {}
 
 
-def room(sound, amount):
-    """sound.reverb(amount), with the echo that runs past the end added back onto the start,
+def room(clip, amount):
+    """clip.reverb(amount), with the echo that runs past the end added back onto the start,
     so the sound still loops with no gap."""
-    length = len(sound.samples())
-    wet = sound.reverb(amount).samples()
+    length = len(clip.samples())
+    wet = clip.reverb(amount).samples()
     looped = wet[:length]
     for i, value in enumerate(wet[length:]):
         looped[i % length] += value
-    return f.create_sound(looped)
+    return sound.create(looped)
 
 
 def make_drone(raga):
     """A tanpura on Sa. A raga with no Pa (Marwa) gets Ni on its first string instead."""
     pattern = "P S' S' S" if "P" in raga.swaras else "N S' S' S"
     if pattern not in drones:
-        drones[pattern] = room(f.drone("D3", 7, pattern=pattern), 0.4)
+        drones[pattern] = room(sound.drone("D3", 7, pattern=pattern), 0.4)
         drones[pattern].set_volume(0.5)        # under the singer, as a tanpura sits
     return drones[pattern]
 
@@ -85,7 +87,7 @@ def make_tune(raga):
         down = raga.avaroha.split()
         tokens = up + ["-"] + down[:-2] + [down[-2] + "~" + down[-1] + ":2"] + ["-", "-"]
         beats = up + [None] + down + [None, None]
-        tune = f.melody(" ".join(tokens), tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
+        tune = sound.melody(" ".join(tokens), tempo=TEMPO, sa=SA, tuning="just").reverb(0.3)
         tune.set_volume(0.8)
         lit = [b.rstrip("',") if b else None for b in beats]
         tunes[raga.name] = (tune, lit)
@@ -94,7 +96,7 @@ def make_tune(raga):
 
 # what is happening now
 mode = "idle"                              # idle, listen, sing, thinking or result
-raga = f.raga(NAMES[0])
+raga = sangeet.raga(NAMES[0])
 tune, lit = None, []
 drone = None
 trail = []                                 # the pitch line, in rows above S, or None for a gap
@@ -121,7 +123,7 @@ def choose(index):
     """Change the raga. Everything stops, and the last singing is forgotten."""
     global raga, shares, matches, message
     stop_all()
-    raga = f.raga(NAMES[index])
+    raga = sangeet.raga(NAMES[index])
     shares, matches, message = [], [], ""
     del trail[:]
 
@@ -179,7 +181,7 @@ def work_out_the_singing():
         message = "No clear notes were heard. Sing nearer the microphone, and try again."
         matches = []
     else:
-        matches = f.match_ragas(shares)[:3]
+        matches = sangeet.match_ragas(shares)[:3]
         message = ""
     mode = "result"
 

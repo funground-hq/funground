@@ -148,7 +148,7 @@ class Picture:
 
     You get one from f.create_graphics(width, height) (an empty, see-through canvas), f.layer(name) (a
     layer that sits over the canvas), f.load_image(path) (a picture file), f.load_svg(path) (a vector
-    file), f.get(x, y, w, h) (a copy of part of the canvas) and f.spectrogram() (a picture of a sound).
+    file), f.get(x, y, w, h) (a copy of part of the canvas) and sound.spectrogram() (a picture of a sound).
 
     A picture has its own state and its own transform, and nothing about it is cleared between frames. It
     starts see-through. Draw on it with the same commands as f.: fill, stroke, circle, rect, line, text,

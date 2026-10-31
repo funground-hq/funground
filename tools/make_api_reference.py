@@ -35,8 +35,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import since  # noqa: E402  (which release a name arrives in, S-229)
 import funground as f  # noqa: E402
-from funground import _colornames, api as _api, pages, synth  # noqa: E402
+from funground import _colornames, api as _api, pages  # noqa: E402
 from funground import analysis, marks, typography  # noqa: E402
+from funground import sangeet as _sangeet, sound as _sound  # noqa: E402  (the two libraries, S-246)
+from funground.sound import _synth as synth  # noqa: E402
 from funground._namespaces import NAMESPACE_NAMES  # noqa: E402
 _color = sys.modules["funground.color"]  # f.color (the function) hides the module as an attribute
 from funground.export import FORMATS, TEXT_MODES  # noqa: E402
@@ -101,15 +103,35 @@ GROUPS: dict[str, list[str]] = {
     "Saving": ["save", "save_frames", "save_gif", "save_movie"],
     "Ground": ["area", "grid", "mm", "inch", "ground"],
     "Motion and pages": ["frame_duration", "new_page", "page_size", "page_count"],
-    "Sound": ["load_sound", "create_sound", "tone", "note", "pluck", "melody", "sequence", "mix", "drone",
-              "note_to_frequency", "frequency_to_note", "chord_notes"],
-    "Music analysis and the microphone": ["microphone", "microphones"],
     "Camera": ["camera", "cameras", "load_clip"],
-    "Drawing sound": ["draw_wave", "draw_spectrum", "spectrogram", "draw_pitch_line"],
-    "Ragas and talas": ["ragas", "raga", "talas", "tala_info", "tala", "match_ragas"],
     "Classes": ["Vector", "FormattedString"],
     "Names for colours and options": ["COLORS", "CONSTANTS"],
 }
+
+# The libraries a sketch imports (D-120, ADR-007, S-246): `from funground import sound`. Each has its own section of the
+# reference, in this order, and no "Since" badge on a name (everything in a library was on f in 0.1). `names` is the
+# order of the section and must be exactly the library's __all__ (check_groups). `renamed` lists the spellings that
+# changed on the way (D-123): the name in 0.1 and the name in the library.
+LIBRARIES: dict[str, dict] = {
+    "sound": {
+        "module": _sound,
+        "title": "The sound library",
+        "about": "Tones, notes, sound files, the microphone and drawings of sound.",
+        "names": ["load", "create", "tone", "note", "pluck", "melody", "sequence", "mix", "drone",
+                  "note_to_frequency", "frequency_to_note", "chord_notes", "microphone", "microphones",
+                  "draw_wave", "draw_spectrum", "spectrogram", "draw_pitch_line"],
+        "renamed": [("create_sound", "create"), ("load_sound", "load")],
+    },
+    "sangeet": {
+        "module": _sangeet,
+        "title": "The sangeet library",
+        "about": "Ragas and talas of Hindustani music.",
+        "names": ["ragas", "raga", "talas", "tala_info", "tala", "match_ragas"],
+        "renamed": [],
+    },
+}
+# Which library each name belongs to, for the See also links.
+LIBRARY_OF = {name: lib for lib, info in LIBRARIES.items() for name in info["names"]}
 
 # Which parameters take the words of each f.CONSTANTS group (D-103): (function or method, parameter). tests/test_constants.py
 # checks each pair against the code that validates the words, in both directions, so this list cannot drift.
@@ -124,8 +146,8 @@ GROUP_PARAMS: dict[str, list[tuple[str, str]]] = {
     "CURSOR": [("cursor", "kind")],
     "BLEND": [("blend_mode", "mode")],
     "FILTER": [("filter", "kind"), ("apply_filter", "kind")],
-    "WAVE": [("tone", "wave"), ("note", "wave"), ("melody", "wave")],
-    "TUNING": [("melody", "tuning")],
+    "WAVE": [("sound.tone", "wave"), ("sound.note", "wave"), ("sound.melody", "wave")],
+    "TUNING": [("sound.melody", "tuning")],
     "ANCHOR": [("Mark.place", "anchor")],
     "MARK_STYLE": [("Mark.place", "style")],
     "SAVE_TEXT": [("save", "text"), ("Picture.save", "text")],
@@ -180,9 +202,9 @@ WORD_MEANINGS: dict[str, list[tuple[str, dict[str, str]]]] = {
     "f.apply_filter": [("kind", FILTER_KINDS)],
     "f.cursor": [("kind", CURSOR_KINDS)],
     "f.key_down": [("key", KEY_NAMES)],
-    "f.tone": [("wave", synth.WAVES)],
-    "f.note": [("wave", synth.WAVES)],
-    "f.melody": [("wave", synth.WAVES)],
+    "sound.tone": [("wave", synth.WAVES)],
+    "sound.note": [("wave", synth.WAVES)],
+    "sound.melody": [("wave", synth.WAVES)],
     "Mark.place": [("anchor", marks.ANCHOR_MEANINGS)],
 }
 
@@ -338,13 +360,20 @@ class Page:
         return "\n".join(self.out).rstrip("\n") + "\n"
 
 
-def see_also(names: list[str], known: set[str], owner: tuple[str, set[str]] | None = None) -> str:
+def see_also(names: list[str], known: set[str], owner: tuple[str, set[str]] | None = None,
+             library: str | None = None) -> str:
     """The See also line. In a class member's entry (*owner* is (class name, its member names)), a name is
-    looked for in the class first, so Sound.play links to Sound.play and not to an f. function."""
+    looked for in the class first, so Sound.play links to Sound.play and not to an f. function. A name of a library
+    (S-246) links to that library's section; it is written with the library's name unless the entry is in that library
+    (*library*), so a sound.note entry says `raga` is `sangeet.raga`."""
     parts = []
     for n in names:
         if owner is not None and n in owner[1]:
             parts.append(f"[`{n}`](#cls-{owner[0]}-{n})")
+        elif n in LIBRARY_OF:
+            lib = LIBRARY_OF[n]
+            label = n if lib == library else f"{lib}.{n}"
+            parts.append(f"[`{label}`](#fn-{lib}-{n})")
         elif n in known:
             kind = "const" if n in NAMESPACE_NAMES else "cls" if inspect.isclass(getattr(f, n, None)) else "fn"
             parts.append(f"[`{n}`](#{kind}-{n})")
@@ -361,7 +390,8 @@ def add_since(page: Page, version: str | None) -> None:
 
 
 def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | None, known: set[str],
-                 level: str = "###", owner: tuple[str, set[str]] | None = None, arrives: str | None = None) -> None:
+                 level: str = "###", owner: tuple[str, set[str]] | None = None, arrives: str | None = None,
+                 library: str | None = None) -> None:
     d = parse_doc(doc)
     page.add(f'<a id="{anchor}"></a>', f"{level} {heading}", "")
     add_since(page, arrives)
@@ -390,7 +420,7 @@ def render_entry(page: Page, anchor: str, heading: str, sig: str, doc: str | Non
     if d["Example"]:
         page.add("```py", d["Example"], "```", "")
     if d["see"]:
-        page.add(see_also(d["see"], known, owner), "")
+        page.add(see_also(d["see"], known, owner, library), "")
 
 
 def table(page: Page, headers: list[str], rows: list[list]) -> None:
@@ -480,10 +510,10 @@ def reference_tables(page: Page) -> None:
           [[f"`{q or '(none)'}`", " ".join(map(str, st))] for q, st in analysis.CHORD_QUALITIES.items()])
 
     data = json.loads((ROOT / "funground" / "data" / "ragas.json").read_text(encoding="utf-8"))
-    page.add("### Ragas", "", "From `f.ragas()` and `f.raga(name)`. See the "
+    page.add("### Ragas", "", "From `sangeet.ragas()` and `sangeet.raga(name)`. See the "
              "[ragas and talas chapter](../guide/17_ragas_and_talas.md).", "")
     table(page, ["Name", "Thaat", "Time"], [[r["name"], r["thaat"], r["time"]] for r in data["ragas"]])
-    page.add("### Talas", "", "From `f.talas()` and `f.tala_info(name)`.", "")
+    page.add("### Talas", "", "From `sangeet.talas()` and `sangeet.tala_info(name)`.", "")
     table(page, ["Name", "Beats", "Vibhag (divisions)"],
           [[t["name"], t["beats"], "+".join(map(str, t["vibhag"]))] for t in data["talas"]])
 
@@ -558,8 +588,34 @@ def check_groups() -> None:
     extra = sorted(set(grouped) - set(all_names))
     if extra:
         errors.append(f"in a group but not in funground._PUBLIC_NAMES: {extra}")
+    for lib, info in LIBRARIES.items():                    # S-246: each library lists exactly its __all__, none of it on f
+        module_names = list(info["module"].__all__)
+        if sorted(info["names"]) != sorted(module_names) or len(set(info["names"])) != len(info["names"]):
+            errors.append(f"the {lib} library's names in LIBRARIES differ from {lib}.__all__")
+        on_f = sorted(set(info["names"]) & set(all_names))
+        if on_f:
+            errors.append(f"in the {lib} library and still in funground._PUBLIC_NAMES: {on_f}")
     if errors:
         raise SystemExit("make_api_reference: " + "; ".join(errors))
+
+
+def library_section(page: Page, lib: str, info: dict, known: set[str]) -> None:
+    """The section of one library (S-246): its import line and what it is, the spellings that changed, then its names.
+    There is no "Since" badge on a name: everything in a library was on f in 0.1."""
+    page.add(f'<a id="{slug_of(info["title"])}"></a>', f"## {info['title']}", "",
+             "```py", f"from funground import {lib}", "```", "",
+             "New in 0.2 as a library; in 0.1 these were on `f`.", "")
+    if info["renamed"]:
+        page.add("Two names lost the word the library already says:", "")
+        for old, new in info["renamed"]:
+            page.add(f"- `f.{old}` is now `{lib}.{new}`.")
+        page.add("")
+    else:
+        page.add("No name changed: `f.name` in 0.1 is `" + lib + ".name` now.", "")
+    for name in info["names"]:
+        obj = getattr(info["module"], name)
+        render_entry(page, f"fn-{lib}-{name}", f"`{lib}.{name}`", signature_text(f"{lib}.", name, obj), obj.__doc__,
+                     known, library=lib)
 
 
 def build() -> str:
@@ -580,11 +636,15 @@ def build() -> str:
           "[When something goes wrong](../guide/errors.md), the [glossary](../guide/glossary.md), "
           "[funground compared with p5 and DrawBot](Compared_with_p5_and_DrawBot.md) "
           "and the [documentation front door](../README.md).", "",
-          "In the examples, `import funground as f` is understood.", "", "## Contents", "")
+          "In the examples, `import funground as f` is understood. A library's examples also understand its own import "
+          "line, such as `from funground import sound`.", "", "## Contents", "")
     for title, names in GROUPS.items():
         p.add(f"- [{title}](#{slug_of(title)}): "
               + ", ".join(f"[`{n}`](#{'const-' if n in NAMESPACE_NAMES else 'cls-' if n in class_set else 'fn-'}{n})"
                       for n in names))
+    for lib, info in LIBRARIES.items():
+        p.add(f"- [{info['title']}](#{slug_of(info['title'])}): "
+              + ", ".join(f"[`{n}`](#fn-{lib}-{n})" for n in info["names"]))
     p.add("- [Live values](#live-values): " + ", ".join(f"[`{n}`](#live-{n})" for n in sorted(live)))
     p.add("- [Classes in detail](#classes-in-detail): " + ", ".join(f"[`{n}`](#cls-{n})" for n, _ in classes))
     p.add("- [Constants and reference tables](#constants-and-reference-tables)", "")
@@ -601,6 +661,9 @@ def build() -> str:
                 continue
             render_entry(p, f"fn-{name}", f"`f.{name}`", signature_text("f.", name, obj), obj.__doc__, known,
                          arrives=since.name_since(name))
+
+    for lib, info in LIBRARIES.items():
+        library_section(p, lib, info, known)
 
     p.add('<a id="live-values"></a>', "## Live values", "",
           "These look like variables. Read them as `f.width`, `f.mouse_x` and so on. "
@@ -689,7 +752,15 @@ def rules_text() -> str:
 
 
 def llms_index() -> str:
-    lines = ["# funground", "", f"> {LLMS_SUMMARY}", "", rules_text(), "", "## Docs", ""]
+    lines = ["# funground", "", f"> {LLMS_SUMMARY}", "", rules_text(), "", "## Libraries", ""]
+    for lib, info in LIBRARIES.items():
+        lines += [f"### {info['title']}", "", f"`from funground import {lib}`. {info['about']} "
+                  f"New in 0.2 as a library; in 0.1 these were on `f`.", "",
+                  "Names: " + ", ".join(f"`{lib}.{n}`" for n in info["names"]) + ".", ""]
+        if info["renamed"]:
+            lines += ["Renamed: " + ", ".join(f"`f.{old}` is `{lib}.{new}`" for old, new in info["renamed"]) + ".", ""]
+        lines += [f"[Reference]({REPO_URL}docs/reference/API.md#{slug_of(info['title'])})", ""]
+    lines += ["## Docs", ""]
     lines += [f"- [{title}]({REPO_URL}{path}): {note}" for title, path, note in LLMS_LINKS]
     lines += ["", "## Optional", "",
               f"- [llms-full.txt]({REPO_URL}llms-full.txt): these rules and the whole API reference in one file", ""]
@@ -848,8 +919,34 @@ def completions_text() -> str:
     classes = {name: {"summary": first_sentence(parse_doc(cls.__doc__)["summary"]), "url": f"reference/API.md#cls-{name}",
                       **({"since": since.class_since(name)} if since.class_since(name) else {}),
                       "members": class_members(cls, class_set)} for name, cls in all_classes()}
-    data = {"version": f.__version__, "names": names, "colors": colors, "color_params": color_params, "classes": classes}
+    data = {"version": f.__version__, "names": names, "colors": colors, "color_params": color_params, "classes": classes,
+            "libraries": library_completions(class_set)}
     return json.dumps(data, indent=1, ensure_ascii=False) + "\n"
+
+
+def library_completions(class_set: set[str]) -> dict[str, list[dict]]:
+    """The names of each library for editors, under completions.json's "libraries" key (S-246): ``{"sound": [...],
+    "sangeet": [...]}``. An entry has the same shape as one in "names" (name, kind, signature, detail, summary, url,
+    and "returns" or "options" when there are any), except that it has no "since" and no "star". The editor suggests
+    them after ``sound.`` once the sketch says ``from funground import sound``."""
+    libraries: dict[str, list[dict]] = {}
+    for lib, info in LIBRARIES.items():
+        entries = []
+        for name in info["names"]:
+            obj = getattr(info["module"], name)
+            signature, detail, _ = learner_signature(name, obj)
+            entry: dict = {"name": name, "kind": "function", "signature": signature, "detail": detail,
+                           "summary": first_sentence(parse_doc(obj.__doc__)["summary"]),
+                           "url": f"reference/API.md#fn-{lib}-{name}"}
+            returns = returned_class(inspect.signature(obj).return_annotation, obj.__doc__, class_set)
+            if returns:
+                entry["returns"] = returns
+            tables = WORD_MEANINGS.get(f"{lib}.{name}")
+            if tables:
+                entry["options"] = {arg: [{"word": w, "meaning": m} for w, m in table.items()] for arg, table in tables}
+            entries.append(entry)
+        libraries[lib] = entries
+    return libraries
 
 
 def colors_class_text() -> str:

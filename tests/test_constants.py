@@ -12,8 +12,10 @@ import typing
 import pytest
 
 import funground as f
+from funground import sound
 from conftest import ROOT
-from funground import _colornames, _options, color as _color_function, pages, synth  # noqa: F401
+from funground import _colornames, _options, color as _color_function, pages  # noqa: F401
+from funground.sound import _synth as synth
 from funground import marks, typography, web_fonts
 from funground._namespaces import NAMESPACE_NAMES
 from funground.export import TEXT_MODES
@@ -49,10 +51,10 @@ ACCEPTED: dict[tuple[str, str], tuple[tuple[str, ...], object]] = {
     ("blend_mode", "mode"): (tuple(Sketch.BLEND_MODES), _options.BlendMode),
     ("filter", "kind"): (tuple(FILTER_KINDS), _options.FilterKind),
     ("apply_filter", "kind"): (tuple(FILTER_KINDS), _options.FilterKind),
-    ("tone", "wave"): (tuple(synth.WAVES), _options.Wave),
-    ("note", "wave"): (tuple(synth.WAVES), _options.Wave),
-    ("melody", "wave"): (tuple(synth.WAVES), _options.Wave),
-    ("melody", "tuning"): (("equal", "just"), _options.Tuning),          # no table in the code: an inline tuple
+    ("sound.tone", "wave"): (tuple(synth.WAVES), _options.Wave),
+    ("sound.note", "wave"): (tuple(synth.WAVES), _options.Wave),
+    ("sound.melody", "wave"): (tuple(synth.WAVES), _options.Wave),
+    ("sound.melody", "tuning"): (("equal", "just"), _options.Tuning),          # no table in the code: an inline tuple
     ("Mark.place", "anchor"): (tuple(marks.ANCHORS), _options.MarkAnchor),
     ("Mark.place", "style"): (("own", "current"), _options.MarkStyle),   # no table in the code: an inline tuple
     ("load_font", "provider"): (web_fonts.PROVIDER_WORDS, _options.Provider),
@@ -121,9 +123,11 @@ def test_the_annotations_use_those_types():
     import inspect
 
     for (name, parameter), (_, literal) in ACCEPTED.items():
-        if literal is None or "." in name or parameter == "value":
+        library = name.startswith("sound.")                    # the sound library's functions (S-246)
+        if literal is None or ("." in name and not library) or parameter == "value":
             continue
-        annotation = inspect.signature(getattr(f, name)).parameters[parameter].annotation
+        function = getattr(sound, name.removeprefix("sound.")) if library else getattr(f, name)
+        annotation = inspect.signature(function).parameters[parameter].annotation
         alias = next(n for n, value in vars(_options).items() if value is literal)
         assert alias in annotation, f"{name}({parameter}) is annotated {annotation}, not with {alias}"
 
@@ -144,10 +148,10 @@ CALLS = {
     ("stroke_join", "join"): lambda w: f.stroke_join(w),
     ("PathBuilder.expand_stroke", "join"): lambda w: f.path().move_to(0, 0).line_to(10, 0).expand_stroke(2, join=w),
     ("blend_mode", "mode"): lambda w: f.blend_mode(w),
-    ("tone", "wave"): lambda w: f.tone(440, 0.05, w),
-    ("note", "wave"): lambda w: f.note("C4", 0.05, w),
-    ("melody", "wave"): lambda w: f.melody("C4", wave=w),
-    ("melody", "tuning"): lambda w: f.melody("S R", tuning=w, sa="C4"),
+    ("sound.tone", "wave"): lambda w: sound.tone(440, 0.05, w),
+    ("sound.note", "wave"): lambda w: sound.note("C4", 0.05, w),
+    ("sound.melody", "wave"): lambda w: sound.melody("C4", wave=w),
+    ("sound.melody", "tuning"): lambda w: sound.melody("S R", tuning=w, sa="C4"),
     ("key_down", "key"): lambda w: f.key_down(w),
     ("page_size", "name"): lambda w: f.page_size(w),
 }

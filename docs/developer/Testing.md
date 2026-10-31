@@ -151,7 +151,7 @@ that every name it mentions exists. It also keeps the four pilot examples of S-1
 The suite never needs a microphone, a sound card or an ffmpeg program. Use these patterns.
 
 - **A fake microphone** (`tests/test_microphone.py`, the `fake` fixture). It patches the three small
-  functions of `microphone_input.py` that touch pygame's audio: `_device_names`, `_open_capture`
+  functions of `sound/_microphone.py` that touch pygame's audio: `_device_names`, `_open_capture`
   and `_sdl2_audio`. A `FakeDevice` keeps the callback, and a test feeds samples by calling
   `fake["opened"][0][1].callback(array("f", [...]))`, exactly as the audio thread would. The fixture
   also clears `FUNGROUND_HEADLESS`, because headless gives a silent microphone and never asks for a
