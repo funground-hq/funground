@@ -683,8 +683,32 @@ def forget_file_fonts(mark: int) -> None:
     """Forget the fonts that `load_font()` loaded after *mark* (from `file_font_mark()`), so the next
     run reads those files again and gives their names afresh. The bundled fonts stay (S-157, D-083)."""
     for cache_key in list(_path_to_key)[mark:]:
-        _registry.pop(_path_to_key.pop(cache_key), None)
+        key = _path_to_key.pop(cache_key)
+        _registry.pop(key, None)
+        _loaded.discard(key)
+        _chosen.discard(key)
     web_fonts.forget()
+
+
+# S-244: which loaded fonts this run has chosen. load_font() adds a key to _loaded; text_font(), text_fallback(), a
+# FormattedString, drawing with the font and every Font question add it to _chosen. A font in the first and not the
+# second is reported once, at the end of the run, if the sketch drew text (Sketch.finish).
+_loaded: set[str] = set()
+_chosen: set[str] = set()
+
+
+def note_chosen(key: str | None) -> None:
+    """Record that the font with this key was used for something (S-244)."""
+    if key is not None:
+        _chosen.add(key)
+
+
+def never_chosen_fonts() -> list[str]:
+    """The family names of the fonts loaded and never chosen since the last call; forgets them all (S-244)."""
+    names = [_registry[key].family for key in sorted(_loaded - _chosen) if key in _registry]
+    _loaded.clear()
+    _chosen.clear()
+    return names
 
 
 class Font:
@@ -720,6 +744,7 @@ class Font:
         return hash(self.name)
 
     def _resource(self) -> FontResource:
+        _chosen.add(self.name)
         resource = _registry.get(self.name)
         if resource is None and self.name in STYLE_FILES.values():
             resource = _builtin(self.name)                    # a built-in style not used yet
@@ -972,6 +997,7 @@ def load_font(path: str, base_dir: str | None = None, face: int | str = 0, *, pr
             n += 1
         _registry[key] = resource
         _path_to_key[cache_key] = key
+    _loaded.add(key)
     return Font(key)
 
 
@@ -981,6 +1007,7 @@ def effective_font(state) -> FontResource:
     loaded font (text_style is then ignored, as p5 does)."""
     if state.font is None:
         return _builtin(STYLE_FILES[state.text_style])
+    _chosen.add(state.font)
     resource = _registry.get(state.font)
     if resource is None:
         raise RuntimeError(f"no font loaded for key {state.font!r} (was it loaded in this process?)")
