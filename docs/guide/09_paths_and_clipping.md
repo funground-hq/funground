@@ -834,6 +834,8 @@ On Windows and Linux the camera works on the desktop. **On a Mac, run the sketch
 use the camera. In Visual Studio Code's panel the camera is not available. The gallery has a
 [mirror of dots](../gallery/README.md#pictures-and-images) and a photo booth. Both show a photo when there is no camera.
 
+A model can find your body or your hand in the camera's picture. See [chapter 20, Models](20_models.md).
+
 ### Stand in front of any picture
 
 > **Since 0.2.** In Play now; on your computer with funground 0.2.

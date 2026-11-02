@@ -7,6 +7,7 @@ Write new goldens/snapshots by running the suite once; never edit them by hand.
 """
 from __future__ import annotations
 
+import importlib.metadata
 import importlib.util
 import json
 import os
@@ -40,6 +41,43 @@ GOLDEN_PLATFORM = "Windows"
 NOT_YET_IN_GALLERY: set[str] = set()
 
 
+def _installed(distribution: str) -> bool:
+    try:
+        importlib.metadata.distribution(distribution)
+    except importlib.metadata.PackageNotFoundError:
+        return False
+    return True
+
+
+# The models area (S-232) needs funground-ml, a separate install the core environment may not have. The examples are still
+# listed (the index, the images and the coverage counts stay right) but they are only run when funground-ml is installed.
+# Their model files come from ml/tests/.models (git-ignored), so a test never writes a models/ folder into the repository.
+MODELS_AREA = "models"
+MODELS_FOLDER = ROOT / "ml" / "tests" / ".models"
+# Installed, not merely importable: tools/make_api_reference.py puts ml/ on sys.path to read the docstrings, and a test
+# that imports it in the same process would make funground_ml importable without its numpy, Pillow and onnxruntime.
+HAS_ML = _installed("funground-ml")
+
+
+def _needs_models(path: Path, monkeypatch) -> None:
+    """Skip a models example when funground-ml is not installed; otherwise point it at the shared model folder."""
+    if path.parent.name != MODELS_AREA:
+        return
+    if not HAS_ML:
+        pytest.skip("the models examples need funground-ml (python -m pip install -e ml); it is not installed here")
+    monkeypatch.setenv("FUNGROUND_ML_MODELS", os.environ.get("FUNGROUND_ML_MODELS") or str(MODELS_FOLDER))
+
+
+def _run(path: Path, frames: int = 30):
+    """run_sketch, except that a models example whose model files cannot be downloaded (offline) is skipped, as in ml/tests."""
+    try:
+        return run_sketch(path, frames=frames)
+    except ConnectionError as error:
+        if path.parent.name != MODELS_AREA:
+            raise
+        pytest.skip(f"the model files are not in ml/tests/.models/ and cannot be downloaded: {error}")
+
+
 @pytest.fixture(autouse=True)
 def _scratch_cwd(tmp_path, monkeypatch):
     """Examples that f.save() write into a throwaway directory, never the repo. They also run with no
@@ -57,14 +95,16 @@ def test_gallery_exists_and_every_example_has_a_docstring():
 
 
 @pytest.mark.parametrize("path", EXAMPLES, ids=gallery.example_id)
-def test_example_runs_headless(path: Path):
-    (w, h), data = run_sketch(path, frames=30)
+def test_example_runs_headless(path: Path, monkeypatch):
+    _needs_models(path, monkeypatch)
+    (w, h), data = _run(path)
     assert len(data) == w * h * 3
 
 
 @pytest.mark.parametrize("path", DETERMINISTIC, ids=gallery.example_id)
-def test_example_matches_golden(path: Path):
-    frame = run_sketch(path, frames=30)
+def test_example_matches_golden(path: Path, monkeypatch):
+    _needs_models(path, monkeypatch)
+    frame = _run(path)
     golden = GALLERY_GOLDEN / f"{gallery.example_id(path)}.png"
     if not golden.exists():
         GALLERY_GOLDEN.mkdir(parents=True, exist_ok=True)
@@ -81,8 +121,9 @@ def test_example_matches_golden(path: Path):
 
 
 @pytest.mark.parametrize("path", DETERMINISTIC, ids=gallery.example_id)
-def test_example_ops_match_snapshot(path: Path):
-    run_sketch(path, frames=30)
+def test_example_ops_match_snapshot(path: Path, monkeypatch):
+    _needs_models(path, monkeypatch)
+    _run(path)
     actual = json.dumps(ir.Frame(list(api.active_sketch().last_ops)).to_jsonable(), indent=1, sort_keys=True) + "\n"
     snap = GALLERY_SNAPSHOTS / f"{gallery.example_id(path)}.json"
     if not snap.exists():

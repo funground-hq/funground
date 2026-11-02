@@ -66,6 +66,15 @@ microphone, and play ragas and talas.
 | 16 | [Sound](16_sound.md) |
 | 17 | [Ragas and talas](17_ragas_and_talas.md) |
 
+### Models
+
+After this part you can find a body or a hand in your camera or a picture, and draw with the points it finds. The models are
+a separate install.
+
+| # | Chapter |
+|---|---|
+| 20 | [Models: your body and your hands](20_models.md) |
+
 ### Projects
 
 After this part you have seen whole programs built from the pieces above.

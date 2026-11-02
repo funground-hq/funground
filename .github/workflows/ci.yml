@@ -17,6 +17,7 @@ on:
     branches: ["**"]
     paths:
       - "funground/**"
+      - "ml/**"
       - "tests/**"
       - "examples/**"
       - "tools/**"
@@ -29,6 +30,7 @@ on:
     branches: [main]
     paths:
       - "funground/**"
+      - "ml/**"
       - "tests/**"
       - "examples/**"
       - "tools/**"

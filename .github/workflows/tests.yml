@@ -51,6 +51,25 @@ jobs:
         env:
           FUNGROUND_GOLDEN_TOLERANCE: ${{ inputs.newest && '1' || '' }}   # newest versions: invisible edge changes allowed
         run: python -m pytest --timeout=300
+      # The models library (S-232, D-125) comes after the core tests, in the same job. The core tests run WITHOUT funground-ml, so
+      # the sentence "The models library is a separate install" keeps being tested, and the models examples are skipped there.
+      # Only now is funground-ml installed; then its own tests and the models gallery examples run with real model files.
+      - name: Install funground-ml (after the core tests, which must run without it)
+        run: python -m pip install -e ml
+      - name: Keep the model files between runs (a new version of a model is a new key)
+        uses: actions/cache@v4
+        with:
+          path: ml/tests/.models
+          key: ml-models-${{ hashFiles('ml/funground_ml/_models.py') }}
+      - name: Test funground-ml, with the real models
+        env:
+          FUNGROUND_ML_MODELS: ${{ github.workspace }}/ml/tests/.models
+        run: python -m pytest ml/tests --timeout=300
+      - name: Test the models gallery examples
+        env:
+          FUNGROUND_ML_MODELS: ${{ github.workspace }}/ml/tests/.models
+          FUNGROUND_GOLDEN_TOLERANCE: ${{ inputs.newest && '1' || '' }}
+        run: python -m pytest tests/test_gallery.py -k models --timeout=300
       - name: Keep the pictures that differ from their goldens
         if: failure()
         uses: actions/upload-artifact@v4
