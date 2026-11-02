@@ -16,7 +16,7 @@ ALLOWED = {"platform/": {"pygame"}, "renderers/": {"cairo", "skia", "blend2d", "
            "imaging.py": {"pygame"},
            "sound/_engine.py": {"pygame"},                   # sound playback (D-046)
            "sound/_microphone.py": {"pygame"},               # microphone input via pygame._sdl2.audio (D-058)
-           "camera_input.py": {"pygame"},                         # camera input via pygame.camera (D-089)
+           "camera/_device.py": {"pygame"},                  # camera input via pygame.camera (D-089)
            "pathops.py": {"pathops"},                        # path booleans (ADR-005, D-037)
            "svg.py": {"svgelements"}}                       # SVG import (D-041)
 
@@ -56,7 +56,7 @@ def test_public_facade_imports_no_backend():
 
 
 def _library_imports(path: Path) -> set[str]:
-    """Which of "sound" and "sangeet" a file imports from funground (relative or absolute)."""
+    """Which of "sound", "sangeet" and "camera" a file imports from funground (relative or absolute)."""
     found: set[str] = set()
     for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
         if isinstance(node, ast.ImportFrom):
@@ -70,18 +70,18 @@ def _library_imports(path: Path) -> set[str]:
             continue
         for tokens in paths:
             if relative or tokens[0] == "funground":
-                found |= {t for t in ("sound", "sangeet") if t in tokens[:3]}
+                found |= {t for t in ("sound", "sangeet", "camera") if t in tokens[:3]}
     return found
 
 
-def test_the_core_imports_neither_library():
-    """S-246, ADR-007: nothing outside funground/sound/ and funground/sangeet/ imports them (funground/__init__.py
-    only names them in its table of moved names), and only sangeet imports sound."""
+def test_the_core_imports_no_library():
+    """S-246 and S-247, ADR-007: nothing outside funground/sound/, funground/sangeet/ and funground/camera/ imports
+    them (funground/__init__.py only names them in its table of moved names), and only sangeet imports sound."""
     offenders = []
     for path in PACKAGE.rglob("*.py"):
         rel = path.relative_to(PACKAGE).as_posix()
         hits = _library_imports(path)
-        allowed = {"sound": {"sound"}, "sangeet": {"sound", "sangeet"}}
+        allowed = {"sound": {"sound"}, "sangeet": {"sound", "sangeet"}, "camera": {"camera"}}
         library = rel.split("/")[0] if "/" in rel else None
         if hits - allowed.get(library, set()):
             offenders.append(f"{rel}: {sorted(hits)}")

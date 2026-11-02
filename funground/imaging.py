@@ -57,16 +57,16 @@ def decode_animation(path: str) -> tuple[int, int, list[bytes], list[float]]:
     with open(path, "rb") as handle:
         head = handle.read(1024)
     if path.lower().endswith((".svg", ".svgz")) or (head.lstrip()[:1] == b"<" and b"<svg" in head.lower()):
-        raise ValueError(f"f.load_clip(): {path!r} is an SVG file, not a clip. Use f.load_svg() to read it as a drawing")
+        raise ValueError(f"camera.load_clip(): {path!r} is an SVG file, not a clip. Use f.load_svg() to read it as a drawing")
     try:
         loaded = pygame.image.load_animation(path)
     except Exception as exc:                      # pygame.error, or anything the decoder raises
-        raise ValueError(f"f.load_clip(): {path!r} is not an animated picture funground can read ({exc})") from exc
+        raise ValueError(f"camera.load_clip(): {path!r} is not an animated picture funground can read ({exc})") from exc
     if not loaded:
-        raise ValueError(f"f.load_clip(): {path!r} has no frames")
+        raise ValueError(f"camera.load_clip(): {path!r} has no frames")
     width, height = loaded[0][0].get_size()
     if width <= 0 or height <= 0:
-        raise ValueError(f"f.load_clip(): {path!r} has no pixels")
+        raise ValueError(f"camera.load_clip(): {path!r} has no pixels")
     frames = []
     for surface, _ in loaded:
         rgba = pygame.Surface((width, height), pygame.SRCALPHA, 32)

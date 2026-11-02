@@ -754,14 +754,25 @@ f.run()
 
 > **Since 0.2.** In Play now; on your computer with funground 0.2.
 
-A picture can also come from your camera. `f.camera()` makes a camera object. **Nothing opens until you
-call `cam.start()`.** Then your computer (or the browser) asks for permission, and the camera's light comes on.
-Frames stay on your computer: funground never sends them anywhere. The camera is let go when you call
-`cam.stop()` and when the sketch ends. The camera works on Windows and Linux computers and on the website
-(Play). On a Mac computer, `f.camera()` says to run the sketch on the website instead.
+A picture can also come from your camera. The camera is a library: one line brings it in, and every call then says
+`camera.`
 
 ```py
-cam = f.camera()
+import funground as f
+from funground import camera
+```
+
+`camera.open()` makes a camera object. Call the object `cam`, not `camera`: a variable called `camera` would hide the
+library. **Nothing opens until you call `cam.start()`.** Then your computer (or the browser) asks for permission, and the camera's light comes on.
+Frames stay on your computer: funground never sends them anywhere. The camera is let go when you call
+`cam.stop()` and when the sketch ends. The camera works on Windows and Linux computers and on the website
+(Play). On a Mac computer, `camera.open()` says to run the sketch on the website instead.
+
+```py
+import funground as f
+from funground import camera
+
+cam = camera.open()
 
 
 def setup():
@@ -805,12 +816,12 @@ for y in range(0, 480, 20):
 `clip = cam.record(3)` keeps the next three seconds, one frame for each frame your sketch draws. The clip is in
 memory only, so it is limited to 10 seconds. When `clip.done` is `True` the recording is over. Then `clip.save("me.gif")`
 writes an animated GIF. (An `.mp4` also works on a computer with the video extra, but not in the browser.)
-`f.load_clip("take.gif")` reads a GIF back as a clip, so a take saved by one sketch can play in another:
+`camera.load_clip("take.gif")` reads a GIF back as a clip, so a take saved by one sketch can play in another:
 `f.image(take.frame(f.frame_count % len(take)), 0, 0)` loops it.
 
 | Call | What it does |
 |---|---|
-| `f.camera()` / `f.cameras()` | A camera, and the names of the cameras on your computer. |
+| `camera.open()` / `camera.names()` | A camera, and the names of the cameras on your computer. |
 | `cam.start(width, height, mirror)` / `cam.stop()` | Open the camera, and let it go. |
 | `cam.is_ready()` | `True` once a frame has arrived. |
 | `f.image(cam, x, y)` | Draw the latest frame. |
@@ -837,7 +848,10 @@ tolerance=30)` makes every pixel see-through that looks the same as the same pix
 whatever changed: you.
 
 ```py
-cam = f.camera()
+import funground as f
+from funground import camera
+
+cam = camera.open()
 beach = f.load_image("beach.jpg")    # your own picture
 empty = None                         # the room with nobody in it
 

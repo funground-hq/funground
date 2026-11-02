@@ -1,6 +1,6 @@
 """Camera input (S-172; contracts I4 and I5; D-089).
 
-The real camera is never opened here. The desktop tests replace `camera_input._camera_module` with a fake
+The real camera is never opened here. The desktop tests replace `camera._device._camera_module` with a fake
 `pygame.camera` that hands out real pygame surfaces, so the desktop device's scaling, mirroring and conversion run for
 real. The browser tests use a Session with a fake page that pushes RGBA frames.
 """
@@ -15,7 +15,8 @@ import pygame
 import pytest
 
 import funground as f
-from funground import api, camera_input as ci, ir
+from funground import api, camera, ir
+from funground.camera import _device as ci
 from funground.picture import Picture
 from funground.platform.headless import HeadlessPlatform
 from funground.sketch import Sketch
@@ -72,9 +73,9 @@ class FakeCameraModule:
         return list(self.names)
 
     def Camera(self, name, size):         # noqa: N802 (pygame's name)
-        camera = FakeCamera(self, name, size)
-        self.opened.append(camera)
-        return camera
+        device = FakeCamera(self, name, size)
+        self.opened.append(device)
+        return device
 
 
 @pytest.fixture
@@ -111,48 +112,48 @@ def at(picture, x, y):
 # ---- finding cameras
 
 def test_cameras_lists_the_device_names(desk):
-    assert f.cameras() == ["Fake webcam", "Other camera"]
+    assert camera.names() == ["Fake webcam", "Other camera"]
 
 
 def test_cameras_is_empty_when_headless_and_on_a_mac(desk, monkeypatch):
     monkeypatch.setattr(sys, "platform", "darwin")
-    assert f.cameras() == []
+    assert camera.names() == []
     monkeypatch.setattr(sys, "platform", "win32")
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
-    assert f.cameras() == []
+    assert camera.names() == []
 
 
 def test_camera_picks_the_first_or_the_one_with_the_name(desk):
-    assert f.camera()._device_name == "Fake webcam"
-    assert f.camera("other")._device_name == "Other camera"
+    assert camera.open()._device_name == "Fake webcam"
+    assert camera.open("other")._device_name == "Other camera"
 
 
 def test_a_name_that_matches_none_is_a_runtime_error(desk):
     with pytest.raises(RuntimeError, match="'nope'.*Fake webcam.*Other camera"):
-        f.camera("nope")
+        camera.open("nope")
 
 
 def test_no_camera_is_a_runtime_error(desk):
     desk.names = []
     with pytest.raises(RuntimeError, match="no camera was found"):
-        f.camera()
+        camera.open()
 
 
 def test_a_bad_name_is_a_value_error(desk):
     with pytest.raises(ValueError, match="name must be text"):
-        f.camera(3)
+        camera.open(3)
     with pytest.raises(ValueError, match="name must be text"):
-        f.camera("")
+        camera.open("")
 
 
 def test_a_mac_desktop_says_to_use_the_website(desk, monkeypatch):
     monkeypatch.setattr(sys, "platform", "darwin")
     with pytest.raises(RuntimeError, match="Windows and Linux.*website"):
-        f.camera()
+        camera.open()
 
 
 def test_nothing_opens_until_start(desk):
-    cam = f.camera()
+    cam = camera.open()
     assert desk.opened == [] and not cam.is_ready()
     cam.start()
     assert [c.size for c in desk.opened] == [(640, 480)] and desk.opened[0].running
@@ -160,14 +161,14 @@ def test_nothing_opens_until_start(desk):
 
 def test_a_camera_that_cannot_be_opened_is_a_runtime_error_at_start(desk):
     desk.fail_to_open = "busy"
-    cam = f.camera()
+    cam = camera.open()
     with pytest.raises(RuntimeError, match="could not be opened.*busy"):
         cam.start()
     assert not cam.is_ready()
 
 
 def test_start_checks_its_arguments(desk):
-    cam = f.camera()
+    cam = camera.open()
     for bad in (0, -3, 2.5, "big", True):
         with pytest.raises(ValueError, match="width must be a whole number above 0"):
             cam.start(bad, 4)
@@ -179,7 +180,7 @@ def test_start_checks_its_arguments(desk):
 
 def test_a_headless_camera_opens_nothing_and_is_never_ready(desk, monkeypatch):
     monkeypatch.setenv("FUNGROUND_HEADLESS", "1")
-    cam = f.camera()
+    cam = camera.open()
     seen = []
 
     def draw():
@@ -199,7 +200,7 @@ def test_a_headless_camera_opens_nothing_and_is_never_ready(desk, monkeypatch):
 # ---- the frame
 
 def test_image_draws_the_frame_scaled_and_mirrored(desk):
-    cam = f.camera()
+    cam = camera.open()
     seen = []
 
     def setup():
@@ -218,7 +219,7 @@ def test_image_draws_the_frame_scaled_and_mirrored(desk):
 
 
 def test_image_draws_the_frame_unmirrored(desk):
-    cam = f.camera()
+    cam = camera.open()
     seen = []
 
     def setup():
@@ -234,7 +235,7 @@ def test_image_draws_the_frame_unmirrored(desk):
 
 
 def test_image_takes_the_tint_the_size_and_the_image_mode(desk):
-    cam = f.camera()
+    cam = camera.open()
 
     def setup():
         f.size(8, 4)
@@ -252,7 +253,7 @@ def test_image_takes_the_tint_the_size_and_the_image_mode(desk):
 
 def test_a_frame_is_scaled_to_the_asked_size_from_any_native_size(desk):
     desk.native = (4, 2)
-    cam = f.camera()
+    cam = camera.open()
     cam.start(8, 4, mirror=False)
     sketch = run(lambda: None, setup=lambda: f.size(8, 4), frames=1)
     assert cam.is_ready() is False                    # the sketch ended, so the camera was let go
@@ -264,7 +265,7 @@ def test_a_frame_is_scaled_to_the_asked_size_from_any_native_size(desk):
 
 
 def test_picture_is_black_before_the_first_frame(desk):
-    cam = f.camera()
+    cam = camera.open()
     cam.start(8, 4)
     desk.silent = True
     f.size(8, 4)
@@ -277,7 +278,7 @@ def test_picture_is_black_before_the_first_frame(desk):
 
 def test_image_draws_nothing_before_the_first_frame(desk):
     desk.silent = True
-    cam = f.camera()
+    cam = camera.open()
 
     def setup():
         f.size(8, 4)
@@ -292,7 +293,7 @@ def test_image_draws_nothing_before_the_first_frame(desk):
 
 
 def test_picture_is_an_independent_copy(desk):
-    cam = f.camera()
+    cam = camera.open()
     pictures = []
 
     def setup():
@@ -313,7 +314,7 @@ def test_picture_is_an_independent_copy(desk):
 
 
 def test_the_frame_is_taken_once_before_each_draw(desk):
-    cam = f.camera()
+    cam = camera.open()
     pairs = []
 
     def setup():
@@ -331,7 +332,7 @@ def test_the_frame_is_taken_once_before_each_draw(desk):
 
 
 def test_the_camera_is_one_picture_with_a_new_version_each_frame(desk):
-    cam = f.camera()
+    cam = camera.open()
     seen = []
 
     def setup():
@@ -353,7 +354,7 @@ def test_the_camera_is_one_picture_with_a_new_version_each_frame(desk):
 
 
 def test_save_writes_a_png_of_the_frame(desk, tmp_path):
-    cam = f.camera()
+    cam = camera.open()
     path = tmp_path / "me.png"
 
     def setup():
@@ -368,7 +369,7 @@ def test_save_writes_a_png_of_the_frame(desk, tmp_path):
 
 def test_save_writes_a_jpg_and_refuses_other_endings(desk, tmp_path):
     pytest.importorskip("PIL")
-    cam = f.camera()
+    cam = camera.open()
     f.size(8, 4)
     cam.start(8, 4)
     cam.save(str(tmp_path / "me.jpg"))
@@ -378,7 +379,7 @@ def test_save_writes_a_jpg_and_refuses_other_endings(desk, tmp_path):
 
 
 def test_stop_lets_the_camera_go(desk):
-    cam = f.camera()
+    cam = camera.open()
     cam.start(8, 4)
     assert desk.opened[0].running
     cam.stop()
@@ -387,7 +388,7 @@ def test_stop_lets_the_camera_go(desk):
 
 
 def test_the_end_of_the_sketch_stops_the_camera(desk):
-    cam = f.camera()
+    cam = camera.open()
 
     def setup():
         f.size(8, 4)
@@ -401,7 +402,7 @@ def test_the_end_of_the_sketch_stops_the_camera(desk):
 # ---- clips
 
 def test_record_keeps_one_frame_per_drawn_frame(desk):
-    cam = f.camera()
+    cam = camera.open()
     clips = []
 
     def setup():
@@ -423,7 +424,7 @@ def test_record_keeps_one_frame_per_drawn_frame(desk):
 
 
 def test_a_clip_grows_and_stops_when_full(desk):
-    cam = f.camera()
+    cam = camera.open()
     lengths = []
 
     def setup():
@@ -442,7 +443,7 @@ def test_a_clip_grows_and_stops_when_full(desk):
 
 def test_a_clip_that_is_not_ready_holds_nothing(desk):
     desk.silent = True
-    cam = f.camera()
+    cam = camera.open()
 
     def setup():
         f.size(8, 4)
@@ -454,7 +455,7 @@ def test_a_clip_that_is_not_ready_holds_nothing(desk):
 
 
 def test_frame_index_errors(desk):
-    cam = f.camera()
+    cam = camera.open()
     f.size(8, 4)
     cam.start(8, 4)
     clip = cam.record(1)
@@ -475,7 +476,7 @@ def test_frame_index_errors(desk):
 
 
 def test_pause_and_resume_leave_the_paused_frames_out(desk):
-    cam = f.camera()
+    cam = camera.open()
     f.size(8, 4)
     cam.start(8, 4)
     clip = cam.record(5)
@@ -492,7 +493,7 @@ def test_pause_and_resume_leave_the_paused_frames_out(desk):
 
 
 def test_clip_stop_ends_the_recording_and_keeps_the_camera_on(desk):
-    cam = f.camera()
+    cam = camera.open()
     f.size(8, 4)
     cam.start(8, 4)
     clip = cam.record(5)
@@ -506,7 +507,7 @@ def test_clip_stop_ends_the_recording_and_keeps_the_camera_on(desk):
 
 
 def test_stop_ends_a_recording_early_and_what_was_kept_stays(desk):
-    cam = f.camera()
+    cam = camera.open()
     f.size(8, 4)
     cam.start(8, 4)
     clip = cam.record(5)
@@ -521,14 +522,14 @@ def test_stop_ends_a_recording_early_and_what_was_kept_stays(desk):
 
 
 def test_record_needs_a_started_camera(desk):
-    cam = f.camera()
+    cam = camera.open()
     f.size(8, 4)
     with pytest.raises(RuntimeError, match=r"Call cam.start\(\) first"):
         cam.record(1)
 
 
 def test_the_clip_cap_names_the_memory(desk):
-    cam = f.camera()
+    cam = camera.open()
     f.size(8, 4)
     cam.start(640, 480)
     with pytest.raises(ValueError, match=r"at most 10 seconds.*640 x 480.*60 frames a second.*about 774 MB"):
@@ -543,7 +544,7 @@ def test_clip_save_writes_a_readable_gif(desk, tmp_path):
     pytest.importorskip("PIL")
     from PIL import Image
 
-    cam = f.camera()
+    cam = camera.open()
     clips = []
 
     def setup():
@@ -563,7 +564,7 @@ def test_clip_save_writes_a_readable_gif(desk, tmp_path):
 
 
 def test_clip_save_errors(desk, tmp_path):
-    cam = f.camera()
+    cam = camera.open()
     f.size(8, 4)
     cam.start(8, 4)
     clip = cam.record(1)
@@ -613,7 +614,8 @@ class Page:
 
 SOURCE = """
 import funground as f
-cam = f.camera()
+from funground import camera
+cam = camera.open()
 def setup():
     f.size(8, 4)
     cam.start(8, 4)
@@ -696,7 +698,7 @@ def test_without_on_camera_the_camera_never_becomes_ready():
         session.push_camera(b"\x80" * (8 * 4 * 4), 8, 4)
         session.step(0.0)
         assert rgb(1, 1) == (0, 0, 0)
-        assert not f.camera().is_ready()
+        assert not camera.open().is_ready()
     finally:
         session.stop()
 
@@ -715,12 +717,12 @@ def test_camera_unavailable_prints_one_line_for_each_start(page, capsys):
 
 def test_the_browser_choose_the_camera_and_mp4_is_refused(page, tmp_path):
     page.session.start(SOURCE)
-    assert f.cameras() == []
+    assert camera.names() == []
     with pytest.raises(RuntimeError, match="only works in the desktop version"):
-        f.camera("USB")
+        camera.open("USB")
     page.push(1)
     page.session.step(0.0)
-    cam = f.camera()
+    cam = camera.open()
     cam.start(8, 4)
     clip = cam.record(1)
     ci.take_frames(api.canvas_sketch())
@@ -731,7 +733,7 @@ def test_the_browser_choose_the_camera_and_mp4_is_refused(page, tmp_path):
 def test_a_browser_clip_is_saved_as_a_gif(page, tmp_path):
     pytest.importorskip("PIL")
     page.session.start(NO_CAMERA)
-    cam = f.camera()
+    cam = camera.open()
     cam.start(8, 4)
     clip = cam.record(0.2)
     for n in (1, 2, 3):
@@ -749,7 +751,7 @@ def test_a_session_runs_without_pygame_camera_or_pygame():
         "from funground.web import Session\n"
         "got = []\n"
         "s = Session(8, 4, on_camera=lambda c, fields: got.append(c))\n"
-        "s.start('import funground as f\\ncam = f.camera()\\n"
+        "s.start('import funground as f\\nfrom funground import camera\\ncam = camera.open()\\n"
         "def setup():\\n    f.size(8, 4)\\n    cam.start(8, 4)\\n"
         "def draw():\\n    f.image(cam, 0, 0)\\nf.run()\\n')\n"
         "s.push_camera(bytes([9, 9, 9, 255]) * 32, 8, 4)\n"
@@ -766,7 +768,7 @@ def test_a_session_runs_without_pygame_camera_or_pygame():
 # ---- loading a clip (S-220, D-109)
 def test_a_saved_take_loads_back_as_the_same_clip(desk, tmp_path):
     pytest.importorskip("PIL")
-    cam = f.camera()
+    cam = camera.open()
     clips = []
 
     def setup():
@@ -780,7 +782,7 @@ def test_a_saved_take_loads_back_as_the_same_clip(desk, tmp_path):
     run(draw, setup=setup, frames=8, fps=10)
     path = tmp_path / "take.gif"
     clips[0].save(str(path))
-    loaded = f.load_clip(str(path))
+    loaded = camera.load_clip(str(path))
     assert loaded.done and len(loaded) == len(clips[0]) == 4
     assert loaded.fps == 10
     picture = loaded.frame(-1)
@@ -793,21 +795,21 @@ def test_a_still_picture_loads_as_one_frame(tmp_path):
     surface.fill((200, 40, 40))
     path = tmp_path / "still.png"
     pygame.image.save(surface, str(path))
-    clip = f.load_clip(str(path))
+    clip = camera.load_clip(str(path))
     assert len(clip) == 1 and clip.done
 
 
 def test_load_clip_errors(tmp_path):
     with pytest.raises(FileNotFoundError):
-        f.load_clip(str(tmp_path / "missing.gif"))
+        camera.load_clip(str(tmp_path / "missing.gif"))
     svg = tmp_path / "shape.svg"
     svg.write_text('<svg xmlns="http://www.w3.org/2000/svg"/>', encoding="utf-8")
     with pytest.raises(ValueError, match="SVG"):
-        f.load_clip(str(svg))
+        camera.load_clip(str(svg))
     junk = tmp_path / "junk.gif"
     junk.write_bytes(b"not a picture")
     with pytest.raises(ValueError, match="not an animated picture"):
-        f.load_clip(str(junk))
+        camera.load_clip(str(junk))
 
 
 def test_the_frame_rate_comes_from_the_middle_delay():
