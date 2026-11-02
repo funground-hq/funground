@@ -1,6 +1,6 @@
 # The first models library: pose, hands and the person (D-125)
 
-**Status:** proposed 2 November 2026 (D-125, pending). It comes from spike S-231 (`spikes/16_models/README.md`) and
+**Status:** proposed and accepted 2 November 2026 (D-125, option a, with both open questions answered as proposed). It comes from spike S-231 (`spikes/16_models/README.md`) and
 D-124 (ONNX files from the Hugging Face Hub, run by `onnxruntime` on the desktop and `onnxruntime-web` in Play). Stories
 S-232 (pose and hands) and S-233 (the person's outline) are built after the answer.
 
@@ -87,7 +87,7 @@ the core.
 **What would change it:** if the course wants learners to see that a model is something you load, b makes that a line
 of code.
 
-## Open questions
+## Open questions (answered 2 November: both as proposed)
 
 1. Point names: MediaPipe's own (`left_wrist`, `left_index` for the hand's tip in the body), or plainer words where they
    are obscure (`left_hand` for `left_index`)? Proposed: MediaPipe's, so that their documentation still helps.
