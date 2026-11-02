@@ -7,6 +7,7 @@ Write new goldens/snapshots by running the suite once; never edit them by hand.
 """
 from __future__ import annotations
 
+import importlib.metadata
 import importlib.util
 import json
 import os
@@ -39,12 +40,23 @@ GOLDEN_PLATFORM = "Windows"
 # CONSTANTS (D-103, S-174) is shown by the project Moving the paper (paper-07, 27 Oct: was listed here).
 NOT_YET_IN_GALLERY: set[str] = set()
 
+
+def _installed(distribution: str) -> bool:
+    try:
+        importlib.metadata.distribution(distribution)
+    except importlib.metadata.PackageNotFoundError:
+        return False
+    return True
+
+
 # The models area (S-232) needs funground-ml, a separate install the core environment may not have. The examples are still
-# listed (the index, the images and the coverage counts stay right) but they are only run when funground_ml can be imported.
+# listed (the index, the images and the coverage counts stay right) but they are only run when funground-ml is installed.
 # Their model files come from ml/tests/.models (git-ignored), so a test never writes a models/ folder into the repository.
 MODELS_AREA = "models"
 MODELS_FOLDER = ROOT / "ml" / "tests" / ".models"
-HAS_ML = importlib.util.find_spec("funground_ml") is not None
+# Installed, not merely importable: tools/make_api_reference.py puts ml/ on sys.path to read the docstrings, and a test
+# that imports it in the same process would make funground_ml importable without its numpy, Pillow and onnxruntime.
+HAS_ML = _installed("funground-ml")
 
 
 def _needs_models(path: Path, monkeypatch) -> None:

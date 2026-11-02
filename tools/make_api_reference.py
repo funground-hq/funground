@@ -42,8 +42,14 @@ from funground.sound import _synth as synth  # noqa: E402
 # The models library (S-232, ADR-007, D-125) is a separate install, funground-ml, and the project .venv does not have it (and must
 # not). So the repository's own ml/ folder goes first on the path: funground_ml is then found without an install. Importing it
 # loads no numpy, Pillow or onnxruntime (they are lazy), so the generator needs none of them.
-sys.path.insert(0, str(ROOT / "ml"))
-import funground_ml as _ml  # noqa: E402
+# The folder is taken off the path again at once, so a test that imports this tool does not make funground-ml look installed
+# to the rest of its process.
+_ML_FOLDER = str(ROOT / "ml")
+sys.path.insert(0, _ML_FOLDER)
+try:
+    import funground_ml as _ml  # noqa: E402
+finally:
+    sys.path.remove(_ML_FOLDER)
 from funground._namespaces import NAMESPACE_NAMES  # noqa: E402
 _color = sys.modules["funground.color"]  # f.color (the function) hides the module as an attribute
 from funground.export import FORMATS, TEXT_MODES  # noqa: E402
