@@ -1,11 +1,11 @@
 # The models package: `funground-ml` on the desktop (S-232, D-124, D-125)
 
-**Status:** built on 2 November 2026 for the desktop; the contract rows ML1 to ML4 are drafts. Play's half of S-232 is not built.
+**Status:** built on 2 November 2026 for the desktop and for Play; the contract rows ML1 to ML4 are drafts.
 
 ## Problem
 
 D-125 decided what a learner writes: `ml.pose(cam)` and `ml.hand(cam)` give named points. This note records how the desktop
-half is built, so that the Play half (the same files in `onnxruntime-web`) can match it and a later change knows what must
+half is built and how Play's half (the same files in `onnxruntime-web`) matches it, so that a later change knows what must
 stay true.
 
 ## Layout
@@ -15,7 +15,7 @@ ml/                          its own distribution, funground-ml 0.1.0.dev0 (LGPL
   pyproject.toml             funground, onnxruntime>=1.31,<2, numpy>=2,<3, pillow>=11,<13
   funground_ml/
     __init__.py              pose(), hand(): the only public names, with their docstrings
-    _tasks.py                from a source to a Body or a Hand
+    _tasks.py                from a source to a Body or a Hand: the desktop path, and the host path (Play)
     _source.py               what a source is, and the answer kept for each source and frame
     _glue.py                 numpy and Pillow: cut, detect, landmarks, tracker (no onnxruntime)
     _results.py              Body, Hand, the point names, the mirrored swap
@@ -24,6 +24,7 @@ ml/                          its own distribution, funground-ml 0.1.0.dev0 (LGPL
     _runtime.py              the only module that imports onnxruntime
   tests/                     unit tests, model tests, the two test photographs (data/SOURCES.md)
 funground/ml/__init__.py     the core's stub: imports funground_ml, or one sentence about the separate install
+funground/platform/browser_models.py   HostModels: the bridge to a page that runs the models (Play)
 ```
 
 The core never imports onnxruntime (`tests/test_boundaries.py` lists it as a backend with no allowed module in the core;
@@ -113,14 +114,39 @@ found, its score is above 0.5, the nose is above the hips, the hips are above th
 camera swaps the sides, and the second frame does not run the detector. The hand tests use `standing_woman_640.jpg` (a US federal
 work): a hand is found with a score of 0.8 or more. Each result agrees within 5 px with the spike's numpy glue
 (`spikes/16_models/onnx/ort_glue.py`, imported by path and run on the same picture). An empty picture gives `None`. (Old photographs
-are low contrast and the hand model does not find a hand in any Gandhi photograph tried, which is why the hand tests use another picture.) The model
+are low contrast and the hand model does not find a hand in any Gandhi photograph tried, which is why the hand tests use another picture.) `ml/tests/test_host.py` tests the host path with a fake page and no browser (see "In Play").
+The model
 files go in `ml/tests/.models/` (ignored by git), downloaded on the first run; a run with no connection skips these tests with a reason.
 
-## What is left for Play
+## In Play (S-232, built 2 November 2026)
 
-- The same two tasks in `onnxruntime-web` in a worker, from the same four files (D-124), with the points agreeing with this
-  package's within about 5 px (S-231 measured 4.65 px for the body and 2.17 px for the hand).
-- `ml.pose(cam)` there returns the latest result and may be one frame behind (D-125).
-- Tracking from the last frame's points (not the box of the last detection) if Play needs the speed.
+The same two tasks, from the same four files, run by `onnxruntime-web` in a worker of their own. The sketch is the same file and
+has no `async`. How it is wired is in `Web_Runner_Note.md` ("Models"); this section is what the package has to keep true.
+
+- **`host_services.models`.** The web `Session` sets it (a `platform/browser_models.HostModels`); the desktop leaves it `None`. `_tasks.find_body`
+  and `find_hand` read it at the call: when it is set they take the host path. The host path imports none of onnxruntime, numpy, Pillow,
+  `_runtime`, `_glue` or `_fetch`, and neither does `import funground_ml` (those imports are inside the desktop path, and `_source` makes
+  its Tracker and Pillow image on first use). `ml/tests/test_host.py` checks `sys.modules` in a fresh interpreter, so the wheel that Play installs
+  needs no numpy and no Pillow.
+- **Sending.** The answer is looked up as on the desktop, by source, task, picture and version. When the picture's version is new and no
+  picture of this task and source is being worked on, `Frame.rgba()` (the snapshot's pixels as opaque RGBA, in the physical size) goes to
+  `HostModels.request`. A picture that comes while another is in flight is dropped, not queued. `key` is `id()` of the camera or picture.
+- **Reading.** The result is built from `HostModels.latest(task, key)`: the model's raw points on the pixels it was sent. Python scales them to logical
+  pixels from the size the page worked on, and swaps the sides for a mirrored camera (`Body.from_points(..., mirrored)`), exactly as on the desktop. The kept answer is keyed on
+  the picture, its version and `HostModels.generation` (the count of results), so a still picture is answered when its result arrives and a result never
+  changes an answer inside a frame (the host delivers results between steps).
+- **The answer is the newest the browser has.** `None` until the first result arrives, and it can be one frame behind the picture (contract ML3; D-125).
+  Nobody found is a result too. A task the page cannot run (no connection for the first download, a file that fails its check) prints one sentence and stays `None` for the run.
+- **The page** (`funground-web`, `runner/models-worker.js`, `models-glue.js`): `onnxruntime-web` 1.30.0 from jsDelivr (`ort.wasm.mjs`, wasm only; one thread without cross-origin isolation), the
+  model files from the table `runtime/models.json` that `tools/build_runtime.py` writes from `_models.py`, each checked with `crypto.subtle` and kept in Cache Storage.
+  `models-glue.js` is the twin of `_glue.py` with the same numbers, and its crop is Pillow's bilinear lookup written out, not the canvas's smoothing.
+- **Measured** on this machine (Windows, headless Chrome 156 with a temporary profile, one wasm thread; `funground-web/tools/test_models.py`), the same sketch on both platforms on the two test photographs:
+  the largest difference from the desktop's points is 0.03 px for the body (33 points, mean 0.01 px) and 0.41 px for the hand (21 points, mean 0.20 px), against the 5 px bound
+  (S-231's canvas crop gave 4.65 px and 2.17 px). Speed with a new picture sent every frame, the box reused as above: between 5.2 and 8.5 pose answers a second and between 6.7 and 9.2 hand answers a second in two runs (the machine is noisy), with the sketch drawing at the same time.
+  The first answer waits for the library (3 MB) and the models (18 MB or 8 MB) to download once; after that they come from the browser's cache.
+
+## What is left
+
+- Tracking from the last frame's points (not the box of the last detection) if the speed needs it; WebGPU and threads in Play (S-231: about twice as fast for pose, if the page can be cross-origin isolated).
 - A gallery example, a guide section and the Quick Reference rows; `tools/make_api_reference.py` does not yet read the library's docstrings.
 - CI on Linux and macOS for `ml/`, and the check of `ORT_DISABLE_TELEMETRY` when the pinned `onnxruntime` changes.

@@ -94,6 +94,44 @@ the camera never becomes ready. A host has one camera: a sketch should make one 
 name is desktop-only (`camera.open("name")` raises, `camera.names()` is `[]`), and so is `.mp4` for a clip (GIF works). Tests:
 `tests/test_camera.py` (here, with a fake page).
 
+**Models (S-232, D-124, D-125).** `ml.pose(cam)` and `ml.hand(cam)` (the funground-ml package, `ML_Package_Note.md`) run the same four ONNX
+files as the desktop, with `onnxruntime-web`, in a worker of their own. The sketch's code does not change and has no `async`.
+The bridge is the camera's shape again: `Session` puts a `HostModels` (`platform/browser_models.py`) in `host_services.models` and
+is given an `on_models(command, fields)` callback (the last argument of `Session`, after `fetch_url`). When `host_services.models` is set,
+`funground_ml._tasks` takes the host path and imports no onnxruntime, numpy, Pillow, `_runtime`, `_glue` or `_fetch`.
+
+- **Out.** When the picture's version is new, `HostModels.request(task, key, rgba, width, height)` calls `on_models("request",
+  {task, key, width, height, pixels})` with the picture's snapshot as opaque RGBA bytes (physical pixels). `key` is `id()` of the camera or
+  picture. At most one picture is in flight for each task and key: while one is being worked on the next is dropped, never queued
+  (as the camera's frames are). `on_models("close", {})` follows when the run ends.
+- **In.** `Session.push_models(task, key, points, score, width, height)` delivers a result: the model's raw points as a flat
+  `x0, y0, x1, y1, ...` on the pixels it was sent (or `None` for nobody). `HostModels.latest(task, key)` is what funground_ml reads. A result
+  for a source the run has forgotten is ignored. `Session.models_unavailable(task, reason)` prints the reason once and stops
+  asking for that task in this run.
+- **The answer.** `ml.pose(cam)` gives the newest result the browser has for that source and task: `None` until the first arrives,
+  and it can be one frame behind (contract ML3). The same answer twice in a frame still holds: the kept answer is keyed on the
+  picture, its version and the count of results (`HostModels.generation`), and results are only delivered between two steps. A still
+  picture is answered when its result arrives, without a second request. Mirroring is done in Python (`Body.from_points(..., mirrored)`),
+  and the points are scaled from the physical size the page worked on to logical pixels, as on the desktop.
+- **The page.** `worker.js` starts `models-worker.js` (a module worker) on the first request, so inference runs in parallel with the
+  sketch and never inside its step. The picture goes across with its buffer transferred; the answer comes back as a message
+  that `worker.js` handles between two steps and pushes into the Session. The models worker loads `onnxruntime-web` from jsDelivr at one exact version
+  (`ort.wasm.mjs`, wasm only; the runner option `onnxruntimeUrl` replaces the folder), and `models-glue.js` is the JavaScript twin of `_glue.py`: the same
+  steps, thresholds (0.5, 0.5, 0.8) and box-reuse rule (score at least 0.9, at most 10 pictures in a row). Its crop does the bilinear
+  lookup of Pillow's `Image.transform` itself instead of using a canvas, so the crop is the same bytes as the desktop's.
+- **The files.** `tools/build_runtime.py` writes `runtime/models.json` from `ml/funground_ml/_models.py` (address, size, SHA-256 and the two
+  files of each task): one table for both platforms. The worker downloads a file once, checks it with `crypto.subtle.digest`, and keeps
+  it in Cache Storage (`funground-models-v1`); a kept copy is checked again when read, and a bad one is downloaded again. The first
+  time it prints the desktop's line with the folder wording changed: `Downloading the pose model, 18 MB, once. After that the browser keeps a copy.`
+- **On demand.** A sketch that contains `from funground import ml` (or `import funground.ml`, `from funground.ml import ...`) makes
+  `worker.js` install the funground-ml wheel (pure Python, manifest role `funground-ml`) without its dependencies. No numpy and no Pillow are loaded.
+- **Privacy.** `onnxruntime-web` has no telemetry. At the pinned version (1.30.0) the loader fetches its own `.wasm` file and nothing else; the
+  `.wasm` binary holds no collector address (S-232 read both). The only requests are the library and its `.wasm` from jsDelivr, and the model
+  files from huggingface.co on the first run.
+
+Tests: `ml/tests/test_host.py` (here, with a fake page: none before the first result, the latest after a push, mirroring, scaling, one request in
+flight, no numpy or Pillow imported) and `tools/test_models.py` (`funground-web`, headless Chrome: the points against the desktop's within 5 px).
+
 **Keep (S-226, D-113 b).** `Session.keep(note)` runs what `f.keep(note)` does for the Session's own sketch: `studio/NNN.png`, `.py` and `.json` in the sketch's folder, where the `.py` is the code the Session was started with (a host holds it in memory, so there is no file to copy). The host calls it between frames, so the last frame drawn is complete and the files are written before `keep()` returns, whether the sketch still draws (the frame on screen is kept, as `f.keep()` does after `f.no_loop()`) or has stopped drawing (a script that has finished). Before an animated sketch's first frame the keep waits for that frame. After `stop()` it raises `RuntimeError` (the picture is gone). The runner's `runner.keep(note)` calls it and reports the files through `onFile`; Play's Keep this uses it. Tests: `tests/test_web_session.py`.
 
 ## Origins and safety (D-078)

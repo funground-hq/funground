@@ -36,6 +36,7 @@ from .platform.base import InputEvent
 from .platform.browser import BrowserPlatform, FrameCallback
 from .platform.browser_audio import MicrophoneCallback, SoundCallback
 from .platform.browser_camera import CameraCallback
+from .platform.browser_models import ModelsCallback
 from .sketch import Sketch
 
 
@@ -88,6 +89,11 @@ class Session:
     page could not open the camera: it prints one line, "The camera is not available: ...", for each start, and
     the camera stays not ready. Without `on_camera` the camera never becomes ready.
 
+    The models go through the host too (S-232): `on_models(command, fields)` is told "request" (a picture to look at:
+    task, key, width, height and RGBA bytes) and "close", and `push_models(task, key, points, score, width, height)`
+    delivers a result (platform.browser_models has the details). `models_unavailable(task, reason)` tells the Session
+    that the page cannot run a model: it prints the reason once. Without `on_models` there is never a result.
+
     The bundled fonts are not in the browser's package (S-211, D-114): `fetch_font(file name)` is called the first
     time funground opens one, and returns its bytes (bytes, or a JavaScript Uint8Array or ArrayBuffer). `fonts`
     maps each file name to {"size": bytes, "sha256": hex} from the host's manifest; a font that differs raises
@@ -101,14 +107,15 @@ class Session:
                  on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None,
                  on_camera: CameraCallback | None = None, fetch_font: Callable[[str], Any] | None = None,
                  fonts: dict[str, dict[str, Any]] | None = None,
-                 fetch_url: Callable[[str], Any] | None = None) -> None:
+                 fetch_url: Callable[[str], Any] | None = None, on_models: ModelsCallback | None = None) -> None:
         web_fonts.set_url_fetcher(_checked_url_fetcher(fetch_url) if fetch_url is not None else None)
         if fetch_font is not None:
             typography.set_font_fetcher(_checked_fetcher(fetch_font, fonts or {}))
-        self._platform = BrowserPlatform(width, height, scale, on_frame, on_sound, on_microphone, on_camera)
+        self._platform = BrowserPlatform(width, height, scale, on_frame, on_sound, on_microphone, on_camera, on_models)
         host_services.mixer = self._platform.mixer
         host_services.microphone = self._platform.microphone
         host_services.camera = self._platform.camera
+        host_services.models = self._platform.models
         self._sketch = api.use_sketch(Sketch(platform=self._platform))
         self._stopped = False
         self._font_mark = typography.file_font_mark()
@@ -206,6 +213,16 @@ class Session:
         start; the camera stays not ready."""
         self._platform.camera.unavailable(reason)
 
+    def push_models(self, task: str, key: int, points, score: float, width: int, height: int) -> None:
+        """One result from the host's models: `points` is a flat sequence x0, y0, x1, y1, ... in pixels of the picture
+        that "request" sent (or None for nobody), `key` is the source's key from that request."""
+        self._platform.push_models(task, key, points, score, width, height)
+
+    def models_unavailable(self, task: str, reason: str) -> None:
+        """The page cannot run this task's models (no connection for the download, a file that fails its check). Prints
+        `reason` once to the sketch's output; the task is not asked for again in this run."""
+        self._platform.models.unavailable(task, reason)
+
     def stop(self) -> None:
         """End the run: the sketch's finish() runs, once; sounds stop and the microphone and camera are let go. Safe to call again."""
         if self._stopped:
@@ -217,6 +234,7 @@ class Session:
             host_services.mixer = None
             host_services.microphone = None
             host_services.camera = None
+            host_services.models = None
             web_fonts.set_url_fetcher(None)
             api.use_sketch(None)
             typography.forget_file_fonts(self._font_mark)

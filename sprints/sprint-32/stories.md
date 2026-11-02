@@ -65,7 +65,7 @@ stories between heavy jobs. One heavy job at a time on this machine.
 - [x] The `funground-ml` package in `ml/` (decided by Claude: a folder of this repository with its own `pyproject.toml`, not a new repository; the maintainer can ask for one): `onnxruntime` with `ORT_DISABLE_TELEMETRY=1` set before import, models fetched by funground's own HTTPS request and checked by SHA-256
 - [x] The core's `funground/ml` stub with the install sentence; boundary rows
 - [x] `ml.pose` and `ml.hand` on the desktop: named `f.Vector` points, `.points`, `.score`, `None` for nobody, the body's own sides with a mirrored camera, the same answer twice in a frame
-- [ ] Play: the same files in `onnxruntime-web` in the worker (funground-web), the latest result, points within 5 px of the desktop's
+- [x] Play: the same files in `onnxruntime-web` in the worker (funground-web), the latest result, points within 5 px of the desktop's
 - [ ] Contract rows, reference, completions, `llms.txt`; a gallery example and a guide section
 
 ## S-233 tasks
