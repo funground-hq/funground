@@ -885,17 +885,31 @@ The **tolerance** is how different a pixel may be and still count as the same. I
 few steps, even in a still room, so a tolerance of 0 rarely works with a camera. Start with 30 and raise it if specks of
 the room are left. Lower it if parts of you disappear.
 
+**Tidy the cut-out.** A cut-out often has two faults. Specks of the room look like you, and holes in you look like the
+room. Add `tidy=True` and the picture keeps one part only, the largest, and fills its holes with its own colours:
+`me.remove_background(empty, tolerance=30, tidy=True)`. If the biggest part is not you (a shadow, a door), say where you
+are with `at=(x, y)`. It keeps the part that has that point in it, and it means `tidy=True`. Take the point from the
+mouse (`f.mouse_x, f.mouse_y`) or pick a spot on your shirt. A point outside the picture, or on a pixel that was removed,
+is a `ValueError` that says so.
+
+**Draw the outline, and move it.** `me.outline(points=80)` gives the border of what is left as a list of `(x, y)`
+points, spread evenly. Draw it with `f.path().polygon(points)`. Drag a point with the mouse and the shape changes.
+Cut the picture out with it using `f.clip(path)`. A picture with nothing left gives an empty list.
+
 Both methods change the picture in place and give nothing back, like `filter()`. They work on any picture, not only the
 camera, and the picture behind can be anything you draw, even something that moves. The sizes must match: an empty
 room of a different size is a `ValueError`.
 
 | Call | What it does |
 |---|---|
-| `me.remove_color(color, tolerance=40)` | Pixels close to `color` become see-through. `color` is anything `f.fill()` takes. |
-| `me.remove_background(empty, tolerance=30)` | Pixels close to the same pixel of the picture `empty` become see-through. |
+| `me.remove_color(color, tolerance=40, tidy=False, at=None)` | Pixels close to `color` become see-through. `color` is anything `f.fill()` takes. |
+| `me.remove_background(empty, tolerance=30, tidy=False, at=None)` | Pixels close to the same pixel of the picture `empty` become see-through. |
+| `tidy=True` | Keep the largest part and fill its holes. |
+| `at=(x, y)` | Keep the part that has this point in it. It means `tidy=True`. |
+| `me.outline(points=80)` | The border of what is left, as a list of `(x, y)` points. |
 
 The gallery has [in front of a picture](../gallery/README.md#pictures-and-images). It draws a figure in a room when there
-is no camera.
+is no camera. [Drag the outline](../gallery/README.md#pictures-and-images) cuts out a drawing and lets you move the outline's points.
 
 ## See also
 

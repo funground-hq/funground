@@ -252,6 +252,10 @@ against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagg
 and a drawn figure when there is no camera) is an original CC0 example, written from the feature. `tools/check_originality.py`
 against the 2,974 corpus files in `C:\Projects\funground-corpora`: nothing flagged. The background is `images/data/photo.jpg`, copied.
 
+## Images 11, drag the outline - 2 November 2026
+
+`examples/gallery/images/11_drag_the_outline.py` (story S-245, D-115: `tidy=True` and `outline()`) is an original CC0 example, written from the feature. It has the same idea as the spike's `outline_editor.py` (our own work) but a new scene and new code. `tools/check_originality.py` against the 2,974 corpus files in `C:\Projectsunground-corpora`: nothing flagged (combined 0.16). The scene is drawn in code; no file is copied.
+
 ## Moving the paper, steps 1 to 8 — 27 October 2026
 
 `examples/gallery/paper/01_where_is_zero.py` to `08_the_flower.py`, the guide project
