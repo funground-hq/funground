@@ -15,7 +15,7 @@ S-238 needs the maintainer for anything created under their account (a GitHub Ap
 |---|---|---|
 | S-246 | Move sound and sangeet out of `f`: `from funground import sound`, `from funground import sangeet` | done 1 Nov (funground #48, funground-web #18): full suite 2765 and 1758 passed, 1 skipped; Play's runner 15 of 15 checks, 17 of 17 frames, sound check passed |
 | S-247 | Move the camera out of `f`: `from funground import camera` (after S-246) | done 2 Nov (funground #49, funground-web #19): full suite 2777 and 1749 passed, 1 skipped; Play's camera check passed, runner 15 of 15, 17 of 17 |
-| S-231 | Spike: which models, from which provider, on the web and on the desktop | planned 28 Oct |
+| S-231 | Spike: which models, from which provider, on the web and on the desktop | done 2 Nov: vision, speech (Whisper tiny.en), sounds (YAMNet) and a taught kNN measured on both platforms, all on onnxruntime; recommendation at the end of `spikes/16_models/README.md` |
 | S-238 | Spike: signing in to GitHub from Play, a static site (D-118) | planned 28 Oct |
 | S-232 | Pose and hands: `ml.pose(source)` and `ml.hand(source)` with named points, in the `funground-ml` package (D-124 d, D-125 a) | done 3 Nov (funground #53, #54, this PR; funground-web #20): desktop and Play agree within 0.41 px |
 | S-233 | The person: `ml.person(source)`, the source with everything but the person see-through (D-125 a; after S-232) | done 3 Nov (this PR; funground-web s233-ml-person): desktop and Play masks differ by 0.08 of 255 on average |
@@ -46,10 +46,10 @@ stories between heavy jobs. One heavy job at a time on this machine.
 ## S-231 tasks
 
 - [x] Desk research: every provider and task, with sizes, licences of code and weights, platforms, worker or page (`spikes/16_models/research.md`)
-- [ ] Measurements on this machine (desktop frames per second; headless Chrome), one heavy job at a time; macOS and Linux marked unverified or measured in CI. Web done 28 Oct (`spikes/16_models/web/results.md`): MediaPipe runs in a module worker; pose lite 11/s on CPU, about 40/s on GPU; no analytics hosts. Desktop done 28 Oct (`spikes/16_models/desktop/results.md`): 4 to 7 times faster than the web; the Python package logs usage to Google (play.googleapis.com) with no switch found
-- [ ] How a model's answer reaches a Python sketch in Pyodide without `async`
-- [ ] The same 30-line pose sketch on the desktop and in Play
-- [ ] A recommendation per platform, and a first API (as the `ml` package, D-120) for the maintainer
+- [x] Measurements on this machine (desktop frames per second; headless Chrome), one heavy job at a time; macOS and Linux marked unverified or measured in CI. Web done 28 Oct (`spikes/16_models/web/results.md`): MediaPipe runs in a module worker; pose lite 11/s on CPU, about 40/s on GPU; no analytics hosts. Desktop done 28 Oct (`spikes/16_models/desktop/results.md`): 4 to 7 times faster than the web; the Python package logs usage to Google (play.googleapis.com) with no switch found Speech, sounds and a taught kNN 2 Nov (`spikes/16_models/speech_sounds/results.md`).
+- [x] How a model's answer reaches a Python sketch in Pyodide without `async` (product code in S-232: `HostModels`, the latest answer read each frame)
+- [x] The same 30-line pose sketch on the desktop and in Play (gallery `models-01_stick_figure`, S-232: within 0.03 px)
+- [x] A recommendation per platform, and a first API (as the `ml` package, D-120) for the maintainer (D-124 d, D-125 a; closing table in `spikes/16_models/README.md`)
 
 ## S-238 tasks
 

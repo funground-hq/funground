@@ -1,0 +1,73 @@
+{
+ "pictures": 24,
+ "per_class": {
+  "bird": 8,
+  "cat": 8,
+  "dog": 8
+ },
+ "splits": 200,
+ "dinov2_small_q8": {
+  "dim": 384,
+  "ms_per_picture_median": 79.4,
+  "k1": {
+   "accuracy_mean": 0.914,
+   "accuracy_min": 0.8,
+   "accuracy_max": 1.0,
+   "per_class": {
+    "bird": 0.872,
+    "cat": 0.999,
+    "dog": 0.871
+   },
+   "margin_when_right_median": 0.367,
+   "margin_when_wrong_median": 0.033,
+   "wrong_answers": 258,
+   "test_answers": 3000
+  },
+  "k3": {
+   "accuracy_mean": 0.915,
+   "accuracy_min": 0.733,
+   "accuracy_max": 1.0,
+   "per_class": {
+    "bird": 0.925,
+    "cat": 0.991,
+    "dog": 0.828
+   },
+   "margin_when_right_median": 0.359,
+   "margin_when_wrong_median": 0.034,
+   "wrong_answers": 256,
+   "test_answers": 3000
+  }
+ },
+ "mobilenetv4_small_pooled": {
+  "dim": 1280,
+  "ms_per_picture_median": 3.9,
+  "k1": {
+   "accuracy_mean": 0.895,
+   "accuracy_min": 0.733,
+   "accuracy_max": 1.0,
+   "per_class": {
+    "bird": 0.947,
+    "cat": 0.977,
+    "dog": 0.762
+   },
+   "margin_when_right_median": 0.211,
+   "margin_when_wrong_median": 0.031,
+   "wrong_answers": 314,
+   "test_answers": 3000
+  },
+  "k3": {
+   "accuracy_mean": 0.867,
+   "accuracy_min": 0.6,
+   "accuracy_max": 1.0,
+   "per_class": {
+    "bird": 0.921,
+    "cat": 0.967,
+    "dog": 0.713
+   },
+   "margin_when_right_median": 0.213,
+   "margin_when_wrong_median": 0.037,
+   "wrong_answers": 399,
+   "test_answers": 3000
+  }
+ }
+}

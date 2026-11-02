@@ -1,0 +1,139 @@
+{
+ "date": "2026-11-02T16:11:41.879Z",
+ "chrome": "156.0.8078.74",
+ "iso": false,
+ "ok": true,
+ "result": {
+  "task": "whisper",
+  "threads": 1,
+  "version": "1.30.0",
+  "where": "worker",
+  "isolated": false,
+  "import_ms": 175.39999997615814,
+  "clips": {
+   "tts": {
+    "seconds": 7.178125,
+    "run_s": [
+     3.8715,
+     4.377,
+     4.0941000000238414
+    ],
+    "rtf": 0.5393469743143231,
+    "rtf_first": 0.5393469743143231,
+    "text": "Draw a red circle in the middle of the screen, then make it bounce off the walls and change color every time it hits one."
+   },
+   "gettysburg": {
+    "seconds": 12,
+    "run_s": [
+     5.201300000011921,
+     4.8655,
+     4.397699999988079
+    ],
+    "rtf": 0.3664749999990066,
+    "rtf_first": 0.4334416666676601,
+    "text": "This is a LibraVox recording. All LibraVox recordings are in the public domain. For more information or to volunteer, please visit libravox.org."
+   }
+  },
+  "model_bytes": 40843851,
+  "ready_ms": 3473.399999976158,
+  "resources": [
+   {
+    "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort.wasm.mjs",
+    "encoded": 107559
+   },
+   {
+    "url": "http://127.0.0.1:58128/a/tts.wav",
+    "encoded": 229744
+   },
+   {
+    "url": "http://127.0.0.1:58128/a/gettysburg.wav",
+    "encoded": 384044
+   },
+   {
+    "url": "http://127.0.0.1:58128/m/whisper_tiny_en/onnx/encoder_model_quantized.onnx",
+    "encoded": 10124993
+   },
+   {
+    "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort-wasm-simd-threaded.mjs",
+    "encoded": 9338
+   },
+   {
+    "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort-wasm-simd-threaded.wasm",
+    "encoded": 3073897
+   },
+   {
+    "url": "http://127.0.0.1:58128/m/whisper_tiny_en/onnx/decoder_model_merged_quantized.onnx",
+    "encoded": 30718858
+   },
+   {
+    "url": "http://127.0.0.1:58128/m/whisper_tiny_en/tokenizer.json",
+    "encoded": 2405679
+   },
+   {
+    "url": "http://127.0.0.1:58128/m/whisper_tiny_en/generation_config.json",
+    "encoded": 1646
+   }
+  ]
+ },
+ "hosts": {
+  "127.0.0.1 (ours)": 10,
+  "cdn.jsdelivr.net": 3
+ },
+ "requests": [
+  {
+   "url": "/page.html?task=whisper&threads=1&version=1.30.0",
+   "bytes": 627
+  },
+  {
+   "url": "/worker.js",
+   "bytes": 0
+  },
+  {
+   "url": "/yamnet_web.js",
+   "bytes": 103
+  },
+  {
+   "url": "/whisper_web.js",
+   "bytes": 6066
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort.wasm.mjs",
+   "bytes": 108444
+  },
+  {
+   "url": "/a/tts.wav",
+   "bytes": 229758
+  },
+  {
+   "url": "/a/gettysburg.wav",
+   "bytes": 384058
+  },
+  {
+   "url": "/m/whisper_tiny_en/onnx/encoder_model_quantized.onnx",
+   "bytes": 10125008
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort-wasm-simd-threaded.mjs",
+   "bytes": 9739
+  },
+  {
+   "url": "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort-wasm-simd-threaded.wasm",
+   "bytes": 3075101
+  },
+  {
+   "url": "/m/whisper_tiny_en/onnx/decoder_model_merged_quantized.onnx",
+   "bytes": 30718874
+  },
+  {
+   "url": "/m/whisper_tiny_en/tokenizer.json",
+   "bytes": 2405694
+  },
+  {
+   "url": "/m/whisper_tiny_en/generation_config.json",
+   "bytes": 1658
+  }
+ ],
+ "logs": [
+  "error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ]
+}
