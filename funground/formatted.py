@@ -154,7 +154,7 @@ class FormattedString:
         """
         from .api import active_sketch
         from .sketch import Sketch
-        from .typography import TEXT_STYLES, Font
+        from .typography import TEXT_STYLES, Font, note_chosen
 
         sketch = active_sketch()
         key = None
@@ -172,6 +172,7 @@ class FormattedString:
             else:
                 raise TypeError(
                     f"FormattedString.append() needs a font from f.load_font() or a path, not {type(font).__name__}")
+            note_chosen(key)
         if size is not None:
             if isinstance(size, bool) or not isinstance(size, Real):
                 raise TypeError(f"FormattedString.append() takes a number for size, not {type(size).__name__}")
