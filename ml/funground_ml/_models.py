@@ -1,8 +1,9 @@
 """The model files funground-ml uses: one table, each pinned to a commit and a checksum (D-124, D-125).
 
-The files are the OpenCV Zoo's ONNX conversions of MediaPipe's pose and hand models (Apache-2.0), kept on the Hugging
-Face Hub in the ``opencv`` organisation. Each address names a commit, never ``main``, so the file cannot change under a
-learner. ``_fetch`` checks the size and the SHA-256 before it keeps a download.
+The pose and hand files are the OpenCV Zoo's ONNX conversions of MediaPipe's models (Apache-2.0), kept on the Hugging
+Face Hub in the ``opencv`` organisation. The person file is Google's MediaPipe selfie segmentation model (the general one, 256 x 256,
+Apache-2.0) as ONNX, from the ``onnx-community`` organisation. Each address names a commit, never ``main``, so the file cannot
+change under a learner. ``_fetch`` checks the size and the SHA-256 before it keeps a download.
 """
 from __future__ import annotations
 
@@ -21,10 +22,16 @@ class Model:
     size: int          # bytes
     sha256: str
     licence: str
+    kept_as: str = ""  # the name the copy in ``models/`` has, when the file's own name says too little ("onnx/model.onnx")
 
     @property
     def url(self) -> str:
         return f"{HUB}/{self.repo}/resolve/{self.commit}/{self.file}"
+
+    @property
+    def local_name(self) -> str:
+        """The file name of the copy kept beside the sketch."""
+        return self.kept_as or self.file
 
 
 MODELS: dict[str, Model] = {m.name: m for m in (
@@ -40,10 +47,15 @@ MODELS: dict[str, Model] = {m.name: m for m in (
     Model("hand_landmarks", "opencv/handpose_estimation_mediapipe", "4b2a0b446e5cf2f11fb6b2c7251091c035d2c1f7",
           "handpose_estimation_mediapipe_2023feb.onnx", 4099621,
           "db0898ae717b76b075d9bf563af315b29562e11f8df5027a1ef07b02bef6d81c", "Apache-2.0"),
+    Model("person_mask", "onnx-community/mediapipe_selfie_segmentation", "be49485c8e027524be38591817fc5cd31bd9d00e",
+          "onnx/model.onnx", 462352,
+          "3241ac4ad8aa35bdaf33946776db29f7c283a413aa0b0dacb9483594b4531aad", "Apache-2.0",
+          kept_as="mediapipe_selfie_segmentation.onnx"),
 )}
 
-# What each task needs: a finder, then the landmark model.
-TASKS: dict[str, tuple[str, str]] = {
+# What each task needs: a finder, then the landmark model (pose and hand); one model for the person's mask.
+TASKS: dict[str, tuple[str, ...]] = {
     "pose": ("pose_detector", "pose_landmarks"),
     "hand": ("palm_detector", "hand_landmarks"),
+    "person": ("person_mask",),
 }

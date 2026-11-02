@@ -1,6 +1,6 @@
 # The models package: `funground-ml` on the desktop (S-232, D-124, D-125)
 
-**Status:** built on 2 November 2026 for the desktop and for Play; the contract rows ML1 to ML4 are drafts.
+**Status:** built on 2 November 2026 for the desktop and for Play; the contract rows ML1 to ML5 are drafts. `ml.person` (S-233) was added on 2 November 2026: see "The person's mask".
 
 ## Problem
 
@@ -14,12 +14,12 @@ stay true.
 ml/                          its own distribution, funground-ml 0.1.0.dev0 (LGPL-2.1-only)
   pyproject.toml             funground, onnxruntime>=1.31,<2, numpy>=2,<3, pillow>=11,<13
   funground_ml/
-    __init__.py              pose(), hand(): the only public names, with their docstrings
-    _tasks.py                from a source to a Body or a Hand: the desktop path, and the host path (Play)
+    __init__.py              pose(), hand(), person(): the only public names, with their docstrings
+    _tasks.py                from a source to a Body, a Hand or a Picture: the desktop path, and the host path (Play)
     _source.py               what a source is, and the answer kept for each source and frame
     _glue.py                 numpy and Pillow: cut, detect, landmarks, tracker (no onnxruntime)
     _results.py              Body, Hand, the point names, the mirrored swap
-    _models.py               the table of four files: Hub address (pinned commit), size, SHA-256, licence
+    _models.py               the table of five files: Hub address (pinned commit), size, SHA-256, licence
     _fetch.py                the download and the kept copy
     _runtime.py              the only module that imports onnxruntime
   tests/                     unit tests, model tests, the two test photographs (data/SOURCES.md)
@@ -144,6 +144,33 @@ has no `async`. How it is wired is in `Web_Runner_Note.md` ("Models"); this sect
   the largest difference from the desktop's points is 0.03 px for the body (33 points, mean 0.01 px) and 0.41 px for the hand (21 points, mean 0.20 px), against the 5 px bound
   (S-231's canvas crop gave 4.65 px and 2.17 px). Speed with a new picture sent every frame, the box reused as above: between 5.2 and 8.5 pose answers a second and between 6.7 and 9.2 hand answers a second in two runs (the machine is noisy), with the sketch drawing at the same time.
   The first answer waits for the library (3 MB) and the models (18 MB or 8 MB) to download once; after that they come from the browser's cache.
+
+## The person's mask (S-233, built 2 November 2026)
+
+`ml.person(source)` (contract ML5) gives a new picture of the source in which everything but the person is see-through.
+
+- **The model.** One file, `mediapipe_selfie_segmentation.onnx` (kept name; `onnx/model.onnx` in the repository
+  `onnx-community/mediapipe_selfie_segmentation`, commit `be49485c8e027524be38591817fc5cd31bd9d00e`, 462,352 bytes, Apache-2.0): Google's
+  MediaPipe selfie segmentation, the **general** variant (256 x 256 in, 256 x 256 out; the landscape variant reads 144 x 256 and is not
+  used). It is the file the S-231 spike measured. `Model.kept_as` names the copy in `models/` when the repository's own name ("model.onnx")
+  says too little; `TASKS["person"]` has one name, and `_fetch.ensure` gives its path as `{"model": path}`.
+- **In and out.** `_glue.person_mask`: the picture is stretched (not letterboxed) to 256 x 256 with Pillow's bilinear resize, scaled to 0..1 with no
+  mean, channels first; the model's 0..1 output becomes bytes (0..255), not thresholded. `models-glue.js` has the twin (`stretchToTensor`,
+  `personMask`), with Pillow's resize (a triangle filter that averages when shrinking) written out so the two inputs agree to the grey level.
+- **From mask to picture.** Both platforms end in `Picture._masked_copy(mask, width, height)`, a private core helper (no public API) that calls
+  `renderers.cairo2d.mask_pixels`: Cairo paints the picture through the mask as an A8 pattern scaled over the picture (bilinear, edge pixels carried on),
+  so each premultiplied pixel is multiplied by the mask. It is one paint in C. A plain Python loop for the same work took 204 ms in CPython for 640 x 480
+  (more in Pyodide, which has no numpy), against 3.7 ms for the Cairo call in Pyodide, so the mask goes to Python at its own 256 x 256 size and
+  there is no full-size alpha plane to send. The desktop uses the same helper, so the last step cannot differ between platforms.
+- **Play.** `HostModels` has two result types: `PointsResult` (pose and hand) and `MaskResult` (person); the page calls `push` or `push_mask`
+  (`Session.push_models_mask`). `_tasks._from_host` takes a builder that is given the frame and the result, one builder for points and one for the mask.
+- **Measured** (Windows, this machine): the same sketch on both platforms on `standing_woman_640.jpg` (640 x 960): the alpha planes differ by 0.08 of 255 on average,
+  0.0 percent of the pixels by more than 32, largest difference 37 (the bound, set before measuring: mean 3, at most 1 percent over 32). The desktop gives 85
+  pictures a second at 640 x 480 (11.8 ms a call, new frame each time: Pillow image 1.0 ms, resize and model 4.9 ms, cut-out 3.0 ms); Play about 16 answers a second
+  with the sketch drawing at about 32 frames a second.
+- **Tests.** `ml/tests/test_unit.py` (a stand-in model: size, alpha, soft edge, no threshold, nobody, cache, high density, the download of a one-file task),
+  `test_host.py` (the mask result and the page path), `test_models.py` (the photograph: her dress solid, the corners clear, within half a grey level of the spike's own mask),
+  `tests/test_pictures.py` (`_masked_copy`), and `funground-web/tools/test_models.py` (Play against the desktop, the mask time, the speed).
 
 ## What is left
 

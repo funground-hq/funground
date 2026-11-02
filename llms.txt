@@ -143,9 +143,9 @@ Names: `camera.open`, `camera.names`, `camera.load_clip`.
 
 ### The models library
 
-`from funground import ml`. A body and a hand in a camera or a picture, found on your own computer (a separate install, funground-ml). New in 0.2.
+`from funground import ml`. A body, a hand and the outline of a person in a camera or a picture, found on your own computer (a separate install, funground-ml). New in 0.2.
 
-Names: `ml.pose`, `ml.hand`.
+Names: `ml.pose`, `ml.hand`, `ml.person`.
 
 [Reference](https://github.com/funground-hq/funground/blob/main/docs/reference/API.md#the-models-library)
 

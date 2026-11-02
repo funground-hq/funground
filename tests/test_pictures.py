@@ -409,3 +409,74 @@ def test_a_picture_made_before_the_run_keeps_its_number_in_that_run():
     assert early.name == "graphics-1" and names == ["graphics-2"]
     run(s, draw)                                       # a later run starts counting again
     assert names[-1] == "graphics-1"
+
+
+# ---- Picture._masked_copy (private; funground-ml's ml.person, S-233) ------------------------------------------
+def _bgra(width, height, b=40, g=120, r=200, a=255):
+    """Premultiplied BGRA bytes of one flat colour."""
+    k = a / 255
+    return bytes([round(b * k), round(g * k), round(r * k), a]) * (width * height)
+
+
+def _pixel(picture, x, y):
+    snap = picture._snapshot()
+    i = (y * snap.phys_width + x) * 4
+    return tuple(snap.pixels[i:i + 4])                  # blue, green, red, alpha
+
+
+def test_a_masked_copy_keeps_the_size_and_scale_and_leaves_the_original_alone():
+    fresh(30, 30)
+    original = Picture(20, 10, 2.0, "photo")            # a high-density picture: 40 x 20 real pixels
+    original._write_pixels(_bgra(40, 20))
+    before = original._snapshot().pixels
+    cut = original._masked_copy(bytes([255]) * 4, 2, 2)
+    assert (cut.width, cut.height, cut._scale) == (20, 10, 2.0)
+    snap = cut._snapshot()
+    assert (snap.phys_width, snap.phys_height, snap.logical_width, snap.logical_height) == (40, 20, 20, 10)
+    assert snap.history is None and cut is not original and cut.name != original.name
+    assert original._snapshot().pixels == before
+
+
+def test_a_full_mask_changes_nothing_and_an_empty_mask_makes_everything_see_through():
+    fresh(30, 30)
+    original = Picture(16, 12, 1.0, "photo")
+    original._write_pixels(_bgra(16, 12))
+    assert original._masked_copy(bytes([255]) * 9, 3, 3)._snapshot().pixels == original._snapshot().pixels
+    assert set(original._masked_copy(bytes(9), 3, 3)._snapshot().pixels) == {0}
+
+
+def test_a_mask_is_stretched_smoothly_over_the_picture_and_the_colour_goes_with_the_alpha():
+    fresh(30, 30)
+    original = Picture(32, 4, 1.0, "photo")
+    original._write_pixels(_bgra(32, 4))
+    cut = original._masked_copy(bytes([0, 0, 255, 255]), 4, 1)          # see-through on the left, solid on the right
+    alphas = [_pixel(cut, x, 2)[3] for x in range(32)]
+    assert alphas[:8] == [0] * 8 and alphas[-8:] == [255] * 8           # the mask's edge pixels carry on to the edge
+    assert alphas == sorted(alphas) and 0 < alphas[16] < 255            # a soft slope between, never a step
+    for x in (3, 14, 16, 18, 28):
+        b, g, r, a = _pixel(cut, x, 2)
+        assert max(abs(v - round(c * a / 255)) for v, c in zip((b, g, r), (40, 120, 200))) <= 1
+
+
+def test_a_picture_that_is_already_see_through_stays_see_through_under_a_full_mask():
+    fresh(30, 30)
+    original = Picture(8, 8, 1.0, "photo")
+    original._write_pixels(_bgra(8, 8, a=128))
+    assert _pixel(original._masked_copy(bytes([255]), 1, 1), 4, 4) == _pixel(original, 4, 4)
+
+
+def test_a_mask_of_the_wrong_length_is_refused():
+    fresh(30, 30)
+    original = Picture(8, 8, 1.0, "photo")
+    with pytest.raises(ValueError, match="3 x 3 must be 9 bytes, not 8"):
+        original._masked_copy(bytes(8), 3, 3)
+    with pytest.raises(ValueError, match="not empty"):
+        original._masked_copy(b"", 0, 0)
+
+
+def test_a_mask_wider_than_the_picture_is_shrunk_too():
+    fresh(30, 30)
+    original = Picture(4, 4, 1.0, "photo")
+    original._write_pixels(_bgra(4, 4))
+    cut = original._masked_copy(bytes([255]) * (64 * 64), 64, 64)
+    assert _pixel(cut, 2, 2) == _pixel(original, 2, 2)

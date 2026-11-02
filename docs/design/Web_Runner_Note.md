@@ -108,6 +108,9 @@ is given an `on_models(command, fields)` callback (the last argument of `Session
   `x0, y0, x1, y1, ...` on the pixels it was sent (or `None` for nobody). `HostModels.latest(task, key)` is what funground_ml reads. A result
   for a source the run has forgotten is ignored. `Session.models_unavailable(task, reason)` prints the reason once and stops
   asking for that task in this run.
+- **The person's mask (S-233).** `ml.person(cam)` has a result that is a mask, not points: the worker answers `{task, key, mask, maskWidth, maskHeight, width, height}` with the
+  256 x 256 mask as bytes, and `Session.push_models_mask(task, key, mask, mask_width, mask_height, width, height)` delivers it (`HostModels.push_mask`, a `MaskResult`). Python
+  stretches it over the picture and applies it in Cairo (`Picture._masked_copy`, 3.7 ms at 640 x 480 in Pyodide).
 - **The answer.** `ml.pose(cam)` gives the newest result the browser has for that source and task: `None` until the first arrives,
   and it can be one frame behind (contract ML3). The same answer twice in a frame still holds: the kept answer is keyed on the
   picture, its version and the count of results (`HostModels.generation`), and results are only delivered between two steps. A still
