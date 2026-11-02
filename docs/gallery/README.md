@@ -2741,6 +2741,66 @@ The dots get colour, but only from a palette of three colours you choose: dark c
 
 Source: [`examples/gallery/pixels/06_palette_and_gif.py`](../../examples/gallery/pixels/06_palette_and_gif.py)
 
+## Models: your body and your hands
+
+### A stick figure on a photograph
+
+![A stick figure on a photograph](images/models-01_stick_figure.png)
+
+A photograph of Mahatma Gandhi arriving in England in 1931, and a green stick figure drawn over him. The computer finds his body, and the sketch joins the points it found. It needs the models library, which is a separate install: funground-ml.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there.
+- Each point is a Vector in the photo's own pixels, so body.left_shoulder.x and .y can go straight into f.line().
+- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
+- The nose gets a circle. The first run downloads the pose model (once) into a models folder beside the sketch.
+- The photograph is drawn first with f.image(), so the figure lands on top of it.
+
+**Make it yours**
+
+- Add the ears and the mouth: body.left_ear, body.right_ear, body.mouth_left and body.mouth_right.
+- Change f.stroke("lime") and f.stroke_width(4) to give the figure a new look.
+- Draw a small circle at every point in body.points.values() instead of lines.
+- Try your own photo: put it in the data folder and change the name in f.load_image().
+
+</details>
+
+Source: [`examples/gallery/models/01_stick_figure.py`](../../examples/gallery/models/01_stick_figure.py)
+
+### Follow your finger
+
+![Follow your finger](images/models-02_follow_your_finger.png)
+
+Hold up a hand to your camera. A golden trail follows the tip of your index finger, and it fades as the finger moves on. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml. *(Uses real time, so the picture varies from run to run.)*
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- ml.hand(cam) looks for a hand in the camera's latest frame. It gives a hand with 21 named points, or None.
+- hand.index_finger_tip is a Vector. The sketch keeps the last TRAIL of them in a list, newest last.
+- Each line of the trail is more solid than the one before it, so the oldest part fades away.
+- When the hand goes away, the trail shrinks one point at a time until it is gone.
+- The camera is mirrored by default, so the trail moves the way your finger seems to move on the screen.
+
+**Make it yours**
+
+- Change TRAIL to 15 for a short tail, or to 120 for a long ribbon.
+- Follow another point, such as hand.thumb_tip or hand.wrist.
+- Draw a trail for the thumb as well, in another colour.
+- Use f.stroke_width() to make the line thicker near the fingertip.
+
+</details>
+
+Source: [`examples/gallery/models/02_follow_your_finger.py`](../../examples/gallery/models/02_follow_your_finger.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it

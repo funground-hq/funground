@@ -27,6 +27,7 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
   import line, and a `TypeError` after it (the library can be called, only to say this).
 
 ### Added
+- **The models library** (S-232, D-125, ADR-007). A body and a hand in your camera or a picture, found on your own computer: `from funground import ml`, then `ml.pose(source)` gives a body with 33 named points and `ml.hand(source)` gives a hand with 21, each point an `f.Vector` in pixels, or `None` if no one is there. It is a separate install: `python -m pip install funground-ml`. The first call downloads the model it needs (about 18 MB for the body, 8 MB for the hand), once. Nothing the camera sees leaves the computer. It works in Play too, where the answer can be one frame behind. There is a guide chapter ([Models: your body and your hands](docs/guide/20_models.md)), two gallery examples and a Quick Reference row. **New dependency:** `onnxruntime`, in `funground-ml` only, not in the core.
 - **Editors know funground** (S-130, S-195): the package is typed (`py.typed`, a literal `__all__`, typed live
   values), so VS Code lists every function with its arguments after `f.`, knows `f.width` is a number and accepts the
   star style. `funground/completions.json`, generated with the API reference, gives the same list (names, arguments,
