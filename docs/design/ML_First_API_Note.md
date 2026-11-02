@@ -39,7 +39,7 @@ f.run()
 | Name | What it gives |
 |---|---|
 | `ml.pose(source)` | The body in a camera or picture, or `None` if there is no one. Its 33 points are named, as `body.nose`, `body.left_wrist`, `body.right_ankle`, and so on. Each point is an `f.Vector` in canvas pixels, on the source as drawn at `(0, 0)`. `body.points` is a dict of every name and point; `body.score` (0 to 1) says how sure the model is |
-| `ml.hand(source)` | One hand, or `None`, with 21 named points: `hand.wrist`, `hand.thumb_tip`, `hand.index_tip`, and so on, plus `hand.points` and `hand.score` |
+| `ml.hand(source)` | One hand, or `None`, with 21 named points: `hand.wrist`, `hand.thumb_tip`, `hand.index_finger_tip`, and so on, plus `hand.points` and `hand.score` |
 | `ml.person(source)` | A picture of the source with everything that is not the person made see-through: `f.image(ml.person(cam), 0, 0)` |
 
 **The source** is a camera (`camera.open()`) or a picture (`f.load_image()`). The camera's frame is the one taken before
