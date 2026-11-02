@@ -18,7 +18,7 @@ from typing import Any, Protocol, runtime_checkable
 from . import ir
 from ._options import SaveText
 from .platform.base import InputState
-from .renderers.cairo2d import CairoRenderer
+from .renderers.cairo2d import CairoRenderer, mask_pixels
 from .sketch import Sketch
 
 # contract P2: the drawing vocabulary exposed as picture methods, forwarded to the inner
@@ -370,6 +370,22 @@ class Picture:
         other._sketch._name_root = self._sketch._name_root
         other._write_pixels(snap.pixels)
         other._history = None if self._history is None else list(self._history)
+        return other
+
+    def _masked_copy(self, mask: bytes, mask_width: int, mask_height: int) -> "Picture":
+        """A new picture with this one's size and scale, each pixel multiplied by a mask (private; funground-ml's ``ml.person``).
+
+        *mask* is ``mask_width * mask_height`` bytes, one per pixel, stretched smoothly over the whole picture: 0 makes a
+        pixel see-through, 255 leaves it as it is, and the numbers between give soft edges. The colours are multiplied
+        with the alpha, as the picture's pixels are stored (premultiplied), so a half-see-through pixel has half the
+        colour and half the alpha. This picture is not changed. Unlike ``mask()`` it needs no other picture, uses
+        no pygame, and does its work in Cairo, so it is quick in a web page too.
+        """
+        snap = self._snapshot()
+        other = Picture(self.width, self.height, self._scale, self._sketch._next_graphics_name())
+        other._sketch._name_root = self._sketch._name_root
+        other._write_pixels(mask_pixels(snap.pixels, snap.phys_width, snap.phys_height, mask, mask_width, mask_height))
+        other._history = None
         return other
 
     def resize(self, width: int, height: int) -> None:

@@ -2801,6 +2801,35 @@ Hold up a hand to your camera. A golden trail follows the tip of your index fing
 
 Source: [`examples/gallery/models/02_follow_your_finger.py`](../../examples/gallery/models/02_follow_your_finger.py)
 
+### In front of the sea
+
+![In front of the sea](images/models-03_in_front_of_the_sea.png)
+
+A woman on a catwalk is cut out of her photograph and put in front of a sunset sea that the sketch draws itself. The computer finds the person, and everything else in the photograph becomes see-through. It needs the models library, which is a separate install: funground-ml.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- ml.person(photo) gives a new picture the size of the photo. Only the person is left in it. The rest is see-through.
+- The edge is soft. A pixel on the edge is a little see-through, so the cut-out blends into what is behind it.
+- The sky is a stack of thin bands. Each band is a step of f.lerp_color() between two colours. The sea is built the same way.
+- Wavy lines are drawn on the sea with f.begin_shape(), f.vertex() and a sine wave.
+- The background is drawn first. f.image() draws the person last, so she stands in front.
+- With a camera, ml.person(cam) works the same way. Use f.image(ml.person(cam), 0, 0) to put yourself in front of the sea.
+
+**Make it yours**
+
+- Change the four colours at the top for a morning, or a night.
+- Move HORIZON to put the sea higher or lower behind her.
+- Add stars to the sky with f.circle() and f.random_seed().
+- Draw the person twice: first with f.opacity(80) and a shift in x, then normally, for a shadow.
+
+</details>
+
+Source: [`examples/gallery/models/03_in_front_of_the_sea.py`](../../examples/gallery/models/03_in_front_of_the_sea.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it

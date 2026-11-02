@@ -841,3 +841,33 @@ def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: i
         ctx.get_source().set_filter(cairo.FILTER_NEAREST)
     ctx.paint_with_alpha(alpha)
     ctx.restore()
+
+
+def mask_pixels(pixel_bytes, phys_w: int, phys_h: int, mask: bytes, mask_w: int, mask_h: int) -> bytes:
+    """A Picture's raw pixels (BGRA premultiplied) multiplied by a smaller or larger mask of one byte per pixel.
+
+    The mask is stretched over the whole picture, smoothly (bilinear when it is enlarged), and each pixel is multiplied
+    by it: 0 makes the pixel see-through, 255 leaves it as it was. Cairo does it in one paint, so it is fast where
+    Python loops are not (a web page, where there is no numpy). The pixels must be Cairo's own layout, as in
+    ``paint_picture_pixels``. Used by ``Picture._masked_copy`` (funground-ml's ``ml.person``).
+    """
+    if phys_w <= 0 or phys_h <= 0 or mask_w <= 0 or mask_h <= 0:
+        raise ValueError("mask_pixels needs a picture and a mask that are not empty")
+    if len(mask) != mask_w * mask_h:
+        raise ValueError(f"a mask of {mask_w} x {mask_h} must be {mask_w * mask_h} bytes, not {len(mask)}")
+    stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_ARGB32, phys_w)
+    source = cairo.ImageSurface.create_for_data(bytearray(pixel_bytes), cairo.FORMAT_ARGB32, phys_w, phys_h, stride)
+    mask_stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_A8, mask_w)
+    rows = bytearray(mask_stride * mask_h)                    # Cairo wants each row padded to a multiple of 4 bytes
+    for y in range(mask_h):
+        rows[y * mask_stride:y * mask_stride + mask_w] = mask[y * mask_w:(y + 1) * mask_w]
+    pattern = cairo.SurfacePattern(cairo.ImageSurface.create_for_data(rows, cairo.FORMAT_A8, mask_w, mask_h, mask_stride))
+    pattern.set_extend(cairo.EXTEND_PAD)                      # the mask's edge pixels carry on to the picture's edge
+    pattern.set_filter(cairo.FILTER_GOOD)
+    pattern.set_matrix(cairo.Matrix(xx=mask_w / phys_w, yy=mask_h / phys_h))     # picture pixels -> mask pixels
+    out = cairo.ImageSurface(cairo.FORMAT_ARGB32, phys_w, phys_h)
+    ctx = cairo.Context(out)
+    ctx.set_source_surface(source, 0, 0)
+    ctx.mask(pattern)
+    out.flush()
+    return bytes(out.get_data())

@@ -22,9 +22,9 @@ CODE = (ROOT / "ml" / "funground_ml")
 
 
 # ---- names and results
-def test_the_public_names_are_pose_and_hand_only():
-    assert funground_ml.__all__ == ["pose", "hand"]
-    assert callable(funground_ml.pose) and callable(funground_ml.hand)
+def test_the_public_names_are_pose_hand_and_person_only():
+    assert funground_ml.__all__ == ["pose", "hand", "person"]
+    assert callable(funground_ml.pose) and callable(funground_ml.hand) and callable(funground_ml.person)
 
 
 def test_there_are_33_body_names_and_21_hand_names_without_repeats():
@@ -107,6 +107,7 @@ def test_a_camera_with_no_frame_yet_gives_none_without_touching_the_models(monke
     monkeypatch.setattr(_fetch, "ensure", boom)
     assert funground_ml.pose(FakeCamera(None)) is None
     assert funground_ml.hand(FakeCamera(None)) is None
+    assert funground_ml.person(FakeCamera(None)) is None
 
 
 def test_a_mirrored_camera_gives_a_mirrored_frame_and_a_picture_does_not():
@@ -242,14 +243,23 @@ def test_a_picture_of_another_size_starts_again():
 
 
 # ---- the model table and the download
-def test_the_table_has_four_pinned_files_from_the_hub():
-    assert len(_models.MODELS) == 4
+def test_the_table_has_five_pinned_files_from_the_hub():
+    assert len(_models.MODELS) == 5
     for model in _models.MODELS.values():
-        assert re.fullmatch(r"https://huggingface\.co/opencv/[a-z_]+/resolve/[0-9a-f]{40}/[\w.]+\.onnx", model.url), model.url
+        assert re.fullmatch(r"https://huggingface\.co/(opencv|onnx-community)/[a-z_]+/resolve/[0-9a-f]{40}/[\w./]+\.onnx", model.url), model.url
         assert "/main/" not in model.url
-        assert re.fullmatch(r"[0-9a-f]{64}", model.sha256) and model.size > 1_000_000
+        assert re.fullmatch(r"[0-9a-f]{64}", model.sha256) and model.size > 100_000
         assert model.licence == "Apache-2.0"
-    assert set(name for pair in _models.TASKS.values() for name in pair) == set(_models.MODELS)
+        assert "/" not in model.local_name                                  # a copy is kept straight in models/
+    assert set(name for names in _models.TASKS.values() for name in names) == set(_models.MODELS)
+
+
+def test_the_person_task_has_one_file_that_is_the_general_selfie_model():
+    assert _models.TASKS["person"] == ("person_mask",)
+    model = _models.MODELS["person_mask"]
+    assert model.repo == "onnx-community/mediapipe_selfie_segmentation" and model.file == "onnx/model.onnx"
+    assert model.local_name == "mediapipe_selfie_segmentation.onnx" and model.size == 462352
+    assert _models.MODELS["pose_detector"].local_name == _models.MODELS["pose_detector"].file     # the others keep their own names
 
 
 class _Response(io.BytesIO):
@@ -443,5 +453,153 @@ def test_the_core_stub_says_it_is_a_separate_install_when_the_package_is_hidden(
 def test_the_core_stub_passes_the_names_on():
     from funground import ml
 
-    assert ml.pose is funground_ml.pose and ml.hand is funground_ml.hand and ml.__all__ == ["pose", "hand"]
+    assert ml.pose is funground_ml.pose and ml.hand is funground_ml.hand and ml.person is funground_ml.person
+    assert ml.__all__ == ["pose", "hand", "person"]
     assert "ml" not in f._PUBLIC_NAMES                                 # the naming trap: no public function is called ml
+
+
+# ---- the person's mask (S-233)
+def test_a_one_file_task_downloads_it_under_its_kept_name_and_gives_it_the_role_model(monkeypatch, clean_fetch, capsys):
+    import hashlib
+
+    data = b"m" * 1500
+    model = _models.Model("person_mask", "onnx-community/test", "0" * 40, "onnx/model.onnx", len(data),
+                          hashlib.sha256(data).hexdigest(), "Apache-2.0", kept_as="selfie.onnx")
+    monkeypatch.setattr(_fetch, "MODELS", {**_models.MODELS, "person_mask": model})
+    asked = _opener(monkeypatch, {model.url: data})
+    paths = _fetch.ensure("person", None, "ml.person()")
+    assert list(paths) == ["model"] and Path(paths["model"]) == clean_fetch / "selfie.onnx"
+    assert Path(paths["model"]).read_bytes() == data and asked == [model.url]
+    assert "Downloading the person model, 1 MB, once." in capsys.readouterr().out
+    _fetch.ensure("person", None, "ml.person()")
+    assert len(asked) == 1                                              # the kept copy is found by its kept name
+
+
+class _Selfie:
+    """Stands for the selfie model: it records what it was given and answers with a mask, 0 on the left, 1 on the right."""
+
+    def __init__(self, mask=None) -> None:
+        self.inputs = []
+        self.mask = mask
+
+    def get_inputs(self):
+        return [type("Input", (), {"name": "pixel_values"})()]
+
+    def run(self, outputs, feed):
+        import numpy as np
+
+        x = feed["pixel_values"]
+        self.inputs.append(x)
+        if self.mask is not None:
+            return [self.mask(x)]
+        alphas = np.zeros((1, 1, 256, 256), np.float32)
+        alphas[..., 128:] = 1.0
+        return [alphas]
+
+
+def _constant(value: float):
+    """A stand-in model's answer: the same mask value everywhere."""
+    def answer(x):
+        import numpy as np
+
+        return np.full((1, 1, 256, 256), value, np.float32)
+
+    return answer
+
+
+@pytest.fixture
+def selfie(monkeypatch):
+    from funground_ml import _runtime
+
+    model = _Selfie()
+    monkeypatch.setattr(_fetch, "ensure", lambda task, base, who: {"model": "unused"})
+    monkeypatch.setattr(_runtime, "session", lambda path: model)
+    return model
+
+
+def _alphas(picture):
+    snap = picture._snapshot()
+    return snap.pixels[3::4], snap.phys_width, snap.phys_height
+
+
+def test_the_person_is_a_new_picture_of_the_sources_size_with_the_masks_alpha(selfie):
+    from funground.picture import Picture
+
+    source = solid_picture(512, 8)                                          # twice the mask's width: its edge is smoothed
+    cut = funground_ml.person(source)
+    assert isinstance(cut, Picture) and cut is not source
+    assert (cut.width, cut.height) == (512, 8)
+    alphas, width, height = _alphas(cut)
+    assert (width, height) == (512, 8) and len(alphas) == 512 * 8
+    row = alphas[3 * 512:4 * 512]
+    assert row[:255] == bytes(255) and row[257:] == bytes([255]) * 255      # see-through on the left, solid on the right
+    assert 0 < row[255] < row[256] < 255                                    # and a soft edge between, not a step
+    assert _alphas(source)[0] == bytes([255]) * (512 * 8)                   # the source is not changed
+
+
+def test_the_colours_stay_the_sources_and_go_with_the_alpha_premultiplied(selfie):
+    cut = funground_ml.person(solid_picture(512, 8, blue=200))              # blue 200, green 90, red 120
+    pixels = cut._snapshot().pixels
+    right = (3 * 512 + 500) * 4
+    assert tuple(pixels[right:right + 4]) == (200, 90, 120, 255)            # solid: the source's own pixel
+    left = (3 * 512 + 2) * 4
+    assert tuple(pixels[left:left + 4]) == (0, 0, 0, 0)
+    edge = (3 * 512 + 255) * 4
+    b, g, r, a = pixels[edge:edge + 4]
+    assert 0 < a < 255 and max(abs(b - round(200 * a / 255)), abs(g - round(90 * a / 255)), abs(r - round(120 * a / 255))) <= 1
+
+
+def test_the_mask_is_not_thresholded(selfie):
+    selfie.mask = _constant(0.4)
+    alphas, _, _ = _alphas(funground_ml.person(solid_picture()))
+    assert set(alphas) == {102}                                              # 0.4 of 255, kept as it is
+
+
+def test_a_picture_with_nobody_in_it_is_see_through_everywhere_and_is_not_none(selfie):
+    selfie.mask = _constant(0.0)
+    cut = funground_ml.person(solid_picture(40, 30))
+    assert cut is not None and set(cut._snapshot().pixels) == {0}
+
+
+def test_an_empty_transparent_picture_stays_see_through_under_a_full_mask(selfie):
+    selfie.mask = _constant(1.0)
+    f.size(100, 100)
+    empty = f.create_graphics(50, 40)
+    assert set(funground_ml.person(empty)._snapshot().pixels) == {0}
+
+
+def test_the_model_gets_the_whole_picture_stretched_to_256_square_scaled_to_0_1(selfie):
+    funground_ml.person(solid_picture(64, 48, blue=51))
+    x = selfie.inputs[0]
+    assert x.shape == (1, 3, 256, 256) and x.dtype.name == "float32"
+    assert x[0, 0, 100, 100] == pytest.approx(120 / 255, abs=1e-6)           # channels first: red, green, blue
+    assert x[0, 1, 0, 255] == pytest.approx(90 / 255, abs=1e-6) and x[0, 2, 255, 0] == pytest.approx(51 / 255, abs=1e-6)
+
+
+def test_a_high_density_picture_gives_a_picture_with_the_same_logical_size_and_scale(selfie):
+    from funground.picture import Picture
+
+    source = Picture(20, 10, 2.0, "photo")
+    source._write_pixels(bytes([40, 120, 200, 255]) * (40 * 20))
+    cut = funground_ml.person(source)
+    snap = cut._snapshot()
+    assert (cut.width, cut.height, snap.phys_width, snap.phys_height, snap.scale) == (20, 10, 40, 20, 2.0)
+
+
+def test_the_same_picture_comes_twice_in_a_frame_and_a_new_one_for_a_new_frame(selfie):
+    picture = solid_picture()
+    camera = FakeCamera(picture)
+    first = funground_ml.person(camera)
+    assert funground_ml.person(camera) is first and len(selfie.inputs) == 1       # the model ran once
+    picture._write_pixels(bytes([9, 9, 9, 255]) * (64 * 48))                       # a new frame
+    assert funground_ml.person(camera) is not first and len(selfie.inputs) == 2
+
+
+def test_a_mirrored_camera_is_not_swapped_for_the_person(selfie):
+    plain, mirrored = funground_ml.person(FakeCamera(solid_picture(), mirror=False)), funground_ml.person(FakeCamera(solid_picture(), mirror=True))
+    assert plain._snapshot().pixels == mirrored._snapshot().pixels               # the mask is in the picture's own pixels
+
+
+def test_person_says_what_it_needs_when_given_something_else():
+    with pytest.raises(TypeError, match=r"ml\.person\(\) needs a camera from camera\.open\(\) or a picture from f\.load_image\(\), not str"):
+        funground_ml.person("a.png")

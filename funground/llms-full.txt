@@ -150,7 +150,7 @@ In the examples, `import funground as f` is understood. A library's examples als
 - The sound library: `load`, `create`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `drone`, `note_to_frequency`, `frequency_to_note`, `chord_notes`, `microphone`, `microphones`, `draw_wave`, `draw_spectrum`, `spectrogram`, `draw_pitch_line`
 - The sangeet library: `ragas`, `raga`, `talas`, `tala_info`, `tala`, `match_ragas`
 - The camera library: `open`, `names`, `load_clip`
-- The models library: `pose`, `hand`
+- The models library: `pose`, `hand`, `person`
 - Live values: `delta_time`, `frame_count`, `ground`, `height`, `is_key_pressed`, `is_mouse_pressed`, `key`, `key_code`, `mouse_button`, `mouse_x`, `mouse_y`, `pixels`, `pmouse_x`, `pmouse_y`, `width`
 - Classes in detail: `Sound`, `Microphone`, `Camera`, `Clip`, `Picture`, `Vector`, `FormattedString`, `Run`, `PathBuilder`, `Mark`, `Area`, `Ground`, `Cell`, `Grid`, `Path`, `Font`, `Control`, `Slider`, `Checkbox`, `Button`, `Color`, `Gradient`, `Raga`, `Tala`
 - Constants and reference tables
@@ -5055,6 +5055,42 @@ if palm:
 ```
 
 See also: `pose`.
+
+#### `ml.person`
+
+```py
+ml.person(source)
+```
+
+Cut the person out of a camera or a picture.
+
+You get a new picture, as big as the source, in which everything that is not the person is see-through. Draw it over
+anything you like: ``f.image(ml.person(cam), 0, 0)``. The edge is soft, not a hard line: a pixel can be a little
+see-through. The picture is in the source's own pixels, so a mirrored camera gives a mirrored picture, just as ``f.image(cam, 0, 0)``
+draws it. The source itself is not changed.
+
+The model always gives an outline, so a picture with no one in it does not give None: you get a picture that is see-through
+everywhere. Calling it twice in one frame on the same camera gives the same picture, and does the work once. The first call
+downloads the person model (under 1 MB) and keeps it in a ``models/`` folder beside your sketch; it prints one line when it
+does. In Play the browser keeps the copy, and the picture can be one frame behind the camera.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a camera from camera.open(), or a picture from f.load_image() or f.create_graphics(). |
+
+**Returns.** a Picture the size of the source with only the person showing, or None if the camera has no frame yet (in Play, also before the first answer).
+
+**Raises.**
+
+- `TypeError`: if source is not a camera or a picture.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+f.background("navy")
+f.image(ml.person(cam), 0, 0)
+```
+
+See also: `pose`, `hand`, `image`.
 
 ### Live values
 
