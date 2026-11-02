@@ -2,7 +2,7 @@
 
 **Dates:** 17 to 23 October 2026. Work in funground (PRs #16 to #21), `funground-web` (PRs #13 to #16),
 `funground-run.github.io` (PR #10) and `funground-hq.github.io` (PRs #27 to #29). Every story shipped when it was
-checked. **funground 0.1.0 was released on PyPI on 20 October.** **Awaiting sign-off.**
+checked. **funground 0.1.0 was released on PyPI on 20 October.** **Signed off 2 November 2026.**
 
 ## Outcome
 
@@ -83,3 +83,7 @@ S-211 attempt that was redone. Everything else, the release and every commit by 
 Shipping each story as it was checked kept the release separate from the work: 0.1.0 went out from its recorded
 candidate while Sprint 30's stories kept merging. The maintainer's reading of the live site again found what the tests
 missed (the invisible marker, the old install page).
+
+## Sign-off
+
+**Signed off by the maintainer, 2 November 2026** ("Sprints 25 to 31 signed off"). Sprint closed.

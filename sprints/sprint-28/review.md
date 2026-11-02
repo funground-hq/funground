@@ -1,7 +1,7 @@
 # Sprint 28 review — The camera (E-33)
 
 **Dates:** 16 October 2026. Work in funground (PR #10), `funground-web` (PR #11) and `funground-hq.github.io` (PR #23).
-All three merged and live the same day. **Awaiting sign-off.**
+All three merged and live the same day. **Signed off 2 November 2026.**
 
 ## Outcome
 
@@ -53,3 +53,7 @@ every frame after a key) and added the Mac sentence. Parts 3 to 5 by the main se
 
 A fake device on every layer (pygame's module in Python tests, Chrome's fake camera in the browser) let the whole story
 be tested without opening a camera, and the maintainer's single try with a real one confirmed it.
+
+## Sign-off
+
+**Signed off by the maintainer, 2 November 2026** ("Sprints 25 to 31 signed off"). Sprint closed.

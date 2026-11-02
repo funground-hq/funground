@@ -2,7 +2,7 @@
 
 **Dates:** 15 to 16 October 2026. Work in `funground-hq.github.io` (site PRs #17 to #22), `funground-run.github.io`
 (preview PRs #5 to #9), `funground-web` (PRs #9, #10) and funground (PRs #8, #9). Each story shipped when it was
-checked. **Awaiting sign-off.**
+checked. **Signed off 2 November 2026.**
 
 ## Outcome
 
@@ -65,3 +65,7 @@ None this sprint; the main session built and committed everything.
 
 Shipping each story when checked worked for the editor stories. It did not suit S-210, whose risk was only visible on
 the live host: it should have gone out behind a switch, first for a test page only.
+
+## Sign-off
+
+**Signed off by the maintainer, 2 November 2026** ("Sprints 25 to 31 signed off"). Sprint closed.
