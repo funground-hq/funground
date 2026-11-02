@@ -9194,6 +9194,15 @@
      "url": "reference/API.md#cls-Picture-mask"
     },
     {
+     "name": "outline",
+     "kind": "method",
+     "signature": "outline(points=80)",
+     "detail": "(points: int = 80) -> list[tuple[float, float]]",
+     "summary": "Give the border of the part you can see as a list of points, to draw, drag and clip with.",
+     "url": "reference/API.md#cls-Picture-outline",
+     "since": "0.2"
+    },
+    {
      "name": "pixels",
      "kind": "property",
      "signature": "pixels",
@@ -9204,8 +9213,8 @@
     {
      "name": "remove_background",
      "kind": "method",
-     "signature": "remove_background(empty, tolerance=30)",
-     "detail": "(empty: Picture, tolerance: int = 30) -> None",
+     "signature": "remove_background(empty, tolerance=30, tidy=False, at=None)",
+     "detail": "(empty: Picture, tolerance: int = 30, tidy: bool = False, at: tuple[float, float] | None = None) -> None",
      "summary": "Make every pixel that looks the same as an empty picture see-through, in place.",
      "url": "reference/API.md#cls-Picture-remove_background",
      "since": "0.2"
@@ -9213,8 +9222,8 @@
     {
      "name": "remove_color",
      "kind": "method",
-     "signature": "remove_color(color, tolerance=40)",
-     "detail": "(color: Any, tolerance: int = 40) -> None",
+     "signature": "remove_color(color, tolerance=40, tidy=False, at=None)",
+     "detail": "(color: Any, tolerance: int = 40, tidy: bool = False, at: tuple[float, float] | None = None) -> None",
      "summary": "Make every pixel that is close to a colour see-through, in place.",
      "url": "reference/API.md#cls-Picture-remove_color",
      "since": "0.2"

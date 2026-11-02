@@ -14,6 +14,7 @@ checks that against the real surface and refuses to guess if it ever differs.
 """
 from __future__ import annotations
 
+import math
 import re
 import struct
 
@@ -261,6 +262,99 @@ def remove_matching_bgra(bgra: bytes, width: int, height: int, tolerance: int,
     pygame.transform.threshold(out, surface, None if color is None else (*color, 255),
                                (tolerance, tolerance, tolerance, 255), (0, 0, 0, 0), 1, other, True)
     return rgba_to_bgra(pygame.image.tobytes(out, "RGBA"), width, height)
+
+
+# ------------------------------------------------------------------ tidy the cut-out, its outline (S-245, P12, P13)
+# All of this runs on pygame-ce masks (one bit per pixel, in C): no Python loop visits a pixel.
+def _visible(bgra: bytes, width: int, height: int, above: int) -> "pygame.mask.Mask":
+    """The pixels whose alpha is more than *above* (0 to 254). Alpha is the same in premultiplied and plain pixels."""
+    return pygame.mask.from_surface(pygame.image.frombuffer(bytearray(bgra), (width, height), "BGRA"), above)
+
+
+def check_at(at, width: int, height: int, name: str) -> tuple[float, float] | None:
+    """The ``at`` of a cut-out: ``None`` or a point (x, y) inside the picture, in logical pixels."""
+    if at is None:
+        return None
+    try:
+        x, y = at
+        ok = all(isinstance(v, (int, float)) and not isinstance(v, bool) and v == v for v in (x, y))
+    except (TypeError, ValueError):
+        ok = False
+    if not ok:
+        raise ValueError(f"{name}: at must be a point (x, y), such as at=(120, 200), not {at!r}")
+    if not (0 <= x < width and 0 <= y < height):
+        raise ValueError(f"{name}: the point {at!r} is outside the picture, which is {width} x {height}. "
+                         "Give a point on the part you want to keep")
+    return (x, y)
+
+
+def tidy_bgra(original_bgra: bytes, removed_bgra: bytes, width: int, height: int, at: tuple[int, int] | None,
+              name: str) -> bytes:
+    """Keep one connected part of a cut-out and fill its holes with the original pixels (contract P12).
+
+    *removed_bgra* is the picture after the removal (see-through where it matched); *original_bgra* is the same
+    picture before it. The part is the largest one, or the one that contains pixel *at* (physical pixels). A hole
+    is a piece of the outside that does not reach the border of the picture. Everything else is made see-through;
+    the part and its holes keep the original pixels exactly. A *at* pixel that is see-through is a ``ValueError``.
+    """
+    kept = _visible(removed_bgra, width, height, 0)
+    if at is not None:
+        if not kept.get_at(at):
+            raise ValueError(f"{name}: the point is on a see-through pixel, so there is no part to keep. "
+                             "Give a point on the part you want, or lower the tolerance")
+        body = kept.connected_component(at)
+    elif kept.count():
+        body = kept.connected_component()                   # the largest part
+    else:
+        return removed_bgra
+    # The holes: flood the outside from a frame of one pixel put round the picture. What the flood does not
+    # reach is the part and its holes.
+    framed = pygame.mask.Mask((width + 2, height + 2), fill=True)
+    framed.erase(body, (1, 1))
+    outside = framed.connected_component((0, 0))
+    region = pygame.mask.Mask((width, height), fill=True)
+    region.erase(outside, (-1, -1))
+    original = pygame.image.frombuffer(bytearray(original_bgra), (width, height), "BGRA")
+    shown = region.to_surface(setsurface=original, unsetcolor=(0, 0, 0, 0), dest=(0, 0))   # raw pixels are copied
+    return pygame.image.tobytes(shown, "BGRA")
+
+
+def check_outline_points(points, name: str) -> int:
+    """The number of points of an outline: a whole number, 3 or more."""
+    if isinstance(points, bool) or not isinstance(points, int) or points < 3:
+        raise ValueError(f"{name}: points must be a whole number, 3 or more, not {points!r}. "
+                         "It is the most points the outline may have")
+    return points
+
+
+def outline_bgra(bgra: bytes, width: int, height: int, points: int) -> list[tuple[float, float]]:
+    """The border of the largest visible part, as at most *points* points spread evenly along it (contract P13).
+
+    Visible means more than half opaque. The points are the centres of border pixels (physical pixels), or
+    points between two of them, in order round the part. A picture with nothing visible gives an empty list.
+    """
+    visible = _visible(bgra, width, height, 127)
+    if not visible.count():
+        return []
+    border = [(x + 0.5, y + 0.5) for x, y in visible.connected_component().outline()]   # the outer border only
+    if len(border) > 1 and border[-1] == border[0]:
+        border.pop()                                        # pygame repeats the first point to close the ring
+    if len(border) <= points:
+        return border
+    ring = border + [border[0]]                             # closed
+    steps = [math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(ring, ring[1:])]
+    total = sum(steps)
+    out: list[tuple[float, float]] = []
+    i, walked = 0, 0.0                                      # walked: the arc length at ring[i]
+    for k in range(points):
+        target = total * k / points
+        while i < len(steps) - 1 and walked + steps[i] <= target:
+            walked += steps[i]
+            i += 1
+        t = (target - walked) / steps[i] if steps[i] else 0.0
+        (ax, ay), (bx, by) = ring[i], ring[i + 1]
+        out.append((ax + (bx - ax) * t, ay + (by - ay) * t))
+    return out
 
 
 # ------------------------------------------------------------------ filters (S-080, P10)
