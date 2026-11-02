@@ -140,6 +140,9 @@ to the built-in family, remembering whichever style you last chose with `f.text_
 loaded font is in use, `f.text_style()` has no effect — load the bold or italic file itself
 instead, the way you would with any font on your computer.
 
+Loading a font does not use it. If you load a font and draw text but never call `f.text_font()`, funground
+prints "Lora was loaded but never chosen: add f.text_font(...) to use it" when the sketch ends.
+
 ```python
 import funground as f
 
