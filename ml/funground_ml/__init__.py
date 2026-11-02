@@ -32,7 +32,8 @@ def pose(source):
 
     The model finds one person. If there is no one it gives None, so ``if body:`` is enough. Calling it twice in one frame
     on the same camera gives the same body, and does the work once. The first call downloads the pose model (about 18 MB)
-    and keeps it in a ``models/`` folder beside your sketch; it prints one line when it does.
+    and keeps it in a ``models/`` folder beside your sketch; it prints one line when it does. In Play the browser
+    keeps the copy, and the answer can be one frame behind the picture.
 
     The body has 33 named points. Each is an f.Vector in pixels, on the source as drawn at (0, 0):
     nose, left_eye_inner, left_eye, left_eye_outer, right_eye_inner, right_eye, right_eye_outer, left_ear, right_ear,
@@ -70,7 +71,8 @@ def hand(source):
 
     The model finds one hand. If there is none it gives None, so ``if hand:`` is enough. Calling it twice in one frame on
     the same camera gives the same hand, and does the work once. The first call downloads the hand model (about 8 MB) and
-    keeps it in a ``models/`` folder beside your sketch; it prints one line when it does.
+    keeps it in a ``models/`` folder beside your sketch; it prints one line when it does. In Play the browser
+    keeps the copy, and the answer can be one frame behind the picture.
 
     The hand has 21 named points. Each is an f.Vector in pixels, on the source as drawn at (0, 0):
     wrist, thumb_cmc, thumb_mcp, thumb_ip, thumb_tip, index_finger_mcp, index_finger_pip, index_finger_dip,
