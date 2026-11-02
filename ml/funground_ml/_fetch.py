@@ -102,22 +102,24 @@ def _download(model: Model, target: str, who: str, folder_word: str) -> None:
 
 
 def ensure(task: str, base_dir: str | None, who: str) -> dict[str, str]:
-    """The paths of the files for *task* ("pose" or "hand"), downloading the ones that are missing or wrong.
+    """The paths of the files for *task* ("pose", "hand" or "person"), downloading the ones that are missing or wrong.
 
     Returns:
-        {"detector": path, "landmarks": path}. A call that has to download prints one line first.
+        {"detector": path, "landmarks": path} for pose and hand, {"model": path} for person. A call that has to download
+        prints one line first.
     """
     folder = models_folder(base_dir)
     folder_word = FOLDER_NAME if not os.environ.get(ENVIRONMENT) else folder
     paths: dict[str, str] = {}
     missing: list[Model] = []
-    for role, name in zip(("detector", "landmarks"), TASKS[task]):
+    names = TASKS[task]
+    for role, name in zip(("model",) if len(names) == 1 else ("detector", "landmarks"), names):
         model = MODELS[name]
-        paths[role] = os.path.join(folder, model.file)
-        if (folder, model.file) in _checked and os.path.exists(paths[role]):
+        paths[role] = os.path.join(folder, model.local_name)
+        if (folder, model.local_name) in _checked and os.path.exists(paths[role]):
             continue
         if os.path.exists(paths[role]) and _is_good(paths[role], model):
-            _checked.add((folder, model.file))
+            _checked.add((folder, model.local_name))
         else:
             missing.append(model)
     if missing:
@@ -126,6 +128,6 @@ def ensure(task: str, base_dir: str | None, who: str) -> dict[str, str]:
               f"After that funground uses the copy in {folder_word}/.")
         os.makedirs(folder, exist_ok=True)
         for model in missing:
-            _download(model, os.path.join(folder, model.file), who, folder_word)
-            _checked.add((folder, model.file))
+            _download(model, os.path.join(folder, model.local_name), who, folder_word)
+            _checked.add((folder, model.local_name))
     return paths

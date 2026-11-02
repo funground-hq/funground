@@ -1,4 +1,4 @@
-"""The models library: a body and a hand in a camera or a picture.
+"""The models library: a body, a hand and the outline of a person in a camera or a picture.
 
 Bring it in with one line, then every call says ``ml.``::
 
@@ -16,6 +16,9 @@ Bring it in with one line, then every call says ``ml.``::
 The models run on your own computer: what a camera sees never leaves it. The first call downloads the model it needs
 (once) and keeps it in a ``models/`` folder beside your sketch. This is a separate install, ``funground-ml``; the core
 keeps only a small ``funground.ml`` that imports it (ADR-007, D-125).
+
+``ml.person(cam)`` gives a picture of the camera in which everything but the person is see-through, to draw over a background of
+your own.
 """
 from __future__ import annotations
 
@@ -24,7 +27,7 @@ from funground.api import _sketch_folder
 from . import _tasks
 from ._results import Body, Hand
 
-__all__ = ["pose", "hand"]
+__all__ = ["pose", "hand", "person"]
 
 
 def pose(source):
@@ -100,3 +103,35 @@ def hand(source):
     See also: pose
     """
     return _tasks.find_hand(source, _sketch_folder())
+
+
+def person(source):
+    """Cut the person out of a camera or a picture.
+
+    You get a new picture, as big as the source, in which everything that is not the person is see-through. Draw it over
+    anything you like: ``f.image(ml.person(cam), 0, 0)``. The edge is soft, not a hard line: a pixel can be a little
+    see-through. The picture is in the source's own pixels, so a mirrored camera gives a mirrored picture, just as ``f.image(cam, 0, 0)``
+    draws it. The source itself is not changed.
+
+    The model always gives an outline, so a picture with no one in it does not give None: you get a picture that is see-through
+    everywhere. Calling it twice in one frame on the same camera gives the same picture, and does the work once. The first call
+    downloads the person model (under 1 MB) and keeps it in a ``models/`` folder beside your sketch; it prints one line when it
+    does. In Play the browser keeps the copy, and the picture can be one frame behind the camera.
+
+    Arguments:
+        source: a camera from camera.open(), or a picture from f.load_image() or f.create_graphics().
+
+    Returns:
+        a Picture the size of the source with only the person showing, or None if the camera has no frame yet (in Play, also before the first answer).
+
+    Raises:
+        TypeError: if source is not a camera or a picture.
+        ConnectionError: if the model has to be downloaded and there is no connection.
+
+    Example:
+        f.background("navy")
+        f.image(ml.person(cam), 0, 0)
+
+    See also: pose, hand, image
+    """
+    return _tasks.find_person(source, _sketch_folder())

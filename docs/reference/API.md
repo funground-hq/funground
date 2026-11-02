@@ -33,7 +33,7 @@ In the examples, `import funground as f` is understood. A library's examples als
 - [The sound library](#the-sound-library): [`load`](#fn-sound-load), [`create`](#fn-sound-create), [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`pluck`](#fn-sound-pluck), [`melody`](#fn-sound-melody), [`sequence`](#fn-sound-sequence), [`mix`](#fn-sound-mix), [`drone`](#fn-sound-drone), [`note_to_frequency`](#fn-sound-note_to_frequency), [`frequency_to_note`](#fn-sound-frequency_to_note), [`chord_notes`](#fn-sound-chord_notes), [`microphone`](#fn-sound-microphone), [`microphones`](#fn-sound-microphones), [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`spectrogram`](#fn-sound-spectrogram), [`draw_pitch_line`](#fn-sound-draw_pitch_line)
 - [The sangeet library](#the-sangeet-library): [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga), [`talas`](#fn-sangeet-talas), [`tala_info`](#fn-sangeet-tala_info), [`tala`](#fn-sangeet-tala), [`match_ragas`](#fn-sangeet-match_ragas)
 - [The camera library](#the-camera-library): [`open`](#fn-camera-open), [`names`](#fn-camera-names), [`load_clip`](#fn-camera-load_clip)
-- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand)
+- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`person`](#fn-ml-person)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
@@ -5179,6 +5179,43 @@ if palm:
 ```
 
 See also: [`pose`](#fn-ml-pose).
+
+<a id="fn-ml-person"></a>
+### `ml.person`
+
+```py
+ml.person(source)
+```
+
+Cut the person out of a camera or a picture.
+
+You get a new picture, as big as the source, in which everything that is not the person is see-through. Draw it over
+anything you like: ``f.image(ml.person(cam), 0, 0)``. The edge is soft, not a hard line: a pixel can be a little
+see-through. The picture is in the source's own pixels, so a mirrored camera gives a mirrored picture, just as ``f.image(cam, 0, 0)``
+draws it. The source itself is not changed.
+
+The model always gives an outline, so a picture with no one in it does not give None: you get a picture that is see-through
+everywhere. Calling it twice in one frame on the same camera gives the same picture, and does the work once. The first call
+downloads the person model (under 1 MB) and keeps it in a ``models/`` folder beside your sketch; it prints one line when it
+does. In Play the browser keeps the copy, and the picture can be one frame behind the camera.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a camera from camera.open(), or a picture from f.load_image() or f.create_graphics(). |
+
+**Returns.** a Picture the size of the source with only the person showing, or None if the camera has no frame yet (in Play, also before the first answer).
+
+**Raises.**
+
+- `TypeError`: if source is not a camera or a picture.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+f.background("navy")
+f.image(ml.person(cam), 0, 0)
+```
+
+See also: [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`image`](#fn-image).
 
 <a id="live-values"></a>
 ## Live values

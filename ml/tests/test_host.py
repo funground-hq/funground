@@ -9,7 +9,7 @@ import pytest
 
 import funground_ml
 from funground import host_services
-from funground.platform.browser_models import HostModels
+from funground.platform.browser_models import HostModels, MaskResult, PointsResult
 from funground_ml import _results
 
 from conftest import ROOT, FakeCamera, solid_picture
@@ -126,6 +126,37 @@ def test_a_task_the_page_cannot_run_prints_once_and_is_not_asked_again(capsys):
     assert models.request("hand", 1, bytes(16), 2, 2) is True               # the hand is another task
 
 
+def test_a_mask_result_is_a_result_of_its_own_kind():
+    models = HostModels(lambda command, fields: None)
+    models.request("person", 3, bytes(16), 2, 2)
+    models.push_mask("person", 3, bytes([0, 64, 128, 255]), 2, 2, 640, 480)
+    found = models.latest("person", 3)
+    assert isinstance(found, MaskResult) and not isinstance(found, PointsResult)
+    assert found == MaskResult(bytes([0, 64, 128, 255]), 2, 2, 640, 480) and models.generation == 1
+    models.request("pose", 3, bytes(16), 2, 2)
+    models.push("pose", 3, None, 0.0, 2, 2)
+    assert isinstance(models.latest("pose", 3), PointsResult)               # points stay points
+
+
+def test_a_mask_is_taken_as_bytes_from_any_buffer_and_a_wrong_length_is_refused():
+    models = HostModels(lambda command, fields: None)
+    models.request("person", 1, bytes(16), 2, 2)
+    models.push_mask("person", 1, bytearray([1, 2, 3, 4]), 2, 2, 2, 2)
+    assert models.latest("person", 1).mask == bytes([1, 2, 3, 4])
+    models.request("person", 1, bytes(16), 2, 2)
+    with pytest.raises(ValueError, match="mask_width \\* mask_height"):
+        models.push_mask("person", 1, bytes(5), 2, 2, 2, 2)
+    models.request("person", 2, bytes(16), 2, 2)
+    with pytest.raises(ValueError, match="mask_width \\* mask_height"):
+        models.push_mask("person", 2, b"", 0, 0, 2, 2)
+
+
+def test_a_mask_nobody_asked_for_is_ignored():
+    models = HostModels(lambda command, fields: None)
+    models.push_mask("person", 5, bytes(4), 2, 2, 2, 2)
+    assert models.latest("person", 5) is None and models.generation == 0
+
+
 # ---- ml.pose and ml.hand on the host path
 def test_pose_is_none_until_the_first_result_arrives(page):
     camera = FakeCamera(solid_picture())
@@ -217,6 +248,62 @@ def test_a_source_that_is_not_a_camera_or_picture_is_still_a_type_error(page):
         funground_ml.pose("not a picture")
 
 
+# ---- ml.person on the host path
+def _alphas(picture):
+    return picture._snapshot().pixels[3::4]
+
+
+def test_person_is_none_until_the_first_mask_arrives_and_then_a_picture_cut_out_by_it(page):
+    camera = FakeCamera(solid_picture(512, 8))
+    assert funground_ml.person(camera) is None
+    request = page.requests()[0]
+    assert (request["task"], request["width"], request["height"]) == ("person", 512, 8)
+    assert funground_ml.person(camera) is None and len(page.requests()) == 1       # waiting: no second request
+    page.models.push_mask("person", request["key"], bytes(128) + bytes([255]) * 128, 256, 1, 512, 8)
+    cut = funground_ml.person(camera)
+    assert (cut.width, cut.height) == (512, 8)
+    alphas = _alphas(cut)
+    assert alphas[:255] == bytes(255) and alphas[257:512] == bytes([255]) * 255 and 0 < alphas[255] < alphas[256] < 255
+    assert funground_ml.person(camera) is cut                                       # the same picture twice in a frame
+    assert len(page.requests()) == 1
+
+
+def test_a_new_frame_is_cut_out_by_the_older_mask_until_the_next_one_arrives(page):
+    camera = FakeCamera(solid_picture(64, 48, blue=10))
+    funground_ml.person(camera)
+    key = page.requests()[0]["key"]
+    page.models.push_mask("person", key, bytes([255]) * 4, 2, 2, 64, 48)
+    old = funground_ml.person(camera)
+    camera.picture._write_pixels(bytes([200, 90, 120, 255]) * (64 * 48))            # a new frame, the same size
+    behind = funground_ml.person(camera)
+    assert len(page.requests()) == 2                                                # the new frame was sent
+    assert behind is not old and behind._snapshot().pixels[:4] == bytes([200, 90, 120, 255])    # this frame's pixels, the old mask
+
+
+def test_a_mask_for_a_picture_of_another_size_still_covers_the_whole_picture(page):
+    picture = solid_picture(64, 48)
+    funground_ml.person(picture)
+    page.models.push_mask("person", page.requests()[0]["key"], bytes([255]) * 16, 4, 4, 32, 24)   # the page saw half the size
+    assert set(_alphas(funground_ml.person(picture))) == {255}
+
+
+def test_person_in_a_page_gives_the_same_picture_as_the_same_mask_on_the_desktop_path(page):
+    camera = FakeCamera(solid_picture(512, 8, blue=70), mirror=False)
+    funground_ml.person(camera)
+    mask = bytes(range(256))
+    page.models.push_mask("person", page.requests()[0]["key"], mask, 256, 1, 512, 8)
+    assert funground_ml.person(camera)._snapshot().pixels == camera.picture._masked_copy(mask, 256, 1)._snapshot().pixels
+
+
+def test_a_person_task_that_is_unavailable_gives_none_and_prints_one_line(page, capsys):
+    picture = solid_picture()
+    funground_ml.person(picture)
+    page.models.unavailable("person", "Could not download the person model.")
+    assert funground_ml.person(picture) is None
+    assert capsys.readouterr().out == "Could not download the person model.\n"
+    assert funground_ml.pose(picture) is None and len(page.requests()) == 2          # the pose task is another task
+
+
 # ---- what a page does not load
 def _run(code: str):
     env = dict(os.environ, FUNGROUND_HEADLESS="1")
@@ -234,9 +321,11 @@ def test_the_host_path_imports_no_numpy_pillow_or_desktop_module():
         "page = []\n"
         "host_services.models = HostModels(lambda command, fields: page.append((command, fields)))\n"
         "camera = FakeCamera(solid_picture())\n"
-        "assert ml.pose(camera) is None and ml.hand(camera) is None\n"
+        "assert ml.pose(camera) is None and ml.hand(camera) is None and ml.person(camera) is None\n"
         "host_services.models.push('pose', page[0][1]['key'], [float(i) for i in range(66)], 0.9, 64, 48)\n"
         "assert ml.pose(camera) is not None\n"
+        "host_services.models.push_mask('person', page[2][1]['key'], bytes([255]) * 16, 4, 4, 64, 48)\n"
+        "assert ml.person(camera) is not None\n"
         "gone = [name for name in ('onnxruntime', 'numpy', 'PIL', 'funground_ml._runtime', 'funground_ml._glue',\n"
         "                          'funground_ml._fetch') if name in sys.modules]\n"
         "print('imported:', gone)\n"
@@ -273,6 +362,7 @@ def test_a_session_supplies_the_models_for_its_run_and_takes_them_away():
     assert (request["task"], request["width"], request["height"]) == ("pose", 32, 24)
     session.push_models("pose", request["key"], _pairs(33), 0.9, 32, 24)
     session.step(1.0)
+    session.push_models_mask("person", request["key"], bytes(4), 2, 2, 32, 24)         # nothing asked for it: ignored
     session.models_unavailable("hand", "no hand model today")
     session.stop()
     assert host_services.models is None

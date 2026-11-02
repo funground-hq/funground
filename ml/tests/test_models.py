@@ -1,12 +1,14 @@
 """Tests that run the real model files on two test photographs (ml/tests/data/SOURCES.md says where they are from):
-``gandhi_london_rain.jpg`` for the pose tests and ``standing_woman_640.jpg`` for the hand tests.
+``gandhi_london_rain.jpg`` for the pose tests and ``standing_woman_640.jpg`` for the hand tests and the person tests (one
+woman alone on a plain background, so the outline can be checked at points).
 
 The files are kept in ml/tests/.models/ (FUNGROUND_ML_MODELS); the first run downloads them, and a run with no connection
 skips these tests with a reason.
 
 The expected points are not stored: they come from the S-231 spike's own numpy glue (spikes/16_models/onnx/ort_glue.py),
 imported by path and run on the same picture with the same model files. funground-ml's code must give the same points
-within 5 px (the tolerance the spike measured between platforms).
+within 5 px (the tolerance the spike measured between platforms), and the same mask (the spike's ``selfie``) within half a grey
+level on average.
 """
 from __future__ import annotations
 
@@ -21,12 +23,13 @@ import funground as f
 import funground_ml
 from funground_ml import _glue, _tasks
 
-from conftest import HAND_PHOTO, POSE_PHOTO, ROOT, FakeCamera
+from conftest import HAND_PHOTO, PERSON_PHOTO, POSE_PHOTO, ROOT, FakeCamera
 
 pytestmark = [pytest.mark.model, pytest.mark.usefixtures("real_models")]
 
 SPIKE = ROOT / "spikes" / "16_models" / "onnx" / "ort_glue.py"
 TOLERANCE = 5.0                  # pixels
+MASK_TOLERANCE = 0.5             # grey levels (0..255): the mean difference from the spike's mask
 
 
 @pytest.fixture(scope="module")
@@ -145,3 +148,64 @@ def test_the_models_are_run_by_the_cpu_provider_and_kept_once(photo, hand_photo)
     assert len(_runtime._sessions) == before                  # no new session for a second call
     assert len(_runtime._sessions) >= 4
     assert all(s.get_providers() == ["CPUExecutionProvider"] for s in _runtime._sessions.values())
+
+
+# ---- the person's mask (S-233)
+@pytest.fixture(scope="module")
+def person_photo():
+    return f.load_image(str(PERSON_PHOTO))
+
+
+def _alpha_plane(picture) -> np.ndarray:
+    snap = picture._snapshot()
+    return np.frombuffer(snap.pixels, np.uint8).reshape(snap.phys_height, snap.phys_width, 4)[:, :, 3]
+
+
+def test_the_person_stands_out_of_the_photograph(person_photo):
+    cut = funground_ml.person(person_photo)
+    assert (cut.width, cut.height) == (person_photo.width, person_photo.height) == (640, 960)
+    alpha = _alpha_plane(cut)
+    assert alpha[480, 320] > 240 and alpha[300, 320] > 240                   # her dress, her chest
+    assert alpha[10, 10] == 0 and alpha[950, 630] == 0 and alpha[500, 30] == 0   # the corners and the left edge
+    share = (alpha > 127).mean()
+    assert 0.15 < share < 0.35                                               # she fills about a quarter of the picture
+    assert ((alpha > 0) & (alpha < 255)).mean() > 0.01                       # the edge is soft, not a cut
+
+
+def test_the_person_keeps_the_photographs_own_pixels_where_it_is_solid(person_photo):
+    cut = funground_ml.person(person_photo)
+    source = np.frombuffer(person_photo._snapshot().pixels, np.uint8).reshape(960, 640, 4)
+    result = np.frombuffer(cut._snapshot().pixels, np.uint8).reshape(960, 640, 4)
+    solid = result[:, :, 3] == 255
+    assert solid.sum() > 50_000 and (result[solid] == source[solid]).all()
+    assert (result[result[:, :, 3] == 0] == 0).all()                         # and nothing at all where it is see-through
+
+
+def test_the_person_agrees_with_the_spikes_mask_within_half_a_grey_level(person_photo, real_models):
+    if not SPIKE.exists():
+        pytest.skip("the spike's glue (spikes/16_models/onnx/ort_glue.py) is not in this checkout")
+    import onnxruntime as ort
+
+    from funground_ml import _fetch
+
+    spec = importlib.util.spec_from_file_location("spike_ort_glue", SPIKE)
+    spike = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(spike)
+    session = ort.InferenceSession(_fetch.ensure("person", None, "the tests")["model"], providers=["CPUExecutionProvider"])
+    expected = spike.selfie(session, np.asarray(Image.open(PERSON_PHOTO).convert("RGB"))) * 255
+    difference = np.abs(_alpha_plane(funground_ml.person(person_photo)).astype(np.float64) - expected)
+    assert difference.mean() < MASK_TOLERANCE
+
+
+def test_a_flat_picture_has_hardly_anyone_in_it():
+    f.size(200, 200)
+    empty = f.create_graphics(640, 480)
+    empty.background("#7f7f7f")
+    cut = funground_ml.person(empty)
+    assert cut is not None and (cut.width, cut.height) == (640, 480)         # never None for a picture
+    assert (_alpha_plane(cut) > 127).mean() < 0.01
+
+
+def test_the_person_is_made_once_for_a_frame(person_photo):
+    camera = FakeCamera(person_photo, mirror=True)
+    assert funground_ml.person(camera) is funground_ml.person(camera)

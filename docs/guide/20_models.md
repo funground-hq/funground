@@ -1,7 +1,7 @@
 # 20. Models: your body and your hands
 
-A model is a program that has learnt to find something in a picture. funground has two. One finds a **body**. The other
-finds a **hand**. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
+A model is a program that has learnt to find something in a picture. funground has three. One finds a **body**. One
+finds a **hand**. One cuts out the **person**. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
 are. Then you can draw with them.
 
 Everything runs on your own computer. What the camera sees never leaves it.
@@ -128,10 +128,44 @@ def draw():
 
 The gallery has a whole sketch: [follow your finger](../gallery/README.md#follow-your-finger).
 
+## Cut out the person
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+`ml.person(source)` does not give points. It gives a new **picture**. The picture is as big as the camera's, and
+everything that is not the person is see-through. Draw something behind it, then draw the picture on top:
+
+```py
+import funground as f
+from funground import camera, ml
+
+cam = camera.open()
+
+def setup():
+    f.size(640, 480)
+    cam.start(640, 480)
+
+def draw():
+    f.background("navy")                  # anything you like: a gradient, shapes, a photo
+    if cam.is_ready():
+        f.image(ml.person(cam), 0, 0)     # only you, in front of it
+
+f.run()
+```
+
+The edge of the cut-out is soft. A pixel on the edge is a little see-through, so you do not see a hard line.
+
+If nobody is there, you do not get `None`. You get a picture that is see-through everywhere, so `f.image()` draws nothing.
+Only a camera with no picture yet gives `None`. The first call downloads the person model. It is under 1 MB, and it is
+kept like the others.
+
+The picture is in the camera's own pixels, so it is mirrored when the camera is. It lines up with `f.image(cam, 0, 0)`
+exactly. The gallery has a whole sketch: [in front of the sea](../gallery/README.md#in-front-of-the-sea).
+
 ## One call a frame
 
 If you call `ml.pose(cam)` twice in one frame, you get the same body, and the work is done once. So you can ask for the
-body in two places in your code without slowing it down.
+body in two places in your code without slowing it down. `ml.hand(cam)` and `ml.person(cam)` do the same.
 
 Until the camera has sent its first picture, `ml.pose(cam)` gives `None`. You never need to wait on purpose.
 

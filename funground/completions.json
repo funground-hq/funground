@@ -10988,6 +10988,15 @@
     "detail": "(source)",
     "summary": "Find a hand in a camera or a picture.",
     "url": "reference/API.md#fn-ml-hand"
+   },
+   {
+    "name": "person",
+    "kind": "function",
+    "signature": "person(source)",
+    "detail": "(source)",
+    "summary": "Cut the person out of a camera or a picture.",
+    "url": "reference/API.md#fn-ml-person",
+    "returns": "Picture"
    }
   ]
  }
