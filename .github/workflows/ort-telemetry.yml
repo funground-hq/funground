@@ -1,4 +1,5 @@
 # Spike S-231 (D-124): does onnxruntime connect to the network on Linux and macOS? One-off; runs only on its branch.
+# Result: spikes/16_models/ci_telemetry/results.md. Push to spike/ort-telemetry again to recheck a new onnxruntime version.
 # Windows was measured on the maintainer's machine (spikes/16_models/onnx/results.md).
 name: ort-telemetry
 
