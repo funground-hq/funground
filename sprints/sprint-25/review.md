@@ -1,7 +1,7 @@
 # Sprint 25 review — 0.2: a smooth start (E-35)
 
 **Dates:** 14 October 2026, on branch `sprint-25` (funground), `feature/play-completion` (site PR #8) and
-`s198-quiet-star` (sketchbook PR #1). Ran while 0.1.0 waits for the maintainer's Mac test. **Awaiting sign-off.**
+`s198-quiet-star` (sketchbook PR #1). Ran while 0.1.0 waits for the maintainer's Mac test. **Signed off 2 November 2026.**
 
 ## Outcome
 
@@ -73,3 +73,7 @@ builder could not run, ran the suites and committed.
 Kept: decisions as small questions with the list in a file (D-103 changed shape twice in an hour, cheaply,
 before any code). Change: ask for the local trial earlier, and run the editor test and the Pyright probe on every
 story that touches suggestions.
+
+## Sign-off
+
+**Signed off by the maintainer, 2 November 2026** ("Sprints 25 to 31 signed off"). Sprint closed.

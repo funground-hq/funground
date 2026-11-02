@@ -2,7 +2,7 @@
 
 **Dates:** 23 to 28 October 2026. Work in funground (PRs #22 to #40), `funground-web` (PR #17) and
 `funground-hq.github.io` (S-237's menu entry, and the book's pages). Every story shipped when it was checked.
-**Awaiting sign-off.**
+**Signed off 2 November 2026.**
 
 ## Outcome
 
@@ -68,3 +68,7 @@ session.
 Two spikes ran beside a shipping story without blocking it, and both ended in decisions the maintainer took the same
 day. The book took more rounds than planned, each prompted by the maintainer looking at the PDF; showing the first
 pages earlier, rough, would have saved one rebuild.
+
+## Sign-off
+
+**Signed off by the maintainer, 2 November 2026** ("Sprints 25 to 31 signed off"). Sprint closed.

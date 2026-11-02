@@ -1,7 +1,7 @@
 # Sprint 29 review — Creative exercises, closer to Play (E-35, E-34, E-22, E-33)
 
 **Dates:** 16 to 17 October 2026. Work in funground (PRs #11 to #15), `funground-web` (PR #12) and
-`funground-hq.github.io` (PRs #24 to #26). Every story shipped when it was checked. **Awaiting sign-off.**
+`funground-hq.github.io` (PRs #24 to #26). Every story shipped when it was checked. **Signed off 2 November 2026.**
 
 ## Outcome
 
@@ -67,3 +67,7 @@ changed; S-214's `Picture` return types added; S-216 comments tidied). Everythin
 
 Splitting the camera work into a recorder (the booth) and pieces that load a take, as the maintainer proposed, turned
 three tangled examples into a model that other video pieces can follow.
+
+## Sign-off
+
+**Signed off by the maintainer, 2 November 2026** ("Sprints 25 to 31 signed off"). Sprint closed.

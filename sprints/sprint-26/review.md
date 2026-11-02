@@ -2,7 +2,7 @@
 
 **Dates:** 15 October 2026. Work in `funground-hq.github.io` (site PRs #9 to #16), `funground-run.github.io` (preview
 PR #4) and `funground-web` (PR #8). Every site story shipped as soon as it was checked (maintainer, 15 Oct: Play work
-need not wait for a release). **Awaiting sign-off.**
+need not wait for a release). **Signed off 2 November 2026.**
 
 ## Outcome
 
@@ -72,3 +72,7 @@ two dead guide anchors, ran the tests again, shipped, and checked each deploy on
 
 Kept: ship each story as soon as it passes, then look at the live page. Change: look at a phone width before calling
 a page story done, and keep the editor test fast enough to run whole after every story.
+
+## Sign-off
+
+**Signed off by the maintainer, 2 November 2026** ("Sprints 25 to 31 signed off"). Sprint closed.
