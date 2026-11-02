@@ -39,6 +39,11 @@ from funground import _colornames, api as _api, pages  # noqa: E402
 from funground import analysis, marks, typography  # noqa: E402
 from funground import camera as _camera, sangeet as _sangeet, sound as _sound  # noqa: E402  (the libraries, S-246, S-247)
 from funground.sound import _synth as synth  # noqa: E402
+# The models library (S-232, ADR-007, D-125) is a separate install, funground-ml, and the project .venv does not have it (and must
+# not). So the repository's own ml/ folder goes first on the path: funground_ml is then found without an install. Importing it
+# loads no numpy, Pillow or onnxruntime (they are lazy), so the generator needs none of them.
+sys.path.insert(0, str(ROOT / "ml"))
+import funground_ml as _ml  # noqa: E402
 from funground._namespaces import NAMESPACE_NAMES  # noqa: E402
 _color = sys.modules["funground.color"]  # f.color (the function) hides the module as an attribute
 from funground.export import FORMATS, TEXT_MODES  # noqa: E402
@@ -139,6 +144,15 @@ LIBRARIES: dict[str, dict] = {
         "names": ["open", "names", "load_clip"],
         "renamed": None,           # the camera was never released on f: nothing to say about old spellings
         "history": "New in 0.2.",
+    },
+    "ml": {
+        "module": _ml,
+        "title": "The models library",
+        "about": "A body and a hand in a camera or a picture, found on your own computer (a separate install, funground-ml).",
+        "names": ["pose", "hand"],
+        "renamed": None,           # new in 0.2
+        "history": "New in 0.2.",
+        "install": "The models library is a separate install: run `python -m pip install funground-ml`",
     },
 }
 # Which library each name belongs to, for the See also links.
@@ -616,6 +630,8 @@ def library_section(page: Page, lib: str, info: dict, known: set[str]) -> None:
     page.add(f'<a id="{slug_of(info["title"])}"></a>', f"## {info['title']}", "",
              "```py", f"from funground import {lib}", "```", "",
              info["history"], "")
+    if info.get("install"):                                # a library that is not in the core (S-232)
+        page.add(info["install"] + ".", "")
     if info["renamed"]:
         page.add(info["renamed_note"], "")
         for old, new in info["renamed"]:

@@ -39,6 +39,32 @@ GOLDEN_PLATFORM = "Windows"
 # CONSTANTS (D-103, S-174) is shown by the project Moving the paper (paper-07, 27 Oct: was listed here).
 NOT_YET_IN_GALLERY: set[str] = set()
 
+# The models area (S-232) needs funground-ml, a separate install the core environment may not have. The examples are still
+# listed (the index, the images and the coverage counts stay right) but they are only run when funground_ml can be imported.
+# Their model files come from ml/tests/.models (git-ignored), so a test never writes a models/ folder into the repository.
+MODELS_AREA = "models"
+MODELS_FOLDER = ROOT / "ml" / "tests" / ".models"
+HAS_ML = importlib.util.find_spec("funground_ml") is not None
+
+
+def _needs_models(path: Path, monkeypatch) -> None:
+    """Skip a models example when funground-ml is not installed; otherwise point it at the shared model folder."""
+    if path.parent.name != MODELS_AREA:
+        return
+    if not HAS_ML:
+        pytest.skip("the models examples need funground-ml (python -m pip install -e ml); it is not installed here")
+    monkeypatch.setenv("FUNGROUND_ML_MODELS", os.environ.get("FUNGROUND_ML_MODELS") or str(MODELS_FOLDER))
+
+
+def _run(path: Path, frames: int = 30):
+    """run_sketch, except that a models example whose model files cannot be downloaded (offline) is skipped, as in ml/tests."""
+    try:
+        return run_sketch(path, frames=frames)
+    except ConnectionError as error:
+        if path.parent.name != MODELS_AREA:
+            raise
+        pytest.skip(f"the model files are not in ml/tests/.models/ and cannot be downloaded: {error}")
+
 
 @pytest.fixture(autouse=True)
 def _scratch_cwd(tmp_path, monkeypatch):
@@ -57,14 +83,16 @@ def test_gallery_exists_and_every_example_has_a_docstring():
 
 
 @pytest.mark.parametrize("path", EXAMPLES, ids=gallery.example_id)
-def test_example_runs_headless(path: Path):
-    (w, h), data = run_sketch(path, frames=30)
+def test_example_runs_headless(path: Path, monkeypatch):
+    _needs_models(path, monkeypatch)
+    (w, h), data = _run(path)
     assert len(data) == w * h * 3
 
 
 @pytest.mark.parametrize("path", DETERMINISTIC, ids=gallery.example_id)
-def test_example_matches_golden(path: Path):
-    frame = run_sketch(path, frames=30)
+def test_example_matches_golden(path: Path, monkeypatch):
+    _needs_models(path, monkeypatch)
+    frame = _run(path)
     golden = GALLERY_GOLDEN / f"{gallery.example_id(path)}.png"
     if not golden.exists():
         GALLERY_GOLDEN.mkdir(parents=True, exist_ok=True)
@@ -81,8 +109,9 @@ def test_example_matches_golden(path: Path):
 
 
 @pytest.mark.parametrize("path", DETERMINISTIC, ids=gallery.example_id)
-def test_example_ops_match_snapshot(path: Path):
-    run_sketch(path, frames=30)
+def test_example_ops_match_snapshot(path: Path, monkeypatch):
+    _needs_models(path, monkeypatch)
+    _run(path)
     actual = json.dumps(ir.Frame(list(api.active_sketch().last_ops)).to_jsonable(), indent=1, sort_keys=True) + "\n"
     snap = GALLERY_SNAPSHOTS / f"{gallery.example_id(path)}.json"
     if not snap.exists():

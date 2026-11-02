@@ -1,0 +1,31 @@
+# Sources of the example photographs
+
+## standing_woman_640.jpg
+
+- **What:** a full-length photograph of one woman standing on a catwalk, one hand on her hip, the other hand by her side.
+- **Where from:** Wikimedia Commons, "File:Lynda Carter at The Heart Truth 2009.jpg"
+  <https://commons.wikimedia.org/wiki/File:Lynda_Carter_at_The_Heart_Truth_2009.jpg>
+  (first published on Flickr by The Heart Truth, <https://www.flickr.com/photos/thehearttruth/3293995284/>).
+- **Author:** The Heart Truth (a national programme of the US National Heart, Lung, and Blood Institute, part of the US
+  Department of Health and Human Services). Taken 13 February 2009, Bryant Park, New York.
+- **Licence:** public domain, a work of the US federal government. Commons tags it `{{PD-USGov-HHS}}` and its Flickr
+  licence was reviewed on 8 March 2011.
+- **What was done to it:** Commons' 960 px wide copy, scaled down to 640 x 960 and saved as a JPEG (quality 85, 60 KB).
+
+The photograph is used by `02_follow_your_finger.py` when there is no camera. A copy of it is also in `ml/tests/data/`, where the tests use it.
+
+## gandhi_london_rain.jpg
+
+- **What:** a photograph of Mahatma Gandhi walking in the rain after landing at Folkestone (UK), 12 September 1931, under
+  an umbrella held by someone beside him. One person is clearly the main subject, full length.
+- **Where from:** Wikimedia Commons, "File:Gandhi London rain.jpg"
+  <https://commons.wikimedia.org/wiki/File:Gandhi_London_rain.jpg>. Commons gives its source as
+  <http://rena.wao.com/gandhi/jpg/MG48.jpg>.
+- **Author:** unknown (Commons: `{{unknown|Author}}`).
+- **Date:** 12 September 1931.
+- **Licence tags (as on Commons):** `{{PD-UK-unknown}}` and `{{PD-1996}}`. Commons' `PD-1996` says the work was public domain
+  in its source country on the date the US restored foreign copyrights (1996), so it is public domain in the US as well.
+- **What was done to it:** nothing but a conversion from a greyscale JPEG to an RGB JPEG (quality 95). It is Commons' own
+  original size, 330 x 454, not scaled.
+
+The photograph is used by `01_stick_figure.py`. A copy of it is also in `ml/tests/data/`, where the tests use it.
