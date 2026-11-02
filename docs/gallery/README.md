@@ -2568,6 +2568,36 @@ You, standing in front of a sunset. Press E while you are out of view, so the ca
 
 Source: [`examples/gallery/images/10_in_front_of_a_picture.py`](../../examples/gallery/images/10_in_front_of_a_picture.py)
 
+### Drag the outline
+
+![Drag the outline](images/images-11_drag_the_outline.png)
+
+A drawn person is cut out of a drawn room and set in front of a new sky. Red dots mark the outline of the cut-out. Drag a dot with the mouse and the shape that cuts the picture follows it. Pull a dot in to trim the person, or push it out to show more of the room.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- picture.remove_background(empty, tolerance=30, tidy=True) removes the room. The ball on the floor is a speck, so tidy drops it. The pocket is the colour of the wall, so it is a hole, and tidy fills it with the picture's own colours.
+- picture.outline(40) gives the border of what is left as a list of 40 (x, y) points, spread evenly along it.
+- f.path().polygon(points) turns the list into a shape. f.draw_path() draws its yellow line.
+- f.clip(path) inside f.saved_state() draws the photo only inside the shape. Because the shape is built again in every frame, a point you move changes the cut at once.
+- mouse_pressed() grabs the nearest dot, mouse_dragged() moves it and mouse_released() lets go.
+
+**Make it yours**
+
+- Change POINTS to 12, then 120. See how few dots still cut the person well.
+- Drag a dot far out. What does the cut show there?
+- Draw a different person in draw_figure(), or move the ball next to the legs.
+- Add a key_pressed() that prints points, so you can keep your own correction.
+
+</details>
+
+Source: [`examples/gallery/images/11_drag_the_outline.py`](../../examples/gallery/images/11_drag_the_outline.py)
+
 ## Pixels to marks
 
 ### From pixels to marks, step 1: a grid of colours
