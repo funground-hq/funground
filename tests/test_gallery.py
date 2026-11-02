@@ -135,8 +135,11 @@ def test_example_ops_match_snapshot(path: Path, monkeypatch):
         out = ROOT / "tests" / "snapshots" / "_actual"
         out.mkdir(parents=True, exist_ok=True)
         (out / snap.name).write_text(actual, encoding="utf-8")
+    # A models example draws where the model found the body. onnxruntime's arithmetic differs in the last digits between
+    # processors (CI's runner gave 194.27486 where this machine gave 194.27482), so those points match to 0.01 px.
+    tolerance = {"abs_tol": 0.01} if path.parent.name == MODELS_AREA else {}
     try:
-        assert_json_documents_close(json.loads(actual), json.loads(expected))
+        assert_json_documents_close(json.loads(actual), json.loads(expected), **tolerance)
     except AssertionError as exc:
         raise AssertionError(
             f"{path.name}: op list differs from its snapshot; actual saved to tests/snapshots/_actual/: {exc}"
