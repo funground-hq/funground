@@ -1,0 +1,47 @@
+# Spike S-231 (D-124): does onnxruntime connect to the network on Linux and macOS? One-off; runs only on its branch.
+# Windows was measured on the maintainer's machine (spikes/16_models/onnx/results.md).
+name: ort-telemetry
+
+on:
+  push:
+    branches: ["spike/ort-telemetry"]
+
+jobs:
+  probe:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        disable: ["", "1"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: python -m pip install onnxruntime onnx numpy
+      - name: What the native library links and names
+        shell: bash
+        run: |
+          lib=$(python -c "import onnxruntime, pathlib; print(next(pathlib.Path(onnxruntime.__file__).parent.rglob('onnxruntime_pybind11_state*')))")
+          echo "$lib"; python -c "import onnxruntime; print(onnxruntime.__version__)"
+          if [ "$RUNNER_OS" = "Linux" ]; then ldd "$lib"; else otool -L "$lib"; fi
+          echo "--- network-looking strings:"
+          strings "$lib" | grep -iE "events\.data\.microsoft|1ds|telemetry|https?://" | sort -u | head -40 || true
+      - name: Linux, every connect() and sendto() of the process and its threads
+        if: runner.os == 'Linux'
+        env:
+          ORT_DISABLE_TELEMETRY: ${{ matrix.disable }}
+        run: |
+          sudo apt-get install -y strace > /dev/null
+          strace -f -e trace=connect,sendto,sendmsg -o trace.txt python spikes/16_models/ci_telemetry/probe.py
+          echo "--- inet calls:"; grep -E "AF_INET|AF_INET6" trace.txt || echo "none"
+      - name: macOS, the process's sockets, polled until it exits
+        if: runner.os == 'macOS'
+        env:
+          ORT_DISABLE_TELEMETRY: ${{ matrix.disable }}
+        run: |
+          python spikes/16_models/ci_telemetry/probe.py & pid=$!
+          : > sockets.txt
+          while kill -0 $pid 2>/dev/null; do lsof -a -p $pid -i -n -P 2>/dev/null | tail -n +2 >> sockets.txt; sleep 0.2; done
+          echo "--- sockets seen:"; sort -u sockets.txt || true; [ -s sockets.txt ] || echo "none"
