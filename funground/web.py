@@ -91,8 +91,9 @@ class Session:
 
     The models go through the host too (S-232): `on_models(command, fields)` is told "request" (a picture to look at:
     task, key, width, height and RGBA bytes) and "close", and `push_models(task, key, points, score, width, height)`
-    delivers a result (platform.browser_models has the details). `models_unavailable(task, reason)` tells the Session
-    that the page cannot run a model: it prints the reason once. Without `on_models` there is never a result.
+    delivers a result (platform.browser_models has the details); a result that is a mask, the person's, comes through
+    `push_models_mask(task, key, mask, mask_width, mask_height, width, height)`. `models_unavailable(task, reason)` tells
+    the Session that the page cannot run a model: it prints the reason once. Without `on_models` there is never a result.
 
     The bundled fonts are not in the browser's package (S-211, D-114): `fetch_font(file name)` is called the first
     time funground opens one, and returns its bytes (bytes, or a JavaScript Uint8Array or ArrayBuffer). `fonts`
@@ -217,6 +218,12 @@ class Session:
         """One result from the host's models: `points` is a flat sequence x0, y0, x1, y1, ... in pixels of the picture
         that "request" sent (or None for nobody), `key` is the source's key from that request."""
         self._platform.push_models(task, key, points, score, width, height)
+
+    def push_models_mask(self, task: str, key: int, mask, mask_width: int, mask_height: int, width: int, height: int) -> None:
+        """One result from the host's models that is a mask (the "person" task): `mask` is `mask_width * mask_height`
+        bytes, row by row from the top left, 0 for not the person and 255 for the person, covering the whole picture
+        that "request" sent (of `width` x `height` pixels). `key` is the source's key from that request."""
+        self._platform.push_models_mask(task, key, mask, mask_width, mask_height, width, height)
 
     def models_unavailable(self, task: str, reason: str) -> None:
         """The page cannot run this task's models (no connection for the download, a file that fails its check). Prints

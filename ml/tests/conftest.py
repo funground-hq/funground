@@ -12,6 +12,7 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 POSE_PHOTO = HERE / "data" / "gandhi_london_rain.jpg"      # the pose tests (SOURCES.md)
 HAND_PHOTO = HERE / "data" / "standing_woman_640.jpg"      # the hand tests (SOURCES.md)
+PERSON_PHOTO = HAND_PHOTO                                  # the person tests: she stands alone, so the outline is clean
 MODELS_FOLDER = HERE / ".models"
 
 
@@ -46,7 +47,7 @@ def real_models():
     previous = os.environ.get(_fetch.ENVIRONMENT)
     os.environ[_fetch.ENVIRONMENT] = str(MODELS_FOLDER)
     try:
-        for task in ("pose", "hand"):
+        for task in ("pose", "hand", "person"):
             try:
                 _fetch.ensure(task, None, "the tests")
             except ConnectionError as error:

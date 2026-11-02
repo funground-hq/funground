@@ -5,12 +5,14 @@ so inference never blocks the sketch's step. The two halves meet here, in the wa
 
 * `request(task, key, rgba, width, height)` sends one picture to the page. At most one is in flight for each task and
   source; a picture that comes while one is being worked on is dropped, never queued.
-* `push(task, key, points, score, width, height)` is what the page calls with a result. The host delivers it between
-  two steps, so the sketch never sees a result appear half way through a frame.
-* `latest(task, key)` is what funground_ml reads: the newest result for that task and source, or None before the first.
+* `push(task, key, points, score, width, height)` is what the page calls with a result of points (the "pose" and "hand"
+  tasks), and `push_mask(task, key, mask, mask_width, mask_height, width, height)` with a result that is a mask (the "person"
+  task). The host delivers either between two steps, so the sketch never sees a result appear half way through a frame.
+* `latest(task, key)` is what funground_ml reads: the newest result for that task and source, a `PointsResult` or a
+  `MaskResult`, or None before the first.
 
-`key` says which source a picture came from (funground_ml uses `id()` of the camera or picture). `task` is "pose" or
-"hand". A result can be one frame behind the picture, which is what `ml.pose(cam)` gives in a page (contract ML3).
+`key` says which source a picture came from (funground_ml uses `id()` of the camera or picture). `task` is "pose", "hand" or
+"person". A result can be one frame behind the picture, which is what `ml.pose(cam)` gives in a page (contract ML3).
 
 `on_models(command, fields)` is told what the sketch wants:
 
@@ -29,12 +31,24 @@ from typing import NamedTuple
 ModelsCallback = Callable[[str, dict], None]
 
 
-class ModelResult(NamedTuple):
-    """One answer from the page, for the pixels it was sent."""
+class PointsResult(NamedTuple):
+    """One answer of points from the page (the "pose" and "hand" tasks), for the pixels it was sent."""
     points: tuple | None        # ((x, y), ...) in pixels of the picture that was sent, or None when nobody was found
     score: float
     width: int                  # the size of the picture that was sent
     height: int
+
+
+class MaskResult(NamedTuple):
+    """One answer that is a mask from the page (the "person" task), for the pixels it was sent."""
+    mask: bytes                 # mask_width * mask_height bytes, row by row from the top left: 0 is not the person, 255 is
+    mask_width: int             # the mask's own size, not the picture's: it covers the whole picture, stretched
+    mask_height: int
+    width: int                  # the size of the picture that was sent
+    height: int
+
+
+ModelResult = PointsResult | MaskResult
 
 
 class HostModels:
@@ -86,7 +100,21 @@ class HostModels:
             if len(flat) % 2:
                 raise ValueError("the points of a model result must be x, y pairs: an even number of values")
             found = tuple(zip(flat[0::2], flat[1::2]))
-        self._latest[(task, key)] = ModelResult(found, float(score), int(width), int(height))
+        self._latest[(task, key)] = PointsResult(found, float(score), int(width), int(height))
+        self.generation += 1
+
+    def push_mask(self, task: str, key: int, mask, mask_width: int, mask_height: int, width: int, height: int) -> None:
+        """A result that is a mask from the page: `mask` is `mask_width * mask_height` bytes, one for each pixel of the
+        mask, row by row from the top left (0 is not the person, 255 is the person). `width` and `height` are the size of
+        the picture that was sent. A result for a source the run has forgotten is ignored."""
+        if (task, key) not in self._in_flight:
+            return
+        self._in_flight.discard((task, key))
+        data = bytes(mask)
+        if mask_width <= 0 or mask_height <= 0 or len(data) != mask_width * mask_height:
+            raise ValueError(f"a mask from the models must be mask_width * mask_height bytes; got {len(data)} bytes "
+                             f"for {mask_width} x {mask_height}")
+        self._latest[(task, key)] = MaskResult(data, int(mask_width), int(mask_height), int(width), int(height))
         self.generation += 1
 
     def unavailable(self, task: str, reason: str) -> None:

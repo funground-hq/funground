@@ -18,7 +18,7 @@ S-238 needs the maintainer for anything created under their account (a GitHub Ap
 | S-231 | Spike: which models, from which provider, on the web and on the desktop | planned 28 Oct |
 | S-238 | Spike: signing in to GitHub from Play, a static site (D-118) | planned 28 Oct |
 | S-232 | Pose and hands: `ml.pose(source)` and `ml.hand(source)` with named points, in the `funground-ml` package (D-124 d, D-125 a) | done 3 Nov (funground #53, #54, this PR; funground-web #20): desktop and Play agree within 0.41 px |
-| S-233 | The person: `ml.person(source)`, the source with everything but the person see-through (D-125 a; after S-232) | added 2 Nov after D-125; planned |
+| S-233 | The person: `ml.person(source)`, the source with everything but the person see-through (D-125 a; after S-232) | done 3 Nov (this PR; funground-web s233-ml-person): desktop and Play masks differ by 0.08 of 255 on average |
 | Smaller, when they fit | S-249's SVG background bug (no API change); S-244 (a loaded font never chosen); S-245 (tidy the cut-out, decided in D-115) | SVG background done 28 Oct (full suite 2814 and 1749 passed, 1 skipped); the others planned |
 
 Order: the names proposal (D-123) first, with the internal module renames that free the names (no public change);
@@ -70,5 +70,5 @@ stories between heavy jobs. One heavy job at a time on this machine.
 
 ## S-233 tasks
 
-- [ ] `ml.person(source)` on the desktop and in Play, the selfie model's mask applied as alpha; contract row; example and guide
+- [x] `ml.person(source)` on the desktop and in Play, the selfie model's mask applied as alpha; contract row; example and guide
 

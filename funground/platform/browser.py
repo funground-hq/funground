@@ -84,6 +84,10 @@ class BrowserPlatform(HeadlessPlatform):
         """One result from the host's models (browser_models.py); the sketch reads the latest."""
         self.models.push(task, key, points, score, width, height)
 
+    def push_models_mask(self, task: str, key: int, mask, mask_width: int, mask_height: int, width: int, height: int) -> None:
+        """One result that is a mask from the host's models (browser_models.py); the sketch reads the latest."""
+        self.models.push_mask(task, key, mask, mask_width, mask_height, width, height)
+
     def poll(self) -> bool:
         super().poll()
         for event in self._events:               # a page reports the space bar as " "; key_down("space") must see it

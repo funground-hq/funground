@@ -248,3 +248,19 @@ class Tracker:
         else:
             self.forget()
         return found
+
+
+# ---- the person's mask: one model, no boxes
+MASK_SIZE = 256              # the selfie model reads a 256 x 256 picture and gives a 256 x 256 mask
+
+
+def person_mask(session, image: Image.Image) -> bytes:
+    """The model's mask for the whole picture: MASK_SIZE x MASK_SIZE bytes, 0 (not the person) to 255 (the person).
+
+    The picture is stretched to the model's square (not letterboxed: the mask must cover the whole picture, and the model
+    was made for stretched pictures), scaled to 0..1 with no mean, and the model gives a 0..1 value for each pixel. The
+    values stay soft: nothing is cut at a threshold. (The browser's twin is ``personMask`` in models-glue.js.)
+    """
+    x = np.asarray(image.resize((MASK_SIZE, MASK_SIZE), Image.Resampling.BILINEAR), np.float32).transpose(2, 0, 1)[None] / 255
+    alphas = session.run(None, {session.get_inputs()[0].name: x})[0][0, 0]
+    return np.clip(np.floor(alphas * 255 + 0.5), 0, 255).astype(np.uint8).tobytes()
