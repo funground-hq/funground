@@ -26,7 +26,7 @@ from .controls import Button, Checkbox, ControlPanel, Slider, panel_ops
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
 from .paint import Gradient, parse_paint
 from .formatted import FormattedString
-from .typography import TEXT_STYLES, text_size_value
+from .typography import TEXT_STYLES, never_chosen_fonts, note_chosen, text_size_value
 from .geometry import Path, Transform, rect_radii
 from .paths import PathBuilder
 from .noise import Noise
@@ -139,6 +139,8 @@ class Sketch:
         self._start_time = time.perf_counter()
         self._fps_measured = 0.0
         self._has_window = False
+        self._text_drawn = False                 # a Text op was recorded this run (S-244)
+        self.ended_by_error = False              # the run is ending because of an error: hints would only add noise
         # ((width, height), RGB bytes) of the final frame when run(max_frames=)
         # stops the sketch; used by the regression suite.
         self.last_frame: tuple[tuple[int, int], bytes] | None = None
@@ -846,6 +848,8 @@ class Sketch:
         """Record an op, after turning any waiting set() calls into their one Pixels op (contract P7)."""
         if self._pending_pixels:
             self._flush_pixel_patch()
+        if isinstance(op, ir.Text):
+            self._text_drawn = True
         self.frame.append(op)
 
     def _render(self) -> None:
@@ -1415,6 +1419,7 @@ class Sketch:
             raise TypeError(
                 f"f.text_font() needs a font from f.load_font(), a path or web address, or None, not {type(font).__name__}"
             )
+        note_chosen(key)
         changes = {"font": key}
         if size is not None:
             changes["text_size"] = text_size_value(size, "f.text_font()")
@@ -1438,6 +1443,7 @@ class Sketch:
                 raise TypeError(
                     f"f.text_fallback() needs fonts from f.load_font() or f.system_font(), not {type(font).__name__}"
                 )
+            note_chosen(key)
             if key not in keys:
                 keys.append(key)
         self._states.update(text_fallback=tuple(keys))
@@ -2450,6 +2456,9 @@ class Sketch:
         try:
             while self.step():
                 pass
+        except BaseException:
+            self.ended_by_error = True
+            raise
         finally:
             self.finish()
 
@@ -2579,6 +2588,16 @@ class Sketch:
         self._platform.close()
         self._end_panel()
         self._has_window = False
+        self._tell_unused_fonts()
+
+    def _tell_unused_fonts(self) -> None:
+        """Print one line per loaded font the sketch never chose, when it drew text (S-244). Once per run: finish() runs once."""
+        names = never_chosen_fonts()
+        drew, self._text_drawn = self._text_drawn, False
+        failed, self.ended_by_error = self.ended_by_error, False
+        if drew and not failed:                  # after an error the traceback is what matters
+            for name in names:
+                print(f"{name} was loaded but never chosen: add f.text_font(...) to use it")
 
 
 def _is_positive_whole(n: object) -> bool:
