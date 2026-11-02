@@ -92,6 +92,8 @@ option C: byte-identical goldens, PDF/SVG, one renderer). The website is at fung
 (D-077); its Play page hosts the editor (S-151). Evidence: `sprints/sprint-17` to `sprint-19`,
 `docs/design/Web_Target_Options.md`.
 
+**Scope (D-127, 2 Nov 2026):** everything on main by then (the libraries `sound`, `sangeet`, `camera` and `ml`, fonts from the web, the tidy cut-out, the editors' names), plus the models S-234 (words), S-250 (sound), S-235 (a model you teach), S-236 (the guide chapter) and Play's S-238 to S-243 (the sketchbook, embed, stop without restarting, several files, the shape editor's prototype). `funground-ml` is published to PyPI beside it.
+
 ## Directional — after 1.0 (D-014)
 
 | Track | Epic | State |
