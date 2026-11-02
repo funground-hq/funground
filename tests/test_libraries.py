@@ -10,6 +10,7 @@ import pytest
 
 import funground as f
 from funground import camera, frame_inputs, host_services, sangeet, sound
+from funground.camera import _device
 from conftest import ROOT
 
 MOVED = sorted(f._MOVED)
@@ -106,7 +107,7 @@ def test_the_library_module_is_callable_only_to_say_so():
 
 def test_naming_the_camera_camera_gets_one_plain_sentence():
     """`camera = camera.open()` hides the library; the next `camera.open()` reaches the Camera object."""
-    cam = camera.open()
+    cam = _device.Camera(None, silent=True)                              # no device needed: CI has no camera
     for name in ("open", "names", "load_clip"):
         with pytest.raises(AttributeError, match=r"camera\.%s\(\) is called on the library.*cam = camera\.open\(\)" % name):
             getattr(cam, name)
