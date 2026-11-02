@@ -18,3 +18,6 @@ spikes/08_browser_pyodide/node_modules/
 tests/snapshots/_actual/
 .claude/worktrees/
 .claude/settings.local.json
+
+# funground-ml: model files the tests download
+ml/tests/.models/
