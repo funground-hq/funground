@@ -154,6 +154,7 @@ class Session:
                 self._sketch.show()                       # a script that never called f.show() (S-180)
         except BaseException as error:
             global_style.explain_clash(error, namespace)  # a global-style script's error at the top level
+            self._sketch.ended_by_error = True
             self.stop()
             raise
 
@@ -194,6 +195,7 @@ class Session:
         try:
             going = self._sketch.step()
         except BaseException:
+            self._sketch.ended_by_error = True
             self.stop()
             raise
         if not going:
