@@ -9,7 +9,8 @@ import ast
 from pathlib import Path
 
 PACKAGE = Path(__file__).resolve().parent.parent / "funground"
-BACKENDS = {"pygame", "cairo", "skia", "blend2d", "moderngl", "OpenGL", "pathops", "svgelements", "pypdf", "imageio_ffmpeg"}
+BACKENDS = {"pygame", "cairo", "skia", "blend2d", "moderngl", "OpenGL", "pathops", "svgelements", "pypdf", "imageio_ffmpeg",
+            "onnxruntime"}               # onnxruntime: only funground_ml/_runtime.py, outside the core (D-125; ml/tests checks that)
 # Which backend each provider directory may import (S-026: pygame is platform-only now).
 # imaging.py reads image files with pygame-ce (ADR-004, D-028).
 ALLOWED = {"platform/": {"pygame"}, "renderers/": {"cairo", "skia", "blend2d", "pygame"}, "export/": {"cairo", "pypdf", "imageio_ffmpeg"},             # pypdf: real PDF text (D-043)
