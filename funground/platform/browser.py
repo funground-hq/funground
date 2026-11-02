@@ -26,6 +26,7 @@ from collections.abc import Callable
 from .base import EVENT_KINDS, MOUSE_BUTTONS, InputEvent, Pixels
 from .browser_audio import HostMicrophone, HostMixer, MicrophoneCallback, SoundCallback
 from .browser_camera import CameraCallback, HostCamera
+from .browser_models import HostModels, ModelsCallback
 from .headless import HeadlessPlatform
 
 # on_frame(data, width, height, stride): data is the frame's bytes (BGRA, premultiplied, row-major),
@@ -43,7 +44,7 @@ class BrowserPlatform(HeadlessPlatform):
 
     def __init__(self, width: int, height: int, scale: float = 1.0, on_frame: FrameCallback | None = None,
                  on_sound: SoundCallback | None = None, on_microphone: MicrophoneCallback | None = None,
-                 on_camera: CameraCallback | None = None) -> None:
+                 on_camera: CameraCallback | None = None, on_models: ModelsCallback | None = None) -> None:
         super().__init__()
         if width <= 0 or height <= 0:
             raise ValueError("the host's canvas size must be above 0")
@@ -57,6 +58,7 @@ class BrowserPlatform(HeadlessPlatform):
         self.mixer = HostMixer(on_sound)         # what the sound library plays through, instead of pygame's mixer
         self.microphone = HostMicrophone(on_microphone)
         self.camera = HostCamera(on_camera)
+        self.models = HostModels(on_models)
 
     @property
     def backing_scale(self) -> float:
@@ -77,6 +79,10 @@ class BrowserPlatform(HeadlessPlatform):
     def push_camera(self, pixels, width: int, height: int) -> None:
         """One RGBA frame from the host's camera (`width * height * 4` bytes); the sketch uses the latest."""
         self.camera.push(pixels, width, height)
+
+    def push_models(self, task: str, key: int, points, score: float, width: int, height: int) -> None:
+        """One result from the host's models (browser_models.py); the sketch reads the latest."""
+        self.models.push(task, key, points, score, width, height)
 
     def poll(self) -> bool:
         super().poll()
@@ -112,6 +118,7 @@ class BrowserPlatform(HeadlessPlatform):
         self.mixer.stop_all()                    # a run that ends leaves nothing playing or listening
         self.microphone.close()
         self.camera.close()
+        self.models.close()
         super().close()
 
     # ---- output, to the host
