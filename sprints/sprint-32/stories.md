@@ -17,6 +17,8 @@ S-238 needs the maintainer for anything created under their account (a GitHub Ap
 | S-247 | Move the camera out of `f`: `from funground import camera` (after S-246) | done 2 Nov (funground #49, funground-web #19): full suite 2777 and 1749 passed, 1 skipped; Play's camera check passed, runner 15 of 15, 17 of 17 |
 | S-231 | Spike: which models, from which provider, on the web and on the desktop | planned 28 Oct |
 | S-238 | Spike: signing in to GitHub from Play, a static site (D-118) | planned 28 Oct |
+| S-232 | Pose and hands: `ml.pose(source)` and `ml.hand(source)` with named points, in the `funground-ml` package (D-124 d, D-125 a) | added 2 Nov after D-125; in progress |
+| S-233 | The person: `ml.person(source)`, the source with everything but the person see-through (D-125 a; after S-232) | added 2 Nov after D-125; planned |
 | Smaller, when they fit | S-249's SVG background bug (no API change); S-244 (a loaded font never chosen); S-245 (tidy the cut-out, decided in D-115) | SVG background done 28 Oct (full suite 2814 and 1749 passed, 1 skipped); the others planned |
 
 Order: the names proposal (D-123) first, with the internal module renames that free the names (no public change);
@@ -56,3 +58,17 @@ stories between heavy jobs. One heavy job at a time on this machine.
 - [ ] Option b: the exchange service's code (written, `exchange/worker.js`); the App and the host set up by or with the maintainer
 - [ ] The maintainer's check on a phone and a laptop: sign in, list, open, save, new, sign out
 - [ ] A recommendation for D-118, with who owns the App and the service
+
+## S-232 tasks
+
+- [x] The API to the maintainer (D-125, `docs/design/ML_First_API_Note.md`): accepted 2 Nov, option a
+- [ ] The `funground-ml` package in `ml/` (decided by Claude: a folder of this repository with its own `pyproject.toml`, not a new repository; the maintainer can ask for one): `onnxruntime` with `ORT_DISABLE_TELEMETRY=1` set before import, models fetched by funground's own HTTPS request and checked by SHA-256
+- [ ] The core's `funground/ml` stub with the install sentence; boundary rows
+- [ ] `ml.pose` and `ml.hand` on the desktop: named `f.Vector` points, `.points`, `.score`, `None` for nobody, the body's own sides with a mirrored camera, the same answer twice in a frame
+- [ ] Play: the same files in `onnxruntime-web` in the worker (funground-web), the latest result, points within 5 px of the desktop's
+- [ ] Contract rows, reference, completions, `llms.txt`; a gallery example and a guide section
+
+## S-233 tasks
+
+- [ ] `ml.person(source)` on the desktop and in Play, the selfie model's mask applied as alpha; contract row; example and guide
+
