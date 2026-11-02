@@ -1,0 +1,166 @@
+{
+ "whisper": {
+  "tts": {
+   "desktop_text": "Draw a red circle in the middle of the screen, then make it bounce off the walls and change color every time it hits one.",
+   "web_text": "Draw a red circle in the middle of the screen, then make it bounce off the walls and change color every time it hits one.",
+   "wer_desktop": 0.0,
+   "wer_web": 0.0,
+   "same_words_desktop_web": true,
+   "exact_same_string": true,
+   "rtf_desktop": 0.122,
+   "rtf_web": 0.539
+  },
+  "gettysburg": {
+   "desktop_text": "This is a LibraVox recording. All LibraVox recordings are in the public domain. For more information or to volunteer, please visit LibraVox.org.",
+   "web_text": "This is a LibraVox recording. All LibraVox recordings are in the public domain. For more information or to volunteer, please visit libravox.org.",
+   "wer_desktop": 0.13,
+   "wer_web": 0.13,
+   "same_words_desktop_web": true,
+   "exact_same_string": false,
+   "rtf_desktop": 0.112,
+   "rtf_web": 0.366
+  }
+ },
+ "yamnet": {
+  "dog": {
+   "max_abs_score_diff": 1e-05,
+   "top3_desktop": [
+    [
+     "Dog",
+     0.7638
+    ],
+    [
+     "Animal",
+     0.7581
+    ],
+    [
+     "Domestic animals, pets",
+     0.7435
+    ]
+   ],
+   "top3_web": [
+    [
+     "Dog",
+     0.7638
+    ],
+    [
+     "Animal",
+     0.7581
+    ],
+    [
+     "Domestic animals, pets",
+     0.7435
+    ]
+   ],
+   "ms_single_window_desktop": 1.4,
+   "ms_single_window_web": 22.4,
+   "ms_per_window_in_clip_desktop": 0.8,
+   "ms_per_window_in_clip_web": 24.3
+  },
+  "clap": {
+   "max_abs_score_diff": 0.0,
+   "top3_desktop": [
+    [
+     "Hands",
+     0.3172
+    ],
+    [
+     "Explosion",
+     0.2643
+    ],
+    [
+     "Slap, smack",
+     0.2472
+    ]
+   ],
+   "top3_web": [
+    [
+     "Hands",
+     0.3172
+    ],
+    [
+     "Explosion",
+     0.2643
+    ],
+    [
+     "Slap, smack",
+     0.2472
+    ]
+   ],
+   "ms_single_window_desktop": 1.4,
+   "ms_single_window_web": 21.2,
+   "ms_per_window_in_clip_desktop": 0.8,
+   "ms_per_window_in_clip_web": 24.4
+  },
+  "whistle": {
+   "max_abs_score_diff": 0.0,
+   "top3_desktop": [
+    [
+     "Whistling",
+     0.7304
+    ],
+    [
+     "Alarm",
+     0.1854
+    ],
+    [
+     "Whistle",
+     0.1577
+    ]
+   ],
+   "top3_web": [
+    [
+     "Whistling",
+     0.7304
+    ],
+    [
+     "Alarm",
+     0.1854
+    ],
+    [
+     "Whistle",
+     0.1577
+    ]
+   ],
+   "ms_single_window_desktop": 1.4,
+   "ms_single_window_web": 13.1,
+   "ms_per_window_in_clip_desktop": 0.9,
+   "ms_per_window_in_clip_web": 20.6
+  },
+  "speech": {
+   "max_abs_score_diff": 0.0,
+   "top3_desktop": [
+    [
+     "Speech",
+     0.8702
+    ],
+    [
+     "Silence",
+     0.125
+    ],
+    [
+     "Speech synthesizer",
+     0.028
+    ]
+   ],
+   "top3_web": [
+    [
+     "Speech",
+     0.8702
+    ],
+    [
+     "Silence",
+     0.125
+    ],
+    [
+     "Speech synthesizer",
+     0.028
+    ]
+   ],
+   "ms_single_window_desktop": 1.4,
+   "ms_single_window_web": 28.2,
+   "ms_per_window_in_clip_desktop": 0.9,
+   "ms_per_window_in_clip_web": 24.8
+  }
+ }
+}
