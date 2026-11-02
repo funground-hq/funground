@@ -464,7 +464,8 @@ class Picture:
         self._write_pixels(imaging.mask_bgra(snap.pixels, scaled[3::4]))
         self._history = None
 
-    def remove_color(self, color: Any, tolerance: int = 40) -> None:
+    def remove_color(self, color: Any, tolerance: int = 40, tidy: bool = False,
+                     at: tuple[float, float] | None = None) -> None:
         """Make every pixel that is close to a colour see-through, in place.
 
         A pixel is close when its red, green and blue each differ from the colour by at most the tolerance.
@@ -472,15 +473,22 @@ class Picture:
         flat background. Pixels that are kept are not changed, and pixels that are already see-through stay
         see-through. The drawing history is dropped.
 
+        The cut-out can leave specks (bits of the background that look like you) and holes (bits of you that look
+        like the background). With tidy=True only one connected part is kept, the largest, and its holes are filled
+        with the picture's own colours. With at=(x, y) the part that contains that point is kept instead.
+
         Arguments:
             color: the colour to remove, in one argument: a name, a hex string, a grey number or (red, green, blue), read as fill() reads it.
             tolerance: how different a colour may be and still go, from 0 (exactly this colour) to 255 (every colour). It is 40 at first.
+            tidy: True to keep one connected part and fill its holes. It is False at first.
+            at: a point (x, y) on the part to keep, in pixels of this picture. It implies tidy=True. It is None at first.
 
         Returns:
             None. The picture itself is changed.
 
         Raises:
-            ValueError: if the tolerance is not a whole number from 0 to 255.
+            TypeError: if tidy is not True or False.
+            ValueError: if the tolerance is not a whole number from 0 to 255, or if at is not a point, is outside the picture, or is on a pixel that is see-through after the removal.
 
         Example:
             g = f.create_graphics(100, 100)
@@ -495,14 +503,19 @@ class Picture:
         from . import imaging
 
         tolerance = imaging.check_tolerance(tolerance, "g.remove_color()")
+        point = imaging.check_at(at, self.width, self.height, "g.remove_color()")
+        tidy = self._check_tidy(tidy, "g.remove_color()")
         c = self._sketch.read_color(color)              # as fill() reads it, under the colour mode
         snap = self._snapshot()
         out = imaging.remove_matching_bgra(snap.pixels, snap.phys_width, snap.phys_height, tolerance,
                                            color=(c.red, c.green, c.blue))
+        if tidy or point is not None:
+            out = self._tidied(snap, out, point, "g.remove_color()")
         self._write_pixels(out)
         self._history = None
 
-    def remove_background(self, empty: "Picture", tolerance: int = 30) -> None:
+    def remove_background(self, empty: "Picture", tolerance: int = 30, tidy: bool = False,
+                          at: tuple[float, float] | None = None) -> None:
         """Make every pixel that looks the same as an empty picture see-through, in place.
 
         Take a picture of the room with nobody in it, then compare each new picture with it. A pixel is the
@@ -510,16 +523,22 @@ class Picture:
         tolerance. What is left is whatever changed, such as you. Pixels that are kept are not changed. The
         drawing history is dropped.
 
+        A camera leaves specks (bits of the room that changed) and holes (bits of you that look like the room).
+        With tidy=True only one connected part is kept, the largest, and its holes are filled with the picture's
+        own colours. With at=(x, y), a point on you, the part that contains that point is kept instead.
+
         Arguments:
             empty: a Picture of the same size, showing only the background.
             tolerance: how different a pixel may be and still count as the same, from 0 to 255. It is 30 at first. A camera flickers a little, so 0 rarely works.
+            tidy: True to keep one connected part and fill its holes. It is False at first.
+            at: a point (x, y) on the part to keep, in pixels of this picture. It implies tidy=True. It is None at first.
 
         Returns:
             None. The picture itself is changed.
 
         Raises:
-            TypeError: if empty is not a Picture.
-            ValueError: if the tolerance is not a whole number from 0 to 255, or if empty has a different size.
+            TypeError: if empty is not a Picture, or if tidy is not True or False.
+            ValueError: if the tolerance is not a whole number from 0 to 255, if empty has a different size, or if at is not a point, is outside the picture, or is on a pixel that is see-through after the removal.
 
         Example:
             empty = f.create_graphics(100, 100)
@@ -545,10 +564,64 @@ class Picture:
         if (esnap.phys_width, esnap.phys_height) != (snap.phys_width, snap.phys_height):     # the same size, another scale
             empty_pixels = imaging.resize_bgra(esnap.pixels, esnap.phys_width, esnap.phys_height,
                                                snap.phys_width, snap.phys_height)
+        point = imaging.check_at(at, self.width, self.height, "g.remove_background()")
+        tidy = self._check_tidy(tidy, "g.remove_background()")
         out = imaging.remove_matching_bgra(snap.pixels, snap.phys_width, snap.phys_height, tolerance,
                                            empty_bgra=empty_pixels)
+        if tidy or point is not None:
+            out = self._tidied(snap, out, point, "g.remove_background()")
         self._write_pixels(out)
         self._history = None
+
+    @staticmethod
+    def _check_tidy(tidy: Any, name: str) -> bool:
+        if not isinstance(tidy, bool):
+            raise TypeError(f"{name}: tidy must be True or False, not {type(tidy).__name__}")
+        return tidy
+
+    def _tidied(self, snap: Snapshot, removed: bytes, point: tuple[float, float] | None, name: str) -> bytes:
+        """The cut-out with one part kept and its holes filled (the logical point becomes a physical pixel)."""
+        from . import imaging
+
+        at = None
+        if point is not None:
+            at = (min(snap.phys_width - 1, int(point[0] * snap.scale)),
+                  min(snap.phys_height - 1, int(point[1] * snap.scale)))
+        return imaging.tidy_bgra(snap.pixels, removed, snap.phys_width, snap.phys_height, at, name)
+
+    def outline(self, points: int = 80) -> list[tuple[float, float]]:
+        """Give the border of the part you can see as a list of points, to draw, drag and clip with.
+
+        The part is the largest connected group of pixels that are more than half opaque, so use it after
+        remove_background or remove_color, best with tidy=True. The points are spread evenly along the border,
+        in order round the part, in pixels of this picture. Pass the list to f.path().polygon() to draw it, or
+        make a path of it for f.clip(). Move a point and the shape changes. A picture with nothing to see gives
+        an empty list. The picture is not changed.
+
+        Arguments:
+            points: the most points to give, a whole number of 3 or more. It is 80 at first. A small shape may give fewer.
+
+        Returns:
+            A list of (x, y) tuples.
+
+        Raises:
+            ValueError: if points is not a whole number of 3 or more.
+
+        Example:
+            g = f.create_graphics(100, 100)
+            g.fill("tomato")
+            g.circle(50, 50, 60)
+            shape = g.outline(points=12)        # 12 points round the circle
+            edge = f.path().polygon(shape)
+
+        See also: remove_background, remove_color, mask
+        """
+        from . import imaging
+
+        points = imaging.check_outline_points(points, "g.outline()")
+        snap = self._snapshot()
+        border = imaging.outline_bgra(snap.pixels, snap.phys_width, snap.phys_height, points)
+        return [(x / snap.scale, y / snap.scale) for x, y in border]
 
     def _write_pixels(self, bgra: bytes) -> None:
         """Put premultiplied BGRA (this picture's physical size) on the surface; a new version."""

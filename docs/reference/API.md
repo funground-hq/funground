@@ -6934,6 +6934,43 @@ photo.mask(stencil)                         # now it is a circle
 
 See also: [`copy`](#cls-Picture-copy), [`image`](#cls-Picture-image).
 
+<a id="cls-Picture-outline"></a>
+#### `Picture.outline`
+
+<p class="fg-since">Since 0.2.</p>
+
+```py
+Picture.outline(points: 'int' = 80) -> 'list[tuple[float, float]]'
+```
+
+Give the border of the part you can see as a list of points, to draw, drag and clip with.
+
+The part is the largest connected group of pixels that are more than half opaque, so use it after
+remove_background or remove_color, best with tidy=True. The points are spread evenly along the border,
+in order round the part, in pixels of this picture. Pass the list to f.path().polygon() to draw it, or
+make a path of it for f.clip(). Move a point and the shape changes. A picture with nothing to see gives
+an empty list. The picture is not changed.
+
+| Argument | Meaning |
+|---|---|
+| `points` | the most points to give, a whole number of 3 or more. It is 80 at first. A small shape may give fewer. |
+
+**Returns.** A list of (x, y) tuples.
+
+**Raises.**
+
+- `ValueError`: if points is not a whole number of 3 or more.
+
+```py
+g = f.create_graphics(100, 100)
+g.fill("tomato")
+g.circle(50, 50, 60)
+shape = g.outline(points=12)        # 12 points round the circle
+edge = f.path().polygon(shape)
+```
+
+See also: [`remove_background`](#cls-Picture-remove_background), [`remove_color`](#cls-Picture-remove_color), [`mask`](#cls-Picture-mask).
+
 <a id="cls-Picture-pixels"></a>
 #### `Picture.pixels`
 
@@ -6964,7 +7001,7 @@ See also: [`copy`](#cls-Picture-copy), [`mask`](#cls-Picture-mask).
 <p class="fg-since">Since 0.2.</p>
 
 ```py
-Picture.remove_background(empty: "'Picture'", tolerance: 'int' = 30) -> 'None'
+Picture.remove_background(empty: "'Picture'", tolerance: 'int' = 30, tidy: 'bool' = False, at: 'tuple[float, float] | None' = None) -> 'None'
 ```
 
 Make every pixel that looks the same as an empty picture see-through, in place.
@@ -6974,17 +7011,23 @@ same when its red, green and blue each differ from the same pixel of the empty p
 tolerance. What is left is whatever changed, such as you. Pixels that are kept are not changed. The
 drawing history is dropped.
 
+A camera leaves specks (bits of the room that changed) and holes (bits of you that look like the room).
+With tidy=True only one connected part is kept, the largest, and its holes are filled with the picture's
+own colours. With at=(x, y), a point on you, the part that contains that point is kept instead.
+
 | Argument | Meaning |
 |---|---|
 | `empty` | a Picture of the same size, showing only the background. |
 | `tolerance` | how different a pixel may be and still count as the same, from 0 to 255. It is 30 at first. A camera flickers a little, so 0 rarely works. |
+| `tidy` | True to keep one connected part and fill its holes. It is False at first. |
+| `at` | a point (x, y) on the part to keep, in pixels of this picture. It implies tidy=True. It is None at first. |
 
 **Returns.** None. The picture itself is changed.
 
 **Raises.**
 
-- `TypeError`: if empty is not a Picture.
-- `ValueError`: if the tolerance is not a whole number from 0 to 255, or if empty has a different size.
+- `TypeError`: if empty is not a Picture, or if tidy is not True or False.
+- `ValueError`: if the tolerance is not a whole number from 0 to 255, if empty has a different size, or if at is not a point, is outside the picture, or is on a pixel that is see-through after the removal.
 
 ```py
 empty = f.create_graphics(100, 100)
@@ -7003,7 +7046,7 @@ See also: [`remove_color`](#cls-Picture-remove_color), [`mask`](#cls-Picture-mas
 <p class="fg-since">Since 0.2.</p>
 
 ```py
-Picture.remove_color(color: 'Any', tolerance: 'int' = 40) -> 'None'
+Picture.remove_color(color: 'Any', tolerance: 'int' = 40, tidy: 'bool' = False, at: 'tuple[float, float] | None' = None) -> 'None'
 ```
 
 Make every pixel that is close to a colour see-through, in place.
@@ -7013,16 +7056,23 @@ Draw something behind the picture and it shows through. Use it with a green clot
 flat background. Pixels that are kept are not changed, and pixels that are already see-through stay
 see-through. The drawing history is dropped.
 
+The cut-out can leave specks (bits of the background that look like you) and holes (bits of you that look
+like the background). With tidy=True only one connected part is kept, the largest, and its holes are filled
+with the picture's own colours. With at=(x, y) the part that contains that point is kept instead.
+
 | Argument | Meaning |
 |---|---|
 | `color` | the colour to remove, in one argument: a name, a hex string, a grey number or (red, green, blue), read as fill() reads it. |
 | `tolerance` | how different a colour may be and still go, from 0 (exactly this colour) to 255 (every colour). It is 40 at first. |
+| `tidy` | True to keep one connected part and fill its holes. It is False at first. |
+| `at` | a point (x, y) on the part to keep, in pixels of this picture. It implies tidy=True. It is None at first. |
 
 **Returns.** None. The picture itself is changed.
 
 **Raises.**
 
-- `ValueError`: if the tolerance is not a whole number from 0 to 255.
+- `TypeError`: if tidy is not True or False.
+- `ValueError`: if the tolerance is not a whole number from 0 to 255, or if at is not a point, is outside the picture, or is on a pixel that is see-through after the removal.
 
 ```py
 g = f.create_graphics(100, 100)
