@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib
+import importlib.util
 import json
 import pkgutil
 from pathlib import Path
@@ -626,5 +627,10 @@ def test_no_submodule_hides_a_public_name():
     assert modules & set(f._PUBLIC_NAMES) == {"color", "noise"}
     assert (PACKAGE / "exploring.py").exists()
     for name in sorted(modules):
+        if name == "ml" and importlib.util.find_spec("funground_ml") is None:
+            # The models stub says it is a separate install when funground-ml is absent (ML4)
+            with pytest.raises(ImportError, match="separate install"):
+                importlib.import_module("funground.ml")
+            continue
         importlib.import_module(f"funground.{name}")
     assert callable(f.variations) and callable(f.keep) and callable(f.area) and callable(f.grid)

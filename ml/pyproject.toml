@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "funground-ml"
+version = "0.1.0.dev0"
+description = "The models library for funground: a body and a hand in a camera or a picture, found on your own computer."
+readme = "README.md"
+license = "LGPL-2.1-only"
+requires-python = ">=3.11"
+authors = [{ name = "Samir Joshi" }]
+keywords = ["creative coding", "education", "pose", "hand tracking", "onnx", "funground"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "Topic :: Education",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+
+# The same bounds as the core's (D-100): from the version funground-ml needs up to the next major version.
+dependencies = ["funground", "onnxruntime>=1.31,<2", "numpy>=2,<3", "pillow>=11,<13"]
+
+[project.urls]
+Homepage = "https://github.com/funground-hq/funground"
+Source = "https://github.com/funground-hq/funground"
+Issues = "https://github.com/funground-hq/funground/issues"
+
+[tool.setuptools]
+packages = ["funground_ml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["model: runs the real model files (downloads them on the first run; skipped when offline)"]
