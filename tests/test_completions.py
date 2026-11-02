@@ -114,8 +114,9 @@ def test_other_entries_have_no_members():
 
 def test_functions_name_the_class_they_give_back():
     found = entries()
-    assert found["path"]["returns"] == "PathBuilder" and found["camera"]["returns"] == "Camera"
+    assert found["path"]["returns"] == "PathBuilder"
     assert found["grid"]["returns"] == "Grid"
+    assert {e["name"]: e for e in data()["libraries"]["camera"]}["open"]["returns"] == "Camera"
     assert {e["name"]: e for e in data()["libraries"]["sound"]}["tone"]["returns"] == "Sound"
     assert "returns" not in found["circle"] and "returns" not in found["Vector"]
 

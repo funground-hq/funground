@@ -47,7 +47,7 @@ video = ["imageio-ffmpeg>=0.5,<1"]        # an ffmpeg for MP4 export (D-045 = B)
 
 [tool.setuptools]
 packages = ["funground", "funground.platform", "funground.renderers", "funground.export",
-            "funground.sound", "funground.sangeet",
+            "funground.sound", "funground.sangeet", "funground.camera",
             "funground.examples", "funground.gallery_images"]
 
 # The gallery examples ship without moving (S-103, D-049): the build maps the repository's

@@ -20,14 +20,13 @@ from ._options import (ArcMode, BlendMode, ColorMode, CursorKind, EllipseMode, F
 from .marks import NOT_GIVEN, Mark, mark_from_path, mark_from_svg, refuse_in_mark  # S-132: marks (the Marks section at the end)
 from .paths import PathBuilder
 from .typography import Font
-from .picture import Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
+from .picture import FrameSource, Picture, draw_image  # noqa: F401  (Picture: public via f.create_graphics, S-052)
 from .sketch import DEFAULT_SHADOW_COLOR, Sketch
 from .surface import Area, Grid  # noqa: F401  (S-132 part 4: returned by f.area and f.grid, contract G1)
 from .formatted import FormattedString  # noqa: F401  (public: f.FormattedString, S-091)
 from .vector import Vector  # noqa: F401  (public: f.Vector, S-055)
 
 if TYPE_CHECKING:                                    # only for the annotations below; nothing is imported at run time
-    from .camera_input import Camera, Clip
     from .paint import Gradient
 
 _active: Sketch | None = None
@@ -2790,95 +2789,6 @@ def load_svg(path: str) -> Picture:
     return canvas_sketch().load_svg(path, base_dir=_sketch_folder())
 
 
-
-
-def camera(name: str | None = None) -> Camera:
-    """Make a camera object for the computer's default camera.
-
-    Nothing opens, and no light comes on, until you call cam.start(). Then use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives a still copy whose pixels you can read with get(), cam.save("me.png") writes a photo, and cam.record(3) keeps three seconds as a clip you can save as a GIF. Frames stay on your computer. In the browser, press Play and allow the camera when it asks. On a Mac, the desktop camera does not work yet: run the sketch on the website. With FUNGROUND_HEADLESS=1 the camera opens nothing and is never ready.
-
-    Arguments:
-        name: part of the name of the camera to use. The default None uses the first camera. See cameras(). In the browser the browser chooses, so leave it out.
-
-    Returns:
-        A Camera: start(width, height, mirror), stop(), is_ready(), width, height, picture(), save(path) and record(seconds).
-
-    Raises:
-        ValueError: name is not text.
-        RuntimeError: there is no camera, no camera has that name, or this is a Mac desktop.
-
-    Example:
-        cam = f.camera()
-        cam.start()
-        f.image(cam, 0, 0)
-
-    See also: cameras, image, load_image
-    """
-    from . import camera_input
-
-    return camera_input.make(name, canvas_sketch)
-
-
-def cameras() -> list[str]:
-    """Return the names of the computer's cameras.
-
-    The list is empty in the browser, where the browser chooses the camera, and on a Mac desktop.
-
-    Returns:
-        A list of names. Give part of one to camera().
-
-    Example:
-        print(f.cameras())
-
-    See also: camera
-    """
-    from . import camera_input
-
-    return camera_input.cameras()
-
-
-def load_clip(path: str) -> Clip:
-    """Read an animated GIF or WebP file and return it as a clip.
-
-    It is the same kind of clip that cam.record() gives, so a take saved from the photo booth can come back in another
-    sketch: len(clip) counts its frames, clip.frame(i) is one of them as a picture, and clip.fps is how many frames a
-    second it plays. A relative path is found next to the sketch file first, then in the current folder. A still
-    picture gives a clip of one frame. The frame rate comes from the file's frame times; when they differ, the middle
-    one is used.
-
-    Arguments:
-        path: the file name, such as "take.gif".
-
-    Returns:
-        A Clip that is complete: clip.done is True.
-
-    Raises:
-        FileNotFoundError: there is no such file.
-        ValueError: the file is not a picture funground can read, or it is an SVG file.
-
-    Example:
-        take = f.load_clip("take.gif")
-        f.image(take.frame(f.frame_count % len(take)), 0, 0)
-
-    See also: camera, load_image
-    """
-    from . import camera_input
-    from .typography import _resolve_path
-
-    caller = inspect.currentframe()
-    base_dir = None
-    if caller is not None and caller.f_back is not None:
-        sketch_file = caller.f_back.f_globals.get("__file__")
-        if sketch_file:
-            import os
-
-            base_dir = os.path.dirname(os.path.abspath(sketch_file))
-    resolved = _resolve_path(path, base_dir, "f.load_clip()", "clip")
-    return camera_input.load_clip(resolved, canvas_sketch)
-
-
-
-
 def svg_paths(path: str) -> list[PathBuilder]:
     """Read an SVG file and return its shapes as paths.
 
@@ -2907,7 +2817,7 @@ def svg_paths(path: str) -> list[PathBuilder]:
     return [PathBuilder(geometry) for geometry in svg.shapes_as_paths(svg.read(resolved, "f.svg_paths()"))]
 
 
-def image(picture: Picture | Camera, x: float, y: float, width: float | None = None, height: float | None = None,
+def image(picture: Picture | FrameSource, x: float, y: float, width: float | None = None, height: float | None = None,
           sx: float | None = None, sy: float | None = None,
           sw: float | None = None, sh: float | None = None) -> None:
     """Draw a picture.
@@ -2915,7 +2825,7 @@ def image(picture: Picture | Camera, x: float, y: float, width: float | None = N
     It is drawn as it is at this moment: later drawing on the picture does not change what was placed. image_mode() changes how x, y, width and height are read. tint() colours it.
 
     Arguments:
-        picture: a Picture, from load_image(), load_svg(), create_graphics(), get() or sound.spectrogram(), or a camera from camera(). A camera draws its latest frame, and nothing before the first one arrives.
+        picture: a Picture, from load_image(), load_svg(), create_graphics(), get() or sound.spectrogram(), or a camera from camera.open(). A camera draws its latest frame, and nothing before the first one arrives.
         x, y: where to put it, by default the top-left corner.
         width, height: the size to stretch it to. The default None uses the picture's own size.
         sx, sy, sw, sh: give all four to draw only that part of the picture (in its own pixels) into the box. A part that reaches outside the picture is clipped and keeps its place. sw and sh must be above 0.
@@ -2927,7 +2837,7 @@ def image(picture: Picture | Camera, x: float, y: float, width: float | None = N
         f.image(photo, 0, 0)
         f.image(photo, 0, 0, 200, 150, 40, 30, 100, 75)
 
-    See also: load_image, create_graphics, image_mode, tint, camera
+    See also: load_image, create_graphics, image_mode, tint
     """
     draw_image(active_sketch(), picture, x, y, width, height, sx, sy, sw, sh)
 

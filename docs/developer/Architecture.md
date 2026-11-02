@@ -55,6 +55,9 @@ draw-op IR is the contract. Cairo draws. pygame-ce runs the window. Learners nev
  |  sound and music |   analysis.py: Sound objects, microphones, ragas. They play, listen and
  +------------------+   analyse. They add nothing to the IR. The drawing views (sound/_views.py)
                         draw with ordinary drawing calls.
+ +------------------+   funground/camera/ (a library): the camera and its clips. A camera is
+ |      camera      |   drawn as a Picture; it adds nothing to the IR of its own.
+ +------------------+
  +------------------+   funground/gallery.py    the Examples Gallery browser (a funground sketch)
  |  gallery package |   funground/examples/     the examples, mapped into the package at build time
  +------------------+
@@ -75,18 +78,33 @@ Read it top to bottom for one drawing call:
 
 ### The modules
 
-**Core and libraries (ADR-007, S-246).** `f` holds the core. A **library** is a subpackage that a sketch imports
+**Core and libraries (ADR-007, S-246, S-247).** `f` holds the core. A **library** is a subpackage that a sketch imports
 (`from funground import sound`) and that imports the core. The core never imports a library, and
 `tests/test_boundaries.py` checks it. A library keeps its code in modules whose names start with an underscore
-(`sound/_engine.py`), so no module can take the name of a public function. There are two today:
+(`sound/_engine.py`), so no module can take the name of a public function. There are three today:
 
 - `funground/sound/`: the sound library, 18 names. `_engine.py` (the `Sound` class and the mixer), `_synth.py` (sound
   from numbers), `_swaras.py` (the drone and the singing analysis), `_microphone.py` and `_views.py`.
 - `funground/sangeet/`: the sangeet library, 6 names (ragas and talas). `_tables.py` holds the table. sangeet imports
   sound to make sounds; sound never imports sangeet.
+- `funground/camera/`: the camera library, 3 names (`camera.open`, `camera.names`, `camera.load_clip`). `_device.py`
+  holds the `Camera` and `Clip` classes and the device behind them (pygame.camera, or the page's camera).
 
-What a host supplies (a web page's mixer and microphone) is set in `funground/host_services.py`, a plain registry in the
-core. `web.py` sets it, the sound library reads it. On a computer it is empty and pygame is used.
+What a host supplies (a web page's mixer, microphone and camera) is set in `funground/host_services.py`, a plain
+registry in the core. `web.py` sets it, the libraries read it. On a computer it is empty and pygame is used.
+
+Three small things in the core let the camera work without the core importing it:
+
+- `funground/frame_inputs.py` is a registry of inputs the sketch serves each frame. The camera library registers its
+  `take_frames` and `stop_all` when it is imported. `Sketch` calls `frame_inputs.take_all(self)` once before each
+  `draw()` (the frame is taken once, like the mouse: contract I4) and `frame_inputs.stop_all()` when the sketch ends.
+- `picture.FrameSource` is a protocol: an object with a `_current_picture()` method. `f.image()` draws any such object as
+  its latest picture, and a `Camera` is one.
+- `host_services.camera` is the page's camera, set and cleared by `Session` as the mixer and microphone are.
+
+`from funground import camera` also gives the library module its own class (`camera/__init__.py`), so that a call
+`f.camera()` in old code raises one `TypeError` with the sentence naming `camera.open()` (D-123). Before the library is
+imported, `f.camera` raises an `AttributeError` with the same sentence.
 
 | Module | What it does |
 |---|---|
@@ -113,6 +131,8 @@ core. `web.py` sets it, the sound library reads it. On a computer it is empty an
 | `funground/sound/_synth.py` | Sound from numbers (A3, A9): waves, envelopes, notes, plucks, melodies. Plain Python, no device. |
 | `funground/analysis.py` | Onsets, tempo, beats, chroma, chords, key (A5, A6). Plain Python. |
 | `funground/sangeet/_tables.py`, `funground/data/ragas.json` | Ragas and talas: drone, tala, tonic, swara histogram, raga matching (A8). The table names its sources. |
+| `funground/frame_inputs.py` | The registry of inputs the sketch serves each frame (S-247): `register(take, stop)`, `take_all(sketch)`, `stop_all()`. The core never imports a library, so a library registers itself here. |
+| `funground/camera/_device.py` | `Camera` and `Clip` (I4, I5): the device (pygame.camera, or the host's camera), the frame taken once before each `draw()`, recording and saving clips. The only user of `pygame.camera`. |
 | `funground/sound/_microphone.py` | `Microphone` (A4, D-058). Uses pygame's experimental `pygame._sdl2.audio`, in three small functions. |
 | `funground/sound/_views.py` | Ready-made drawings of a sound or microphone: wave, spectrum, spectrogram, pitch line (A7). |
 | `funground/gallery.py` | The Examples Gallery browser, `python -m funground.gallery`. Holds `AREAS`, the locator and the explanation reader. |
@@ -183,6 +203,7 @@ every file in `funground/`. Its `ALLOWED` table is the truth:
 |---|---|---|
 | pygame-ce (`pygame`), window and images | `funground/platform/`, `funground/imaging.py` | pygame-ce is the window, input and timing layer, and it decodes image files. It draws nothing (D-008, a test checks for `pygame.draw` and `pygame.font`). `imaging.py` reads image files with it so that no second image library is needed (ADR-004, D-028). |
 | pygame-ce audio (`pygame.mixer`, `pygame._sdl2.audio`) | `funground/sound/_engine.py`, `funground/sound/_microphone.py` | Sound playback and microphone input (D-046, D-058). One file for each. `microphone_input.py` uses pygame-ce's experimental module, kept in three small functions so a change is easy to follow. |
+| pygame-ce camera (`pygame.camera`) | `funground/camera/_device.py` | Camera input (D-089). Imported only when a camera is asked for, never when funground is imported. |
 | Cairo (`cairo`, pycairo) | `funground/renderers/`, `funground/export/` | Cairo is the renderer and the PDF and SVG writer. Keeping it in two folders means one place to change if the renderer changes (ADR-001, ADR-002, D-011). |
 | pypdf | `funground/export/` | To rewrite Cairo's PDF so that text is real, searchable text and layers are real layers (D-043, D-053). It belongs with the other file-writing code. |
 | imageio-ffmpeg (`imageio_ffmpeg`) | `funground/export/` | The optional `funground[video]` extra: an ffmpeg program for MP4 export, found by `find_ffmpeg()` in `export/motion.py` (D-045). |

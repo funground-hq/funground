@@ -21,6 +21,7 @@ Make it yours:
 import math
 
 import funground as f
+from funground import camera
 
 WIDTH, HEIGHT = 400, 300
 TOLERANCE = 30
@@ -32,9 +33,9 @@ room = None                                    # the drawn room, for when there 
 
 def open_camera():
     try:
-        camera = f.camera()
-        camera.start(WIDTH, HEIGHT)
-        return camera
+        cam = camera.open()
+        cam.start(WIDTH, HEIGHT)
+        return cam
     except RuntimeError:
         return None
 

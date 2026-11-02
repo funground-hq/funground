@@ -4541,7 +4541,7 @@
    "name": "image",
    "kind": "function",
    "signature": "image(picture, x, y, width=None, height=None, sx=None, sy=None, sw=None, sh=None)",
-   "detail": "(picture: Picture | Camera, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
+   "detail": "(picture: Picture | FrameSource, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
    "summary": "Draw a picture.",
    "url": "reference/API.md#fn-image",
    "star": true
@@ -4689,38 +4689,6 @@
    "detail": "() -> None",
    "summary": "Copy the canvas into f.pixels.",
    "url": "reference/API.md#fn-load_pixels",
-   "star": true
-  },
-  {
-   "name": "camera",
-   "kind": "function",
-   "signature": "camera(name=None)",
-   "detail": "(name: str | None = None) -> Camera",
-   "summary": "Make a camera object for the computer's default camera.",
-   "url": "reference/API.md#fn-camera",
-   "returns": "Camera",
-   "since": "0.2",
-   "star": true
-  },
-  {
-   "name": "cameras",
-   "kind": "function",
-   "signature": "cameras()",
-   "detail": "() -> list[str]",
-   "summary": "Return the names of the computer's cameras.",
-   "url": "reference/API.md#fn-cameras",
-   "since": "0.2",
-   "star": true
-  },
-  {
-   "name": "load_clip",
-   "kind": "function",
-   "signature": "load_clip(path)",
-   "detail": "(path: str) -> Clip",
-   "summary": "Read an animated GIF or WebP file and return it as a clip.",
-   "url": "reference/API.md#fn-load_clip",
-   "returns": "Clip",
-   "since": "0.2",
    "star": true
   },
   {
@@ -10974,6 +10942,34 @@
     "detail": "(histogram: Any) -> list[tuple[str, float]]",
     "summary": "Rank the table's ragas by how well their swaras fit a histogram.",
     "url": "reference/API.md#fn-sangeet-match_ragas"
+   }
+  ],
+  "camera": [
+   {
+    "name": "open",
+    "kind": "function",
+    "signature": "open(name=None)",
+    "detail": "(name: str | None = None) -> Camera",
+    "summary": "Make a camera object for the computer's default camera.",
+    "url": "reference/API.md#fn-camera-open",
+    "returns": "Camera"
+   },
+   {
+    "name": "names",
+    "kind": "function",
+    "signature": "names()",
+    "detail": "() -> list[str]",
+    "summary": "Return the names of the computer's cameras.",
+    "url": "reference/API.md#fn-camera-names"
+   },
+   {
+    "name": "load_clip",
+    "kind": "function",
+    "signature": "load_clip(path)",
+    "detail": "(path: str) -> Clip",
+    "summary": "Read an animated GIF or WebP file and return it as a clip.",
+    "url": "reference/API.md#fn-camera-load_clip",
+    "returns": "Clip"
    }
   ]
  }

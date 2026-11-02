@@ -5,7 +5,7 @@ arrow keys change the speed, and below zero it plays backwards. Space pauses. It
 is next to the sketch (save one with the photo booth), and a little film of a paper boat when there is none.
 
 How it works:
-- f.load_clip("take.gif") reads an animated GIF into a clip: len(clip) counts its frames, clip.frame(i) gives
+- camera.load_clip("take.gif") reads an animated GIF into a clip: len(clip) counts its frames, clip.frame(i) gives
   frame i as a picture, and clip.fps is how fast it was made to play.
 - The sketch keeps a playhead, a number that can sit between two frames. Each frame of the sketch moves it on
   by speed * clip.fps / 30, so speed 1 plays the clip at its own pace, 2 twice as fast, -1 backwards.
@@ -20,12 +20,13 @@ Make it yours:
 - Try f.filter("posterize", 4) after drawing the frame.
 """
 import funground as f
+from funground import camera
 
 WIDTH, HEIGHT = 480, 360
 try:
-    take = f.load_clip("take.gif")            # your own take, next to the sketch
+    take = camera.load_clip("take.gif")      # your own take, next to the sketch
 except FileNotFoundError:
-    take = f.load_clip("data/take.gif")       # the paper boat
+    take = camera.load_clip("data/take.gif") # the paper boat
 playhead = 0.0
 speed = 1.0
 paused = False

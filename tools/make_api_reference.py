@@ -37,7 +37,7 @@ import since  # noqa: E402  (which release a name arrives in, S-229)
 import funground as f  # noqa: E402
 from funground import _colornames, api as _api, pages  # noqa: E402
 from funground import analysis, marks, typography  # noqa: E402
-from funground import sangeet as _sangeet, sound as _sound  # noqa: E402  (the two libraries, S-246)
+from funground import camera as _camera, sangeet as _sangeet, sound as _sound  # noqa: E402  (the libraries, S-246, S-247)
 from funground.sound import _synth as synth  # noqa: E402
 from funground._namespaces import NAMESPACE_NAMES  # noqa: E402
 _color = sys.modules["funground.color"]  # f.color (the function) hides the module as an attribute
@@ -103,13 +103,13 @@ GROUPS: dict[str, list[str]] = {
     "Saving": ["save", "save_frames", "save_gif", "save_movie"],
     "Ground": ["area", "grid", "mm", "inch", "ground"],
     "Motion and pages": ["frame_duration", "new_page", "page_size", "page_count"],
-    "Camera": ["camera", "cameras", "load_clip"],
     "Classes": ["Vector", "FormattedString"],
     "Names for colours and options": ["COLORS", "CONSTANTS"],
 }
 
-# The libraries a sketch imports (D-120, ADR-007, S-246): `from funground import sound`. Each has its own section of the
-# reference, in this order, and no "Since" badge on a name (everything in a library was on f in 0.1). `names` is the
+# The libraries a sketch imports (D-120, ADR-007, S-246, S-247): `from funground import sound`. Each has its own section of the
+# reference, in this order, and no "Since" badge on a name (a library says its own history). `renamed` is None for a library that was never
+# released on f (the camera). `names` is the
 # order of the section and must be exactly the library's __all__ (check_groups). `renamed` lists the spellings that
 # changed on the way (D-123): the name in 0.1 and the name in the library.
 LIBRARIES: dict[str, dict] = {
@@ -121,6 +121,8 @@ LIBRARIES: dict[str, dict] = {
                   "note_to_frequency", "frequency_to_note", "chord_notes", "microphone", "microphones",
                   "draw_wave", "draw_spectrum", "spectrogram", "draw_pitch_line"],
         "renamed": [("create_sound", "create"), ("load_sound", "load")],
+        "history": "New in 0.2 as a library; in 0.1 these were on `f`.",
+        "renamed_note": "Two names lost the word the library already says:",
     },
     "sangeet": {
         "module": _sangeet,
@@ -128,6 +130,15 @@ LIBRARIES: dict[str, dict] = {
         "about": "Ragas and talas of Hindustani music.",
         "names": ["ragas", "raga", "talas", "tala_info", "tala", "match_ragas"],
         "renamed": [],
+        "history": "New in 0.2 as a library; in 0.1 these were on `f`.",
+    },
+    "camera": {
+        "module": _camera,
+        "title": "The camera library",
+        "about": "The computer's camera, photos and short clips.",
+        "names": ["open", "names", "load_clip"],
+        "renamed": None,           # the camera was never released on f: nothing to say about old spellings
+        "history": "New in 0.2.",
     },
 }
 # Which library each name belongs to, for the See also links.
@@ -604,13 +615,13 @@ def library_section(page: Page, lib: str, info: dict, known: set[str]) -> None:
     There is no "Since" badge on a name: everything in a library was on f in 0.1."""
     page.add(f'<a id="{slug_of(info["title"])}"></a>', f"## {info['title']}", "",
              "```py", f"from funground import {lib}", "```", "",
-             "New in 0.2 as a library; in 0.1 these were on `f`.", "")
+             info["history"], "")
     if info["renamed"]:
-        page.add("Two names lost the word the library already says:", "")
+        page.add(info["renamed_note"], "")
         for old, new in info["renamed"]:
             page.add(f"- `f.{old}` is now `{lib}.{new}`.")
         page.add("")
-    else:
+    elif info["renamed"] is not None:
         page.add("No name changed: `f.name` in 0.1 is `" + lib + ".name` now.", "")
     for name in info["names"]:
         obj = getattr(info["module"], name)
@@ -755,7 +766,7 @@ def llms_index() -> str:
     lines = ["# funground", "", f"> {LLMS_SUMMARY}", "", rules_text(), "", "## Libraries", ""]
     for lib, info in LIBRARIES.items():
         lines += [f"### {info['title']}", "", f"`from funground import {lib}`. {info['about']} "
-                  f"New in 0.2 as a library; in 0.1 these were on `f`.", "",
+                  f"{info['history']}", "",
                   "Names: " + ", ".join(f"`{lib}.{n}`" for n in info["names"]) + ".", ""]
         if info["renamed"]:
             lines += ["Renamed: " + ", ".join(f"`f.{old}` is `{lib}.{new}`" for old, new in info["renamed"]) + ".", ""]

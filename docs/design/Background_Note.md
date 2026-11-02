@@ -7,8 +7,9 @@ names, the tolerance and "in place" approved 18 Oct). Built in Sprint 30.
 
 ```python
 import funground as f
+from funground import camera
 
-cam = f.camera()
+cam = camera.open()
 beach = f.load_image("beach.jpg")
 empty = None                                   # the room with nobody in it
 

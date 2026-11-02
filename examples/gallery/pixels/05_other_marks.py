@@ -19,6 +19,7 @@ Make it yours:
 - Add a fourth mark: a small shape you draw, chosen with the key 4.
 """
 import funground as f
+from funground import camera
 
 WIDTH, HEIGHT = 400, 300
 CELL = 14
@@ -34,7 +35,7 @@ def setup():
     f.size(WIDTH, HEIGHT)
     f.text_align("center", "center")
     try:
-        cam = f.camera()
+        cam = camera.open()
         cam.start(WIDTH, HEIGHT)
     except RuntimeError:
         cam = None

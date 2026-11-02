@@ -20,7 +20,7 @@ import warnings
 from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 
-from . import camera_input, ir
+from . import frame_inputs, ir
 from .capabilities import Capability, FungroundWarning, missing_capability
 from .controls import Button, Checkbox, ControlPanel, Slider, panel_ops
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
@@ -2538,7 +2538,7 @@ class Sketch:
             self._redraw_pending = False
             if not self._smooth:
                 self.frame.append(ir.SetAntialias(False))   # the renderer resets per frame
-            camera_input.take_frames(self)         # the camera's frame, taken once like the mouse (contract I4)
+            frame_inputs.take_all(self)            # a camera's frame, taken once like the mouse (contract I4, S-247)
             self._in_draw = True
             self.publish_live_values()
             try:
@@ -2574,7 +2574,7 @@ class Sketch:
         self._guides = []
         self._frame_sequence = None
         self._motion = None                      # a recording the sketch did not live to finish is dropped
-        camera_input.stop_all()                  # the camera's light goes off
+        frame_inputs.stop_all()                  # a camera's light goes off
         self._renderer.attach(0, 0)
         self._platform.close()
         self._end_panel()

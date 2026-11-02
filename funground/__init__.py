@@ -86,9 +86,6 @@ from .api import (
     load_font,
     load_image,
     load_pixels,
-    camera,
-    cameras,
-    load_clip,
     load_svg,
     loop,
     mag,
@@ -283,9 +280,6 @@ __all__ = [
     "load_font",
     "load_image",
     "load_pixels",
-    "camera",
-    "cameras",
-    "load_clip",
     "load_svg",
     "loop",
     "mag",
@@ -423,7 +417,7 @@ _RENAMED = {
 }
 
 
-# D-120, ADR-007, D-123: the sound and sangeet names left ``f`` in 0.2 for libraries that a sketch imports. This one table
+# D-120, ADR-007, D-123: the sound, sangeet and camera names left ``f`` in 0.2 for libraries that a sketch imports. This one table
 # gives every moved name its sentence (the library it went to, and the name it has there). Nothing here is an alias: 0.1
 # code that calls ``f.note()`` is told what to write instead. The names stay in funground/released_names.json, which
 # records 0.1.
@@ -436,6 +430,7 @@ _MOVED = {
     "microphones": ("sound", "microphones"), "draw_wave": ("sound", "draw_wave"),
     "draw_spectrum": ("sound", "draw_spectrum"), "draw_pitch_line": ("sound", "draw_pitch_line"),
     "spectrogram": ("sound", "spectrogram"),
+    "camera": ("camera", "open"), "cameras": ("camera", "names"), "load_clip": ("camera", "load_clip"),
     "raga": ("sangeet", "raga"), "ragas": ("sangeet", "ragas"), "match_ragas": ("sangeet", "match_ragas"),
     "tala": ("sangeet", "tala"), "tala_info": ("sangeet", "tala_info"), "talas": ("sangeet", "talas"),
 }

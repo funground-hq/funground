@@ -54,8 +54,7 @@ def test_no_public_name_is_the_name_of_a_helper():
 
 def test_later_names_say_so_and_earlier_ones_do_not():
     names = {e["name"]: e for e in completions()["names"]}
-    assert names["camera"]["since"] == "0.2"
-    assert names["load_clip"]["since"] == "0.2"
+    assert "camera" not in names and "load_clip" not in names       # the camera is a library now (S-247)
     assert "since" not in names["circle"]
     classes = completions()["classes"]
     members = {m["name"]: m for m in classes["Picture"]["members"]}
@@ -85,9 +84,11 @@ def test_the_later_option_word_exists():
 
 def test_the_api_reference_and_llms_say_so():
     api = read(ROOT / "docs" / "reference" / "API.md")
-    for anchor in ("fn-camera", "cls-Picture-remove_color"):
+    for anchor in ("cls-Camera", "cls-Picture-remove_color"):
         section = api.split(f'<a id="{anchor}"></a>')[1].split("<a id=")[0]
         assert since.api_badge("0.2") in section.split("```")[0]          # the badge, before the signature
+    library = api.split('<a id="the-camera-library"></a>')[1].split("<a id=")[0]      # a library says its own history
+    assert "New in 0.2." in library
     circle = api.split('<a id="fn-circle"></a>')[1].split("<a id=")[0]
     assert "Since 0" not in circle
     assert "Since 0.2." in read(ROOT / "llms-full.txt")

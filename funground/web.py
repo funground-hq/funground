@@ -31,7 +31,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from . import api, camera_input, exploring, global_style, host_services, typography, web_fonts
+from . import api, exploring, global_style, host_services, typography, web_fonts
 from .platform.base import InputEvent
 from .platform.browser import BrowserPlatform, FrameCallback
 from .platform.browser_audio import MicrophoneCallback, SoundCallback
@@ -108,7 +108,7 @@ class Session:
         self._platform = BrowserPlatform(width, height, scale, on_frame, on_sound, on_microphone, on_camera)
         host_services.mixer = self._platform.mixer
         host_services.microphone = self._platform.microphone
-        camera_input.use_host_camera(self._platform.camera)
+        host_services.camera = self._platform.camera
         self._sketch = api.use_sketch(Sketch(platform=self._platform))
         self._stopped = False
         self._font_mark = typography.file_font_mark()
@@ -216,7 +216,7 @@ class Session:
         finally:
             host_services.mixer = None
             host_services.microphone = None
-            camera_input.use_host_camera(None)
+            host_services.camera = None
             web_fonts.set_url_fetcher(None)
             api.use_sketch(None)
             typography.forget_file_fonts(self._font_mark)

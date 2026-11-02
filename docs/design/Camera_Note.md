@@ -13,8 +13,9 @@ sound and can listen to the microphone, but it cannot see. The camera is the mis
 
 ```python
 import funground as f
+from funground import camera
 
-cam = f.camera()                 # the default camera; f.cameras() lists them (desktop)
+cam = camera.open()              # the default camera; camera.names() lists them (desktop)
 
 
 def setup():
@@ -33,8 +34,8 @@ f.run()
 
 | Call | Does |
 |---|---|
-| `f.camera(name=None)` | The default camera, or (desktop) the one whose name contains `name`. Nothing opens yet |
-| `f.cameras()` | The cameras' names (desktop); `[]` in the browser, where the browser chooses |
+| `camera.open(name=None)` | The default camera, or (desktop) the one whose name contains `name`. Nothing opens yet |
+| `camera.names()` | The cameras' names (desktop); `[]` in the browser, where the browser chooses |
 | `cam.start(width=640, height=480, mirror=True)` | Opens the camera at (about) that size; `mirror` flips it like a mirror, as people expect of a selfie view |
 | `cam.stop()` | Lets it go (the light goes off). Also done when the sketch ends |
 | `cam.is_ready()` | `True` once frames arrive (after permission is given) |
@@ -56,7 +57,7 @@ frame in memory, so the length is capped, e.g. 10 seconds, with a clear error ab
 ## How it works
 
 The camera follows the microphone's pattern (`microphone_input.py`, `Web_Runner_Note.md`, "Sound and
-microphone"): one module, `camera_input.py`, opens a device and keeps **the latest frame**; a host can replace
+microphone"): one module, `camera/_device.py` (inside the camera library, S-247), opens a device and keeps **the latest frame**; a host can replace
 the device.
 
 **Desktop.** pygame-ce, already a dependency, captures from cameras: Media Foundation on Windows and V4L2 on

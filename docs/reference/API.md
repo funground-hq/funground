@@ -28,11 +28,11 @@ In the examples, `import funground as f` is understood. A library's examples als
 - [Saving](#saving): [`save`](#fn-save), [`save_frames`](#fn-save_frames), [`save_gif`](#fn-save_gif), [`save_movie`](#fn-save_movie)
 - [Ground](#ground): [`area`](#fn-area), [`grid`](#fn-grid), [`mm`](#fn-mm), [`inch`](#fn-inch), [`ground`](#fn-ground)
 - [Motion and pages](#motion-and-pages): [`frame_duration`](#fn-frame_duration), [`new_page`](#fn-new_page), [`page_size`](#fn-page_size), [`page_count`](#fn-page_count)
-- [Camera](#camera): [`camera`](#fn-camera), [`cameras`](#fn-cameras), [`load_clip`](#fn-load_clip)
 - [Classes](#classes): [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString)
 - [Names for colours and options](#names-for-colours-and-options): [`COLORS`](#const-COLORS), [`CONSTANTS`](#const-CONSTANTS)
 - [The sound library](#the-sound-library): [`load`](#fn-sound-load), [`create`](#fn-sound-create), [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`pluck`](#fn-sound-pluck), [`melody`](#fn-sound-melody), [`sequence`](#fn-sound-sequence), [`mix`](#fn-sound-mix), [`drone`](#fn-sound-drone), [`note_to_frequency`](#fn-sound-note_to_frequency), [`frequency_to_note`](#fn-sound-frequency_to_note), [`chord_notes`](#fn-sound-chord_notes), [`microphone`](#fn-sound-microphone), [`microphones`](#fn-sound-microphones), [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`spectrogram`](#fn-sound-spectrogram), [`draw_pitch_line`](#fn-sound-draw_pitch_line)
 - [The sangeet library](#the-sangeet-library): [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga), [`talas`](#fn-sangeet-talas), [`tala_info`](#fn-sangeet-tala_info), [`tala`](#fn-sangeet-tala), [`match_ragas`](#fn-sangeet-match_ragas)
+- [The camera library](#the-camera-library): [`open`](#fn-camera-open), [`names`](#fn-camera-names), [`load_clip`](#fn-camera-load_clip)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
@@ -2689,7 +2689,7 @@ See also: [`hide_layer`](#fn-hide_layer), [`layer`](#fn-layer).
 ### `f.image`
 
 ```py
-f.image(picture: 'Picture | Camera', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'
+f.image(picture: 'Picture | FrameSource', x: 'float', y: 'float', width: 'float | None' = None, height: 'float | None' = None, sx: 'float | None' = None, sy: 'float | None' = None, sw: 'float | None' = None, sh: 'float | None' = None) -> 'None'
 ```
 
 Draw a picture.
@@ -2698,7 +2698,7 @@ It is drawn as it is at this moment: later drawing on the picture does not chang
 
 | Argument | Meaning |
 |---|---|
-| `picture` | a Picture, from load_image(), load_svg(), create_graphics(), get() or sound.spectrogram(), or a camera from camera(). A camera draws its latest frame, and nothing before the first one arrives. |
+| `picture` | a Picture, from load_image(), load_svg(), create_graphics(), get() or sound.spectrogram(), or a camera from camera.open(). A camera draws its latest frame, and nothing before the first one arrives. |
 | `x`, `y` | where to put it, by default the top-left corner. |
 | `width`, `height` | the size to stretch it to. The default None uses the picture's own size. |
 | `sx`, `sy`, `sw`, `sh` | give all four to draw only that part of the picture (in its own pixels) into the box. A part that reaches outside the picture is clipped and keeps its place. sw and sh must be above 0. |
@@ -2712,7 +2712,7 @@ f.image(photo, 0, 0)
 f.image(photo, 0, 0, 200, 150, 40, 30, 100, 75)
 ```
 
-See also: [`load_image`](#fn-load_image), [`create_graphics`](#fn-create_graphics), [`image_mode`](#fn-image_mode), [`tint`](#fn-tint), [`camera`](#fn-camera).
+See also: [`load_image`](#fn-load_image), [`create_graphics`](#fn-create_graphics), [`image_mode`](#fn-image_mode), [`tint`](#fn-tint).
 
 <a id="fn-image_mode"></a>
 ### `f.image_mode`
@@ -4021,97 +4021,6 @@ print(f.page_count())
 
 See also: [`new_page`](#fn-new_page).
 
-<a id="camera"></a>
-## Camera
-
-<a id="fn-camera"></a>
-### `f.camera`
-
-<p class="fg-since">Since 0.2.</p>
-
-```py
-f.camera(name: 'str | None' = None) -> 'Camera'
-```
-
-Make a camera object for the computer's default camera.
-
-Nothing opens, and no light comes on, until you call cam.start(). Then use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives a still copy whose pixels you can read with get(), cam.save("me.png") writes a photo, and cam.record(3) keeps three seconds as a clip you can save as a GIF. Frames stay on your computer. In the browser, press Play and allow the camera when it asks. On a Mac, the desktop camera does not work yet: run the sketch on the website. With FUNGROUND_HEADLESS=1 the camera opens nothing and is never ready.
-
-| Argument | Meaning |
-|---|---|
-| `name` | part of the name of the camera to use. The default None uses the first camera. See cameras(). In the browser the browser chooses, so leave it out. |
-
-**Returns.** A Camera: start(width, height, mirror), stop(), is_ready(), width, height, picture(), save(path) and record(seconds).
-
-**Raises.**
-
-- `ValueError`: name is not text.
-- `RuntimeError`: there is no camera, no camera has that name, or this is a Mac desktop.
-
-```py
-cam = f.camera()
-cam.start()
-f.image(cam, 0, 0)
-```
-
-See also: [`cameras`](#fn-cameras), [`image`](#fn-image), [`load_image`](#fn-load_image).
-
-<a id="fn-cameras"></a>
-### `f.cameras`
-
-<p class="fg-since">Since 0.2.</p>
-
-```py
-f.cameras() -> 'list[str]'
-```
-
-Return the names of the computer's cameras.
-
-The list is empty in the browser, where the browser chooses the camera, and on a Mac desktop.
-
-**Returns.** A list of names. Give part of one to camera().
-
-```py
-print(f.cameras())
-```
-
-See also: [`camera`](#fn-camera).
-
-<a id="fn-load_clip"></a>
-### `f.load_clip`
-
-<p class="fg-since">Since 0.2.</p>
-
-```py
-f.load_clip(path: 'str') -> 'Clip'
-```
-
-Read an animated GIF or WebP file and return it as a clip.
-
-It is the same kind of clip that cam.record() gives, so a take saved from the photo booth can come back in another
-sketch: len(clip) counts its frames, clip.frame(i) is one of them as a picture, and clip.fps is how many frames a
-second it plays. A relative path is found next to the sketch file first, then in the current folder. A still
-picture gives a clip of one frame. The frame rate comes from the file's frame times; when they differ, the middle
-one is used.
-
-| Argument | Meaning |
-|---|---|
-| `path` | the file name, such as "take.gif". |
-
-**Returns.** A Clip that is complete: clip.done is True.
-
-**Raises.**
-
-- `FileNotFoundError`: there is no such file.
-- `ValueError`: the file is not a picture funground can read, or it is an SVG file.
-
-```py
-take = f.load_clip("take.gif")
-f.image(take.frame(f.frame_count % len(take)), 0, 0)
-```
-
-See also: [`camera`](#fn-camera), [`load_image`](#fn-load_image).
-
 <a id="classes"></a>
 ## Classes
 
@@ -5082,6 +4991,97 @@ print(sangeet.match_ragas(h)[0])
 ```
 
 See also: [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga).
+
+<a id="the-camera-library"></a>
+## The camera library
+
+```py
+from funground import camera
+```
+
+New in 0.2.
+
+<a id="fn-camera-open"></a>
+### `camera.open`
+
+```py
+camera.open(name: 'str | None' = None) -> 'Camera'
+```
+
+Make a camera object for the computer's default camera.
+
+Nothing opens, and no light comes on, until you call cam.start(). Then use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives a still copy whose pixels you can read with get(), cam.save("me.png") writes a photo, and cam.record(3) keeps three seconds as a clip you can save as a GIF. Frames stay on your computer. In the browser, press Play and allow the camera when it asks. On a Mac, the desktop camera does not work yet: run the sketch on the website. With FUNGROUND_HEADLESS=1 the camera opens nothing and is never ready.
+
+| Argument | Meaning |
+|---|---|
+| `name` | part of the name of the camera to use. The default None uses the first camera. See names(). In the browser the browser chooses, so leave it out. |
+
+**Returns.** A Camera: start(width, height, mirror), stop(), is_ready(), width, height, picture(), save(path) and record(seconds).
+
+**Raises.**
+
+- `ValueError`: name is not text.
+- `RuntimeError`: there is no camera, no camera has that name, or this is a Mac desktop.
+
+```py
+cam = camera.open()
+cam.start()
+f.image(cam, 0, 0)
+```
+
+See also: [`names`](#fn-camera-names), [`load_clip`](#fn-camera-load_clip), [`image`](#fn-image), [`load_image`](#fn-load_image).
+
+<a id="fn-camera-names"></a>
+### `camera.names`
+
+```py
+camera.names() -> 'list[str]'
+```
+
+Return the names of the computer's cameras.
+
+The list is empty in the browser, where the browser chooses the camera, and on a Mac desktop.
+
+**Returns.** A list of names. Give part of one to open().
+
+```py
+print(camera.names())
+```
+
+See also: [`open`](#fn-camera-open).
+
+<a id="fn-camera-load_clip"></a>
+### `camera.load_clip`
+
+```py
+camera.load_clip(path: 'str') -> 'Clip'
+```
+
+Read an animated GIF or WebP file and return it as a clip.
+
+It is the same kind of clip that cam.record() gives, so a take saved from the photo booth can come back in another
+sketch: len(clip) counts its frames, clip.frame(i) is one of them as a picture, and clip.fps is how many frames a
+second it plays. A relative path is found next to the sketch file first, then in the current folder. A still
+picture gives a clip of one frame. The frame rate comes from the file's frame times; when they differ, the middle
+one is used.
+
+| Argument | Meaning |
+|---|---|
+| `path` | the file name, such as "take.gif". |
+
+**Returns.** A Clip that is complete: clip.done is True.
+
+**Raises.**
+
+- `FileNotFoundError`: there is no such file.
+- `ValueError`: the file is not a picture funground can read, or it is an SVG file.
+
+```py
+take = camera.load_clip("take.gif")
+f.image(take.frame(f.frame_count % len(take)), 0, 0)
+```
+
+See also: [`open`](#fn-camera-open), [`load_image`](#fn-load_image).
 
 <a id="live-values"></a>
 ## Live values
@@ -6250,7 +6250,7 @@ Camera(device_name: 'str | None', canvas=None, silent: 'bool' = False) -> 'None'
 
 A camera that your sketch can look through.
 
-You get one from f.camera(). Nothing opens until you call start(). Then the computer (or the browser) asks
+You get one from camera.open(). Nothing opens until you call start(). Then the computer (or the browser) asks
 permission the first time, and frames begin to arrive.
 
 Use it like a picture: f.image(cam, 0, 0) draws its latest frame. cam.picture() gives you a still copy, to read
@@ -6264,7 +6264,7 @@ Frames stay on your computer: funground never sends them anywhere. With FUNGROUN
 nothing and is never ready.
 
 ```py
-cam = f.camera()
+cam = camera.open()
 cam.start()
 f.image(cam, 0, 0)
 ```
@@ -6418,7 +6418,7 @@ when you call stop() and when the sketch ends.
 - `RuntimeError`: if the camera is busy, or the computer will not let funground use it.
 
 ```py
-cam = f.camera()
+cam = camera.open()
 cam.start(320, 240)
 ```
 
