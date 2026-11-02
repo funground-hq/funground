@@ -1,0 +1,184 @@
+# 20. Models: your body and your hands
+
+A model is a program that has learnt to find something in a picture. funground has two. One finds a **body**. The other
+finds a **hand**. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
+are. Then you can draw with them.
+
+Everything runs on your own computer. What the camera sees never leaves it.
+
+## Install it first
+
+Models are a library, and it is a **separate install**. Run this once, in a terminal:
+
+```sh
+python -m pip install funground-ml
+```
+
+Then one line brings it in, and every call says `ml.`
+
+```py
+import funground as f
+from funground import camera, ml
+```
+
+Without the install, that line stops with one sentence: "The models library is a separate install: run
+`python -m pip install funground-ml`".
+
+Why is it separate? A model is a big file, and a program to run it. Most sketches need neither. So the core of
+funground stays small, and you add the models when you want them.
+
+**The first call downloads the model.** It prints one line, such as `Downloading the pose model, 18 MB, once.` The body
+model is about 18 MB and the hand model about 8 MB. The files are kept in a `models/` folder beside your sketch. The next
+time you run it, nothing is downloaded, and it works without the internet.
+
+**What stays on your computer:** the camera's pictures, the points the model finds and the model files. The only thing
+that goes over the internet is the download of the model files.
+
+**In Play** (the website), you install nothing. The browser keeps the model files and runs the models for you. The
+answer can be **one frame behind** the picture. Your sketch does not change.
+
+## Find a body
+
+`ml.pose(source)` looks for a body. The source is a camera from `camera.open()`, or a picture from `f.load_image()`.
+
+```py
+import funground as f
+from funground import camera, ml
+
+cam = camera.open()
+
+
+def setup():
+    f.size(640, 480)
+    cam.start()
+
+
+def draw():
+    f.image(cam, 0, 0)
+    body = ml.pose(cam)
+    if body:
+        f.circle(body.nose.x, body.nose.y, 30)
+
+
+f.run()
+```
+
+`ml.pose()` gives you a **body**, or `None` if no one is there. So `if body:` is all the check you need.
+
+The body has 33 **named points**. Each one is an `f.Vector`, in pixels, on the source as you draw it at `(0, 0)`. So
+you can put a point straight into a drawing call:
+
+```py
+f.line(body.left_wrist.x, body.left_wrist.y, body.right_wrist.x, body.right_wrist.y)
+f.circle(body.nose.x, body.nose.y, 30)
+```
+
+Two more things are on a body:
+
+- `body.points` is a dict of every name and its point. Use it to go through all of them, or to look one up by a name you
+  have in a variable: `body.points["left_elbow"]`.
+- `body.score` says how sure the model is, from 0 to 1. A body below 0.5 is not given, so you never see a weak guess:
+  you get `None`.
+
+```py
+for name, point in body.points.items():
+    f.circle(point.x, point.y, 6)           # a dot on every point of the body
+```
+
+A wrong name is helped. `body.left_sholder` says "A body has no point called 'left_sholder'. Did you mean
+'left_shoulder'?"
+
+**Left and right are the person's own sides.** A camera is mirrored by default, as in a mirror. Even so,
+`body.left_wrist` is **your own left wrist**, wherever it shows on the screen. Raise your left hand, and the left wrist
+goes up. On a mirrored screen, that hand is on the left of the picture, as it would be in a mirror.
+
+A picture works as well as a camera. The points are in the picture's own pixels, so draw the picture at `(0, 0)` and
+the points land in the right place. The gallery has a
+[stick figure on a photograph](../gallery/README.md#a-stick-figure-on-a-photograph).
+
+## Find a hand
+
+`ml.hand(source)` does the same for a hand. It gives a **hand**, or `None`.
+
+```py
+hand = ml.hand(cam)
+if hand:
+    tip = hand.index_finger_tip
+    f.circle(tip.x, tip.y, 20)
+```
+
+A hand has 21 named points, and `hand.points` and `hand.score`, in the same way. A hand below 0.8 is not given. A hand
+has no side, left or right, in this version: you get one hand, whichever it is.
+
+A trail that follows a fingertip is a list of its places. Add the newest, and drop the oldest:
+
+```py
+trail = []
+
+
+def draw():
+    f.image(cam, 0, 0)
+    hand = ml.hand(cam)
+    if hand:
+        trail.append(hand.index_finger_tip)
+        del trail[:-30]                     # keep the last 30 places
+    for a, b in zip(trail, trail[1:]):
+        f.line(a.x, a.y, b.x, b.y)
+```
+
+The gallery has a whole sketch: [follow your finger](../gallery/README.md#follow-your-finger).
+
+## One call a frame
+
+If you call `ml.pose(cam)` twice in one frame, you get the same body, and the work is done once. So you can ask for the
+body in two places in your code without slowing it down.
+
+Until the camera has sent its first picture, `ml.pose(cam)` gives `None`. You never need to wait on purpose.
+
+## The 33 points of a body
+
+| Part | Names |
+|---|---|
+| Face | `nose`, `left_eye_inner`, `left_eye`, `left_eye_outer`, `right_eye_inner`, `right_eye`, `right_eye_outer`, `left_ear`, `right_ear`, `mouth_left`, `mouth_right` |
+| Shoulders and arms | `left_shoulder`, `right_shoulder`, `left_elbow`, `right_elbow`, `left_wrist`, `right_wrist` |
+| Hands | `left_pinky`, `right_pinky`, `left_index`, `right_index`, `left_thumb`, `right_thumb` |
+| Hips and legs | `left_hip`, `right_hip`, `left_knee`, `right_knee`, `left_ankle`, `right_ankle` |
+| Feet | `left_heel`, `right_heel`, `left_foot_index`, `right_foot_index` |
+
+## The 21 points of a hand
+
+| Part | Names |
+|---|---|
+| Wrist | `wrist` |
+| Thumb | `thumb_cmc`, `thumb_mcp`, `thumb_ip`, `thumb_tip` |
+| Index finger | `index_finger_mcp`, `index_finger_pip`, `index_finger_dip`, `index_finger_tip` |
+| Middle finger | `middle_finger_mcp`, `middle_finger_pip`, `middle_finger_dip`, `middle_finger_tip` |
+| Ring finger | `ring_finger_mcp`, `ring_finger_pip`, `ring_finger_dip`, `ring_finger_tip` |
+| Little finger | `pinky_mcp`, `pinky_pip`, `pinky_dip`, `pinky_tip` |
+
+The names are MediaPipe's own, so its pictures and notes help you find the point you want. In a finger, `mcp` is the
+knuckle where it joins the hand, `pip` and `dip` are the next two joints, and `tip` is the end.
+
+## What can go wrong
+
+- **It gives `None`.** Nobody was found. Always write `if body:` or `if hand:` before you use a point. Without the
+  check, `body.nose` on `None` stops the sketch.
+- **The light is low.** A dim room, or a bright window behind you, makes the model unsure. It may give `None`, or points
+  that jump about. Turn on a light, and face it.
+- **Part of the body is out of the picture.** The model has to guess the points it cannot see, so they may be wrong, or
+  off the canvas. Step back until your arms are in the picture, and check `body.score` if you want to be careful.
+- **There is one person and one hand.** If two people stand in the picture, you get one of them. If you hold up two
+  hands, you get one.
+- **The first run is slow.** It is downloading the model. The next run starts at once.
+- **"Could not download".** There was no internet on the first run. Connect once, run the sketch, and the files are kept.
+- **A model is not exact.** The points move a little even when you stand still. To make them calmer, draw the average of
+  the last few places instead of the newest one.
+
+## Try it
+
+1. Draw a circle on each of your two wrists. Raise your left hand. Which circle moves?
+2. Draw a line from each shoulder to its elbow, and from each elbow to its wrist. You have two arms.
+3. Make a circle at your index finger tip that gets bigger when `hand.thumb_tip` and `hand.index_finger_tip` are far
+   apart. Hint: `f.distance()`.
+
+**Previous:** [19. Studios: the same picture, twice](19_studios.md)

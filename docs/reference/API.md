@@ -33,6 +33,7 @@ In the examples, `import funground as f` is understood. A library's examples als
 - [The sound library](#the-sound-library): [`load`](#fn-sound-load), [`create`](#fn-sound-create), [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`pluck`](#fn-sound-pluck), [`melody`](#fn-sound-melody), [`sequence`](#fn-sound-sequence), [`mix`](#fn-sound-mix), [`drone`](#fn-sound-drone), [`note_to_frequency`](#fn-sound-note_to_frequency), [`frequency_to_note`](#fn-sound-frequency_to_note), [`chord_notes`](#fn-sound-chord_notes), [`microphone`](#fn-sound-microphone), [`microphones`](#fn-sound-microphones), [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`spectrogram`](#fn-sound-spectrogram), [`draw_pitch_line`](#fn-sound-draw_pitch_line)
 - [The sangeet library](#the-sangeet-library): [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga), [`talas`](#fn-sangeet-talas), [`tala_info`](#fn-sangeet-tala_info), [`tala`](#fn-sangeet-tala), [`match_ragas`](#fn-sangeet-match_ragas)
 - [The camera library](#the-camera-library): [`open`](#fn-camera-open), [`names`](#fn-camera-names), [`load_clip`](#fn-camera-load_clip)
+- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
@@ -5082,6 +5083,102 @@ f.image(take.frame(f.frame_count % len(take)), 0, 0)
 ```
 
 See also: [`open`](#fn-camera-open), [`load_image`](#fn-load_image).
+
+<a id="the-models-library"></a>
+## The models library
+
+```py
+from funground import ml
+```
+
+New in 0.2.
+
+The models library is a separate install: run `python -m pip install funground-ml`.
+
+<a id="fn-ml-pose"></a>
+### `ml.pose`
+
+```py
+ml.pose(source)
+```
+
+Find the body in a camera or a picture.
+
+The model finds one person. If there is no one it gives None, so ``if body:`` is enough. Calling it twice in one frame
+on the same camera gives the same body, and does the work once. The first call downloads the pose model (about 18 MB)
+and keeps it in a ``models/`` folder beside your sketch; it prints one line when it does. In Play the browser
+keeps the copy, and the answer can be one frame behind the picture.
+
+The body has 33 named points. Each is an f.Vector in pixels, on the source as drawn at (0, 0):
+nose, left_eye_inner, left_eye, left_eye_outer, right_eye_inner, right_eye, right_eye_outer, left_ear, right_ear,
+mouth_left, mouth_right, left_shoulder, right_shoulder, left_elbow, right_elbow, left_wrist, right_wrist,
+left_pinky, right_pinky, left_index, right_index, left_thumb, right_thumb, left_hip, right_hip, left_knee,
+right_knee, left_ankle, right_ankle, left_heel, right_heel, left_foot_index and right_foot_index. They are
+MediaPipe's names. ``body.points`` is a dict of every name and point, and ``body.score`` (0 to 1) says how sure the
+model is. A body with a score under 0.5 is not given: you get None.
+
+Left and right are the person's own sides. With a mirrored camera (the default of ``cam.start()``) the left wrist is
+the learner's own left wrist, wherever it shows on the screen.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a camera from camera.open(), or a picture from f.load_image() or f.create_graphics(). |
+
+**Returns.** a Body, or None if there is no one, or if the camera has no frame yet.
+
+**Raises.**
+
+- `TypeError`: if source is not a camera or a picture.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+body = ml.pose(cam)
+if body:
+    f.line(body.left_wrist.x, body.left_wrist.y, body.right_wrist.x, body.right_wrist.y)
+```
+
+See also: [`hand`](#fn-ml-hand).
+
+<a id="fn-ml-hand"></a>
+### `ml.hand`
+
+```py
+ml.hand(source)
+```
+
+Find a hand in a camera or a picture.
+
+The model finds one hand. If there is none it gives None, so ``if hand:`` is enough. Calling it twice in one frame on
+the same camera gives the same hand, and does the work once. The first call downloads the hand model (about 8 MB) and
+keeps it in a ``models/`` folder beside your sketch; it prints one line when it does. In Play the browser
+keeps the copy, and the answer can be one frame behind the picture.
+
+The hand has 21 named points. Each is an f.Vector in pixels, on the source as drawn at (0, 0):
+wrist, thumb_cmc, thumb_mcp, thumb_ip, thumb_tip, index_finger_mcp, index_finger_pip, index_finger_dip,
+index_finger_tip, middle_finger_mcp, middle_finger_pip, middle_finger_dip, middle_finger_tip, ring_finger_mcp,
+ring_finger_pip, ring_finger_dip, ring_finger_tip, pinky_mcp, pinky_pip, pinky_dip and pinky_tip. They are
+MediaPipe's names. ``hand.points`` is a dict of every name and point, and ``hand.score`` (0 to 1) says how sure the
+model is. A hand with a score under 0.8 is not given: you get None. A hand has no side (left or right) in this
+version.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a camera from camera.open(), or a picture from f.load_image() or f.create_graphics(). |
+
+**Returns.** a Hand, or None if there is no hand, or if the camera has no frame yet.
+
+**Raises.**
+
+- `TypeError`: if source is not a camera or a picture.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+palm = ml.hand(cam)
+if palm:
+    f.circle(palm.index_finger_tip.x, palm.index_finger_tip.y, 12)
+```
+
+See also: [`pose`](#fn-ml-pose).
 
 <a id="live-values"></a>
 ## Live values

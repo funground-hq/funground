@@ -10971,6 +10971,24 @@
     "url": "reference/API.md#fn-camera-load_clip",
     "returns": "Clip"
    }
+  ],
+  "ml": [
+   {
+    "name": "pose",
+    "kind": "function",
+    "signature": "pose(source)",
+    "detail": "(source)",
+    "summary": "Find the body in a camera or a picture.",
+    "url": "reference/API.md#fn-ml-pose"
+   },
+   {
+    "name": "hand",
+    "kind": "function",
+    "signature": "hand(source)",
+    "detail": "(source)",
+    "summary": "Find a hand in a camera or a picture.",
+    "url": "reference/API.md#fn-ml-hand"
+   }
   ]
  }
 }

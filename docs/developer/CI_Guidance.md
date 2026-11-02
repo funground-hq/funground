@@ -28,6 +28,8 @@ Each stage starts only when the stage before it has passed (`needs:`), and insid
 failure cancels the rest (`fail-fast`). macOS gets two Python versions, not four: its minutes cost
 about 10 times Linux's, and the versions in between are covered by Windows and Linux.
 
+The same job also tests the models library (S-232): after the core tests, which run without `funground-ml` so that its "separate install" sentence stays tested, it installs `-e ml`, restores the cached model files (`ml/tests/.models`, keyed on `ml/funground_ml/_models.py`), then runs `ml/tests` and the models gallery examples. A change under `ml/` starts the job too.
+
 While a problem is being fixed, CI runs on **one system and one Python version**: the one that
 showed it. Run workflow → `ci` → tick only that system, give only that version.
 
