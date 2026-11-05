@@ -1,6 +1,6 @@
 # S-235 evidence: teach and guess from a few camera pictures
 
-2026-11-05, 07:42 to about 07:52 UTC. Branch: `cloud/teach-evidence` (the name asked for). Nothing in `funground/` or `ml/` changed.
+2026-11-05, 07:42 to 07:48 UTC. Branch: `cloud/teach-evidence` (the name asked for). Nothing in `funground/` or `ml/` changed.
 
 Files: `embed.py` (pictures to vectors), `analyse.py` (all the splits), `results.json` (every number below).
 
