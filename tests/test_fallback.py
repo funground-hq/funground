@@ -175,6 +175,7 @@ def test_itemising_is_remembered():
 
 def test_the_bundled_fonts_load_only_when_needed():
     typography._bundled_cache.clear()
+    typography._ITEMISE_CACHE.clear()       # else text shaped by an earlier test (guide 06_text#9) skips the loading
     shape("Hello")
     assert not typography._bundled_cache
     shape(f"Hello {ROCKET}")
