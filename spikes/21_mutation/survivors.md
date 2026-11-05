@@ -6,7 +6,7 @@
 | funground/noise.py (results_noise.json) | 114 of 114 | 102 | 0 | 12 | 89.5% | yes |
 | funground/pathops.py (results_pathops.json) | 88 of 88 | 68 | 0 | 20 | 77.3% | yes |
 | funground/paths.py (results_paths.json) | 37 of 37 | 16 | 0 | 21 | 43.2% | yes |
-| funground/sound/_swaras.py (results_swaras.json) | 100 of 214 | 51 | 4 | 49 | 51.0% | no (partial) |
+| funground/sound/_swaras.py (results_swaras.json) | 140 of 214 | 67 | 6 | 73 | 47.9% | no (partial) |
 | funground/vector.py (results_vector.json) | 85 of 85 | 63 | 0 | 22 | 74.1% | yes |
 
 ## results_color.json: 12 survivors
@@ -473,7 +473,7 @@
 - #35 line 542: unary drop unary minus
 - #36 line 542: unary drop unary minus
 
-## results_swaras.json: 49 survivors
+## results_swaras.json: 73 survivors
 
 - #0 line 23: boolop Or->swap
 - #1 line 23: compare LtE->Lt
@@ -524,6 +524,30 @@
 - #92 line 117: binop Mod->FloorDiv
 - #94 line 117: binop Mult->Div
 - #96 line 118: const 1.0->2.0
+- #100 line 123: const 11025->11026
+- #101 line 124: const 1024->1025
+- #102 line 125: const 300->301
+- #105 line 134: const 1->2
+- #106 line 135: compare Gt->GtE
+- #107 line 135: const 1->2
+- #109 line 136: binop Sub->Add
+- #111 line 137: binop Div->Mult
+- #112 line 137: const 0->1
+- #114 line 141: compare Lt->LtE
+- #115 line 143: binop Sub->Add
+- #117 line 144: binop Mult->Div
+- #118 line 144: const 1->2
+- #119 line 145: binop Add->Sub
+- #121 line 145: const 0->1
+- #122 line 145: const 1->2
+- #125 line 150: const 702->703
+- #126 line 151: const 10->11
+- #127 line 171: compare Lt->LtE
+- #129 line 173: const 1200->1201
+- #131 line 174: const 0.0->1.0
+- #135 line 177: const 1200.0->1201.0
+- #136 line 177: const 1200.0->1201.0
+- #137 line 177: const 440.0->441.0
 
 ## results_vector.json: 22 survivors
 

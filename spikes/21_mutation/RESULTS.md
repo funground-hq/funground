@@ -158,7 +158,7 @@ not 4 (6 % of the radius). F12 calls these "close approximations" without a numb
 | #4 `get_close_matches(n=2)` | 62 | equivalent | only the first match is used | — |
 | #8, #9 the "slip in a missing shape" hint (`f.path().lin(...)`) uses `close[1]` → `IndexError` | 64 | unclear | the hint is not in a docstring or the contract; the mutant would turn a helpful error into a crash, so the maintainer may want it pinned | — |
 
-### geometry.py — 33.6 % first pass; 46 real gaps closed so far
+### geometry.py — 33.6 % first pass; 122 real-gap survivors closed so far
 
 | Survivor(s) | Line | Verdict | Where stated | New test (test_geometry.py) |
 |---|---|---|---|---|
@@ -169,9 +169,16 @@ not 4 (6 % of the radius). F12 calls these "close approximations" without a numb
 | #7, #8 `shearing` defaults | 45 | equivalent | the only caller passes both angles | — |
 | #155, #156 arc pieces (`1e-9`, 90 → 91) | 282 | unclear | how many pieces an arc uses, and its accuracy, is not documented | — |
 | #67, #68, #80 quad_to | 176–177 | not decided | timed out under contention in pass 2 (counted as killed there); re-check alone | — |
-| lines 300–516 and 516–638 | | see the re-check log | | — |
+| 76 of 108 survivors in `contours` and `_flatten_cubic` (Bezier evaluation, closing piece, sub-paths) | 453–508 | real gap | contours docstring ("curves flattened to tolerance", closed flag, closing piece) | `test_contours_flatten_curves_to_the_tolerance_and_keep_the_sub_paths` ([`geometry_contours_recheck.log`](geometry_contours_recheck.log)) |
+| the other 32 there: `_cubic_steps` formula and constants, `range(1, …)`, `max(1, …)` | 453–469 | equivalent or unclear | they change how many steps a curve is cut into; most give more steps (equivalent). A mutant giving fewer steps would break the tolerance only on curves flatter than a circle; the step bound itself is not documented | — |
+| #314 a lone `move` dropped; #330–332 closing piece compared with `pts[1]` (a duplicate start point) | 488, 507 | unclear | contours' docstring does not say what a one-point sub-path gives; a duplicate zero-length piece draws the same | — |
+| #319, #322 a line or curve with no current point | 498, 503 | equivalent | Path refuses `line_to`/`cubic_to` without a current point | — |
+| #194, #195 `current_point`; #202, #203 `translated` | 357, 429 | not decided | pass 2 did not reach them; likely killed by test_shapes/test_text_path (unverified) | — |
+| lines 516–638 (sample_path, measuring): PARTIAL re-check, 100 of 205 survivors re-run with test_text_points and test_text_on_path, 87 killed | 516–563 | 11 of the 13 left were real gaps, now closed | T16, sample_path and PathMeasure docstrings | `test_sample_path_puts_a_point_every_spacing_along_the_outline`, `test_path_measure_follows_a_circle_and_faces_along_it` |
+| #363, #364, #368, #369, #423, #424 tolerance and count checks | 535, 550 | equivalent | thresholds for an exact match or a stopped curve | — |
+| the other 105 survivors past line 563 | | not re-checked (run stopped for time) | | — |
 
-### sound/_swaras.py — partial
+### sound/_swaras.py — PARTIAL: 140 of 214 mutants run, 67 killed (47.9%), saved at 07:59 UTC while the run continued
 
 See the score table at the end (the run continued while this was written). Survivors seen so far are drone
 tuning constants (`DRONE_GAP`, `DRONE_RING`, `DRONE_T60`, `DRONE_SOFTNESS`, the all-pass coefficient):
@@ -195,7 +202,7 @@ runs it after _swaras.
 - No mutant showed the real code to be wrong.
 
 **What is fixed (tests only; no library code changed)**, one commit per module:
-vector (10 tests), noise (2), colour (3), path outlines/pathops (5), paths (2), geometry (4). Each names the
+vector (10 tests), noise (2), colour (3), path outlines/pathops (5), paths (2), geometry (8 tests in 8 commits). Each names the
 docstring or contract row it checks, passes on the real code and fails on its mutants.
 
 **What needs the maintainer**
@@ -212,4 +219,8 @@ docstring or contract row it checks, passes on the real code and fails on its mu
 - I once stopped a process by command-line pattern (`pkill -f mutwork_v2`, my own re-check run) instead of by
   PID; it matched only that run. Everything else was stopped by PID.
 
-**Commits to review** (all `[skip ci]`): see `git log origin/main..cloud/mutation-gaps`.
+**Full suite:** started at 07:58 UTC in the background; not finished when credit ran out, so unverified. The changed test files (test_vector, test_noise, test_colour_objects, test_cmyk, test_path_outlines, test_paths, test_geometry) pass: 207 passed, 2 failed (the two pre-existing `HeadlessPlatform.target` failures).
+
+**Partial runs:** _swaras (see its section), _synth not started, geometry pass 2 stopped at 50 of 358, geometry sampling re-check stopped at 100 of 205.
+
+**Commits to review** (all `[skip ci]`, tests and spike files only): `git log --oneline origin/main..origin/cloud/mutation-gaps`.
