@@ -13,7 +13,7 @@ from `tests/constraints.txt`. Environment: `SDL_VIDEODRIVER=dummy SDL_AUDIODRIVE
 | Why did CI hang in `16_sound`? | **A deadlock between SDL's audio thread and the GIL**, in the microphone. Reproduced on Linux every time in a small script; not reproduced in 50 runs of the guide examples themselves. Mechanism measured; that it is *the* CI hang is the best-reasoned cause, unverified on Windows. |
 | Why did the 5-minute timeout not fire? | Both pytest-timeout methods need the GIL, and the stuck main thread holds it inside a C call. **Measured**: with `--timeout=5`, neither `thread` nor `signal` fired; a C-level faulthandler watchdog ended the run at 20 s. |
 | The unidentified S-245 failure | Not identified. Best candidates: wall-clock budget tests (margins measured below). Unverified. |
-| Order and load | One order-dependent failure, and it was mine (fixed, see below). Otherwise clean over 4 random seeds on 4 workers. |
+| Order and load | One order-dependent test (`test_fallback.py`, fixed, shortest order given); one load-dependent failure (the reverb time budget, 2.41 s against 2.0 s); one error from my own first fix (fixed). |
 | Local runs that follow AGENTS.md | **9 tests failed** with `FUNGROUND_HEADLESS=1` set, as AGENTS.md suggests. Fixed (test isolation). |
 
 ## 1. Baseline (Python 3.11.18)
@@ -113,7 +113,23 @@ test.
 | 1 | origin/main's | 4484 passed, 131 skipped, 124 s |
 | 2 | my first fix (`2c07a0e`) | 4484 passed, **1 error**: teardown of `test_capabilities.py::test_unknown_renderer_name_is_an_error` |
 | 3 | my first fix | 4483 passed, the same teardown error, and **1 failed: `test_making_sound.py::test_reverb_of_five_seconds_is_quick`**, `assert (1079.636872726 - 1077.224527774) < 2.0`: `reverb(1)` took **2.41 s** against a 2.0 s budget, on worker gw2, load average 8 to 11 on 4 CPUs. It passes alone. It is load, not order: no shorter order makes it fail. |
-| 2, 4, 5 again | the final fix | SEEDSB_PLACEHOLDER |
+| 2 again | conftest fixed | 4483 passed, **1 failed: `test_fallback.py::test_the_bundled_fonts_load_only_when_needed`**, `assert set() == {'NotoEmoji-Regular.ttf'}`. Order-dependent: see below. |
+| 4 | conftest fixed | **4484 passed**, 131 skipped |
+| 5, and 6 and 2 with both fixes | | SEEDSC_PLACEHOLDER |
+
+**The order-dependent failure.** `test_the_bundled_fonts_load_only_when_needed` clears `typography._bundled_cache`
+and checks that shaping an emoji loads Noto Emoji. But `typography._ITEMISE_CACHE` memoises the answer for a whole
+text. Guide example `06_text#9` draws `"Hello \U0001F680"`, the same text; if it ran earlier in the same process,
+the memo answered and `_bundled()` was never called. Shortest failing order (fails before the fix, passes after):
+
+```
+pytest -p no:randomly "tests/test_guide.py::test_complete_examples_run_as_printed[06_text#9]" \
+  "tests/test_fallback.py::test_the_bundled_fonts_load_only_when_needed"
+```
+
+The product is right (the font had been loaded, earlier). **Fixed** in the test: it clears both caches (commit
+`0fcbfab`). In the normal file order `test_fallback.py` runs before `test_guide.py`, which is why CI never saw it;
+with `pytest-xdist` it would appear at random.
 
 The seed-2 error was mine: my first fix took the test's own `monkeypatch` in the autouse fixture, so the fixture's
 teardown ran before the test's `FUNGROUND_RENDERER=crayon` was undone. It failed alone too, in any order. Fixed in
@@ -141,7 +157,16 @@ Whole suite, one process, `--timeout=300`, constraints from `tests/constraints.t
 started with my first conftest fix, so the `test_capabilities` teardown error from section 3 is expected in them
 and is not a version problem.
 
-RESULTS_VERSIONS_PLACEHOLDER
+| Python | Libraries | Result | Time |
+|---|---|---|---:|
+| 3.11.18 | pinned | 4475 passed, 9 failed only because `FUNGROUND_HEADLESS=1` was set (section 1) | 318 s |
+| 3.12.3 | pinned | **4484 passed**, 131 skipped, plus the known teardown error | 628 s (machine overloaded) |
+| 3.13.18 | pinned | first run killed by the kernel for memory at 95% (exit 137, not a test failure); rerun: PY313_PLACEHOLDER | |
+| 3.14.6 | pinned | **4484 passed**, 131 skipped, plus the known teardown error | 618 s (machine overloaded) |
+| 3.14.6 | newest inside the bounds: pycairo 1.29.2, fonttools 4.68.0, pypdf 6.21.4, uharfbuzz 0.57.0 (pygame-ce, skia-pathops, svgelements unchanged) | **4484 passed**, 131 skipped, plus the known teardown error | 480 s |
+
+No failure depends on the Python version or on the newest libraries. Pixel goldens are compared on Windows only,
+so pycairo 1.29.2's known Windows edge change (constraints.txt) cannot show here.
 
 ml: a second venv (Python 3.11, core pinned, then `pip install -e ml`: onnxruntime 1.31.1, numpy 2.4.6).
 `pytest ml/tests --timeout=300`: **90 passed in 10.0 s**, no skips, with the real models downloaded to the
@@ -247,20 +272,23 @@ Where time could be saved without testing less:
 3. `Microphone.close()` promises "funground calls it when a sketch ends"; nothing does. Open devices outlive their
    sketch and their test. This is a product bug, but closing them today would hit the deadlock more often, so it
    should land together with the deadlock fix.
-4. CI runs the microphone guide examples on a real (dummy-driver) capture device, while local runs that follow
+4. One order-dependent test (`test_fallback.py`, fixed). It would have made a switch to `pytest-xdist` flaky.
+5. CI runs the microphone guide examples on a real (dummy-driver) capture device, while local runs that follow
    AGENTS.md run them silent. The two runs test different code.
-5. Wall-clock budget tests fail under load: `test_reverb_of_five_seconds_is_quick` failed once in a random-order
+6. Wall-clock budget tests fail under load: `test_reverb_of_five_seconds_is_quick` failed once in a random-order
    run on a loaded machine (2.41 s against 2.0 s). This is the most likely cause of the unidentified S-245 failure
    (S-245's suite ran in parallel parts); that it was this test is unverified.
-6. Memory: a single-process run of the whole suite reached about 2.9 GB resident (`ps` at 75 to 95%, Python 3.12
+7. Memory: a single-process run of the whole suite reached about 2.9 GB resident (`ps` at 75 to 95%, Python 3.12
    and 3.14). Running four suites at once on 15 GB got one killed by the kernel (exit 137). The cause of the growth
    was not looked into.
-7. 100 runs of the `16_sound` guide examples as CI runs them (50 idle, 50 at load average 8 to 11) all passed;
+8. 100 runs of the `16_sound` guide examples as CI runs them (50 idle, 50 at load average 8 to 11) all passed;
    `pygame.quit()` with a started microphone did not deadlock in 900 rounds (`mic_quit_deadlock.py`).
 
 **Fixed (in this branch)**
 - `tests/conftest.py`: every test starts without `FUNGROUND_HEADLESS`, so the 9 tests that failed locally with it
   set now pass, and local runs match CI. Test isolation only; no test weakened.
+- `tests/test_fallback.py`: the lazy-loading test also clears `_ITEMISE_CACHE`, so it no longer fails after guide
+  example `06_text#9`. Test isolation only; it checks the same thing.
 
 **Needs the maintainer**
 - Decide the microphone fix: pause through ctypes into pygame-ce's SDL (prototype in `mic_fix_prototype.py`, needs a
@@ -272,5 +300,8 @@ Where time could be saved without testing less:
 - Whether CI should use `pytest-xdist` (a dev dependency change, so `pyproject.toml`).
 
 **Commits to review** (all `[skip ci]`): see `git log origin/main..cloud/test-stability`.
-- `b292ae8` plan; `2c07a0e` and the commit after it: the conftest isolation fix (review them together, the second
-  corrects the first); `1493a84` and later: spike scripts and this file.
+- `b292ae8` plan.
+- `2c07a0e` and the commit after it: the conftest isolation fix (review them together; the second corrects the
+  first, whose teardown order broke `test_capabilities`).
+- `0fcbfab`: the `test_fallback` isolation fix.
+- The rest: spike scripts and this file.
