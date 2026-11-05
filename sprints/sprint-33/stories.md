@@ -21,6 +21,8 @@ pass, on the desktop and in Play, before the tag.
 |---|---|---|
 | S-234 | Words you say: `ml.words(mic)`, speech to words on the device, the same on the desktop and in Play | done 5 Nov (#63, web #23); a real microphone in Play is for the maintainer's test pass |
 | S-251 | A microphone stops without freezing the sketch (found by spike 19; added 5 Nov, before S-234, which rests on it) | done |
+| S-252 | The test suite can be trusted before 0.2 (spike 19; added 5 Nov) | done (#65) |
+| S-253 | Nonsense numbers cannot hang a sketch or spoil a saved file (spike 20; added 5 Nov) | built; PR open |
 | S-250 | Sounds: `ml.sound(mic)`, the most likely sound with how sure, and the next guesses | planned |
 | S-235 | A model you teach: `ml.teach(...)` and `ml.guess(...)`, a few examples of each kind from the camera | planned |
 | S-236 | The guide chapter on models: what a model is, what it learnt from, why it is wrong, what stays on your computer | planned |
