@@ -7,6 +7,7 @@ gradient.
 """
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from numbers import Real
 from typing import Union
@@ -54,6 +55,8 @@ def parse_paint(value, parse=Color.parse) -> Paint:
 def _number(v, what: str) -> float:
     if isinstance(v, bool) or not isinstance(v, Real):
         raise TypeError(f"{what} needs numbers, not {v!r}")
+    if not math.isfinite(v):                  # nan or inf would reach the saved PDF and SVG
+        raise ValueError(f"{what} needs finite numbers, not {v!r}")
     return float(v)
 
 
