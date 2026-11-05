@@ -266,16 +266,26 @@ class Sketch:
             )
 
     # ------------------------------------------------------------ transforms
+    @staticmethod
+    def _finite(call: str, **values: Any) -> None:
+        """Refuse nan and inf before they reach the matrix: Cairo cannot save a drawing with one."""
+        for name, value in values.items():
+            if isinstance(value, float) and not math.isfinite(value):
+                raise ValueError(f"f.{call}(): {name} must be a finite number, not {value!r}")
+
     def translate(self, dx: float, dy: float) -> None:
+        self._finite("translate", x=dx, y=dy)
         self._emit(ir.Concat(Transform.translation(dx, dy)))
 
     def rotate(self, degrees: float) -> None:
         """Rotate later drawing by *degrees* (contract F1): +90 turns +x into +y (clockwise on screen)."""
+        self._finite("rotate", angle=degrees)
         self._emit(ir.Concat(Transform.rotation(degrees)))
 
     def scale(self, sx: float, sy: float | None = None) -> None:
         if sy is None:
             sy = sx
+        self._finite("scale", x=sx, y=sy)
         if sx == 0 or sy == 0:
             raise ValueError("scale factor must not be 0 (nothing could be drawn)")
         self._emit(ir.Concat(Transform.scaling(sx, sy)))
@@ -289,6 +299,7 @@ class Sketch:
         self._shear(0.0, degrees)
 
     def _shear(self, x_degrees: float, y_degrees: float) -> None:
+        self._finite("shear_y" if x_degrees == 0.0 else "shear_x", angle=y_degrees if x_degrees == 0.0 else x_degrees)
         for d in (x_degrees, y_degrees):
             if abs(math.cos(math.radians(d))) < 1e-9:
                 raise ValueError("a shear of 90 degrees (or 270) would be infinitely slanted")
@@ -297,6 +308,7 @@ class Sketch:
     def apply_matrix(self, a: float, b: float, c: float, d: float, e: float, f: float) -> None:
         """Multiply in x' = a*x + c*y + e, y' = b*x + d*y + f (the p5 / Canvas order)."""
         t = Transform(float(a), float(b), float(c), float(d), float(e), float(f))
+        self._finite("apply_matrix", a=t.a, b=t.b, c=t.c, d=t.d, e=t.e, f=t.f)
         if t.determinant() == 0:
             raise ValueError("f.apply_matrix(): this matrix squashes everything flat (its determinant is 0)")
         self._emit(ir.Concat(t))
