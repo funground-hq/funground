@@ -1,8 +1,8 @@
 # 20. Models: your body and your hands
 
-A model is a program that has learnt to find something in a picture. funground has three. One finds a **body**. One
-finds a **hand**. One cuts out the **person**. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
-are. Then you can draw with them.
+A model is a program that has learnt to find something in a picture, or in a sound. funground has four. One finds a **body**. One
+finds a **hand**. One cuts out the **person**. One writes down the **words** you say. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
+are. Speak to your microphone, and it knows what you said. Then you can draw with them.
 
 Everything runs on your own computer. What the camera sees never leaves it.
 
@@ -28,10 +28,10 @@ Why is it separate? A model is a big file, and a program to run it. Most sketche
 funground stays small, and you add the models when you want them.
 
 **The first call downloads the model.** It prints one line, such as `Downloading the pose model, 18 MB, once.` The body
-model is about 18 MB and the hand model about 8 MB. The files are kept in a `models/` folder beside your sketch. The next
+model is about 18 MB, the hand model about 8 MB and the words model 42 MB. The files are kept in a `models/` folder beside your sketch. The next
 time you run it, nothing is downloaded, and it works without the internet.
 
-**What stays on your computer:** the camera's pictures, the points the model finds and the model files. The only thing
+**What stays on your computer:** the camera's pictures, what the microphone hears, the points and words the model finds and the model files. The only thing
 that goes over the internet is the download of the model files.
 
 **In Play** (the website), you install nothing. The browser keeps the model files and runs the models for you. The
@@ -162,10 +162,58 @@ kept like the others.
 The picture is in the camera's own pixels, so it is mirrored when the camera is. It lines up with `f.image(cam, 0, 0)`
 exactly. The gallery has a whole sketch: [in front of the sea](../gallery/README.md#in-front-of-the-sea).
 
+## Listen for words
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+`ml.words(source)` listens. The source is a microphone from `sound.microphone()`, or a sound. It gives you the **words**
+that were said, in English, or `None` if nothing has been said yet.
+
+```py
+import textwrap
+
+import funground as f
+from funground import ml, sound
+
+mic = sound.microphone()
+
+def setup():
+    f.size(640, 480)
+    mic.start()
+
+def draw():
+    f.background("navy")
+    words = ml.words(mic)
+    if words:
+        f.text_size(32)
+        f.text(textwrap.fill(words.text, 30), 20, 20)
+
+f.run()
+```
+
+A words has three parts. `words.text` is what was said, with capitals and full stops. `words.score` says how sure the model is,
+from 0 to 1. `words.is_new` is `True` in the frame the words first appear, and `False` after that. So you can do something once
+for each thing said: `if words and words.is_new:`. `str(words)` is the text.
+
+**It does not wait.** funground cuts what the microphone hears into **phrases**. A phrase starts when you speak, and ends
+when you have been quiet for about half a second. Each phrase is worked on beside your sketch, so `draw()` never stops. The
+words appear a moment after you pause (a second or two on a slow computer). Until then you get the last words you said.
+If you speak again while it is still working, only your newest phrase waits.
+
+**A sound works too.** `ml.words(mic.capture(3))` listens to the last three seconds. `ml.words(sound.load("hello.wav"))`
+listens to a file. A sound can be up to 30 seconds long. On your computer the call waits for the answer, and asking again
+about the same sound is free.
+
+The model is Whisper tiny, a small one for English. It is good with a clear voice and a quiet room. It can be wrong about
+names and unusual words. When it is not sure (a score under 0.4), or hears nothing, the answer is dropped and you keep the
+last words, so you never get an empty answer. The first call downloads the model. It is 42 MB, and it is kept like the others.
+
+The gallery has a whole sketch: [say a colour](../gallery/README.md#say-a-colour).
+
 ## One call a frame
 
 If you call `ml.pose(cam)` twice in one frame, you get the same body, and the work is done once. So you can ask for the
-body in two places in your code without slowing it down. `ml.hand(cam)` and `ml.person(cam)` do the same.
+body in two places in your code without slowing it down. `ml.hand(cam)`, `ml.person(cam)` and `ml.words(mic)` do the same.
 
 Until the camera has sent its first picture, `ml.pose(cam)` gives `None`. You never need to wait on purpose.
 
@@ -214,5 +262,6 @@ knuckle where it joins the hand, `pip` and `dip` are the next two joints, and `t
 2. Draw a line from each shoulder to its elbow, and from each elbow to its wrist. You have two arms.
 3. Make a circle at your index finger tip that gets bigger when `hand.thumb_tip` and `hand.index_finger_tip` are far
    apart. Hint: `f.distance()`.
+4. Add one circle to the canvas each time you say something new. Hint: `words.is_new`, and a list that grows.
 
 **Previous:** [19. Studios: the same picture, twice](19_studios.md)

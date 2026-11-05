@@ -14,7 +14,7 @@ from importlib import metadata
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from ._models import MODELS, TASKS, Model
+from ._models import MODELS, ROLES, TASKS, Model
 
 FOLDER_NAME = "models"
 ENVIRONMENT = "FUNGROUND_ML_MODELS"
@@ -102,18 +102,18 @@ def _download(model: Model, target: str, who: str, folder_word: str) -> None:
 
 
 def ensure(task: str, base_dir: str | None, who: str) -> dict[str, str]:
-    """The paths of the files for *task* ("pose", "hand" or "person"), downloading the ones that are missing or wrong.
+    """The paths of the files for *task* ("pose", "hand", "person" or "words"), downloading the ones that are missing or wrong.
 
     Returns:
-        {"detector": path, "landmarks": path} for pose and hand, {"model": path} for person. A call that has to download
-        prints one line first.
+        {"detector": path, "landmarks": path} for pose and hand, {"model": path} for person, {"encoder": path,
+        "decoder": path, "vocabulary": path} for words. A call that has to download prints one line first.
     """
     folder = models_folder(base_dir)
     folder_word = FOLDER_NAME if not os.environ.get(ENVIRONMENT) else folder
     paths: dict[str, str] = {}
     missing: list[Model] = []
     names = TASKS[task]
-    for role, name in zip(("model",) if len(names) == 1 else ("detector", "landmarks"), names):
+    for role, name in zip(ROLES[task], names):
         model = MODELS[name]
         paths[role] = os.path.join(folder, model.local_name)
         if (folder, model.local_name) in _checked and os.path.exists(paths[role]):
