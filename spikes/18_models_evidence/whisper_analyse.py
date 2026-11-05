@@ -2,7 +2,7 @@
 
     whisper_analyse.py OUT.json RESULTS.jsonl [RESULTS.jsonl ...]     (model name = file name before the first '_')
 
-Normalised text: lower case; hyphens to spaces; punctuation removed (apostrophes inside words kept); whole numbers
+Normalised text: lower case; hyphens to spaces; contractions expanded (n't, 're, 've, i'm, 'll; not 's or 'd); punctuation removed (apostrophes inside words kept); whole numbers
 0 to 9,999 and simple ordinals written as words; mr/mrs/dr expanded. WER = (S + D + I) / reference words, pooled over
 utterances. 95 % interval: 2,000 bootstrap resamples of utterances (seed 18). Duplicate (id, cond) rows: the first is kept.
 """
@@ -22,6 +22,8 @@ def words(n):
 def ordinal(n):
     w = words(n).split(); last = w[-1]
     w[-1] = ORD.get(last, (last[:-1] + "ieth") if last.endswith("y") else last + "th"); return " ".join(w)
+CONTR = [(r"\bwon't\b", "will not"), (r"\bcan't\b", "can not"), (r"\bcannot\b", "can not"), (r"n't\b", " not"), (r"'re\b", " are"),
+         (r"'ve\b", " have"), (r"\bi'm\b", "i am"), (r"'ll\b", " will")]
 ABBR = {"mr": "mister", "mrs": "missus", "dr": "doctor", "st": "saint", "ok": "okay"}
 
 def norm(t):
@@ -29,6 +31,8 @@ def norm(t):
     t = re.sub(r"(\d),(\d)", r"\1\2", t)
     t = re.sub(r"\b(\d{1,4})(st|nd|rd|th)\b", lambda m: ordinal(int(m.group(1))), t)
     t = re.sub(r"\b\d{1,4}\b", lambda m: words(int(m.group(0))), t)
+    t = t.replace("\u2019", "'")
+    for a, b in CONTR: t = re.sub(a, b, t)
     t = re.sub(r"[^a-z' ]", " ", t)
     t = re.sub(r"(^| )'|'( |$)", " ", t)
     return " ".join(ABBR.get(w, w) for w in t.split())
@@ -67,8 +71,8 @@ if __name__ == "__main__":
         for (g, c), lst in sorted(groups.items()):
             w, lo, hi = wer_ci([r["S"] + r["D"] + r["I"] for r in lst], [r["N"] for r in lst], np.random.default_rng(18))
             out["wer"].append({"model": model, "group": g, "cond": c, "utts": len(lst), "words": sum(r["N"] for r in lst),
-                               "wer": round(w * 100, 1), "ci95": [round(lo * 100, 1), round(hi * 100, 1)],
-                               "utt_exact": round(100 * np.mean([r["S"] + r["D"] + r["I"] == 0 for r in lst]), 1)})
+                               "wer": round(float(w) * 100, 1), "ci95": [round(lo * 100, 1), round(hi * 100, 1)],
+                               "utt_exact": round(100 * float(np.mean([r["S"] + r["D"] + r["I"] == 0 for r in lst])), 1)})
         sp = [r for r in rs.values()]
         out["speed"][model] = {"threads": sorted({r["threads"] for r in sp}), "rows": len(sp),
                                "rtf_median": round(float(np.median([r["run_s"] / r["seconds"] for r in sp])), 3),
