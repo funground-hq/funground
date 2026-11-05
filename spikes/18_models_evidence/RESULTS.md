@@ -173,7 +173,7 @@ only change is that the empty key/value cache shape is read from `config.json`, 
 
 | Group | Source | Licence | Used |
 |---|---|---|---|
-| Indian English, read (1 speaker, ksp, male) | CMU ARCTIC 0.95, festvox.org `cmu_us_ksp_arctic-0.95-release.tar.bz2` | free use (the ARCTIC licence: BSD-like, keep the copyright notice) | 57 utterances |
+| Indian English, read (1 speaker, ksp, male) | CMU ARCTIC 0.95, festvox.org `cmu_us_ksp_arctic-0.95-release.tar.bz2` | free use with the copyright notice kept (BSD-like; from memory, the COPYING file was not re-read: unverified) | 57 utterances |
 | US English, read (bdl male, slt female) | CMU ARCTIC 0.95 | same | 47 |
 | Canadian English, read (jmk) | CMU ARCTIC 0.95 | same | 22 |
 | Scottish English, read (awb) | CMU ARCTIC 0.95 | same | 24 |
