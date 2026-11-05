@@ -158,3 +158,87 @@ Not done: 4 and 5 classes (the data has 3), Imagenette, real webcam photos, and 
   - pinning a SHA-256 for the DINOv2 q8 file: the earlier spike gave none, and this run found `c179f8f7…7efb`;
   - whether to repeat this on real photos (Imagenette, or webcam pictures).
 - **Commits to review:** the plan commit, the scripts commit and the results commit on `cloud/teach-evidence`, all marked [skip ci].
+
+---
+
+# Follow-up: real photographs (Imagenette)
+
+2026-11-05, 07:50 to 07:54 UTC, the same branch. Files are in `imagenette/`: `embed_in.py`, `analyse_in.py` and `results.json`.
+
+- **Data:** Imagenette 160 px from fast.ai (`https://s3.amazonaws.com/fast-ai-imageclas/imagenette2-160.tgz`, 99,003,388 bytes,
+  SHA-256 `64d0c4859f35a461889e0147755a999a48b49bf38a7e0f9bd27003f10db02fe5`). From the train split I drew 150 per class across all
+  10 classes (seed 0), 1,500 in all. These are real photos of ten very different things: a fish, a dog, a cassette player, a chainsaw,
+  a church, a horn, a lorry, a petrol pump, a golf ball and a parachute.
+- **Model and set-up:** the same model file and preprocessing as above. The 160 px pictures are scaled up to 256 before the 224 crop.
+  Embedding took 84 s on 4 processes at 1 thread each.
+- **Run:** `analyse_in.py <prefix> results.json 2000`, seed 235, k=1, 2,000 splits per setting and 40 test pictures per class. Each
+  split draws its classes from the 10.
+
+## 1. Accuracy (k=1), against Rock Paper Scissors
+
+| Classes | 3 per class | 5 per class | 10 per class | RPS with 5 per class |
+|---|---|---|---|---|
+| 2 | 98.7 % | 99.2 % | 99.5 % | 84.4 % |
+| 3 | 97.8 % | 98.5 % | 99.1 % | 75.2 % |
+| 4 | 97.1 % | 98.1 % | 98.7 % | not measured |
+| 5 | 96.4 % | 97.5 % | 98.5 % | not measured |
+
+Intervals and the learner's range for each cell are in `imagenette/results.json`.
+
+- Real photos of **very different things are easy**: 3 examples a class already give 96 to 99 %.
+- Rendered hands on plain white are **hard**: they were 15 to 23 points lower with 5 examples a class.
+- **The difficulty comes from how alike the classes look, not from whether the pictures are real.** A learner teaching "my cup" against
+  "my pen" will probably land between the two datasets. A learner teaching "thumbs up" against "thumbs down" in the same room will
+  probably sit near RPS or below it (unverified). So the "at least 5" advice should stand as the safe side; on easy classes 3 is enough.
+
+## 2. The score's floor and scale
+
+On the test splits (the odd-numbered ones; fitted on the even-numbered ones):
+
+| Margin | 0–0.01 | 0.01–0.02 | 0.02–0.05 | 0.05–0.1 | 0.1–0.15 | 0.15–0.2 | 0.2–0.3 | >0.3 |
+|---|---|---|---|---|---|---|---|---|
+| How often right | 46 % | 55 % | 69 % | 88 % | 96 % | 99 % | 99.8 % | 100 % |
+
+How often a near-tie (margin under 0.01) is right, by the number of classes: **2: 52 %, 3: 49 %, 4: 45 %, 5: 45 %**. With 1/n those
+would be 50, 33, 25 and 20 %.
+
+| Floor | Fitted M | ECE, all | ECE with 2 / 3 / 4 / 5 classes | ECE with M fixed at 0.075 |
+|---|---|---|---|---|
+| fixed 0.5 | 0.1025 | **0.0044** | 0.0031 / 0.0044 / 0.0043 / 0.0054 | 0.0071 |
+| 1/n | 0.0725 | 0.0085 | 0.0029 / 0.0063 / 0.0088 / 0.0119 | 0.0085 |
+
+- **The floor should stay at about 0.5, not 1/n.** A margin of 0 does not mean "guessing among all n". It means "a tie between the top
+  two", and the true class is nearly always one of those two. So a near-tie is right about half the time, whatever n is. It sinks only
+  a little as n grows (45 % at 5 classes). The 1/n floor is worse on held-out splits, and it gets worse as the class count grows.
+- If the maintainer wants n in the formula, `max(0.45, 1/n)`-style tuning would be the size of the effect. Data from more than 5
+  classes would be needed to justify it (not measured).
+- **The scale moves with the data.** The fitted M is 0.075 on RPS and 0.10 on Imagenette. With 0.075 fixed, the ECE on Imagenette is
+  still only 0.007.
+  - Caveat: the ECE is tiny here mainly because nearly every guess is right, which makes it easy to score well.
+  - A single M between 0.075 and 0.1 is defensible for both datasets. I'd suggest **0.1**, the rounder number, which is slightly
+    cautious on hard data. On RPS, 0.1 was not tested directly, so this is unverified there.
+
+## 3. `.score` when only one class has been taught (a proposal, not measured)
+
+With one class there is no runner-up, so there is no margin, and every picture is "that class".
+
+- Proposal: `.guess` returns that class and `.score` is **0.5**, with a plain warning: "Teach at least two things so I can compare."
+- Why 0.5: it is the same value as a tie, so its meaning matches the rest of the scale ("I cannot tell"). It does not pretend to be
+  sure, and it never needs a special case for `None` in learners' `if` statements.
+- The rejected alternatives:
+  - **Top similarity as the score:** on both datasets, untaught pictures score 0.85 to 0.95 too, so it would look confident about
+    anything.
+  - **`None`:** it breaks `if guess.score > 0.8:` in learner code.
+
+## For the main session (follow-up)
+
+- **Found:**
+  - Real photos of different things are easy (96 to 99 % with 3 examples a class, 2 to 5 classes). Look-alike classes are where
+    examples matter.
+  - The score's floor should be a fixed 0.5, not 1/n: a near-tie is right 45 to 52 % of the time with 2 to 5 classes, and 1/n does
+    worse on held-out splits.
+  - The scale M is 0.075 (RPS) to 0.10 (Imagenette); 0.1 is proposed.
+  - The one-class case: propose `.score = 0.5` and a warning.
+- **Still not measured:** pictures from a learner's own webcam (the maintainer's suggested next test), more than 5 classes, and k=3
+  on Imagenette.
+- **Commit to review:** the Imagenette scripts and results commits on `cloud/teach-evidence`, both marked [skip ci].
