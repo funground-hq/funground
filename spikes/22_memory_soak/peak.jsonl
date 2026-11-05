@@ -1,0 +1,4 @@
+{"case": "a0_png", "peak_mb": 30.5, "secs": 0.0, "error": "ValueError: unknown page size 'A0': use one of A3, A4, A5, B5, Letter, Legal, Tabloid, Square (add \"Landscape\" to turn it on its side, e.g. \"A4Landscape\")", "files": {}}
+{"case": "a0_pdf", "peak_mb": 30.5, "secs": 0.0, "error": "ValueError: unknown page size 'A0': use one of A3, A4, A5, B5, Letter, Legal, Tabloid, Square (add \"Landscape\" to turn it on its side, e.g. \"A4Landscape\")", "files": {}}
+{"case": "pdf60", "peak_mb": 216.3, "secs": 2.2, "error": null, "files": {"sixty.pdf": 3833968}}
+{"case": "gif300", "peak_mb": 4886.4, "secs": 126.1, "error": null, "files": {"gif300.gif": 16617828, "sixty.pdf": 3833968}}

@@ -20,7 +20,7 @@ def art(w, h, n=400):
 
 try:
     if case in ("a0_png", "a0_pdf"):
-        f.size("A0"); art(f.width, f.height)
+        f.size(2384, 3370); art(f.width, f.height)   # A0, 841 x 1189 mm, in points: "A0" is not a named page
         if case == "a0_png":
             f.save(os.path.join(outdir, "a0.png"), dpi=300)
         else:
