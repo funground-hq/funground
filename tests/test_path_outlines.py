@@ -322,3 +322,13 @@ def test_bounds_of_an_open_lopsided_curve_is_its_exact_extent():
     top = min(y for _, y in samples)
     x, y, w, h = p.path().move_to(*p0).curve_to(*c1, *c2, *p3).bounds()
     assert (x, y, w, h) == pytest.approx((0, top, 100, -top), abs=0.01)
+
+
+def test_the_miter_limit_is_10_at_first():
+    # expand_stroke docstring: "miter_limit: how long a pointed corner may get, at least 1. It is 10 at first."
+    # A corner whose miter is 10.5 times the half-width is cut at the limit 10 but not at 11.
+    theta = 2 * math.asin(1 / 10.5)
+    sharp = p.path().move_to(0, 100).line_to(100, 100).line_to(100 - 100 * math.cos(theta), 100 - 100 * math.sin(theta))
+    default = sharp.expand_stroke(4, join="miter").bounds()
+    assert default == pytest.approx(sharp.expand_stroke(4, join="miter", miter_limit=10).bounds())
+    assert default != pytest.approx(sharp.expand_stroke(4, join="miter", miter_limit=11).bounds())
