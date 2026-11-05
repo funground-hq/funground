@@ -22,9 +22,10 @@ CODE = (ROOT / "ml" / "funground_ml")
 
 
 # ---- names and results
-def test_the_public_names_are_pose_hand_and_person_only():
-    assert funground_ml.__all__ == ["pose", "hand", "person"]
-    assert callable(funground_ml.pose) and callable(funground_ml.hand) and callable(funground_ml.person)
+def test_the_public_names_are_pose_hand_person_and_words_only():
+    assert funground_ml.__all__ == ["pose", "hand", "person", "words"]
+    assert all(callable(getattr(funground_ml, name)) for name in funground_ml.__all__)
+    assert funground_ml.Words is _results.Words and funground_ml.Body is _results.Body       # importable, like Body, not starred
 
 
 def test_there_are_33_body_names_and_21_hand_names_without_repeats():
@@ -243,10 +244,10 @@ def test_a_picture_of_another_size_starts_again():
 
 
 # ---- the model table and the download
-def test_the_table_has_five_pinned_files_from_the_hub():
-    assert len(_models.MODELS) == 5
+def test_the_table_has_eight_pinned_files_from_the_hub():
+    assert len(_models.MODELS) == 8
     for model in _models.MODELS.values():
-        assert re.fullmatch(r"https://huggingface\.co/(opencv|onnx-community)/[a-z_]+/resolve/[0-9a-f]{40}/[\w./]+\.onnx", model.url), model.url
+        assert re.fullmatch(r"https://huggingface\.co/(opencv|onnx-community)/[a-z_.-]+/resolve/[0-9a-f]{40}/[\w./]+\.(onnx|json)", model.url), model.url
         assert "/main/" not in model.url
         assert re.fullmatch(r"[0-9a-f]{64}", model.sha256) and model.size > 100_000
         assert model.licence == "Apache-2.0"
@@ -454,7 +455,8 @@ def test_the_core_stub_passes_the_names_on():
     from funground import ml
 
     assert ml.pose is funground_ml.pose and ml.hand is funground_ml.hand and ml.person is funground_ml.person
-    assert ml.__all__ == ["pose", "hand", "person"]
+    assert ml.words is funground_ml.words
+    assert ml.__all__ == ["pose", "hand", "person", "words"]
     assert "ml" not in f._PUBLIC_NAMES                                 # the naming trap: no public function is called ml
 
 

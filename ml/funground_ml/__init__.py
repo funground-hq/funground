@@ -1,4 +1,4 @@
-"""The models library: a body, a hand and the outline of a person in a camera or a picture.
+"""The models library: a body, a hand and the outline of a person in a camera or a picture, and the words in a microphone.
 
 Bring it in with one line, then every call says ``ml.``::
 
@@ -19,15 +19,18 @@ keeps only a small ``funground.ml`` that imports it (ADR-007, D-125).
 
 ``ml.person(cam)`` gives a picture of the camera in which everything but the person is see-through, to draw over a background of
 your own.
+
+``ml.words(mic)`` listens to a microphone and gives the words it heard, a phrase at a time, in English. It works beside the sketch,
+so ``draw()`` never waits for it.
 """
 from __future__ import annotations
 
 from funground.api import _sketch_folder
 
 from . import _tasks
-from ._results import Body, Hand
+from ._results import Body, Hand, Words
 
-__all__ = ["pose", "hand", "person"]
+__all__ = ["pose", "hand", "person", "words"]
 
 
 def pose(source):
@@ -135,3 +138,45 @@ def person(source):
     See also: pose, hand, image
     """
     return _tasks.find_person(source, _sketch_folder())
+
+
+def words(source):
+    """Listen to a microphone or a sound, and give the words in it.
+
+    It understands English. For a microphone (``sound.microphone()``, started) funground cuts what it hears into phrases: a phrase
+    starts when the sound gets louder than a whisper and ends after a short pause. Each phrase is worked on beside your sketch, so
+    ``draw()`` never waits. The words appear a moment after the speaker pauses (a second or two on a slow computer). Until then you
+    get the last words, or None before the first. If you pass a sound (for example ``mic.capture(3)`` or ``sound.load("a.wav")``),
+    the whole sound is one phrase, at most 30 seconds. On a computer the call waits for the answer, and asking again about the same
+    sound is free. In Play it gives None until the answer arrives.
+
+    You get a Words. ``words.text`` is what was said, with capitals and full stops. ``words.score`` (0 to 1) says how sure the
+    model is. ``words.is_new`` is True in the frame the words first appear, and False after that, so you can do something once for
+    each thing said. ``str(words)`` is the text. When the model is not sure (a score under 0.4) or hears nothing, the answer is
+    dropped and you keep the last words. A microphone that is not listening, or one with no sound (``FUNGROUND_HEADLESS=1``), gives
+    None or the last words. Calling it twice in one frame gives the same Words.
+
+    The first call downloads the words model (42 MB) and keeps it in a ``models/`` folder beside your sketch; it prints one line
+    when it does. The sound never leaves your computer.
+
+    Arguments:
+        source: a microphone from sound.microphone(), or a Sound.
+
+    Returns:
+        a Words, or None if nothing has been heard yet.
+
+    Raises:
+        TypeError: if source is not a microphone or a sound.
+        ValueError: if the sound is longer than 30 seconds.
+        ConnectionError: if the model has to be downloaded and there is no connection.
+
+    Example:
+        mic = sound.microphone()
+        mic.start()
+        heard = ml.words(mic)
+        if heard:
+            f.text(heard.text, 20, 100)
+
+    See also: pose, microphone
+    """
+    return _tasks.find_words(source, _sketch_folder())

@@ -179,6 +179,30 @@ def test_capture_is_a_sound_of_what_was_fed(fake):
     assert snd.duration() == pytest.approx(0.5, abs=0.001)
 
 
+def test_since_gives_every_sample_once_with_the_count(fake):
+    """The reading funground-ml's listener uses (ML6): what came after a position, and the new count, in one reading."""
+    mic = sound.microphone()
+    mic.start()
+    mic._feed([0.1, 0.2, 0.3])
+    first, total = mic._since(0)
+    assert first == pytest.approx([0.1, 0.2, 0.3]) and total == 3
+    mic._feed([0.4, 0.5])
+    second, total = mic._since(total)
+    assert second == pytest.approx([0.4, 0.5]) and total == 5
+    assert mic._since(total) == ([], 5)
+
+
+def test_since_gives_only_what_the_buffer_still_holds(fake):
+    mic = sound.microphone()
+    mic.start()
+    mic._feed([0.0] * (mi.BUFFER_SECONDS * RATE))
+    mic._feed([0.5] * 10)                                # the buffer wraps
+    chunk, total = mic._since(0)
+    assert chunk[-10:] == pytest.approx([0.5] * 10)
+    assert total == mi.BUFFER_SECONDS * RATE + 10
+    assert len(chunk) == mi.BUFFER_SECONDS * RATE        # the 10 oldest are gone; the caller sees it from the lengths
+
+
 def test_capture_works_after_stop_and_pads_with_silence(fake):
     mic = sound.microphone()
     mic.start()
@@ -268,10 +292,13 @@ def test_open_capture_converts_16_bit_and_averages_channels(monkeypatch):
             def __init__(self, callback, **kw):
                 self.callback = callback
 
+            def close(self):
+                pass
+
     monkeypatch.setattr(mi, "_sdl2_audio", lambda: Audio)
-    device, rate = mi._open_capture(None, got.append)
+    capture, rate = mi._open_capture(None, got.append)
     pcm = array("h", [16384, 0, -16384, -16384])  # two frames of two channels
-    device.callback(device, memoryview(pcm.tobytes()))
+    capture.device.callback(capture.device, memoryview(pcm.tobytes()))
     assert rate == 44100
     assert list(got[0]) == pytest.approx([0.25, -0.5])
 
