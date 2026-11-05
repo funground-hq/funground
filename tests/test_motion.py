@@ -297,7 +297,7 @@ def test_gif_without_pillow_uses_ffmpeg(tmp_path, monkeypatch, fake_ffmpeg):
     assert args[args.index("-s") + 1] == "20x10"
     assert args[args.index("-r") + 1] == "10"
     assert args[args.index("-pix_fmt") + 1] == "rgb24"
-    assert "palettegen" in args[args.index("-filter_complex") + 1]
+    assert "paletteuse" in args[args.index("-lavfi") + 1]         # the last of two passes: the first makes the palette
     assert args[args.index("-loop") + 1] == "0"
     assert args[-1] == str(tmp_path / "x.gif")
     assert (tmp_path / "x.gif").exists()
@@ -456,3 +456,48 @@ def test_png_pdf_svg_saves_are_unchanged(tmp_path):
     assert sorted(f.name for f in tmp_path.iterdir()) == ["a.pdf", "a_1.png", "a_1.svg", "a_2.png", "a_2.svg"]
     with pytest.raises(ValueError, match=r"\.png, \.pdf, \.svg"):
         p.save(str(tmp_path / "a.bmp"))
+
+
+# ---- a long recording is limited by the disk, not by the memory
+def test_frames_come_back_in_order_as_often_as_asked():
+    store = motion.FrameStore((1, 2))
+    store.add(b"abcdef")
+    store.add(b"ghijkl")
+    assert len(store) == 2
+    assert list(store) == [b"abcdef", b"ghijkl"] == list(store)
+    store.add(b"mnopqr")                                  # adding after reading goes at the end
+    assert list(store)[-1] == b"mnopqr"
+    store.close()
+
+
+def test_a_frame_of_the_wrong_size_is_named():
+    store = motion.FrameStore((2, 2))
+    store.add(bytes(12))
+    with pytest.raises(ValueError, match="frame 2 is not 2 x 2 pixels"):
+        store.add(bytes(11))
+    store.close()
+
+
+def test_a_long_recording_leaves_memory(monkeypatch):
+    monkeypatch.setattr(motion, "MEMORY_LIMIT", 100)
+    store = motion.FrameStore((10, 10))
+    store.add(bytes(300))
+    assert store._file._rolled                            # on disk, past the limit
+    store.close()
+
+
+def test_a_short_recording_stays_in_memory():
+    store = motion.FrameStore((10, 10))
+    store.add(bytes(300))
+    assert not store._file._rolled
+    store.close()
+
+
+def test_a_recording_cut_short_lets_go_of_its_frames(tmp_path):
+    from funground import api
+
+    sketch = api.active_sketch()
+    store = motion.FrameStore((1, 1))
+    sketch._motion = [str(tmp_path / "x.gif"), "gif", 5, store, (1, 1), False]
+    sketch._drop_motion()
+    assert sketch._motion is None and store._file.closed
