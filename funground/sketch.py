@@ -1857,6 +1857,11 @@ class Sketch:
         """
         if mode not in self.ARC_MODES:
             raise ValueError(f"f.arc() mode must be one of {', '.join(self.ARC_MODES)}, not {mode!r}")
+        for name, value in (("start", start), ("stop", stop)):
+            if isinstance(value, float) and not math.isfinite(value):
+                raise ValueError(f"f.arc(): {name} must be a finite number of degrees, not {value!r}")
+        if isinstance(start, (int, float)) and isinstance(stop, (int, float)) and start - stop > 360 * 64:
+            stop = start + (stop - start) % 360   # the same as adding 360 until stop >= start, without the wait
         while stop < start:
             stop += 360
         stop = min(stop, start + 360)
