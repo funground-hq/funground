@@ -112,7 +112,8 @@ test.
 |---|---|---|
 | 1 | origin/main's | 4484 passed, 131 skipped, 124 s |
 | 2 | my first fix (`2c07a0e`) | 4484 passed, **1 error**: teardown of `test_capabilities.py::test_unknown_renderer_name_is_an_error` |
-| 3, and 2, 4, 5 again | see the table at the end of this section | |
+| 3 | my first fix | 4483 passed, the same teardown error, and **1 failed: `test_making_sound.py::test_reverb_of_five_seconds_is_quick`**, `assert (1079.636872726 - 1077.224527774) < 2.0`: `reverb(1)` took **2.41 s** against a 2.0 s budget, on worker gw2, load average 8 to 11 on 4 CPUs. It passes alone. It is load, not order: no shorter order makes it fail. |
+| 2, 4, 5 again | the final fix | SEEDSB_PLACEHOLDER |
 
 The seed-2 error was mine: my first fix took the test's own `monkeypatch` in the autouse fixture, so the fixture's
 teardown ran before the test's `FUNGROUND_RENDERER=crayon` was undone. It failed alone too, in any order. Fixed in
@@ -130,7 +131,7 @@ under the load above:
 | `test_pages.py` lines 362 and 419 | 1 s, 10 s | not timed separately |
 | `test_pixels.py` line 509 | 2.0 s | not timed separately |
 
-A Windows runner is slower than this machine, so the first two have little room. Measuring CPU time
+The reverb budget **did fail once** under load (seed 3 above, 2.41 s). A Windows runner is slower than this machine, so the first two have little room. Measuring CPU time
 (`time.process_time()`) instead of wall time would keep the budgets just as strict and stop other load counting
 against them. That is a change to what the tests measure, so it is for the maintainer.
 
@@ -248,8 +249,14 @@ Where time could be saved without testing less:
    should land together with the deadlock fix.
 4. CI runs the microphone guide examples on a real (dummy-driver) capture device, while local runs that follow
    AGENTS.md run them silent. The two runs test different code.
-5. Wall-clock budget tests have small margins under load (table in section 3); the likely cause of the
-   unidentified S-245 failure, unverified.
+5. Wall-clock budget tests fail under load: `test_reverb_of_five_seconds_is_quick` failed once in a random-order
+   run on a loaded machine (2.41 s against 2.0 s). This is the most likely cause of the unidentified S-245 failure
+   (S-245's suite ran in parallel parts); that it was this test is unverified.
+6. Memory: a single-process run of the whole suite reached about 2.9 GB resident (`ps` at 75 to 95%, Python 3.12
+   and 3.14). Running four suites at once on 15 GB got one killed by the kernel (exit 137). The cause of the growth
+   was not looked into.
+7. 100 runs of the `16_sound` guide examples as CI runs them (50 idle, 50 at load average 8 to 11) all passed;
+   `pygame.quit()` with a started microphone did not deadlock in 900 rounds (`mic_quit_deadlock.py`).
 
 **Fixed (in this branch)**
 - `tests/conftest.py`: every test starts without `FUNGROUND_HEADLESS`, so the 9 tests that failed locally with it
