@@ -205,3 +205,16 @@ def test_contours_flatten_curves_to_the_tolerance_and_keep_the_sub_paths():
         assert abs(math.hypot((ax + bx) / 2 - 50, (ay + by) / 2 - 50) - r) < slack
     parts = contours(Path().move_to(0, 0).line_to(10, 0).line_to(10, 10).close().move_to(50, 50).line_to(60, 50))
     assert parts == [([(0, 0), (10, 0), (10, 10), (0, 0)], True), ([(50, 50), (60, 50)], False)]
+
+
+def test_sample_path_puts_a_point_every_spacing_along_the_outline():
+    # Contract T16: points "one every spacing pixels of outline length, starting at the start of each outline";
+    # sample_path docstring: the leftover distance carries across the pieces of a sub-path.
+    from funground.geometry import sample_path
+
+    line = sample_path(Path().move_to(0, 0).line_to(100, 0), 10)
+    assert line == [(0, 0)] + [(float(x), 0.0) for x in range(10, 101, 10)]       # the end, at 100, too
+    bend = sample_path(Path().move_to(0, 0).line_to(1, 0).line_to(1, 3), 1)
+    assert bend == [(0, 0), (1.0, 0.0), (1.0, 1.0), (1.0, 2.0), (1.0, 3.0)]        # a piece 1 long counts
+    square = sample_path(Path.rect(0, 0, 40, 40), 10)
+    assert len(square) == 16 and square[0] == (0, 0) and len(set(square)) == 16    # the start is not repeated
