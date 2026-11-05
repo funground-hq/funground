@@ -1,0 +1,12 @@
+# The token exchange for Play's "Sign in with GitHub" (S-238). The client secret is a Worker secret, set with
+# `wrangler secret put CLIENT_SECRET`; it is never in this file. Logs stay off, so nothing is kept (research.md).
+name = "funground-token"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[vars]
+CLIENT_ID = "Iv23limVsNiPj9pOVmOM"
+
+[observability]
+enabled = false

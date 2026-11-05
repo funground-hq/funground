@@ -239,6 +239,43 @@ Note the number of taps, whether the install screen is understandable to a novic
 token only at GitHub, and the Worker sees only codes and refresh tokens; signed-out storage is empty; the Worker
 costs nothing. Then answer: can a novice finish the install screen unaided?
 
+## Results (5 Nov 2026, the maintainer's test)
+
+Set-up: the GitHub App `funground-play`, owned by `funground-hq`, with `contents: write` and `metadata: read` only (GitHub's public record); the Worker `funground-token` on the maintainer's Cloudflare account (workers.dev, logs
+off, `wrangler.toml` in `exchange/`), and a test sketchbook made from the template. Laptop: Chrome at `http://localhost:8080/`.
+Phone: the same page, hosted for the test as a separate Worker, deleted afterwards with its allowed origin; its callback URL
+stays on the App until the maintainer removes it. Each commit below was read back from GitHub.
+
+| Pass criterion | Laptop | Phone |
+|---|---|---|
+| Sign in with the App | passed | passed |
+| List and open | passed | passed |
+| Save as a commit | passed (`4a5a36f`, `4f64e5c`) | passed (`c0b2c62`, `8ea30fd`, `32300bb`) |
+| New sketch | passed (`e0222d4`) | passed (`36658d9`) |
+| Sign out, nothing kept | passed: token in sessionStorage only, cleared; nothing in localStorage | passed (the steps worked; storage not inspected) |
+| A file changed on GitHub | save refused and the page warned; GitHub's version was not overwritten | not tried |
+| Where the token goes | the page's own request log: GitHub and the Worker only | the `/repositories` line was not seen in the short log box; not checked further |
+| Monthly cost | 0: one Worker on the free plan (the research's figures; no bill seen yet) | |
+| Option a, a pasted token, for comparison | saved a commit (`896cd7b`) | not tried |
+
+Not tested: what a learner sees with no GitHub account; **"Save mine over theirs"**; a real novice; the page does not read `/revoke`'s
+answer, so that GitHub deleted the token is unverified (it expires in 8 hours in any case).
+
+### What the test found
+
+1. **Installing is strictly needed to write**, which answers the first open point. Signed in with no installation, `GET` on a public
+   repository works and every `PUT` is refused, so a learner sees their sketches and can edit them, and then Save fails. The first
+   sign-in did not lead to the install, and it took the maintainer several attempts to get past this. Can a novice finish it unaided? On
+   this evidence, **not with this flow**: Play must check for an installation straight after sign-in and take the learner there.
+2. **A refused save is too quiet.** "Save failed (403)" at the top of the page does not say what to do.
+3. **On a conflict, "Use theirs" drops the learner's text at one click.** Design for S-239 (maintainer, 5 Nov): no extra copy of the
+   learner's version, which would confuse; say plainly what is about to happen, and offer Undo.
+4. **Pasted tokens leave something behind.** Signing out only clears the browser, and the token works until it expires or is deleted at
+   GitHub. The maintainer's own token needed deleting by hand.
+5. **Small things.** `localhost` is accepted as a callback (the second open point). A space or comma in the callback list made GitHub
+   refuse the address (`redirect_uri_mismatch`). Repository names can end in a dot. Commits through the API show as unverified on GitHub.
+   Saving a secret as Text in Cloudflare works but is readable there, and the next `wrangler deploy` would remove it: it must be type Secret.
+
 ## Open points the desk work could not settle
 
 - Whether installing the App is strictly needed for a user token to reach a repository (very likely; test step 1).
