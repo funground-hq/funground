@@ -362,3 +362,16 @@ def test_a_missing_path_method_says_what_to_write_instead():
     with pytest.raises(AttributeError, match="shapes are rect, square, ellipse, circle, triangle, quad and polygon"):
         path.frobnicate()
     assert not hasattr(path, "_private")                      # private names stay plain AttributeErrors
+
+
+# --- Spike 21 (mutation testing) ---------------------------------------------------------------
+
+
+def test_path_rect_with_radii_and_a_negative_size_is_the_equivalent_positive_box():
+    # Contract F14: "A box with a negative width or height is drawn as the equivalent positive box"; the
+    # path builder's rect "takes the same".
+    flipped = p.path().rect(90, 60, -80, -50, 8)
+    plain = p.path().rect(10, 10, 80, 50, 8)
+    assert flipped.bounds() == pytest.approx(plain.bounds())
+    assert flipped.bounds() == pytest.approx((10, 10, 80, 50))
+    assert p.path().rect(90, 10, -80, 50, 8).bounds() == pytest.approx((10, 10, 80, 50))
