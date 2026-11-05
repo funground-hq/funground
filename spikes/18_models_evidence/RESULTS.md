@@ -303,6 +303,25 @@ What would change my answer:
 
 ---
 
+## How far the runs got (partial)
+
+The Whisper numbers are **partial**. Rows written, as (utterance, condition) pairs, against the number planned:
+
+| Run | Written | Planned |
+|---|---|---|
+| tiny.en, ARCTIC (4 conditions) | 1,496 | 1,760 |
+| base.en, ARCTIC | 597 | 1,760 |
+| tiny.en, LibriSpeech (clean, snr10) | 922 | 1,000 |
+| base.en, LibriSpeech | 489 | 1,000 |
+| tiny.en and base.en, EdAcc (clean, snr10) | 294 each | 294 (complete) |
+
+The tables cover only the pairs that **both** models finished (base.en is the limit): 150 ARCTIC utterances, 245 LibriSpeech,
+143 EdAcc. One tiny.en process kept running after the 07:54 stop, because I ended its shell wrapper but not the process. I
+ended it by PID at the end of the session. Its extra rows are not in the tables. YAMNet's main comparison is complete
+(2,009 clips). The tie-aware second pass reached 381 of 2,009 clips.
+
+---
+
 ## For the main session
 
 **Found.**
