@@ -8,6 +8,11 @@ What changed in funground, newest first. Release numbers follow the
 
 A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
 
+### Fixed
+- **Stopping a microphone can no longer freeze a sketch** (S-251, D-128). `mic.stop()`, `mic.close()`, or Python tidying
+  up a microphone that was still listening, could freeze the whole program, and only closing it from outside ended it.
+  It now stops safely. A microphone is also let go when the sketch ends, as its documentation always said.
+
 ### Changed
 - **Sound and the music of India are libraries** (S-246, D-120, D-123, ADR-007). The 24 names `f.tone`, `f.note`,
   `f.pluck`, `f.drone`, `f.melody`, `f.sequence`, `f.mix`, `f.chord_notes`, `f.note_to_frequency`,
