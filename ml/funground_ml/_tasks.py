@@ -1,4 +1,5 @@
-"""The three tasks, from a source to a Body, a Hand or a Picture: the work behind ``ml.pose()``, ``ml.hand()`` and ``ml.person()`` (D-125).
+"""The four tasks, from a source to a Body, a Hand, a Picture or some Words: the work behind ``ml.pose()``, ``ml.hand()``,
+``ml.person()`` and ``ml.words()`` (D-125, D-126).
 
 There are two paths. On a computer the models run here, with onnxruntime. In a web page the host runs them (``host_services.models``,
 S-232) and this module only sends it pictures and reads the newest answer. The desktop modules (``_fetch``, ``_glue``,
@@ -6,13 +7,16 @@ S-232) and this module only sends it pictures and reads the newest answer. The d
 """
 from __future__ import annotations
 
+import weakref
 from typing import TYPE_CHECKING
 
 from funground import host_services
+from funground.api import canvas_sketch
 from funground.picture import Picture
 
-from . import _source
-from ._results import Body, Hand
+from . import _listen, _source
+from ._results import Body, Hand, Words
+from ._speech import MAX_SOUND_SECONDS
 
 if TYPE_CHECKING:
     from funground.platform.browser_models import MaskResult, PointsResult
@@ -84,6 +88,58 @@ def find_person(source: object, base_dir: str | None) -> Picture | None:
         return frame.picture._masked_copy(_glue.person_mask(session, frame.image()), _glue.MASK_SIZE, _glue.MASK_SIZE)
 
     return _source.answer(source, "person", who, make)
+
+
+# What is kept for each microphone (an Ear) and each Sound (a Clip). The microphone or sound is the key, held weakly, and the value
+# does not refer back to it, so neither is kept alive.
+_ears: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
+_clips: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
+
+
+def _frame() -> int:
+    """The sketch's frame count: what "the same frame" means for the words (``Words.is_new`` and the same answer twice)."""
+    return canvas_sketch().frame_count
+
+
+def find_words(source: object, base_dir: str | None) -> Words | None:
+    """The words heard by a microphone, or in a Sound, or None. *base_dir* is the sketch's folder (where ``models/`` is kept).
+
+    A microphone is read for new phrases and the model works on them beside the sketch (a thread on a computer, the page's
+    worker in a web page); the answer is the newest one that has come in. A Sound is one phrase: a computer waits for the
+    answer, a web page gives None until it comes.
+    """
+    from funground.sound._engine import Sound
+    from funground.sound._microphone import Microphone
+
+    who = "ml.words()"
+    if not isinstance(source, (Microphone, Sound)):
+        raise TypeError(f"{who} needs a microphone from sound.microphone() or a sound, not {type(source).__name__}.")
+    if isinstance(source, Sound) and source.duration() > MAX_SOUND_SECONDS:
+        raise ValueError(f"{who}: this sound is {source.duration():.0f} seconds long, and the most it can listen to is "
+                         f"{MAX_SOUND_SECONDS} seconds. Cut it shorter first.")
+    models = host_services.models
+    if models is not None:
+        context, transcribe, make_sink = (models,), None, lambda: _listen.HostSink(models, id(source))
+    else:
+        from . import _fetch, _whisper
+
+        paths = _fetch.ensure("words", base_dir, who)           # the first call downloads, here in the sketch's thread
+
+        def transcribe(samples, rate):
+            return _whisper.load(paths).transcribe(samples, rate)
+
+        context, make_sink = tuple(sorted(paths.items())), lambda: _listen.Worker(transcribe)
+    if isinstance(source, Sound):
+        clip = _clips.get(source)
+        if clip is None or clip.context != context:
+            clip = _clips[source] = _listen.Clip(context, transcribe, make_sink() if models is not None else None)
+        return clip.words(_frame(), source)
+    ear = _ears.get(source)
+    if ear is None or ear.context != context:
+        if ear is not None:
+            ear.close()
+        ear = _ears[source] = _listen.Ear(context, source, make_sink())
+    return ear.words(_frame(), source)
 
 
 def _to_logical(frame: _source.Frame, points):

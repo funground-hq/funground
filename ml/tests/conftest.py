@@ -58,3 +58,28 @@ def real_models():
             os.environ.pop(_fetch.ENVIRONMENT, None)
         else:
             os.environ[_fetch.ENVIRONMENT] = previous
+
+
+SPEECH = HERE / "data" / "tts.wav"          # the words tests (SOURCES.md): 7.2 s, 16 kHz, mono
+SPEECH_TEXT = ("Draw a red circle in the middle of the screen, then make it bounce off the walls and change color every time "
+               "it hits one.")
+
+
+@pytest.fixture(scope="session")
+def words_models():
+    """The words model files in ml/tests/.models/ (downloaded on the first run). Skips the test when offline."""
+    from funground_ml import _fetch
+
+    previous = os.environ.get(_fetch.ENVIRONMENT)
+    os.environ[_fetch.ENVIRONMENT] = str(MODELS_FOLDER)
+    try:
+        try:
+            _fetch.ensure("words", None, "the tests")
+        except ConnectionError as error:
+            pytest.skip(f"the words model files are not in ml/tests/.models/ and cannot be downloaded: {error}")
+        yield MODELS_FOLDER
+    finally:
+        if previous is None:
+            os.environ.pop(_fetch.ENVIRONMENT, None)
+        else:
+            os.environ[_fetch.ENVIRONMENT] = previous

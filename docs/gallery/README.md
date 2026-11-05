@@ -2860,6 +2860,36 @@ A woman on a catwalk is cut out of her photograph and put in front of a sunset s
 
 Source: [`examples/gallery/models/03_in_front_of_the_sea.py`](../../examples/gallery/models/03_in_front_of_the_sea.py)
 
+### Say a colour
+
+![Say a colour](images/models-04_say_a_colour.png)
+
+Say the name of a colour into your microphone. The big circle takes that colour, and the words you said are written under it. Each time you say something new, the computer writes it a moment after you stop. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- ml.words(mic) listens to the microphone beside the sketch, so draw() never waits. It gives the words last heard, or None.
+- words.text is what was said, with capitals and full stops. words.is_new is True in the one frame when new words arrive.
+- The sketch lowercases the words and looks at each one. If a word is in COLOUR_NAMES, the circle is filled with it.
+- textwrap.fill() cuts a long sentence into short lines so that it stays on the screen.
+- The first run downloads the words model (42 MB, once) into a models folder beside the sketch. It understands English.
+
+**Make it yours**
+
+- Add more names to COLOUR_NAMES, such as "coral", "navy" or "silver".
+- Draw a square when you say "square", and a circle when you say "circle".
+- Change SIZE to make the words bigger, or draw them with f.text_font().
+- Try ml.words(mic.capture(3)) to listen to the last three seconds in one go.
+
+</details>
+
+Source: [`examples/gallery/models/04_say_a_colour.py`](../../examples/gallery/models/04_say_a_colour.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it

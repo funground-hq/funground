@@ -9,7 +9,7 @@ import pytest
 
 import funground_ml
 from funground import host_services
-from funground.platform.browser_models import HostModels, MaskResult, PointsResult
+from funground.platform.browser_models import HostModels, MaskResult, PointsResult, WordsResult
 from funground_ml import _results
 
 from conftest import ROOT, FakeCamera, solid_picture
@@ -366,4 +366,169 @@ def test_a_session_supplies_the_models_for_its_run_and_takes_them_away():
     session.models_unavailable("hand", "no hand model today")
     session.stop()
     assert host_services.models is None
+    assert asked[-1][0] == "close"
+
+
+# ---- ml.words on the host path (S-234)
+def _phrase(seconds=1.0, rate=8000):
+    """Some speech and the quiet that ends it, as the samples a microphone would have heard."""
+    import math
+    from array import array
+
+    speech = array("f", (0.5 * math.sin(2 * math.pi * 300 * i / rate) for i in range(round(seconds * rate))))
+    return speech + array("f", bytes(4 * round(0.8 * rate)))
+
+
+def _listening(rate=8000):
+    from funground import sound
+
+    mic = sound.microphone()
+    mic.start()
+    mic._rate = rate
+    return mic
+
+
+@pytest.fixture
+def frames(monkeypatch):
+    from funground_ml import _tasks
+
+    state = {"n": 1}
+    monkeypatch.setattr(_tasks, "_frame", lambda: state["n"])
+    return lambda: state.update(n=state["n"] + 1)
+
+
+def test_a_phrase_is_sent_as_float32_bytes_with_its_rate_and_one_is_in_flight():
+    asked = []
+    models = HostModels(lambda command, fields: asked.append((command, fields)))
+    samples = _phrase()
+    assert models.request_sound("words", 9, samples.tobytes(), 8000) is True
+    assert models.request_sound("words", 9, samples.tobytes(), 8000) is False          # one in flight for the source
+    assert models.request_sound("words", 10, samples.tobytes(), 8000) is True           # another source
+    assert [command for command, fields in asked] == ["request", "request"]
+    fields = asked[0][1]
+    assert fields == {"task": "words", "key": 9, "rate": 8000, "samples": samples.tobytes()}
+    assert len(fields["samples"]) == 4 * len(samples)
+
+
+def test_a_phrase_must_be_float32_bytes_and_have_a_rate():
+    models = HostModels(lambda command, fields: None)
+    with pytest.raises(ValueError, match="float32 bytes"):
+        models.request_sound("words", 1, bytes(7), 8000)
+    with pytest.raises(ValueError, match="float32 bytes"):
+        models.request_sound("words", 1, b"", 8000)
+    with pytest.raises(ValueError, match="rate above 0"):
+        models.request_sound("words", 1, bytes(8), 0)
+
+
+def test_words_come_back_as_a_words_result_for_a_phrase_that_is_in_flight():
+    models = HostModels(lambda command, fields: None)
+    models.push_words("words", 4, "nobody asked", 0.9)
+    assert models.latest("words", 4) is None and models.generation == 0                 # not in flight: ignored
+    models.request_sound("words", 4, bytes(8), 8000)
+    models.push_words("words", 4, "Hello there.", 0.93)
+    found = models.latest("words", 4)
+    assert isinstance(found, WordsResult) and found == WordsResult("Hello there.", 0.93) and models.generation == 1
+    assert models.request_sound("words", 4, bytes(8), 8000) is True                      # free again
+
+
+def test_a_microphones_phrase_goes_to_the_host_and_the_words_come_back(page, frames):
+    mic = _listening()
+    assert funground_ml.words(mic) is None and page.requests() == []
+    mic._feed(_phrase())
+    frames()
+    assert funground_ml.words(mic) is None
+    [request] = page.requests()
+    assert (request["task"], request["key"], request["rate"]) == ("words", id(mic), 8000)
+    assert 1.5 < len(request["samples"]) / 4 / 8000 < 1.8
+    page.models.push_words("words", id(mic), "Hello there.", 0.9)
+    frames()
+    found = funground_ml.words(mic)
+    assert isinstance(found, _results.Words) and (found.text, found.score, found.is_new) == ("Hello there.", 0.9, True)
+    assert funground_ml.words(mic) is found
+    frames()
+    assert funground_ml.words(mic).text == "Hello there." and not funground_ml.words(mic).is_new
+
+
+def test_the_newest_phrase_waits_while_one_is_in_flight_and_older_ones_are_passed(page, frames):
+    mic = _listening()
+    funground_ml.words(mic)
+    mic._feed(_phrase(1.0))
+    frames()
+    funground_ml.words(mic)                                                              # phrase 1 goes out
+    mic._feed(_phrase(0.5))
+    frames()
+    funground_ml.words(mic)                                                              # phrase 2 waits
+    mic._feed(_phrase(2.0))
+    frames()
+    funground_ml.words(mic)                                                              # phrase 3 takes its place
+    assert len(page.requests()) == 1
+    page.models.push_words("words", id(mic), "One.", 0.9)
+    frames()
+    assert funground_ml.words(mic).text == "One."
+    sent = page.requests()
+    assert len(sent) == 2 and len(sent[1]["samples"]) > len(sent[0]["samples"])          # the 2 s phrase, not the 0.5 s one
+
+
+def test_words_that_are_not_words_are_dropped_in_python(page, frames):
+    mic = _listening()
+    funground_ml.words(mic)
+    mic._feed(_phrase())
+    frames()
+    funground_ml.words(mic)
+    page.models.push_words("words", id(mic), "Thank you.", 0.2)
+    frames()
+    assert funground_ml.words(mic) is None
+
+
+def test_a_sound_is_sent_once_whole_and_gives_none_until_the_answer_arrives(page, frames):
+    from funground import sound
+
+    clip = sound.create([0.1] * 22050, 22050)
+    assert funground_ml.words(clip) is None
+    [request] = page.requests()
+    assert (request["key"], request["rate"], len(request["samples"])) == (id(clip), 22050, 4 * 22050)
+    frames()
+    assert funground_ml.words(clip) is None and len(page.requests()) == 1
+    page.models.push_words("words", id(clip), "A beep.", 0.8)
+    frames()
+    found = funground_ml.words(clip)
+    assert found.text == "A beep." and found.is_new and len(page.requests()) == 1
+    assert funground_ml.words(clip) is found
+
+
+def test_without_a_page_that_listens_nothing_is_sent_and_there_are_no_words(frames):
+    from funground import sound
+
+    host_services.models = HostModels()
+    try:
+        mic = _listening()
+        funground_ml.words(mic)
+        mic._feed(_phrase())
+        frames()
+        assert funground_ml.words(mic) is None
+        assert funground_ml.words(sound.create([0.1] * 8000, 8000)) is None
+    finally:
+        host_services.models = None
+
+
+def test_a_session_passes_a_phrase_out_and_the_words_in():
+    from funground.web import Session
+
+    asked = []
+    session = Session(64, 48, on_models=lambda command, fields: asked.append((command, fields)))
+    session.start(
+        "import funground as f\n"
+        "from funground import ml, sound\n"
+        "f.size(64, 48)\n"
+        "beep = sound.create([0.1] * 8000, 8000)\n"
+        "def draw():\n"
+        "    print('heard', ml.words(beep))\n"
+        "f.run()\n"
+    )
+    session.step(0.0)
+    request = next(fields for command, fields in asked if command == "request")
+    assert (request["task"], request["rate"], len(request["samples"])) == ("words", 8000, 4 * 8000)
+    session.push_models_words("words", request["key"], "Hello.", 0.9)
+    session.step(1.0)
+    session.stop()
     assert asked[-1][0] == "close"

@@ -254,6 +254,20 @@ class Microphone(_Analysis):
                 chunk = self._ring[start:] + self._ring[:end]
         return [0.0] * (count - have) + chunk.tolist()
 
+    def _since(self, position: int) -> tuple[list[float], int]:
+        """What was heard after sample number *position* (counted from start()), and the count of samples heard so far.
+
+        One reading under the lock, so a reader that keeps the count sees every sample once. Only what the buffer still
+        holds is given: if more than its 10 seconds came since *position*, the oldest part is gone (the caller can tell from
+        the lengths). Used by funground-ml's listener (contract ML6)."""
+        with self._lock:
+            total = self._total
+            have = max(0, min(total - position, total, self._size))
+            end = total % self._size
+            start = end - have
+            chunk = self._ring[start:end] if start >= 0 else self._ring[start:] + self._ring[:end]
+        return chunk.tolist(), total
+
     # ---- analysis (A2, A3, A4): level, spectrum and pitch come from _Analysis
     def _analysing(self) -> bool:
         return self._listening

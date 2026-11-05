@@ -1,6 +1,6 @@
 # The models package: `funground-ml` on the desktop (S-232, D-124, D-125)
 
-**Status:** built on 2 November 2026 for the desktop and for Play; the contract rows ML1 to ML5 are drafts. `ml.person` (S-233) was added on 2 November 2026: see "The person's mask".
+**Status:** built on 2 November 2026 for the desktop and for Play; the contract rows ML1 to ML5 are drafts. `ml.person` (S-233) was added on 2 November 2026: see "The person's mask". `ml.words` (S-234, row ML6, a draft) was added on 3 November 2026 for the desktop: see "The words".
 
 ## Problem
 
@@ -14,12 +14,15 @@ stay true.
 ml/                          its own distribution, funground-ml 0.1.0.dev0 (LGPL-2.1-only)
   pyproject.toml             funground, onnxruntime>=1.31,<2, numpy>=2,<3, pillow>=11,<13
   funground_ml/
-    __init__.py              pose(), hand(), person(): the only public names, with their docstrings
-    _tasks.py                from a source to a Body, a Hand or a Picture: the desktop path, and the host path (Play)
+    __init__.py              pose(), hand(), person(), words(): the only public names, with their docstrings
+    _tasks.py                from a source to a Body, a Hand, a Picture or some Words: the desktop path, and the host path (Play)
+    _speech.py               no numpy: the phrase cutter, the byte-level token decoder, the numbers of the speech model
+    _listen.py               no numpy: Heard (the answer a frame sees), Worker (the thread), HostSink, Ear (a microphone), Clip (a Sound)
+    _whisper.py              numpy: resampling, log-mel, the greedy decode loop (the only other user of _runtime)
     _source.py               what a source is, and the answer kept for each source and frame
     _glue.py                 numpy and Pillow: cut, detect, landmarks, tracker (no onnxruntime)
     _results.py              Body, Hand, the point names, the mirrored swap
-    _models.py               the table of five files: Hub address (pinned commit), size, SHA-256, licence
+    _models.py               the table of eight files: Hub address (pinned commit), size, SHA-256, licence
     _fetch.py                the download and the kept copy
     _runtime.py              the only module that imports onnxruntime
   tests/                     unit tests, model tests, the two test photographs (data/SOURCES.md)
@@ -171,6 +174,37 @@ has no `async`. How it is wired is in `Web_Runner_Note.md` ("Models"); this sect
 - **Tests.** `ml/tests/test_unit.py` (a stand-in model: size, alpha, soft edge, no threshold, nobody, cache, high density, the download of a one-file task),
   `test_host.py` (the mask result and the page path), `test_models.py` (the photograph: her dress solid, the corners clear, within half a grey level of the spike's own mask),
   `tests/test_pictures.py` (`_masked_copy`), and `funground-web/tools/test_models.py` (Play against the desktop, the mask time, the speed).
+
+## The words (S-234, built 3 November 2026)
+
+`ml.words(source)` (contract ML6) gives the words in a microphone or a Sound. The speech model is Whisper tiny.en, 8-bit, the files the S-231 spike measured
+(`onnx-community/whisper-tiny.en` at commit `2575352d61be1bf7225cf8f8b268a4678025fc58`): the encoder, the merged decoder, and `vocab.json`.
+
+- **Why no `tokenizers`.** Decoding needs only number to text. `vocab.json` is a table of byte-level pieces (GPT-2's scheme: each byte is one printable
+  character, so a space is U+0120), and `_speech.decode` joins the pieces, maps the characters back to bytes and reads them as UTF-8. That is about 20 lines of ours,
+  the same as the web page's. The `tokenizers` library (a compiled package, a new dependency in every install, and nothing on Pyodide) would give the same text.
+  The 90 numbers the model must never choose come from `generation_config.json`; they are a constant in `_speech.py`, so that file is not downloaded.
+  The download is therefore 41.8 MB (10.1 + 30.7 + 1.0), printed as "42 MB" (contract ML6 said 43 for the 2.4 MB `tokenizer.json`, which is not used).
+- **The phrase cutter** (`_speech.PhraseCutter`, pure Python so that Pyodide can run it). It reads the microphone's ring buffer since it last looked, by `mic._total`
+  (the position it has reached; `mic._version` says when `start()` cleared the buffer), in 30 ms blocks; a block with an RMS level over 0.02 is speech; a phrase ends after
+  0.6 s of quiet, is dropped if it holds under 0.3 s of speech, and is cut at 10 s. Three blocks of quiet before the start are kept so the first sound is not clipped.
+  A sketch that looks rarely catches up with up to what the ring holds (10 s); what has gone is skipped and the open phrase ends there. Stopping the microphone ends the open phrase.
+  The numbers are named constants at the top of `_speech.py`. The cutter is run by the sketch's thread, inside `ml.words()`: measured at 0.06 ms for the 735 samples of one 60 fps frame at 44.1 kHz, so it needs no thread.
+- **The thread** (`_listen.Worker`). One daemon thread for each microphone, started with its first phrase, holding at most one phrase waiting (a newer phrase replaces it, under one
+  `threading.Condition`). It loads the two sessions on its first phrase (so `draw()` does not stall; the first answer is about a second later), resamples, and runs the model.
+  An exception in it is kept and raised by the sketch's next `ml.words()` call. The download (ML4) happens in the sketch's thread on the first call, as for pose.
+  `weakref.finalize` ends the thread when the microphone's memory is dropped. The memory is kept for each microphone in a weak dictionary and does not refer back to it.
+- **A Sound** is one phrase: `sound.samples()` (mono) at `sound._sample_rate()`, answered in the sketch's thread, kept for each Sound (`_listen.Clip`).
+- **What a frame sees** (`_listen.Heard`). The first call in a frame settles the answer for that frame (the sketch's `frame_count`), so the same object is given for the whole
+  frame and `is_new` is True in the frame the answer first shows. A Words given earlier is never changed. An answer under 0.4 or with no text never reaches it.
+- **The model.** `_whisper`: resample to 16 kHz by linear interpolation (the formula is in `to_model_rate`'s docstring and in `browser_models.py`; the web page does the same),
+  log-mel as Whisper's feature extractor does it, the encoder, then the decoder with its key and value cache, greedy, at most 224 pieces, the score the mean probability of the
+  pieces chosen (a softmax over the logits with the banned numbers removed). For `tts.wav` the words are the spike's exactly.
+- **In Play.** `HostModels.request_sound("words", key, float32 bytes, rate)` and `push_words(task, key, text, score)` (`Session.push_models_words`); the protocol is in the module
+  docstring of `browser_models.py`. `_listen.HostSink` keeps the newest phrase waiting while one is in flight. The page's worker (`models-worker.js`) is a later task:
+  it must do the same resampling, log-mel, loop and decoding as `_whisper.py`, and `ml/tests/test_host.py` only checks the Python side with a stand-in page.
+- **Tests.** `ml/tests/test_words.py` (the cutter on synthetic sound, the decoder, the resampling against the formula, Heard, the thread with a stand-in model, the errors),
+  `test_host.py` (the host path), `test_words_model.py` (the real files on `data/tts.wav`, from a Sound and from a microphone that is fed it).
 
 ## What is left
 
