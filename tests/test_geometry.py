@@ -158,3 +158,32 @@ def test_rounded_rect_corners_are_quarter_circles_meeting_the_sides():
     ends = [seg[-1] for seg in only_bottom_left.segments if seg[0] != "close"]
     assert all(close(a, b, 1e-9) for a, b in zip(ends, [(10, 10), (90, 10), (90, 60), (15, 60), (10, 55)]))
     assert len(ends) == 5
+
+
+def _cubics_lie_on_ellipse(path, cx, cy, rx, ry):
+    """Every cubic's end and middle (t = 0.5) are on the ellipse, to 0.1 % of its size."""
+    start = None
+    for seg in path.segments:
+        if seg[0] == "cubic":
+            c1, c2, end = seg[1:]
+            mid = tuple(0.125 * a + 0.375 * b + 0.375 * c + 0.125 * d for a, b, c, d in zip(start, c1, c2, end))
+            for x, y in (end, mid):
+                assert abs(math.hypot((x - cx) / rx, (y - cy) / ry) - 1) < 1e-3
+        if seg[0] != "close":
+            start = seg[-1]
+
+
+def test_ellipse_and_arc_curves_follow_the_ellipse():
+    # Path.ellipse docstring (an ellipse with these radii) and Path.arc_to docstring: "The point at angle a is
+    # (cx + rx * cos a, cy + ry * sin a)", turning clockwise, from start to stop.
+    _cubics_lie_on_ellipse(Path.ellipse(50, 40, 30, 12), 50, 40, 30, 12)
+    arc = Path().arc_to(50, 40, 30, 12, 20, 250)
+    _cubics_lie_on_ellipse(arc, 50, 40, 30, 12)
+    a, b = math.radians(20), math.radians(250)
+    assert close(arc.segments[0][1], (50 + 30 * math.cos(a), 40 + 12 * math.sin(a)))
+    assert close(arc.segments[-1][-1], (50 + 30 * math.cos(b), 40 + 12 * math.sin(b)))
+    # clockwise on the screen: from 20 degrees the arc goes down (y grows) before it comes back up
+    assert arc.segments[1][-1][1] > arc.segments[0][1][1]
+    # "If stop is not above start, only the line to the start is added"; a small sweep is still an arc
+    assert [s[0] for s in Path().move_to(0, 0).arc_to(50, 40, 30, 12, 45, 45).segments] == ["move", "line"]
+    assert [s[0] for s in Path().move_to(0, 0).arc_to(50, 40, 30, 12, 45, 45.5).segments] == ["move", "line", "cubic"]
