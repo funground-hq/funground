@@ -1,0 +1,15 @@
+real code: survived 74 passed, 1 deselected in 8.19s
+334 522 const 0->1 -> killed
+335 524 const 1->2 -> killed
+336 525 binop Sub->Add -> killed
+337 525 binop Sub->Add -> killed
+338 525 const 0->1 -> killed
+339 525 const 0->1 -> killed
+340 525 const 1->2 -> killed
+341 525 const 1->2 -> killed
+342 526 compare Eq->NotEq -> killed
+343 526 const 0->1 -> survived
+344 528 const 0.0->1.0 -> killed
+345 529 binop Sub->Add -> killed
+346 529 compare GtE->Gt -> killed
+347 530 binop Add->Sub -> survived
