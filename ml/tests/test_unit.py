@@ -22,8 +22,8 @@ CODE = (ROOT / "ml" / "funground_ml")
 
 
 # ---- names and results
-def test_the_public_names_are_pose_hand_person_and_words_only():
-    assert funground_ml.__all__ == ["pose", "hand", "person", "words"]
+def test_the_public_names_are_pose_hand_person_words_and_sound_only():
+    assert funground_ml.__all__ == ["pose", "hand", "person", "words", "sound"]
     assert all(callable(getattr(funground_ml, name)) for name in funground_ml.__all__)
     assert funground_ml.Words is _results.Words and funground_ml.Body is _results.Body       # importable, like Body, not starred
 
@@ -244,10 +244,10 @@ def test_a_picture_of_another_size_starts_again():
 
 
 # ---- the model table and the download
-def test_the_table_has_eight_pinned_files_from_the_hub():
-    assert len(_models.MODELS) == 8
+def test_the_table_has_nine_pinned_files_from_the_hub():
+    assert len(_models.MODELS) == 9
     for model in _models.MODELS.values():
-        assert re.fullmatch(r"https://huggingface\.co/(opencv|onnx-community)/[a-z_.-]+/resolve/[0-9a-f]{40}/[\w./]+\.(onnx|json)", model.url), model.url
+        assert re.fullmatch(r"https://huggingface\.co/(opencv|onnx-community|funground-hq)/[a-z_.-]+/resolve/[0-9a-f]{40}/[\w./]+\.(onnx|json)", model.url), model.url
         assert "/main/" not in model.url
         assert re.fullmatch(r"[0-9a-f]{64}", model.sha256) and model.size > 100_000
         assert model.licence == "Apache-2.0"
@@ -456,7 +456,8 @@ def test_the_core_stub_passes_the_names_on():
 
     assert ml.pose is funground_ml.pose and ml.hand is funground_ml.hand and ml.person is funground_ml.person
     assert ml.words is funground_ml.words
-    assert ml.__all__ == ["pose", "hand", "person", "words"]
+    assert ml.sound is funground_ml.sound
+    assert ml.__all__ == ["pose", "hand", "person", "words", "sound"]
     assert "ml" not in f._PUBLIC_NAMES                                 # the naming trap: no public function is called ml
 
 
