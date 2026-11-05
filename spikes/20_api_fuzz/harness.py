@@ -180,6 +180,9 @@ def check_files(folder):
             problems.append(("save-error", ext, f"{type(e).__module__}.{type(e).__name__}: {e}"[:300],
                              _frames(e.__traceback__)))
             continue
+        import glob
+        pages = sorted(glob.glob(os.path.join(folder, f"out*.{ext}")))  # several pages save as out_1, out_2
+        p = pages[0] if pages else p
         try:
             if ext == "png":
                 with Image.open(p) as im:
@@ -243,6 +246,15 @@ def child(case, wfd, with_files):
 
 # ---------------------------------------------------------------- the parent
 
+import re
+RAW_MSG = re.compile(r"math domain error|cannot convert float|unsupported operand|can only concatenate|"
+                     r"expected str, bytes|is not iterable|not subscriptable|object is not callable|"
+                     r"must be real number|could not convert string|invalid literal|has no attribute|"
+                     r"index out of range|too many values to unpack|not enough values to unpack|"
+                     r"surrogates not allowed|integer is required|object cannot be interpreted|"
+                     r"Expected an array|division by zero|out of range float|codec can't")
+
+
 def classify(case, res, rc, elapsed):
     if res is None:
         if rc == "timeout":
@@ -258,8 +270,12 @@ def classify(case, res, rc, elapsed):
         frames = res["frames"]
         last = frames[-1][0] if frames else ""
         inside = last.startswith("funground")
+        if t == "NameError" and last == "<sketch>":
+            return None, None  # the docstring example uses a variable it does not define: a harness artefact
         if t not in LEARNER_TYPES:
             return 4, f"raw {res['type']}"
+        if RAW_MSG.search(res["msg"]):
+            return 4, f"{t} with Python's own wording"
         if not inside and last != "<sketch>":
             return 4, f"{t} raised from outside funground ({os.path.basename(last)})"
         return None, None
@@ -348,7 +364,7 @@ def main():
         with open(os.path.join(out, "skipped.json"), "w") as fh:
             json.dump(skipped, fh, indent=1)
         print(len(cases), "cases;", len(skipped), "names skipped", flush=True)
-        run_all(cases, out, with_files_for=lambda c: c["kind"] == "valid")
+        run_all(cases, out, with_files_for=lambda c: True)
     elif mode == "programs":
         from programs import make_programs
         n, seed = int(sys.argv[3]), int(sys.argv[4])
