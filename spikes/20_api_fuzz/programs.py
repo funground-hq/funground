@@ -13,6 +13,14 @@ COL = st.sampled_from(["'tomato'", "'tomatoe'", "'#fff'", "'#12'", "(255, 0, 0)"
                        "None", "f.hsb(200, 50, 50)", "f.cmyk(0, 80, 90, 0)", "float('nan')"])
 
 
+import os
+if os.environ.get("FUZZ_SANE"):
+    NUM = st.integers(-20, 300).map(str)
+    TXT = st.sampled_from(["'hi'", "''", "'🎨😀'", "'שלום'", "'नमस्ते दुनिया'", "'a' * 300", "'line\\nbreak'", "42"])
+    COL = st.sampled_from(["'tomato'", "'#FF8800'", "(255, 0, 0)", "(0, 0, 255, 128)", "f.hsb(200, 50, 50)",
+                           "f.cmyk(0, 80, 90, 0)", "120"])
+
+
 def _n(k):
     return st.tuples(*([NUM] * k)).map(", ".join)
 
@@ -54,7 +62,7 @@ BLOCK = st.recursive(
 )
 
 PROG = st.tuples(
-    st.sampled_from(["f.size(200, 150)", "f.size(200, 150)", "f.size('A6')", ""]),
+    st.sampled_from(["f.size(200, 150)", "f.size(200, 150)", "f.size('A5')", ""]),
     st.lists(BLOCK, min_size=1, max_size=20),
     st.booleans(),
 )

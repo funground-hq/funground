@@ -360,6 +360,9 @@ def main():
     mode, out = sys.argv[1], sys.argv[2]
     if mode == "calls":
         cases, skipped = call_cases()
+        only = os.environ.get("FUZZ_ONLY")          # e.g. FUZZ_ONLY=f.arc,f.circle re-checks a few names
+        if only:
+            cases = [c for c in cases if c["name"] in only.split(",")]
         os.makedirs(out, exist_ok=True)
         with open(os.path.join(out, "skipped.json"), "w") as fh:
             json.dump(skipped, fh, indent=1)

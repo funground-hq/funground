@@ -110,7 +110,7 @@ Grouped by cause, worst count first. The suggested sentences follow the house st
 | 2 | 156 | `sound.load`, `f.load_font`, `f.load_image`, `f.load_svg`, `f.svg_paths`, `camera.load_clip` | `f.load_image(0)` | `TypeError: expected str, bytes or os.PathLike object, not int` | `f.load_image() needs a file name in quotes, such as "photo.png", not 0` |
 | 3 | 100 | `apply_matrix`, `shadow`, `curve_tightness`, `lerp_color` (amount), `noise_seed` | `f.shadow("", 6, blur=8)` | `ValueError: could not convert string to float: ''` / `invalid literal for int() with base 10: ''` | `f.shadow(): x must be a number, not ''` |
 | 4 | 24 | `fill`, `stroke`, `background`, `color`, `lerp_color`, `mark`, `hsb` | `f.stroke(float("inf"))` | `OverflowError: cannot convert float infinity to integer` (`color.py:403`); `f.hsb(inf, ...)`: `cannot convert float NaN to integer` | the existing `colour component inf must be a number from 0 to 255` |
-| 5 | 25 | `size`, `resize_canvas`, `create_graphics`, `inch` (as a size) | `f.size(f.inch(2 ** 63), f.inch(4))`; `f.size(f.inch(1e-308), 288)`; `f.resize_canvas(800, float("nan"))` | `OverflowError: Python int too large to convert to C long` (`cairo2d.py:86`); `AttributeError: 'NoneType' object has no attribute 'get_matrix'` (`sketch.py:384`); `cannot convert float NaN to integer` | `f.size(): the width must be a number of pixels from 1 to 32767, not 6.6e+20` (Cairo's limit) |
+| 5 | 25 | `size`, `resize_canvas`, `create_graphics`, `inch` (as a size) | `f.size(f.inch(2 ** 63), f.inch(4))`; `f.size(f.inch(1e-308), 288)`; `f.resize_canvas(800, float("nan"))` | `OverflowError: Python int too large to convert to C long` (`cairo2d.py:86`); `AttributeError: 'NoneType' object has no attribute 'get_matrix'` (`sketch.py:384`); `cannot convert float NaN to integer` | `f.size(): the width must be a number of pixels from 1 to 32767, not 6.6e+20` (Cairo's image limit; not checked here) |
 | 6 | 18 + 4 | `polygon`, `random_choice` | `f.polygon(0)`; `f.polygon([1, 2])` | `TypeError: 'int' object is not iterable` | `f.polygon() needs a list of points, such as [(10, 10), (90, 10), (50, 80)]` |
 | 7 | 13 | `random_seed` | `f.random_seed(())`; `f.random_seed("\ud800")` | `The only supported seed types are: None, int, float, str, bytes, and bytearray.`; `UnicodeEncodeError` | `f.random_seed() needs a whole number, such as f.random_seed(7)` |
 | 8 | 10 | `text_to_points` | `f.text_to_points("hi", float("nan"), 20, 6)` | `OverflowError`/`ValueError: cannot convert float ... to integer` (`geometry.py:462`) | `f.text_to_points(): x must be a finite number, not nan` |
@@ -130,3 +130,23 @@ state errors met by the program fuzzer read well: `f.layer() cannot be used insi
 `f.end_shape() called outside a shape`, `f.begin_shape() called again before f.end_shape()`,
 `No drawing window yet. Call f.size(...) first.`
 
+## After the fixes
+
+- Re-fuzz of the fixed names only (`FUZZ_ONLY=f.arc,f.circle,f.ellipse,f.translate,f.rotate,f.scale,f.shear_x,f.apply_matrix,f.linear_gradient,f.radial_gradient,f.stroke_dash`): 1 293 cases, 41 s, `{"ok": 605, "learner-error": 490, "finding": 198}`. **No hang left.** Class 3 left: 5 gradients with finite but huge values (1e308 overflows to inf in the SVG) and `f.stroke_dash(1e308)` (unreadable PDF). New class 4 seen: `f.scale(1e-308)` makes a matrix Cairo refuses at save time (11 cases). The rest are the class 4 rows above (strings for numbers).
+- Fix tests, each run before its fix and seen failing: 6 arc cases hung, 8 transform cases and the SVG check failed, 4 gradient, 3 dash and 3 ellipse cases failed. After each fix the new test file and the nearest existing file (`test_shapes.py`, `test_transforms.py`, `test_semantics.py`, gradient and dash tests, `test_boundaries.py`) passed.
+- **Whole suite after the fixes: PARTIAL.** Baseline before any fix: `4484 passed, 131 skipped` in 300 s. The run with all five fixes was stopped by the end of the credit at about 44 % with no failure printed so far (`.venv/bin/python -m pytest -o addopts="" -q`). The main session must run the whole suite, and the Windows golden comparison, before merging.
+
+## For the main session
+
+**Found.** No crash (class 1) in 11 526 single calls and 5 000 random programs. Class 2: `f.arc` with a huge or infinite angle hung for ever; an infinite circle stalled Cairo's PDF/SVG; one long unbroken word in `f.text_box` is roughly cubic (2 000 chars: 7 s); huge sound durations and a tiny `text_to_points` spacing run out of memory. Class 3: nan/inf from gradients, transforms and dash lengths reached saved SVG/PDF; a lone-surrogate layer name makes invalid SVG; `bleed=1e308` writes an inf MediaBox. Class 4: about 1 400 cases in 17 groups (table above), mostly numbers given as strings, None or lists reaching arithmetic, and inf/nan reaching `int()`.
+
+**Fixed** (one commit each, regression test in `tests/test_fuzz_*.py`, no new parameter, finite calls unchanged):
+- `405aaff` f.arc hang (modulo jump only when the gap is over 64 turns; ordinary angles take the old loop).
+- `17d57f7` nan/inf refused in translate, rotate, scale, shear, apply_matrix.
+- `eba382e` nan/inf refused in linear_gradient, radial_gradient.
+- `f1361e5` nan/inf dash lengths refused in stroke_dash (existing sentence).
+- `373e988` infinite circle/ellipse size refused.
+
+**Needs the maintainer.** The wording of every new error sentence; the class 4 list and its suggested sentences; caps or ranges for: text_box long-word wrapping (a faster search could move a line break under kerning), sound duration, text_to_points spacing, gradient and dash magnitudes such as 1e308, `scale(1e-308)`, `bleed`; refusing lone surrogates in layer and keep names; whether `"#fff"` and `size("A6")` should be accepted. Run the whole suite and the Windows goldens on these commits: the full run here is partial.
+
+**Commits to review:** `3171902` to `5580c24` (spike folder only), then the five fixes above, then the final write-up commit.
