@@ -19,7 +19,8 @@ pass, on the desktop and in Play, before the tag.
 
 | Story | Value | Status |
 |---|---|---|
-| S-234 | Words you say: `ml.words(mic)`, speech to words on the device, the same on the desktop and in Play | planned |
+| S-234 | Words you say: `ml.words(mic)`, speech to words on the device, the same on the desktop and in Play | desktop and Python side built; the funground-web worker is next |
+| S-251 | A microphone stops without freezing the sketch (found by spike 19; added 5 Nov, before S-234, which rests on it) | done |
 | S-250 | Sounds: `ml.sound(mic)`, the most likely sound with how sure, and the next guesses | planned |
 | S-235 | A model you teach: `ml.teach(...)` and `ml.guess(...)`, a few examples of each kind from the camera | planned |
 | S-236 | The guide chapter on models: what a model is, what it learnt from, why it is wrong, what stays on your computer | planned |
@@ -36,8 +37,8 @@ S-236; S-240 and S-242 between heavy jobs; S-238 as soon as the accounts exist. 
 
 ## S-234 tasks
 
-- [ ] Contract row: what `ml.words(mic)` takes and gives, when it answers (a phrase after a pause), to the maintainer if it changes D-126's meaning
-- [ ] Desktop: Whisper tiny.en q8 in `funground-ml`, pinned and checked by SHA-256; the spike's decode loop as product code
+- [x] Contract row: what `ml.words(mic)` takes and gives, when it answers (a phrase after a pause), to the maintainer if it changes D-126's meaning
+- [x] Desktop: Whisper tiny.en q8 in `funground-ml`, pinned and checked by SHA-256; the spike's decode loop as product code
 - [ ] The microphone's samples to the model in Play, without `async` in the sketch
 - [ ] Desktop and Play give the same words for the same recording, by test
-- [ ] Reference, gallery example and golden, guide section, Quick Reference row
+- [x] Reference, gallery example and golden, guide section, Quick Reference row
