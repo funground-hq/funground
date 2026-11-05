@@ -92,7 +92,9 @@ class Session:
     The models go through the host too (S-232): `on_models(command, fields)` is told "request" (a picture to look at:
     task, key, width, height and RGBA bytes) and "close", and `push_models(task, key, points, score, width, height)`
     delivers a result (platform.browser_models has the details); a result that is a mask, the person's, comes through
-    `push_models_mask(task, key, mask, mask_width, mask_height, width, height)`. `models_unavailable(task, reason)` tells
+    `push_models_mask(task, key, mask, mask_width, mask_height, width, height)`. A phrase of speech comes the other way as a
+    "request" with `rate` and float32 `samples` (the "words" task, S-234), and its words come through
+    `push_models_words(task, key, text, score)`. `models_unavailable(task, reason)` tells
     the Session that the page cannot run a model: it prints the reason once. Without `on_models` there is never a result.
 
     The bundled fonts are not in the browser's package (S-211, D-114): `fetch_font(file name)` is called the first
@@ -226,6 +228,11 @@ class Session:
         bytes, row by row from the top left, 0 for not the person and 255 for the person, covering the whole picture
         that "request" sent (of `width` x `height` pixels). `key` is the source's key from that request."""
         self._platform.push_models_mask(task, key, mask, mask_width, mask_height, width, height)
+
+    def push_models_words(self, task: str, key: int, text: str, score: float) -> None:
+        """One result from the host's models that is words (the "words" task): `text` is what was heard ("" for nothing)
+        and `score` is how sure the model was, 0 to 1. `key` is the source's key from the "request" that sent the phrase."""
+        self._platform.push_models_words(task, key, text, score)
 
     def models_unavailable(self, task: str, reason: str) -> None:
         """The page cannot run this task's models (no connection for the download, a file that fails its check). Prints

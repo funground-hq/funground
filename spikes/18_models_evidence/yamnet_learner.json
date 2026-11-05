@@ -1,0 +1,881 @@
+{
+ "clips": 1840,
+ "classes": 46,
+ "generic_left_out": [
+  "Silence",
+  "Animal",
+  "Domestic animals, pets",
+  "Livestock, farm animals, working animals",
+  "Wild animals",
+  "Vehicle",
+  "Motor vehicle (road)",
+  "Rail transport",
+  "Aircraft",
+  "Water",
+  "Liquid",
+  "Inside, small room",
+  "Outside, rural or natural",
+  "Outside, urban or manmade",
+  "Speech",
+  "Music",
+  "Sound effect",
+  "Mechanisms",
+  "Bell",
+  "Crying, sobbing",
+  "Wood",
+  "Bird",
+  "Insect",
+  "Engine",
+  "Clock",
+  "Tools",
+  "Fowl"
+ ],
+ "share": {
+  "mean": {
+   "top1": 0.245,
+   "top3": 0.646
+  },
+  "max": {
+   "top1": 0.247,
+   "top3": 0.641
+  },
+  "mean_no_generic": {
+   "top1": 0.588,
+   "top3": 0.767
+  },
+  "max_no_generic": {
+   "top1": 0.577,
+   "top3": 0.755
+  }
+ },
+ "per_class": {
+  "dog": {
+   "mean": [
+    0.05,
+    0.82
+   ],
+   "max": [
+    0.0,
+    0.75
+   ],
+   "mean_no_generic": [
+    1.0,
+    1.0
+   ],
+   "max_no_generic": [
+    0.97,
+    0.97
+   ]
+  },
+  "chirping_birds": {
+   "mean": [
+    0.17,
+    0.95
+   ],
+   "max": [
+    0.2,
+    0.88
+   ],
+   "mean_no_generic": [
+    0.95,
+    1.0
+   ],
+   "max_no_generic": [
+    0.85,
+    0.97
+   ]
+  },
+  "vacuum_cleaner": {
+   "mean": [
+    0.3,
+    0.5
+   ],
+   "max": [
+    0.35,
+    0.5
+   ],
+   "mean_no_generic": [
+    0.45,
+    0.6
+   ],
+   "max_no_generic": [
+    0.42,
+    0.6
+   ]
+  },
+  "thunderstorm": {
+   "mean": [
+    0.82,
+    1.0
+   ],
+   "max": [
+    0.85,
+    1.0
+   ],
+   "mean_no_generic": [
+    0.85,
+    1.0
+   ],
+   "max_no_generic": [
+    0.9,
+    1.0
+   ]
+  },
+  "door_wood_knock": {
+   "mean": [
+    0.2,
+    0.7
+   ],
+   "max": [
+    0.05,
+    0.78
+   ],
+   "mean_no_generic": [
+    0.62,
+    0.78
+   ],
+   "max_no_generic": [
+    0.72,
+    0.82
+   ]
+  },
+  "crow": {
+   "mean": [
+    0.47,
+    0.85
+   ],
+   "max": [
+    0.55,
+    0.97
+   ],
+   "mean_no_generic": [
+    0.97,
+    0.97
+   ],
+   "max_no_generic": [
+    0.97,
+    1.0
+   ]
+  },
+  "clapping": {
+   "mean": [
+    0.17,
+    0.57
+   ],
+   "max": [
+    0.15,
+    0.57
+   ],
+   "mean_no_generic": [
+    0.23,
+    0.57
+   ],
+   "max_no_generic": [
+    0.2,
+    0.62
+   ]
+  },
+  "fireworks": {
+   "mean": [
+    0.45,
+    0.95
+   ],
+   "max": [
+    0.68,
+    0.95
+   ],
+   "mean_no_generic": [
+    0.5,
+    0.95
+   ],
+   "max_no_generic": [
+    0.88,
+    0.95
+   ]
+  },
+  "chainsaw": {
+   "mean": [
+    0.47,
+    0.68
+   ],
+   "max": [
+    0.5,
+    0.68
+   ],
+   "mean_no_generic": [
+    0.57,
+    0.72
+   ],
+   "max_no_generic": [
+    0.55,
+    0.68
+   ]
+  },
+  "airplane": {
+   "mean": [
+    0.0,
+    0.42
+   ],
+   "max": [
+    0.03,
+    0.47
+   ],
+   "mean_no_generic": [
+    0.4,
+    0.53
+   ],
+   "max_no_generic": [
+    0.4,
+    0.55
+   ]
+  },
+  "pouring_water": {
+   "mean": [
+    0.0,
+    0.0
+   ],
+   "max": [
+    0.0,
+    0.03
+   ],
+   "mean_no_generic": [
+    0.0,
+    0.12
+   ],
+   "max_no_generic": [
+    0.03,
+    0.1
+   ]
+  },
+  "train": {
+   "mean": [
+    0.0,
+    0.97
+   ],
+   "max": [
+    0.0,
+    0.97
+   ],
+   "mean_no_generic": [
+    1.0,
+    1.0
+   ],
+   "max_no_generic": [
+    1.0,
+    1.0
+   ]
+  },
+  "sheep": {
+   "mean": [
+    0.35,
+    0.95
+   ],
+   "max": [
+    0.05,
+    0.9
+   ],
+   "mean_no_generic": [
+    0.97,
+    0.97
+   ],
+   "max_no_generic": [
+    0.9,
+    0.95
+   ]
+  },
+  "water_drops": {
+   "mean": [
+    0.12,
+    0.25
+   ],
+   "max": [
+    0.1,
+    0.35
+   ],
+   "mean_no_generic": [
+    0.23,
+    0.45
+   ],
+   "max_no_generic": [
+    0.23,
+    0.4
+   ]
+  },
+  "church_bells": {
+   "mean": [
+    0.0,
+    0.95
+   ],
+   "max": [
+    0.0,
+    0.82
+   ],
+   "mean_no_generic": [
+    0.47,
+    0.97
+   ],
+   "max_no_generic": [
+    0.47,
+    0.97
+   ]
+  },
+  "clock_alarm": {
+   "mean": [
+    0.53,
+    0.72
+   ],
+   "max": [
+    0.5,
+    0.65
+   ],
+   "mean_no_generic": [
+    0.57,
+    0.72
+   ],
+   "max_no_generic": [
+    0.57,
+    0.65
+   ]
+  },
+  "keyboard_typing": {
+   "mean": [
+    0.9,
+    1.0
+   ],
+   "max": [
+    0.88,
+    1.0
+   ],
+   "mean_no_generic": [
+    0.97,
+    1.0
+   ],
+   "max_no_generic": [
+    1.0,
+    1.0
+   ]
+  },
+  "wind": {
+   "mean": [
+    0.1,
+    0.23
+   ],
+   "max": [
+    0.03,
+    0.15
+   ],
+   "mean_no_generic": [
+    0.17,
+    0.33
+   ],
+   "max_no_generic": [
+    0.07,
+    0.25
+   ]
+  },
+  "footsteps": {
+   "mean": [
+    0.4,
+    0.5
+   ],
+   "max": [
+    0.33,
+    0.47
+   ],
+   "mean_no_generic": [
+    0.45,
+    0.53
+   ],
+   "max_no_generic": [
+    0.35,
+    0.47
+   ]
+  },
+  "frog": {
+   "mean": [
+    0.53,
+    0.82
+   ],
+   "max": [
+    0.68,
+    0.85
+   ],
+   "mean_no_generic": [
+    0.82,
+    0.9
+   ],
+   "max_no_generic": [
+    0.82,
+    0.9
+   ]
+  },
+  "cow": {
+   "mean": [
+    0.3,
+    0.75
+   ],
+   "max": [
+    0.45,
+    0.75
+   ],
+   "mean_no_generic": [
+    0.72,
+    0.85
+   ],
+   "max_no_generic": [
+    0.78,
+    0.85
+   ]
+  },
+  "brushing_teeth": {
+   "mean": [
+    0.4,
+    0.47
+   ],
+   "max": [
+    0.4,
+    0.65
+   ],
+   "mean_no_generic": [
+    0.42,
+    0.5
+   ],
+   "max_no_generic": [
+    0.42,
+    0.68
+   ]
+  },
+  "car_horn": {
+   "mean": [
+    0.07,
+    0.42
+   ],
+   "max": [
+    0.07,
+    0.45
+   ],
+   "mean_no_generic": [
+    0.4,
+    0.55
+   ],
+   "max_no_generic": [
+    0.38,
+    0.57
+   ]
+  },
+  "crackling_fire": {
+   "mean": [
+    0.1,
+    0.28
+   ],
+   "max": [
+    0.05,
+    0.12
+   ],
+   "mean_no_generic": [
+    0.1,
+    0.42
+   ],
+   "max_no_generic": [
+    0.05,
+    0.17
+   ]
+  },
+  "helicopter": {
+   "mean": [
+    0.07,
+    0.47
+   ],
+   "max": [
+    0.15,
+    0.5
+   ],
+   "mean_no_generic": [
+    0.47,
+    0.5
+   ],
+   "max_no_generic": [
+    0.45,
+    0.5
+   ]
+  },
+  "rain": {
+   "mean": [
+    0.17,
+    0.65
+   ],
+   "max": [
+    0.4,
+    0.7
+   ],
+   "mean_no_generic": [
+    0.57,
+    0.88
+   ],
+   "max_no_generic": [
+    0.6,
+    0.9
+   ]
+  },
+  "insects": {
+   "mean": [
+    0.47,
+    0.72
+   ],
+   "max": [
+    0.57,
+    0.78
+   ],
+   "mean_no_generic": [
+    0.78,
+    0.8
+   ],
+   "max_no_generic": [
+    0.78,
+    0.78
+   ]
+  },
+  "laughing": {
+   "mean": [
+    0.23,
+    0.78
+   ],
+   "max": [
+    0.17,
+    0.65
+   ],
+   "mean_no_generic": [
+    0.72,
+    0.85
+   ],
+   "max_no_generic": [
+    0.57,
+    0.8
+   ]
+  },
+  "hen": {
+   "mean": [
+    0.03,
+    0.12
+   ],
+   "max": [
+    0.0,
+    0.07
+   ],
+   "mean_no_generic": [
+    0.95,
+    0.97
+   ],
+   "max_no_generic": [
+    0.85,
+    0.97
+   ]
+  },
+  "engine": {
+   "mean": [
+    0.17,
+    0.72
+   ],
+   "max": [
+    0.17,
+    0.62
+   ],
+   "mean_no_generic": [
+    0.6,
+    0.82
+   ],
+   "max_no_generic": [
+    0.5,
+    0.82
+   ]
+  },
+  "breathing": {
+   "mean": [
+    0.2,
+    0.68
+   ],
+   "max": [
+    0.1,
+    0.53
+   ],
+   "mean_no_generic": [
+    0.33,
+    0.82
+   ],
+   "max_no_generic": [
+    0.15,
+    0.68
+   ]
+  },
+  "crying_baby": {
+   "mean": [
+    0.0,
+    0.88
+   ],
+   "max": [
+    0.0,
+    0.85
+   ],
+   "mean_no_generic": [
+    0.8,
+    0.9
+   ],
+   "max_no_generic": [
+    0.75,
+    0.9
+   ]
+  },
+  "hand_saw": {
+   "mean": [
+    0.23,
+    0.6
+   ],
+   "max": [
+    0.35,
+    0.72
+   ],
+   "mean_no_generic": [
+    0.42,
+    0.85
+   ],
+   "max_no_generic": [
+    0.47,
+    0.85
+   ]
+  },
+  "coughing": {
+   "mean": [
+    0.38,
+    0.85
+   ],
+   "max": [
+    0.2,
+    0.85
+   ],
+   "mean_no_generic": [
+    0.85,
+    0.88
+   ],
+   "max_no_generic": [
+    0.82,
+    0.88
+   ]
+  },
+  "glass_breaking": {
+   "mean": [
+    0.2,
+    0.9
+   ],
+   "max": [
+    0.12,
+    0.88
+   ],
+   "mean_no_generic": [
+    0.78,
+    0.93
+   ],
+   "max_no_generic": [
+    0.72,
+    0.9
+   ]
+  },
+  "snoring": {
+   "mean": [
+    0.17,
+    0.97
+   ],
+   "max": [
+    0.28,
+    0.97
+   ],
+   "mean_no_generic": [
+    0.2,
+    0.97
+   ],
+   "max_no_generic": [
+    0.33,
+    1.0
+   ]
+  },
+  "toilet_flush": {
+   "mean": [
+    0.93,
+    0.97
+   ],
+   "max": [
+    0.93,
+    1.0
+   ],
+   "mean_no_generic": [
+    0.97,
+    1.0
+   ],
+   "max_no_generic": [
+    1.0,
+    1.0
+   ]
+  },
+  "pig": {
+   "mean": [
+    0.25,
+    0.72
+   ],
+   "max": [
+    0.25,
+    0.72
+   ],
+   "mean_no_generic": [
+    0.72,
+    0.9
+   ],
+   "max_no_generic": [
+    0.75,
+    0.9
+   ]
+  },
+  "clock_tick": {
+   "mean": [
+    0.0,
+    0.57
+   ],
+   "max": [
+    0.0,
+    0.53
+   ],
+   "mean_no_generic": [
+    0.65,
+    0.8
+   ],
+   "max_no_generic": [
+    0.47,
+    0.8
+   ]
+  },
+  "sneezing": {
+   "mean": [
+    0.07,
+    0.75
+   ],
+   "max": [
+    0.07,
+    0.75
+   ],
+   "mean_no_generic": [
+    0.65,
+    0.85
+   ],
+   "max_no_generic": [
+    0.62,
+    0.85
+   ]
+  },
+  "rooster": {
+   "mean": [
+    0.0,
+    0.05
+   ],
+   "max": [
+    0.0,
+    0.0
+   ],
+   "mean_no_generic": [
+    0.93,
+    0.93
+   ],
+   "max_no_generic": [
+    0.9,
+    0.95
+   ]
+  },
+  "sea_waves": {
+   "mean": [
+    0.0,
+    0.5
+   ],
+   "max": [
+    0.0,
+    0.57
+   ],
+   "mean_no_generic": [
+    0.0,
+    0.8
+   ],
+   "max_no_generic": [
+    0.0,
+    0.75
+   ]
+  },
+  "siren": {
+   "mean": [
+    0.57,
+    0.93
+   ],
+   "max": [
+    0.53,
+    0.85
+   ],
+   "mean_no_generic": [
+    0.6,
+    1.0
+   ],
+   "max_no_generic": [
+    0.6,
+    0.97
+   ]
+  },
+  "cat": {
+   "mean": [
+    0.12,
+    0.72
+   ],
+   "max": [
+    0.1,
+    0.78
+   ],
+   "mean_no_generic": [
+    0.75,
+    0.85
+   ],
+   "max_no_generic": [
+    0.8,
+    0.82
+   ]
+  },
+  "door_wood_creaks": {
+   "mean": [
+    0.0,
+    0.0
+   ],
+   "max": [
+    0.0,
+    0.03
+   ],
+   "mean_no_generic": [
+    0.0,
+    0.0
+   ],
+   "max_no_generic": [
+    0.03,
+    0.03
+   ]
+  },
+  "crickets": {
+   "mean": [
+    0.05,
+    0.35
+   ],
+   "max": [
+    0.1,
+    0.42
+   ],
+   "mean_no_generic": [
+    0.4,
+    0.53
+   ],
+   "max_no_generic": [
+    0.42,
+    0.55
+   ]
+  }
+ }
+}

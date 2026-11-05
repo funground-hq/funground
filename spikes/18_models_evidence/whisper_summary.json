@@ -1,0 +1,1155 @@
+{
+ "wer": [
+  {
+   "model": "tiny",
+   "group": "canadian",
+   "cond": "clean",
+   "utts": 22,
+   "words": 225,
+   "wer": 5.8,
+   "ci95": [
+    2.5,
+    9.8
+   ],
+   "runaway": 0,
+   "utt_exact": 63.6
+  },
+  {
+   "model": "tiny",
+   "group": "canadian",
+   "cond": "mic",
+   "utts": 22,
+   "words": 225,
+   "wer": 7.6,
+   "ci95": [
+    3.2,
+    12.6
+   ],
+   "runaway": 0,
+   "utt_exact": 59.1
+  },
+  {
+   "model": "tiny",
+   "group": "canadian",
+   "cond": "snr10",
+   "utts": 22,
+   "words": 225,
+   "wer": 29.3,
+   "ci95": [
+    21.0,
+    37.7
+   ],
+   "runaway": 0,
+   "utt_exact": 13.6
+  },
+  {
+   "model": "tiny",
+   "group": "canadian",
+   "cond": "snr20",
+   "utts": 22,
+   "words": 225,
+   "wer": 9.3,
+   "ci95": [
+    5.3,
+    14.3
+   ],
+   "runaway": 0,
+   "utt_exact": 50.0
+  },
+  {
+   "model": "tiny",
+   "group": "indian",
+   "cond": "clean",
+   "utts": 57,
+   "words": 532,
+   "wer": 12.2,
+   "ci95": [
+    9.3,
+    15.5
+   ],
+   "runaway": 0,
+   "utt_exact": 36.8
+  },
+  {
+   "model": "tiny",
+   "group": "indian",
+   "cond": "mic",
+   "utts": 57,
+   "words": 532,
+   "wer": 14.3,
+   "ci95": [
+    10.0,
+    18.8
+   ],
+   "runaway": 0,
+   "utt_exact": 40.4
+  },
+  {
+   "model": "tiny",
+   "group": "indian",
+   "cond": "snr10",
+   "utts": 57,
+   "words": 532,
+   "wer": 17.9,
+   "ci95": [
+    14.2,
+    21.7
+   ],
+   "runaway": 0,
+   "utt_exact": 28.1
+  },
+  {
+   "model": "tiny",
+   "group": "indian",
+   "cond": "snr20",
+   "utts": 57,
+   "words": 532,
+   "wer": 12.8,
+   "ci95": [
+    9.3,
+    16.3
+   ],
+   "runaway": 0,
+   "utt_exact": 42.1
+  },
+  {
+   "model": "tiny",
+   "group": "indian_edacc",
+   "cond": "clean",
+   "utts": 143,
+   "words": 2375,
+   "wer": 32.2,
+   "ci95": [
+    24.2,
+    43.0
+   ],
+   "runaway": 2,
+   "utt_exact": 17.5
+  },
+  {
+   "model": "tiny",
+   "group": "indian_edacc",
+   "cond": "snr10",
+   "utts": 143,
+   "words": 2375,
+   "wer": 62.8,
+   "ci95": [
+    42.0,
+    92.9
+   ],
+   "runaway": 5,
+   "utt_exact": 12.6
+  },
+  {
+   "model": "tiny",
+   "group": "librispeech",
+   "cond": "clean",
+   "utts": 245,
+   "words": 4662,
+   "wer": 6.1,
+   "ci95": [
+    4.9,
+    7.3
+   ],
+   "runaway": 0,
+   "utt_exact": 49.0
+  },
+  {
+   "model": "tiny",
+   "group": "librispeech",
+   "cond": "snr10",
+   "utts": 244,
+   "words": 4656,
+   "wer": 9.8,
+   "ci95": [
+    8.5,
+    11.3
+   ],
+   "runaway": 0,
+   "utt_exact": 33.6
+  },
+  {
+   "model": "tiny",
+   "group": "scottish",
+   "cond": "clean",
+   "utts": 24,
+   "words": 221,
+   "wer": 4.1,
+   "ci95": [
+    1.4,
+    7.6
+   ],
+   "runaway": 0,
+   "utt_exact": 75.0
+  },
+  {
+   "model": "tiny",
+   "group": "scottish",
+   "cond": "mic",
+   "utts": 24,
+   "words": 221,
+   "wer": 3.6,
+   "ci95": [
+    1.3,
+    6.4
+   ],
+   "runaway": 0,
+   "utt_exact": 70.8
+  },
+  {
+   "model": "tiny",
+   "group": "scottish",
+   "cond": "snr10",
+   "utts": 24,
+   "words": 221,
+   "wer": 13.1,
+   "ci95": [
+    7.0,
+    20.4
+   ],
+   "runaway": 0,
+   "utt_exact": 45.8
+  },
+  {
+   "model": "tiny",
+   "group": "scottish",
+   "cond": "snr20",
+   "utts": 24,
+   "words": 221,
+   "wer": 5.0,
+   "ci95": [
+    1.8,
+    8.9
+   ],
+   "runaway": 0,
+   "utt_exact": 70.8
+  },
+  {
+   "model": "tiny",
+   "group": "us",
+   "cond": "clean",
+   "utts": 47,
+   "words": 426,
+   "wer": 5.6,
+   "ci95": [
+    2.6,
+    9.3
+   ],
+   "runaway": 0,
+   "utt_exact": 74.5
+  },
+  {
+   "model": "tiny",
+   "group": "us",
+   "cond": "mic",
+   "utts": 46,
+   "words": 418,
+   "wer": 7.7,
+   "ci95": [
+    4.3,
+    11.9
+   ],
+   "runaway": 0,
+   "utt_exact": 67.4
+  },
+  {
+   "model": "tiny",
+   "group": "us",
+   "cond": "snr10",
+   "utts": 46,
+   "words": 418,
+   "wer": 8.6,
+   "ci95": [
+    5.7,
+    11.7
+   ],
+   "runaway": 0,
+   "utt_exact": 54.3
+  },
+  {
+   "model": "tiny",
+   "group": "us",
+   "cond": "snr20",
+   "utts": 46,
+   "words": 418,
+   "wer": 6.7,
+   "ci95": [
+    3.8,
+    9.8
+   ],
+   "runaway": 0,
+   "utt_exact": 67.4
+  },
+  {
+   "model": "base",
+   "group": "canadian",
+   "cond": "clean",
+   "utts": 22,
+   "words": 225,
+   "wer": 4.9,
+   "ci95": [
+    1.7,
+    8.9
+   ],
+   "runaway": 0,
+   "utt_exact": 72.7
+  },
+  {
+   "model": "base",
+   "group": "canadian",
+   "cond": "mic",
+   "utts": 22,
+   "words": 225,
+   "wer": 5.8,
+   "ci95": [
+    1.7,
+    11.5
+   ],
+   "runaway": 0,
+   "utt_exact": 72.7
+  },
+  {
+   "model": "base",
+   "group": "canadian",
+   "cond": "snr10",
+   "utts": 22,
+   "words": 225,
+   "wer": 20.0,
+   "ci95": [
+    13.6,
+    26.8
+   ],
+   "runaway": 0,
+   "utt_exact": 22.7
+  },
+  {
+   "model": "base",
+   "group": "canadian",
+   "cond": "snr20",
+   "utts": 22,
+   "words": 225,
+   "wer": 6.7,
+   "ci95": [
+    2.7,
+    11.3
+   ],
+   "runaway": 0,
+   "utt_exact": 68.2
+  },
+  {
+   "model": "base",
+   "group": "indian",
+   "cond": "clean",
+   "utts": 57,
+   "words": 532,
+   "wer": 10.5,
+   "ci95": [
+    7.7,
+    13.6
+   ],
+   "runaway": 0,
+   "utt_exact": 42.1
+  },
+  {
+   "model": "base",
+   "group": "indian",
+   "cond": "mic",
+   "utts": 57,
+   "words": 532,
+   "wer": 11.3,
+   "ci95": [
+    8.2,
+    14.7
+   ],
+   "runaway": 0,
+   "utt_exact": 40.4
+  },
+  {
+   "model": "base",
+   "group": "indian",
+   "cond": "snr10",
+   "utts": 57,
+   "words": 532,
+   "wer": 13.5,
+   "ci95": [
+    10.1,
+    16.9
+   ],
+   "runaway": 0,
+   "utt_exact": 36.8
+  },
+  {
+   "model": "base",
+   "group": "indian",
+   "cond": "snr20",
+   "utts": 57,
+   "words": 532,
+   "wer": 10.2,
+   "ci95": [
+    7.4,
+    12.8
+   ],
+   "runaway": 0,
+   "utt_exact": 42.1
+  },
+  {
+   "model": "base",
+   "group": "indian_edacc",
+   "cond": "clean",
+   "utts": 143,
+   "words": 2375,
+   "wer": 26.1,
+   "ci95": [
+    18.6,
+    36.9
+   ],
+   "runaway": 2,
+   "utt_exact": 25.9
+  },
+  {
+   "model": "base",
+   "group": "indian_edacc",
+   "cond": "snr10",
+   "utts": 143,
+   "words": 2375,
+   "wer": 35.4,
+   "ci95": [
+    27.4,
+    46.0
+   ],
+   "runaway": 2,
+   "utt_exact": 14.7
+  },
+  {
+   "model": "base",
+   "group": "librispeech",
+   "cond": "clean",
+   "utts": 245,
+   "words": 4662,
+   "wer": 3.7,
+   "ci95": [
+    3.0,
+    4.4
+   ],
+   "runaway": 0,
+   "utt_exact": 62.9
+  },
+  {
+   "model": "base",
+   "group": "librispeech",
+   "cond": "snr10",
+   "utts": 244,
+   "words": 4656,
+   "wer": 5.7,
+   "ci95": [
+    4.8,
+    6.7
+   ],
+   "runaway": 0,
+   "utt_exact": 48.8
+  },
+  {
+   "model": "base",
+   "group": "scottish",
+   "cond": "clean",
+   "utts": 24,
+   "words": 221,
+   "wer": 3.6,
+   "ci95": [
+    1.3,
+    7.0
+   ],
+   "runaway": 0,
+   "utt_exact": 75.0
+  },
+  {
+   "model": "base",
+   "group": "scottish",
+   "cond": "mic",
+   "utts": 24,
+   "words": 221,
+   "wer": 4.1,
+   "ci95": [
+    1.3,
+    7.7
+   ],
+   "runaway": 0,
+   "utt_exact": 75.0
+  },
+  {
+   "model": "base",
+   "group": "scottish",
+   "cond": "snr10",
+   "utts": 24,
+   "words": 221,
+   "wer": 6.8,
+   "ci95": [
+    2.9,
+    11.4
+   ],
+   "runaway": 0,
+   "utt_exact": 62.5
+  },
+  {
+   "model": "base",
+   "group": "scottish",
+   "cond": "snr20",
+   "utts": 24,
+   "words": 221,
+   "wer": 3.2,
+   "ci95": [
+    0.8,
+    6.6
+   ],
+   "runaway": 0,
+   "utt_exact": 79.2
+  },
+  {
+   "model": "base",
+   "group": "us",
+   "cond": "clean",
+   "utts": 47,
+   "words": 426,
+   "wer": 2.8,
+   "ci95": [
+    0.9,
+    5.4
+   ],
+   "runaway": 0,
+   "utt_exact": 83.0
+  },
+  {
+   "model": "base",
+   "group": "us",
+   "cond": "mic",
+   "utts": 46,
+   "words": 418,
+   "wer": 3.8,
+   "ci95": [
+    1.5,
+    6.8
+   ],
+   "runaway": 0,
+   "utt_exact": 80.4
+  },
+  {
+   "model": "base",
+   "group": "us",
+   "cond": "snr10",
+   "utts": 46,
+   "words": 418,
+   "wer": 5.7,
+   "ci95": [
+    3.3,
+    8.6
+   ],
+   "runaway": 0,
+   "utt_exact": 65.2
+  },
+  {
+   "model": "base",
+   "group": "us",
+   "cond": "snr20",
+   "utts": 46,
+   "words": 418,
+   "wer": 4.8,
+   "ci95": [
+    2.2,
+    8.0
+   ],
+   "runaway": 0,
+   "utt_exact": 73.9
+  }
+ ],
+ "speed": {
+  "tiny": {
+   "threads": [
+    1
+   ],
+   "rows": 2538,
+   "rtf_median": 0.284,
+   "s_per_utt_median": 1.089,
+   "note": "3 Whisper runs and 1 YAMNet run shared 4 CPUs, 1 thread each"
+  },
+  "base": {
+   "threads": [
+    1
+   ],
+   "rows": 1380,
+   "rtf_median": 0.587,
+   "s_per_utt_median": 2.285,
+   "note": "3 Whisper runs and 1 YAMNet run shared 4 CPUs, 1 thread each"
+  }
+ },
+ "confusions": {
+  "tiny": [
+   [
+    "delete",
+    "you",
+    15,
+    "small word"
+   ],
+   [
+    "delete",
+    "know",
+    15,
+    "content word"
+   ],
+   [
+    "delete",
+    "and",
+    14,
+    "small word"
+   ],
+   [
+    "delete",
+    "like",
+    13,
+    "content word"
+   ],
+   [
+    "insert",
+    "the",
+    12,
+    "small word"
+   ],
+   [
+    "delete",
+    "i",
+    11,
+    "small word"
+   ],
+   [
+    "insert",
+    "a",
+    11,
+    "small word"
+   ],
+   [
+    "insert",
+    "and",
+    10,
+    "small word"
+   ],
+   [
+    "delete",
+    "it's",
+    9,
+    "content word"
+   ],
+   [
+    "insert",
+    "her",
+    9,
+    "small word"
+   ],
+   [
+    "delete",
+    "it",
+    7,
+    "small word"
+   ],
+   [
+    "insert",
+    "to",
+    7,
+    "small word"
+   ],
+   [
+    "delete",
+    "is",
+    6,
+    "small word"
+   ],
+   [
+    "delete",
+    "to",
+    6,
+    "small word"
+   ],
+   [
+    "insert",
+    "i",
+    6,
+    "small word"
+   ],
+   [
+    "delete",
+    "so",
+    5,
+    "content word"
+   ],
+   [
+    "delete",
+    "that",
+    5,
+    "small word"
+   ],
+   [
+    "delete",
+    "at",
+    5,
+    "small word"
+   ],
+   [
+    "insert",
+    "am",
+    5,
+    "content word"
+   ],
+   [
+    "insert",
+    "it",
+    5,
+    "small word"
+   ],
+   [
+    "insert",
+    "these",
+    5,
+    "content word"
+   ],
+   [
+    "insert",
+    "of",
+    5,
+    "small word"
+   ],
+   [
+    "insert",
+    "for",
+    5,
+    "small word"
+   ],
+   [
+    "delete",
+    "this",
+    4,
+    "small word"
+   ],
+   [
+    "delete",
+    "one",
+    4,
+    "content word"
+   ],
+   [
+    "delete",
+    "of",
+    4,
+    "small word"
+   ],
+   [
+    "delete",
+    "was",
+    4,
+    "small word"
+   ],
+   [
+    "delete",
+    "have",
+    4,
+    "small word"
+   ],
+   [
+    "delete",
+    "we",
+    4,
+    "small word"
+   ],
+   [
+    "delete",
+    "my",
+    4,
+    "content word"
+   ]
+  ],
+  "base": [
+   [
+    "delete",
+    "i",
+    18,
+    "small word"
+   ],
+   [
+    "delete",
+    "you",
+    12,
+    "small word"
+   ],
+   [
+    "insert",
+    "and",
+    12,
+    "small word"
+   ],
+   [
+    "delete",
+    "and",
+    11,
+    "small word"
+   ],
+   [
+    "delete",
+    "know",
+    10,
+    "content word"
+   ],
+   [
+    "delete",
+    "like",
+    10,
+    "content word"
+   ],
+   [
+    "insert",
+    "the",
+    9,
+    "small word"
+   ],
+   [
+    "insert",
+    "a",
+    9,
+    "small word"
+   ],
+   [
+    "insert",
+    "her",
+    8,
+    "small word"
+   ],
+   [
+    "delete",
+    "it's",
+    6,
+    "content word"
+   ],
+   [
+    "delete",
+    "it",
+    6,
+    "small word"
+   ],
+   [
+    "delete",
+    "was",
+    6,
+    "small word"
+   ],
+   [
+    "delete",
+    "so",
+    6,
+    "content word"
+   ],
+   [
+    "insert",
+    "for",
+    6,
+    "small word"
+   ],
+   [
+    "delete",
+    "the",
+    5,
+    "small word"
+   ],
+   [
+    "delete",
+    "that",
+    5,
+    "small word"
+   ],
+   [
+    "delete",
+    "to",
+    5,
+    "small word"
+   ],
+   [
+    "insert",
+    "i",
+    5,
+    "small word"
+   ],
+   [
+    "insert",
+    "these",
+    5,
+    "content word"
+   ],
+   [
+    "delete",
+    "is",
+    4,
+    "small word"
+   ],
+   [
+    "delete",
+    "have",
+    4,
+    "small word"
+   ],
+   [
+    "insert",
+    "it",
+    4,
+    "small word"
+   ],
+   [
+    "insert",
+    "please",
+    4,
+    "content word"
+   ],
+   [
+    "insert",
+    "things",
+    4,
+    "content word"
+   ],
+   [
+    "insert",
+    "we",
+    4,
+    "small word"
+   ],
+   [
+    "delete",
+    "a",
+    3,
+    "small word"
+   ],
+   [
+    "delete",
+    "at",
+    3,
+    "small word"
+   ],
+   [
+    "delete",
+    "no",
+    3,
+    "content word"
+   ],
+   [
+    "delete",
+    "oh",
+    3,
+    "content word"
+   ],
+   [
+    "delete",
+    "in",
+    3,
+    "small word"
+   ]
+  ]
+ },
+ "examples": [
+  {
+   "id": "arctic_ksp_arctic_a0016",
+   "cond": "clean",
+   "ref": "There's Fort Churchill, a rifle-shot beyond the ridge, asleep.",
+   "tiny": "There's four Churchill, a rifle shot beyond the ridge, asleep.",
+   "base": "There's 4 church till a rifle shot beyond the ridge asleep."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0034",
+   "cond": "clean",
+   "ref": "Men of Selden's stamp don't stop at women and children.",
+   "tiny": "Men of seldom stamp don't stop at women and children.",
+   "base": "Men of cell-dense stamp don't stop at women and children."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0160",
+   "cond": "clean",
+   "ref": "You want to go over and see his gang throw dirt.",
+   "tiny": "You want to go over and see his gang through dirt.",
+   "base": "You want to go over and see his gang through dirt."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0164",
+   "cond": "clean",
+   "ref": "He came first a year ago, and revealed himself to Jeanne.",
+   "tiny": "He came first a year ago and revealed himself to Gene.",
+   "base": "He came first a year ago and revealed himself to Gene."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0264",
+   "cond": "clean",
+   "ref": "And I hope you've got plenty of chain out, Captain Young.",
+   "tiny": "And I hope you have got plenty of chain out, Captain Yang.",
+   "base": "and I hope you have got plenty of chain out Captain Yang."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0272",
+   "cond": "clean",
+   "ref": "You can take a vacation on pay.",
+   "tiny": "You can take your vacation on pay.",
+   "base": "You can take a vacation on pay."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0299",
+   "cond": "clean",
+   "ref": "I tell you I am disgusted with this adventure tomfoolery and rot.",
+   "tiny": "I tell you, I am disgusted with this adventuring town full of reindeer.",
+   "base": "I tell you, I am disgusted with this adventury town full-ery and rot."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0327",
+   "cond": "clean",
+   "ref": "They were less stooped than we, less springy in their movements.",
+   "tiny": "They were less stop than we, less springy in their moments.",
+   "base": "they were less stopped than we, less springy in their movements."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0352",
+   "cond": "clean",
+   "ref": "I'm sure going along with you all, Elijah.",
+   "tiny": "I am sure going along with you all, Aliza.",
+   "base": "I am sure going along with you all, Alayser."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0376",
+   "cond": "clean",
+   "ref": "Your price, my son, is just about thirty per week.",
+   "tiny": "Your prize my son is just about 30 per week.",
+   "base": "Your prize my son is just about 30 per week."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0450",
+   "cond": "clean",
+   "ref": "No man ate of the seal meat or the oil.",
+   "tiny": "No man, 8 of the seal meat are the oil.",
+   "base": "No man, 8 of the seal meat or the oil."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0455",
+   "cond": "clean",
+   "ref": "I obeyed, and a minute or two later they stood before him.",
+   "tiny": "I obey it and a minute or two later, they stood before me.",
+   "base": "I obeyed and a minute or two later they stood before me."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0474",
+   "cond": "clean",
+   "ref": "I sailed third mate in the little Vampire before you were born.",
+   "tiny": "I sailed third-made in the little vampire before he were born.",
+   "base": "I sailed third mate in the little vampire before he were born."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0483",
+   "cond": "clean",
+   "ref": "Beyond dispute, Corry Hutchinson had married Mabel Holmes.",
+   "tiny": "Beyond dispute, Corey Hutchinson had married Mabel Holmes.",
+   "base": "Beyond dispute, Kori Hutchinson had married Mabel Holmes."
+  },
+  {
+   "id": "arctic_ksp_arctic_a0494",
+   "cond": "clean",
+   "ref": "O'Brien took off his coat and bared his right arm.",
+   "tiny": "O'Brien took off his coat and barely is right arm.",
+   "base": "O'Brien took off his court and bared his right arm."
+  }
+ ],
+ "confusion_totals": {
+  "tiny": {
+   "substitutions": 637,
+   "deletions": 265,
+   "insertions": 257
+  },
+  "base": {
+   "substitutions": 429,
+   "deletions": 221,
+   "insertions": 228
+  }
+ },
+ "confusion_groups": {
+  "tiny": [
+   [
+    "substitute",
+    "sounds alike",
+    235
+   ],
+   [
+    "substitute",
+    "small word",
+    232
+   ],
+   [
+    "insert",
+    "content word",
+    159
+   ],
+   [
+    "substitute",
+    "other word",
+    154
+   ],
+   [
+    "delete",
+    "content word",
+    153
+   ],
+   [
+    "delete",
+    "small word",
+    112
+   ],
+   [
+    "insert",
+    "small word",
+    98
+   ],
+   [
+    "substitute",
+    "name",
+    16
+   ]
+  ],
+  "base": [
+   [
+    "substitute",
+    "sounds alike",
+    168
+   ],
+   [
+    "substitute",
+    "small word",
+    165
+   ],
+   [
+    "insert",
+    "content word",
+    142
+   ],
+   [
+    "delete",
+    "content word",
+    121
+   ],
+   [
+    "delete",
+    "small word",
+    100
+   ],
+   [
+    "insert",
+    "small word",
+    86
+   ],
+   [
+    "substitute",
+    "other word",
+    79
+   ],
+   [
+    "substitute",
+    "name",
+    17
+   ]
+  ]
+ }
+}

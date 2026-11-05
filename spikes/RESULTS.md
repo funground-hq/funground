@@ -406,3 +406,22 @@ and a 12-page test chapter laid out and drawn by funground, day and night, print
 on the line, contrast is at least 4.5:1, and a build takes about 10 s a trim. It found seven gaps in funground's PDF
 (S-249). Outcomes: D-121 (no new shape keywords), D-122 (book building on an external content platform; funground keeps
 print, with a content contract, S-248). The spreads are on the site (`docs/book/`). Details: `15_book/RESULTS.md`.
+
+## 18 to 23. Six cloud sessions on one day (5 Nov 2026)
+
+Linux cloud sessions of 4 CPUs and 16 GB, each on its own branch from `bc651ca`. The numbers are the sessions' own: the main session
+read the results and spot-checked some, and did not measure them again, except where a section says so.
+
+- **`18_models_evidence/`:** the community YAMNet ONNX matches Google's model on 2,000 clips (largest difference 6.7e-5), which meets
+  S-250's condition. YAMNet names parents first, so a learner's sound is named right in the top 1 only 24.5 % of the time. Whisper
+  tiny.en's error is 6 % on clear US speech, 12 % on one Indian English reader and 32 % on Indian English conversation.
+- **`19_test_stability/`:** the microphone deadlock (S-251, D-128), which the main session confirmed on Windows; an order-dependent
+  test, and 9 tests that failed with `FUNGROUND_HEADLESS=1`, both fixed; the suite passes on Python 3.11 to 3.14.
+- **`20_api_fuzz/`:** no crash in 11,526 calls and 5,000 programs; a hang in `f.arc`, nan and inf reaching saved files, and a list of
+  raw errors a learner could meet.
+- **`21_mutation/`:** tests rarely used unequal, non-zero values, so a swapped sign could pass. No mutant showed the real code wrong.
+- **`22_memory_soak/`:** a new layer name each frame grows about 1 GB per 1,000 frames at 400 x 300, and a 300-frame 1080p GIF peaks
+  at 4.9 GB. Of the gallery sketches, only the one recording a GIF grows fast (it keeps its frames, about 460 MB per 1,000); others
+  rise 1 to 3 MB per 1,000 frames, which these 10 s runs cannot tell from noise, so an hour's soak would say more.
+- **`23_teach_evidence/`:** a taught kNN on DINOv2 needs 5 to 10 examples a class for look-alike classes and 3 for different things;
+  k=1 beats k=3; a score of `0.5 + 0.5 * min(1, margin / M)`, with M from 0.075 to 0.1, fits on held-out splits.

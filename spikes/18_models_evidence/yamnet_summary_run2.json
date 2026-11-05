@@ -1,0 +1,3412 @@
+{
+ "clips": 381,
+ "esc50_clips": 372,
+ "files": {
+  "community": {
+   "clips_compared": 381,
+   "errors": 0,
+   "window_count_mismatch": 0,
+   "windows": 3766,
+   "max_abs_diff_any_window": 2.6971101760864258e-05,
+   "max_abs_diff_clip_mean": 2.592802047729492e-06,
+   "window_top1_agree": 1.0,
+   "window_top3_set_agree_raw": 0.8879447689856612,
+   "window_top3_set_agree_tieaware": 1.0,
+   "clip_top1_agree": 1.0,
+   "clip_top3_set_agree_raw": 0.984251968503937,
+   "clip_top3_order_agree_raw": 0.984251968503937,
+   "clip_top1_disagreements": [],
+   "clip_top3_set_disagree_nontie": 0,
+   "clip_top3_nontie_examples": []
+  },
+  "ours": {
+   "clips_compared": 381,
+   "errors": 0,
+   "window_count_mismatch": 0,
+   "windows": 3766,
+   "max_abs_diff_any_window": 2.6971101760864258e-05,
+   "max_abs_diff_clip_mean": 2.592802047729492e-06,
+   "window_top1_agree": 1.0,
+   "window_top3_set_agree_raw": 0.8879447689856612,
+   "window_top3_set_agree_tieaware": 1.0,
+   "clip_top1_agree": 1.0,
+   "clip_top3_set_agree_raw": 0.984251968503937,
+   "clip_top3_order_agree_raw": 0.984251968503937,
+   "clip_top1_disagreements": [],
+   "clip_top3_set_disagree_nontie": 0,
+   "clip_top3_nontie_examples": []
+  },
+  "ours_run2": {
+   "clips_compared": 381,
+   "errors": 0,
+   "window_count_mismatch": 0,
+   "windows": 3766,
+   "max_abs_diff_any_window": 2.6971101760864258e-05,
+   "max_abs_diff_clip_mean": 2.592802047729492e-06,
+   "window_top1_agree": 1.0,
+   "window_top3_set_agree_raw": 0.8879447689856612,
+   "window_top3_set_agree_tieaware": 1.0,
+   "clip_top1_agree": 1.0,
+   "clip_top3_set_agree_raw": 0.984251968503937,
+   "clip_top3_order_agree_raw": 0.984251968503937,
+   "clip_top1_disagreements": [],
+   "clip_top3_set_disagree_nontie": 0,
+   "clip_top3_nontie_examples": []
+  }
+ },
+ "learner": {
+  "google": {
+   "classes": 46,
+   "clips": 346,
+   "top1": 0.2514450867052023,
+   "top3": 0.6647398843930635,
+   "per_class": {
+    "dog": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Dog",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.3333333333333333,
+     "top3": 0.8333333333333334
+    },
+    "cat": {
+     "common_top1": [
+      [
+       "Cat",
+       3
+      ],
+      [
+       "Animal",
+       2
+      ],
+      [
+       "Domestic animals, pets",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.875
+    },
+    "crying_baby": {
+     "common_top1": [
+      [
+       "Crying, sobbing",
+       6
+      ],
+      [
+       "Speech",
+       1
+      ],
+      [
+       "Laughter",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.75
+    },
+    "clapping": {
+     "common_top1": [
+      [
+       "Clapping",
+       5
+      ],
+      [
+       "Applause",
+       2
+      ]
+     ],
+     "n": 7,
+     "top1": 0.7142857142857143,
+     "top3": 0.8571428571428571
+    },
+    "door_wood_knock": {
+     "common_top1": [
+      [
+       "Silence",
+       6
+      ],
+      [
+       "Knock",
+       1
+      ],
+      [
+       "Speech",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.5
+    },
+    "church_bells": {
+     "common_top1": [
+      [
+       "Bell",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "siren": {
+     "common_top1": [
+      [
+       "Siren",
+       7
+      ],
+      [
+       "Emergency vehicle",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.875,
+     "top3": 1.0
+    },
+    "sneezing": {
+     "common_top1": [
+      [
+       "Silence",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.625
+    },
+    "coughing": {
+     "common_top1": [
+      [
+       "Silence",
+       5
+      ],
+      [
+       "Cough",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.875
+    },
+    "snoring": {
+     "common_top1": [
+      [
+       "Breathing",
+       7
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "laughing": {
+     "common_top1": [
+      [
+       "Speech",
+       4
+      ],
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Laughter",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.75
+    },
+    "crow": {
+     "common_top1": [
+      [
+       "Animal",
+       5
+      ],
+      [
+       "Crow",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.16666666666666666,
+     "top3": 0.8333333333333334
+    },
+    "frog": {
+     "common_top1": [
+      [
+       "Frog",
+       5
+      ],
+      [
+       "Animal",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.875
+    },
+    "sheep": {
+     "common_top1": [
+      [
+       "Livestock, farm animals, working animals",
+       4
+      ],
+      [
+       "Sheep",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.2857142857142857,
+     "top3": 1.0
+    },
+    "pig": {
+     "common_top1": [
+      [
+       "Animal",
+       6
+      ],
+      [
+       "Speech",
+       1
+      ],
+      [
+       "Pig",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 1.0
+    },
+    "cow": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Speech",
+       2
+      ],
+      [
+       "Roaring cats (lions, tigers)",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.5
+    },
+    "rooster": {
+     "common_top1": [
+      [
+       "Silence",
+       5
+      ],
+      [
+       "Animal",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.125
+    },
+    "hen": {
+     "common_top1": [
+      [
+       "Animal",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.25
+    },
+    "rain": {
+     "common_top1": [
+      [
+       "Water",
+       6
+      ],
+      [
+       "Vehicle",
+       1
+      ],
+      [
+       "Rain",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.875
+    },
+    "sea_waves": {
+     "common_top1": [
+      [
+       "Ocean",
+       2
+      ],
+      [
+       "Water",
+       1
+      ],
+      [
+       "Boat, Water vehicle",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.0,
+     "top3": 0.5
+    },
+    "helicopter": {
+     "common_top1": [
+      [
+       "Vehicle",
+       5
+      ],
+      [
+       "Helicopter",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.625
+    },
+    "chainsaw": {
+     "common_top1": [
+      [
+       "Chainsaw",
+       4
+      ],
+      [
+       "Vehicle",
+       2
+      ],
+      [
+       "Engine",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.5,
+     "top3": 0.625
+    },
+    "train": {
+     "common_top1": [
+      [
+       "Vehicle",
+       6
+      ]
+     ],
+     "n": 6,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "clock_tick": {
+     "common_top1": [
+      [
+       "Clock",
+       3
+      ],
+      [
+       "Inside, small room",
+       2
+      ],
+      [
+       "Mechanisms",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.75
+    },
+    "clock_alarm": {
+     "common_top1": [
+      [
+       "Alarm clock",
+       5
+      ],
+      [
+       "Beep, bleep",
+       1
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.7142857142857143,
+     "top3": 0.8571428571428571
+    },
+    "vacuum_cleaner": {
+     "common_top1": [
+      [
+       "Vehicle",
+       4
+      ],
+      [
+       "Jet engine",
+       2
+      ],
+      [
+       "Vacuum cleaner",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.5
+    },
+    "toilet_flush": {
+     "common_top1": [
+      [
+       "Toilet flush",
+       7
+      ],
+      [
+       "Water",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.875,
+     "top3": 1.0
+    },
+    "airplane": {
+     "common_top1": [
+      [
+       "Vehicle",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.375
+    },
+    "car_horn": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Vehicle",
+       4
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.25
+    },
+    "footsteps": {
+     "common_top1": [
+      [
+       "Walk, footsteps",
+       5
+      ],
+      [
+       "Fireworks",
+       1
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.625
+    },
+    "brushing_teeth": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Toothbrush",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.25
+    },
+    "keyboard_typing": {
+     "common_top1": [
+      [
+       "Typing",
+       5
+      ],
+      [
+       "Speech",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.8333333333333334,
+     "top3": 1.0
+    },
+    "thunderstorm": {
+     "common_top1": [
+      [
+       "Thunderstorm",
+       5
+      ],
+      [
+       "Explosion",
+       2
+      ],
+      [
+       "Wind",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 1.0
+    },
+    "wind": {
+     "common_top1": [
+      [
+       "Wind",
+       2
+      ],
+      [
+       "Water",
+       2
+      ],
+      [
+       "Thunderstorm",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.375
+    },
+    "pouring_water": {
+     "common_top1": [
+      [
+       "Water",
+       2
+      ],
+      [
+       "Drip",
+       2
+      ],
+      [
+       "Liquid",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.0
+    },
+    "fireworks": {
+     "common_top1": [
+      [
+       "Explosion",
+       4
+      ],
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Fireworks",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.875
+    },
+    "hand_saw": {
+     "common_top1": [
+      [
+       "Rub",
+       2
+      ],
+      [
+       "Wood",
+       1
+      ],
+      [
+       "Sawing",
+       1
+      ]
+     ],
+     "n": 5,
+     "top1": 0.2,
+     "top3": 0.4
+    },
+    "chirping_birds": {
+     "common_top1": [
+      [
+       "Animal",
+       3
+      ],
+      [
+       "Wild animals",
+       3
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 1.0
+    },
+    "crickets": {
+     "common_top1": [
+      [
+       "Insect",
+       2
+      ],
+      [
+       "Outside, rural or natural",
+       2
+      ],
+      [
+       "Rattle (instrument)",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.0,
+     "top3": 0.2857142857142857
+    },
+    "insects": {
+     "common_top1": [
+      [
+       "Insect",
+       5
+      ],
+      [
+       "Wild animals",
+       2
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.875
+    },
+    "glass_breaking": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ]
+     ],
+     "n": 4,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "breathing": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Gasp",
+       2
+      ],
+      [
+       "Breathing",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.75
+    },
+    "crackling_fire": {
+     "common_top1": [
+      [
+       "Patter",
+       3
+      ],
+      [
+       "Fire",
+       2
+      ],
+      [
+       "Crumpling, crinkling",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.625
+    },
+    "door_wood_creaks": {
+     "common_top1": [
+      [
+       "Fart",
+       3
+      ],
+      [
+       "Crying, sobbing",
+       1
+      ],
+      [
+       "Music",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.0
+    },
+    "water_drops": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Drip",
+       1
+      ],
+      [
+       "Telephone",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.14285714285714285,
+     "top3": 0.2857142857142857
+    },
+    "engine": {
+     "common_top1": [
+      [
+       "Vehicle",
+       7
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.5
+    }
+   }
+  },
+  "community": {
+   "classes": 46,
+   "clips": 346,
+   "top1": 0.2514450867052023,
+   "top3": 0.6647398843930635,
+   "per_class": {
+    "dog": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Dog",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.3333333333333333,
+     "top3": 0.8333333333333334
+    },
+    "cat": {
+     "common_top1": [
+      [
+       "Cat",
+       3
+      ],
+      [
+       "Animal",
+       2
+      ],
+      [
+       "Domestic animals, pets",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.875
+    },
+    "crying_baby": {
+     "common_top1": [
+      [
+       "Crying, sobbing",
+       6
+      ],
+      [
+       "Speech",
+       1
+      ],
+      [
+       "Laughter",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.75
+    },
+    "clapping": {
+     "common_top1": [
+      [
+       "Clapping",
+       5
+      ],
+      [
+       "Applause",
+       2
+      ]
+     ],
+     "n": 7,
+     "top1": 0.7142857142857143,
+     "top3": 0.8571428571428571
+    },
+    "door_wood_knock": {
+     "common_top1": [
+      [
+       "Silence",
+       6
+      ],
+      [
+       "Knock",
+       1
+      ],
+      [
+       "Speech",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.5
+    },
+    "church_bells": {
+     "common_top1": [
+      [
+       "Bell",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "siren": {
+     "common_top1": [
+      [
+       "Siren",
+       7
+      ],
+      [
+       "Emergency vehicle",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.875,
+     "top3": 1.0
+    },
+    "sneezing": {
+     "common_top1": [
+      [
+       "Silence",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.625
+    },
+    "coughing": {
+     "common_top1": [
+      [
+       "Silence",
+       5
+      ],
+      [
+       "Cough",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.875
+    },
+    "snoring": {
+     "common_top1": [
+      [
+       "Breathing",
+       7
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "laughing": {
+     "common_top1": [
+      [
+       "Speech",
+       4
+      ],
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Laughter",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.75
+    },
+    "crow": {
+     "common_top1": [
+      [
+       "Animal",
+       5
+      ],
+      [
+       "Crow",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.16666666666666666,
+     "top3": 0.8333333333333334
+    },
+    "frog": {
+     "common_top1": [
+      [
+       "Frog",
+       5
+      ],
+      [
+       "Animal",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.875
+    },
+    "sheep": {
+     "common_top1": [
+      [
+       "Livestock, farm animals, working animals",
+       4
+      ],
+      [
+       "Sheep",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.2857142857142857,
+     "top3": 1.0
+    },
+    "pig": {
+     "common_top1": [
+      [
+       "Animal",
+       6
+      ],
+      [
+       "Speech",
+       1
+      ],
+      [
+       "Pig",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 1.0
+    },
+    "cow": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Speech",
+       2
+      ],
+      [
+       "Roaring cats (lions, tigers)",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.5
+    },
+    "rooster": {
+     "common_top1": [
+      [
+       "Silence",
+       5
+      ],
+      [
+       "Animal",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.125
+    },
+    "hen": {
+     "common_top1": [
+      [
+       "Animal",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.25
+    },
+    "rain": {
+     "common_top1": [
+      [
+       "Water",
+       6
+      ],
+      [
+       "Vehicle",
+       1
+      ],
+      [
+       "Rain",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.875
+    },
+    "sea_waves": {
+     "common_top1": [
+      [
+       "Ocean",
+       2
+      ],
+      [
+       "Water",
+       1
+      ],
+      [
+       "Boat, Water vehicle",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.0,
+     "top3": 0.5
+    },
+    "helicopter": {
+     "common_top1": [
+      [
+       "Vehicle",
+       5
+      ],
+      [
+       "Helicopter",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.625
+    },
+    "chainsaw": {
+     "common_top1": [
+      [
+       "Chainsaw",
+       4
+      ],
+      [
+       "Vehicle",
+       2
+      ],
+      [
+       "Engine",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.5,
+     "top3": 0.625
+    },
+    "train": {
+     "common_top1": [
+      [
+       "Vehicle",
+       6
+      ]
+     ],
+     "n": 6,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "clock_tick": {
+     "common_top1": [
+      [
+       "Clock",
+       3
+      ],
+      [
+       "Inside, small room",
+       2
+      ],
+      [
+       "Mechanisms",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.75
+    },
+    "clock_alarm": {
+     "common_top1": [
+      [
+       "Alarm clock",
+       5
+      ],
+      [
+       "Beep, bleep",
+       1
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.7142857142857143,
+     "top3": 0.8571428571428571
+    },
+    "vacuum_cleaner": {
+     "common_top1": [
+      [
+       "Vehicle",
+       4
+      ],
+      [
+       "Jet engine",
+       2
+      ],
+      [
+       "Vacuum cleaner",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.5
+    },
+    "toilet_flush": {
+     "common_top1": [
+      [
+       "Toilet flush",
+       7
+      ],
+      [
+       "Water",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.875,
+     "top3": 1.0
+    },
+    "airplane": {
+     "common_top1": [
+      [
+       "Vehicle",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.375
+    },
+    "car_horn": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Vehicle",
+       4
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.25
+    },
+    "footsteps": {
+     "common_top1": [
+      [
+       "Walk, footsteps",
+       5
+      ],
+      [
+       "Fireworks",
+       1
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.625
+    },
+    "brushing_teeth": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Toothbrush",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.25
+    },
+    "keyboard_typing": {
+     "common_top1": [
+      [
+       "Typing",
+       5
+      ],
+      [
+       "Speech",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.8333333333333334,
+     "top3": 1.0
+    },
+    "thunderstorm": {
+     "common_top1": [
+      [
+       "Thunderstorm",
+       5
+      ],
+      [
+       "Explosion",
+       2
+      ],
+      [
+       "Wind",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 1.0
+    },
+    "wind": {
+     "common_top1": [
+      [
+       "Wind",
+       2
+      ],
+      [
+       "Water",
+       2
+      ],
+      [
+       "Thunderstorm",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.375
+    },
+    "pouring_water": {
+     "common_top1": [
+      [
+       "Water",
+       2
+      ],
+      [
+       "Drip",
+       2
+      ],
+      [
+       "Liquid",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.0
+    },
+    "fireworks": {
+     "common_top1": [
+      [
+       "Explosion",
+       4
+      ],
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Fireworks",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.875
+    },
+    "hand_saw": {
+     "common_top1": [
+      [
+       "Rub",
+       2
+      ],
+      [
+       "Wood",
+       1
+      ],
+      [
+       "Sawing",
+       1
+      ]
+     ],
+     "n": 5,
+     "top1": 0.2,
+     "top3": 0.4
+    },
+    "chirping_birds": {
+     "common_top1": [
+      [
+       "Animal",
+       3
+      ],
+      [
+       "Wild animals",
+       3
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 1.0
+    },
+    "crickets": {
+     "common_top1": [
+      [
+       "Insect",
+       2
+      ],
+      [
+       "Outside, rural or natural",
+       2
+      ],
+      [
+       "Rattle (instrument)",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.0,
+     "top3": 0.2857142857142857
+    },
+    "insects": {
+     "common_top1": [
+      [
+       "Insect",
+       5
+      ],
+      [
+       "Wild animals",
+       2
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.875
+    },
+    "glass_breaking": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ]
+     ],
+     "n": 4,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "breathing": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Gasp",
+       2
+      ],
+      [
+       "Breathing",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.75
+    },
+    "crackling_fire": {
+     "common_top1": [
+      [
+       "Patter",
+       3
+      ],
+      [
+       "Fire",
+       2
+      ],
+      [
+       "Crumpling, crinkling",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.625
+    },
+    "door_wood_creaks": {
+     "common_top1": [
+      [
+       "Fart",
+       3
+      ],
+      [
+       "Crying, sobbing",
+       1
+      ],
+      [
+       "Music",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.0
+    },
+    "water_drops": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Drip",
+       1
+      ],
+      [
+       "Telephone",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.14285714285714285,
+     "top3": 0.2857142857142857
+    },
+    "engine": {
+     "common_top1": [
+      [
+       "Vehicle",
+       7
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.5
+    }
+   }
+  },
+  "ours": {
+   "classes": 46,
+   "clips": 346,
+   "top1": 0.2514450867052023,
+   "top3": 0.6647398843930635,
+   "per_class": {
+    "dog": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Dog",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.3333333333333333,
+     "top3": 0.8333333333333334
+    },
+    "cat": {
+     "common_top1": [
+      [
+       "Cat",
+       3
+      ],
+      [
+       "Animal",
+       2
+      ],
+      [
+       "Domestic animals, pets",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.875
+    },
+    "crying_baby": {
+     "common_top1": [
+      [
+       "Crying, sobbing",
+       6
+      ],
+      [
+       "Speech",
+       1
+      ],
+      [
+       "Laughter",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.75
+    },
+    "clapping": {
+     "common_top1": [
+      [
+       "Clapping",
+       5
+      ],
+      [
+       "Applause",
+       2
+      ]
+     ],
+     "n": 7,
+     "top1": 0.7142857142857143,
+     "top3": 0.8571428571428571
+    },
+    "door_wood_knock": {
+     "common_top1": [
+      [
+       "Silence",
+       6
+      ],
+      [
+       "Knock",
+       1
+      ],
+      [
+       "Speech",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.5
+    },
+    "church_bells": {
+     "common_top1": [
+      [
+       "Bell",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "siren": {
+     "common_top1": [
+      [
+       "Siren",
+       7
+      ],
+      [
+       "Emergency vehicle",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.875,
+     "top3": 1.0
+    },
+    "sneezing": {
+     "common_top1": [
+      [
+       "Silence",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.625
+    },
+    "coughing": {
+     "common_top1": [
+      [
+       "Silence",
+       5
+      ],
+      [
+       "Cough",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.875
+    },
+    "snoring": {
+     "common_top1": [
+      [
+       "Breathing",
+       7
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "laughing": {
+     "common_top1": [
+      [
+       "Speech",
+       4
+      ],
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Laughter",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.75
+    },
+    "crow": {
+     "common_top1": [
+      [
+       "Animal",
+       5
+      ],
+      [
+       "Crow",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.16666666666666666,
+     "top3": 0.8333333333333334
+    },
+    "frog": {
+     "common_top1": [
+      [
+       "Frog",
+       5
+      ],
+      [
+       "Animal",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.875
+    },
+    "sheep": {
+     "common_top1": [
+      [
+       "Livestock, farm animals, working animals",
+       4
+      ],
+      [
+       "Sheep",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.2857142857142857,
+     "top3": 1.0
+    },
+    "pig": {
+     "common_top1": [
+      [
+       "Animal",
+       6
+      ],
+      [
+       "Speech",
+       1
+      ],
+      [
+       "Pig",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 1.0
+    },
+    "cow": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Speech",
+       2
+      ],
+      [
+       "Roaring cats (lions, tigers)",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.5
+    },
+    "rooster": {
+     "common_top1": [
+      [
+       "Silence",
+       5
+      ],
+      [
+       "Animal",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.125
+    },
+    "hen": {
+     "common_top1": [
+      [
+       "Animal",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.25
+    },
+    "rain": {
+     "common_top1": [
+      [
+       "Water",
+       6
+      ],
+      [
+       "Vehicle",
+       1
+      ],
+      [
+       "Rain",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.875
+    },
+    "sea_waves": {
+     "common_top1": [
+      [
+       "Ocean",
+       2
+      ],
+      [
+       "Water",
+       1
+      ],
+      [
+       "Boat, Water vehicle",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.0,
+     "top3": 0.5
+    },
+    "helicopter": {
+     "common_top1": [
+      [
+       "Vehicle",
+       5
+      ],
+      [
+       "Helicopter",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.625
+    },
+    "chainsaw": {
+     "common_top1": [
+      [
+       "Chainsaw",
+       4
+      ],
+      [
+       "Vehicle",
+       2
+      ],
+      [
+       "Engine",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.5,
+     "top3": 0.625
+    },
+    "train": {
+     "common_top1": [
+      [
+       "Vehicle",
+       6
+      ]
+     ],
+     "n": 6,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "clock_tick": {
+     "common_top1": [
+      [
+       "Clock",
+       3
+      ],
+      [
+       "Inside, small room",
+       2
+      ],
+      [
+       "Mechanisms",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.75
+    },
+    "clock_alarm": {
+     "common_top1": [
+      [
+       "Alarm clock",
+       5
+      ],
+      [
+       "Beep, bleep",
+       1
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.7142857142857143,
+     "top3": 0.8571428571428571
+    },
+    "vacuum_cleaner": {
+     "common_top1": [
+      [
+       "Vehicle",
+       4
+      ],
+      [
+       "Jet engine",
+       2
+      ],
+      [
+       "Vacuum cleaner",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.5
+    },
+    "toilet_flush": {
+     "common_top1": [
+      [
+       "Toilet flush",
+       7
+      ],
+      [
+       "Water",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.875,
+     "top3": 1.0
+    },
+    "airplane": {
+     "common_top1": [
+      [
+       "Vehicle",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.375
+    },
+    "car_horn": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Vehicle",
+       4
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.25
+    },
+    "footsteps": {
+     "common_top1": [
+      [
+       "Walk, footsteps",
+       5
+      ],
+      [
+       "Fireworks",
+       1
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.625
+    },
+    "brushing_teeth": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Toothbrush",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.25
+    },
+    "keyboard_typing": {
+     "common_top1": [
+      [
+       "Typing",
+       5
+      ],
+      [
+       "Speech",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.8333333333333334,
+     "top3": 1.0
+    },
+    "thunderstorm": {
+     "common_top1": [
+      [
+       "Thunderstorm",
+       5
+      ],
+      [
+       "Explosion",
+       2
+      ],
+      [
+       "Wind",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 1.0
+    },
+    "wind": {
+     "common_top1": [
+      [
+       "Wind",
+       2
+      ],
+      [
+       "Water",
+       2
+      ],
+      [
+       "Thunderstorm",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.375
+    },
+    "pouring_water": {
+     "common_top1": [
+      [
+       "Water",
+       2
+      ],
+      [
+       "Drip",
+       2
+      ],
+      [
+       "Liquid",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.0
+    },
+    "fireworks": {
+     "common_top1": [
+      [
+       "Explosion",
+       4
+      ],
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Fireworks",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.875
+    },
+    "hand_saw": {
+     "common_top1": [
+      [
+       "Rub",
+       2
+      ],
+      [
+       "Wood",
+       1
+      ],
+      [
+       "Sawing",
+       1
+      ]
+     ],
+     "n": 5,
+     "top1": 0.2,
+     "top3": 0.4
+    },
+    "chirping_birds": {
+     "common_top1": [
+      [
+       "Animal",
+       3
+      ],
+      [
+       "Wild animals",
+       3
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 1.0
+    },
+    "crickets": {
+     "common_top1": [
+      [
+       "Insect",
+       2
+      ],
+      [
+       "Outside, rural or natural",
+       2
+      ],
+      [
+       "Rattle (instrument)",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.0,
+     "top3": 0.2857142857142857
+    },
+    "insects": {
+     "common_top1": [
+      [
+       "Insect",
+       5
+      ],
+      [
+       "Wild animals",
+       2
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.875
+    },
+    "glass_breaking": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ]
+     ],
+     "n": 4,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "breathing": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Gasp",
+       2
+      ],
+      [
+       "Breathing",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.75
+    },
+    "crackling_fire": {
+     "common_top1": [
+      [
+       "Patter",
+       3
+      ],
+      [
+       "Fire",
+       2
+      ],
+      [
+       "Crumpling, crinkling",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.625
+    },
+    "door_wood_creaks": {
+     "common_top1": [
+      [
+       "Fart",
+       3
+      ],
+      [
+       "Crying, sobbing",
+       1
+      ],
+      [
+       "Music",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.0
+    },
+    "water_drops": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Drip",
+       1
+      ],
+      [
+       "Telephone",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.14285714285714285,
+     "top3": 0.2857142857142857
+    },
+    "engine": {
+     "common_top1": [
+      [
+       "Vehicle",
+       7
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.5
+    }
+   }
+  },
+  "ours_run2": {
+   "classes": 46,
+   "clips": 346,
+   "top1": 0.2514450867052023,
+   "top3": 0.6647398843930635,
+   "per_class": {
+    "dog": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Dog",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.3333333333333333,
+     "top3": 0.8333333333333334
+    },
+    "cat": {
+     "common_top1": [
+      [
+       "Cat",
+       3
+      ],
+      [
+       "Animal",
+       2
+      ],
+      [
+       "Domestic animals, pets",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.875
+    },
+    "crying_baby": {
+     "common_top1": [
+      [
+       "Crying, sobbing",
+       6
+      ],
+      [
+       "Speech",
+       1
+      ],
+      [
+       "Laughter",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.75
+    },
+    "clapping": {
+     "common_top1": [
+      [
+       "Clapping",
+       5
+      ],
+      [
+       "Applause",
+       2
+      ]
+     ],
+     "n": 7,
+     "top1": 0.7142857142857143,
+     "top3": 0.8571428571428571
+    },
+    "door_wood_knock": {
+     "common_top1": [
+      [
+       "Silence",
+       6
+      ],
+      [
+       "Knock",
+       1
+      ],
+      [
+       "Speech",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.5
+    },
+    "church_bells": {
+     "common_top1": [
+      [
+       "Bell",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "siren": {
+     "common_top1": [
+      [
+       "Siren",
+       7
+      ],
+      [
+       "Emergency vehicle",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.875,
+     "top3": 1.0
+    },
+    "sneezing": {
+     "common_top1": [
+      [
+       "Silence",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.625
+    },
+    "coughing": {
+     "common_top1": [
+      [
+       "Silence",
+       5
+      ],
+      [
+       "Cough",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.875
+    },
+    "snoring": {
+     "common_top1": [
+      [
+       "Breathing",
+       7
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "laughing": {
+     "common_top1": [
+      [
+       "Speech",
+       4
+      ],
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Laughter",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.75
+    },
+    "crow": {
+     "common_top1": [
+      [
+       "Animal",
+       5
+      ],
+      [
+       "Crow",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.16666666666666666,
+     "top3": 0.8333333333333334
+    },
+    "frog": {
+     "common_top1": [
+      [
+       "Frog",
+       5
+      ],
+      [
+       "Animal",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.875
+    },
+    "sheep": {
+     "common_top1": [
+      [
+       "Livestock, farm animals, working animals",
+       4
+      ],
+      [
+       "Sheep",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.2857142857142857,
+     "top3": 1.0
+    },
+    "pig": {
+     "common_top1": [
+      [
+       "Animal",
+       6
+      ],
+      [
+       "Speech",
+       1
+      ],
+      [
+       "Pig",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 1.0
+    },
+    "cow": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Speech",
+       2
+      ],
+      [
+       "Roaring cats (lions, tigers)",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.5
+    },
+    "rooster": {
+     "common_top1": [
+      [
+       "Silence",
+       5
+      ],
+      [
+       "Animal",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.125
+    },
+    "hen": {
+     "common_top1": [
+      [
+       "Animal",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.25
+    },
+    "rain": {
+     "common_top1": [
+      [
+       "Water",
+       6
+      ],
+      [
+       "Vehicle",
+       1
+      ],
+      [
+       "Rain",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.875
+    },
+    "sea_waves": {
+     "common_top1": [
+      [
+       "Ocean",
+       2
+      ],
+      [
+       "Water",
+       1
+      ],
+      [
+       "Boat, Water vehicle",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.0,
+     "top3": 0.5
+    },
+    "helicopter": {
+     "common_top1": [
+      [
+       "Vehicle",
+       5
+      ],
+      [
+       "Helicopter",
+       3
+      ]
+     ],
+     "n": 8,
+     "top1": 0.375,
+     "top3": 0.625
+    },
+    "chainsaw": {
+     "common_top1": [
+      [
+       "Chainsaw",
+       4
+      ],
+      [
+       "Vehicle",
+       2
+      ],
+      [
+       "Engine",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.5,
+     "top3": 0.625
+    },
+    "train": {
+     "common_top1": [
+      [
+       "Vehicle",
+       6
+      ]
+     ],
+     "n": 6,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "clock_tick": {
+     "common_top1": [
+      [
+       "Clock",
+       3
+      ],
+      [
+       "Inside, small room",
+       2
+      ],
+      [
+       "Mechanisms",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.75
+    },
+    "clock_alarm": {
+     "common_top1": [
+      [
+       "Alarm clock",
+       5
+      ],
+      [
+       "Beep, bleep",
+       1
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.7142857142857143,
+     "top3": 0.8571428571428571
+    },
+    "vacuum_cleaner": {
+     "common_top1": [
+      [
+       "Vehicle",
+       4
+      ],
+      [
+       "Jet engine",
+       2
+      ],
+      [
+       "Vacuum cleaner",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.5
+    },
+    "toilet_flush": {
+     "common_top1": [
+      [
+       "Toilet flush",
+       7
+      ],
+      [
+       "Water",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.875,
+     "top3": 1.0
+    },
+    "airplane": {
+     "common_top1": [
+      [
+       "Vehicle",
+       8
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.375
+    },
+    "car_horn": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Vehicle",
+       4
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.25
+    },
+    "footsteps": {
+     "common_top1": [
+      [
+       "Walk, footsteps",
+       5
+      ],
+      [
+       "Fireworks",
+       1
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.625
+    },
+    "brushing_teeth": {
+     "common_top1": [
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Toothbrush",
+       2
+      ],
+      [
+       "Animal",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.25
+    },
+    "keyboard_typing": {
+     "common_top1": [
+      [
+       "Typing",
+       5
+      ],
+      [
+       "Speech",
+       1
+      ]
+     ],
+     "n": 6,
+     "top1": 0.8333333333333334,
+     "top3": 1.0
+    },
+    "thunderstorm": {
+     "common_top1": [
+      [
+       "Thunderstorm",
+       5
+      ],
+      [
+       "Explosion",
+       2
+      ],
+      [
+       "Wind",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 1.0
+    },
+    "wind": {
+     "common_top1": [
+      [
+       "Wind",
+       2
+      ],
+      [
+       "Water",
+       2
+      ],
+      [
+       "Thunderstorm",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.375
+    },
+    "pouring_water": {
+     "common_top1": [
+      [
+       "Water",
+       2
+      ],
+      [
+       "Drip",
+       2
+      ],
+      [
+       "Liquid",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.0
+    },
+    "fireworks": {
+     "common_top1": [
+      [
+       "Explosion",
+       4
+      ],
+      [
+       "Silence",
+       2
+      ],
+      [
+       "Fireworks",
+       2
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.875
+    },
+    "hand_saw": {
+     "common_top1": [
+      [
+       "Rub",
+       2
+      ],
+      [
+       "Wood",
+       1
+      ],
+      [
+       "Sawing",
+       1
+      ]
+     ],
+     "n": 5,
+     "top1": 0.2,
+     "top3": 0.4
+    },
+    "chirping_birds": {
+     "common_top1": [
+      [
+       "Animal",
+       3
+      ],
+      [
+       "Wild animals",
+       3
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 1.0
+    },
+    "crickets": {
+     "common_top1": [
+      [
+       "Insect",
+       2
+      ],
+      [
+       "Outside, rural or natural",
+       2
+      ],
+      [
+       "Rattle (instrument)",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.0,
+     "top3": 0.2857142857142857
+    },
+    "insects": {
+     "common_top1": [
+      [
+       "Insect",
+       5
+      ],
+      [
+       "Wild animals",
+       2
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.625,
+     "top3": 0.875
+    },
+    "glass_breaking": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ]
+     ],
+     "n": 4,
+     "top1": 0.0,
+     "top3": 1.0
+    },
+    "breathing": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Gasp",
+       2
+      ],
+      [
+       "Breathing",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.125,
+     "top3": 0.75
+    },
+    "crackling_fire": {
+     "common_top1": [
+      [
+       "Patter",
+       3
+      ],
+      [
+       "Fire",
+       2
+      ],
+      [
+       "Crumpling, crinkling",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.25,
+     "top3": 0.625
+    },
+    "door_wood_creaks": {
+     "common_top1": [
+      [
+       "Fart",
+       3
+      ],
+      [
+       "Crying, sobbing",
+       1
+      ],
+      [
+       "Music",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.0
+    },
+    "water_drops": {
+     "common_top1": [
+      [
+       "Silence",
+       4
+      ],
+      [
+       "Drip",
+       1
+      ],
+      [
+       "Telephone",
+       1
+      ]
+     ],
+     "n": 7,
+     "top1": 0.14285714285714285,
+     "top3": 0.2857142857142857
+    },
+    "engine": {
+     "common_top1": [
+      [
+       "Vehicle",
+       7
+      ],
+      [
+       "Silence",
+       1
+      ]
+     ],
+     "n": 8,
+     "top1": 0.0,
+     "top3": 0.5
+    }
+   }
+  }
+ },
+ "edge": {
+  "edge_silence_1s": {
+   "google": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "community": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours_run2": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "windows": 2
+  },
+  "edge_silence_5s": {
+   "google": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "community": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours_run2": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "windows": 10
+  },
+  "edge_short_0.5s": {
+   "google": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "community": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours_run2": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "windows": 1
+  },
+  "edge_short_0.1s": {
+   "google": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "community": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours_run2": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "windows": 1
+  },
+  "edge_exact_0.96s": {
+   "google": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "community": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours_run2": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "windows": 1
+  },
+  "edge_empty_0s": {
+   "google": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "community": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "ours_run2": [
+    "Silence",
+    "Speech",
+    "Glockenspiel"
+   ],
+   "windows": 1
+  },
+  "edge_clipped_x20": {
+   "google": [
+    "Silence",
+    "Sound effect",
+    "Dog"
+   ],
+   "community": [
+    "Silence",
+    "Sound effect",
+    "Dog"
+   ],
+   "ours": [
+    "Silence",
+    "Sound effect",
+    "Dog"
+   ],
+   "ours_run2": [
+    "Silence",
+    "Sound effect",
+    "Dog"
+   ],
+   "windows": 10
+  },
+  "edge_quiet_x0.001": {
+   "google": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "community": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "ours": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "ours_run2": [
+    "Silence",
+    "Speech",
+    "Music"
+   ],
+   "windows": 10
+  },
+  "edge_white_noise": {
+   "google": [
+    "White noise",
+    "Waterfall",
+    "Static"
+   ],
+   "community": [
+    "White noise",
+    "Waterfall",
+    "Static"
+   ],
+   "ours": [
+    "White noise",
+    "Waterfall",
+    "Static"
+   ],
+   "ours_run2": [
+    "White noise",
+    "Waterfall",
+    "Static"
+   ],
+   "windows": 10
+  }
+ }
+}

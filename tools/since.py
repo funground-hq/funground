@@ -30,6 +30,9 @@ API_BADGE = '<p class="fg-since">Since {v}.</p>'
 # Option words that arrive later than the function that takes them. Written by hand: tests/test_since.py checks each
 # word is still accepted, so an entry cannot outlive its word.
 LATER_WORDS = {"filter": {"kind": {"edges": "0.2"}}, "apply_filter": {"kind": {"edges": "0.2"}}}
+# Library calls that mark a guide section or a gallery example. The models library's names are not in completions.json (it is a
+# separate install), so a call is listed here by hand to get the marker. Only ml.words so far (S-234).
+LATER_CALLS = {"ml.words": "0.2"}
 WORD_VERSIONS = {word: v for args in LATER_WORDS.values() for words in args.values() for word, v in words.items()}
 
 
@@ -130,6 +133,7 @@ def later_use(text: str, row: bool = False) -> str | None:
         pattern = rf"\.{n}\b" if n in properties else rf"\.{n}\("
         if re.search(pattern, text):
             found.append(v)
+    found += [v for call, v in LATER_CALLS.items() if re.search(rf"\b{re.escape(call)}\(", text)]
     found += [v for w, v in WORD_VERSIONS.items() if re.search(rf"""["']{w}["']""", text)]
     return latest(found)
 

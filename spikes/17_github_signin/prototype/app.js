@@ -5,9 +5,9 @@
 
 const CONFIG = {
   // Fill these in after the maintainer has made the App and the Worker. Empty values switch option b off.
-  CLIENT_ID: "",                                   // the GitHub App's client ID (public)
-  APP_SLUG: "",                                    // the App's URL name: github.com/apps/<slug>
-  EXCHANGE_URL: "",                                // e.g. "https://funground-token.<account>.workers.dev"
+  CLIENT_ID: "Iv23limVsNiPj9pOVmOM",                                 // the GitHub App's client ID (public)
+  APP_SLUG: "funground-play",                                  // the App's URL name: github.com/apps/<slug>
+  EXCHANGE_URL: "https://funground-token.samir-01a.workers.dev",                              // e.g. "https://funground-token.<account>.workers.dev"
   SKETCH_DIR: "sketches",                          // the sketchbook template's folder
 };
 
