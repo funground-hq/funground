@@ -115,7 +115,9 @@ test.
 | 3 | my first fix | 4483 passed, the same teardown error, and **1 failed: `test_making_sound.py::test_reverb_of_five_seconds_is_quick`**, `assert (1079.636872726 - 1077.224527774) < 2.0`: `reverb(1)` took **2.41 s** against a 2.0 s budget, on worker gw2, load average 8 to 11 on 4 CPUs. It passes alone. It is load, not order: no shorter order makes it fail. |
 | 2 again | conftest fixed | 4483 passed, **1 failed: `test_fallback.py::test_the_bundled_fonts_load_only_when_needed`**, `assert set() == {'NotoEmoji-Regular.ttf'}`. Order-dependent: see below. |
 | 4 | conftest fixed | **4484 passed**, 131 skipped |
-| 5, and 6 and 2 with both fixes | | SEEDSC_PLACEHOLDER |
+| 5 | conftest fixed | **4484 passed**, 131 skipped, 114 s |
+| 6 | both fixes | **4484 passed**, 131 skipped, 102 s |
+| 2 again | both fixes | **4484 passed**, 131 skipped, 105 s: the seed that found the order-dependent test is now clean |
 
 **The order-dependent failure.** `test_the_bundled_fonts_load_only_when_needed` clears `typography._bundled_cache`
 and checks that shaping an emoji loads Noto Emoji. But `typography._ITEMISE_CACHE` memoises the answer for a whole
@@ -161,7 +163,7 @@ and is not a version problem.
 |---|---|---|---:|
 | 3.11.18 | pinned | 4475 passed, 9 failed only because `FUNGROUND_HEADLESS=1` was set (section 1) | 318 s |
 | 3.12.3 | pinned | **4484 passed**, 131 skipped, plus the known teardown error | 628 s (machine overloaded) |
-| 3.13.18 | pinned | first run killed by the kernel for memory at 95% (exit 137, not a test failure); rerun: PY313_PLACEHOLDER | |
+| 3.13.18 | pinned | first run killed by the kernel for memory at 95% (exit 137, not a test failure); rerun with the final conftest fix: **4484 passed**, 131 skipped, no error | |
 | 3.14.6 | pinned | **4484 passed**, 131 skipped, plus the known teardown error | 618 s (machine overloaded) |
 | 3.14.6 | newest inside the bounds: pycairo 1.29.2, fonttools 4.68.0, pypdf 6.21.4, uharfbuzz 0.57.0 (pygame-ce, skia-pathops, svgelements unchanged) | **4484 passed**, 131 skipped, plus the known teardown error | 480 s |
 
@@ -250,7 +252,7 @@ From the 3.11 baseline's junit XML (`spikes/19_test_stability/timings.py`): 4615
 | tests.test_pdf_text::test_a_text_heavy_page_is_much_smaller | 1.68 |
 
 Where time could be saved without testing less:
-- **Run with `pytest-xdist -n auto`.** The suite took 124 to 152 s on 4 workers against 318 s in one process here,
+- **Run with `pytest-xdist -n auto`.** The suite took 102 to 224 s on 4 workers (102 to 114 s when the machine was not shared) against 318 s in one process here,
   and it passed in random order, so it does not depend on order (with the fix above). GitHub's Windows runners
   have 4 CPUs. Measured on Linux only.
 - **`test_gallery.py` is 31% of the time** (353 tests, 96 s). Each example is run headless, then again for the
