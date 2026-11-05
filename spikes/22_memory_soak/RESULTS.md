@@ -29,7 +29,7 @@ Seed: `random.seed(0)` in every process. Nothing in `funground/` was changed; no
 stress sketches 30 s (500 to 2,500 frames). These are not hour-long soaks. Several 1 to 3 MB/1,000 rises
 below are within allocator noise at this length and are unverified as leaks.
 
-## 1. Gallery soak (96 of 102 measured)
+## 1. Gallery soak (98 of 104 measured)
 
 Six sketches wrote no record: they hit `timeout 90` before 10 s of sampling or never reached the
 warm-up (unmeasured, reason not checked): animation/04_pause, images/03_pixels, images/04_filters,
@@ -51,7 +51,7 @@ No sketch raised an error. Sorted by second-half slope; full rows in `gallery_so
 | examples/gallery/text/02_align.py | 1100 | 10.5 | 46.9 | 48.2 | 1.28 | 0.85 |  |
 | examples/gallery/text/01_text.py | 3300 | 10.8 | 45.8 | 51.3 | 1.72 | 0.81 |  |
 
-(The other 84 rows are at or under 0.7 MB/1,000 in the second half; see `gallery_soak.jsonl` or run `table.py`.)
+(The table was made when 96 rows were in; the other rows are at or under 0.7 MB/1,000 in the second half; see `gallery_soak.jsonl` or run `table.py`.)
 
 - **animation/05_record_a_gif.py rises to 990 MB in 2,100 frames.** It calls `save_gif("spinner.gif", 2)`.
   The harness runs at fps=1000, so 2 seconds may be 2,000 frames held in memory before writing, not the
