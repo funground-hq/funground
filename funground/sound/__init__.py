@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from .. import analysis
+from .. import analysis, frame_inputs
 from .._options import Tuning, Wave
 from ..api import _sketch_folder, active_sketch, canvas_sketch
 from . import _engine, _microphone, _swaras, _synth as synth, _views
@@ -35,6 +35,13 @@ __all__ = [
 
 def _sound_frame() -> int:
     return canvas_sketch().frame_count
+
+
+def _nothing_to_take(sketch) -> None:
+    """A sketch reads the microphone when it asks, so there is nothing to take before draw()."""
+
+
+frame_inputs.register(_nothing_to_take, _microphone.close_all)      # the sketch's end lets go of every microphone
 
 
 def load(path: str) -> Sound:

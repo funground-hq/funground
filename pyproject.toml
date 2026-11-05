@@ -68,3 +68,4 @@ funground = ["py.typed", "fonts/*.ttf", "fonts/*.txt", "data/*.json", "data/*.ic
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+faulthandler_timeout = 330                # prints every thread's stack; works when a freeze stops pytest-timeout (spike 19)
