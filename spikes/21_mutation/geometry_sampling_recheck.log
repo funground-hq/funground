@@ -108,3 +108,5 @@ real code: survived 74 passed, 1 deselected in 8.19s
 440 575 const 1->2 -> killed
 441 576 const 1->2 -> killed
 442 577 compare Eq->NotEq -> killed
+443 578 const 1->2 -> killed
+444 578 const 2->3 -> killed
