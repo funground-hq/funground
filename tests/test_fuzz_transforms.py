@@ -18,7 +18,7 @@ import funground as f
     lambda: f.apply_matrix(1, 0, 0, 1, float("nan"), 0),
 ])
 def test_a_transform_with_nan_or_inf_is_refused_with_a_sentence(canvas, call):
-    with pytest.raises(ValueError, match=r"^f\.\w+\(\): .*finite number"):
+    with pytest.raises(ValueError, match=r"^f\.\w+\(\): .* came out as "):
         call()
 
 

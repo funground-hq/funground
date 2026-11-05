@@ -21,6 +21,7 @@ from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 
 from . import frame_inputs, ir
+from ._numbers import unusable
 from .capabilities import Capability, FungroundWarning, missing_capability
 from .controls import Button, Checkbox, ControlPanel, Slider, panel_ops
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
@@ -271,7 +272,7 @@ class Sketch:
         """Refuse nan and inf before they reach the matrix: Cairo cannot save a drawing with one."""
         for name, value in values.items():
             if isinstance(value, float) and not math.isfinite(value):
-                raise ValueError(f"f.{call}(): {name} must be a finite number, not {value!r}")
+                raise ValueError(unusable(name, value, f"f.{call}()"))
 
     def translate(self, dx: float, dy: float) -> None:
         self._finite("translate", x=dx, y=dy)
@@ -975,7 +976,7 @@ class Sketch:
         if isinstance(value, bool) or not isinstance(value, (int, float)):
             raise TypeError(f"f.{call}(): {name} must be a number, not {value!r}")
         if isinstance(value, float) and not math.isfinite(value):
-            raise ValueError(f"f.{call}(): {name} must be a finite number, not {value!r}")
+            raise ValueError(unusable(name, value, f"f.{call}()"))
         return math.floor(value)
 
     def get(self, x: float, y: float, w: float | None = None, h: float | None = None):
@@ -1874,7 +1875,7 @@ class Sketch:
             raise ValueError(f"f.arc() mode must be one of {', '.join(self.ARC_MODES)}, not {mode!r}")
         for name, value in (("start", start), ("stop", stop)):
             if isinstance(value, float) and not math.isfinite(value):
-                raise ValueError(f"f.arc(): {name} must be a finite number of degrees, not {value!r}")
+                raise ValueError(unusable(name, value, "f.arc()"))
         if isinstance(start, (int, float)) and isinstance(stop, (int, float)) and start - stop > 360 * 64:
             stop = start + (stop - start) % 360   # the same as adding 360 until stop >= start, without the wait
         while stop < start:
@@ -1958,7 +1959,7 @@ class Sketch:
         if isinstance(offset, bool) or not isinstance(offset, (int, float)):
             raise TypeError(f"f.text_on_path() needs the offset as a number of pixels, not {offset!r}")
         if not math.isfinite(offset):
-            raise ValueError(f"f.text_on_path() needs a finite offset, not {offset!r}")
+            raise ValueError(unusable("offset", offset, "f.text_on_path()"))
         text = str(message).replace(SOFT_HYPHEN, "")
         if "\n" in text:
             raise ValueError("f.text_on_path() sets one line of text, but this message has a new line in it. "

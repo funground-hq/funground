@@ -20,6 +20,8 @@ import struct
 
 import pygame
 
+from ._numbers import unusable
+
 _SVG_MESSAGE = "SVG files cannot be loaded as images; use f.load_svg() to read them as drawings"
 
 
@@ -389,7 +391,7 @@ def check_filter(kind, value):
         if isinstance(value, bool) or not isinstance(value, (int, float)):
             raise TypeError(f"f.filter({kind!r}): the value must be a number, not {value!r}")
         if value != value or value in (float("inf"), float("-inf")):
-            raise ValueError(f"f.filter({kind!r}): the value must be a finite number, not {value!r}")
+            raise ValueError(unusable("the value", value, f"f.filter({kind!r})"))
         return value
 
     if kind == "threshold":

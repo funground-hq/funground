@@ -63,8 +63,8 @@ def test_zero_sized_areas_are_allowed():
 @pytest.mark.parametrize("args, error, match", [
     ((0, 0, -1, 10), ValueError, "cannot be negative"),
     ((0, 0, 10, -0.5), ValueError, "cannot be negative"),
-    ((0, 0, float("inf"), 10), ValueError, "finite"),
-    ((0, float("nan"), 10, 10), ValueError, "finite"),
+    ((0, 0, float("inf"), 10), ValueError, "came out as"),
+    ((0, float("nan"), 10, 10), ValueError, "came out as"),
     (("0", 0, 10, 10), TypeError, "number"),
     ((0, 0, True, 10), TypeError, "number"),
 ])
