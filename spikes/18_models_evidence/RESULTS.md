@@ -62,7 +62,7 @@ onnxruntime 1.26.0, both on 1 thread. Command: `yamnet_compare.py` (see its docs
 Note on top-3. Every raw top-3 difference came from **ties at zero**: on silence Google's model scores "Silence" 1.0 and
 the other 520 classes about 0, so the 2nd and 3rd places are decided by rounding noise (Google picks "Music", the ONNX files
 "Glockenspiel"). With ties excluded (a difference counts only if Google's 3rd score is at least 0.001) there are
-**0** clip-level top-3 differences out of 2,009. A tie-aware window-level count was started late (`compare2.jsonl`); see 1.7.
+**0** clip-level top-3 differences out of 2,009. A second, tie-aware run (`yamnet_summary_run2.json`, the first 381 clips: 9 edge cases and 372 ESC-50 clips, 3,766 windows, with conversion run 2 added) gives **100 % tie-aware window top-3 agreement** for all three ONNX files, and a largest difference of 2.7e-5.
 
 **Framing and padding match Google's.** Window counts are equal for every clip: 5 s gives 10 windows (0.96 s window, 0.48 s
 hop), 1 s gives 2, and anything of 0.96 s or less, including an empty array, gives 1 padded window, in all three models. That
@@ -147,7 +147,191 @@ ICASSP 2017. The exact wording Google prefers was not re-checked here (unverifie
 
 ### 1.7 Not done or partial (YAMNet)
 
-- Tie-aware window-level top-3, and the second conversion run in the full comparison: `compare2.jsonl` was started at low
-  priority late in the session. The count reached is in "For the main session".
+- The tie-aware window-level top-3 count and conversion run 2 cover 381 of the 2,009 clips only (stopped at 07:54 to free the CPUs).
 - Browser timing (onnxruntime-web) was not re-measured; spike 16's numbers stand.
 - A live microphone and noisy rooms were not tested for YAMNet.
+
+---
+
+## Part 2: Whisper (S-234)
+
+### 2.1 Models
+
+| Model | Repo and commit | File | Bytes | SHA-256 |
+|---|---|---|---|---|
+| tiny.en q8 | `onnx-community/whisper-tiny.en` @ `2575352d61be1bf7225cf8f8b268a4678025fc58` | encoder_model_quantized.onnx | 10,124,993 | `e93ec822…3a25` (same as spike 16) |
+| | | decoder_model_merged_quantized.onnx | 30,718,858 | `c0592d07…be52` (same) |
+| base.en q8 | `onnx-community/whisper-base.en` @ `51eefc0af78b103839eda9e7e4f4186acc6517fe` | encoder_model_quantized.onnx | 23,201,320 | `6e8001198c490bbae018c0044f630c2915efb826bad957006ce36152d0ab2a10` |
+| | | decoder_model_merged_quantized.onnx | 53,692,803 | `dd4761a3f7add26afda3512abff4706920404c2517e85a9f2ff090b0c0987909` |
+| both | | tokenizer.json | 2,405,679 | `5eb60cec…10d0` (identical in both repos) |
+
+Download: tiny.en 40.8 MB, base.en **76.9 MB** (1.9 times as much), plus the 2.4 MB tokenizer for either. The decode loop is
+spike 16's (`whisper_desktop.py`: own log-mel, greedy decoding, suppress lists), copied line for line in `whisper_eval.py`. The
+only change is that the empty key/value cache shape is read from `config.json`, because base.en has 8 heads, not 6.
+
+### 2.2 Speech used
+
+| Group | Source | Licence | Used |
+|---|---|---|---|
+| Indian English, read (1 speaker, ksp, male) | CMU ARCTIC 0.95, festvox.org `cmu_us_ksp_arctic-0.95-release.tar.bz2` | free use (the ARCTIC licence: BSD-like, keep the copyright notice) | 57 utterances |
+| US English, read (bdl male, slt female) | CMU ARCTIC 0.95 | same | 47 |
+| Canadian English, read (jmk) | CMU ARCTIC 0.95 | same | 22 |
+| Scottish English, read (awb) | CMU ARCTIC 0.95 | same | 24 |
+| Indian English, **conversational** (2 speakers: EDACC-C05-B, L1 Indian English; EDACC-C36-A, L1 Hindi) | EdAcc, `edinburghcstr/edacc` @ `d9ae7bd344f0562b766ec93ee5ce8f2f9568ce66`, test split, seeded 150 of 631 Indian English rows (147 kept, 143 with words) | CC BY-SA 4.0 (dataset card) | 143 |
+| LibriSpeech test-clean (read audiobooks, mostly US) | openslr.org/resources/12 `test-clean.tar.gz` | CC BY 4.0 | 245 of a seeded 500 |
+
+Sampling seed 18 (`make_manifest.py`; ARCTIC: ksp 200 and 60 for each other speaker in a mixed order, so a stopped run still
+covers everyone). **Not reached:** Svarah (AI4Bharat, Indian English) is gated on the Hub and this session has no token.
+L2-ARCTIC needs registration. I found no openly licensed children's speech in the time available (not searched thoroughly).
+Each run was stopped at 07:54, so not all sampled utterances were transcribed. Both models are compared on exactly the same
+(utterance, condition) pairs.
+
+### 2.3 Conditions
+
+`clean`; `snr20` and `snr10`: seeded room or fan noise (pink noise plus a 100 Hz hum and harmonics, generated; seed from
+the SHA-256 of the utterance id and condition) mixed at 20 and 10 dB SNR (signal-to-noise ratio: the speech is 100 times,
+or 10 times, as strong as the noise); `mic`: a cheap microphone, a 4th-order Butterworth band-pass from 300 to 3,400 Hz.
+ARCTIC got all four. LibriSpeech and EdAcc got clean and snr10 only, to save time. ESC-50 room sounds were not used.
+
+### 2.4 Word error rate
+
+WER (word error rate) = (substituted + deleted + inserted words) / reference words, after normalising: lower case,
+punctuation removed, contractions and numbers written out, fillers (um, uh) and EdAcc event tags removed
+(`whisper_analyse.py`). 95 % interval: 2,000 bootstrap resamples of utterances, seed 18. Lower is better.
+
+| Group (utterances) | Condition | tiny.en WER % (95 % CI) | base.en WER % (95 % CI) |
+|---|---|---|---|
+| **Indian, ARCTIC ksp (57)** | clean | **12.2** (9.3 to 15.5) | **10.5** (7.7 to 13.6) |
+| | snr20 | 12.8 (9.3 to 16.3) | 10.2 (7.4 to 12.8) |
+| | snr10 | 17.9 (14.2 to 21.7) | 13.5 (10.1 to 16.9) |
+| | mic | 14.3 (10.0 to 18.8) | 11.3 (8.2 to 14.7) |
+| **Indian, EdAcc conversation (143)** | clean | **32.2** (24.2 to 43.0) | **26.1** (18.6 to 36.9) |
+| | snr10 | **62.8** (42.0 to 92.9) | 35.4 (27.4 to 46.0) |
+| US, ARCTIC (47; 46 for noisy/mic) | clean | 5.6 (2.6 to 9.3) | 2.8 (0.9 to 5.4) |
+| | snr20 | 6.7 (3.8 to 9.8) | 4.8 (2.2 to 8.0) |
+| | snr10 | 8.6 (5.7 to 11.7) | 5.7 (3.3 to 8.6) |
+| | mic | 7.7 (4.3 to 11.9) | 3.8 (1.5 to 6.8) |
+| Canadian, ARCTIC (22) | clean / snr20 / snr10 / mic | 5.8 / 9.3 / **29.3** / 7.6 | 4.9 / 6.7 / **20.0** / 5.8 |
+| Scottish, ARCTIC (24) | clean / snr20 / snr10 / mic | 4.1 / 5.0 / 13.1 / 3.6 | 3.6 / 3.2 / 6.8 / 4.1 |
+| LibriSpeech test-clean (245) | clean | 6.1 (4.9 to 7.3) | 3.7 (3.0 to 4.4) |
+| | snr10 | 9.8 (8.5 to 11.3) | 5.7 (4.8 to 6.7) |
+
+Full table with intervals, words and the share of utterances that came out exactly right: `whisper_summary.json` → `wer`.
+
+What it says:
+- **Indian English read speech is about twice the error of US read speech** for both models (tiny 12 % against 6 %; base 10 %
+  against 3 %). That is one speaker, so this is an example, not a measure of "Indian English".
+- **Conversation is the real gap.** On EdAcc's two Indian speakers, tiny gets about 1 word in 3 wrong and base 1 in 4. Some of
+  this is the speaking style (fast, overlapping, informal), not the accent; EdAcc has no non-Indian group here to separate
+  the two (not measured).
+- **A noisy room hurts tiny far more than base.** At 10 dB, tiny's EdAcc WER doubles (32 → 63 %) and has **runaway
+  repetition loops** in 5 of 143 utterances (for example "… because it's a good, good, good, good, …" until the 200-token limit).
+  base had 2. The Canadian speaker at 10 dB: tiny 29 %, base 20 %.
+- **The cheap-microphone band (300 to 3,400 Hz) costs little**: 1 to 2 points for either model.
+- **base.en is better in every group and condition.** Its interval overlaps tiny's in most of the small ARCTIC groups, but not
+  on LibriSpeech (245 utterances: 3.7 against 6.1 clean) or on EdAcc in noise.
+
+### 2.5 Speed (real-time factor)
+
+RTF (real-time factor) = seconds of computing / seconds of audio; under 1 is faster than real time. Machine otherwise idle,
+10 LibriSpeech clips (median 6.3 s), warm-up then best of 2 (`whisper_rtf.py`):
+
+| Model | 1 thread: RTF median (max), s per clip | 4 threads: RTF median (max), s per clip |
+|---|---|---|
+| tiny.en q8 | **0.16** (0.24), 1.0 s | 0.18 (0.27), 1.2 s |
+| base.en q8 | **0.30** (0.46), 2.0 s | 0.26 (0.36), 1.7 s |
+
+base.en is about **twice as slow** at 1 thread. 4 threads hardly help here (tiny was slightly *slower*), probably because the
+decoder runs many small steps one token at a time. During the bulk runs (4 to 6 processes sharing 4 CPUs) the medians were
+0.28 (tiny) and 0.59 (base). **Browser speed is unverified.** Spike 16 measured tiny.en at RTF 0.37 to 0.54 in a 1-thread wasm
+worker on the maintainer's slow machine. If base scales the same (about 2x), it would be about 0.8 to 1.1 there: **at or over
+real time** (an estimate, not measured).
+
+### 2.6 Common confusions (for S-236)
+
+Counted on clean speech only, all groups pooled (`whisper_summary.json` → `confusions`, `confusion_groups`). Grouped:
+
+| Kind | tiny.en | base.en | Real examples (reference → heard) |
+|---|---|---|---|
+| Sounds alike (similar spelling or sound) | 235 | 168 | price → prize, mate → made, read → red, scents → sense, omissions → emissions, throw → through, movements → moments, stooped → stop, sheath → sheet |
+| Small words swapped (a, the, he, his …) | 232 | 165 | he → we, an → and, his → has, her → a, you → he, him → me, a → your |
+| Words added | 257 | 228 | "the", "and", "a" put in; in conversation whole phrases |
+| Words dropped | 265 | 221 | "you know", "like", "so", "it's" in conversation (the model tidies speech up) |
+| Names | 16 | 17 | Jeanne → Gene, Young → Yang, Selden's → seldom / cell-dense, Fort Churchill → four Churchill / 4 church till, Yukon → can, Elijah → Aliza |
+| Other substitutions | 154 | 79 | tomfoolery and rot → town full of reindeer (tiny) |
+| Spelling, not hearing | | | manoeuvring → maneuvering (the model writes American spelling) |
+
+The 30 most common single confusions are in the JSON. Most of them are small words dropped or added in EdAcc conversation, and
+these make poor teaching examples. The rows above are the instructive ones for a chapter on why a model is wrong: it guesses
+words that sound alike, it prefers common words to rare names, it tidies up how people really talk, and in noise it can
+**loop**, repeating one word.
+
+### 2.7 Recommendation: tiny.en or base.en
+
+**Keep tiny.en q8 as the default for 0.2, and offer base.en q8 as an opt-in "more accurate" model** (one argument, the same
+loop). Also add a **repetition guard** to the loop, whatever the model: stop when the same token or bigram repeats about 4 times,
+and cap the tokens by clip length. This alone removes the worst failures (runaway loops in noise).
+
+Why. base.en is clearly more accurate (LibriSpeech 3.7 % against 6.1 %; Indian read speech 10.5 % against 12.2 %; noisy
+conversation 35 % against 63 %), but it is 1.9 times the download (76.9 MB against 40.8 MB). It is also about 2 times slower,
+which in the browser at 1 thread probably puts it near real time on a slow machine. For short, clear commands to a sketch,
+tiny's 5 to 12 % is usable. For noisy classrooms and conversational speech neither model is good, and base is much better.
+
+What would change my answer:
+- If a browser measurement shows base.en at RTF under 0.6 on the slowest target machine, **move to base.en**: the accuracy gain
+  in noise is large.
+- If learners mostly speak in noisy rooms (a classroom) or in an Indian English conversational style, base.en is worth its size.
+- If most learners have slow connections, or the 77 MB download is a problem for a classroom's network, stay on tiny.en.
+- More Indian English speakers (Svarah, L2-ARCTIC), children's speech, and real laptop-microphone recordings could move these
+  numbers. They are the main gap.
+
+---
+
+## Problems met
+
+- `github.com` archive downloads are blocked by the session proxy: ESC-50 was fetched with `git clone --depth 1` instead.
+- The first CMU ARCTIC URL (`festvox.org/cmu_arctic/packed/…`) gave 404. The right path is `festvox.org/cmu_arctic/cmu_arctic/packed/…`.
+- Svarah is gated (needs a Hub token). The datasets-server filter endpoint for EdAcc failed with an authentication error, so
+  `fetch_edacc.py` reads parquet row groups by HTTP range instead.
+- The first WER pass counted contractions ("you've" against "you have"), EdAcc fillers and `<COUGH>`-style tags as errors.
+  The normaliser was fixed before the numbers above were made.
+- tf2onnx output is not byte-repeatable (1.4).
+- I typed a bare `python3` once (to read Kaggle's JSON), against the rule. It was the system Python 3.13 in a cloud container,
+  and it ran and printed; no installer was involved.
+- The Whisper bulk runs shared the CPUs (up to 6 processes on 4), so their per-utterance times are not used for speed. Only
+  `whisper_rtf_*.json` (idle machine) is.
+
+---
+
+## For the main session
+
+**Found.**
+1. **S-250 condition met, with evidence.** The community YAMNet ONNX (`d3835ffb…f908e`) matches Google's TensorFlow model
+   (Kaggle `google/yamnet` v1, Apache 2.0, archive `b80da2a1…e5e0`) on all 2,000 ESC-50 clips and 9 edge cases: largest
+   difference 6.7e-5, top-1 agreement 100 % by window and by clip, the same framing and padding, and no top-3 differences
+   apart from ties at zero. Structurally it is a tf2onnx 1.16.1, opset 15 conversion of Google's model.
+2. **tf2onnx is not byte-repeatable** (same weights and graph, different constant names), so a hash can identify the file
+   we host but cannot prove how it was built. The proof is the score comparison (`yamnet_compare.py`).
+3. **YAMNet names parents first.** For learners, the right name is top 1 in only 24.5 % of clean-class ESC-50 clips
+   ("Animal", "Vehicle", "Silence" win), and in the top 3 in 64.6 %. Leaving out "Silence" and broad parent names raised
+   top 1 to about 59 % (optimistic: the list was chosen after looking). This matters more for S-250's helper design than the
+   choice of file.
+4. **Whisper:** tiny.en's error rate is 6 % on clear US read speech, 12 % on one Indian English reader and 32 % on Indian English
+   conversation. Noise at 10 dB doubles the conversation error, and tiny falls into **repetition loops** (5 of 143). base.en
+   is better everywhere (3.7 % against 6.1 % on LibriSpeech), but it is 1.9 times the size and about 2 times slower.
+
+**Fixed:** nothing in funground (none was in scope).
+
+**Needs the maintainer.**
+- Choose which YAMNet file to host: the community file (recommended, now checked) or our conversion run 1 (`d2e2733a…45a4`).
+  Add the AudioSet CC BY 4.0 credit (1.6) to the credits.
+- Whisper: keep tiny.en as the default (recommended), offer base.en as an opt-in, and add a repetition guard to the decode
+  loop (a candidate story). Changing the default model is the maintainer's decision.
+- S-250 helper design: consider skipping "Silence" and parent names when showing a learner the best name. Test that on
+  held-out sounds first.
+- S-236 can use the examples in 2.6.
+- Still unmeasured: browser speed of base.en; more Indian English speakers (Svarah needs a Hub token); children's speech;
+  real laptop-microphone recordings.
+
+**Commits to review** (branch `cloud/models-evidence`, all `[skip ci]`): `git log origin/main..origin/cloud/models-evidence`.
+Only `spikes/18_models_evidence/` is touched.
