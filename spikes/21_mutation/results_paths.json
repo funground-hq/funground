@@ -1,0 +1,343 @@
+{
+ "module": "funground/paths.py",
+ "sites": 37,
+ "done": 37,
+ "killed": 16,
+ "score": 0.432,
+ "partial": false,
+ "mutants": [
+  {
+   "id": 0,
+   "kind": "compare",
+   "line": 51,
+   "desc": "IsNot->Is",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 9 passed, 2 deselected in 0.52s"
+  },
+  {
+   "id": 1,
+   "kind": "compare",
+   "line": 59,
+   "desc": "In->NotIn",
+   "status": "killed",
+   "seconds": 1.8,
+   "tail": "1 failed, 23 passed, 2 deselected in 1.31s"
+  },
+  {
+   "id": 2,
+   "kind": "binop",
+   "line": 62,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 1.8,
+   "tail": "1 failed, 23 passed, 2 deselected in 1.32s"
+  },
+  {
+   "id": 3,
+   "kind": "const",
+   "line": 62,
+   "desc": "0.75->1.75",
+   "status": "killed",
+   "seconds": 1.7,
+   "tail": "1 failed, 23 passed, 2 deselected in 1.27s"
+  },
+  {
+   "id": 4,
+   "kind": "const",
+   "line": 62,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 1.8,
+   "tail": "35 passed, 2 deselected in 1.43s"
+  },
+  {
+   "id": 5,
+   "kind": "boolop",
+   "line": 63,
+   "desc": "And->swap",
+   "status": "killed",
+   "seconds": 1.7,
+   "tail": "1 failed, 23 passed, 2 deselected in 1.17s"
+  },
+  {
+   "id": 6,
+   "kind": "compare",
+   "line": 63,
+   "desc": "In->NotIn",
+   "status": "killed",
+   "seconds": 1.6,
+   "tail": "1 failed, 23 passed, 2 deselected in 1.18s"
+  },
+  {
+   "id": 7,
+   "kind": "const",
+   "line": 63,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 1.7,
+   "tail": "1 failed, 23 passed, 2 deselected in 1.16s"
+  },
+  {
+   "id": 8,
+   "kind": "const",
+   "line": 64,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.50s"
+  },
+  {
+   "id": 9,
+   "kind": "const",
+   "line": 64,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.44s"
+  },
+  {
+   "id": 10,
+   "kind": "const",
+   "line": 66,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 1.7,
+   "tail": "1 failed, 23 passed, 2 deselected in 1.23s"
+  },
+  {
+   "id": 11,
+   "kind": "compare",
+   "line": 199,
+   "desc": "Lt->LtE",
+   "status": "survived",
+   "seconds": 2.0,
+   "tail": "35 passed, 2 deselected in 1.48s"
+  },
+  {
+   "id": 12,
+   "kind": "const",
+   "line": 199,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.45s"
+  },
+  {
+   "id": 13,
+   "kind": "binop",
+   "line": 200,
+   "desc": "Add->Sub",
+   "status": "survived",
+   "seconds": 2.0,
+   "tail": "35 passed, 2 deselected in 1.48s"
+  },
+  {
+   "id": 14,
+   "kind": "unary",
+   "line": 200,
+   "desc": "drop unary minus",
+   "status": "survived",
+   "seconds": 2.0,
+   "tail": "35 passed, 2 deselected in 1.49s"
+  },
+  {
+   "id": 15,
+   "kind": "compare",
+   "line": 201,
+   "desc": "Lt->LtE",
+   "status": "survived",
+   "seconds": 2.1,
+   "tail": "35 passed, 2 deselected in 1.53s"
+  },
+  {
+   "id": 16,
+   "kind": "const",
+   "line": 201,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.48s"
+  },
+  {
+   "id": 17,
+   "kind": "binop",
+   "line": 202,
+   "desc": "Add->Sub",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.41s"
+  },
+  {
+   "id": 18,
+   "kind": "unary",
+   "line": 202,
+   "desc": "drop unary minus",
+   "status": "survived",
+   "seconds": 2.0,
+   "tail": "35 passed, 2 deselected in 1.50s"
+  },
+  {
+   "id": 19,
+   "kind": "binop",
+   "line": 206,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 1.7,
+   "tail": "1 failed, 22 passed, 2 deselected in 1.23s"
+  },
+  {
+   "id": 20,
+   "kind": "binop",
+   "line": 224,
+   "desc": "Add->Sub",
+   "status": "survived",
+   "seconds": 2.0,
+   "tail": "35 passed, 2 deselected in 1.47s"
+  },
+  {
+   "id": 21,
+   "kind": "binop",
+   "line": 224,
+   "desc": "Div->Mult",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.46s"
+  },
+  {
+   "id": 22,
+   "kind": "binop",
+   "line": 224,
+   "desc": "Div->Mult",
+   "status": "survived",
+   "seconds": 2.0,
+   "tail": "35 passed, 2 deselected in 1.49s"
+  },
+  {
+   "id": 23,
+   "kind": "const",
+   "line": 224,
+   "desc": "2->3",
+   "status": "survived",
+   "seconds": 2.0,
+   "tail": "35 passed, 2 deselected in 1.49s"
+  },
+  {
+   "id": 24,
+   "kind": "const",
+   "line": 224,
+   "desc": "2->3",
+   "status": "survived",
+   "seconds": 2.1,
+   "tail": "35 passed, 2 deselected in 1.55s"
+  },
+  {
+   "id": 25,
+   "kind": "compare",
+   "line": 262,
+   "desc": "Lt->LtE",
+   "status": "killed",
+   "seconds": 1.8,
+   "tail": "1 failed, 22 passed, 2 deselected in 1.26s"
+  },
+  {
+   "id": 26,
+   "kind": "const",
+   "line": 262,
+   "desc": "3->4",
+   "status": "killed",
+   "seconds": 1.6,
+   "tail": "1 failed, 22 passed, 2 deselected in 1.18s"
+  },
+  {
+   "id": 27,
+   "kind": "binop",
+   "line": 264,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 1.8,
+   "tail": "1 failed, 22 passed, 2 deselected in 1.29s"
+  },
+  {
+   "id": 28,
+   "kind": "binop",
+   "line": 264,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 1.6,
+   "tail": "1 failed, 22 passed, 2 deselected in 1.13s"
+  },
+  {
+   "id": 29,
+   "kind": "const",
+   "line": 264,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 1.6,
+   "tail": "1 failed, 22 passed, 2 deselected in 1.12s"
+  },
+  {
+   "id": 30,
+   "kind": "const",
+   "line": 264,
+   "desc": "1->2",
+   "status": "killed",
+   "seconds": 1.7,
+   "tail": "1 failed, 22 passed, 2 deselected in 1.24s"
+  },
+  {
+   "id": 31,
+   "kind": "binop",
+   "line": 265,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 1.7,
+   "tail": "1 failed, 22 passed, 2 deselected in 1.24s"
+  },
+  {
+   "id": 32,
+   "kind": "const",
+   "line": 437,
+   "desc": "10->11",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.42s"
+  },
+  {
+   "id": 33,
+   "kind": "const",
+   "line": 527,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.44s"
+  },
+  {
+   "id": 34,
+   "kind": "const",
+   "line": 527,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.53s"
+  },
+  {
+   "id": 35,
+   "kind": "unary",
+   "line": 542,
+   "desc": "drop unary minus",
+   "status": "survived",
+   "seconds": 1.9,
+   "tail": "35 passed, 2 deselected in 1.51s"
+  },
+  {
+   "id": 36,
+   "kind": "unary",
+   "line": 542,
+   "desc": "drop unary minus",
+   "status": "survived",
+   "seconds": 2.0,
+   "tail": "35 passed, 2 deselected in 1.48s"
+  }
+ ]
+}
