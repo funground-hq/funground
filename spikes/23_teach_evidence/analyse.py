@@ -97,7 +97,7 @@ for n in [3, 5, 10]:
         U = rng.choice(idx[out_c], TEST_PER, replace=False); _, mu, tu = predict(X[T], tl, X[U], 1, 2); unk_top.append(tu); unk_m.append(mu)
     kt, km, ko, ut, um = map(np.concatenate, (known_top, known_m, known_ok, unk_top, unk_m))
     rows = []
-    for th in [0.3, 0.4, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8]:
+    for th in [0.8, 0.85, 0.88, 0.9, 0.92, 0.94, 0.96]:
         rows.append({"top_similarity_below": th, "unknown_caught": round(float((ut < th).mean()), 4),
                      "known_right_lost": round(float(((kt < th) & ko).mean()), 4), "known_wrong_caught": round(float(((kt < th) & ~ko).mean()), 4)})
     unk[f"n{n}"] = {"known_accuracy": round(float(ko.mean()), 4),
