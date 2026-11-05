@@ -277,3 +277,58 @@ def test_moved_paths_work_with_booleans(canvas):
 
 def test_outline_draws_with_draw_path(canvas):
     assert fill_area(canvas, line().expand_stroke(10, cap="butt")) > 900
+
+
+# ---------------------------------------------------------------- spike 21 (mutation testing)
+def test_a_thin_stroke_and_the_smallest_miter_limit_are_allowed():
+    # Contract F12: only width <= 0 and miter_limit < 1 are errors; the docstring says "at least 1".
+    assert not line().expand_stroke(0.5).is_empty
+    assert not corner().expand_stroke(4, join="miter", miter_limit=1).is_empty
+
+
+def test_a_dash_list_may_hold_a_zero_length():
+    # Contract F12: only "all-zero or negative entries" are errors, so [0, 6] (dots, with round caps) is allowed.
+    dots = line().expand_stroke(4, cap="round", dash=[0, 10])
+    assert subpaths(dots) >= 5
+
+
+def test_round_caps_reach_exactly_half_the_width_past_the_ends():
+    # Contract F12: round caps "become close quadratic approximations, raised to cubics". The caps of an
+    # 8-wide line from (20, 50) to (120, 50) reach 4 past each end, so the outline holds exactly 16..124.
+    x, y, w, h = line().expand_stroke(8, cap="round").bounds()
+    assert (x, y, w, h) == pytest.approx((16, 46, 108, 8), abs=0.05)
+    assert line().expand_stroke(8, cap="round").contains(123.5, 50)
+    assert not line().expand_stroke(8, cap="round").contains(123.5, 53.5)    # 4.95 from the end
+
+
+def test_the_outline_of_a_curve_follows_the_curve():
+    # Contract F12: the outline covers what a stroke of that width would paint. A circle 60 across (radius 30) stroked
+    # 10 wide is a ring from radius 25 to 35.
+    ring = p.path().circle(100, 100, 60).expand_stroke(10)
+    assert ring.bounds() == pytest.approx((65, 65, 70, 70), abs=0.1)
+    for deg in range(0, 360, 15):
+        a = math.radians(deg)
+        assert ring.contains(100 + 30 * math.cos(a), 100 + 30 * math.sin(a))
+        assert not ring.contains(100 + 22 * math.cos(a), 100 + 22 * math.sin(a))
+        assert not ring.contains(100 + 38 * math.cos(a), 100 + 38 * math.sin(a))
+
+
+def test_bounds_of_an_open_lopsided_curve_is_its_exact_extent():
+    # Contract F12: bounds() is "the path's exact extent", open lines and curves included. Control points
+    # at different heights make the top of the curve lie where only the real control points put it.
+    p0, c1, c2, p3 = (0, 0), (0, -100), (100, -50), (100, 0)
+    samples = [tuple((1 - t) ** 3 * a + 3 * (1 - t) ** 2 * t * b + 3 * (1 - t) * t ** 2 * c + t ** 3 * d
+                     for a, b, c, d in zip(p0, c1, c2, p3)) for t in (i / 20000 for i in range(20001))]
+    top = min(y for _, y in samples)
+    x, y, w, h = p.path().move_to(*p0).curve_to(*c1, *c2, *p3).bounds()
+    assert (x, y, w, h) == pytest.approx((0, top, 100, -top), abs=0.01)
+
+
+def test_the_miter_limit_is_10_at_first():
+    # expand_stroke docstring: "miter_limit: how long a pointed corner may get, at least 1. It is 10 at first."
+    # A corner whose miter is 10.5 times the half-width is cut at the limit 10 but not at 11.
+    theta = 2 * math.asin(1 / 10.5)
+    sharp = p.path().move_to(0, 100).line_to(100, 100).line_to(100 - 100 * math.cos(theta), 100 - 100 * math.sin(theta))
+    default = sharp.expand_stroke(4, join="miter").bounds()
+    assert default == pytest.approx(sharp.expand_stroke(4, join="miter", miter_limit=10).bounds())
+    assert default != pytest.approx(sharp.expand_stroke(4, join="miter", miter_limit=11).bounds())

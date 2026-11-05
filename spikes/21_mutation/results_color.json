@@ -1,0 +1,1819 @@
+{
+ "module": "funground/color.py",
+ "sites": 201,
+ "done": 201,
+ "killed": 189,
+ "score": 0.94,
+ "partial": false,
+ "mutants": [
+  {
+   "id": 0,
+   "kind": "const",
+   "line": 43,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.5,
+   "tail": "E   ValueError: colour component a=256 must be an integer from 0 to 255"
+  },
+  {
+   "id": 1,
+   "kind": "boolop",
+   "line": 49,
+   "desc": "Or->swap",
+   "status": "killed",
+   "seconds": 1.5,
+   "tail": "1 failed, 17 passed in 0.87s"
+  },
+  {
+   "id": 2,
+   "kind": "compare",
+   "line": 49,
+   "desc": "LtE->Lt",
+   "status": "killed",
+   "seconds": 0.5,
+   "tail": "E   ValueError: colour component r=0 must be an integer from 0 to 255"
+  },
+  {
+   "id": 3,
+   "kind": "compare",
+   "line": 49,
+   "desc": "LtE->Lt",
+   "status": "killed",
+   "seconds": 0.5,
+   "tail": "E   ValueError: colour component r=255 must be an integer from 0 to 255"
+  },
+  {
+   "id": 4,
+   "kind": "const",
+   "line": 49,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 0.6,
+   "tail": "E   ValueError: colour component r=0 must be an integer from 0 to 255"
+  },
+  {
+   "id": 5,
+   "kind": "const",
+   "line": 49,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 1.4,
+   "tail": "1 failed, 24 passed in 0.84s"
+  },
+  {
+   "id": 6,
+   "kind": "boolop",
+   "line": 51,
+   "desc": "And->swap",
+   "status": "killed",
+   "seconds": 0.5,
+   "tail": "E   TypeError: object of type 'NoneType' has no len()"
+  },
+  {
+   "id": 7,
+   "kind": "boolop",
+   "line": 51,
+   "desc": "Or->swap",
+   "status": "survived",
+   "seconds": 5.9,
+   "tail": "217 passed in 5.32s"
+  },
+  {
+   "id": 8,
+   "kind": "compare",
+   "line": 51,
+   "desc": "IsNot->Is",
+   "status": "killed",
+   "seconds": 0.5,
+   "tail": "E   TypeError: object of type 'NoneType' has no len()"
+  },
+  {
+   "id": 9,
+   "kind": "compare",
+   "line": 51,
+   "desc": "LtE->Lt",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 87 passed in 0.51s"
+  },
+  {
+   "id": 10,
+   "kind": "compare",
+   "line": 51,
+   "desc": "LtE->Lt",
+   "status": "killed",
+   "seconds": 1.2,
+   "tail": "1 error in 0.70s"
+  },
+  {
+   "id": 11,
+   "kind": "compare",
+   "line": 51,
+   "desc": "NotEq->Eq",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 error in 0.32s"
+  },
+  {
+   "id": 12,
+   "kind": "const",
+   "line": 51,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 1.1,
+   "tail": "1 failed, 87 passed in 0.54s"
+  },
+  {
+   "id": 13,
+   "kind": "const",
+   "line": 51,
+   "desc": "100->101",
+   "status": "survived",
+   "seconds": 5.0,
+   "tail": "217 passed in 4.52s"
+  },
+  {
+   "id": 14,
+   "kind": "const",
+   "line": 51,
+   "desc": "4->5",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 error in 0.24s"
+  },
+  {
+   "id": 15,
+   "kind": "binop",
+   "line": 152,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 1.3,
+   "tail": "1 failed, 78 passed in 0.78s"
+  },
+  {
+   "id": 16,
+   "kind": "binop",
+   "line": 152,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 1.1,
+   "tail": "1 failed, 78 passed in 0.61s"
+  },
+  {
+   "id": 17,
+   "kind": "binop",
+   "line": 152,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 78 passed in 0.30s"
+  },
+  {
+   "id": 18,
+   "kind": "const",
+   "line": 152,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.39s"
+  },
+  {
+   "id": 19,
+   "kind": "const",
+   "line": 152,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.40s"
+  },
+  {
+   "id": 20,
+   "kind": "const",
+   "line": 152,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 78 passed in 0.34s"
+  },
+  {
+   "id": 21,
+   "kind": "binop",
+   "line": 153,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.43s"
+  },
+  {
+   "id": 22,
+   "kind": "const",
+   "line": 153,
+   "desc": "360->361",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 78 passed in 0.34s"
+  },
+  {
+   "id": 23,
+   "kind": "binop",
+   "line": 167,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 78 passed in 0.34s"
+  },
+  {
+   "id": 24,
+   "kind": "binop",
+   "line": 167,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 78 passed in 0.38s"
+  },
+  {
+   "id": 25,
+   "kind": "binop",
+   "line": 167,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.42s"
+  },
+  {
+   "id": 26,
+   "kind": "const",
+   "line": 167,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.42s"
+  },
+  {
+   "id": 27,
+   "kind": "const",
+   "line": 167,
+   "desc": "255->256",
+   "status": "survived",
+   "seconds": 4.8,
+   "tail": "217 passed in 4.41s"
+  },
+  {
+   "id": 28,
+   "kind": "const",
+   "line": 167,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 78 passed in 0.37s"
+  },
+  {
+   "id": 29,
+   "kind": "binop",
+   "line": 168,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 78 passed in 0.28s"
+  },
+  {
+   "id": 30,
+   "kind": "const",
+   "line": 168,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.44s"
+  },
+  {
+   "id": 31,
+   "kind": "binop",
+   "line": 182,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 78 passed in 0.33s"
+  },
+  {
+   "id": 32,
+   "kind": "binop",
+   "line": 182,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 78 passed in 0.39s"
+  },
+  {
+   "id": 33,
+   "kind": "binop",
+   "line": 182,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 78 passed in 0.39s"
+  },
+  {
+   "id": 34,
+   "kind": "const",
+   "line": 182,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 78 passed in 0.38s"
+  },
+  {
+   "id": 35,
+   "kind": "const",
+   "line": 182,
+   "desc": "255->256",
+   "status": "survived",
+   "seconds": 4.6,
+   "tail": "217 passed in 4.22s"
+  },
+  {
+   "id": 36,
+   "kind": "const",
+   "line": 182,
+   "desc": "255->256",
+   "status": "survived",
+   "seconds": 4.6,
+   "tail": "217 passed in 4.22s"
+  },
+  {
+   "id": 37,
+   "kind": "binop",
+   "line": 183,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 78 passed in 0.32s"
+  },
+  {
+   "id": 38,
+   "kind": "const",
+   "line": 183,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 78 passed in 0.29s"
+  },
+  {
+   "id": 39,
+   "kind": "binop",
+   "line": 197,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.6,
+   "tail": "1 failed, 78 passed in 0.28s"
+  },
+  {
+   "id": 40,
+   "kind": "binop",
+   "line": 197,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 78 passed in 0.40s"
+  },
+  {
+   "id": 41,
+   "kind": "binop",
+   "line": 197,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.42s"
+  },
+  {
+   "id": 42,
+   "kind": "const",
+   "line": 197,
+   "desc": "255->256",
+   "status": "survived",
+   "seconds": 5.1,
+   "tail": "217 passed in 4.60s"
+  },
+  {
+   "id": 43,
+   "kind": "const",
+   "line": 197,
+   "desc": "255->256",
+   "status": "survived",
+   "seconds": 4.9,
+   "tail": "217 passed in 4.56s"
+  },
+  {
+   "id": 44,
+   "kind": "const",
+   "line": 197,
+   "desc": "255->256",
+   "status": "survived",
+   "seconds": 5.3,
+   "tail": "217 passed in 4.82s"
+  },
+  {
+   "id": 45,
+   "kind": "binop",
+   "line": 198,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.42s"
+  },
+  {
+   "id": 46,
+   "kind": "const",
+   "line": 198,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 78 passed in 0.38s"
+  },
+  {
+   "id": 47,
+   "kind": "const",
+   "line": 201,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 5.1,
+   "tail": "1 failed, 208 passed in 4.60s"
+  },
+  {
+   "id": 48,
+   "kind": "binop",
+   "line": 221,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 63 passed in 0.36s"
+  },
+  {
+   "id": 49,
+   "kind": "binop",
+   "line": 221,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 64 passed in 0.36s"
+  },
+  {
+   "id": 50,
+   "kind": "binop",
+   "line": 221,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 65 passed in 0.40s"
+  },
+  {
+   "id": 51,
+   "kind": "const",
+   "line": 221,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 63 passed in 0.30s"
+  },
+  {
+   "id": 52,
+   "kind": "const",
+   "line": 221,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 64 passed in 0.46s"
+  },
+  {
+   "id": 53,
+   "kind": "const",
+   "line": 221,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 65 passed in 0.35s"
+  },
+  {
+   "id": 54,
+   "kind": "const",
+   "line": 224,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 4.9,
+   "tail": "1 failed, 208 passed in 4.38s"
+  },
+  {
+   "id": 55,
+   "kind": "binop",
+   "line": 245,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 73 passed in 0.44s"
+  },
+  {
+   "id": 56,
+   "kind": "binop",
+   "line": 245,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 75 passed in 0.39s"
+  },
+  {
+   "id": 57,
+   "kind": "binop",
+   "line": 245,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 74 passed in 0.32s"
+  },
+  {
+   "id": 58,
+   "kind": "const",
+   "line": 245,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 73 passed in 0.47s"
+  },
+  {
+   "id": 59,
+   "kind": "const",
+   "line": 245,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 75 passed in 0.32s"
+  },
+  {
+   "id": 60,
+   "kind": "const",
+   "line": 245,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 74 passed in 0.44s"
+  },
+  {
+   "id": 61,
+   "kind": "const",
+   "line": 248,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.6,
+   "tail": "1 error in 0.23s"
+  },
+  {
+   "id": 62,
+   "kind": "const",
+   "line": 289,
+   "desc": "0.0->1.0",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 80 passed in 0.43s"
+  },
+  {
+   "id": 63,
+   "kind": "const",
+   "line": 289,
+   "desc": "1.0->2.0",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 80 passed in 0.44s"
+  },
+  {
+   "id": 64,
+   "kind": "binop",
+   "line": 290,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 80 passed in 0.44s"
+  },
+  {
+   "id": 65,
+   "kind": "binop",
+   "line": 290,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 80 passed in 0.47s"
+  },
+  {
+   "id": 66,
+   "kind": "binop",
+   "line": 290,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 80 passed in 0.42s"
+  },
+  {
+   "id": 67,
+   "kind": "boolop",
+   "line": 291,
+   "desc": "And->swap",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 105 passed in 0.51s"
+  },
+  {
+   "id": 68,
+   "kind": "compare",
+   "line": 291,
+   "desc": "IsNot->Is",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 105 passed in 0.46s"
+  },
+  {
+   "id": 69,
+   "kind": "compare",
+   "line": 291,
+   "desc": "IsNot->Is",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 105 passed in 0.43s"
+  },
+  {
+   "id": 70,
+   "kind": "binop",
+   "line": 292,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 105 passed in 0.37s"
+  },
+  {
+   "id": 71,
+   "kind": "binop",
+   "line": 292,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 105 passed in 0.50s"
+  },
+  {
+   "id": 72,
+   "kind": "binop",
+   "line": 292,
+   "desc": "Sub->Add",
+   "status": "survived",
+   "seconds": 5.3,
+   "tail": "217 passed in 4.83s"
+  },
+  {
+   "id": 73,
+   "kind": "binop",
+   "line": 293,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 80 passed in 0.51s"
+  },
+  {
+   "id": 74,
+   "kind": "binop",
+   "line": 293,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 1.1,
+   "tail": "1 failed, 80 passed in 0.48s"
+  },
+  {
+   "id": 75,
+   "kind": "binop",
+   "line": 293,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 80 passed in 0.43s"
+  },
+  {
+   "id": 76,
+   "kind": "const",
+   "line": 321,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 17 passed in 0.38s"
+  },
+  {
+   "id": 77,
+   "kind": "compare",
+   "line": 322,
+   "desc": "In->NotIn",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 29 passed in 0.39s"
+  },
+  {
+   "id": 78,
+   "kind": "const",
+   "line": 328,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 62 passed in 0.36s"
+  },
+  {
+   "id": 79,
+   "kind": "const",
+   "line": 346,
+   "desc": "512->513",
+   "status": "survived",
+   "seconds": 5.0,
+   "tail": "217 passed in 4.49s"
+  },
+  {
+   "id": 80,
+   "kind": "compare",
+   "line": 349,
+   "desc": "In->NotIn",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed in 0.26s"
+  },
+  {
+   "id": 81,
+   "kind": "const",
+   "line": 353,
+   "desc": "1->2",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 10 passed in 0.37s"
+  },
+  {
+   "id": 82,
+   "kind": "const",
+   "line": 355,
+   "desc": "2->3",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 13 passed in 0.29s"
+  },
+  {
+   "id": 83,
+   "kind": "boolop",
+   "line": 356,
+   "desc": "And->swap",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 19 passed in 0.34s"
+  },
+  {
+   "id": 84,
+   "kind": "compare",
+   "line": 356,
+   "desc": "In->NotIn",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 10 passed in 0.35s"
+  },
+  {
+   "id": 85,
+   "kind": "compare",
+   "line": 356,
+   "desc": "In->NotIn",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 10 passed in 0.35s"
+  },
+  {
+   "id": 86,
+   "kind": "compare",
+   "line": 356,
+   "desc": "IsNot->Is",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 10 passed in 0.37s"
+  },
+  {
+   "id": 87,
+   "kind": "const",
+   "line": 356,
+   "desc": "6->7",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 10 passed in 0.36s"
+  },
+  {
+   "id": 88,
+   "kind": "const",
+   "line": 356,
+   "desc": "8->9",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 12 passed in 0.37s"
+  },
+  {
+   "id": 89,
+   "kind": "binop",
+   "line": 357,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 10 passed in 0.36s"
+  },
+  {
+   "id": 90,
+   "kind": "const",
+   "line": 357,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 10 passed in 0.34s"
+  },
+  {
+   "id": 91,
+   "kind": "const",
+   "line": 357,
+   "desc": "16->17",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 10 passed in 0.35s"
+  },
+  {
+   "id": 92,
+   "kind": "const",
+   "line": 357,
+   "desc": "2->3",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 10 passed in 0.37s"
+  },
+  {
+   "id": 93,
+   "kind": "const",
+   "line": 357,
+   "desc": "2->3",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 10 passed in 0.30s"
+  },
+  {
+   "id": 94,
+   "kind": "compare",
+   "line": 367,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 6 passed in 0.37s"
+  },
+  {
+   "id": 95,
+   "kind": "const",
+   "line": 367,
+   "desc": "2->3",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 6 passed in 0.37s"
+  },
+  {
+   "id": 96,
+   "kind": "compare",
+   "line": 370,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 6 passed in 0.30s"
+  },
+  {
+   "id": 97,
+   "kind": "const",
+   "line": 370,
+   "desc": "3->4",
+   "status": "killed",
+   "seconds": 0.6,
+   "tail": "1 failed, 6 passed in 0.26s"
+  },
+  {
+   "id": 98,
+   "kind": "const",
+   "line": 371,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 6 passed in 0.27s"
+  },
+  {
+   "id": 99,
+   "kind": "compare",
+   "line": 372,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 0.6,
+   "tail": "1 failed, 9 passed in 0.24s"
+  },
+  {
+   "id": 100,
+   "kind": "const",
+   "line": 372,
+   "desc": "4->5",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 9 passed in 0.37s"
+  },
+  {
+   "id": 101,
+   "kind": "const",
+   "line": 385,
+   "desc": "512->513",
+   "status": "survived",
+   "seconds": 4.7,
+   "tail": "217 passed in 4.28s"
+  },
+  {
+   "id": 102,
+   "kind": "compare",
+   "line": 396,
+   "desc": "Is->IsNot",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 30 passed in 0.38s"
+  },
+  {
+   "id": 103,
+   "kind": "boolop",
+   "line": 398,
+   "desc": "Or->swap",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 30 passed in 0.36s"
+  },
+  {
+   "id": 104,
+   "kind": "compare",
+   "line": 401,
+   "desc": "NotEq->Eq",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 28 passed in 0.39s"
+  },
+  {
+   "id": 105,
+   "kind": "boolop",
+   "line": 410,
+   "desc": "Or->swap",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 82 passed in 0.47s"
+  },
+  {
+   "id": 106,
+   "kind": "compare",
+   "line": 410,
+   "desc": "NotEq->Eq",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 63 passed in 0.41s"
+  },
+  {
+   "id": 107,
+   "kind": "binop",
+   "line": 412,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.6,
+   "tail": "1 failed, 64 passed in 0.26s"
+  },
+  {
+   "id": 108,
+   "kind": "binop",
+   "line": 412,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 63 passed in 0.43s"
+  },
+  {
+   "id": 109,
+   "kind": "binop",
+   "line": 412,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.6,
+   "tail": "1 failed, 63 passed in 0.29s"
+  },
+  {
+   "id": 110,
+   "kind": "binop",
+   "line": 412,
+   "desc": "Mod->FloorDiv",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 64 passed in 0.29s"
+  },
+  {
+   "id": 111,
+   "kind": "const",
+   "line": 412,
+   "desc": "0.0->1.0",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 67 passed in 0.36s"
+  },
+  {
+   "id": 112,
+   "kind": "const",
+   "line": 412,
+   "desc": "0.0->1.0",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 failed, 68 passed in 0.28s"
+  },
+  {
+   "id": 113,
+   "kind": "const",
+   "line": 412,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 63 passed in 0.35s"
+  },
+  {
+   "id": 114,
+   "kind": "const",
+   "line": 412,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 63 passed in 0.37s"
+  },
+  {
+   "id": 115,
+   "kind": "const",
+   "line": 412,
+   "desc": "100.0->101.0",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 71 passed in 0.44s"
+  },
+  {
+   "id": 116,
+   "kind": "const",
+   "line": 412,
+   "desc": "100.0->101.0",
+   "status": "killed",
+   "seconds": 3.2,
+   "tail": "1 failed, 156 passed in 2.83s"
+  },
+  {
+   "id": 117,
+   "kind": "const",
+   "line": 412,
+   "desc": "360->361",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 64 passed in 0.41s"
+  },
+  {
+   "id": 118,
+   "kind": "const",
+   "line": 412,
+   "desc": "360->361",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 70 passed in 0.40s"
+  },
+  {
+   "id": 119,
+   "kind": "boolop",
+   "line": 417,
+   "desc": "Or->swap",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 100 passed in 0.46s"
+  },
+  {
+   "id": 120,
+   "kind": "compare",
+   "line": 417,
+   "desc": "NotEq->Eq",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 error in 0.35s"
+  },
+  {
+   "id": 121,
+   "kind": "compare",
+   "line": 419,
+   "desc": "LtE->Lt",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 87 passed in 0.51s"
+  },
+  {
+   "id": 122,
+   "kind": "compare",
+   "line": 419,
+   "desc": "LtE->Lt",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 error in 0.31s"
+  },
+  {
+   "id": 123,
+   "kind": "const",
+   "line": 419,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 87 passed in 0.56s"
+  },
+  {
+   "id": 124,
+   "kind": "const",
+   "line": 419,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 96 passed in 0.54s"
+  },
+  {
+   "id": 125,
+   "kind": "binop",
+   "line": 428,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 86 passed in 0.45s"
+  },
+  {
+   "id": 126,
+   "kind": "binop",
+   "line": 428,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 86 passed in 0.39s"
+  },
+  {
+   "id": 127,
+   "kind": "const",
+   "line": 428,
+   "desc": "1->2",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 86 passed in 0.50s"
+  },
+  {
+   "id": 128,
+   "kind": "const",
+   "line": 428,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 88 passed in 0.51s"
+  },
+  {
+   "id": 129,
+   "kind": "binop",
+   "line": 429,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 86 passed in 0.54s"
+  },
+  {
+   "id": 130,
+   "kind": "binop",
+   "line": 429,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.7,
+   "tail": "1 error in 0.31s"
+  },
+  {
+   "id": 131,
+   "kind": "binop",
+   "line": 429,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 error in 0.36s"
+  },
+  {
+   "id": 132,
+   "kind": "binop",
+   "line": 429,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 1.0,
+   "tail": "1 failed, 90 passed in 0.56s"
+  },
+  {
+   "id": 133,
+   "kind": "const",
+   "line": 429,
+   "desc": "1->2",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 86 passed in 0.49s"
+  },
+  {
+   "id": 134,
+   "kind": "const",
+   "line": 429,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 90 passed in 0.47s"
+  },
+  {
+   "id": 135,
+   "kind": "const",
+   "line": 429,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 1.1,
+   "tail": "1 failed, 87 passed in 0.62s"
+  },
+  {
+   "id": 136,
+   "kind": "const",
+   "line": 436,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.4,
+   "tail": "E   ValueError: colour component r=256 must be an integer from 0 to 255"
+  },
+  {
+   "id": 137,
+   "kind": "const",
+   "line": 436,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.4,
+   "tail": "E   ValueError: colour component g=256 must be an integer from 0 to 255"
+  },
+  {
+   "id": 138,
+   "kind": "const",
+   "line": 436,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 0.4,
+   "tail": "E   ValueError: colour component b=256 must be an integer from 0 to 255"
+  },
+  {
+   "id": 139,
+   "kind": "const",
+   "line": 437,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 0.9,
+   "tail": "1 failed, 32 passed in 0.38s"
+  },
+  {
+   "id": 140,
+   "kind": "const",
+   "line": 437,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 32 passed in 0.38s"
+  },
+  {
+   "id": 141,
+   "kind": "const",
+   "line": 437,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 0.8,
+   "tail": "1 failed, 32 passed in 0.36s"
+  },
+  {
+   "id": 142,
+   "kind": "const",
+   "line": 444,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 140 passed in 2.29s"
+  },
+  {
+   "id": 143,
+   "kind": "const",
+   "line": 444,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 2.7,
+   "tail": "1 failed, 140 passed in 2.17s"
+  },
+  {
+   "id": 144,
+   "kind": "const",
+   "line": 444,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 2.6,
+   "tail": "1 failed, 140 passed in 2.06s"
+  },
+  {
+   "id": 145,
+   "kind": "const",
+   "line": 444,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 2.6,
+   "tail": "1 failed, 140 passed in 2.14s"
+  },
+  {
+   "id": 146,
+   "kind": "const",
+   "line": 445,
+   "desc": "1->2",
+   "status": "killed",
+   "seconds": 2.9,
+   "tail": "1 failed, 145 passed in 2.42s"
+  },
+  {
+   "id": 147,
+   "kind": "const",
+   "line": 445,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 2.7,
+   "tail": "1 failed, 141 passed in 2.28s"
+  },
+  {
+   "id": 148,
+   "kind": "const",
+   "line": 445,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 141 passed in 2.38s"
+  },
+  {
+   "id": 149,
+   "kind": "const",
+   "line": 445,
+   "desc": "360->361",
+   "status": "killed",
+   "seconds": 2.6,
+   "tail": "1 failed, 142 passed in 2.18s"
+  },
+  {
+   "id": 150,
+   "kind": "const",
+   "line": 446,
+   "desc": "1->2",
+   "status": "killed",
+   "seconds": 4.7,
+   "tail": "1 failed, 194 passed in 4.18s"
+  },
+  {
+   "id": 151,
+   "kind": "const",
+   "line": 446,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 3.0,
+   "tail": "1 failed, 146 passed in 2.49s"
+  },
+  {
+   "id": 152,
+   "kind": "const",
+   "line": 446,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 146 passed in 2.35s"
+  },
+  {
+   "id": 153,
+   "kind": "const",
+   "line": 446,
+   "desc": "360->361",
+   "status": "killed",
+   "seconds": 2.9,
+   "tail": "1 failed, 147 passed in 2.44s"
+  },
+  {
+   "id": 154,
+   "kind": "boolop",
+   "line": 456,
+   "desc": "And->swap",
+   "status": "killed",
+   "seconds": 2.5,
+   "tail": "1 failed, 141 passed in 2.05s"
+  },
+  {
+   "id": 155,
+   "kind": "compare",
+   "line": 456,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 2.6,
+   "tail": "1 failed, 139 passed in 2.14s"
+  },
+  {
+   "id": 156,
+   "kind": "compare",
+   "line": 456,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 2.5,
+   "tail": "1 failed, 139 passed in 2.10s"
+  },
+  {
+   "id": 157,
+   "kind": "const",
+   "line": 456,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 3.0,
+   "tail": "1 failed, 139 passed in 2.45s"
+  },
+  {
+   "id": 158,
+   "kind": "const",
+   "line": 456,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 139 passed in 2.35s"
+  },
+  {
+   "id": 159,
+   "kind": "boolop",
+   "line": 460,
+   "desc": "And->swap",
+   "status": "killed",
+   "seconds": 3.5,
+   "tail": "1 failed, 158 passed in 2.94s"
+  },
+  {
+   "id": 160,
+   "kind": "compare",
+   "line": 460,
+   "desc": "In->NotIn",
+   "status": "killed",
+   "seconds": 2.6,
+   "tail": "1 failed, 141 passed in 2.10s"
+  },
+  {
+   "id": 161,
+   "kind": "const",
+   "line": 460,
+   "desc": "2->3",
+   "status": "killed",
+   "seconds": 4.8,
+   "tail": "1 failed, 193 passed in 4.22s"
+  },
+  {
+   "id": 162,
+   "kind": "const",
+   "line": 460,
+   "desc": "3->4",
+   "status": "killed",
+   "seconds": 2.9,
+   "tail": "1 failed, 141 passed in 2.37s"
+  },
+  {
+   "id": 163,
+   "kind": "const",
+   "line": 460,
+   "desc": "4->5",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 145 passed in 2.34s"
+  },
+  {
+   "id": 164,
+   "kind": "boolop",
+   "line": 465,
+   "desc": "Or->swap",
+   "status": "killed",
+   "seconds": 4.5,
+   "tail": "1 failed, 186 passed in 4.00s"
+  },
+  {
+   "id": 165,
+   "kind": "compare",
+   "line": 465,
+   "desc": "NotEq->Eq",
+   "status": "killed",
+   "seconds": 2.7,
+   "tail": "1 failed, 141 passed in 2.24s"
+  },
+  {
+   "id": 166,
+   "kind": "compare",
+   "line": 468,
+   "desc": "LtE->Lt",
+   "status": "killed",
+   "seconds": 4.7,
+   "tail": "1 failed, 193 passed in 4.13s"
+  },
+  {
+   "id": 167,
+   "kind": "const",
+   "line": 468,
+   "desc": "2->3",
+   "status": "killed",
+   "seconds": 2.7,
+   "tail": "1 failed, 141 passed in 2.19s"
+  },
+  {
+   "id": 168,
+   "kind": "const",
+   "line": 469,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 5.1,
+   "tail": "217 passed in 4.56s"
+  },
+  {
+   "id": 169,
+   "kind": "const",
+   "line": 469,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 4.7,
+   "tail": "1 failed, 194 passed in 4.21s"
+  },
+  {
+   "id": 170,
+   "kind": "const",
+   "line": 469,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 4.7,
+   "tail": "1 failed, 193 passed in 4.22s"
+  },
+  {
+   "id": 171,
+   "kind": "compare",
+   "line": 470,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 4.5,
+   "tail": "1 failed, 193 passed in 4.00s"
+  },
+  {
+   "id": 172,
+   "kind": "const",
+   "line": 470,
+   "desc": "1->2",
+   "status": "killed",
+   "seconds": 4.6,
+   "tail": "1 failed, 193 passed in 4.16s"
+  },
+  {
+   "id": 173,
+   "kind": "const",
+   "line": 470,
+   "desc": "2->3",
+   "status": "killed",
+   "seconds": 4.5,
+   "tail": "1 failed, 193 passed in 4.08s"
+  },
+  {
+   "id": 174,
+   "kind": "compare",
+   "line": 471,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 4.2,
+   "tail": "1 failed, 193 passed in 3.77s"
+  },
+  {
+   "id": 175,
+   "kind": "const",
+   "line": 475,
+   "desc": "3->4",
+   "status": "killed",
+   "seconds": 3.1,
+   "tail": "1 failed, 145 passed in 2.55s"
+  },
+  {
+   "id": 176,
+   "kind": "compare",
+   "line": 476,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 2.4,
+   "tail": "1 failed, 141 passed in 1.98s"
+  },
+  {
+   "id": 177,
+   "kind": "const",
+   "line": 476,
+   "desc": "3->4",
+   "status": "killed",
+   "seconds": 2.5,
+   "tail": "1 failed, 145 passed in 2.11s"
+  },
+  {
+   "id": 178,
+   "kind": "const",
+   "line": 476,
+   "desc": "4->5",
+   "status": "killed",
+   "seconds": 2.6,
+   "tail": "1 failed, 145 passed in 2.08s"
+  },
+  {
+   "id": 179,
+   "kind": "binop",
+   "line": 477,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 2.9,
+   "tail": "1 failed, 149 passed in 2.51s"
+  },
+  {
+   "id": 180,
+   "kind": "binop",
+   "line": 477,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 2.7,
+   "tail": "1 failed, 141 passed in 2.26s"
+  },
+  {
+   "id": 181,
+   "kind": "const",
+   "line": 477,
+   "desc": "0.0->1.0",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 145 passed in 2.31s"
+  },
+  {
+   "id": 182,
+   "kind": "const",
+   "line": 477,
+   "desc": "1.0->2.0",
+   "status": "killed",
+   "seconds": 3.1,
+   "tail": "1 failed, 156 passed in 2.63s"
+  },
+  {
+   "id": 183,
+   "kind": "const",
+   "line": 477,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 2.5,
+   "tail": "1 failed, 141 passed in 2.11s"
+  },
+  {
+   "id": 184,
+   "kind": "compare",
+   "line": 478,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 2.7,
+   "tail": "1 failed, 141 passed in 2.23s"
+  },
+  {
+   "id": 185,
+   "kind": "binop",
+   "line": 479,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 2.9,
+   "tail": "1 failed, 150 passed in 2.43s"
+  },
+  {
+   "id": 186,
+   "kind": "binop",
+   "line": 479,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 2.9,
+   "tail": "1 failed, 149 passed in 2.45s"
+  },
+  {
+   "id": 187,
+   "kind": "const",
+   "line": 479,
+   "desc": "0.0->1.0",
+   "status": "killed",
+   "seconds": 3.2,
+   "tail": "1 failed, 149 passed in 2.74s"
+  },
+  {
+   "id": 188,
+   "kind": "const",
+   "line": 479,
+   "desc": "1.0->2.0",
+   "status": "killed",
+   "seconds": 2.9,
+   "tail": "1 failed, 156 passed in 2.52s"
+  },
+  {
+   "id": 189,
+   "kind": "const",
+   "line": 479,
+   "desc": "255->256",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 149 passed in 2.31s"
+  },
+  {
+   "id": 190,
+   "kind": "binop",
+   "line": 481,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 3.0,
+   "tail": "1 failed, 142 passed in 2.48s"
+  },
+  {
+   "id": 191,
+   "kind": "binop",
+   "line": 481,
+   "desc": "Mod->FloorDiv",
+   "status": "killed",
+   "seconds": 2.4,
+   "tail": "1 failed, 142 passed in 2.03s"
+  },
+  {
+   "id": 192,
+   "kind": "binop",
+   "line": 481,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 2.2,
+   "tail": "1 failed, 142 passed in 1.83s"
+  },
+  {
+   "id": 193,
+   "kind": "const",
+   "line": 481,
+   "desc": "360->361",
+   "status": "killed",
+   "seconds": 2.5,
+   "tail": "1 failed, 142 passed in 1.99s"
+  },
+  {
+   "id": 194,
+   "kind": "compare",
+   "line": 482,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 2.7,
+   "tail": "1 failed, 141 passed in 2.20s"
+  },
+  {
+   "id": 195,
+   "kind": "binop",
+   "line": 483,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 2.2,
+   "tail": "1 failed, 143 passed in 1.71s"
+  },
+  {
+   "id": 196,
+   "kind": "binop",
+   "line": 483,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 143 passed in 2.34s"
+  },
+  {
+   "id": 197,
+   "kind": "binop",
+   "line": 483,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 141 passed in 2.39s"
+  },
+  {
+   "id": 198,
+   "kind": "binop",
+   "line": 483,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 2.5,
+   "tail": "1 failed, 141 passed in 2.05s"
+  },
+  {
+   "id": 199,
+   "kind": "const",
+   "line": 483,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 2.5,
+   "tail": "1 failed, 143 passed in 2.09s"
+  },
+  {
+   "id": 200,
+   "kind": "const",
+   "line": 483,
+   "desc": "100->101",
+   "status": "killed",
+   "seconds": 2.8,
+   "tail": "1 failed, 143 passed in 2.30s"
+  }
+ ]
+}

@@ -48,3 +48,26 @@ def test_noise_detail_changes_the_field():
 def test_noise_detail_rejects_bad_values(args):
     with pytest.raises(ValueError):
         p.noise_detail(*args)
+
+
+# --- Spike 21 (mutation testing) ---------------------------------------------------------------
+
+
+def test_values_stay_between_0_and_1_far_from_the_origin():
+    # Contract H4 and the noise() docstring: noise returns 0-1, for any input. Whole numbers up to
+    # 5000 reach every cell of the 4096-entry lattice, so a lattice one entry short would fail here.
+    p.noise_seed(11)
+    for x in range(0, 5000, 7):
+        for y in (0, 3, 250):
+            assert 0 <= p.noise(x, y) <= 1
+
+
+def test_noise_detail_falloff_changes_the_field():
+    # noise_detail docstring: "falloff: how much each layer fades"; contract H4: 0 < falloff < 1.
+    p.noise_seed(9)
+    p.noise_detail(4, 0.5)
+    half = p.noise(0.37, 0.61)
+    p.noise_detail(4, 0.25)
+    quarter = p.noise(0.37, 0.61)
+    p.noise_detail(4, 0.5)                   # back to the default for the other tests
+    assert quarter != half

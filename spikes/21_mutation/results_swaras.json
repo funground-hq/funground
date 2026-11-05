@@ -1,0 +1,1270 @@
+{
+ "module": "funground/sound/_swaras.py",
+ "sites": 214,
+ "done": 140,
+ "killed": 67,
+ "score": 0.479,
+ "partial": true,
+ "mutants": [
+  {
+   "id": 0,
+   "kind": "boolop",
+   "line": 23,
+   "desc": "Or->swap",
+   "status": "survived",
+   "seconds": 22.1,
+   "tail": "133 passed in 21.56s"
+  },
+  {
+   "id": 1,
+   "kind": "compare",
+   "line": 23,
+   "desc": "LtE->Lt",
+   "status": "survived",
+   "seconds": 23.2,
+   "tail": "133 passed in 22.72s"
+  },
+  {
+   "id": 2,
+   "kind": "compare",
+   "line": 23,
+   "desc": "LtE->Lt",
+   "status": "survived",
+   "seconds": 22.6,
+   "tail": "133 passed in 21.93s"
+  },
+  {
+   "id": 3,
+   "kind": "const",
+   "line": 23,
+   "desc": "20->21",
+   "status": "survived",
+   "seconds": 22.0,
+   "tail": "133 passed in 21.52s"
+  },
+  {
+   "id": 4,
+   "kind": "const",
+   "line": 23,
+   "desc": "5000->5001",
+   "status": "survived",
+   "seconds": 20.9,
+   "tail": "133 passed in 20.52s"
+  },
+  {
+   "id": 5,
+   "kind": "const",
+   "line": 29,
+   "desc": "0.7->1.7",
+   "status": "survived",
+   "seconds": 21.1,
+   "tail": "133 passed in 20.65s"
+  },
+  {
+   "id": 6,
+   "kind": "const",
+   "line": 30,
+   "desc": "5.0->6.0",
+   "status": "survived",
+   "seconds": 19.5,
+   "tail": "133 passed in 19.06s"
+  },
+  {
+   "id": 7,
+   "kind": "const",
+   "line": 31,
+   "desc": "6.0->7.0",
+   "status": "survived",
+   "seconds": 22.5,
+   "tail": "133 passed in 21.95s"
+  },
+  {
+   "id": 8,
+   "kind": "const",
+   "line": 32,
+   "desc": "32->33",
+   "status": "survived",
+   "seconds": 25.7,
+   "tail": "133 passed in 24.58s"
+  },
+  {
+   "id": 9,
+   "kind": "binop",
+   "line": 41,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 7.1,
+   "tail": "1 failed, 25 passed in 6.47s"
+  },
+  {
+   "id": 10,
+   "kind": "const",
+   "line": 41,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 22.9,
+   "tail": "133 passed in 22.14s"
+  },
+  {
+   "id": 11,
+   "kind": "binop",
+   "line": 42,
+   "desc": "Div->Mult",
+   "status": "timeout",
+   "seconds": 62.1,
+   "tail": ""
+  },
+  {
+   "id": 12,
+   "kind": "binop",
+   "line": 42,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 11.5,
+   "tail": "1 failed, 27 passed in 10.87s"
+  },
+  {
+   "id": 13,
+   "kind": "const",
+   "line": 42,
+   "desc": "0.5->1.5",
+   "status": "killed",
+   "seconds": 13.0,
+   "tail": "1 failed, 27 passed in 12.18s"
+  },
+  {
+   "id": 14,
+   "kind": "binop",
+   "line": 43,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 10.4,
+   "tail": "1 failed, 25 passed in 9.79s"
+  },
+  {
+   "id": 15,
+   "kind": "const",
+   "line": 43,
+   "desc": "0.5->1.5",
+   "status": "survived",
+   "seconds": 26.8,
+   "tail": "133 passed in 26.12s"
+  },
+  {
+   "id": 16,
+   "kind": "binop",
+   "line": 44,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 10.4,
+   "tail": "1 failed, 27 passed in 9.70s"
+  },
+  {
+   "id": 17,
+   "kind": "binop",
+   "line": 45,
+   "desc": "Add->Sub",
+   "status": "survived",
+   "seconds": 27.9,
+   "tail": "133 passed in 27.21s"
+  },
+  {
+   "id": 18,
+   "kind": "binop",
+   "line": 45,
+   "desc": "Div->Mult",
+   "status": "survived",
+   "seconds": 29.3,
+   "tail": "133 passed in 28.54s"
+  },
+  {
+   "id": 19,
+   "kind": "binop",
+   "line": 45,
+   "desc": "Sub->Add",
+   "status": "survived",
+   "seconds": 31.7,
+   "tail": "133 passed in 30.93s"
+  },
+  {
+   "id": 20,
+   "kind": "const",
+   "line": 45,
+   "desc": "1.0->2.0",
+   "status": "survived",
+   "seconds": 28.6,
+   "tail": "133 passed in 28.06s"
+  },
+  {
+   "id": 21,
+   "kind": "const",
+   "line": 45,
+   "desc": "1.0->2.0",
+   "status": "survived",
+   "seconds": 30.2,
+   "tail": "133 passed in 29.24s"
+  },
+  {
+   "id": 22,
+   "kind": "binop",
+   "line": 47,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 11.7,
+   "tail": "1 failed, 27 passed in 10.81s"
+  },
+  {
+   "id": 23,
+   "kind": "binop",
+   "line": 47,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 25.6,
+   "tail": "1 failed, 43 passed in 24.73s"
+  },
+  {
+   "id": 24,
+   "kind": "binop",
+   "line": 47,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 12.2,
+   "tail": "1 failed, 27 passed in 10.31s"
+  },
+  {
+   "id": 25,
+   "kind": "binop",
+   "line": 47,
+   "desc": "Pow->Mult",
+   "status": "killed",
+   "seconds": 13.7,
+   "tail": "1 failed, 27 passed in 12.79s"
+  },
+  {
+   "id": 26,
+   "kind": "const",
+   "line": 47,
+   "desc": "0.5->1.5",
+   "status": "killed",
+   "seconds": 12.3,
+   "tail": "1 failed, 25 passed in 11.05s"
+  },
+  {
+   "id": 27,
+   "kind": "const",
+   "line": 47,
+   "desc": "10.0->11.0",
+   "status": "survived",
+   "seconds": 36.2,
+   "tail": "133 passed in 35.17s"
+  },
+  {
+   "id": 28,
+   "kind": "const",
+   "line": 47,
+   "desc": "3.0->4.0",
+   "status": "survived",
+   "seconds": 32.5,
+   "tail": "133 passed in 31.68s"
+  },
+  {
+   "id": 29,
+   "kind": "unary",
+   "line": 47,
+   "desc": "drop unary minus",
+   "status": "killed",
+   "seconds": 24.0,
+   "tail": "1 failed, 43 passed in 23.24s"
+  },
+  {
+   "id": 30,
+   "kind": "binop",
+   "line": 48,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 10.2,
+   "tail": "1 failed, 25 passed in 9.16s"
+  },
+  {
+   "id": 31,
+   "kind": "const",
+   "line": 48,
+   "desc": "0.0->1.0",
+   "status": "survived",
+   "seconds": 32.6,
+   "tail": "133 passed in 31.65s"
+  },
+  {
+   "id": 32,
+   "kind": "const",
+   "line": 49,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 34.7,
+   "tail": "133 passed in 33.34s"
+  },
+  {
+   "id": 33,
+   "kind": "binop",
+   "line": 50,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 10.2,
+   "tail": "1 failed, 25 passed in 9.45s"
+  },
+  {
+   "id": 34,
+   "kind": "const",
+   "line": 50,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 27.9,
+   "tail": "133 passed in 27.00s"
+  },
+  {
+   "id": 35,
+   "kind": "const",
+   "line": 51,
+   "desc": "0.0->1.0",
+   "status": "killed",
+   "seconds": 11.2,
+   "tail": "1 failed, 25 passed in 10.27s"
+  },
+  {
+   "id": 36,
+   "kind": "binop",
+   "line": 55,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 12.1,
+   "tail": "1 failed, 27 passed in 11.11s"
+  },
+  {
+   "id": 37,
+   "kind": "binop",
+   "line": 55,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 11.0,
+   "tail": "1 failed, 25 passed in 10.16s"
+  },
+  {
+   "id": 38,
+   "kind": "binop",
+   "line": 57,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 9.5,
+   "tail": "1 failed, 27 passed in 8.47s"
+  },
+  {
+   "id": 39,
+   "kind": "binop",
+   "line": 57,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 8.4,
+   "tail": "1 failed, 25 passed in 7.71s"
+  },
+  {
+   "id": 40,
+   "kind": "binop",
+   "line": 57,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 12.2,
+   "tail": "1 failed, 25 passed in 11.41s"
+  },
+  {
+   "id": 41,
+   "kind": "binop",
+   "line": 57,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 11.9,
+   "tail": "1 failed, 27 passed in 11.06s"
+  },
+  {
+   "id": 42,
+   "kind": "binop",
+   "line": 61,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 8.9,
+   "tail": "1 failed, 25 passed in 7.77s"
+  },
+  {
+   "id": 43,
+   "kind": "const",
+   "line": 61,
+   "desc": "1->2",
+   "status": "killed",
+   "seconds": 8.1,
+   "tail": "1 failed, 25 passed in 7.52s"
+  },
+  {
+   "id": 44,
+   "kind": "compare",
+   "line": 62,
+   "desc": "Eq->NotEq",
+   "status": "killed",
+   "seconds": 10.5,
+   "tail": "1 failed, 27 passed in 9.54s"
+  },
+  {
+   "id": 45,
+   "kind": "const",
+   "line": 63,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 10.0,
+   "tail": "1 failed, 27 passed in 9.37s"
+  },
+  {
+   "id": 46,
+   "kind": "binop",
+   "line": 64,
+   "desc": "Mult->Div",
+   "status": "survived",
+   "seconds": 30.1,
+   "tail": "133 passed in 29.14s"
+  },
+  {
+   "id": 47,
+   "kind": "const",
+   "line": 64,
+   "desc": "0.004->1.004",
+   "status": "killed",
+   "seconds": 18.4,
+   "tail": "1 failed, 43 passed in 17.57s"
+  },
+  {
+   "id": 48,
+   "kind": "binop",
+   "line": 66,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 10.0,
+   "tail": "1 failed, 25 passed in 9.13s"
+  },
+  {
+   "id": 49,
+   "kind": "binop",
+   "line": 66,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 9.1,
+   "tail": "1 failed, 25 passed in 8.40s"
+  },
+  {
+   "id": 50,
+   "kind": "binop",
+   "line": 67,
+   "desc": "Mult->Div",
+   "status": "survived",
+   "seconds": 31.0,
+   "tail": "133 passed in 29.50s"
+  },
+  {
+   "id": 51,
+   "kind": "const",
+   "line": 67,
+   "desc": "0.5->1.5",
+   "status": "survived",
+   "seconds": 33.4,
+   "tail": "133 passed in 31.66s"
+  },
+  {
+   "id": 52,
+   "kind": "binop",
+   "line": 69,
+   "desc": "Div->Mult",
+   "status": "survived",
+   "seconds": 35.8,
+   "tail": "133 passed in 35.04s"
+  },
+  {
+   "id": 53,
+   "kind": "binop",
+   "line": 69,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 10.6,
+   "tail": "1 failed, 25 passed in 9.63s"
+  },
+  {
+   "id": 54,
+   "kind": "binop",
+   "line": 69,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 12.4,
+   "tail": "1 failed, 25 passed in 11.66s"
+  },
+  {
+   "id": 55,
+   "kind": "binop",
+   "line": 69,
+   "desc": "Sub->Add",
+   "status": "killed",
+   "seconds": 9.6,
+   "tail": "1 failed, 25 passed in 8.48s"
+  },
+  {
+   "id": 56,
+   "kind": "const",
+   "line": 69,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 29.2,
+   "tail": "133 passed in 27.71s"
+  },
+  {
+   "id": 57,
+   "kind": "const",
+   "line": 81,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 8.0,
+   "tail": "1 failed, 26 passed in 7.12s"
+  },
+  {
+   "id": 58,
+   "kind": "const",
+   "line": 81,
+   "desc": "600->601",
+   "status": "survived",
+   "seconds": 30.4,
+   "tail": "133 passed in 29.72s"
+  },
+  {
+   "id": 59,
+   "kind": "const",
+   "line": 82,
+   "desc": "0->1",
+   "status": "killed",
+   "seconds": 11.3,
+   "tail": "1 failed, 25 passed in 10.48s"
+  },
+  {
+   "id": 60,
+   "kind": "const",
+   "line": 82,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 26.2,
+   "tail": "133 passed in 25.59s"
+  },
+  {
+   "id": 61,
+   "kind": "boolop",
+   "line": 83,
+   "desc": "Or->swap",
+   "status": "killed",
+   "seconds": 10.8,
+   "tail": "1 failed, 26 passed in 10.06s"
+  },
+  {
+   "id": 62,
+   "kind": "binop",
+   "line": 92,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 9.0,
+   "tail": "1 failed, 25 passed in 8.19s"
+  },
+  {
+   "id": 63,
+   "kind": "binop",
+   "line": 92,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 9.6,
+   "tail": "1 failed, 25 passed in 8.62s"
+  },
+  {
+   "id": 64,
+   "kind": "binop",
+   "line": 92,
+   "desc": "Pow->Mult",
+   "status": "killed",
+   "seconds": 9.3,
+   "tail": "1 failed, 25 passed in 8.58s"
+  },
+  {
+   "id": 65,
+   "kind": "const",
+   "line": 92,
+   "desc": "2.0->3.0",
+   "status": "killed",
+   "seconds": 9.1,
+   "tail": "1 failed, 27 passed in 8.59s"
+  },
+  {
+   "id": 66,
+   "kind": "compare",
+   "line": 93,
+   "desc": "LtE->Lt",
+   "status": "survived",
+   "seconds": 23.4,
+   "tail": "133 passed in 22.70s"
+  },
+  {
+   "id": 67,
+   "kind": "compare",
+   "line": 93,
+   "desc": "LtE->Lt",
+   "status": "survived",
+   "seconds": 27.1,
+   "tail": "133 passed in 26.50s"
+  },
+  {
+   "id": 68,
+   "kind": "const",
+   "line": 93,
+   "desc": "2000.0->2001.0",
+   "status": "survived",
+   "seconds": 27.7,
+   "tail": "133 passed in 27.06s"
+  },
+  {
+   "id": 69,
+   "kind": "const",
+   "line": 93,
+   "desc": "30.0->31.0",
+   "status": "survived",
+   "seconds": 27.3,
+   "tail": "133 passed in 26.36s"
+  },
+  {
+   "id": 70,
+   "kind": "boolop",
+   "line": 96,
+   "desc": "Or->swap",
+   "status": "survived",
+   "seconds": 26.3,
+   "tail": "133 passed in 25.67s"
+  },
+  {
+   "id": 71,
+   "kind": "binop",
+   "line": 97,
+   "desc": "Mult->Div",
+   "status": "timeout",
+   "seconds": 62.1,
+   "tail": ""
+  },
+  {
+   "id": 72,
+   "kind": "const",
+   "line": 97,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 27.3,
+   "tail": "133 passed in 26.70s"
+  },
+  {
+   "id": 73,
+   "kind": "binop",
+   "line": 99,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 7.9,
+   "tail": "1 failed, 25 passed in 7.08s"
+  },
+  {
+   "id": 74,
+   "kind": "const",
+   "line": 99,
+   "desc": "0.0->1.0",
+   "status": "survived",
+   "seconds": 32.1,
+   "tail": "133 passed in 30.75s"
+  },
+  {
+   "id": 75,
+   "kind": "binop",
+   "line": 100,
+   "desc": "Add->Sub",
+   "status": "timeout",
+   "seconds": 62.3,
+   "tail": ""
+  },
+  {
+   "id": 76,
+   "kind": "binop",
+   "line": 100,
+   "desc": "Mult->Div",
+   "status": "survived",
+   "seconds": 36.8,
+   "tail": "133 passed in 35.20s"
+  },
+  {
+   "id": 77,
+   "kind": "const",
+   "line": 100,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 39.7,
+   "tail": "133 passed in 39.03s"
+  },
+  {
+   "id": 78,
+   "kind": "const",
+   "line": 101,
+   "desc": "0.0->1.0",
+   "status": "survived",
+   "seconds": 36.2,
+   "tail": "133 passed in 35.42s"
+  },
+  {
+   "id": 79,
+   "kind": "const",
+   "line": 102,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 31.7,
+   "tail": "133 passed in 30.80s"
+  },
+  {
+   "id": 80,
+   "kind": "compare",
+   "line": 103,
+   "desc": "Lt->LtE",
+   "status": "survived",
+   "seconds": 37.7,
+   "tail": "133 passed in 37.06s"
+  },
+  {
+   "id": 81,
+   "kind": "binop",
+   "line": 104,
+   "desc": "Mod->FloorDiv",
+   "status": "killed",
+   "seconds": 13.1,
+   "tail": "1 failed, 27 passed in 12.23s"
+  },
+  {
+   "id": 82,
+   "kind": "compare",
+   "line": 105,
+   "desc": "NotIn->In",
+   "status": "killed",
+   "seconds": 13.2,
+   "tail": "1 failed, 25 passed in 12.46s"
+  },
+  {
+   "id": 83,
+   "kind": "const",
+   "line": 106,
+   "desc": "1.0->2.0",
+   "status": "survived",
+   "seconds": 41.0,
+   "tail": "133 passed in 40.03s"
+  },
+  {
+   "id": 84,
+   "kind": "binop",
+   "line": 108,
+   "desc": "Mult->Div",
+   "status": "survived",
+   "seconds": 33.9,
+   "tail": "133 passed in 32.95s"
+  },
+  {
+   "id": 85,
+   "kind": "binop",
+   "line": 109,
+   "desc": "Sub->Add",
+   "status": "survived",
+   "seconds": 35.0,
+   "tail": "133 passed in 33.56s"
+  },
+  {
+   "id": 86,
+   "kind": "binop",
+   "line": 110,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 15.8,
+   "tail": "1 failed, 25 passed in 14.44s"
+  },
+  {
+   "id": 87,
+   "kind": "binop",
+   "line": 110,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 9.6,
+   "tail": "1 failed, 25 passed in 9.15s"
+  },
+  {
+   "id": 88,
+   "kind": "binop",
+   "line": 116,
+   "desc": "Add->Sub",
+   "status": "timeout",
+   "seconds": 62.1,
+   "tail": ""
+  },
+  {
+   "id": 89,
+   "kind": "const",
+   "line": 116,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 31.5,
+   "tail": "133 passed in 30.73s"
+  },
+  {
+   "id": 90,
+   "kind": "binop",
+   "line": 117,
+   "desc": "Add->Sub",
+   "status": "survived",
+   "seconds": 57.3,
+   "tail": "133 passed in 55.99s"
+  },
+  {
+   "id": 91,
+   "kind": "binop",
+   "line": 117,
+   "desc": "FloorDiv->Div",
+   "status": "survived",
+   "seconds": 51.0,
+   "tail": "133 passed in 50.06s"
+  },
+  {
+   "id": 92,
+   "kind": "binop",
+   "line": 117,
+   "desc": "Mod->FloorDiv",
+   "status": "survived",
+   "seconds": 46.1,
+   "tail": "133 passed in 44.50s"
+  },
+  {
+   "id": 93,
+   "kind": "binop",
+   "line": 117,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 48.8,
+   "tail": "1 failed, 43 passed in 46.99s"
+  },
+  {
+   "id": 94,
+   "kind": "binop",
+   "line": 117,
+   "desc": "Mult->Div",
+   "status": "survived",
+   "seconds": 53.5,
+   "tail": "133 passed in 50.48s"
+  },
+  {
+   "id": 95,
+   "kind": "boolop",
+   "line": 118,
+   "desc": "Or->swap",
+   "status": "killed",
+   "seconds": 14.5,
+   "tail": "1 failed, 25 passed in 12.94s"
+  },
+  {
+   "id": 96,
+   "kind": "const",
+   "line": 118,
+   "desc": "1.0->2.0",
+   "status": "survived",
+   "seconds": 55.6,
+   "tail": "133 passed in 54.76s"
+  },
+  {
+   "id": 97,
+   "kind": "unary",
+   "line": 118,
+   "desc": "drop unary minus",
+   "status": "killed",
+   "seconds": 24.6,
+   "tail": "1 failed, 25 passed in 23.16s"
+  },
+  {
+   "id": 98,
+   "kind": "binop",
+   "line": 119,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 19.0,
+   "tail": "1 failed, 25 passed in 17.57s"
+  },
+  {
+   "id": 99,
+   "kind": "binop",
+   "line": 119,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 20.0,
+   "tail": "1 failed, 25 passed in 18.60s"
+  },
+  {
+   "id": 100,
+   "kind": "const",
+   "line": 123,
+   "desc": "11025->11026",
+   "status": "survived",
+   "seconds": 47.1,
+   "tail": "133 passed in 45.89s"
+  },
+  {
+   "id": 101,
+   "kind": "const",
+   "line": 124,
+   "desc": "1024->1025",
+   "status": "survived",
+   "seconds": 42.7,
+   "tail": "133 passed in 41.36s"
+  },
+  {
+   "id": 102,
+   "kind": "const",
+   "line": 125,
+   "desc": "300->301",
+   "status": "survived",
+   "seconds": 42.9,
+   "tail": "133 passed in 41.75s"
+  },
+  {
+   "id": 103,
+   "kind": "const",
+   "line": 126,
+   "desc": "0.02->1.02",
+   "status": "killed",
+   "seconds": 28.7,
+   "tail": "1 failed, 46 passed in 27.14s"
+  },
+  {
+   "id": 104,
+   "kind": "binop",
+   "line": 134,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 27.9,
+   "tail": "1 failed, 43 passed in 26.03s"
+  },
+  {
+   "id": 105,
+   "kind": "const",
+   "line": 134,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 44.1,
+   "tail": "133 passed in 42.97s"
+  },
+  {
+   "id": 106,
+   "kind": "compare",
+   "line": 135,
+   "desc": "Gt->GtE",
+   "status": "survived",
+   "seconds": 45.2,
+   "tail": "133 passed in 44.17s"
+  },
+  {
+   "id": 107,
+   "kind": "const",
+   "line": 135,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 55.3,
+   "tail": "133 passed in 53.90s"
+  },
+  {
+   "id": 108,
+   "kind": "binop",
+   "line": 136,
+   "desc": "Mod->FloorDiv",
+   "status": "killed",
+   "seconds": 57.6,
+   "tail": "1 failed, 47 passed in 55.71s"
+  },
+  {
+   "id": 109,
+   "kind": "binop",
+   "line": 136,
+   "desc": "Sub->Add",
+   "status": "survived",
+   "seconds": 53.6,
+   "tail": "133 passed in 52.65s"
+  },
+  {
+   "id": 110,
+   "kind": "binop",
+   "line": 137,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 37.2,
+   "tail": "1 failed, 43 passed in 34.65s"
+  },
+  {
+   "id": 111,
+   "kind": "binop",
+   "line": 137,
+   "desc": "Div->Mult",
+   "status": "survived",
+   "seconds": 51.5,
+   "tail": "133 passed in 49.74s"
+  },
+  {
+   "id": 112,
+   "kind": "const",
+   "line": 137,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 45.7,
+   "tail": "133 passed in 43.83s"
+  },
+  {
+   "id": 113,
+   "kind": "binop",
+   "line": 140,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 28.6,
+   "tail": "1 failed, 43 passed in 26.51s"
+  },
+  {
+   "id": 114,
+   "kind": "compare",
+   "line": 141,
+   "desc": "Lt->LtE",
+   "status": "survived",
+   "seconds": 44.2,
+   "tail": "133 passed in 43.07s"
+  },
+  {
+   "id": 115,
+   "kind": "binop",
+   "line": 143,
+   "desc": "Sub->Add",
+   "status": "survived",
+   "seconds": 35.7,
+   "tail": "133 passed in 34.62s"
+  },
+  {
+   "id": 116,
+   "kind": "binop",
+   "line": 144,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 25.2,
+   "tail": "1 failed, 43 passed in 24.29s"
+  },
+  {
+   "id": 117,
+   "kind": "binop",
+   "line": 144,
+   "desc": "Mult->Div",
+   "status": "survived",
+   "seconds": 52.4,
+   "tail": "133 passed in 50.92s"
+  },
+  {
+   "id": 118,
+   "kind": "const",
+   "line": 144,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 49.6,
+   "tail": "133 passed in 48.74s"
+  },
+  {
+   "id": 119,
+   "kind": "binop",
+   "line": 145,
+   "desc": "Add->Sub",
+   "status": "survived",
+   "seconds": 44.5,
+   "tail": "133 passed in 43.02s"
+  },
+  {
+   "id": 120,
+   "kind": "binop",
+   "line": 145,
+   "desc": "Add->Sub",
+   "status": "killed",
+   "seconds": 37.8,
+   "tail": "1 failed, 43 passed in 36.67s"
+  },
+  {
+   "id": 121,
+   "kind": "const",
+   "line": 145,
+   "desc": "0->1",
+   "status": "survived",
+   "seconds": 60.8,
+   "tail": "133 passed in 58.99s"
+  },
+  {
+   "id": 122,
+   "kind": "const",
+   "line": 145,
+   "desc": "1->2",
+   "status": "survived",
+   "seconds": 62.0,
+   "tail": "133 passed in 60.54s (0:01:00)"
+  },
+  {
+   "id": 123,
+   "kind": "binop",
+   "line": 146,
+   "desc": "Div->Mult",
+   "status": "timeout",
+   "seconds": 62.1,
+   "tail": ""
+  },
+  {
+   "id": 124,
+   "kind": "const",
+   "line": 149,
+   "desc": "10->11",
+   "status": "timeout",
+   "seconds": 62.0,
+   "tail": ""
+  },
+  {
+   "id": 125,
+   "kind": "const",
+   "line": 150,
+   "desc": "702->703",
+   "status": "survived",
+   "seconds": 49.6,
+   "tail": "133 passed in 48.27s"
+  },
+  {
+   "id": 126,
+   "kind": "const",
+   "line": 151,
+   "desc": "10->11",
+   "status": "survived",
+   "seconds": 47.0,
+   "tail": "133 passed in 45.65s"
+  },
+  {
+   "id": 127,
+   "kind": "compare",
+   "line": 171,
+   "desc": "Lt->LtE",
+   "status": "survived",
+   "seconds": 43.6,
+   "tail": "133 passed in 41.78s"
+  },
+  {
+   "id": 128,
+   "kind": "binop",
+   "line": 173,
+   "desc": "FloorDiv->Div",
+   "status": "killed",
+   "seconds": 38.1,
+   "tail": "1 failed, 43 passed in 36.71s"
+  },
+  {
+   "id": 129,
+   "kind": "const",
+   "line": 173,
+   "desc": "1200->1201",
+   "status": "survived",
+   "seconds": 34.2,
+   "tail": "133 passed in 33.48s"
+  },
+  {
+   "id": 130,
+   "kind": "binop",
+   "line": 174,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 26.0,
+   "tail": "1 failed, 43 passed in 25.10s"
+  },
+  {
+   "id": 131,
+   "kind": "const",
+   "line": 174,
+   "desc": "0.0->1.0",
+   "status": "survived",
+   "seconds": 36.3,
+   "tail": "133 passed in 35.12s"
+  },
+  {
+   "id": 132,
+   "kind": "binop",
+   "line": 177,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 26.6,
+   "tail": "1 failed, 43 passed in 25.16s"
+  },
+  {
+   "id": 133,
+   "kind": "binop",
+   "line": 177,
+   "desc": "Mod->FloorDiv",
+   "status": "killed",
+   "seconds": 25.6,
+   "tail": "1 failed, 43 passed in 24.44s"
+  },
+  {
+   "id": 134,
+   "kind": "binop",
+   "line": 177,
+   "desc": "Mult->Div",
+   "status": "killed",
+   "seconds": 26.7,
+   "tail": "1 failed, 43 passed in 25.25s"
+  },
+  {
+   "id": 135,
+   "kind": "const",
+   "line": 177,
+   "desc": "1200.0->1201.0",
+   "status": "survived",
+   "seconds": 37.8,
+   "tail": "133 passed in 36.94s"
+  },
+  {
+   "id": 136,
+   "kind": "const",
+   "line": 177,
+   "desc": "1200.0->1201.0",
+   "status": "survived",
+   "seconds": 38.5,
+   "tail": "133 passed in 36.79s"
+  },
+  {
+   "id": 137,
+   "kind": "const",
+   "line": 177,
+   "desc": "440.0->441.0",
+   "status": "survived",
+   "seconds": 37.7,
+   "tail": "133 passed in 36.86s"
+  },
+  {
+   "id": 138,
+   "kind": "binop",
+   "line": 179,
+   "desc": "Div->Mult",
+   "status": "killed",
+   "seconds": 27.4,
+   "tail": "1 failed, 43 passed in 25.99s"
+  },
+  {
+   "id": 139,
+   "kind": "binop",
+   "line": 180,
+   "desc": "Mod->FloorDiv",
+   "status": "killed",
+   "seconds": 26.0,
+   "tail": "1 failed, 43 passed in 24.88s"
+  }
+ ]
+}

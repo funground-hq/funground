@@ -79,3 +79,20 @@ def test_public_color_function_and_internal_color_module_coexist():
     assert callable(funground.color) and funground.color("red").rgb == (255, 0, 0)
     module = importlib.import_module("funground.color")
     assert module.Color is Color
+
+
+# --- Spike 21 (mutation testing): the ends of each 0-100 scale, read from every channel ---------
+
+
+def test_grey_has_no_saturation_and_white_is_fully_light():
+    # Color.saturation docstring: "a number from 0 (grey) to 100"; Color.lightness: "0 (black) to 100 (white)".
+    for grey in (Color(128, 128, 128), Color(255, 255, 255), Color(40, 40, 40)):
+        assert grey.saturation == pytest.approx(0, abs=1e-9)
+    assert Color(255, 255, 255).lightness == pytest.approx(100)
+    assert Color(0, 0, 0).lightness == pytest.approx(0)
+
+
+@pytest.mark.parametrize("rgb", [(255, 0, 0), (0, 255, 0), (0, 0, 255)])
+def test_each_full_primary_has_full_brightness(rgb):
+    # Color.brightness docstring: "0 (black) to 100 (full brightness)"; its example: red is 100.
+    assert Color(*rgb).brightness == pytest.approx(100)
