@@ -12,8 +12,8 @@ pygame-ce 2.5.8 (SDL 2.32.10), Hypothesis 6.170.14, pypdf 6.19.0, Pillow 12.3.0.
 | Run | Command (from `spikes/20_api_fuzz`, with `SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy FUNGROUND_HEADLESS=1`) | Cases | Time |
 |---|---|---|---|
 | Single calls | `../../.venv/bin/python harness.py calls OUT` | 11 526 | 348 s |
-| Wild programs | `../../.venv/bin/python harness.py programs OUT 3000 0` | 3 000 | about 6 min |
-| Sane programs | `FUZZ_SANE=1 ../../.venv/bin/python harness.py programs OUT 2000 0` | see below | |
+| Wild programs | `../../.venv/bin/python harness.py programs OUT 3000 0` | 3 000: 272 clean, 2 714 learner errors, 14 findings | 60 s of work (slowed by 7 hangs) |
+| Sane programs | `FUZZ_SANE=1 ../../.venv/bin/python harness.py programs OUT 2000 0` | 2 000 (1 192 scripts, 808 animated): 400 clean with every file read back, 1 600 learner errors, **0 findings** | 293 s |
 
 **The harness** (`harness.py`). The parent imports funground once and forks one child per case, 4 at a time.
 The child sets `RLIMIT_AS` to 2 GB, runs the case in a fresh temporary folder, and reports through a pipe.
@@ -63,9 +63,12 @@ inside examples), `f.full_screen` (needs a display), `f.exit` and `f.stop` (end 
 ## Results
 
 Single calls: 3 768 ran cleanly, 6 341 raised a good learner error, 1 417 were findings
-(`{"ok": 3768, "learner-error": 6341, "finding": 1417}`). Wild programs: 3 000 run, 7 findings of
-class 2 (all `f.arc`) and 1 of class 4. Sane programs: no finding in the part that had finished at
-write-up time (see the end). The full groups are in `groups_calls.jsonl` (one line per group: class,
+(`{"ok": 3768, "learner-error": 6341, "finding": 1417}`). Wild programs: 14 findings: 7 of class 2 (all `f.arc`
+with nan or inf angles) and 7 of class 4 (6 are a nan or inf transform that Cairo refuses at save time,
+group I; 1 is `f.stroke_width(inf)`, row 14). Grouped in `groups_programs.jsonl`. Sane programs: no
+finding; every PNG, PDF, SVG and GIF that 400 surviving programs wrote opened in its parser.
+The learner errors in the program runs are the state checks working (layers do not nest, a vertex
+outside a shape, drawing before `f.size`), not findings. The full groups are in `groups_calls.jsonl` (one line per group: class,
 count, exception, top funground frame, names, shortest repro, message); every case of class 1 to 3 is in
 `severe_calls.jsonl`.
 
@@ -103,9 +106,9 @@ Grouped by cause, worst count first. The suggested sentences follow the house st
 
 | # | Cases | Names | Example call | What the learner sees now | Suggested sentence |
 |---|---|---|---|---|---|
-| 1 | about 640 | `curve`, `curve_vertex`, `bezier_vertex`, `bezier_point`, `map_range`, `lerp`, `norm`, `mag`, `radians`, `degrees`, `rotate`, `shear_x`, `arc`, `text_path`, `text_to_points`, `text_box` (x, y), `random_gaussian`, `random`/`random_number` | `f.map_range("", 0, f.width, 0, 255)` | `TypeError: unsupported operand type(s) for -: 'str' and 'int'` (also `must be real number, not str`, `can only concatenate str`) | `f.map_range(): value must be a number, not ''` |
+| 1 | about 870 | `curve`, `curve_vertex`, `bezier_vertex`, `bezier_point`, `map_range`, `lerp`, `norm`, `mag`, `radians`, `degrees`, `rotate`, `shear_x`, `arc`, `text_path`, `text_to_points`, `text_box` (x, y), `random_gaussian`, `random`/`random_number` | `f.map_range("", 0, f.width, 0, 255)` | `TypeError: unsupported operand type(s) for -: 'str' and 'int'` (also `must be real number, not str`, `can only concatenate str`) | `f.map_range(): value must be a number, not ''` |
 | 2 | 156 | `sound.load`, `f.load_font`, `f.load_image`, `f.load_svg`, `f.svg_paths`, `camera.load_clip` | `f.load_image(0)` | `TypeError: expected str, bytes or os.PathLike object, not int` | `f.load_image() needs a file name in quotes, such as "photo.png", not 0` |
-| 3 | 81 | `apply_matrix`, `shadow`, `curve_tightness`, `lerp_color` (amount), `noise_seed` | `f.shadow("", 6, blur=8)` | `ValueError: could not convert string to float: ''` / `invalid literal for int() with base 10: ''` | `f.shadow(): x must be a number, not ''` |
+| 3 | 100 | `apply_matrix`, `shadow`, `curve_tightness`, `lerp_color` (amount), `noise_seed` | `f.shadow("", 6, blur=8)` | `ValueError: could not convert string to float: ''` / `invalid literal for int() with base 10: ''` | `f.shadow(): x must be a number, not ''` |
 | 4 | 24 | `fill`, `stroke`, `background`, `color`, `lerp_color`, `mark`, `hsb` | `f.stroke(float("inf"))` | `OverflowError: cannot convert float infinity to integer` (`color.py:403`); `f.hsb(inf, ...)`: `cannot convert float NaN to integer` | the existing `colour component inf must be a number from 0 to 255` |
 | 5 | 25 | `size`, `resize_canvas`, `create_graphics`, `inch` (as a size) | `f.size(f.inch(2 ** 63), f.inch(4))`; `f.size(f.inch(1e-308), 288)`; `f.resize_canvas(800, float("nan"))` | `OverflowError: Python int too large to convert to C long` (`cairo2d.py:86`); `AttributeError: 'NoneType' object has no attribute 'get_matrix'` (`sketch.py:384`); `cannot convert float NaN to integer` | `f.size(): the width must be a number of pixels from 1 to 32767, not 6.6e+20` (Cairo's limit) |
 | 6 | 18 + 4 | `polygon`, `random_choice` | `f.polygon(0)`; `f.polygon([1, 2])` | `TypeError: 'int' object is not iterable` | `f.polygon() needs a list of points, such as [(10, 10), (90, 10), (50, 80)]` |
