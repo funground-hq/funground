@@ -6,6 +6,12 @@ session (kernel 6.18, 4 CPUs), 2026-11-05, 07:27 to about 08:10 UTC. Every commi
 Versions unless stated: pygame-ce 2.5.8 (SDL 2.32.10), pycairo 1.29.1, pytest 9.1.1, pytest-timeout 2.4.0, all
 from `tests/constraints.txt`. Environment: `SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy`, as CI.
 
+**Update, 5 Nov, on the maintainer's Windows machine (Python 3.14, the main session).** The deadlock happens on Windows too. A fixed
+20 ms stop missed it in 900 rounds; varied timing (10 to 80 ms) froze in 3 of 3 runs at `self._device.pause(1)`, and collecting
+froze in 1 of 1. The fix did not take the ctypes route below: the audio thread pauses its own device (S-251, D-128). That this was
+the CI hang is still unproven. `faulthandler_timeout = 330` is now in `pyproject.toml`: on Windows, with the GIL held in a C call
+and `--timeout=2`, it printed every thread's stack at 3 s, so the next hang says where it stopped.
+
 ## Summary
 
 | Question | Answer |
