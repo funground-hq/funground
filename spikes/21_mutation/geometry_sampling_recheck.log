@@ -110,3 +110,10 @@ real code: survived 74 passed, 1 deselected in 8.19s
 442 577 compare Eq->NotEq -> killed
 443 578 const 1->2 -> killed
 444 578 const 2->3 -> killed
+445 578 const 3->4 -> killed
+446 580 const 0.0->1.0 -> killed
+447 581 binop Add->Sub -> killed
+448 581 const 1->2 -> survived
+449 581 const 1->2 -> killed
+450 582 binop Div->Mult -> killed
+451 583 binop Sub->Add -> killed
