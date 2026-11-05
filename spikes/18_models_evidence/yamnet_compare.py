@@ -25,10 +25,12 @@ def compare(g, o):
     gw, ow = g[:n], o[:n]
     w1 = [top(a, 1)[0] == top(b, 1)[0] for a, b in zip(gw, ow)]
     w3 = [set(top(a, 3)) == set(top(b, 3)) for a, b in zip(gw, ow)]
+    w3t = [s3 or a[top(a, 3)[2]] < 1e-3 for s3, a in zip(w3, gw)]   # tie-aware: Google's 3rd score under 0.001 means ties at ~0
     gm, om = g.mean(0), o.mean(0)
     return {"win_g": len(g), "win_o": len(o), "max_abs_diff": float(np.abs(gw - ow).max()) if n else None,
             "mean_abs_diff": float(np.abs(gw - ow).mean()) if n else None,
             "win_top1_agree": float(np.mean(w1)) if n else None, "win_top3_set_agree": float(np.mean(w3)) if n else None,
+            "win_top3_set_agree_tieaware": float(np.mean(w3t)) if n else None,
             "clip_max_abs_diff": float(np.abs(gm - om).max()), "clip_top1_agree": top(gm, 1) == top(om, 1),
             "clip_top3_set_agree": set(top(gm, 3)) == set(top(om, 3)), "clip_top3_order_agree": top(gm, 3) == top(om, 3)}
 
