@@ -13,5 +13,5 @@ import funground as f
     lambda: f.ellipse(100, 50, 20, -float("inf")),
 ])
 def test_an_infinite_circle_is_refused_rather_than_stalling_the_pdf(canvas, call):
-    with pytest.raises(ValueError, match=r"^f\.(circle|ellipse)\(\): .*finite number"):
+    with pytest.raises(ValueError, match=r"^f\.(circle|ellipse)\(\): .* came out as "):
         call()

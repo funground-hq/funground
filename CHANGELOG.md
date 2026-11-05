@@ -8,6 +8,10 @@ What changed in funground, newest first. Release numbers follow the
 
 A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
 
+### Changed
+- **nan and infinity get one plain sentence** (S-256, D-130). For example `f.rotate(): angle came out as "not a number" (nan), so it
+  cannot be used. Check how angle was worked out.`
+
 ### Fixed
 - **`f.arc` no longer hangs on a huge or infinite angle, and nan or inf no longer reach a saved file** (S-253, found by spike 20).
   `translate`, `rotate`, `scale`, the shears, `apply_matrix`, `linear_gradient`, `radial_gradient`, `stroke_dash`, `circle`, `ellipse`
