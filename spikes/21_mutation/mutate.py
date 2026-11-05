@@ -207,8 +207,13 @@ def main():
                 _save(out_json, module, n, results, partial=True)
         return info
 
+    ids = range(n)
+    if os.environ.get("MUT_IDS"):  # re-run only these mutants (a JSON file of a results file: its survivors)
+        prev = json.load(open(os.environ["MUT_IDS"], encoding="utf-8"))
+        ids = [r["id"] for r in prev["mutants"] if r["status"] == "survived"]
+        n = len(ids)
     with ThreadPoolExecutor(WORKERS) as pool:
-        list(pool.map(job, range(n)))
+        list(pool.map(job, ids))
     _save(out_json, module, n, results, partial=False)
 
 
