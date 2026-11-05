@@ -509,3 +509,12 @@ def test_the_gallery_poster_saves_a_pdf_of_exact_inks(tmp_path, monkeypatch):
     assert has(found.ops["k"], (0, 0, 0, 1.0)) and has(found.ops["K"], (1, 1, 1, 1))     # the headline; the marks
     assert any(s[0] == "DeviceCMYK" for s in found.shadings)
     assert found.rgb == [] and "ICCBased" not in found.spaces and not found.has_output_intent
+
+
+def test_lerp_of_two_inked_colours_mixes_from_inks_that_are_not_zero():
+    # lerp_color docstring: "If both colours came from f.cmyk(), the result is a cmyk colour too, with mixed
+    # inks" (contract S17). Starting inks that are not zero show which way the mix goes.
+    mid = f.lerp_color(f.cmyk(20, 80, 40, 10), f.cmyk(60, 20, 40, 30), 0.5)
+    assert mid.cmyk == pytest.approx((40.0, 50.0, 40.0, 20.0))
+    quarter = f.lerp_color(f.cmyk(20, 80, 40, 10), f.cmyk(60, 20, 40, 30), 0.25)
+    assert quarter.cmyk == pytest.approx((30.0, 65.0, 40.0, 15.0))
