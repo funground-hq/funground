@@ -218,3 +218,19 @@ def test_sample_path_puts_a_point_every_spacing_along_the_outline():
     assert bend == [(0, 0), (1.0, 0.0), (1.0, 1.0), (1.0, 2.0), (1.0, 3.0)]        # a piece 1 long counts
     square = sample_path(Path.rect(10, 20, 40, 40), 10)
     assert len(square) == 16 and square[0] == (10, 20) and len(set(square)) == 16    # the start is not repeated
+
+
+def test_path_measure_follows_a_circle_and_faces_along_it():
+    # PathMeasure docstring: the length is the sum of pieces made "exact for a circle"; point_at gives "a point
+    # on it, and the direction of the curve itself there", as rotate() reads it (clockwise on the screen).
+    # Path.ellipse is within 0.03 per cent of a true circle, so the checks allow that.
+    from funground.geometry import PathMeasure
+
+    r = 30
+    route = PathMeasure(Path.ellipse(50, 50, r, r))
+    assert route.length == pytest.approx(2 * math.pi * r, rel=0.0005)
+    for d in (5, 10, 33.3, 50, 77, 120, 160):
+        x, y, degrees = route.point_at(d)
+        assert math.hypot(x - 50, y - 50) == pytest.approx(r, abs=0.0003 * r + 0.1)
+        facing = math.degrees(math.atan2(y - 50, x - 50)) + 90                      # at right angles to the radius
+        assert (degrees - facing + 180) % 360 - 180 == pytest.approx(0, abs=0.5)
