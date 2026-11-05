@@ -21,7 +21,9 @@ from collections.abc import Iterator
 from fractions import Fraction
 
 MOTION_FORMATS = ("gif", "mp4")
-MEMORY_LIMIT = 64 * 1024 * 1024           # bytes of frames kept in memory; beyond this they go to a temporary file
+# Bytes of frames kept in memory; beyond this they go to a temporary file. Small, because the move happens inside one
+# frame: at 64 MB it stalled that frame for about 360 ms, and at 8 MB the worst frame was 9 to 28 ms (S-255).
+MEMORY_LIMIT = 8 * 1024 * 1024
 
 _NO_ENCODER_GIF = (
     "f.save_gif() and saving a .gif need Pillow or ffmpeg, and neither was found. "
