@@ -187,3 +187,21 @@ def test_ellipse_and_arc_curves_follow_the_ellipse():
     # "If stop is not above start, only the line to the start is added"; a small sweep is still an arc
     assert [s[0] for s in Path().move_to(0, 0).arc_to(50, 40, 30, 12, 45, 45).segments] == ["move", "line"]
     assert [s[0] for s in Path().move_to(0, 0).arc_to(50, 40, 30, 12, 45, 45.5).segments] == ["move", "line", "cubic"]
+
+
+def test_contours_flatten_curves_to_the_tolerance_and_keep_the_sub_paths():
+    # geometry.contours docstring: "The sub-paths of path as polylines (curves flattened to tolerance), each
+    # with a flag for whether it was closed. A closing segment is added as a straight piece back to the start."
+    # Path.ellipse is within 0.03 per cent of a true circle (its docstring), so every point and every chord
+    # middle must be within that plus the tolerance of the circle.
+    from funground.geometry import contours
+
+    r, tol = 30, 0.01
+    (poly, closed), = contours(Path.ellipse(50, 50, r, r), tol)
+    assert closed and poly[0] == poly[-1] and len(poly) > 8
+    slack = 0.0003 * r + tol + 1e-9
+    for (ax, ay), (bx, by) in zip(poly, poly[1:]):
+        assert abs(math.hypot(ax - 50, ay - 50) - r) < 0.0003 * r + 1e-9
+        assert abs(math.hypot((ax + bx) / 2 - 50, (ay + by) / 2 - 50) - r) < slack
+    parts = contours(Path().move_to(0, 0).line_to(10, 0).line_to(10, 10).close().move_to(50, 50).line_to(60, 50))
+    assert parts == [([(0, 0), (10, 0), (10, 10), (0, 0)], True), ([(50, 50), (60, 50)], False)]
