@@ -292,10 +292,13 @@ def test_open_capture_converts_16_bit_and_averages_channels(monkeypatch):
             def __init__(self, callback, **kw):
                 self.callback = callback
 
+            def close(self):
+                pass
+
     monkeypatch.setattr(mi, "_sdl2_audio", lambda: Audio)
-    device, rate = mi._open_capture(None, got.append)
+    capture, rate = mi._open_capture(None, got.append)
     pcm = array("h", [16384, 0, -16384, -16384])  # two frames of two channels
-    device.callback(device, memoryview(pcm.tobytes()))
+    capture.device.callback(capture.device, memoryview(pcm.tobytes()))
     assert rate == 44100
     assert list(got[0]) == pytest.approx([0.25, -0.5])
 

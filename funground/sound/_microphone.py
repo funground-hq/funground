@@ -8,11 +8,17 @@ A microphone listens on SDL's audio thread. The callback copies what it hears in
 the last 10 seconds of mono samples. A lock guards the buffer, because the callback writes on that
 thread while the sketch reads on its own. The analysis (level, spectrum, pitch) is the same code that
 sounds use (``_engine._Analysis``). The microphone is never played back.
+
+The device is stopped from its own audio thread, and every microphone closes when the sketch ends:
+``_Capture`` says why.
 """
 from __future__ import annotations
 
+import sys
+import time
 from array import array
-from threading import Lock
+from threading import Event, Lock
+from weakref import WeakSet
 
 from .. import host_services
 from . import _engine as _sound
@@ -21,6 +27,8 @@ from ._engine import _Analysis, _is_headless
 BUFFER_SECONDS = 10
 RATE = 44100
 CHUNK = 512
+CALLBACK_WAIT = 0.25                      # seconds for the audio thread to answer; a chunk comes every 12 ms
+CALLBACK_RETURN = 0.02                    # seconds for a callback that has answered to finish returning
 
 _NEEDS_NEW_PYGAME = ("microphone input needs pygame-ce 2.5 or newer (its pygame._sdl2.audio module "
                      "was not found). Update it with: pip install --upgrade pygame-ce")
@@ -64,6 +72,59 @@ def _device_names() -> list[str]:
         raise RuntimeError(_no_device_message(f"the computer's audio system did not answer ({exc})")) from exc
 
 
+class _Capture:
+    """An SDL capture device that can stop without freezing the sketch.
+
+    SDL calls the callback while it holds the device's lock, and the callback needs Python's lock (the GIL) to run.
+    pygame's pause() and close() hold the GIL and wait for the device. If a callback is waiting at that moment, each
+    waits for the other for ever, and no Python timeout can fire (spike 19, on Windows and Linux). Collecting a running
+    device does the same. So nothing here pauses a running device from outside: pause(1) asks the audio thread to do
+    it, from inside the callback, where it already holds both locks, and waits with the GIL free. A paused device makes
+    no more callbacks, so closing it is safe once the last one has returned, which pause(1) also waits for.
+    """
+
+    def __init__(self, listen) -> None:
+        self._listen = listen                 # listen(device, view) receives what the device heard
+        self.device = None                    # the pygame AudioDevice, set by _open_capture
+        self._running = False
+        self._pausing = False
+        self._paused = Event()
+
+    def on_audio(self, device, view) -> None:
+        """The device's callback, on SDL's audio thread."""
+        if self._pausing:
+            device.pause(1)
+            self._paused.set()
+        else:
+            self._listen(device, view)
+
+    def pause(self, flag: int) -> None:
+        """Listen with pause(0); stop with pause(1)."""
+        if not flag:
+            self._pausing = False
+            self._paused.clear()
+            self._running = True
+            self.device.pause(0)              # a paused device has no callback to wait for
+        elif self._running:
+            self._running = False
+            self._pausing = True
+            if not self._paused.wait(CALLBACK_WAIT):      # a device that has gone quiet makes no callback to wait for
+                self.device.pause(1)
+            time.sleep(CALLBACK_RETURN)       # the last callback needs the GIL to return, and close() would hold it
+
+    def close(self) -> None:
+        """Stop and let go of the device. Closing again does nothing."""
+        if self.device is None:
+            return
+        self.pause(1)
+        self.device.close()
+        self.device = None
+
+    def __del__(self) -> None:
+        if not sys.is_finalizing():           # at exit pygame has already closed the audio system
+            self.close()
+
+
 def _open_capture(name: str | None, callback):
     """Open an input device that calls ``callback(samples)`` with a list of floats from -1 to 1.
     Returns ``(device, rate)``. The device has ``pause(0)`` to listen, ``pause(1)`` to stop and
@@ -89,13 +150,14 @@ def _open_capture(name: str | None, callback):
                                 for i in range(0, len(chunk) - channels + 1, channels)])
         callback(chunk)
 
+    capture = _Capture(on_audio)
     try:
-        device = audio.AudioDevice(devicename=name, iscapture=True, frequency=RATE,
-                                   audioformat=audio.AUDIO_F32, numchannels=1, chunksize=CHUNK,
-                                   allowed_changes=audio.AUDIO_ALLOW_FORMAT_CHANGE, callback=on_audio)
+        capture.device = audio.AudioDevice(devicename=name, iscapture=True, frequency=RATE,
+                                           audioformat=audio.AUDIO_F32, numchannels=1, chunksize=CHUNK,
+                                           allowed_changes=audio.AUDIO_ALLOW_FORMAT_CHANGE, callback=capture.on_audio)
     except Exception as exc:
         raise RuntimeError(_no_device_message(f"the microphone could not be opened ({exc})")) from exc
-    return device, int(getattr(device, "frequency", RATE) or RATE)
+    return capture, int(getattr(capture.device, "frequency", RATE) or RATE)
 
 
 def microphones() -> list[str]:
@@ -126,6 +188,15 @@ def make(name: str | None = None, frame_source=None) -> "Microphone":
             return Microphone(candidate, frame_source)
     raise RuntimeError(_no_device_message(f"no microphone has {name!r} in its name (they are: "
                                           + ", ".join(repr(n) for n in names) + ")"))
+
+
+_started: WeakSet["Microphone"] = WeakSet()      # to close when the sketch ends; a dropped microphone closes itself
+
+
+def close_all() -> None:
+    """Close every microphone that has been started. The sketch's end calls this, through ``frame_inputs``."""
+    for mic in list(_started):
+        mic.close()
 
 
 class Microphone(_Analysis):
@@ -184,6 +255,8 @@ class Microphone(_Analysis):
             return
         with self._lock:
             self._total = 0
+        if _host_input() is None:                # a host closes its own microphone when the run ends
+            _started.add(self)
         if not self._silent:
             if self._device is None:
                 self._device, self._rate = _open_capture(self._device_name, self._feed)
@@ -383,3 +456,4 @@ class Microphone(_Analysis):
             except Exception:
                 pass
             self._device = None
+        _started.discard(self)
