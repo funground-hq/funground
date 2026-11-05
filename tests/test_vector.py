@@ -116,3 +116,74 @@ def test_plain_numbers_take_the_fast_path_and_everything_else_is_as_before():
         p.Vector(1, 1) * True
     with pytest.raises(TypeError):
         p.Vector(1, 1) / "2"
+
+
+# --- Spike 21 (mutation testing): cases where x and y are both non-zero and unequal, so a swapped
+# sign, a swapped operator or a swapped index shows. Each states where the behaviour is written.
+
+
+def test_an_x_y_pair_is_read_in_order():
+    # Contract H5: add/sub/set/dist/dot/cross/lerp accept "an (x, y) pair".
+    assert p.Vector(0, 0).add((1, 2)) == (1, 2)
+    assert p.Vector(5, 5).sub([1, 2]) == (4, 3)
+
+
+def test_from_angle_scales_by_the_length():
+    # from_angle docstring: "length: how long the vector is"; 0 degrees points right.
+    assert close(p.Vector.from_angle(0, 2), 2, 0)
+    assert close(p.Vector.from_angle(90, 10), 0, 10)    # the docstring's example
+
+
+def test_normalize_lengthens_a_short_vector_to_1():
+    # normalize docstring: "Make the length 1, keeping the direction". It applies below length 1 too.
+    assert close(p.Vector(0.3, 0.4).normalize(), 0.6, 0.8)
+
+
+def test_set_heading_keeps_the_length():
+    # set_heading docstring example: Vector(5, 0).set_heading(90) is about (0, 5).
+    assert close(p.Vector(5, 0).set_heading(90), 0, 5)
+
+
+def test_rotate_turns_any_vector_clockwise_and_keeps_its_length():
+    # rotate docstring: "A positive angle turns clockwise on the screen" (90 = down, contract H5).
+    v = p.Vector(3, 4)
+    turned = v.copy().rotate(90)
+    assert close(turned, -4, 3)
+    assert math.isclose(turned.mag(), 5)
+    assert math.isclose(turned.heading(), v.heading() + 90)
+    assert close(p.Vector(3, 4).rotate(-90), 4, -3)
+    sixty = v.copy().rotate(60)                     # an angle whose sine and cosine are both non-zero
+    assert math.isclose(sixty.mag(), 5) and math.isclose(sixty.heading(), v.heading() + 60)
+
+
+def test_lerp_moves_part_of_the_way_from_where_the_vector_is():
+    # lerp docstring: "Move part of the way towards another vector"; 0 stays, 1 arrives.
+    assert p.Vector(10, 10).lerp(p.Vector(20, 30), 0.5) == (15, 20)
+    assert p.Vector(10, 10).lerp((20, 30), 1) == (20, 30)
+    assert p.Vector(10, 10).lerp((20, 30), 0) == (10, 10)
+
+
+def test_dist_from_a_point_that_is_not_the_origin():
+    # dist docstring: "The distance from this point to another".
+    assert p.Vector(1, 2).dist(p.Vector(4, 6)) == 5
+    assert p.Vector(4, 6).dist((1, 2)) == 5
+
+
+def test_dot_is_x_times_x_plus_y_times_y():
+    # dot docstring: "It is x * other.x + y * other.y".
+    assert p.Vector(2, 3).dot(p.Vector(4, 5)) == 23
+    assert p.Vector(2, 3).dot((4, -5)) == -7
+
+
+def test_angle_between_vectors_that_are_not_on_the_axes():
+    # angle_between docstring: "The angle that turns this vector's direction onto another's", signed.
+    assert math.isclose(p.Vector(1, 1).angle_between(p.Vector(-1, 1)), 90)
+    assert math.isclose(p.Vector(-1, 1).angle_between(p.Vector(1, 1)), -90)
+    assert math.isclose(p.Vector(2, 0).angle_between(p.Vector(1, 1)), 45)
+
+
+def test_vectors_are_equal_only_when_both_x_and_y_match():
+    # Contract H5: a vector is "equal to a vector or an (x, y) pair".
+    assert p.Vector(1, 2) == p.Vector(1, 2)
+    assert p.Vector(1, 2) != p.Vector(1, 3)
+    assert p.Vector(1, 2) != p.Vector(0, 2)
