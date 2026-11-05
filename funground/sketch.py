@@ -1384,7 +1384,8 @@ class Sketch:
     def stroke_dash(self, pattern, offset: float = 0) -> None:
         """Dashed strokes: stroke_dash(10) or stroke_dash([12, 4, 2, 4]); offset shifts the pattern."""
         values = (pattern,) if isinstance(pattern, (int, float)) else tuple(pattern)
-        if not values or any((not isinstance(v, (int, float))) or v < 0 for v in values) or sum(values) == 0:
+        if (not values or any((not isinstance(v, (int, float))) or not math.isfinite(v) or v < 0 for v in values)
+                or sum(values) == 0):                # nan or inf makes a PDF no reader can open
             raise ValueError("f.stroke_dash() needs one or more lengths of 0 or more, not all 0, e.g. f.stroke_dash([10, 5])")
         self._states.update(dash=tuple(float(v) for v in values), dash_offset=float(offset))
 
