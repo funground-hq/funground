@@ -1,4 +1,4 @@
-"""What ``ml.pose()`` and ``ml.hand()`` give back: a Body and a Hand (D-125).
+"""What ``ml.pose()``, ``ml.hand()`` and ``ml.words()`` give back: a Body, a Hand and some Words (D-125, D-126).
 
 Each named point is an attribute and an ``f.Vector`` in the pixels of the source as drawn at (0, 0). The names are
 MediaPipe's own, so its documentation still helps.
@@ -105,3 +105,24 @@ class Hand(_Points):
     def from_points(cls, xy, score: float) -> "Hand":
         points = {name: Vector(float(row[0]), float(row[1])) for name, row in zip(HAND_NAMES, xy)}
         return cls(points, score)
+
+
+class Words:
+    """The words heard by ``ml.words()``.
+
+    ``words.text`` is what was said, with the model's own capitals and punctuation, and is never empty. ``words.score`` (0 to 1)
+    is how sure the model is. ``words.is_new`` is True in the frame the answer first shows up, and False in the frames after, so
+    ``if words and words.is_new:`` does something once for each thing said. ``str(words)`` is the text.
+    """
+
+    def __init__(self, text: str, score: float, is_new: bool = False) -> None:
+        self.text = text
+        self.score = score
+        self.is_new = is_new
+
+    def __str__(self) -> str:
+        return self.text
+
+    def __repr__(self) -> str:
+        shown = self.text if len(self.text) <= 40 else self.text[:37] + "..."
+        return f"<Words {shown!r} score {self.score:.2f}{', new' if self.is_new else ''}>"

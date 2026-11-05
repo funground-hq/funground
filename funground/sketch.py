@@ -2583,7 +2583,7 @@ class Sketch:
         self._guides = []
         self._frame_sequence = None
         self._motion = None                      # a recording the sketch did not live to finish is dropped
-        frame_inputs.stop_all()                  # a camera's light goes off
+        frame_inputs.stop_all()                  # a camera's light goes off, a microphone is let go
         self._renderer.attach(0, 0)
         self._platform.close()
         self._end_panel()

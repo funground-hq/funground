@@ -33,7 +33,7 @@ In the examples, `import funground as f` is understood. A library's examples als
 - [The sound library](#the-sound-library): [`load`](#fn-sound-load), [`create`](#fn-sound-create), [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`pluck`](#fn-sound-pluck), [`melody`](#fn-sound-melody), [`sequence`](#fn-sound-sequence), [`mix`](#fn-sound-mix), [`drone`](#fn-sound-drone), [`note_to_frequency`](#fn-sound-note_to_frequency), [`frequency_to_note`](#fn-sound-frequency_to_note), [`chord_notes`](#fn-sound-chord_notes), [`microphone`](#fn-sound-microphone), [`microphones`](#fn-sound-microphones), [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`spectrogram`](#fn-sound-spectrogram), [`draw_pitch_line`](#fn-sound-draw_pitch_line)
 - [The sangeet library](#the-sangeet-library): [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga), [`talas`](#fn-sangeet-talas), [`tala_info`](#fn-sangeet-tala_info), [`tala`](#fn-sangeet-tala), [`match_ragas`](#fn-sangeet-match_ragas)
 - [The camera library](#the-camera-library): [`open`](#fn-camera-open), [`names`](#fn-camera-names), [`load_clip`](#fn-camera-load_clip)
-- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`person`](#fn-ml-person)
+- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`person`](#fn-ml-person), [`words`](#fn-ml-words)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
@@ -5216,6 +5216,53 @@ f.image(ml.person(cam), 0, 0)
 ```
 
 See also: [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`image`](#fn-image).
+
+<a id="fn-ml-words"></a>
+### `ml.words`
+
+```py
+ml.words(source)
+```
+
+Listen to a microphone or a sound, and give the words in it.
+
+It understands English. For a microphone (``sound.microphone()``, started) funground cuts what it hears into phrases: a phrase
+starts when the sound gets louder than a whisper and ends after a short pause. Each phrase is worked on beside your sketch, so
+``draw()`` never waits. The words appear a moment after the speaker pauses (a second or two on a slow computer). Until then you
+get the last words, or None before the first. If you pass a sound (for example ``mic.capture(3)`` or ``sound.load("a.wav")``),
+the whole sound is one phrase, at most 30 seconds. On a computer the call waits for the answer, and asking again about the same
+sound is free. In Play it gives None until the answer arrives.
+
+You get a Words. ``words.text`` is what was said, with capitals and full stops. ``words.score`` (0 to 1) says how sure the
+model is. ``words.is_new`` is True in the frame the words first appear, and False after that, so you can do something once for
+each thing said. ``str(words)`` is the text. When the model is not sure (a score under 0.4) or hears nothing, the answer is
+dropped and you keep the last words. A microphone that is not listening, or one with no sound (``FUNGROUND_HEADLESS=1``), gives
+None or the last words. Calling it twice in one frame gives the same Words.
+
+The first call downloads the words model (42 MB) and keeps it in a ``models/`` folder beside your sketch; it prints one line
+when it does. The sound never leaves your computer.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a microphone from sound.microphone(), or a Sound. |
+
+**Returns.** a Words, or None if nothing has been heard yet.
+
+**Raises.**
+
+- `TypeError`: if source is not a microphone or a sound.
+- `ValueError`: if the sound is longer than 30 seconds.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+mic = sound.microphone()
+mic.start()
+heard = ml.words(mic)
+if heard:
+    f.text(heard.text, 20, 100)
+```
+
+See also: [`pose`](#fn-ml-pose), [`sound.microphone`](#fn-sound-microphone).
 
 <a id="live-values"></a>
 ## Live values

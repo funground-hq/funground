@@ -29,3 +29,13 @@ The photograph is only used to run the pose and hand models in `test_models.py`.
   original size, 330 x 454, not scaled.
 
 The photograph is only used to run the pose model in `test_models.py`. `standing_woman_640.jpg` (above) is used for the hand tests.
+
+## tts.wav
+
+- **What:** a computer voice saying "Draw a red circle in the middle of the screen, then make it bounce off the walls and change
+  color every time it hits one." 7.2 s, 16 kHz, mono.
+- **Where from:** made on the maintainer's machine with Windows' own voice (System.Speech, Microsoft David) and resampled, in the
+  S-231 speech spike (spikes/16_models/speech_sounds/).
+- **Author and licence:** funground, CC0.
+
+The sound is only used to run the words model in `test_words_model.py`.

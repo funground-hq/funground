@@ -11006,6 +11006,14 @@
     "summary": "Cut the person out of a camera or a picture.",
     "url": "reference/API.md#fn-ml-person",
     "returns": "Picture"
+   },
+   {
+    "name": "words",
+    "kind": "function",
+    "signature": "words(source)",
+    "detail": "(source)",
+    "summary": "Listen to a microphone or a sound, and give the words in it.",
+    "url": "reference/API.md#fn-ml-words"
    }
   ]
  }

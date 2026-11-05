@@ -2,8 +2,9 @@
 
 The core never imports a library. A library that has a live input, such as the camera, registers two functions here
 when it is imported: ``take(sketch)``, which the sketch calls once before each ``draw()`` (so everything in one frame
-sees the same input, like the mouse; contract I4), and ``stop()``, which the sketch calls when it ends. With no
-library imported, the lists are empty and the sketch does nothing. This is not learner API.
+sees the same input, like the mouse; contract I4), and ``stop()``, which the sketch calls when it ends. The microphone
+is read when the sketch asks, so its ``take`` does nothing. With no library imported, the lists are empty and the sketch
+does nothing. This is not learner API.
 """
 from __future__ import annotations
 
