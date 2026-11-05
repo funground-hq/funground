@@ -1,0 +1,16 @@
+{
+ "model": "tiny",
+ "clips": 10,
+ "threads_1": {
+  "rtf_median": 0.156,
+  "rtf_max": 0.243,
+  "s_per_utt_median": 1.022,
+  "audio_s_median": 6.27
+ },
+ "threads_4": {
+  "rtf_median": 0.181,
+  "rtf_max": 0.274,
+  "s_per_utt_median": 1.185,
+  "audio_s_median": 6.27
+ }
+}

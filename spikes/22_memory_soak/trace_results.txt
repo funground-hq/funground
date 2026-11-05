@@ -1,0 +1,30 @@
+## 01_blend_opacity_shadow.py: frames 100..700
+- /home/user/funground/funground/typography.py:279: size=1773 KiB (+1316 KiB), count=11947 (+8433), average=152 B
+- /home/user/funground/funground/typography.py:248: size=56.8 KiB (+47.0 KiB), count=606 (+501), average=96 B
+- /home/user/funground/funground/renderers/cairo2d.py:224: size=46.9 KiB (+39.2 KiB), count=600 (+502), average=80 B
+- <string>:4: size=47.0 KiB (+39.1 KiB), count=601 (+501), average=80 B
+- /usr/lib/python3.11/tracemalloc.py:558: size=37.0 KiB (+36.9 KiB), count=621 (+620), average=61 B
+## 03_clock.py: frames 100..700
+- /home/user/funground/funground/typography.py:279: size=1829 KiB (+1409 KiB), count=12650 (+9017), average=148 B
+- /home/user/funground/funground/typography.py:263: size=1562 KiB (+1331 KiB), count=30514 (+25998), average=52 B
+- /home/user/funground/funground/typography.py:262: size=139 KiB (+118 KiB), count=559 (+471), average=255 B
+- /home/user/funground/funground/ir.py:265: size=60.7 KiB (+41.4 KiB), count=311 (+212), average=200 B
+- /usr/lib/python3.11/tracemalloc.py:558: size=39.6 KiB (+39.5 KiB), count=641 (+640), average=63 B
+## 08_draw_a_wave.py: frames 100..700
+- /home/user/funground/funground/typography.py:279: size=2020 KiB (+1805 KiB), count=14111 (+11730), average=147 B
+- /home/user/funground/funground/geometry.py:141: size=685 KiB (+596 KiB), count=6680 (+5226), average=105 B
+- /usr/lib/python3.11/tracemalloc.py:558: size=128 KiB (+128 KiB), count=2179 (+2178), average=60 B
+- /home/user/funground/funground/sketch.py:2167: size=72.7 KiB (+71.1 KiB), count=551 (+535), average=135 B
+- /home/user/funground/funground/geometry.py:225: size=52.0 KiB (+50.9 KiB), count=666 (+652), average=80 B
+## stress_new_pictures.py: frames 50..250
+- /home/user/funground/funground/picture.py:343: size=114 MiB (+90.4 MiB), count=251 (+190), average=466 KiB
+- /home/user/funground/funground/sketch.py:109: size=632 KiB (+475 KiB), count=253 (+190), average=2560 B
+- /home/user/funground/funground/sketch.py:131: size=392 KiB (+294 KiB), count=509 (+383), average=788 B
+- /usr/lib/python3.11/random.py:164: size=83.3 KiB (+62.6 KiB), count=510 (+384), average=167 B
+- /home/user/funground/funground/picture.py:188: size=80.7 KiB (+59.3 KiB), count=1260 (+950), average=66 B
+## stress_text_sizes.py: frames 50..250
+- /home/user/funground/funground/typography.py:263: size=10.9 MiB (+8978 KiB), count=236721 (+190249), average=48 B
+- /home/user/funground/funground/typography.py:262: size=793 KiB (+637 KiB), count=249 (+200), average=3260 B
+- /usr/lib/python3.11/tracemalloc.py:558: size=212 KiB (+212 KiB), count=3369 (+3368), average=64 B
+- /home/user/funground/spikes/22_memory_soak/stress_text_sizes.py:8: size=110 KiB (+88.2 KiB), count=251 (+200), average=450 B
+- /home/user/funground/funground/typography.py:279: size=409 KiB (+66.8 KiB), count=5365 (+394), average=78 B
