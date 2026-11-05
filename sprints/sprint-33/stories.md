@@ -19,12 +19,12 @@ pass, on the desktop and in Play, before the tag.
 
 | Story | Value | Status |
 |---|---|---|
-| S-234 | Words you say: `ml.words(mic)`, speech to words on the device, the same on the desktop and in Play | desktop and Python side built; the funground-web worker is next |
+| S-234 | Words you say: `ml.words(mic)`, speech to words on the device, the same on the desktop and in Play | done 5 Nov (#63, web #23); a real microphone in Play is for the maintainer's test pass |
 | S-251 | A microphone stops without freezing the sketch (found by spike 19; added 5 Nov, before S-234, which rests on it) | done |
 | S-250 | Sounds: `ml.sound(mic)`, the most likely sound with how sure, and the next guesses | planned |
 | S-235 | A model you teach: `ml.teach(...)` and `ml.guess(...)`, a few examples of each kind from the camera | planned |
 | S-236 | The guide chapter on models: what a model is, what it learnt from, why it is wrong, what stays on your computer | planned |
-| S-238 | Spike: signing in to GitHub from Play (carried over from sprint 32) | waits for the GitHub App and the Worker |
+| S-238 | Spike: signing in to GitHub from Play (carried over from sprint 32) | done 5 Nov: passed on a laptop and a phone; D-118 awaits the maintainer |
 | S-239 | The sketchbook in Play (after S-238 and D-118) | planned |
 | S-240 | Embed: only the code and the picture, for the guide and the course | planned |
 | S-241 | Spike: stop without restarting | planned |
@@ -39,6 +39,6 @@ S-236; S-240 and S-242 between heavy jobs; S-238 as soon as the accounts exist. 
 
 - [x] Contract row: what `ml.words(mic)` takes and gives, when it answers (a phrase after a pause), to the maintainer if it changes D-126's meaning
 - [x] Desktop: Whisper tiny.en q8 in `funground-ml`, pinned and checked by SHA-256; the spike's decode loop as product code
-- [ ] The microphone's samples to the model in Play, without `async` in the sketch
-- [ ] Desktop and Play give the same words for the same recording, by test
+- [x] The microphone's samples to the model in Play, without `async` in the sketch
+- [x] Desktop and Play give the same words for the same recording, by test
 - [x] Reference, gallery example and golden, guide section, Quick Reference row

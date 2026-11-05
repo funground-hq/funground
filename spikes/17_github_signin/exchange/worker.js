@@ -21,7 +21,6 @@ const API = "https://api.github.com";
 // Only these pages may call the worker. Add the exact origin of your test server when testing.
 const ALLOWED_ORIGINS = new Set([
   "https://funground-hq.github.io",
-  "https://funground-signin-test.samir-01a.workers.dev",   // the phone test of spike S-238; remove with that Worker
   "http://localhost:8000",
   "http://localhost:8080",
   "http://127.0.0.1:8000",
