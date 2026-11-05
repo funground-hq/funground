@@ -3,7 +3,8 @@
     whisper_analyse.py OUT.json RESULTS.jsonl [RESULTS.jsonl ...]     (model name = file name before the first '_')
 
 Normalised text: lower case; hyphens to spaces; contractions expanded (n't, 're, 've, i'm, 'll; not 's or 'd); punctuation removed (apostrophes inside words kept); whole numbers
-0 to 9,999 and simple ordinals written as words; mr/mrs/dr expanded. WER = (S + D + I) / reference words, pooled over
+0 to 9,999 and simple ordinals written as words; mr/mrs/dr expanded; fillers (um, uh, er, hmm ...) and EdAcc <tags> removed; utterances with no reference words dropped.\n"runaway": utterances whose hypothesis has more than 2 x reference words + 10 (a repetition loop).
+Confusions: clean condition only, so one mistake is not counted once per condition. WER = (S + D + I) / reference words, pooled over
 utterances. 95 % interval: 2,000 bootstrap resamples of utterances (seed 18). Duplicate (id, cond) rows: the first is kept.
 """
 import json, os, re, sys
@@ -24,9 +25,11 @@ def ordinal(n):
     w[-1] = ORD.get(last, (last[:-1] + "ieth") if last.endswith("y") else last + "th"); return " ".join(w)
 CONTR = [(r"\bwon't\b", "will not"), (r"\bcan't\b", "can not"), (r"\bcannot\b", "can not"), (r"n't\b", " not"), (r"'re\b", " are"),
          (r"'ve\b", " have"), (r"\bi'm\b", "i am"), (r"'ll\b", " will")]
+FILLERS = {"um", "uh", "er", "erm", "ah", "hmm", "mm", "mhm", "uhm"}
 ABBR = {"mr": "mister", "mrs": "missus", "dr": "doctor", "st": "saint", "ok": "okay"}
 
 def norm(t):
+    t = re.sub(r"<[^>]*>", " ", t)                     # EdAcc event tags: <COUGH>, <LAUGH>, <NO-SPEECH>, <DTMF>
     t = t.lower().replace("-", " ").replace("—", " ")
     t = re.sub(r"(\d),(\d)", r"\1\2", t)
     t = re.sub(r"\b(\d{1,4})(st|nd|rd|th)\b", lambda m: ordinal(int(m.group(1))), t)
@@ -35,7 +38,7 @@ def norm(t):
     for a, b in CONTR: t = re.sub(a, b, t)
     t = re.sub(r"[^a-z' ]", " ", t)
     t = re.sub(r"(^| )'|'( |$)", " ", t)
-    return " ".join(ABBR.get(w, w) for w in t.split())
+    return " ".join(ABBR.get(w, w) for w in t.split() if w not in FILLERS)
 
 FUNC = set("a an the and of to in on at is was it he she i you we they his her for with as but or that this be by from had have".split())
 
@@ -64,6 +67,7 @@ if __name__ == "__main__":
             r["_o"] = o
     # only (id, cond) pairs present for every model, so the models are compared on the same utterances
     keys = set.intersection(*(set(rs) for rs in rows.values()))
+    keys = {k for k in keys if norm(next(iter(rows.values()))[k]["ref"])}      # drop utterances with no words (EdAcc <NO-SPEECH>)
     for model, rs in rows.items():
         groups = defaultdict(list)
         for k in keys:
@@ -72,6 +76,7 @@ if __name__ == "__main__":
             w, lo, hi = wer_ci([r["S"] + r["D"] + r["I"] for r in lst], [r["N"] for r in lst], np.random.default_rng(18))
             out["wer"].append({"model": model, "group": g, "cond": c, "utts": len(lst), "words": sum(r["N"] for r in lst),
                                "wer": round(float(w) * 100, 1), "ci95": [round(lo * 100, 1), round(hi * 100, 1)],
+                               "runaway": sum(len(norm(r["hyp"]).split()) > 2 * r["N"] + 10 for r in lst),
                                "utt_exact": round(100 * float(np.mean([r["S"] + r["D"] + r["I"] == 0 for r in lst])), 1)})
         sp = [r for r in rs.values()]
         out["speed"][model] = {"threads": sorted({r["threads"] for r in sp}), "rows": len(sp),
@@ -79,7 +84,12 @@ if __name__ == "__main__":
                                "s_per_utt_median": round(float(np.median([r["run_s"] for r in sp])), 3),
                                "note": "3 Whisper runs and 1 YAMNet run shared 4 CPUs, 1 thread each"}
         sub, dele, ins = Counter(), Counter(), Counter()
+        names_in_refs = set()
         for k in keys:
+            raw = rs[k]["ref"].split()
+            names_in_refs |= {norm(w) for w in raw[1:] if w[:1].isupper() and not rs[k]["ref"].isupper()} - {"i", ""}
+        for k in keys:
+            if k[1] != "clean": continue
             r = rs[k]; o = r["_o"]; ref, hyp = o.references[0], o.hypotheses[0]
             for a in o.alignments[0]:
                 if a.type == "substitute":
@@ -88,11 +98,21 @@ if __name__ == "__main__":
                     for i in range(a.ref_start_idx, a.ref_end_idx): dele[ref[i]] += 1
                 elif a.type == "insert":
                     for j in range(a.hyp_start_idx, a.hyp_end_idx): ins[hyp[j]] += 1
-        allc = [("substitute", f"{a} -> {b}", n, "function word" if a in FUNC or b in FUNC else "content word") for (a, b), n in sub.items()]
-        allc += [("delete", w, n, "function word" if w in FUNC else "content word") for w, n in dele.items()]
-        allc += [("insert", w, n, "function word" if w in FUNC else "content word") for w, n in ins.items()]
+        def kind(a, b=None):
+            import difflib
+            if a in names_in_refs: return "name"
+            if a in FUNC or (b and b in FUNC): return "small word"
+            if b is None: return "content word"
+            return "sounds alike" if difflib.SequenceMatcher(None, a, b).ratio() >= 0.5 else "other word"
+        allc = [("substitute", f"{a} -> {b}", n, kind(a, b)) for (a, b), n in sub.items()]
+        allc += [("delete", w, n, kind(w)) for w, n in dele.items()]
+        allc += [("insert", w, n, "small word" if w in FUNC else "content word") for w, n in ins.items()]
+        out.setdefault("confusion_totals", {})[model] = {"substitutions": sum(sub.values()), "deletions": sum(dele.values()), "insertions": sum(ins.values())}
         allc.sort(key=lambda x: -x[2])
         out["confusions"][model] = allc[:30]
+        g = Counter()
+        for c in allc: g[(c[0], c[3])] += c[2]
+        out.setdefault("confusion_groups", {})[model] = sorted([[a, b, n] for (a, b), n in g.items()], key=lambda x: -x[2])
     for k in sorted(keys)[:0]: pass
     # learner-facing examples: Indian English clean, both models wrong or differing
     ex = [k for k in sorted(keys) if k[1] == "clean" and rows["tiny"][k]["group"] == "indian" and rows["tiny"][k]["S"] + rows["tiny"][k]["D"] + rows["tiny"][k]["I"] > 0] if "tiny" in rows else []
