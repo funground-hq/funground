@@ -242,3 +242,28 @@ With one class there is no runner-up, so there is no margin, and every picture i
 - **Still not measured:** pictures from a learner's own webcam (the maintainer's suggested next test), more than 5 classes, and k=3
   on Imagenette.
 - **Commit to review:** the Imagenette scripts and results commits on `cloud/teach-evidence`, both marked [skip ci].
+
+---
+
+# For the main session
+
+Both runs finished; there are no partial numbers and no jobs still running.
+
+- **Found:**
+  - On Rock Paper Scissors (rendered hands, 3 classes), k=1 beats k=3 in every clean setting by 5 to 8 points. It is far better
+    with uneven teaching (20 against 3: 61 % against 35 % for the small class). With 1 of 5 labels wrong the two are a tie
+    (62 % against 61 %).
+  - Real photos of different things (Imagenette, 2 to 5 classes) reach 96 to 99 % with 3 examples a class. Look-alike classes are
+    where examples matter.
+  - The raw margin ranks guesses well but is on the wrong scale. The proposal `0.5 + 0.5 * min(1, margin / M)` with M between 0.075
+    and 0.1 calibrates well on held-out splits. The floor should stay 0.5, not 1/n: a near-tie is right 45 to 52 % of the time with
+    2 to 5 classes.
+  - Untaught pictures score as high as taught ones, so a "does not know" threshold is costly.
+- **Fixed:** nothing. Only spike files were added; nothing in `funground/` or `ml/` changed.
+- **Needs the maintainer:**
+  - the S-235 contract row: k=1 fixed, the `.score` formula and its constant, `.score = 0.5` with a warning when one class is taught,
+    and no "does not know" by default;
+  - pinning the DINOv2 q8 file (this session's file: SHA-256 `c179f8f7…7efb`, 24,446,700 bytes);
+  - a small test with pictures from a real webcam before the row is final.
+- **Commits to review** on `cloud/teach-evidence`, all marked [skip ci]: c8ae78a (plan), 6627bcf (scripts), 0c53fbc (RPS results),
+  plus the times-correction commit, fb5c231 (Imagenette scripts), ee63f26 (Imagenette results), and this closing commit.
