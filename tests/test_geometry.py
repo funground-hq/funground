@@ -216,5 +216,5 @@ def test_sample_path_puts_a_point_every_spacing_along_the_outline():
     assert line == [(0, 0)] + [(float(x), 0.0) for x in range(10, 101, 10)]       # the end, at 100, too
     bend = sample_path(Path().move_to(0, 0).line_to(1, 0).line_to(1, 3), 1)
     assert bend == [(0, 0), (1.0, 0.0), (1.0, 1.0), (1.0, 2.0), (1.0, 3.0)]        # a piece 1 long counts
-    square = sample_path(Path.rect(0, 0, 40, 40), 10)
-    assert len(square) == 16 and square[0] == (0, 0) and len(set(square)) == 16    # the start is not repeated
+    square = sample_path(Path.rect(10, 20, 40, 40), 10)
+    assert len(square) == 16 and square[0] == (10, 20) and len(set(square)) == 16    # the start is not repeated
