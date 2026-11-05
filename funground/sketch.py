@@ -1801,10 +1801,12 @@ class Sketch:
         return x, y, w, h                       # "center": numbers untouched
 
     def circle(self, x: float, y: float, diameter: float) -> None:
+        self._finite("circle", diameter=diameter)    # an infinite circle stalls Cairo's PDF and SVG
         x, y, w, _ = self._ellipse_box(x, y, diameter, diameter, one_size=True)
         self._emit(ir.Circle(x, y, w, self.style))
 
     def ellipse(self, x: float, y: float, width: float, height: float) -> None:
+        self._finite("ellipse", width=width, height=height)
         x, y, width, height = self._ellipse_box(x, y, width, height)
         self._emit(ir.Ellipse(x, y, width, height, self.style))
 
