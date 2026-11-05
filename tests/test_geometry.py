@@ -234,3 +234,6 @@ def test_path_measure_follows_a_circle_and_faces_along_it():
         assert math.hypot(x - 50, y - 50) == pytest.approx(r, abs=0.0003 * r + 0.1)
         facing = math.degrees(math.atan2(y - 50, x - 50)) + 90                      # at right angles to the radius
         assert (degrees - facing + 180) % 360 - 180 == pytest.approx(0, abs=0.5)
+    # along a straight line the direction is the line's own: (10, 20) to (40, 60) is a 3-4-5 slope
+    x, y, degrees = PathMeasure(Path().move_to(10, 20).line_to(40, 60)).point_at(25)
+    assert (x, y) == pytest.approx((25, 40)) and degrees == pytest.approx(math.degrees(math.atan2(4, 3)))
