@@ -122,3 +122,39 @@ def test_translated_refuses_a_non_number():
 
 def test_path_is_hashable():
     assert hash(Path.rect(0, 0, 1, 1)) == hash(Path.rect(0, 0, 1, 1))
+
+
+# ---------------------------------------------------------------- spike 21 (mutation testing)
+def test_then_is_applying_one_transform_after_the_other_for_any_pair():
+    # Transform.then docstring: "Apply *self* first, then *other*". Rotations, shears and unequal scales
+    # fill every entry of the matrix, so a wrong sign or product in the composition shows.
+    parts = [Transform.rotation(30), Transform.shearing(20, -15), Transform.scaling(2, 3),
+             Transform.translation(5, -7), Transform.rotation(-110)]
+    for first in parts:
+        for second in parts:
+            both = first.then(second)
+            for x, y in ((7, -2), (0.5, 3), (-4, -9)):
+                assert close(both.apply(x, y), second.apply(*first.apply(x, y)))
+
+
+def test_rounded_rect_corners_are_quarter_circles_meeting_the_sides():
+    # Contract F14: "Corners are quarter-circle arcs"; rounded_rect docstring: "A radius of 0 gives a sharp
+    # corner". Each arc runs from one side's tangent point to the next, and its middle is at 45 degrees.
+    path = Path.rounded_rect(10, 10, 80, 50, (8, 1, 6, 0))
+    ends = [seg[-1] for seg in path.segments if seg[0] != "close"]
+    expected = [(10, 18), (18, 10), (89, 10), (90, 11), (90, 54), (84, 60), (10, 60)]
+    assert len(ends) == len(expected) and all(close(a, b, 1e-9) for a, b in zip(ends, expected))
+    centres = {(18, 10): ((18, 18), 8), (90, 11): ((89, 11), 1), (84, 60): ((84, 54), 6)}
+    start = None
+    for seg in path.segments:
+        if seg[0] == "cubic":
+            (c1, c2, end), (cx, cy) = seg[1:], centres[tuple(round(v, 9) for v in seg[3])][0]
+            r = centres[tuple(round(v, 9) for v in seg[3])][1]
+            mid = tuple(0.125 * a + 0.375 * b + 0.375 * c + 0.125 * d for a, b, c, d in zip(start, c1, c2, end))
+            assert abs(math.hypot(mid[0] - cx, mid[1] - cy) - r) < 1e-3 * r
+            assert abs(abs(mid[0] - cx) - abs(mid[1] - cy)) < 1e-3 * r      # at 45 degrees
+        start = seg[-1] if seg[0] != "close" else start
+    only_bottom_left = Path.rounded_rect(10, 10, 80, 50, (0, 0, 0, 5))
+    ends = [seg[-1] for seg in only_bottom_left.segments if seg[0] != "close"]
+    assert all(close(a, b, 1e-9) for a, b in zip(ends, [(10, 10), (90, 10), (90, 60), (15, 60), (10, 55)]))
+    assert len(ends) == 5
