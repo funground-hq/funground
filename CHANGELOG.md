@@ -9,6 +9,10 @@ What changed in funground, newest first. Release numbers follow the
 A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
 
 ### Fixed
+- **`f.arc` no longer hangs on a huge or infinite angle, and nan or inf no longer reach a saved file** (S-253, found by spike 20).
+  `translate`, `rotate`, `scale`, the shears, `apply_matrix`, `linear_gradient`, `radial_gradient`, `stroke_dash`, `circle`, `ellipse`
+  and `arc` now refuse them with a sentence, where before they could make a PDF or SVG that would not open, or stall. Ordinary
+  numbers draw exactly as before.
 - **Stopping a microphone can no longer freeze a sketch** (S-251, D-128). `mic.stop()`, `mic.close()`, or Python tidying
   up a microphone that was still listening, could freeze the whole program, and only closing it from outside ended it.
   It now stops safely. A microphone is also let go when the sketch ends, as its documentation always said.
