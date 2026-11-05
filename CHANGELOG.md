@@ -16,6 +16,9 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
 - **Stopping a microphone can no longer freeze a sketch** (S-251, D-128). `mic.stop()`, `mic.close()`, or Python tidying
   up a microphone that was still listening, could freeze the whole program, and only closing it from outside ended it.
   It now stops safely. A microphone is also let go when the sketch ends, as its documentation always said.
+- **A long recording no longer fills the memory** (S-255). `f.save_gif` and `f.save_movie` keep frames in a temporary file
+  while recording, so the length of an MP4 is limited by the disk. A GIF made with Pillow still uses some memory for each
+  frame, but much less than it did. The saved files are the same as before.
 
 ### Changed
 - **Sound and the music of India are libraries** (S-246, D-120, D-123, ADR-007). The 24 names `f.tone`, `f.note`,
