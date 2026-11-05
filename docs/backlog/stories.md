@@ -401,6 +401,7 @@ Principles for the epic, written before the spike so it is measured against them
 | S-256 | E-37 | **nan and infinity get one plain sentence** (D-130), everywhere a number is checked | 33 |
 | S-257 | E-37 | **Whisper stops repeating itself, and base.en is measured in a browser** (D-131). A repetition guard in the decode loop, the same on the desktop and in Play; base.en's real-time factor in Play on the slowest target | 33 |
 | S-258 | E-37 | **Layers cost little when they are not changing** (spike 22, 5 Nov; the maintainer: fix the root cause). A new layer name each frame grows about 1 GB per 1,000 frames at 400 x 300: each layer holds its pixels twice, and every layer is put over the canvas each frame. Remove the duplicate; prototype keeping idle layers compressed and merging unchanged ones. No change to contract F16 or to any golden | 33 |
+| S-259 | E-37 | **`sound.load()` gives the same samples on the desktop and in Play** (found by S-250, 5 Nov). A 16 kHz file gives different waveforms: the sum of absolute samples for `clapping.wav` is 25,447 on the desktop, 22,125 in Play and 22,125 by exact linear interpolation, and one guess of `ml.sound` changed. Find which decoder is right, make them agree, and restore a same-answers check that goes through `sound.load()`. Check whether `ml.words` is affected | 33 |
 
 ## E-38 Play and your GitHub sketchbook, and more for the editor (27 October 2026)
 
