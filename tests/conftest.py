@@ -37,8 +37,13 @@ def reset_funground() -> Sketch:
 
 @pytest.fixture(autouse=True)
 def _fresh_state():
-    reset_funground()
-    yield
+    # AGENTS.md suggests FUNGROUND_HEADLESS=1 for local runs, and CI does not set it. Start every test without it, so
+    # the suite gives the same result in both; a test that wants headless sets it itself (spike 19). A private
+    # MonkeyPatch, not the test's: the test's own changes must be undone before the reset below.
+    with pytest.MonkeyPatch.context() as env:
+        env.delenv("FUNGROUND_HEADLESS", raising=False)
+        reset_funground()
+        yield
     if pygame.get_init():
         pygame.quit()
     reset_funground()
