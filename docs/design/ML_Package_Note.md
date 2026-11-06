@@ -198,7 +198,7 @@ has no `async`. How it is wired is in `Web_Runner_Note.md` ("Models"); this sect
 - **What a frame sees** (`_listen.Heard`). The first call in a frame settles the answer for that frame (the sketch's `frame_count`), so the same object is given for the whole
   frame and `is_new` is True in the frame the answer first shows. A Words given earlier is never changed. An answer under 0.4 or with no text never reaches it.
 - **The model.** `_whisper`: resample to 16 kHz by linear interpolation (the formula is in `to_model_rate`'s docstring and in `browser_models.py`; the web page does the same),
-  log-mel as Whisper's feature extractor does it, the encoder, then the decoder with its key and value cache, greedy, at most 224 pieces, the score the mean probability of the
+  log-mel as Whisper's feature extractor does it, the encoder, then the decoder with its key and value cache, greedy, at most 224 pieces and at most 10 for each second of sound (at least 16), stopping when one piece or a pair comes four times in a row, keeping the first (S-257, D-131), the score the mean probability of the
   pieces chosen (a softmax over the logits with the banned numbers removed). For `tts.wav` the words are the spike's exactly.
 - **In Play.** `HostModels.request_sound("words", key, float32 bytes, rate)` and `push_words(task, key, text, score)` (`Session.push_models_words`); the protocol is in the module
   docstring of `browser_models.py`. `_listen.HostSink` keeps the newest phrase waiting while one is in flight. The page's worker (`models-worker.js`) is a later task:
