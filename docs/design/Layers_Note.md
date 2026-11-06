@@ -180,6 +180,10 @@ pixels out cannot change the result. `tests/test_layer_rest.py` compares the byt
 
 The last row is the one that got slower: each frame there has one rest and one wake.
 
+**In Play** (7 November, headless Chrome, `tools/test_runner.py` on funground-web `main`): a sketch whose layers rest, wake,
+are hidden, shown and read came out byte-identical to its desktop picture, with the layers shown resting at frame 20.
+The gallery's four layer sketches were byte-identical to their goldens too. Memory and speed were not measured in a browser.
+
 **Tried and rejected** (a prototype, 7 November; D-134 records the choice).
 
 - *Compressing idle layers.* A sparse 400 x 300 layer takes 0.40 ms to expand and about 0.15 ms to paint.
