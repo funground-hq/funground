@@ -6,8 +6,8 @@ The steps, as OpenAI's Whisper does them:
 2. **Log-mel**: the sound becomes a picture of 80 rows (pitch bands on the mel scale) and 3000 columns (10 ms each), the
    logarithm of how loud each band is (``log_mel``).
 3. The **encoder** turns that picture into the model's idea of the sound.
-4. The **decoder** chooses the words one piece at a time, the likeliest each time (greedy), until it chooses "end" or has chosen
-   ``MAX_TOKENS``. It keeps what it has worked out so far (the "past key values"), so each new piece costs one small step.
+4. The **decoder** chooses the words one piece at a time, the likeliest each time (greedy), until it chooses "end", starts to
+   repeat itself (``_speech.loop_tail``) or has chosen as many as the sound can hold (``_speech.token_limit``). It keeps what it has worked out so far (the "past key values"), so each new piece costs one small step.
 5. ``_speech.decode`` turns the chosen numbers into text.
 
 The answer is the text and a score: the mean probability of the pieces the model chose. This is the same arithmetic as the
@@ -21,8 +21,8 @@ from functools import cache
 import numpy as np
 
 from . import _runtime
-from ._speech import (END_OF_TEXT, FIRST_WORD_BANNED, MAX_TOKENS, NO_TIMESTAMPS, SAMPLE_RATE, START_OF_TEXT, SUPPRESSED,
-                      WINDOW_SECONDS, decode, load_vocabulary)
+from ._speech import (END_OF_TEXT, FIRST_WORD_BANNED, NO_TIMESTAMPS, SAMPLE_RATE, START_OF_TEXT, SUPPRESSED, WINDOW_SECONDS, decode,
+                      load_vocabulary, loop_tail, token_limit)
 
 # ---- the log-mel picture (Whisper's feature extractor)
 FFT_SIZE = 400                 # 25 ms of sound at 16 kHz for each column
@@ -119,7 +119,8 @@ class Whisper:
         probabilities: list[float] = []
         feed = np.array([[START_OF_TEXT, NO_TIMESTAMPS]], np.int64)
         first = True
-        while len(chosen) < MAX_TOKENS:
+        limit = token_limit(len(samples) / rate)
+        while len(chosen) < limit:
             outputs = self._decoder.run(None, {"input_ids": feed, "encoder_hidden_states": hidden,
                                                "use_cache_branch": np.array([not first]), **past})
             logits = outputs[0][0, -1].astype(np.float64)
@@ -131,6 +132,9 @@ class Whisper:
                 break
             chosen.append(best)
             probabilities.append(float(np.exp(logits[best] - logits.max()) / np.exp(logits - logits.max()).sum()))
+            if extra := loop_tail(chosen):
+                del chosen[-extra:], probabilities[-extra:]
+                break
             for name, value in zip(self._present_names, outputs[1:]):
                 key = name.replace("present", "past_key_values")
                 if first or ".decoder." in key:         # the encoder's keys and values are worked out once
