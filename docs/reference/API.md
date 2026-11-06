@@ -2105,7 +2105,7 @@ A closed path, such as a circle, carries on past its end, so text can start anyw
 
 **Raises.**
 
-- `ValueError`: the path has no length, the message has a new line in it, or the offset is not a finite number.
+- `ValueError`: the path has no length, the message has a new line in it, or the offset is nan or infinity.
 - `TypeError`: path is not a path, the message is a FormattedString, or the offset is not a number.
 
 ```py
@@ -3809,7 +3809,7 @@ An area has left, top, right, bottom, width, height, cx and cy (its centre). ins
 **Raises.**
 
 - `TypeError`: a value is not a number.
-- `ValueError`: w or h is negative, or a value is not finite.
+- `ValueError`: w or h is negative, or a value is nan or infinity.
 
 ```py
 panel = f.area(40, 40, 320, 200)
