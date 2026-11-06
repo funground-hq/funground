@@ -94,7 +94,8 @@ class Session:
     delivers a result (platform.browser_models has the details); a result that is a mask, the person's, comes through
     `push_models_mask(task, key, mask, mask_width, mask_height, width, height)`. A phrase of speech comes the other way as a
     "request" with `rate` and float32 `samples` (the "words" task, S-234), and its words come through
-    `push_models_words(task, key, text, score)`. `models_unavailable(task, reason)` tells
+    `push_models_words(task, key, text, score)`. A window of sound for naming (the "sound" task, S-250) goes out the same
+    way and its 521 scores come back through `push_models_sound(task, key, scores)` (float32 bytes). `models_unavailable(task, reason)` tells
     the Session that the page cannot run a model: it prints the reason once. Without `on_models` there is never a result.
 
     The bundled fonts are not in the browser's package (S-211, D-114): `fetch_font(file name)` is called the first
@@ -233,6 +234,11 @@ class Session:
         """One result from the host's models that is words (the "words" task): `text` is what was heard ("" for nothing)
         and `score` is how sure the model was, 0 to 1. `key` is the source's key from the "request" that sent the phrase."""
         self._platform.push_models_words(task, key, text, score)
+
+    def push_models_sound(self, task: str, key: int, scores) -> None:
+        """One result from the host's models that is sound scores (the "sound" task): the model's 521 scores as float32 bytes
+        (4 bytes each). `key` is the source's key from the "request" that sent the window."""
+        self._platform.push_models_sound(task, key, scores)
 
     def models_unavailable(self, task: str, reason: str) -> None:
         """The page cannot run this task's models (no connection for the download, a file that fails its check). Prints

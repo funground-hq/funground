@@ -126,3 +126,32 @@ class Words:
     def __repr__(self) -> str:
         shown = self.text if len(self.text) <= 40 else self.text[:37] + "..."
         return f"<Words {shown!r} score {self.score:.2f}{', new' if self.is_new else ''}>"
+
+
+class Heard:
+    """The name of a sound, given by ``ml.sound()``.
+
+    ``heard.name`` is the sound's name in English, for example ``"Dog"`` or ``"Speech"``. ``heard.score`` (0 to 1) is how sure the
+    model is of that name. ``heard.next`` is up to four more guesses, the likeliest first; each is a Heard too, with its own name
+    and score, no guesses of its own, and ``is_new`` False. ``heard.is_new`` is True in the frame an answer first shows up, and False
+    in the frames after. ``str(heard)`` is the name. The name is often a broad one, and it can be wrong.
+    """
+
+    def __init__(self, name: str, score: float, next: tuple["Heard", ...] = (), is_new: bool = False) -> None:
+        self.name = name
+        self.score = score
+        self.next = tuple(next)
+        self.is_new = is_new
+
+    @classmethod
+    def from_guesses(cls, guesses, is_new: bool) -> "Heard":
+        """The answer for ``_sound.choose``'s list of (name, score): the best one, with the rest as its ``next``."""
+        (name, score), rest = guesses[0], guesses[1:]
+        return cls(name, score, tuple(cls(n, s) for n, s in rest), is_new)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def __repr__(self) -> str:
+        names = f", next {', '.join(repr(g.name) for g in self.next)}" if self.next else ""
+        return f"<Heard {self.name!r} score {self.score:.2f}{names}{', new' if self.is_new else ''}>"

@@ -1,5 +1,5 @@
-"""The four tasks, from a source to a Body, a Hand, a Picture or some Words: the work behind ``ml.pose()``, ``ml.hand()``,
-``ml.person()`` and ``ml.words()`` (D-125, D-126).
+"""The five tasks, from a source to a Body, a Hand, a Picture, some Words or a Heard: the work behind ``ml.pose()``, ``ml.hand()``,
+``ml.person()``, ``ml.words()`` and ``ml.sound()`` (D-125, D-126).
 
 There are two paths. On a computer the models run here, with onnxruntime. In a web page the host runs them (``host_services.models``,
 S-232) and this module only sends it pictures and reads the newest answer. The desktop modules (``_fetch``, ``_glue``,
@@ -14,8 +14,8 @@ from funground import host_services
 from funground.api import canvas_sketch
 from funground.picture import Picture
 
-from . import _listen, _source
-from ._results import Body, Hand, Words
+from . import _hearing, _listen, _source
+from ._results import Body, Hand, Heard, Words
 from ._speech import MAX_SOUND_SECONDS
 
 if TYPE_CHECKING:
@@ -94,6 +94,8 @@ def find_person(source: object, base_dir: str | None) -> Picture | None:
 # does not refer back to it, so neither is kept alive.
 _ears: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
 _clips: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
+_sound_ears: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()       # the same for ml.sound(), kept apart from the words
+_sound_clips: "weakref.WeakKeyDictionary" = weakref.WeakKeyDictionary()
 
 
 def _frame() -> int:
@@ -140,6 +142,47 @@ def find_words(source: object, base_dir: str | None) -> Words | None:
             ear.close()
         ear = _ears[source] = _listen.Ear(context, source, make_sink())
     return ear.words(_frame(), source)
+
+
+def find_sound(source: object, base_dir: str | None) -> Heard | None:
+    """The name of the sound heard by a microphone, or in a Sound, or None. *base_dir* is the sketch's folder (where ``models/`` is kept).
+
+    A microphone's newest 0.96 s is worked on every 0.48 s beside the sketch (a thread on a computer, the page's worker in a web
+    page); the answer is the newest one that has come in. A Sound is one answer: a computer waits for it, a web page gives None
+    until it comes.
+    """
+    from funground.sound._engine import Sound
+    from funground.sound._microphone import Microphone
+
+    who = "ml.sound()"
+    if not isinstance(source, (Microphone, Sound)):
+        raise TypeError(f"{who} needs a microphone from sound.microphone() or a sound, not {type(source).__name__}.")
+    if isinstance(source, Sound) and source.duration() > MAX_SOUND_SECONDS:
+        raise ValueError(f"{who}: this sound is {source.duration():.0f} seconds long, and the most it can listen to is "
+                         f"{MAX_SOUND_SECONDS} seconds. Cut it shorter first.")
+    models = host_services.models
+    if models is not None:
+        context, classify, make_sink = (models,), None, lambda: _hearing.SoundHostSink(models, id(source))
+    else:
+        from . import _fetch, _yamnet
+
+        paths = _fetch.ensure("sound", base_dir, who)           # the first call downloads, here in the sketch's thread
+
+        def classify(window, rate):
+            return window.tag, (None if window.samples is None else _yamnet.load(paths).scores(window.samples, rate))
+
+        context, make_sink = tuple(sorted(paths.items())), lambda: _listen.Worker(classify, name="funground sound")
+    if isinstance(source, Sound):
+        clip = _sound_clips.get(source)
+        if clip is None or clip.context != context:
+            clip = _sound_clips[source] = _hearing.SoundClip(context, classify, make_sink() if models is not None else None)
+        return clip.heard(_frame(), source)
+    ear = _sound_ears.get(source)
+    if ear is None or ear.context != context:
+        if ear is not None:
+            ear.close()
+        ear = _sound_ears[source] = _hearing.SoundEar(context, source, make_sink())
+    return ear.heard(_frame(), source)
 
 
 def _to_logical(frame: _source.Frame, points):

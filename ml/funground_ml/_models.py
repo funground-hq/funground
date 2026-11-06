@@ -9,6 +9,10 @@ The words files (S-234) are OpenAI's Whisper tiny.en, converted to ONNX and quan
 organisation (Apache-2.0 on the original; the converted repository's card names no licence): the encoder, the decoder, and the
 token table ``vocab.json`` that turns the model's numbers back into text. Reading the table is a few lines of our own
 (``_speech.py``), so there is no ``tokenizers`` library to install.
+
+The sound file (S-250) is Google's YAMNet as ONNX, funground's own copy of the community repository ``audiomagic/yamnet-onnx``, so it cannot vanish with someone else's account (Apache-2.0 on the
+original; the converted repository's card names no licence). Its scores match Google's model to 6.7e-5 (spike 18). The 521 names
+it scores are in ``_sound_names.py``, not downloaded. The sound names come from the AudioSet ontology by Google LLC, CC BY 4.0.
 """
 from __future__ import annotations
 
@@ -68,6 +72,9 @@ MODELS: dict[str, Model] = {m.name: m for m in (
           "vocab.json", 999186,
           "f6bd25a65e4e63ca31360e9fb11c7e4f9a391a78385d640acd814092dd6eee4f", "Apache-2.0",
           kept_as="whisper_tiny_en_vocab.json"),
+    Model("sound_model", "funground-hq/yamnet-onnx", "9648eed1cf043f9163842e9cb6d5fd8291d0d1cf",
+          "yamnet.onnx", 16093355,
+          "d3835ffbbd4a1bb3e777f0ca217b5007907f5171dd5d17c4236b95b2af8f908e", "Apache-2.0"),
 )}
 
 # What each task needs: a finder, then the landmark model (pose and hand); one model for the person's mask; the two halves of
@@ -77,6 +84,7 @@ TASKS: dict[str, tuple[str, ...]] = {
     "hand": ("palm_detector", "hand_landmarks"),
     "person": ("person_mask",),
     "words": ("words_encoder", "words_decoder", "words_vocabulary"),
+    "sound": ("sound_model",),
 }
 
 # The name each file of a task goes by in the paths ``_fetch.ensure`` gives back, in the order of TASKS.
@@ -85,4 +93,5 @@ ROLES: dict[str, tuple[str, ...]] = {
     "hand": ("detector", "landmarks"),
     "person": ("model",),
     "words": ("encoder", "decoder", "vocabulary"),
+    "sound": ("model",),
 }

@@ -1,6 +1,6 @@
 # The models package: `funground-ml` on the desktop (S-232, D-124, D-125)
 
-**Status:** built on 2 November 2026 for the desktop and for Play; the contract rows ML1 to ML5 are drafts. `ml.person` (S-233) was added on 2 November 2026: see "The person's mask". `ml.words` (S-234, row ML6, a draft) was added on 3 November 2026 for the desktop: see "The words".
+**Status:** built on 2 November 2026 for the desktop and for Play; the contract rows ML1 to ML5 are drafts. `ml.person` (S-233) was added on 2 November 2026: see "The person's mask". `ml.words` (S-234, row ML6, a draft) was added on 3 November 2026 for the desktop: see "The words". `ml.sound` (S-250, row ML7, a draft) was added on 5 November 2026 for the desktop and for Play: see "The sound names".
 
 ## Problem
 
@@ -14,15 +14,19 @@ stay true.
 ml/                          its own distribution, funground-ml 0.1.0.dev0 (LGPL-2.1-only)
   pyproject.toml             funground, onnxruntime>=1.31,<2, numpy>=2,<3, pillow>=11,<13
   funground_ml/
-    __init__.py              pose(), hand(), person(), words(): the only public names, with their docstrings
+    __init__.py              pose(), hand(), person(), words(), sound(): the only public names, with their docstrings
     _tasks.py                from a source to a Body, a Hand, a Picture or some Words: the desktop path, and the host path (Play)
     _speech.py               no numpy: the phrase cutter, the byte-level token decoder, the numbers of the speech model
     _listen.py               no numpy: Heard (the answer a frame sees), Worker (the thread), HostSink, Ear (a microphone), Clip (a Sound)
+    _sound.py                no numpy: the rules for choosing the names (choose, HIDDEN) and the level rule (is_quiet)
+    _sound_names.py          the 521 sound names, generated once from YAMNet's class map (CC BY 4.0 credit in its header)
+    _hearing.py              no numpy: Latest (the answer a frame sees), SoundEar (a microphone), SoundClip (a Sound), SoundHostSink
+    _yamnet.py               numpy: the sound model (resampling by _whisper.to_model_rate, the mean of the rows)
     _whisper.py              numpy: resampling, log-mel, the greedy decode loop (the only other user of _runtime)
     _source.py               what a source is, and the answer kept for each source and frame
     _glue.py                 numpy and Pillow: cut, detect, landmarks, tracker (no onnxruntime)
-    _results.py              Body, Hand, the point names, the mirrored swap
-    _models.py               the table of eight files: Hub address (pinned commit), size, SHA-256, licence
+    _results.py              Body, Hand, Words, Heard, the point names, the mirrored swap
+    _models.py               the table of nine files: Hub address (pinned commit), size, SHA-256, licence
     _fetch.py                the download and the kept copy
     _runtime.py              the only module that imports onnxruntime
   tests/                     unit tests, model tests, the two test photographs (data/SOURCES.md)
@@ -198,13 +202,62 @@ has no `async`. How it is wired is in `Web_Runner_Note.md` ("Models"); this sect
 - **What a frame sees** (`_listen.Heard`). The first call in a frame settles the answer for that frame (the sketch's `frame_count`), so the same object is given for the whole
   frame and `is_new` is True in the frame the answer first shows. A Words given earlier is never changed. An answer under 0.4 or with no text never reaches it.
 - **The model.** `_whisper`: resample to 16 kHz by linear interpolation (the formula is in `to_model_rate`'s docstring and in `browser_models.py`; the web page does the same),
-  log-mel as Whisper's feature extractor does it, the encoder, then the decoder with its key and value cache, greedy, at most 224 pieces, the score the mean probability of the
+  log-mel as Whisper's feature extractor does it, the encoder, then the decoder with its key and value cache, greedy, at most 224 pieces and at most 10 for each second of sound (at least 16), stopping when one piece or a pair comes four times in a row, keeping the first (S-257, D-131), the score the mean probability of the
   pieces chosen (a softmax over the logits with the banned numbers removed). For `tts.wav` the words are the spike's exactly.
 - **In Play.** `HostModels.request_sound("words", key, float32 bytes, rate)` and `push_words(task, key, text, score)` (`Session.push_models_words`); the protocol is in the module
   docstring of `browser_models.py`. `_listen.HostSink` keeps the newest phrase waiting while one is in flight. The page's worker (`models-worker.js`) is a later task:
   it must do the same resampling, log-mel, loop and decoding as `_whisper.py`, and `ml/tests/test_host.py` only checks the Python side with a stand-in page.
 - **Tests.** `ml/tests/test_words.py` (the cutter on synthetic sound, the decoder, the resampling against the formula, Heard, the thread with a stand-in model, the errors),
   `test_host.py` (the host path), `test_words_model.py` (the real files on `data/tts.wav`, from a Sound and from a microphone that is fed it).
+
+## The sound names (S-250, built 5 November 2026)
+
+`ml.sound(source)` (contract ML7, D-126, D-129) gives the name of a sound heard by a microphone or in a Sound. The model is Google's YAMNet as ONNX, from the community
+repository `funground-hq/yamnet-onnx` at commit `9648eed1cf043f9163842e9cb6d5fd8291d0d1cf` (funground's copy of `audiomagic/yamnet-onnx`, commit `f25b741c2f0bdc6d7e6db24b5fddda23347dbafd`): `yamnet.onnx`, 16,093,355 bytes, SHA-256
+`d3835ffbbd4a1bb3e777f0ca217b5007907f5171dd5d17c4236b95b2af8f908e` (the table of `_models.py`, task "sound", one file). It takes the raw waveform (float32, 16 kHz, input `waveform`) and
+gives one row of 521 scores for each 0.96 s window. Spike 18 measured its scores against Google's model at 6.7e-5 on 2,000 clips. The community file has no licence on its card; the original is Apache-2.0.
+The repository is not the project's, so a mirror in a funground Hugging Face organisation is still open (D-129).
+
+- **The 521 names are in the package** (`_sound_names.py`, generated once, not downloaded): the `display_name` column of `yamnet_class_map.csv` in the same repository and commit (14,096 bytes, SHA-256
+  `cdf24d193e196d9e95912a2667051ae203e92a2ba09449218ccb40ef787c6df2`), in the order of the `index` column. The header of the file says this and carries the credit: the sound names come from the AudioSet ontology by
+  Google LLC, CC BY 4.0 (also in `ml/README.md` and `THIRD_PARTY_LICENSES.md`). A test checks that there are 521 different names, and that every hidden name is one of them.
+- **One function chooses** (`_sound.choose`, pure Python, no numpy): given the 521 scores, `None` when the likeliest name of all is `Silence`; the fifteen umbrella names of D-129 (`_sound.HIDDEN`) are
+  left out; `None` when the best name left scores under 0.1; otherwise the best and up to four next, likeliest first (a tie keeps the model's order). The desktop and Play both use it: the page sends only the 521 scores
+  and no names. The level rule (`_sound.is_quiet`: the loudest 30 ms block of the 0.96 s, RMS, under 0.02) is applied in Python before a window is sent, on both. It applies to a microphone's windows only; a Sound is
+  given to the model whole, and only the two rules about the answer apply to it.
+- **The windows** (`_hearing.SoundEar`, no numpy). Like the words' Ear it reads the microphone since it last looked (`mic._since`), but it keeps the newest 0.96 s and cuts a window when 0.96 s has been heard and then
+  every 0.48 s of sound (counted in samples at the microphone's rate, so it does not drift with the frame rate; a sketch that looks rarely gets the newest window, not a queue). Nothing is answered for the first 0.96 s.
+  A window travels as a `Window(tag, samples)`; a quiet window has `samples=None` and is never sent to the model, but it goes through the sink in its place, so that "nothing to name" arrives in order after the
+  answers before it. The tag changes when the microphone stops or starts again, and an answer with an old tag is dropped: a sound that stopped does not come back from a window still being worked on.
+  `is_new` is True in the frame each new answer first shows (a whistle that goes on is a new answer every 0.48 s). The names are chosen in the sketch's thread, after the sink.
+- **The thread** (`_listen.Worker`, now with a thread name): one daemon thread for each microphone, one window in work, the newest waiting. The model runs in it, never in the sketch's thread; a daemon thread, ended by
+  `weakref.finalize` when the microphone's memory goes, so it holds up neither the end of a sketch nor the microphone's own close at the sketch's end (S-251). Verified: the thread is a daemon, and drops with the microphone (`test_hearing.py`).
+  An exception in it is raised by a later `ml.sound()` call, once. The download happens in the sketch's thread on the first call: `Downloading the sound model, 16 MB, once.`
+- **A Sound** is one window: `sound.samples()` at `sound._sample_rate()`, up to 30 s (a longer one is a `ValueError`), answered at once in the sketch's thread on the desktop and kept for each Sound (`_hearing.SoundClip`); in Play it is sent
+  whole and the answer is `None` until it comes. The Sound's rows are averaged (Google's demo does the same). Words and sound keep separate memory for one Sound.
+- **The model** (`_yamnet.Yamnet`): `to_model_rate` of `_whisper.py` (linear interpolation, the formula in its docstring and in `browser_models.py`), `session.run`, the mean of the rows in double precision. A window of 0.96 s is one row (ONNX
+  pads it into one window: 15,360 samples give 1 row, 16,000 give 2).
+- **In Play.** `HostModels.request_sound("sound", key, float32 bytes, rate)` and `push_sound_scores(task, key, scores)` with the 521 scores as float32 bytes (`Session.push_models_sound`); the protocol is in `browser_models.py`.
+  `_hearing.SoundHostSink` keeps the newest window waiting while one is in flight, and answers a quiet window in order. The page (`runner/models-glue.js` `createSound`, `models-worker.js`, `worker.js` in funground-web)
+  resamples with the same formula, runs the session, averages the rows and sends a `Float32Array`; it has no names. The one file is in `models.json`, made from `_models.py` by `tools/build_runtime.py`.
+- **Same answers, desktop and Play** (`funground-web/tools/test_models.py`, case "sound"): `tts.wav`, `whistle.wav` and `clapping.wav` give the same name and the same four next names, and scores that agree to
+  four decimals (largest difference 0.0). The test makes each Sound itself in plain Python instead of calling `sound.load()`: measured while writing it, `sound.load()` of the same 16 kHz file gives a different 44.1 kHz waveform
+  on the desktop than in a page (clapping.wav: the sum of absolute values is 25,447 on the desktop, 22,125 in the page and 22,125 by exact linear interpolation, and the 5th name differed, "Cap gun" on the desktop and
+  "Firecracker" in Play, with scores up to 0.027 apart). That is in the core's decoder, not in the model, and is not fixed here.
+- **What it gives for the three recordings** (desktop and Play the same, with the Sounds made as above):
+
+  | Recording | Name | Score | Next |
+  |---|---|---|---|
+  | `tts.wav` (a computer voice) | Speech | 0.998 | Speech synthesizer, Narration, monologue, Conversation, Radio |
+  | `whistle.wav` | Whistling | 0.712 | Alarm, Whistle, Police car (siren), Siren |
+  | `clapping.wav` | Hands | 0.415 | Explosion, Slap, smack, Gunshot, gunfire, Firecracker |
+
+  The clapping is "Hands", not "Applause": the names are often broad or sideways, and the contract and the guide say so. (With `sound.load()` on the desktop the same file gives "Hands" 0.40 and "Cap gun" in fifth place.)
+- **Speed.** On this machine the desktop works out one 0.96 s window in 2.2 ms. In Play (headless Chrome, onnxruntime-web, wasm) the 7.2 s recording (14 windows) is answered in 0.47 s once the model is loaded,
+  a real-time factor of 0.065; the first answer in a page needs 3.5 s for the first Sound (model load) and 0.3 to 0.4 s for the next ones. A single window is therefore well under the 0.48 s hop. Chrome's fake microphone
+  (a beep every second) gave answers in Play within 2.5 s of starting; the time of each window in the page was not measured on its own.
+- **Tests.** `ml/tests/test_hearing.py` (the names, the choosing and every rule that gives `None`, the level rule, Heard and `is_new`, the windows, the thread with a stand-in model, a stopped microphone, the host path with a stand-in
+  page, errors), `test_hearing_model.py` (the real file on the three recordings in `data/`, from a Sound and from a microphone that is fed one), and the case "sound" and "sound microphone" in funground-web's `tools/test_models.py`.
 
 ## What is left
 

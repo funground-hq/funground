@@ -67,8 +67,9 @@ class Worker:
     error in it is kept and raised by the next ``collect()``, in the sketch's thread.
     """
 
-    def __init__(self, transcribe: Callable[[array, int], Answer]) -> None:
+    def __init__(self, transcribe: Callable[[array, int], Answer], name: str = "funground words") -> None:
         self._transcribe = transcribe
+        self._name = name
         self._condition = threading.Condition()
         self._waiting: tuple[array, int] | None = None
         self._answers: list[Answer] = []
@@ -80,7 +81,7 @@ class Worker:
         with self._condition:
             self._waiting = (samples, rate)
             if self._thread is None:
-                self._thread = threading.Thread(target=self._run, name="funground words", daemon=True)
+                self._thread = threading.Thread(target=self._run, name=self._name, daemon=True)
                 self._thread.start()
             self._condition.notify()
 

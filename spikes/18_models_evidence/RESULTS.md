@@ -285,6 +285,27 @@ What would change my answer:
 - More Indian English speakers (Svarah, L2-ARCTIC), children's speech, and real laptop-microphone recordings could move these
   numbers. They are the main gap.
 
+### 2.8 base.en in a real browser (S-257, 6 Nov 2026)
+
+The measurement 2.7 asked for. **base.en is over the 0.6 limit, so tiny.en stays the default** (D-131).
+
+Headless Chrome, `tools/test_models.py --only words` in funground-web, on the maintainer's laptop (i5-1135G7, about 1.3 GB of
+memory free), one 7.178 s clip, two runs each: the first from the model site, the second from the browser's copy. tiny.en ran
+straight after base.en, so the two share their conditions. base.en was a throwaway copy with the base.en files of 2.1 and
+`HEADS = 8`; nothing from it is in the product.
+
+| Model | RTF, first run | RTF, from the copy | Answer | First wait | Score (Play) |
+|---|---|---|---|---|---|
+| tiny.en q8 | 0.559 | 0.577 | 4.0, 4.1 s | 9.2, 7.3 s | 0.9596 |
+| base.en q8 | **1.048** | **2.038** | 7.5, 14.6 s | 14.2, 15.3 s | 0.9686 |
+
+Both models gave the same text in Play as on the desktop. On this clear clip the text of the two models was also the same, so the
+accuracy gain of 2.7 does not show here.
+
+Limits. This is one clip on one machine, with little memory free: base.en's two runs differ by a factor of 2, probably from
+memory pressure, which was not measured. The slowest target is not named anywhere, so this laptop stands in for it; a slower
+machine would only be further over the limit. The earlier estimate of "near real time" holds for base.en's better run.
+
 ---
 
 ## Problems met
