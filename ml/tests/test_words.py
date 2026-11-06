@@ -530,3 +530,70 @@ def test_the_memory_does_not_keep_a_microphone_or_a_sound_alive(model, frames):
     del mic, clip
     gc.collect()
     assert refs[0]() is None and refs[1]() is None
+
+
+# ---- a model stuck in a loop (S-257, D-131)
+def test_a_piece_or_a_pair_said_four_times_is_a_loop_and_the_first_is_kept():
+    assert _speech.loop_tail([1, 2, 7, 7, 7, 7]) == 3
+    assert _speech.loop_tail([1, 7, 8, 7, 8, 7, 8, 7, 8]) == 6
+
+
+def test_three_times_is_not_a_loop_and_nor_is_ordinary_speech():
+    assert _speech.loop_tail([7, 7, 7]) == 0
+    assert _speech.loop_tail([7, 8, 7, 8, 7, 8]) == 0
+    assert _speech.loop_tail([1, 2, 3, 4, 5, 6, 7, 8]) == 0
+    assert _speech.loop_tail([]) == 0
+
+
+def test_the_limit_on_pieces_follows_the_length_of_the_sound():
+    assert _speech.token_limit(0.3) == _speech.MIN_TOKENS
+    assert _speech.token_limit(7.2) == 72
+    assert _speech.token_limit(30) == _speech.MAX_TOKENS
+
+
+class ScriptedDecoder:
+    """Stands in for the decoder: it chooses these pieces in turn, then "end", and counts how often it was run."""
+
+    def __init__(self, pieces):
+        self.pieces, self.runs = list(pieces) + [_speech.END_OF_TEXT], 0
+
+    def run(self, _outputs, _inputs):
+        logits = np.zeros((1, 1, 51864), np.float32)
+        logits[0, 0, self.pieces[min(self.runs, len(self.pieces) - 1)]] = 20.0
+        self.runs += 1
+        return [logits]
+
+
+def words_the_model_may_say(count):
+    return [n for n in range(1000, 2000) if n not in _speech.SUPPRESSED][:count]
+
+
+def scripted_whisper(pieces):
+    """A Whisper with no model files. Piece n of the vocabulary reads " wn", with the model's mark for a space."""
+    whisper = object.__new__(_whisper.Whisper)
+    whisper._encoder = type("Encoder", (), {"run": lambda self, _outputs, _inputs: [np.zeros((1, 1500, 384), np.float32)]})()
+    whisper._decoder, whisper._past_names, whisper._present_names = ScriptedDecoder(pieces), [], []
+    whisper._vocabulary = [f"Ġw{n}" for n in range(_speech.END_OF_TEXT)]
+    whisper._suppressed = np.array(_speech.SUPPRESSED)
+    return whisper
+
+
+def test_the_loop_stops_at_the_repeat_and_keeps_the_words_before_it():
+    whisper = scripted_whisper([1000, 1001] + [1002] * 200)
+    text, score = whisper.transcribe(np.zeros(16000 * 10, np.float32), 16000)
+    assert text == "w1000 w1001 w1002"
+    assert whisper._decoder.runs == 6                          # stopped as soon as it was sure, not after 100 pieces
+    assert score > 0.99
+
+
+def test_words_without_a_loop_are_all_kept():
+    pieces = words_the_model_may_say(50)
+    whisper = scripted_whisper(pieces)
+    text, _ = whisper.transcribe(np.zeros(16000 * 10, np.float32), 16000)
+    assert text.split() == [f"w{n}" for n in pieces]
+
+
+def test_a_short_sound_cannot_give_a_long_answer():
+    whisper = scripted_whisper(words_the_model_may_say(200))
+    text, _ = whisper.transcribe(np.zeros(16000, np.float32), 16000)
+    assert len(text.split()) == _speech.MIN_TOKENS
