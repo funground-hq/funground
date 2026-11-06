@@ -33,7 +33,7 @@ In the examples, `import funground as f` is understood. A library's examples als
 - [The sound library](#the-sound-library): [`load`](#fn-sound-load), [`create`](#fn-sound-create), [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`pluck`](#fn-sound-pluck), [`melody`](#fn-sound-melody), [`sequence`](#fn-sound-sequence), [`mix`](#fn-sound-mix), [`drone`](#fn-sound-drone), [`note_to_frequency`](#fn-sound-note_to_frequency), [`frequency_to_note`](#fn-sound-frequency_to_note), [`chord_notes`](#fn-sound-chord_notes), [`microphone`](#fn-sound-microphone), [`microphones`](#fn-sound-microphones), [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`spectrogram`](#fn-sound-spectrogram), [`draw_pitch_line`](#fn-sound-draw_pitch_line)
 - [The sangeet library](#the-sangeet-library): [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga), [`talas`](#fn-sangeet-talas), [`tala_info`](#fn-sangeet-tala_info), [`tala`](#fn-sangeet-tala), [`match_ragas`](#fn-sangeet-match_ragas)
 - [The camera library](#the-camera-library): [`open`](#fn-camera-open), [`names`](#fn-camera-names), [`load_clip`](#fn-camera-load_clip)
-- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`person`](#fn-ml-person), [`words`](#fn-ml-words)
+- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`person`](#fn-ml-person), [`words`](#fn-ml-words), [`sound`](#fn-ml-sound)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
@@ -2105,7 +2105,7 @@ A closed path, such as a circle, carries on past its end, so text can start anyw
 
 **Raises.**
 
-- `ValueError`: the path has no length, the message has a new line in it, or the offset is not a finite number.
+- `ValueError`: the path has no length, the message has a new line in it, or the offset is nan or infinity.
 - `TypeError`: path is not a path, the message is a FormattedString, or the offset is not a number.
 
 ```py
@@ -3809,7 +3809,7 @@ An area has left, top, right, bottom, width, height, cx and cy (its centre). ins
 **Raises.**
 
 - `TypeError`: a value is not a number.
-- `ValueError`: w or h is negative, or a value is not finite.
+- `ValueError`: w or h is negative, or a value is nan or infinity.
 
 ```py
 panel = f.area(40, 40, 320, 200)
@@ -5263,6 +5263,55 @@ if heard:
 ```
 
 See also: [`pose`](#fn-ml-pose), [`sound.microphone`](#fn-sound-microphone).
+
+<a id="fn-ml-sound"></a>
+### `ml.sound`
+
+```py
+ml.sound(source)
+```
+
+Listen to a microphone or a sound, and give the name of what it hears.
+
+It names everyday sounds, such as a dog, a whistle, clapping, a car or speech. For a microphone (``sound.microphone()``,
+started) funground listens to the last second (0.96 s) and works out a new answer about twice a second (every 0.48 s). It
+works beside your sketch, so ``draw()`` never waits. You get None until a second has been heard, and whenever there is nothing
+to name: it is quiet, the likeliest sound is silence, or the model is not sure of any name (a score under 0.1). So a sound that
+stops does not stay on the screen. If you pass a sound (for example ``mic.capture(3)`` or ``sound.load("a.wav")``), you get one
+answer for the whole sound, at most 30 seconds. On a computer the call waits for the answer, and asking again about the same
+sound is free. In Play it gives None until the answer arrives. A microphone that is not listening, or one with no sound
+(``FUNGROUND_HEADLESS=1``), gives None.
+
+You get a Heard. ``heard.name`` is the name, in English. ``heard.score`` (0 to 1) says how sure the model is. ``heard.next`` is
+up to four more guesses, the likeliest first; each is a Heard with a name and a score. ``heard.is_new`` is True in the frame
+an answer first appears, and False after that. ``str(heard)`` is the name. The model often gives a broad name ("Music", not the
+instrument) and it can be wrong, so show the next guesses too. Calling it twice in one frame gives the same Heard.
+
+The first call downloads the sound model (16 MB) and keeps it in a ``models/`` folder beside your sketch; it prints one line
+when it does. The sound never leaves your computer. The sound names are from the AudioSet ontology by Google LLC (CC BY 4.0),
+and the model is YAMNet by Google LLC (Apache 2.0).
+
+| Argument | Meaning |
+|---|---|
+| `source` | a microphone from sound.microphone(), or a Sound. |
+
+**Returns.** a Heard, or None if there is nothing to name.
+
+**Raises.**
+
+- `TypeError`: if source is not a microphone or a sound.
+- `ValueError`: if the sound is longer than 30 seconds.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+mic = sound.microphone()
+mic.start()
+heard = ml.sound(mic)
+if heard:
+    f.text(heard.name, 20, 100)
+```
+
+See also: [`words`](#fn-ml-words), [`sound.microphone`](#fn-sound-microphone).
 
 <a id="live-values"></a>
 ## Live values

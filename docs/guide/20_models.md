@@ -1,7 +1,7 @@
 # 20. Models: your body and your hands
 
-A model is a program that has learnt to find something in a picture, or in a sound. funground has four. One finds a **body**. One
-finds a **hand**. One cuts out the **person**. One writes down the **words** you say. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
+A model is a program that has learnt to find something in a picture, or in a sound. funground has five. One finds a **body**. One
+finds a **hand**. One cuts out the **person**. One writes down the **words** you say. One names the **sound** you hear. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
 are. Speak to your microphone, and it knows what you said. Then you can draw with them.
 
 Everything runs on your own computer. What the camera sees never leaves it.
@@ -28,7 +28,7 @@ Why is it separate? A model is a big file, and a program to run it. Most sketche
 funground stays small, and you add the models when you want them.
 
 **The first call downloads the model.** It prints one line, such as `Downloading the pose model, 18 MB, once.` The body
-model is about 18 MB, the hand model about 8 MB and the words model 42 MB. The files are kept in a `models/` folder beside your sketch. The next
+model is about 18 MB, the hand model about 8 MB, the words model 42 MB and the sound model 16 MB. The files are kept in a `models/` folder beside your sketch. The next
 time you run it, nothing is downloaded, and it works without the internet.
 
 **What stays on your computer:** the camera's pictures, what the microphone hears, the points and words the model finds and the model files. The only thing
@@ -210,10 +210,97 @@ last words, so you never get an empty answer. The first call downloads the model
 
 The gallery has a whole sketch: [say a colour](../gallery/README.md#say-a-colour).
 
+## Name a sound
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+`ml.sound(source)` listens and says what the sound is. The source is a microphone from `sound.microphone()`, or a sound. It
+gives you a **heard** with the name of the sound, such as `"Dog"`, `"Whistling"` or `"Speech"`. It knows about 500 everyday
+sounds.
+
+```py
+import funground as f
+from funground import ml, sound
+
+mic = sound.microphone()
+
+def setup():
+    f.size(640, 480)
+    mic.start()
+
+def draw():
+    f.background("navy")
+    heard = ml.sound(mic)
+    if heard:
+        f.text_size(48)
+        f.text(heard.name, 20, 20)
+        for i, guess in enumerate(heard.next):
+            f.text_size(24)
+            f.text(guess.name, 20, 100 + 40 * i)
+
+f.run()
+```
+
+A heard has four parts. `heard.name` is the best guess. `heard.score` says how sure the model is, from 0 to 1.
+`heard.next` is up to four more guesses, the likeliest first. Each one is a heard too, with its own `name` and `score`.
+`heard.is_new` is `True` in the frame a new answer first appears, and `False` after that. `str(heard)` is the name.
+
+**It does not wait.** The model listens to the last second of your microphone. A new answer comes about twice a second.
+It is worked out beside your sketch, so `draw()` never stops. You get `None` for the first second after you start the
+microphone.
+
+**You also get `None` when there is nothing to name.** That is when the room is quiet, when the likeliest sound is
+silence, or when the model is not sure of any name (a score under 0.1). So a sound that stops does not stay on the screen.
+Check `if heard:` before you use it.
+
+**A sound works too.** `ml.sound(mic.capture(3))` names the last three seconds. `ml.sound(sound.load("dog.wav"))` names a
+file. A sound can be up to 30 seconds long. You get one answer for all of it. On your computer the call waits for the
+answer, and asking again about the same sound is free. In Play you get `None` until the answer arrives.
+
+**It often gives a broad name, and it can be wrong.** The model is small. For a piano it may say `"Music"`. For clapping it
+may say `"Hands"` or `"Explosion"`. For a dog it may say `"Bark"` first and `"Dog"` next. That is why `heard.next` is there:
+show the other guesses too. A few very broad names, such as `"Animal"` or `"Vehicle"`, are never given. Sounds that are
+close together, like rain and a shower, can be mixed up.
+
+The first call downloads the model. It is 16 MB, and it is kept like the others. The sound never leaves your computer.
+The names of the sounds are from the AudioSet ontology by Google, and the model is YAMNet by Google.
+
+The gallery has a whole sketch: [name that sound](../gallery/README.md#name-that-sound).
+
+**Do something once, when a sound starts.** `heard.is_new` is `True` for every new answer, about twice a second, so a long
+whistle is new many times. That suits a list of what was heard. To do something once, keep the last name, and act when it
+changes:
+
+```py
+import funground as f
+from funground import ml, sound
+
+mic = sound.microphone()
+woof = sound.note("C5", 0.3)
+last = None
+
+def setup():
+    f.size(640, 480)
+    mic.start()
+
+def draw():
+    global last
+    f.background("navy")
+    heard = ml.sound(mic)
+    name = heard.name if heard else None
+    if name == "Dog" and last != "Dog":
+        woof.play()                  # once, when the dog starts
+    last = name
+
+f.run()
+```
+
+The same dog can be `"Dog"` in one answer and `"Bark"` in the next. To catch both, look at `heard.next` as well.
+
 ## One call a frame
 
 If you call `ml.pose(cam)` twice in one frame, you get the same body, and the work is done once. So you can ask for the
-body in two places in your code without slowing it down. `ml.hand(cam)`, `ml.person(cam)` and `ml.words(mic)` do the same.
+body in two places in your code without slowing it down. `ml.hand(cam)`, `ml.person(cam)`, `ml.words(mic)` and `ml.sound(mic)` do the same.
 
 Until the camera has sent its first picture, `ml.pose(cam)` gives `None`. You never need to wait on purpose.
 
@@ -263,5 +350,6 @@ knuckle where it joins the hand, `pip` and `dip` are the next two joints, and `t
 3. Make a circle at your index finger tip that gets bigger when `hand.thumb_tip` and `hand.index_finger_tip` are far
    apart. Hint: `f.distance()`.
 4. Add one circle to the canvas each time you say something new. Hint: `words.is_new`, and a list that grows.
+5. Clap, whistle and hum. Which names does `ml.sound(mic)` give? Which one is wrong? Is the right name in `heard.next`?
 
 **Previous:** [19. Studios: the same picture, twice](19_studios.md)

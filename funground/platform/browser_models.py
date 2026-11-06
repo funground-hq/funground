@@ -13,7 +13,7 @@ so inference never blocks the sketch's step. The two halves meet here, in the wa
 * `latest(task, key)` is what funground_ml reads: the newest result for that task and source, a `PointsResult` or a
   `MaskResult`, or None before the first.
 
-**Sound** (the "words" task, S-234):
+**Sound** (the "words" task, S-234, and the "sound" task, S-250):
 
 * `request_sound(task, key, samples, rate)` sends one phrase to the page: `samples` is mono float32 bytes (4 bytes for each
   sample, little-endian, values -1 to 1, as `array("f").tobytes()` gives) and `rate` is how many samples there are in a second
@@ -24,6 +24,10 @@ so inference never blocks the sketch's step. The two halves meet here, in the wa
   score, 0 to 1 (the mean probability of the words the model chose). The same rules as for pictures: delivered between two
   steps, and ignored if nothing is in flight for that source.
 * `latest(task, key)` gives the `WordsResult`, or None before the first.
+* `push_sound_scores(task, key, scores)` is what the page calls for the "sound" task: `scores` is the 521 scores of the sound
+  model as float32 bytes (4 bytes for each score, little-endian; a Float32Array's `to_bytes()` in Pyodide gives them), and
+  `latest` then gives a `SoundResult`. Float32 bytes keep the numbers exactly as the model made them. The Python side chooses the
+  names; the page sends none.
 
 What the page does with a phrase (funground_ml expects exactly this; the desktop does the same in `funground_ml/_whisper.py`):
 resample to 16 kHz by linear interpolation (`count = floor(n * 16000 / rate)`; for output j, `p = j * rate / 16000`,
@@ -33,17 +37,25 @@ each time, at most 224 pieces, skipping the suppressed numbers; turn the pieces 
 `vocab.json`; push the text and the mean probability of the chosen pieces. The Python side drops an answer whose score is
 under 0.4 or whose text is empty, so the page need not.
 
+What the page does with a window of the "sound" task (`request_sound("sound", key, samples, rate)`; funground_ml expects exactly
+this; the desktop does the same in `funground_ml/_yamnet.py`): resample to 16 kHz with the same formula as above; run YAMNet
+(`yamnet.onnx`, the input `waveform`: float32, 16 kHz, no other preparation) which gives a table of one row of 521 scores for
+each 0.96 s of sound; take the mean of the rows, column by column (a microphone's window of 0.96 s is one row; a whole Sound is
+several); push the 521 mean scores as float32 bytes with `push_sound_scores`. The quiet-window rule and the choosing of names
+are done in Python before and after, never on the page. A window of a microphone comes about twice a second.
+
 `key` says which source a request came from (funground_ml uses `id()` of the camera, picture, microphone or sound). `task` is
-"pose", "hand", "person" or "words". A result can be one frame behind, which is what `ml.pose(cam)` gives in a page
+"pose", "hand", "person", "words" or "sound". A result can be one frame behind, which is what `ml.pose(cam)` gives in a page
 (contract ML3), and a phrase's answer arrives a second or two after the speaker pauses.
 
 `on_models(command, fields)` is told what the sketch wants:
 
     request   {"task", "key", "width", "height", "pixels"}   find the body or hand in these RGBA bytes
-    request   {"task", "key", "rate", "samples"}             hear the words in this phrase (samples: float32 bytes)
+    request   {"task", "key", "rate", "samples"}             hear the words ("words") or name the sound ("sound") in these
+                                                              samples (float32 bytes)
     close     {}                                              the run ended: forget every source
 
-A "request" with a "samples" field is a phrase and one with "pixels" is a picture; the "task" says the same.
+A "request" with a "samples" field is a phrase or a window of sound and one with "pixels" is a picture; the "task" says the same.
 
 If the page cannot run a model (no connection for the first download, a file that fails its check) it calls
 `unavailable(task, reason)`, which prints the reason once and stops asking for that task. Without `on_models`
@@ -51,6 +63,7 @@ nothing asks the page, so there is never a result.
 """
 from __future__ import annotations
 
+import struct
 from collections.abc import Callable
 from typing import NamedTuple
 
@@ -80,7 +93,12 @@ class WordsResult(NamedTuple):
     score: float                # 0 to 1: the mean probability of the pieces of words the model chose
 
 
-ModelResult = PointsResult | MaskResult | WordsResult
+class SoundResult(NamedTuple):
+    """One answer of sound scores from the page (the "sound" task)."""
+    scores: tuple               # the model's 521 scores (floats, 0 to 1), the mean over the windows heard
+
+
+ModelResult = PointsResult | MaskResult | WordsResult | SoundResult
 
 
 class HostModels:
@@ -170,6 +188,22 @@ class HostModels:
             return
         self._in_flight.discard((task, key))
         self._latest[(task, key)] = WordsResult(str(text), float(score))
+        self.generation += 1
+
+    def push_sound_scores(self, task: str, key: int, scores) -> None:
+        """A result that is sound scores from the page: `scores` is the model's scores as float32 bytes (4 bytes each, little
+        endian), or a sequence of numbers. A result for a source the run has forgotten is ignored."""
+        if (task, key) not in self._in_flight:
+            return
+        self._in_flight.discard((task, key))
+        if isinstance(scores, (bytes, bytearray, memoryview)):
+            data = bytes(scores)
+            if len(data) == 0 or len(data) % 4:
+                raise ValueError(f"sound scores must be float32 bytes (4 for each score); got {len(data)} bytes")
+            numbers = struct.unpack(f"<{len(data) // 4}f", data)
+        else:
+            numbers = tuple(float(v) for v in scores)
+        self._latest[(task, key)] = SoundResult(numbers)
         self.generation += 1
 
     def unavailable(self, task: str, reason: str) -> None:

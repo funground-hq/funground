@@ -25,6 +25,9 @@ START_OF_TEXT = 50257          # the first of the model's start tokens
 NO_TIMESTAMPS = 50362          # the second: "write the words only"
 FIRST_WORD_BANNED = (220, 50256)       # the first word may not be a lone space, nor the end
 MAX_TOKENS = 224               # at most this many pieces of words in one answer
+TOKENS_PER_SECOND = 10         # ... and at most this many for each second of sound: fast speech is about 7 (S-257, D-131)
+MIN_TOKENS = 16                # ... but a very short phrase may still have this many
+LOOP_REPEATS = 4               # one piece, or a pair of pieces, this many times in a row is the model stuck in a loop
 # Pieces the model is told never to choose (symbols, runs of punctuation and its own control numbers).
 SUPPRESSED = (
     1, 2, 7, 8, 9, 10, 14, 25, 26, 27, 28, 29, 31, 58, 59, 60, 61, 62, 63, 90, 91, 92, 93, 357, 366, 438, 532,
@@ -145,6 +148,23 @@ def _bytes_to_characters() -> dict[int, str]:
 
 
 _BYTE_OF_CHARACTER = {character: byte for byte, character in _bytes_to_characters().items()}
+
+
+def token_limit(seconds: float) -> int:
+    """The most pieces of words that *seconds* of sound can give. In noise the model can run on long after any speech."""
+    return max(MIN_TOKENS, min(MAX_TOKENS, int(seconds * TOKENS_PER_SECOND)))
+
+
+def loop_tail(chosen: list[int]) -> int:
+    """How many pieces at the end of *chosen* are a loop to drop, or 0 for none.
+
+    A loop is one piece, or a pair of pieces, ``LOOP_REPEATS`` times in a row. The first time is kept, as it may be a real word.
+    """
+    for size in (1, 2):
+        tail = chosen[-size * LOOP_REPEATS:]
+        if len(tail) == size * LOOP_REPEATS and tail == tail[:size] * LOOP_REPEATS:
+            return size * (LOOP_REPEATS - 1)
+    return 0
 
 
 def load_vocabulary(path: str) -> list[str]:
