@@ -29,6 +29,12 @@ f.run(max_frames=1)
 | `.pdf` | A document made of shapes and text: sharp at any size, good for printing, with bleed and crop marks if you ask |
 | `.svg` | Shapes and text for the web or for editing in a drawing program |
 
+**When the real size matters, save a PDF.** One funground unit is a pixel on screen and a point
+(1/72 inch) in a PDF. So a PDF keeps the size you asked for: `f.size(f.mm(100), f.mm(100))` gives a
+page about 100 mm wide, ready for a printer or a cutting machine. An SVG is made for screens: 640
+units wide shows at 640 pixels in a browser, the same as your window. A drawing or cutting program
+may open that SVG at 3/4 of the real size, because it counts 96 pixels to the inch.
+
 A **PNG** holds exactly what is in the window — including everything earlier frames left there.
 A **PDF or SVG** holds the shapes drawn in *that one frame*, so for those, draw the whole picture
 in the frame you save (start `draw()` with `f.background(...)`).

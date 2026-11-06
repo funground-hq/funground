@@ -137,3 +137,25 @@ def test_a_see_through_background_still_replaces(tmp_path):
     save_frame(frame, str(png), 10, 10)
     surf = cairo.ImageSurface.create_from_png(str(png))
     assert bytes(surf.get_data()[:4]) == b"\x00\x00\x00\x00"
+
+
+def test_a_saved_svg_keeps_the_bare_size_so_it_matches_the_window(tmp_path):
+    """Contract R20, D-132: a screen sketch shows in a browser at the size of its window."""
+    path = tmp_path / "screen.svg"
+    save_frame(ir.Frame([ir.Clear(Color(255, 255, 255))]), str(path), 640, 400)
+    head = re.search(r"<svg[^>]*>", path.read_text(encoding="utf-8")).group(0)
+    assert 'width="640"' in head and 'height="400"' in head and 'viewBox="0 0 640 400"' in head
+    picture = p.load_svg(str(path))
+    assert (picture.width, picture.height) == (640, 400)
+
+
+def test_a_saved_pdf_keeps_the_real_size(tmp_path):
+    """Contract R20, D-132: a PDF is the true-size file. The canvas is in whole units, hence the tolerance."""
+    from pypdf import PdfReader
+
+    side = int(p.mm(100))
+    path = tmp_path / "real.pdf"
+    save_frame(ir.Frame([ir.Clear(Color(255, 255, 255))]), str(path), side, side)
+    page = PdfReader(str(path)).pages[0].mediabox
+    assert float(page.width) * 25.4 / 72 == pytest.approx(100, abs=0.5)
+    assert float(page.height) * 25.4 / 72 == pytest.approx(100, abs=0.5)
