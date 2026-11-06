@@ -3641,6 +3641,8 @@ A PNG is written at the screen's real resolution, so on a 2x display a 640 by 40
 
 For a print shop, a PDF can have a bleed and crop marks. The bleed is extra picture beyond the edges of the page, so that no white line shows when the printer cuts the paper. Draw past the edges (at negative numbers, and beyond width and height) and that drawing appears in the bleed. A background() fills the bleed too. The page of your canvas stays the finished size: the PDF records it as its TrimBox, and the page grown by the bleed as its BleedBox. Crop marks are thin lines in registration colour (all four inks at 100 percent, so they print on every plate) outside the bleed at the four corners, 5 mm long, to show where to cut. Every page of a document of several pages gets the same bleed and marks.
 
+One unit is a pixel on screen and a point (1/72 inch) in a PDF. So when the real size matters, save a PDF: f.size(f.mm(100), f.mm(100)) gives a page about 100 mm wide. An SVG keeps the plain number, so 640 units show at 640 pixels in a browser, like the window. A drawing or cutting program may open it at 3/4 of the real size, because it counts 96 pixels to the inch.
+
 A PDF holds colours made by cmyk() as exact CMYK inks. Every other colour is RGB, tagged as sRGB.
 
 | Argument | Meaning |
