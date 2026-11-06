@@ -1,8 +1,10 @@
 """GIF and MP4 files (story S-100, contract M1, decision D-048).
 
-Frames arrive as plain RGB bytes at the canvas's logical size. A GIF is written with Pillow
-when it is installed (the optional ``funground[extras]``), else by ffmpeg. An MP4 is always
-written by ffmpeg, which is fed raw frames through a pipe.
+Frames arrive as plain RGB bytes at the canvas's logical size and wait in a ``FrameStore``, in memory
+for a short recording and in a temporary file for a long one, so a recording's size is limited by the
+disk and not by the memory. A GIF is written with Pillow when it is installed (the optional
+``funground[extras]``), else by ffmpeg. An MP4 is always written by ffmpeg, which is fed raw frames
+through a pipe. Both read the frames one at a time.
 
 Pillow is imported only inside ``_pillow()``. ffmpeg is found in one place, ``find_ffmpeg()``:
 that is the one function to extend if a bundled ffmpeg is ever offered (D-045).
@@ -11,12 +13,17 @@ from __future__ import annotations
 
 import array
 import math
+import os
 import shutil
 import subprocess
 import tempfile
+from collections.abc import Iterator
 from fractions import Fraction
 
 MOTION_FORMATS = ("gif", "mp4")
+# Bytes of frames kept in memory; beyond this they go to a temporary file. Small, because the move happens inside one
+# frame: at 64 MB it stalled that frame for about 360 ms, and at 8 MB the worst frame was 9 to 28 ms (S-255).
+MEMORY_LIMIT = 8 * 1024 * 1024
 
 _NO_ENCODER_GIF = (
     "f.save_gif() and saving a .gif need Pillow or ffmpeg, and neither was found. "
@@ -96,6 +103,35 @@ def resample_bgra(bgra: bytes, from_width: int, from_height: int, width: int, he
     return out.tobytes()
 
 
+class FrameStore:
+    """The frames of a recording, in order. A short recording stays in memory; a long one moves to a temporary file,
+    which goes away with ``close()``. Reading gives one frame at a time, as often as it is asked for."""
+
+    def __init__(self, size: tuple[int, int]) -> None:
+        self.size = size
+        self._frame_bytes = size[0] * size[1] * 3
+        self._file = tempfile.SpooledTemporaryFile(max_size=MEMORY_LIMIT)
+        self._count = 0
+
+    def add(self, frame: bytes) -> None:
+        if len(frame) != self._frame_bytes:
+            raise ValueError(f"frame {self._count + 1} is not {self.size[0]} x {self.size[1]} pixels")
+        self._file.write(frame)
+        self._count += 1
+
+    def __len__(self) -> int:
+        return self._count
+
+    def __iter__(self) -> Iterator[bytes]:
+        self._file.seek(0)
+        for _ in range(self._count):
+            yield self._file.read(self._frame_bytes)
+        self._file.seek(0, os.SEEK_END)
+
+    def close(self) -> None:
+        self._file.close()
+
+
 # ------------------------------------------------------------------ timing
 def gif_milliseconds(seconds: float) -> int:
     """A frame time as GIF can hold it: a multiple of 10 ms, at least 20 ms (contract M1)."""
@@ -122,36 +158,37 @@ def plan_timing(durations: list[float]) -> tuple[str, list[int]]:
 
 
 # ------------------------------------------------------------------ writing
-def _check(frames: list[bytes], size: tuple[int, int], durations: list[float]) -> None:
-    if not frames:
+def _check(frames: FrameStore, durations: list[float]) -> None:
+    if not len(frames):
         raise ValueError("there are no frames to save")
     if len(durations) != len(frames):
         raise ValueError("there must be one time for each frame")
-    w, h = size
-    for number, frame in enumerate(frames, 1):
-        if len(frame) != w * h * 3:
-            raise ValueError(f"frame {number} is not {w} x {h} pixels")
 
 
-def write_gif(path: str, frames: list[bytes], size: tuple[int, int], durations: list[float]) -> None:
+def write_gif(path: str, frames: FrameStore, size: tuple[int, int], durations: list[float]) -> None:
     """Write an endlessly looping GIF: Pillow if it is installed, else ffmpeg."""
-    _check(frames, size, durations)
+    _check(frames, durations)
     Image = _pillow()
     if Image is not None:
-        images = [Image.frombytes("RGB", size, frame) for frame in frames]
-        images[0].save(path, format="GIF", save_all=True, append_images=images[1:],
-                       duration=[gif_milliseconds(d) for d in durations], loop=0, disposal=1)
+        images = (Image.frombytes("RGB", size, frame) for frame in frames)
+        first = next(images)
+        first.save(path, format="GIF", save_all=True, append_images=images,
+                   duration=[gif_milliseconds(d) for d in durations], loop=0, disposal=1)
         return
     ffmpeg = find_ffmpeg()
     if ffmpeg is None:
         raise RuntimeError(_NO_ENCODER_GIF)
-    graph = "[0:v]split[a][b];[a]palettegen[p];[b][p]paletteuse"
-    _run_ffmpeg(ffmpeg, path, frames, size, durations, ["-filter_complex", graph, "-loop", "0"])
+    # Two passes, because a single graph with split would make ffmpeg hold every frame until the palette is ready.
+    with tempfile.TemporaryDirectory() as folder:
+        palette = os.path.join(folder, "palette.png")
+        _run_ffmpeg(ffmpeg, palette, frames, size, durations, ["-vf", "palettegen", "-update", "1"])
+        _run_ffmpeg(ffmpeg, path, frames, size, durations, ["-lavfi", "[0:v][1:v]paletteuse", "-loop", "0"],
+                    extra_inputs=["-i", palette])
 
 
-def write_mp4(path: str, frames: list[bytes], size: tuple[int, int], durations: list[float]) -> None:
+def write_mp4(path: str, frames: FrameStore, size: tuple[int, int], durations: list[float]) -> None:
     """Write an H.264 MP4 with ffmpeg; an odd width or height is padded by one pixel."""
-    _check(frames, size, durations)
+    _check(frames, durations)
     ffmpeg = find_ffmpeg()
     if ffmpeg is None:
         raise RuntimeError(_NO_FFMPEG)
@@ -160,11 +197,11 @@ def write_mp4(path: str, frames: list[bytes], size: tuple[int, int], durations: 
                  "-movflags", "+faststart"])
 
 
-def _run_ffmpeg(ffmpeg: str, path: str, frames: list[bytes], size: tuple[int, int],
-                durations: list[float], output_options: list[str]) -> None:
+def _run_ffmpeg(ffmpeg: str, path: str, frames: FrameStore, size: tuple[int, int],
+                durations: list[float], output_options: list[str], extra_inputs: tuple | list = ()) -> None:
     rate, repeats = plan_timing(durations)
     command = [ffmpeg, "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24",
-               "-s", f"{size[0]}x{size[1]}", "-r", rate, "-i", "-", *output_options, path]
+               "-s", f"{size[0]}x{size[1]}", "-r", rate, "-i", "-", *extra_inputs, *output_options, path]
     with tempfile.TemporaryFile() as errors:
         process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=errors)
         try:
