@@ -150,7 +150,7 @@ In the examples, `import funground as f` is understood. A library's examples als
 - The sound library: `load`, `create`, `tone`, `note`, `pluck`, `melody`, `sequence`, `mix`, `drone`, `note_to_frequency`, `frequency_to_note`, `chord_notes`, `microphone`, `microphones`, `draw_wave`, `draw_spectrum`, `spectrogram`, `draw_pitch_line`
 - The sangeet library: `ragas`, `raga`, `talas`, `tala_info`, `tala`, `match_ragas`
 - The camera library: `open`, `names`, `load_clip`
-- The models library: `pose`, `hand`, `person`, `words`
+- The models library: `pose`, `hand`, `person`, `words`, `sound`
 - Live values: `delta_time`, `frame_count`, `ground`, `height`, `is_key_pressed`, `is_mouse_pressed`, `key`, `key_code`, `mouse_button`, `mouse_x`, `mouse_y`, `pixels`, `pmouse_x`, `pmouse_y`, `width`
 - Classes in detail: `Sound`, `Microphone`, `Camera`, `Clip`, `Picture`, `Vector`, `FormattedString`, `Run`, `PathBuilder`, `Mark`, `Area`, `Ground`, `Cell`, `Grid`, `Path`, `Font`, `Control`, `Slider`, `Checkbox`, `Button`, `Color`, `Gradient`, `Raga`, `Tala`
 - Constants and reference tables
@@ -2128,7 +2128,7 @@ A closed path, such as a circle, carries on past its end, so text can start anyw
 
 **Raises.**
 
-- `ValueError`: the path has no length, the message has a new line in it, or the offset is not a finite number.
+- `ValueError`: the path has no length, the message has a new line in it, or the offset is nan or infinity.
 - `TypeError`: path is not a path, the message is a FormattedString, or the offset is not a number.
 
 ```py
@@ -3752,7 +3752,7 @@ An area has left, top, right, bottom, width, height, cx and cy (its centre). ins
 **Raises.**
 
 - `TypeError`: a value is not a number.
-- `ValueError`: w or h is negative, or a value is not finite.
+- `ValueError`: w or h is negative, or a value is nan or infinity.
 
 ```py
 panel = f.area(40, 40, 320, 200)
@@ -5139,6 +5139,54 @@ if heard:
 ```
 
 See also: `pose`, `sound.microphone`.
+
+#### `ml.sound`
+
+```py
+ml.sound(source)
+```
+
+Listen to a microphone or a sound, and give the name of what it hears.
+
+It names everyday sounds, such as a dog, a whistle, clapping, a car or speech. For a microphone (``sound.microphone()``,
+started) funground listens to the last second (0.96 s) and works out a new answer about twice a second (every 0.48 s). It
+works beside your sketch, so ``draw()`` never waits. You get None until a second has been heard, and whenever there is nothing
+to name: it is quiet, the likeliest sound is silence, or the model is not sure of any name (a score under 0.1). So a sound that
+stops does not stay on the screen. If you pass a sound (for example ``mic.capture(3)`` or ``sound.load("a.wav")``), you get one
+answer for the whole sound, at most 30 seconds. On a computer the call waits for the answer, and asking again about the same
+sound is free. In Play it gives None until the answer arrives. A microphone that is not listening, or one with no sound
+(``FUNGROUND_HEADLESS=1``), gives None.
+
+You get a Heard. ``heard.name`` is the name, in English. ``heard.score`` (0 to 1) says how sure the model is. ``heard.next`` is
+up to four more guesses, the likeliest first; each is a Heard with a name and a score. ``heard.is_new`` is True in the frame
+an answer first appears, and False after that. ``str(heard)`` is the name. The model often gives a broad name ("Music", not the
+instrument) and it can be wrong, so show the next guesses too. Calling it twice in one frame gives the same Heard.
+
+The first call downloads the sound model (16 MB) and keeps it in a ``models/`` folder beside your sketch; it prints one line
+when it does. The sound never leaves your computer. The sound names are from the AudioSet ontology by Google LLC (CC BY 4.0),
+and the model is YAMNet by Google LLC (Apache 2.0).
+
+| Argument | Meaning |
+|---|---|
+| `source` | a microphone from sound.microphone(), or a Sound. |
+
+**Returns.** a Heard, or None if there is nothing to name.
+
+**Raises.**
+
+- `TypeError`: if source is not a microphone or a sound.
+- `ValueError`: if the sound is longer than 30 seconds.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+mic = sound.microphone()
+mic.start()
+heard = ml.sound(mic)
+if heard:
+    f.text(heard.name, 20, 100)
+```
+
+See also: `words`, `sound.microphone`.
 
 ### Live values
 

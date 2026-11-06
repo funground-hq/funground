@@ -33,13 +33,17 @@ f.run()
 
 - `ml.words(source)` gives the words said, as `words.text` with `words.score` and `words.is_new`, or `None` before anything is heard. The source is a microphone from `sound.microphone()` (listened to beside your sketch: the words of a phrase arrive a moment after you pause) or a Sound, such as `mic.capture(3)`. English only.
 
+- `ml.sound(source)` gives the name of the sound heard, as `heard.name` with `heard.score`, `heard.next` (up to four more guesses) and `heard.is_new`, or `None` when it is quiet or the model is not sure. The source is a microphone from `sound.microphone()` (the last second, a new answer about twice a second, beside your sketch) or a Sound, such as `mic.capture(3)`. The name is often broad and can be wrong.
+
 For pose, hand and person the source is a camera from `camera.open()` or a picture from `f.load_image()`.
 
 ## The model files
 
-The first call downloads the model it needs from the Hugging Face Hub (about 18 MB for the body, 8 MB for the hand, under 1 MB for the person, 42 MB for the words) and
+The first call downloads the model it needs from the Hugging Face Hub (about 18 MB for the body, 8 MB for the hand, under 1 MB for the person, 42 MB for the words, 16 MB for the sound) and
 prints one line. The files are kept in a `models/` folder beside your sketch, so the next run works offline. They are
-the OpenCV Zoo's conversions of MediaPipe's models, MediaPipe's selfie segmentation and OpenAI's Whisper tiny.en, all under the Apache-2.0 licence. Each file is checked against a
+the OpenCV Zoo's conversions of MediaPipe's models, MediaPipe's selfie segmentation, OpenAI's Whisper tiny.en and Google's YAMNet (as ONNX, from the community repository `audiomagic/yamnet-onnx`), all under the Apache-2.0 licence.
+
+The 521 sound names that YAMNet scores are in the package (`funground_ml/_sound_names.py`), not downloaded. They are from the AudioSet ontology by Google LLC, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). YAMNet is by Google LLC (Apache-2.0). Each file is checked against a
 fixed SHA-256 before it is kept.
 
 To keep the files in another folder, set `FUNGROUND_ML_MODELS` to its path. (The tests use this.)

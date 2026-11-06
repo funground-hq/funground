@@ -22,6 +22,8 @@ from __future__ import annotations
 
 import math
 
+from ._numbers import unusable
+
 POINTS_PER_INCH = 72.0
 MM_PER_INCH = 25.4
 
@@ -49,7 +51,7 @@ def _finite(value, where: str, name: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise TypeError(f"{where}: {name} needs a number, not {value!r}")
     if not math.isfinite(value):
-        raise ValueError(f"{where}: {name} needs a finite number, not {value!r}")
+        raise ValueError(unusable(name, value, where))
     return value
 
 

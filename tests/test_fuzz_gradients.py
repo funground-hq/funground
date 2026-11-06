@@ -14,5 +14,5 @@ import funground as f
     lambda: f.radial_gradient(320, 200, float("inf"), ["white", "navy"]),
 ])
 def test_a_gradient_with_nan_or_inf_is_refused_with_a_sentence(canvas, call):
-    with pytest.raises(ValueError, match=r"gradient needs finite numbers"):
+    with pytest.raises(ValueError, match=r"^f\.\w+_gradient\(\): this value came out as "):
         call()

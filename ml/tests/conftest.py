@@ -83,3 +83,27 @@ def words_models():
             os.environ.pop(_fetch.ENVIRONMENT, None)
         else:
             os.environ[_fetch.ENVIRONMENT] = previous
+
+
+WHISTLE = HERE / "data" / "whistle.wav"      # the sound tests (SOURCES.md): 4.9 s, 16 kHz, mono
+CLAPPING = HERE / "data" / "clapping.wav"    # 8 s, 16 kHz, mono
+
+
+@pytest.fixture(scope="session")
+def sound_models():
+    """The sound model file in ml/tests/.models/ (downloaded on the first run). Skips the test when offline."""
+    from funground_ml import _fetch
+
+    previous = os.environ.get(_fetch.ENVIRONMENT)
+    os.environ[_fetch.ENVIRONMENT] = str(MODELS_FOLDER)
+    try:
+        try:
+            _fetch.ensure("sound", None, "the tests")
+        except ConnectionError as error:
+            pytest.skip(f"the sound model file is not in ml/tests/.models/ and cannot be downloaded: {error}")
+        yield MODELS_FOLDER
+    finally:
+        if previous is None:
+            os.environ.pop(_fetch.ENVIRONMENT, None)
+        else:
+            os.environ[_fetch.ENVIRONMENT] = previous
