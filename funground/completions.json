@@ -11014,6 +11014,14 @@
     "detail": "(source)",
     "summary": "Listen to a microphone or a sound, and give the words in it.",
     "url": "reference/API.md#fn-ml-words"
+   },
+   {
+    "name": "sound",
+    "kind": "function",
+    "signature": "sound(source)",
+    "detail": "(source)",
+    "summary": "Listen to a microphone or a sound, and give the name of what it hears.",
+    "url": "reference/API.md#fn-ml-sound"
    }
   ]
  }

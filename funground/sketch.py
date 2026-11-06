@@ -1165,16 +1165,19 @@ class Sketch:
                 )
         self._require_encoder(kind)
         self._script_flush()
-        frames = []
-        scale = self._script_scale
-        for w, h, _, pixels in pages:
-            if pixels is None:
-                bgra = self._view().read_logical(0, 0, w, h, w, h)
-            else:
-                bgra = motion.resample_bgra(pixels, round(w * scale), round(h * scale), w, h)
-            frames.append(motion.bgra_to_rgb(bgra, w, h))
-        durations = [*self._page_durations, self._frame_duration]
-        (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, first, durations)
+        frames = motion.FrameStore(first)
+        try:
+            scale = self._script_scale
+            for w, h, _, pixels in pages:
+                if pixels is None:
+                    bgra = self._view().read_logical(0, 0, w, h, w, h)
+                else:
+                    bgra = motion.resample_bgra(pixels, round(w * scale), round(h * scale), w, h)
+                frames.add(motion.bgra_to_rgb(bgra, w, h))
+            durations = [*self._page_durations, self._frame_duration]
+            (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, first, durations)
+        finally:
+            frames.close()
 
     def save_gif(self, path: str, seconds: float) -> None:
         """Record the next *seconds* of an animated sketch into a GIF."""
@@ -1201,7 +1204,7 @@ class Sketch:
         self._require_encoder(kind)
         frames = max(1, round(seconds * self.fps))
         # Called from draw(), this frame is already being drawn: the recording starts with the next one.
-        self._motion = [path, kind, frames, [], None, bool(self._in_draw)]
+        self._motion = [path, kind, frames, None, None, bool(self._in_draw)]
 
     def _record_motion_frame(self) -> None:
         recording = self._motion
@@ -1215,17 +1218,27 @@ class Sketch:
         path, kind, left, frames, size, _ = recording
         w, h = self.width, self.height
         if size is not None and size != (w, h):
-            self._motion = None
+            self._drop_motion()
             raise ValueError(f"the canvas changed size from {size[0]} x {size[1]} to {w} x {h} while "
                              f"{path!r} was being recorded; a GIF or MP4 keeps one size")
         recording[4] = (w, h)
-        frames.append(motion.bgra_to_rgb(self._view().read_logical(0, 0, w, h, w, h), w, h))
+        if frames is None:
+            frames = recording[3] = motion.FrameStore((w, h))
+        frames.add(motion.bgra_to_rgb(self._view().read_logical(0, 0, w, h, w, h), w, h))
         recording[2] = left - 1
         if recording[2] > 0:
             return
+        try:
+            durations = [1.0 / self.fps] * len(frames)
+            (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, (w, h), durations)
+        finally:
+            self._drop_motion()
+
+    def _drop_motion(self) -> None:
+        """End the recording and let go of its frames."""
+        if self._motion is not None and self._motion[3] is not None:
+            self._motion[3].close()
         self._motion = None
-        durations = [1.0 / self.fps] * len(frames)
-        (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, (w, h), durations)
 
     def save_frames(self, pattern: str, count: int) -> None:
         """Save this frame and the ones after it, *count* in all, numbered into *pattern* (S-056)."""
@@ -2603,7 +2616,7 @@ class Sketch:
         self._frame_end.clear()                  # a keep the sketch did not live to finish is dropped
         self._guides = []
         self._frame_sequence = None
-        self._motion = None                      # a recording the sketch did not live to finish is dropped
+        self._drop_motion()                      # a recording the sketch did not live to finish is dropped
         frame_inputs.stop_all()                  # a camera's light goes off, a microphone is let go
         self._renderer.attach(0, 0)
         self._platform.close()

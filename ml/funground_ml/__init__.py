@@ -1,4 +1,4 @@
-"""The models library: a body, a hand and the outline of a person in a camera or a picture, and the words in a microphone.
+"""The models library: a body, a hand and the outline of a person in a camera or a picture, and the words and sounds in a microphone.
 
 Bring it in with one line, then every call says ``ml.``::
 
@@ -22,15 +22,18 @@ your own.
 
 ``ml.words(mic)`` listens to a microphone and gives the words it heard, a phrase at a time, in English. It works beside the sketch,
 so ``draw()`` never waits for it.
+
+``ml.sound(mic)`` listens to a microphone and gives the name of the sound it hears now, such as "Dog" or "Whistling", with a few
+more guesses. It also works beside the sketch.
 """
 from __future__ import annotations
 
 from funground.api import _sketch_folder
 
 from . import _tasks
-from ._results import Body, Hand, Words
+from ._results import Body, Hand, Heard, Words
 
-__all__ = ["pose", "hand", "person", "words"]
+__all__ = ["pose", "hand", "person", "words", "sound"]
 
 
 def pose(source):
@@ -180,3 +183,47 @@ def words(source):
     See also: pose, microphone
     """
     return _tasks.find_words(source, _sketch_folder())
+
+
+def sound(source):
+    """Listen to a microphone or a sound, and give the name of what it hears.
+
+    It names everyday sounds, such as a dog, a whistle, clapping, a car or speech. For a microphone (``sound.microphone()``,
+    started) funground listens to the last second (0.96 s) and works out a new answer about twice a second (every 0.48 s). It
+    works beside your sketch, so ``draw()`` never waits. You get None until a second has been heard, and whenever there is nothing
+    to name: it is quiet, the likeliest sound is silence, or the model is not sure of any name (a score under 0.1). So a sound that
+    stops does not stay on the screen. If you pass a sound (for example ``mic.capture(3)`` or ``sound.load("a.wav")``), you get one
+    answer for the whole sound, at most 30 seconds. On a computer the call waits for the answer, and asking again about the same
+    sound is free. In Play it gives None until the answer arrives. A microphone that is not listening, or one with no sound
+    (``FUNGROUND_HEADLESS=1``), gives None.
+
+    You get a Heard. ``heard.name`` is the name, in English. ``heard.score`` (0 to 1) says how sure the model is. ``heard.next`` is
+    up to four more guesses, the likeliest first; each is a Heard with a name and a score. ``heard.is_new`` is True in the frame
+    an answer first appears, and False after that. ``str(heard)`` is the name. The model often gives a broad name ("Music", not the
+    instrument) and it can be wrong, so show the next guesses too. Calling it twice in one frame gives the same Heard.
+
+    The first call downloads the sound model (16 MB) and keeps it in a ``models/`` folder beside your sketch; it prints one line
+    when it does. The sound never leaves your computer. The sound names are from the AudioSet ontology by Google LLC (CC BY 4.0),
+    and the model is YAMNet by Google LLC (Apache 2.0).
+
+    Arguments:
+        source: a microphone from sound.microphone(), or a Sound.
+
+    Returns:
+        a Heard, or None if there is nothing to name.
+
+    Raises:
+        TypeError: if source is not a microphone or a sound.
+        ValueError: if the sound is longer than 30 seconds.
+        ConnectionError: if the model has to be downloaded and there is no connection.
+
+    Example:
+        mic = sound.microphone()
+        mic.start()
+        heard = ml.sound(mic)
+        if heard:
+            f.text(heard.name, 20, 100)
+
+    See also: words, microphone
+    """
+    return _tasks.find_sound(source, _sketch_folder())
