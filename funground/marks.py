@@ -30,6 +30,7 @@ import warnings
 from dataclasses import replace
 
 from . import ir
+from ._numbers import unusable
 from ._options import MarkAnchor, MarkStyle
 from .capabilities import FungroundWarning
 from .color import BLACK, WHITE
@@ -183,7 +184,7 @@ def _number(value, name: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise TypeError(f"mark.place(): {name} must be a number, not {value!r}")
     if not math.isfinite(value):
-        raise ValueError(f"mark.place(): {name} must be a finite number, not {value!r}")
+        raise ValueError(unusable(name, value, "mark.place()"))
     return float(value)
 
 

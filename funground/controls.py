@@ -18,6 +18,7 @@ from __future__ import annotations
 import math
 
 from . import ir
+from ._numbers import unusable
 from .color import Color
 from .state import GraphicsState
 
@@ -48,7 +49,7 @@ def _number(v: object, what: str) -> float | int:
     if not _is_number(v):
         raise TypeError(f"{what} must be a number, not {type(v).__name__}")
     if isinstance(v, float) and not math.isfinite(v):
-        raise ValueError(f"{what} must be a finite number, not {v!r}")
+        raise ValueError(unusable(what, v))
     return v
 
 
