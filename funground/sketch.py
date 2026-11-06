@@ -729,15 +729,20 @@ class Sketch:
         canvas is drawn for a window, a PNG, a PDF or an SVG, so the canvas's own ops (and IR
         snapshots) stay exactly what the sketch drew. Every layer is flushed, hidden or not.
         With *files* (S-096), hidden layers are included too, tagged layer_hidden: PDF and SVG keep
-        them switched off, and every other renderer leaves them out."""
+        them switched off, and every other renderer leaves them out. Without *files* the ops must be
+        drawn at once and not kept: they can hold a layer's live surface (S-258)."""
         ops: list[ir.Image] = []
         for name, picture in self._layers.items():
-            snap = picture._snapshot()                 # draws what the layer has recorded so far
             hidden = name in self._layers_hidden
-            if hidden and not files:
+            if files:
+                snap = picture._snapshot()             # draws what the layer has recorded so far
+                ops.append(ir.Image(picture.name, snap.version, 0.0, 0.0, float(picture.width),
+                                    float(picture.height), snapshot=snap, layer=name, layer_hidden=hidden))
                 continue
-            ops.append(ir.Image(picture.name, snap.version, 0.0, 0.0, float(picture.width),
-                                float(picture.height), snapshot=snap, layer=name, layer_hidden=hidden))
+            snap, x, y = picture._for_showing()        # the same, and lets an idle layer rest
+            if not hidden:
+                ops.append(ir.Image(picture.name, snap.version, x, y, float(snap.logical_width),
+                                    float(snap.logical_height), snapshot=snap, layer=name))
         return ops
 
     def _with_layers(self, frame: ir.Frame, files: bool = False) -> ir.Frame:

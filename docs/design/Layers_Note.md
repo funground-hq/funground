@@ -145,9 +145,58 @@ SVG has only the layer step; if it fails the SVG is drawn again as S-095 wrote i
 
 - **A wipe inside a layer block keeps the layer vector.** The block's own `push()` is an `ir.Save` marked `layer_block` (omitted from snapshots when false); a picture's history restarts at a `background` or `clear` inside only that Save as `[Save, ResetMatrix, wipe]`, but still stops if a learner's own `push()` is open.
 
+## What an idle layer costs (S-258)
+
+Spike 22 found that a new layer name each frame grows about 1 GB per 1,000 frames at 400 x 300. Each layer
+held its pixels twice, on its surface and in a cached `Snapshot`, and each frame copied every layer again
+to paint it. Layers are kept by design (F16), so the fix makes a kept layer cheap, not rarer.
+
+**Showing makes no copy.** `Picture._for_showing()` gives the renderer the live surface. That is safe
+because ops for the screen are drawn at once and never kept (`_layer_ops` without `files`). Files still
+use `_snapshot()`, which is a frozen copy with its history.
+
+**An idle layer rests.** After `LAYER_REST_SHOWS` (10) shows with no change, `_rest()` copies the box that
+holds pixels and gives up the surface and its context. It then paints only that box. Anything else that
+needs the picture goes through `_flush_ops()`, and `_wake()` there rebuilds the surface. Rest and wake leave
+`_version` and the history alone, so a resting layer still goes into a PDF or SVG as vectors.
+
+**Who may rest.** A Cairo context holds state, and a new one starts plain. A layer rests only with no
+`push()` open and with no transform, clip or `no_smooth()` made outside a push (`_KEEPS_CONTEXT_STATE`).
+Inside a `with` block all of these end with the block, so ordinary layers rest. The others stay awake.
+
+**Why a box is exact.** A see-through pixel over anything leaves that thing as it was, so leaving those
+pixels out cannot change the result. `tests/test_layer_rest.py` compares the bytes at scales 1, 1.5 and 2.
+
+**Measured** (private memory and the median of the last 30 frames, on an i5-1135G7, headless, with
+`spikes/22_memory_soak/bench_layers.py`):
+
+| Sketch | Before | After |
+|---|---|---|
+| A new layer each frame, 300 frames, 400 x 300 | +293 MB, 22.5 ms | +8.2 MB, 3.8 ms |
+| The same, 1,000 frames | not run (about +980 MB at that rate) | +15.5 MB, 15.8 ms |
+| 5 layers redrawn every frame, 400 x 300 | 2.35 ms | 1.24 ms |
+| 20 layers, each redrawn once in 20 frames, 1920 x 1080 | +333 MB, 92 ms | +83 MB, 39 ms |
+| The same at 400 x 300 | +20 MB, 1.38 ms | +5.6 MB, 2.41 ms |
+
+The last row is the one that got slower: each frame there has one rest and one wake.
+
+**Tried and rejected** (a prototype, 7 November; D-134 records the choice).
+
+- *Compressing idle layers.* A sparse 400 x 300 layer takes 0.40 ms to expand and about 0.15 ms to paint.
+  A shown layer is painted every frame, so it would have to stay expanded, or cost more each frame than
+  it does now. A box saves the memory and also the paint.
+- *Merging unchanged layers into one picture.* Putting 12 see-through layers together and then over the
+  canvas, against one at a time: 16,944 of 480,000 bytes differ, by up to 2 levels. Rounding happens in a
+  different order. The picture would then depend on when the merge happened, so it is out.
+
+**Limits.** A busy layer that fills the canvas still holds one full canvas, not two. Saving wakes every
+layer, and a layer that is saved keeps its cached snapshot until it next rests. A layer with state outside
+a block never rests. Each layer also holds about 15 KB of Python objects. None of this is a cap: 100,000
+layer names still reach a limit, and a warning for that is a question for the maintainer (spike 22).
+
 ## Tests
 
-`tests/test_layer_files.py`: OCG names, order and `/OFF`; one Form XObject per layer carrying its
+`tests/test_layer_rest.py` covers S-258. `tests/test_layer_files.py`: OCG names, order and `/OFF`; one Form XObject per layer carrying its
 OCG; real text inside a layer; pdfium render against the PNG and against the PDF without OCGs;
 one OCG per name across pages, and two for a name hidden on one page only; the P3-limit fallback
 (pixels inside the OCG and the `<g>`); animated saves; the fallback when the layer step fails; SVG

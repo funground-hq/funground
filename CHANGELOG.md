@@ -18,6 +18,10 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
   It now stops safely. A microphone is also let go when the sketch ends, as its documentation always said.
 
 ### Changed
+- **Layers cost little when they are not changing** (S-258, D-134). A layer that has not changed for a few
+  frames keeps only the part that holds pixels, and showing a layer no longer copies it. A new layer each
+  frame at 400 x 300 used about 293 MB over 300 frames and now uses about 8 MB, and the last of those frames
+  is about six times quicker. What you see and what you save do not change.
 - **Sound and the music of India are libraries** (S-246, D-120, D-123, ADR-007). The 24 names `f.tone`, `f.note`,
   `f.pluck`, `f.drone`, `f.melody`, `f.sequence`, `f.mix`, `f.chord_notes`, `f.note_to_frequency`,
   `f.frequency_to_note`, `f.microphone`, `f.microphones`, `f.draw_wave`, `f.draw_spectrum`, `f.draw_pitch_line`,
