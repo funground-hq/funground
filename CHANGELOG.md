@@ -9,6 +9,8 @@ What changed in funground, newest first. Release numbers follow the
 A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
 
 ### Fixed
+- **`ml.words` no longer runs on repeating itself** (S-257, D-131). In noise the model could say one word again and again. It now
+  stops, and keeps the words before the repeat. A word really said four times or more in a row comes back once.
 - **`f.arc` no longer hangs on a huge or infinite angle, and nan or inf no longer reach a saved file** (S-253, found by spike 20).
   `translate`, `rotate`, `scale`, the shears, `apply_matrix`, `linear_gradient`, `radial_gradient`, `stroke_dash`, `circle`, `ellipse`
   and `arc` now refuse them with a sentence, where before they could make a PDF or SVG that would not open, or stall. Ordinary
