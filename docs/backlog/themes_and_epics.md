@@ -70,7 +70,7 @@ Phase exit criteria come from the architecture document, sharpened by the review
 |---|---|---|---|
 | E-20 OpenGL feasibility | Context-creation spike through `PygamePlatform`; provider interface only | 4 | directional |
 | E-21 3D primitives, shaders, camera | | 4 | directional |
-| E-40 Making real things: laser cutting | SVG and PDF files that cut true at their real size, thin lines, and a guide project tested on a real cutter (S-260 to S-263). S-260 is a bug fix and is not tied to 1.0 | post-1.0 | candidate |
+| E-40 Making real things: laser cutting | Files that cut true at their real size, thin lines, and a guide project tested on a real cutter (S-260 to S-263). Opt-in: screen sketches are not changed | post-1.0 | candidate |
 | E-41 From sketch to object: 3D files | A sketch's shapes become objects to print, model or render: first through build123d, then perhaps a small model of our own that writes for several tools (S-264 to S-266). Not E-21, which is 3D on the screen; see `docs/design/Objects_3D_Note.md` | post-1.0 | candidate (D-133) |
 | E-31 Playground in the browser | Pyodide + `BrowserPlatform` + `Canvas2DRenderer` consuming the same IR; loader, `<playground-run>`, launcher URL, classroom page. Feasibility proven by Spike 08 (S-059, done); see `docs/design/Browser_Mode_Note.md` | post-1.0 | directional (D-014) |
 

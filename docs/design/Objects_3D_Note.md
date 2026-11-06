@@ -76,7 +76,7 @@ The first and the second are the reasons to do it. The others are welcome, but n
   capability registry (E-07) is the existing pattern: an unsupported feature fails with a message that names the tool that
   has it.
 - **Units.** `f.mm()` gives points, because the canvas is in points, while 3D tools work in millimetres. A writer must
-  convert, or it repeats the SVG unit bug (S-260).
+  convert, and say which meaning of a unit it uses (D-132).
 
 ## Options
 
@@ -91,7 +91,7 @@ The first and the second are the reasons to do it. The others are welcome, but n
 
 Do this in steps, and let each step earn the next:
 
-1. **Now:** fix the SVG unit (S-260), because everything below depends on true sizes.
+1. **Now:** settle what a file's size means (D-132), and use PDF where true size matters.
 2. **S-264:** a spike taking an SVG through build123d to an STL. It is cheap, needs no funground code, and it may become a
    guide project on its own.
 3. **S-265:** a spike of the small model with three text writers, with its pass/fail set in advance. It shows whether option
