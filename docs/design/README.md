@@ -47,6 +47,7 @@ rewritten after acceptance.
 | [Loop_Inversion_Note.md](Loop_Inversion_Note.md) | The run loop as start/step/finish, so a browser page can drive it (S-060, D-074). | You touch `Sketch.run_namespace`, `start`, `step` or `finish`, or a platform's `tick()`. |
 | [Web_Runner_Note.md](Web_Runner_Note.md) | The 0.2 web runner: BrowserPlatform, the `funground.web` host API, the worker, origins and safety. | You touch `funground/web.py`, `platform/browser.py` or the browser runner. |
 | [Editor_Note.md](Editor_Note.md) | The one-page editor and the learner's GitHub sketchbook: experience, security, save permission (D-079). | You build the Play page, the editor or the sketchbook template. |
+| [Objects_3D_Note.md](Objects_3D_Note.md) | Study: from sketch to object, and whether a small 3D model of our own could write for several tools (E-41, D-133). Nothing decided. | You work on 3D files or laser cutting. |
 
 ## Research and history
 

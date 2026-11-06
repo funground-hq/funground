@@ -102,6 +102,8 @@ option C: byte-identical goldens, PDF/SVG, one renderer). The website is at fung
 | Second web renderer: Canvas 2D (C+B) | E-31 | To revisit (D-075): the Canvas 2D IR renderer (S-135, S-148: within tolerance, 3–9× faster for light sketches at 2×) becomes a second renderer once a compact IR hand-over exists and it measures better than Cairo for the sketches people run |
 | GPU renderer | E-20 | IR consumer; Skia or a GPU engine re-evaluated when needed |
 | 3D (Processing P3D) | E-21 | Not in 1.0; 1.0 means the 2D surface |
+| 3D objects as files | E-41 | Not in 1.0, and not E-21: this makes objects to print, model or render, not 3D on the screen. First through build123d, then perhaps our own small model that writes for several tools. Direction open (D-133); see [Objects_3D_Note.md](design/Objects_3D_Note.md) |
+| Laser cutting | E-40 | Not scheduled. Files that cut true, thin lines, and a guide project tested on a real cutter. Its first story, S-260, is a bug fix for every SVG and can go in any release |
 | funground in the AI era | — | Parked ideas (13 Oct 2026): measuring how well assistants write funground, an in-memory PNG for agent loops, camera-to-model drawing after S-172, drawing from data, contrast and palette helpers. Not planned; see [AI_Era_Possibilities.md](backlog/AI_Era_Possibilities.md) |
 
 ## Deliberately out of scope — [ADR-003](design/ADR-003-out-of-scope.md)
