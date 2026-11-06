@@ -21,6 +21,7 @@ from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 
 from . import frame_inputs, ir
+from ._numbers import unusable
 from .capabilities import Capability, FungroundWarning, missing_capability
 from .controls import Button, Checkbox, ControlPanel, Slider, panel_ops
 from .color import COLOR_MODES, WHITE, Color, ColorLike, parse_in_mode
@@ -271,7 +272,7 @@ class Sketch:
         """Refuse nan and inf before they reach the matrix: Cairo cannot save a drawing with one."""
         for name, value in values.items():
             if isinstance(value, float) and not math.isfinite(value):
-                raise ValueError(f"f.{call}(): {name} must be a finite number, not {value!r}")
+                raise ValueError(unusable(name, value, f"f.{call}()"))
 
     def translate(self, dx: float, dy: float) -> None:
         self._finite("translate", x=dx, y=dy)
@@ -980,7 +981,7 @@ class Sketch:
         if isinstance(value, bool) or not isinstance(value, (int, float)):
             raise TypeError(f"f.{call}(): {name} must be a number, not {value!r}")
         if isinstance(value, float) and not math.isfinite(value):
-            raise ValueError(f"f.{call}(): {name} must be a finite number, not {value!r}")
+            raise ValueError(unusable(name, value, f"f.{call}()"))
         return math.floor(value)
 
     def get(self, x: float, y: float, w: float | None = None, h: float | None = None):
@@ -1169,16 +1170,19 @@ class Sketch:
                 )
         self._require_encoder(kind)
         self._script_flush()
-        frames = []
-        scale = self._script_scale
-        for w, h, _, pixels in pages:
-            if pixels is None:
-                bgra = self._view().read_logical(0, 0, w, h, w, h)
-            else:
-                bgra = motion.resample_bgra(pixels, round(w * scale), round(h * scale), w, h)
-            frames.append(motion.bgra_to_rgb(bgra, w, h))
-        durations = [*self._page_durations, self._frame_duration]
-        (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, first, durations)
+        frames = motion.FrameStore(first)
+        try:
+            scale = self._script_scale
+            for w, h, _, pixels in pages:
+                if pixels is None:
+                    bgra = self._view().read_logical(0, 0, w, h, w, h)
+                else:
+                    bgra = motion.resample_bgra(pixels, round(w * scale), round(h * scale), w, h)
+                frames.add(motion.bgra_to_rgb(bgra, w, h))
+            durations = [*self._page_durations, self._frame_duration]
+            (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, first, durations)
+        finally:
+            frames.close()
 
     def save_gif(self, path: str, seconds: float) -> None:
         """Record the next *seconds* of an animated sketch into a GIF."""
@@ -1205,7 +1209,7 @@ class Sketch:
         self._require_encoder(kind)
         frames = max(1, round(seconds * self.fps))
         # Called from draw(), this frame is already being drawn: the recording starts with the next one.
-        self._motion = [path, kind, frames, [], None, bool(self._in_draw)]
+        self._motion = [path, kind, frames, None, None, bool(self._in_draw)]
 
     def _record_motion_frame(self) -> None:
         recording = self._motion
@@ -1219,17 +1223,27 @@ class Sketch:
         path, kind, left, frames, size, _ = recording
         w, h = self.width, self.height
         if size is not None and size != (w, h):
-            self._motion = None
+            self._drop_motion()
             raise ValueError(f"the canvas changed size from {size[0]} x {size[1]} to {w} x {h} while "
                              f"{path!r} was being recorded; a GIF or MP4 keeps one size")
         recording[4] = (w, h)
-        frames.append(motion.bgra_to_rgb(self._view().read_logical(0, 0, w, h, w, h), w, h))
+        if frames is None:
+            frames = recording[3] = motion.FrameStore((w, h))
+        frames.add(motion.bgra_to_rgb(self._view().read_logical(0, 0, w, h, w, h), w, h))
         recording[2] = left - 1
         if recording[2] > 0:
             return
+        try:
+            durations = [1.0 / self.fps] * len(frames)
+            (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, (w, h), durations)
+        finally:
+            self._drop_motion()
+
+    def _drop_motion(self) -> None:
+        """End the recording and let go of its frames."""
+        if self._motion is not None and self._motion[3] is not None:
+            self._motion[3].close()
         self._motion = None
-        durations = [1.0 / self.fps] * len(frames)
-        (motion.write_gif if kind == "gif" else motion.write_mp4)(path, frames, (w, h), durations)
 
     def save_frames(self, pattern: str, count: int) -> None:
         """Save this frame and the ones after it, *count* in all, numbered into *pattern* (S-056)."""
@@ -1879,7 +1893,7 @@ class Sketch:
             raise ValueError(f"f.arc() mode must be one of {', '.join(self.ARC_MODES)}, not {mode!r}")
         for name, value in (("start", start), ("stop", stop)):
             if isinstance(value, float) and not math.isfinite(value):
-                raise ValueError(f"f.arc(): {name} must be a finite number of degrees, not {value!r}")
+                raise ValueError(unusable(name, value, "f.arc()"))
         if isinstance(start, (int, float)) and isinstance(stop, (int, float)) and start - stop > 360 * 64:
             stop = start + (stop - start) % 360   # the same as adding 360 until stop >= start, without the wait
         while stop < start:
@@ -1963,7 +1977,7 @@ class Sketch:
         if isinstance(offset, bool) or not isinstance(offset, (int, float)):
             raise TypeError(f"f.text_on_path() needs the offset as a number of pixels, not {offset!r}")
         if not math.isfinite(offset):
-            raise ValueError(f"f.text_on_path() needs a finite offset, not {offset!r}")
+            raise ValueError(unusable("offset", offset, "f.text_on_path()"))
         text = str(message).replace(SOFT_HYPHEN, "")
         if "\n" in text:
             raise ValueError("f.text_on_path() sets one line of text, but this message has a new line in it. "
@@ -2607,7 +2621,7 @@ class Sketch:
         self._frame_end.clear()                  # a keep the sketch did not live to finish is dropped
         self._guides = []
         self._frame_sequence = None
-        self._motion = None                      # a recording the sketch did not live to finish is dropped
+        self._drop_motion()                      # a recording the sketch did not live to finish is dropped
         frame_inputs.stop_all()                  # a camera's light goes off, a microphone is let go
         self._renderer.attach(0, 0)
         self._platform.close()

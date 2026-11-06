@@ -324,7 +324,7 @@ def test_wrong_arguments_have_plain_errors(canvas):
         p.text_on_path("Hi", line(), "far")
     with pytest.raises(TypeError, match="offset"):
         p.text_on_path("Hi", line(), True)
-    with pytest.raises(ValueError, match="finite"):
+    with pytest.raises(ValueError, match="offset came out as"):
         p.text_on_path("Hi", line(), float("nan"))
     with pytest.raises(ValueError, match="new line"):
         p.text_on_path("Two\nlines", line())
