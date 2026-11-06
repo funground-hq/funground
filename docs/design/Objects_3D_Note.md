@@ -78,6 +78,28 @@ The first and the second are the reasons to do it. The others are welcome, but n
 - **Units.** `f.mm()` gives points, because the canvas is in points, while 3D tools work in millimetres. A writer must
   convert, and say which meaning of a unit it uses (D-132).
 
+## Which kind of model
+
+A comparison from another assistant, shared by the maintainer on 6 Nov, names three ways to describe an object once and
+send it to different tools. It is a useful frame:
+
+| Kind | What is stored | Fit here |
+|---|---|---|
+| A CSG tree | Solids and booleans as a tree of plain data | **This is what S-265 tests.** It matches funground's IR, and OpenSCAD and OpenCascade both take it directly |
+| Code | A script that builds the object | **The output of S-265, not the model:** a script can only be run, not checked or snapshotted. Plain data can become a script; the reverse is hard |
+| A distance field (SDF) | A function giving the distance to the surface at any point | **Worth a look, for a different reason:** see below |
+
+**Distance fields may answer the viewer problem.** A field can be drawn by ray marching with no mesh at all, on a page in a
+fragment shader, so the costliest item above might not need a mesh engine. Soft blends between shapes are also easy, and
+those suit noise and generative work. Against it: sharp edges and exact dimensions are lost or blurred by sampling, a mesh
+needs a choice of resolution, and getting back to exact CAD is hard. A CSG tree can be turned into a field, so S-265 can
+keep the tree as the model and try a field as its **preview** only. Ray marching and the WebGL it needs are **unverified**
+here, and desktop has no such path yet.
+
+One claim there needs correcting: build123d scripts cannot "bypass B-Rep" and go straight to a mesh. build123d always runs
+through OpenCascade, and an STL from it is a tessellation of that exact model. A script is tied to the tool that it was
+written for. That is why our model is data, with one writer per tool.
+
 ## Options
 
 | Option | What it is | Gain | Cost |
