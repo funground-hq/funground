@@ -13,6 +13,7 @@ carry across flushes the same way its pixels do.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections.abc import Iterable
 from typing import Any, Protocol, runtime_checkable
 
 from . import ir
@@ -64,6 +65,9 @@ HISTORY_LIMIT = 10_000
 # S-258: a layer shown this many times in a row with no change gives up its full surface and keeps only the
 # box that holds its pixels (_Resting). Long enough that a layer redrawn every few frames never rests.
 LAYER_REST_SHOWS = 10
+# S-267: how many layer pixels may rest in one show (one 1080p layer, or 16 at 400 x 300). Layers that fell idle
+# together rest over a few frames, so no frame stalls, and a sketch that makes many layers a frame still keeps up.
+LAYER_REST_PIXELS = 2_000_000
 # What stays in a picture's Cairo context after the op, unless a push() around it ends. A layer that had
 # one outside any push() cannot give its context up, so it never rests.
 _KEEPS_CONTEXT_STATE = (ir.Concat, ir.ClipPath, ir.SetAntialias)
@@ -123,20 +127,35 @@ class _Resting:
 def _visible_box(bgra: Any, width: int, height: int) -> tuple[int, int, int, int]:
     """(left, top, right, bottom) of the pixels that are not fully see-through, or all 0 when there are none.
 
-    A see-through pixel is four zero bytes, as colours are stored multiplied by their alpha."""
+    A see-through pixel is four zero bytes, as colours are stored multiplied by their alpha. A blank row is found by
+    comparing it whole, and in the other rows only what lies outside the box so far is looked at (S-267: a rest
+    happens during a frame, and stripping 8 MB of zero bytes took 26 ms)."""
     stride = width * 4
     data = bytes(bgra)
-    start = len(data) - len(data.lstrip(b"\0"))
-    if start == len(data):
+    blank = bytes(stride)
+    rows = [y for y in range(height) if not data.startswith(blank, y * stride)]
+    if not rows:
         return 0, 0, 0, 0
-    top = start // stride
-    bottom = (len(data.rstrip(b"\0")) + stride - 1) // stride
     left, right = width, 0
-    for y in range(top, bottom):
-        row = data[y * stride:(y + 1) * stride]
-        left = min(left, (stride - len(row.lstrip(b"\0"))) // 4)
-        right = max(right, (len(row.rstrip(b"\0")) + 3) // 4)
-    return left, top, right, bottom
+    for y in rows:
+        start = y * stride
+        before = data[start:start + left * 4]
+        left = (len(before) - len(before.lstrip(b"\0"))) // 4
+        after = data[start + right * 4:start + stride]
+        right += (len(after.rstrip(b"\0")) + 3) // 4
+    return left, rows[0], right, rows[-1] + 1
+
+
+def rest_idle_layers(layers: Iterable["Picture"]) -> None:
+    """Let layers that have been idle long enough rest, at most LAYER_REST_PIXELS of them in one show.
+
+    This comes before a show, not during it: a show's ops hold the live surfaces that a rest gives up."""
+    room = LAYER_REST_PIXELS
+    for layer in layers:
+        if room <= 0:
+            return
+        if layer._ready_to_rest():
+            room -= layer._rest()
 
 
 class _PictureBacking:
@@ -396,30 +415,31 @@ class Picture:
         """What to paint for this layer on the way to the screen, and where (logical).
 
         The result is used at once and never kept, so it can be the live surface and needs no copy. It has no
-        history: only files replay a layer, and they use _snapshot(). A layer that has not changed for
-        LAYER_REST_SHOWS shows rests first, so that it holds one small box and paints only that."""
+        history: only files replay a layer, and they use _snapshot(). A resting layer paints only its box."""
         self._sketch._flush_pixel_patch()
         if self._resting is None or self._sketch.frame:
             self._flush_ops()
             self._quiet_shows = self._quiet_shows + 1 if self._version == self._last_shown else 0
             self._last_shown = self._version
-            if self._quiet_shows < LAYER_REST_SHOWS or self._save_stack or self._context_state_kept:
-                pixels = self._sketch._renderer.pixels()
-                return (Snapshot(self.name, self._version, pixels.data, pixels.width, pixels.height, self._scale,
-                                 self.width, self.height, None), 0.0, 0.0)
-            self._rest()
+            pixels = self._sketch._renderer.pixels()
+            return (Snapshot(self.name, self._version, pixels.data, pixels.width, pixels.height, self._scale,
+                             self.width, self.height, None), 0.0, 0.0)
         resting = self._resting
         return resting.snapshot, resting.left / self._scale, resting.top / self._scale
 
-    def _rest(self) -> None:
-        """Keep only the box that holds pixels, and give up the surface and its context."""
+    def _ready_to_rest(self) -> bool:
+        """Whether this layer is idle and can give up its surface: awake, unchanged, and holding no context state."""
+        self._sketch._flush_pixel_patch()
+        return (self._resting is None and self._quiet_shows >= LAYER_REST_SHOWS and not self._sketch.frame
+                and not self._save_stack and not self._context_state_kept)
+
+    def _rest(self) -> int:
+        """Keep only the box that holds pixels, and give up the surface and its context. Returns the pixels looked at."""
         renderer = self._sketch._renderer
         pixels = renderer.pixels()
         left, top, right, bottom = _visible_box(pixels.data, pixels.width, pixels.height)
         stride = pixels.width * 4
-        box = bytearray()
-        for y in range(top, bottom):
-            box += pixels.data[y * stride + left * 4:y * stride + right * 4]
+        box = bytearray().join(pixels.data[y * stride + left * 4:y * stride + right * 4] for y in range(top, bottom))
         wide, high = right - left, bottom - top
         self._resting = _Resting(
             Snapshot(self.name, self._version, box, wide, high, self._scale, wide / self._scale, high / self._scale,
@@ -427,6 +447,7 @@ class Picture:
             left, top, pixels.width, pixels.height)
         self._snapshot_cache.clear()
         renderer.attach(0, 0)
+        return pixels.width * pixels.height
 
     def _wake(self) -> None:
         """Rebuild the full surface of a resting layer: anything but showing it needs the whole picture."""

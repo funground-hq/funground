@@ -5,6 +5,7 @@ one that never did (contract F16 is unchanged), so these tests compare the two, 
 """
 from __future__ import annotations
 
+import random
 import re
 
 import pytest
@@ -236,12 +237,50 @@ def test_many_idle_layers_hold_little(monkeypatch):
     monkeypatch.setattr(picture, "LAYER_REST_SHOWS", 2)
     for i in range(200):
         dot(s, f"trail {i}", i * 2, 100)
-    for _ in range(4):
+    for _ in range(4 + 200 // 16):               # 16 layers of this size rest in one show
         s._view_pixels()
     held = sum(len(layer._resting.snapshot.pixels) for layer in s._layers.values())
     assert held > 0
     assert all(layer._snapshot_cache == {} for layer in s._layers.values())
     assert held < 200 * 2_000
+
+
+def test_layers_that_fall_idle_together_rest_a_few_at_a_time(monkeypatch):
+    """S-267: 20 full HD layers resting in one show froze it for 0.6 s."""
+    s = script(1920, 1080)
+    for i in range(3):
+        dot(s, f"layer {i}", 20 + i, 15)
+    resting = []
+    for _ in range(LAYER_REST_SHOWS + 5):
+        s._view_pixels()
+        resting.append(sum(layer._resting is not None for layer in s._layers.values()))
+    grown = [after - before for before, after in zip(resting, resting[1:])]
+    assert max(grown) == 1 and resting[-1] == 3
+
+
+def test_small_layers_rest_as_fast_as_a_sketch_can_make_them(monkeypatch):
+    """A rest budget in pixels, not in layers: 10 new small layers a frame must not build up awake."""
+    s = script(400, 300)
+    monkeypatch.setattr(picture, "LAYER_REST_SHOWS", 2)
+    for frame in range(30):
+        for i in range(10):
+            dot(s, f"layer {frame} {i}", i * 8, 100)
+        s._view_pixels()
+    awake = sum(layer._resting is None for layer in s._layers.values())
+    assert awake <= 4 * 10
+
+
+def test_the_box_is_the_same_as_looking_at_every_pixel():
+    rng = random.Random(267)
+    for _ in range(300):
+        w, h = rng.randint(1, 12), rng.randint(1, 9)
+        pixels = bytearray(w * h * 4)
+        for _ in range(rng.randint(0, 6)):
+            pixels[rng.randrange(len(pixels))] = rng.randint(1, 255)
+        hit = [(i % (w * 4) // 4, i // (w * 4)) for i, byte in enumerate(pixels) if byte]
+        expected = ((min(x for x, _ in hit), min(y for _, y in hit),
+                     max(x for x, _ in hit) + 1, max(y for _, y in hit) + 1) if hit else (0, 0, 0, 0))
+        assert _visible_box(pixels, w, h) == expected
 
 
 def test_a_pixel_set_on_a_resting_layer_shows():
