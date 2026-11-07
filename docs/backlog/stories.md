@@ -436,3 +436,28 @@ period. The reasoning and every name's group are in `docs/design/Core_and_Librar
 
 E-37's spike S-231 designs its answer as the separate `funground-ml` package, imported as `from funground import ml`
 (ADR-007).
+
+## E-40 Making real things: laser cutting (6 November 2026)
+
+The maintainer, 6 Nov: put support for laser cutting on the roadmap, and do not let a choice made for physical work hamper the larger number of people who work on screen. Physical needs are therefore opt-in. Nothing here has been tried on
+a real cutter yet. Today the only record is a line in the rangoli guide that says an SVG or PDF can go to a laser cutter.
+
+| ID | Epic | Story | Acceptance | Status |
+|---|---|---|---|---|
+| S-260 | E-40 | **Say which file keeps the real size, and pin it** (found 6 Nov; changed the same day after the maintainer's review). One funground unit is a pixel on screen and a point in a PDF (contract C2, D1). Most sketches are for the screen, and a saved SVG with a bare `width="640"` shows at 640 pixels in a browser, the same as the window. A PDF is the true-size file: 100 mm comes out as 99.8 mm, measured. An SVG in a standards-following drawing tool comes out at 3/4 size: 100 mm gives 74.9 mm by calculation, not yet tried in a real tool. No behaviour changes. Tasks: guide chapter 13 says to use a PDF when the real size matters; correct the line in `docs/guide/projects/02_rangoli.md`; the `save` docstring says the same; tests pin both facts. See D-132 | A test pins a saved SVG's bare size and `viewBox`; a test pins a 100 mm canvas as a PDF page of 100 mm within 0.5 mm; no golden changes | done (D-132) |
+| S-261 | E-40 | **Candidate: lines thinner than 1** (gap 7 of spike 15). `f.stroke_width(0.25)` raises "stroke width must be at least 1". Print needs hairlines of 0.25 to 0.5 pt, and some cutter drivers treat only hairlines as cuts. Changes what a public name accepts, so it is the maintainer's decision. A cutting library (S-262) could give hairlines without changing `stroke_width`. Tasks: what a width below 1 means on screen; contract row; docstring | `f.stroke_width(0.25)` writes `stroke-width="0.25"` in an SVG and a PDF; the screen behaviour is pinned by a test | candidate |
+| S-262 | E-40 | **Candidate spike: what a laser cutter needs from a sketch.** Question: does a funground file go through real cutter software and cut true? Set the pass/fail before the work. Try the rangoli and a test card: size, colours as layers, closed paths, overlaps, burn width (can `expand_stroke` and booleans offset an outline?), pieces that fall out, and whether PDF is enough. If an SVG of true size is needed, decide where it lives: the lean is one opt-in place for what cutting needs (true size, hairlines, colours as layers, burn width), not new keywords on `save` or a changed default. The canvas size also rounds to whole points (100 mm gives 99.8 mm), so check whether that matters | A results note with the card cut on a real machine or, failing that, checked in cutter software and marked so; a list of gaps as stories | candidate |
+| S-263 | E-40 | **Candidate: a guide project, from sketch to cut.** After S-262. A project that makes something that can be cut and used, with burn width and bridges explained in plain English. Correct the line in `docs/guide/projects/02_rangoli.md` if S-262 shows that the rangoli as drawn does not cut well. A DXF route (`ezdxf`) or plotter tidying (`vpype`) goes in a separate package, and only if someone asks | The project's example, its golden and a photo of the real thing | candidate |
+
+## E-41 From sketch to object: 3D files (6 November 2026)
+
+The maintainer, 6 Nov: support 3D integration, for example with build123d, and explore extending funground's 2D approach
+to 3D, with our own internal representation that maps to tools such as Blender, OpenCascade and OpenSCAD. This is not
+E-21: E-21 draws 3D on the screen in real time, and E-41 makes files of objects. The study is
+[Objects_3D_Note.md](../design/Objects_3D_Note.md); the direction is D-133.
+
+| ID | Epic | Story | Acceptance | Status |
+|---|---|---|---|---|
+| S-264 | E-41 | **Candidate spike: from a funground SVG to a 3D print file, through build123d.** Needs no funground code. In a separate virtual environment, take a saved SVG, extrude it with build123d and write an STL. Measure the install size and time, whether the curves stay curves, the size against the sketch, and whether it runs in a browser through OCP.wasm | A results note with the numbers and a recommendation for a guide project | candidate |
+| S-265 | E-41 | **Candidate spike: one small object model, three outputs** (the test of D-133). A plain-data model of about ten kinds (box, sphere, cylinder, extrude, revolve, move, turn, scale, union, difference), with funground paths as profiles. It writes three things as text: an OpenSCAD file, a build123d script and a Blender script. Set before the work: three test objects (a stamp, a vase, a name tag with a hole) come out of at least two tools with their bounding boxes within 0.5 % and their volumes within 2 %; the model is under 300 lines; each writer is under 200 lines. Spikes change no product code | A results note with the measurements for each pair of tools, a recommendation for D-133, and a short trial of a distance field as a preview (see the note) | candidate, needs D-133 |
+| S-266 | E-41 | **Candidate: a 3D library for learners.** Only if S-265 passes and D-133 chooses it. A separate package under ADR-007. Needs a way to see the object while working, without which this is not a learning tool, and its own contract and tests | To be written after S-265 | candidate |
