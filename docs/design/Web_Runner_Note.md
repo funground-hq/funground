@@ -80,6 +80,21 @@ first gesture is not started later; a refused microphone does not raise at `star
 desktop-only (`f.microphone("name")` raises, `f.microphones()` is `[]`). Tests: `tests/test_web_sound.py`
 (here) and `tools/test_sound.py` (`funground-web`, headless Chrome with a fake microphone).
 
+**A file at another rate (S-259, D-135).** The desktop's `mixer.Sound(path)` converts a file to 44 100 Hz inside SDL, with a
+Kaiser-windowed sinc filter: 5 zero crossings to each side, 512 values for each, 80 dB, and a length of `n * 44100 // rate`.
+`analysis.resample_file` computes the same filter in plain Python, because the page has no SDL, and the core has no numpy.
+The desktop is the reference: `tests/test_web_sound.py` compares bytes from `_read_wav` with SDL's for seven rates, mono and
+stereo, five lengths and clipping, and every sample must be within one 16-bit step. Exact bytes are not the aim: SDL works
+in float32 with vector instructions, so its own result can depend on the processor. If an update of pygame-ce changes SDL's
+filter, that test fails and `resample_file` follows it. SDL 2.32.10 was measured; `pyproject.toml` allows any pygame-ce 2.5 or later.
+
+- **Why not linear on both:** tones in a 16 kHz file keep 95% at 2 kHz, 81% at 4 kHz and 61% at 6 kHz; SDL's keep 100%, 100%
+  and 92%. `analysis.resample` stays for `sound.create()`, where it is the same on both and its speed matters more.
+- **Cost:** 0.98 microseconds a sample against linear's 0.22 microseconds on the desktop (i5-1135G7, Python 3.14). In headless Chrome, 20.1 s of
+  16 kHz mono took 3.5 to 3.7 s to load, with Python blocked (the page stays alive; the sketch waits). A file at 44 100 Hz is not
+  resampled and costs nothing. Worked out from that, **unverified:** a three-minute stereo 48 kHz WAV would take about a minute.
+- **Not covered:** OGG and MP3 (still desktop only), and a desktop whose device opens at another rate than the 44 100 Hz asked for.
+
 **Camera (S-172).** The same shape as the microphone, with pictures instead of samples. the camera library
 (`camera/_device.py`) keeps the latest frame; under a host its device is a `HostCamera`
 (`platform/browser_camera.py`, which `Session` puts in `host_services.camera`, S-247). `cam.start(width, height, mirror)` makes the host an `on_camera("start", {"width",
