@@ -2,7 +2,8 @@
 
 This module is plain Python (``math`` and ``cmath`` only). It does not touch pygame, the sound device
 or the sketch. The sound library gives its sounds and microphones the methods that call these functions. It also
-holds ``resample``, which the sound library and the browser's mixer (``platform/browser_audio.py``) both use.
+holds ``resample``, which the sound library and the browser's mixer (``platform/browser_audio.py``) both use, and
+``resample_file``, which gives a browser the samples SDL gives the desktop when a file is read.
 
 Speed: a pure Python FFT is slow, so everything here first lowers the sample rate to about 11 025 a
 second (it averages groups of samples). That is plenty for rhythm and for notes up to 2 kHz, and it
@@ -12,6 +13,7 @@ from __future__ import annotations
 
 import cmath
 import math
+from functools import cache
 from operator import mul, sub
 
 ANALYSIS_RATE = 11025            # the rate chroma and key work at (the input is reduced to about this)
@@ -468,4 +470,70 @@ def resample(values: list[float], src: int, dst: int) -> list[float]:
         else:
             frac = pos - j
             out.append(values[j] * (1.0 - frac) + values[j + 1] * frac)
+    return out
+
+
+# ---- reading a file at another rate: the filter of SDL 2, which decodes files on the desktop
+SINC_CROSSINGS = 5               # the filter reaches this many of its zero crossings to each side
+SINC_STEPS = 512                 # filter values for each crossing
+SINC_SIZE = SINC_CROSSINGS * SINC_STEPS + 1
+SINC_BETA = 0.1102 * (80.0 - 8.7)   # a Kaiser window for 80 dB
+SINC_MARGIN = SINC_CROSSINGS + 1    # silence read before the start and after the end
+
+
+def _bessel(x: float) -> float:
+    """The zeroth modified Bessel function, by its series."""
+    half = x / 2
+    total = term = 1.0
+    k = 1
+    while term > 1e-21:
+        term *= (half / k) ** 2
+        total += term
+        k += 1
+    return total
+
+
+@cache
+def _sinc_filter() -> tuple[tuple[float, ...], tuple[float, ...]]:
+    """One side of the filter, and the step from each value to the next. Made once; it never grows."""
+    last = SINC_SIZE - 1
+    peak = _bessel(SINC_BETA)
+    values = [1.0] * SINC_SIZE
+    for i in range(1, SINC_SIZE):
+        x = math.pi * i / SINC_STEPS
+        values[i] = _bessel(SINC_BETA * math.sqrt(1.0 - ((i - 1) / last) ** 2)) / peak * math.sin(x) / x
+    return tuple(values), tuple(map(sub, values[1:], values)) + (0.0,)
+
+
+def _wing(blend: float, start: int) -> list[float]:
+    """The filter's weights on one side of a position, nearest sample first."""
+    values, steps = _sinc_filter()
+    return [values[i] + blend * steps[i] for i in range(start, SINC_SIZE, SINC_STEPS)]
+
+
+def resample_file(values: list[float], src: int, dst: int) -> list[float]:
+    """Change the samples of a file from *src* to *dst* samples a second, as SDL does on the desktop.
+
+    The result has SDL's length and stays within one step of a 16-bit sample of SDL's (tests/test_web_sound.py compares
+    them), so ``sound.load()`` hears the same in a browser. ``resample`` is simpler and dulls high notes: it keeps 81%
+    of a 4 kHz tone in a 16 kHz file, and this keeps all of it. The cost is about ten multiplications for each new
+    sample. There are ``dst / gcd(src, dst)`` different positions between two samples, so each one's weights are
+    worked out once.
+    """
+    if src == dst or not values:
+        return list(values)
+    divisor = math.gcd(src, dst)
+    weights = []                     # for each position: how many samples it uses before it, and all its weights
+    for position in range(dst // divisor):
+        offset = position * divisor
+        before = _wing(offset / dst, offset * SINC_STEPS // dst)
+        after = _wing(1.0 - offset / dst, (dst - offset) * SINC_STEPS // dst)
+        weights.append((len(before), before[::-1] + after))
+    padded = [0.0] * SINC_MARGIN + list(values) + [0.0] * SINC_MARGIN
+    out = []
+    for i in range(len(values) * dst // src):
+        index, offset = divmod(i * src, dst)
+        before, chosen = weights[offset // divisor]
+        first = index + SINC_MARGIN + 1 - before
+        out.append(sum(map(mul, chosen, padded[first:first + len(chosen)])))
     return out
