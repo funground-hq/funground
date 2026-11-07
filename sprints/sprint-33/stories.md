@@ -24,7 +24,8 @@ pass, on the desktop and in Play, before the tag.
 | S-252 | The test suite can be trusted before 0.2 (spike 19; added 5 Nov) | done (#65) |
 | S-253 | Nonsense numbers cannot hang a sketch or spoil a saved file (spike 20; added 5 Nov) | built; PR open |
 | S-250 | Sounds: `ml.sound(mic)`, the most likely sound with how sure, and the next guesses | built 5 Nov; a real microphone is for the maintainer's test pass |
-| S-259 | `sound.load()` gives the same samples on the desktop and in Play (found by S-250; D-135) | built 7 Nov; PRs open |
+| S-259 | `sound.load()` gives the same samples on the desktop and in Play (found by S-250; D-135) | done (#75, web #26) |
+| S-267 | A layer's rest never stalls a frame (found while reviewing S-258) | done (#76) |
 | S-235 | A model you teach: `ml.teach(...)` and `ml.guess(...)`, a few examples of each kind from the camera | planned |
 | S-236 | The guide chapter on models: what a model is, what it learnt from, why it is wrong, what stays on your computer | planned |
 | S-238 | Spike: signing in to GitHub from Play (carried over from sprint 32) | done 5 Nov: passed on a laptop and a phone; D-118 accepted 5 Nov (b) |

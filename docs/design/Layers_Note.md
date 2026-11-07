@@ -155,14 +155,22 @@ to paint it. Layers are kept by design (F16), so the fix makes a kept layer chea
 because ops for the screen are drawn at once and never kept (`_layer_ops` without `files`). Files still
 use `_snapshot()`, which is a frozen copy with its history.
 
-**An idle layer rests.** After `LAYER_REST_SHOWS` (10) shows with no change, `_rest()` copies the box that
-holds pixels and gives up the surface and its context. It then paints only that box. Anything else that
+**An idle layer rests.** After `LAYER_REST_SHOWS` (10) shows with no change, `rest_idle_layers()` calls `_rest()`
+before the next show. It copies the box that holds pixels and gives up the surface and its context. The layer then
+paints only that box. Resting comes before a show, never during one, because a show's ops hold live surfaces. Anything else that
 needs the picture goes through `_flush_ops()`, and `_wake()` there rebuilds the surface. Rest and wake leave
 `_version` and the history alone, so a resting layer still goes into a PDF or SVG as vectors.
 
 **Who may rest.** A Cairo context holds state, and a new one starts plain. A layer rests only with no
 `push()` open and with no transform, clip or `no_smooth()` made outside a push (`_KEEPS_CONTEXT_STATE`).
 Inside a `with` block all of these end with the block, so ordinary layers rest. The others stay awake.
+
+**A few at a time (S-267).** At most `LAYER_REST_PIXELS` (2,000,000) of layer pixels rest in one show: one 1080p
+layer, or 16 at 400 x 300. Layers usually fall idle together, and S-258 rested them all in one frame: 20 layers at
+1080p froze that frame for 0.6 s. The median frame times below could not show that. A budget in pixels and not in
+layers keeps the frame short at any size, and small layers still rest as fast as a sketch makes them. Finding the box
+also got faster, from 26 ms to about 4.4 ms at 1080p: a blank row is compared whole, and other rows are searched only
+outside the box so far.
 
 **Why a box is exact.** A see-through pixel over anything leaves that thing as it was, so leaving those
 pixels out cannot change the result. `tests/test_layer_rest.py` compares the bytes at scales 1, 1.5 and 2.
@@ -178,7 +186,11 @@ pixels out cannot change the result. `tests/test_layer_rest.py` compares the byt
 | 20 layers, each redrawn once in 20 frames, 1920 x 1080 | +333 MB, 92 ms | +83 MB, 39 ms |
 | The same at 400 x 300 | +20 MB, 1.38 ms | +5.6 MB, 2.41 ms |
 
-The last row is the one that got slower: each frame there has one rest and one wake.
+The last row was the one that got slower: each frame there has one rest and one wake.
+
+After S-267, the same five rows in the same order: +8.4 MB, 3.48 ms · +16.5 MB, 7.15 ms · +3.4 MB, 0.96 ms ·
++91.5 MB, 19.5 ms · +6.0 MB, 1.30 ms. The worst single frame when 20 layers fall idle: 615 ms to 7 ms at 1920 x 1080,
+31 ms to 6.3 ms at 400 x 300.
 
 **In Play** (7 November, headless Chrome, `tools/test_runner.py` on funground-web `main`): a sketch whose layers rest, wake,
 are hidden, shown and read came out byte-identical to its desktop picture, with the layers shown resting at frame 20.
@@ -193,9 +205,16 @@ The gallery's four layer sketches were byte-identical to their goldens too. Memo
   canvas, against one at a time: 16,944 of 480,000 bytes differ, by up to 2 levels. Rounding happens in a
   different order. The picture would then depend on when the merge happened, so it is out.
 
-**Limits.** A busy layer that fills the canvas still holds one full canvas, not two. Saving wakes every
-layer, and a layer that is saved keeps its cached snapshot until it next rests. A layer with state outside
-a block never rests. Each layer also holds about 15 KB of Python objects. None of this is a cap: 100,000
+**Limits** (checked 7 November with small sketches). A busy layer that fills the canvas still holds one full canvas,
+not two. The box is one rectangle: two dots in opposite corners of a 1080p layer keep 98.6% of it, and a faint wash over
+the whole canvas keeps all of it. Opening a `with` block counts as a change even if it draws nothing, so a layer opened
+every frame never rests. Touching every layer at once wakes them all, so the peak is what it was before S-258, not
+what the idle sketch shows. A PDF or SVG save does this: 300 resting layers were all awake after it, and rested again 10
+shows later, so a sketch that saves a PDF every few frames gets little from resting. A PNG does not wake them. A layer
+that is saved keeps its cached snapshot until it next rests. A layer with state outside a block never rests, and that
+stays true for the rest of its life. `_KEEPS_CONTEXT_STATE` is a list kept by hand: a new op that leaves state in
+the context must be added to it, or a layer loses that state when it wakes. Layers rest in the order they were made. Each layer also holds about 15 KB of Python objects. A resting layer still costs time: `_layer_ops` takes about 2.6 microseconds for each,
+and painting comes on top, so a frame with 1,000 layers takes 7 ms. None of this is a cap: 100,000
 layer names still reach a limit, and a warning for that is a question for the maintainer (spike 22).
 
 ## Tests

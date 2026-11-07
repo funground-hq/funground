@@ -28,7 +28,7 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
 ### Changed
 - **nan and infinity get one plain sentence** (S-256, D-130). For example `f.rotate(): angle came out as "not a number" (nan), so it
   cannot be used. Check how angle was worked out.`
-- **Layers cost little when they are not changing** (S-258, D-134). A layer that has not changed for a few
+- **Layers cost little when they are not changing** (S-258, S-267, D-134). A layer that has not changed for a few
   frames keeps only the part that holds pixels, and showing a layer no longer copies it. A new layer each
   frame at 400 x 300 used about 293 MB over 300 frames and now uses about 8 MB, and the last of those frames
   is about six times quicker. What you see and what you save do not change.

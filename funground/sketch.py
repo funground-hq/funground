@@ -732,6 +732,9 @@ class Sketch:
         With *files* (S-096), hidden layers are included too, tagged layer_hidden: PDF and SVG keep
         them switched off, and every other renderer leaves them out. Without *files* the ops must be
         drawn at once and not kept: they can hold a layer's live surface (S-258)."""
+        if self._layers and not files:
+            from .picture import rest_idle_layers
+            rest_idle_layers(self._layers.values())
         ops: list[ir.Image] = []
         for name, picture in self._layers.items():
             hidden = name in self._layers_hidden
@@ -740,7 +743,7 @@ class Sketch:
                 ops.append(ir.Image(picture.name, snap.version, 0.0, 0.0, float(picture.width),
                                     float(picture.height), snapshot=snap, layer=name, layer_hidden=hidden))
                 continue
-            snap, x, y = picture._for_showing()        # the same, and lets an idle layer rest
+            snap, x, y = picture._for_showing()        # the same, with no copy of the layer
             if not hidden:
                 ops.append(ir.Image(picture.name, snap.version, x, y, float(snap.logical_width),
                                     float(snap.logical_height), snapshot=snap, layer=name))
