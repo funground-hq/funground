@@ -167,12 +167,17 @@ def _read_wav(path: str) -> bytes:
     pcm.frombytes(raw)
     sides = [pcm[c::channels] for c in range(channels)]
     if rate != RATE:
-        sides = [array("h", [round(v * 32768) for v in analysis.resample([s / 32768 for s in side], rate, RATE)])
-                 for side in sides]
+        sides = [_at_mixer_rate(side, rate) for side in sides]
     out = array("h", bytes(2 * CHANNELS * len(sides[0])))
     for c in range(CHANNELS):
         out[c::CHANNELS] = sides[min(c, channels - 1)]
     return out.tobytes()
+
+
+def _at_mixer_rate(side: array, rate: int) -> array:
+    """One channel of a file at the mixer's rate, as the desktop's samples (analysis.resample_file)."""
+    converted = analysis.resample_file([s * _TO_FLOAT for s in side], rate, RATE)
+    return array("h", [max(-32768, min(32767, round(v * 32767))) for v in converted])
 
 
 class _CaptureDevice:

@@ -9,6 +9,9 @@ What changed in funground, newest first. Release numbers follow the
 A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
 
 ### Fixed
+- **A sound file reads the same in Play as on your computer** (S-259, D-135). A WAV file that was not at 44 100 Hz sounded
+  duller in Play: a 4 kHz note lost a fifth of its size. It now has the same samples on both, so `ml.sound` gives the same answers.
+  Such a file takes longer to load in Play: about 3.6 s for 20 s of sound on a slow laptop. Sound on the desktop does not change.
 - **`ml.words` no longer runs on repeating itself** (S-257, D-131). In noise the model could say one word again and again. It now
   stops, and keeps the words before the repeat. A word really said four times or more in a row comes back once.
 - **`f.arc` no longer hangs on a huge or infinite angle, and nan or inf no longer reach a saved file** (S-253, found by spike 20).
@@ -25,6 +28,10 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
 ### Changed
 - **nan and infinity get one plain sentence** (S-256, D-130). For example `f.rotate(): angle came out as "not a number" (nan), so it
   cannot be used. Check how angle was worked out.`
+- **Layers cost little when they are not changing** (S-258, D-134). A layer that has not changed for a few
+  frames keeps only the part that holds pixels, and showing a layer no longer copies it. A new layer each
+  frame at 400 x 300 used about 293 MB over 300 frames and now uses about 8 MB, and the last of those frames
+  is about six times quicker. What you see and what you save do not change.
 - **Sound and the music of India are libraries** (S-246, D-120, D-123, ADR-007). The 24 names `f.tone`, `f.note`,
   `f.pluck`, `f.drone`, `f.melody`, `f.sequence`, `f.mix`, `f.chord_notes`, `f.note_to_frequency`,
   `f.frequency_to_note`, `f.microphone`, `f.microphones`, `f.draw_wave`, `f.draw_spectrum`, `f.draw_pitch_line`,
