@@ -831,7 +831,7 @@ def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: i
     if phys_w <= 0 or phys_h <= 0:
         return
     stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_ARGB32, phys_w)
-    data = bytearray(pixel_bytes)
+    data = bytearray(pixel_bytes) if isinstance(pixel_bytes, bytes) else pixel_bytes    # Cairo needs a writable buffer
     img = cairo.ImageSurface.create_for_data(data, cairo.FORMAT_ARGB32, phys_w, phys_h, stride)
     ctx.save()
     ctx.translate(x, y)
