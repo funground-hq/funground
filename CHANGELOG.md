@@ -9,6 +9,9 @@ What changed in funground, newest first. Release numbers follow the
 A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
 
 ### Fixed
+- **A sound file reads the same in Play as on your computer** (S-259, D-135). A WAV file that was not at 44 100 Hz sounded
+  duller in Play: a 4 kHz note lost a fifth of its size. It now has the same samples on both, so `ml.sound` gives the same answers.
+  Such a file takes longer to load in Play: about 3.6 s for 20 s of sound on a slow laptop. Sound on the desktop does not change.
 - **`ml.words` no longer runs on repeating itself** (S-257, D-131). In noise the model could say one word again and again. It now
   stops, and keeps the words before the repeat. A word really said four times or more in a row comes back once.
 - **`f.arc` no longer hangs on a huge or infinite angle, and nan or inf no longer reach a saved file** (S-253, found by spike 20).
