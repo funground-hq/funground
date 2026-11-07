@@ -61,6 +61,13 @@ ALLOWED_METHODS = frozenset({
 _HISTORY_RESET_ALPHAS = (0, 255)
 HISTORY_LIMIT = 10_000
 
+# S-258: a layer shown this many times in a row with no change gives up its full surface and keeps only the
+# box that holds its pixels (_Resting). Long enough that a layer redrawn every few frames never rests.
+LAYER_REST_SHOWS = 10
+# What stays in a picture's Cairo context after the op, unless a push() around it ends. A layer that had
+# one outside any push() cannot give its context up, so it never rests.
+_KEEPS_CONTEXT_STATE = (ir.Concat, ir.ClipPath, ir.SetAntialias)
+
 
 def _resets_history(op: ir.Op) -> bool:
     return isinstance(op, ir.Clear) and op.color.a in _HISTORY_RESET_ALPHAS
@@ -93,13 +100,43 @@ class Snapshot:
 
     name: str
     version: int
-    pixels: bytes                  # physical BGRA premultiplied bytes (Cairo's ARGB32 layout)
+    pixels: bytes                  # physical BGRA premultiplied bytes (Cairo's ARGB32 layout), or a writable buffer for the screen (S-258)
     phys_width: int
     phys_height: int
     scale: float
     logical_width: int
     logical_height: int
     history: tuple | None          # ops since the last opaque background/clear, or None ("pixels only")
+
+
+@dataclass(frozen=True, slots=True)
+class _Resting:
+    """A resting layer (S-258): the box of its surface that holds pixels, and all it takes to rebuild the surface."""
+
+    snapshot: Snapshot             # the box alone, for painting; empty (0 x 0) when the layer has no pixels
+    left: int                      # where the box sits, in physical pixels
+    top: int
+    phys_width: int                # the full surface
+    phys_height: int
+
+
+def _visible_box(bgra: Any, width: int, height: int) -> tuple[int, int, int, int]:
+    """(left, top, right, bottom) of the pixels that are not fully see-through, or all 0 when there are none.
+
+    A see-through pixel is four zero bytes, as colours are stored multiplied by their alpha."""
+    stride = width * 4
+    data = bytes(bgra)
+    start = len(data) - len(data.lstrip(b"\0"))
+    if start == len(data):
+        return 0, 0, 0, 0
+    top = start // stride
+    bottom = (len(data.rstrip(b"\0")) + stride - 1) // stride
+    left, right = width, 0
+    for y in range(top, bottom):
+        row = data[y * stride:(y + 1) * stride]
+        left = min(left, (stride - len(row.lstrip(b"\0"))) // 4)
+        right = max(right, (len(row.rstrip(b"\0")) + 3) // 4)
+    return left, top, right, bottom
 
 
 class _PictureBacking:
@@ -200,6 +237,10 @@ class Picture:
         self._history: list[ir.Op] | None = []     # [] to start: a fresh, transparent picture
         self._save_stack: list[bool] = []             # push()es not yet popped, over the picture's whole life (True = a layer block's own)
         self._snapshot_cache: dict[int, Snapshot] = {}
+        self._resting: _Resting | None = None      # S-258: set while a layer has given up its surface
+        self._quiet_shows = 0                      # S-258: shows in a row with no change
+        self._last_shown = -1                      # S-258: the version the last show had
+        self._context_state_kept = False           # S-258: see _KEEPS_CONTEXT_STATE
         self._layer_owner: Sketch | None = None    # S-095 (F16): the canvas sketch that made this layer
         self._layer_name: str | None = None
 
@@ -295,6 +336,7 @@ class Picture:
         self._flush_ops()
 
     def _flush_ops(self) -> None:
+        self._wake()
         frame = self._sketch.frame
         if not frame:
             return
@@ -308,6 +350,8 @@ class Picture:
 
     def _update_history(self, ops: tuple) -> None:
         for op in ops:
+            if isinstance(op, _KEEPS_CONTEXT_STATE) and not self._save_stack:
+                self._context_state_kept = True
             if isinstance(op, ir.Pixels):
                 self._history = None               # raster writes cannot be replayed as vectors (P7)
             elif _resets_history(op):
@@ -346,6 +390,62 @@ class Picture:
         )
         self._snapshot_cache[self._version] = snap
         return snap
+
+    # ------------------------------------------------------------ resting layers (S-258)
+    def _for_showing(self) -> tuple[Snapshot, float, float]:
+        """What to paint for this layer on the way to the screen, and where (logical).
+
+        The result is used at once and never kept, so it can be the live surface and needs no copy. It has no
+        history: only files replay a layer, and they use _snapshot(). A layer that has not changed for
+        LAYER_REST_SHOWS shows rests first, so that it holds one small box and paints only that."""
+        self._sketch._flush_pixel_patch()
+        if self._resting is None or self._sketch.frame:
+            self._flush_ops()
+            self._quiet_shows = self._quiet_shows + 1 if self._version == self._last_shown else 0
+            self._last_shown = self._version
+            if self._quiet_shows < LAYER_REST_SHOWS or self._save_stack or self._context_state_kept:
+                pixels = self._sketch._renderer.pixels()
+                return (Snapshot(self.name, self._version, pixels.data, pixels.width, pixels.height, self._scale,
+                                 self.width, self.height, None), 0.0, 0.0)
+            self._rest()
+        resting = self._resting
+        return resting.snapshot, resting.left / self._scale, resting.top / self._scale
+
+    def _rest(self) -> None:
+        """Keep only the box that holds pixels, and give up the surface and its context."""
+        renderer = self._sketch._renderer
+        pixels = renderer.pixels()
+        left, top, right, bottom = _visible_box(pixels.data, pixels.width, pixels.height)
+        stride = pixels.width * 4
+        box = bytearray()
+        for y in range(top, bottom):
+            box += pixels.data[y * stride + left * 4:y * stride + right * 4]
+        wide, high = right - left, bottom - top
+        self._resting = _Resting(
+            Snapshot(self.name, self._version, box, wide, high, self._scale, wide / self._scale, high / self._scale,
+                     None),
+            left, top, pixels.width, pixels.height)
+        self._snapshot_cache.clear()
+        renderer.attach(0, 0)
+
+    def _wake(self) -> None:
+        """Rebuild the full surface of a resting layer: anything but showing it needs the whole picture."""
+        resting = self._resting
+        if resting is None:
+            return
+        self._resting = None
+        self._quiet_shows = 0
+        renderer = self._sketch._renderer
+        renderer.attach(resting.phys_width, resting.phys_height, self._scale)
+        surface = renderer.surface
+        surface.flush()
+        data = surface.get_data()
+        box = resting.snapshot
+        row = box.phys_width * 4
+        for y in range(box.phys_height):
+            at = (resting.top + y) * surface.get_stride() + resting.left * 4
+            data[at:at + row] = box.pixels[y * row:(y + 1) * row]
+        surface.mark_dirty()
 
     # ------------------------------------------------------------ copy, resize, mask (contract P9)
     def copy(self) -> "Picture":
@@ -625,6 +725,7 @@ class Picture:
 
     def _write_pixels(self, bgra: bytes) -> None:
         """Put premultiplied BGRA (this picture's physical size) on the surface; a new version."""
+        self._wake()
         surface = self._sketch._renderer.surface
         surface.flush()
         surface.get_data()[:] = bgra
