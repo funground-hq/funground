@@ -147,7 +147,8 @@ if new_design.clicked():
 the letters, one every five pixels. Draw a small circle at each one and the letters are made of dots.
 
 **Save it.** `f.save("rangoli.svg")` and `f.save("rangoli.pdf")` write the pattern as shapes. An SVG
-or a PDF can be printed as big as you like, or sent to a laser cutter. Call it from a button or a key.
+or a PDF can be printed as big as you like. If the real size matters, as it does for a laser cutter,
+use the PDF ([chapter 13](../13_saving_your_work.md)). Call it from a button or a key.
 
 ```py
 def key_pressed():
