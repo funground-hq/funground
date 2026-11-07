@@ -222,6 +222,60 @@ def test_a_wav_file_can_be_loaded_and_played(host, tmp_path):
     assert len(samples) == 2 * round(0.1 * RATE) and samples[0::2] == samples[1::2]
 
 
+def _wav(path, rate, channels, values) -> str:
+    with wave.open(str(path), "wb") as out:
+        out.setnchannels(channels)
+        out.setsampwidth(2)
+        out.setframerate(rate)
+        out.writeframes(array("h", values).tobytes())
+    return str(path)
+
+
+def _sweep(count: int, channels: int) -> list[int]:
+    """A rising tone with sharp clicks and a loud end, which test the filter's edges and clipping."""
+    values = []
+    for i in range(count):
+        tone = math.sin(2 * math.pi * (0.01 + 0.2 * i / count) * i)
+        sample = 32767 if i % 501 == 0 else round((0.99 if i > count * 0.9 else 0.5) * 32767 * tone)
+        values.extend([sample, -sample // 2][:channels])
+    return values
+
+
+def _largest_difference(path: str) -> int:
+    """How far the page's samples for a file are from SDL's, in 16-bit steps; the lengths must agree."""
+    from funground.platform import browser_audio
+
+    desktop = array("h")
+    desktop.frombytes(sound_module._open_mixer(True).Sound(path).get_raw())
+    page = array("h")
+    page.frombytes(browser_audio._read_wav(path))
+    assert len(page) == len(desktop)
+    return max((abs(a - b) for a, b in zip(page, desktop)), default=0)
+
+
+@pytest.mark.parametrize("rate", [8000, 11025, 16000, 22050, 32000, 48000, 96000])
+@pytest.mark.parametrize("channels", [1, 2])
+@pytest.mark.parametrize("count", [1, 2, 7, 1001, 6000])
+def test_a_file_at_another_rate_gives_the_desktops_samples(tmp_path, rate, channels, count):
+    """The desktop is the reference (W1). If an update of pygame-ce changes SDL's filter, this says so, and
+    analysis.resample_file follows it."""
+    assert _largest_difference(_wav(tmp_path / "file.wav", rate, channels, _sweep(count, channels))) <= 1
+
+
+def test_the_recording_that_found_the_difference_loads_the_same():
+    """clapping.wav (S-259): its sum of absolute samples was 22,125 on a page and 25,447 on the desktop."""
+    assert _largest_difference(str(ROOT / "ml" / "tests" / "data" / "clapping.wav")) <= 1
+
+
+def test_resampling_a_file_keeps_high_notes():
+    from funground import analysis
+
+    tone = [0.5 * math.sin(2 * math.pi * 4000 * i / 16000 + 0.3) for i in range(16000)]
+    got = analysis.resample_file(tone, 16000, RATE)
+    assert len(got) == RATE
+    assert max(got[4000:40000]) == pytest.approx(0.5, abs=0.005)
+
+
 def test_a_file_that_is_not_a_16_bit_wav_says_so(host, tmp_path):
     path = tmp_path / "tune.mp3"
     path.write_bytes(b"not a wav file")

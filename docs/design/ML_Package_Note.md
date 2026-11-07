@@ -241,18 +241,16 @@ The repository is not the project's, so a mirror in a funground Hugging Face org
   `_hearing.SoundHostSink` keeps the newest window waiting while one is in flight, and answers a quiet window in order. The page (`runner/models-glue.js` `createSound`, `models-worker.js`, `worker.js` in funground-web)
   resamples with the same formula, runs the session, averages the rows and sends a `Float32Array`; it has no names. The one file is in `models.json`, made from `_models.py` by `tools/build_runtime.py`.
 - **Same answers, desktop and Play** (`funground-web/tools/test_models.py`, case "sound"): `tts.wav`, `whistle.wav` and `clapping.wav` give the same name and the same four next names, and scores that agree to
-  four decimals (largest difference 0.0). The test makes each Sound itself in plain Python instead of calling `sound.load()`: measured while writing it, `sound.load()` of the same 16 kHz file gives a different 44.1 kHz waveform
-  on the desktop than in a page (clapping.wav: the sum of absolute values is 25,447 on the desktop, 22,125 in the page and 22,125 by exact linear interpolation, and the 5th name differed, "Cap gun" on the desktop and
-  "Firecracker" in Play, with scores up to 0.027 apart). That is in the core's decoder, not in the model, and is not fixed here.
-- **What it gives for the three recordings** (desktop and Play the same, with the Sounds made as above):
+  four decimals. The recordings go through `sound.load()` since S-259. Before that, a page's 16 kHz file was another waveform from the desktop's, and the 5th name for clapping.wav differed (D-135; `Web_Runner_Note.md`). Measured in Chrome after the fix: the largest score difference is 0.0001.
+- **What it gives for the three recordings** (desktop and Play the same):
 
   | Recording | Name | Score | Next |
   |---|---|---|---|
   | `tts.wav` (a computer voice) | Speech | 0.998 | Speech synthesizer, Narration, monologue, Conversation, Radio |
-  | `whistle.wav` | Whistling | 0.712 | Alarm, Whistle, Police car (siren), Siren |
-  | `clapping.wav` | Hands | 0.415 | Explosion, Slap, smack, Gunshot, gunfire, Firecracker |
+  | `whistle.wav` | Whistling | 0.683 | Alarm, Whistle, Police car (siren), Siren |
+  | `clapping.wav` | Hands | 0.402 | Explosion, Slap, smack, Gunshot, gunfire, Cap gun |
 
-  The clapping is "Hands", not "Applause": the names are often broad or sideways, and the contract and the guide say so. (With `sound.load()` on the desktop the same file gives "Hands" 0.40 and "Cap gun" in fifth place.)
+  The clapping is "Hands", not "Applause": the names are often broad or sideways, and the contract and the guide say so.
 - **Speed.** On this machine the desktop works out one 0.96 s window in 2.2 ms. In Play (headless Chrome, onnxruntime-web, wasm) the 7.2 s recording (14 windows) is answered in 0.47 s once the model is loaded,
   a real-time factor of 0.065; the first answer in a page needs 3.5 s for the first Sound (model load) and 0.3 to 0.4 s for the next ones. A single window is therefore well under the 0.48 s hop. Chrome's fake microphone
   (a beep every second) gave answers in Play within 2.5 s of starting; the time of each window in the page was not measured on its own.
