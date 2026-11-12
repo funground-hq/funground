@@ -73,7 +73,7 @@ a separate install.
 
 | # | Chapter |
 |---|---|
-| 20 | [Models: your body and your hands](20_models.md) |
+| 20 | [Models: bodies, hands, words and sounds](20_models.md) |
 
 ### Projects
 

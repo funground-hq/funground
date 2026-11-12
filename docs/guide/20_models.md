@@ -1,4 +1,4 @@
-# 20. Models: your body and your hands
+# 20. Models: bodies, hands, words and sounds
 
 A model is a program that has learnt to find something in a picture, or in a sound. funground has five. One finds a **body**. One
 finds a **hand**. One cuts out the **person**. One writes down the **words** you say. One names the **sound** you hear. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
@@ -31,11 +31,25 @@ funground stays small, and you add the models when you want them.
 model is about 18 MB, the hand model about 8 MB, the words model 42 MB and the sound model 16 MB. The files are kept in a `models/` folder beside your sketch. The next
 time you run it, nothing is downloaded, and it works without the internet.
 
-**What stays on your computer:** the camera's pictures, what the microphone hears, the points and words the model finds and the model files. The only thing
-that goes over the internet is the download of the model files.
+## What a model is
 
-**In Play** (the website), you install nothing. The browser keeps the model files and runs the models for you. The
-answer can be **one frame behind** the picture. Your sketch does not change.
+Most programs follow rules that a person wrote. "If the score is over 10, show a star." You can read every rule.
+
+A model is different. Nobody wrote its rules. It **learnt** them from a great many examples.
+
+Think of how you learnt to tell a cat from a dog. Nobody gave you a list of rules. You saw many cats and many dogs, and
+somebody said which was which. After a while you could tell, even for a cat you had never seen.
+
+A model learns in a like way. To find a body, it was shown many pictures of people, with their points marked. To write down
+words, it was shown many hours of speech, with what was said. To name a sound, it was shown many sound clips, with their
+names. Then the learning stopped, and the result is the file you download. Your sketch only asks it questions.
+
+Two things follow.
+
+- **What a model learnt from decides what it is good at.** It is good at things like its examples. It is worse at things
+  that were rare in them, or that were not in them at all.
+- **Its answer is a best guess, not a fact.** That is why every answer has a `score`. A high score means "I am quite
+  sure". It does not mean "I am right".
 
 ## Find a body
 
@@ -297,6 +311,8 @@ f.run()
 
 The same dog can be `"Dog"` in one answer and `"Bark"` in the next. To catch both, look at `heard.next` as well.
 
+<!-- S-235: "Teach a model" goes here after D-145 -->
+
 ## One call a frame
 
 If you call `ml.pose(cam)` twice in one frame, you get the same body, and the work is done once. So you can ask for the
@@ -328,6 +344,67 @@ Until the camera has sent its first picture, `ml.pose(cam)` gives `None`. You ne
 The names are MediaPipe's own, so its pictures and notes help you find the point you want. In a finger, `mcp` is the
 knuckle where it joins the hand, `pip` and `dip` are the next two joints, and `tip` is the end.
 
+## What each model learnt from
+
+Each model was made by someone else, from their own examples. funground uses their files and says who made them.
+
+| Model | Name and who made it | What it learnt from |
+|---|---|---|
+| Body (`ml.pose`) | MediaPipe pose, by Google. The files are the OpenCV Zoo's copies, in the ONNX format. | Pictures of people in many kinds of pose, from many parts of the world, with their points marked. Google does not say how many. |
+| Hand (`ml.hand`) | MediaPipe hand and palm, by Google. The files are the OpenCV Zoo's copies. | About 30,000 photos of real hands, and drawn computer hands placed over many backgrounds. |
+| Person (`ml.person`) | MediaPipe selfie segmentation, by Google. | Phone photos of people, taken with their consent, in real rooms and streets, in all kinds of light. Google tested it on people from 17 parts of the world: it did about as well for every skin tone (within about 1 in 100). |
+| Words (`ml.words`) | Whisper tiny.en, by OpenAI. It hears English only. | 680,000 hours of speech from the internet, with what was said. About two thirds of it was English. |
+| Sound (`ml.sound`) | YAMNet, by Google. The 521 sound names are from the AudioSet ontology, also by Google. | AudioSet: about 2 million ten-second sound clips from YouTube videos, each one named by people who listened to it. Google left out 6 of AudioSet's 527 names, so that the model could not give an offensive name by mistake. |
+
+All five files are free to use (the Apache-2.0 licence). The sound names are free to use with a credit (CC BY 4.0).
+
+Where these facts come from: Google's notes on the [body](https://research.google/blog/on-device-real-time-body-pose-tracking-with-mediapipe-blazepose/),
+[hand](https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker) and
+[person](https://storage.googleapis.com/mediapipe-assets/Model%20Card%20MediaPipe%20Selfie%20Segmentation.pdf) models,
+OpenAI's [notes on Whisper](https://huggingface.co/openai/whisper-tiny.en), and Google's pages on
+[YAMNet](https://github.com/tensorflow/models/blob/master/research/audioset/yamnet/README.md) and
+[AudioSet](https://research.google.com/audioset/).
+
+## Why a model is sometimes wrong
+
+A model is only as good as the examples it learnt from. Voices, faces and sounds that were rare in those examples get
+worse answers. That is nobody's fault, and it is not about you. It is a gap in the examples, and you can see it in numbers.
+
+**Words.** The words model was tested on clips of English where the right words were known. For each clip we counted the words it got
+wrong. Here is what the test found for Whisper tiny.en:
+
+- A person reading aloud in US English: about 1 word in 18 was wrong.
+- A person reading aloud in Indian English: about 1 word in 8 was wrong. That is twice as many. It was one speaker, so it
+  is an example, not a rule about all Indian English.
+- Two people talking freely in Indian English: about 1 word in 3 was wrong. Some of that is the way people talk when they
+  chat (fast, overlapping, informal), not the accent. The test could not tell how much.
+- Add the noise of a fan or a busy room, and it got worse. For the two chatting speakers, about 6 words in 10 were wrong. In a few
+  clips it got stuck and said one word again and again.
+
+The mistakes are small and human. It writes a word that sounds alike ("price" for "prize"). It swaps little words ("he" for
+"we"). It prefers a common word to a rare name ("Yukon" became "can"). It tidies up how people really talk, and leaves out
+"you know" and "like". Whisper's makers say the same: it does better for some accents than for others. They do not say
+how much Indian English it heard while it learnt, so how much of the gap comes from that, we do not know.
+
+**Sounds.** The sound model often names the big family before the sound. For a dog it may say "Animal" first. In a test
+of 1,840 five-second clips of everyday sounds, the right name came first in about 1 clip in 4 (24.5 in 100). It was in the
+first three names in about 2 clips in 3 (64.6 in 100). funground hides the very broadest names, and gives you the next
+guesses in `heard.next`, so you can use them. Short sounds were often called "Silence", because they were over so fast.
+
+**Bodies and hands.** Low light, part of your body out of the picture, and more than one person are the usual causes. See
+"What can go wrong", just below.
+
+What to do about it: use the `score`, show the other guesses, and let a person correct the sketch. Test it with the
+people who will use it, not only with yourself.
+
+## What stays on your computer
+
+These stay on your computer: the camera's pictures, what the microphone hears, the points and words the model finds and the model files. The only thing
+that goes over the internet is the download of the model files. The program that runs the models is also told not to send anything about itself.
+
+**In Play** (the website), you install nothing. The browser keeps the model files and runs the models for you. The
+answer can be **one frame behind** the picture. Your sketch does not change.
+
 ## What can go wrong
 
 - **It gives `None`.** Nobody was found. Always write `if body:` or `if hand:` before you use a point. Without the
@@ -351,5 +428,7 @@ knuckle where it joins the hand, `pip` and `dip` are the next two joints, and `t
    apart. Hint: `f.distance()`.
 4. Add one circle to the canvas each time you say something new. Hint: `words.is_new`, and a list that grows.
 5. Clap, whistle and hum. Which names does `ml.sound(mic)` give? Which one is wrong? Is the right name in `heard.next`?
+6. Say the same sentence in two voices or accents, or in a quiet room and a noisy one. Does `ml.words` give the same
+   words? Does the `score` change?
 
 **Previous:** [19. Studios: the same picture, twice](19_studios.md)
