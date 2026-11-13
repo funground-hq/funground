@@ -241,7 +241,8 @@ def teach(name, source=None, model=None):
     pictures should look different from each other: different light, different places, different angles.
 
     Teaching a camera keeps the picture it shows now. Hold a key down and it teaches as fast as the computer can, one picture at a
-    time, so ``draw()`` never waits. The picture is turned into numbers beside your sketch; a picture counts in a guess once that is done.
+    time, so ``draw()`` never waits. A picture you draw again every frame, such as a box cut from the camera, is taught the same
+    way. The picture is turned into numbers beside your sketch; a picture counts in a guess once that is done.
     Teaching the same picture again under the same name adds nothing, and neither does a camera with no picture yet.
 
     There are three ways to call it. ``ml.teach("cat", cam)`` teaches one picture. ``ml.teach("cat", [a, b, c])`` teaches each
@@ -295,7 +296,8 @@ def guess(source, k=1):
 
     For a camera the answer is worked out beside your sketch, so ``draw()`` never waits. The Guess is the newest one, and can be a
     frame or more behind. You get None until the first one arrives, and if the camera has no picture yet. For a picture on a
-    computer the call waits for the answer. You get None if nothing is taught yet, or no taught picture is ready.
+    computer the call waits for the answer. In Play a picture is answered as a camera is: None until the first answer, then the
+    newest one. You get None if nothing is taught yet, or no taught picture is ready.
 
     Arguments:
         source: a camera from camera.open(), or a picture from f.load_image() or f.create_graphics().

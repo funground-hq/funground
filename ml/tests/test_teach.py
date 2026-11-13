@@ -222,10 +222,27 @@ def test_the_list_form_teaches_each_item_in_order_and_the_dict_form_each_name():
 def test_the_same_picture_and_version_taught_again_to_the_same_name_adds_nothing():
     picture = picture_of(DOWN)
     assert funground_ml.teach("cat", picture) == 1
+    settle()
     assert funground_ml.teach("cat", picture) == 1
     assert funground_ml.teach("dog", picture) == 1                         # another name takes it
+    settle()
     repaint(picture, UP)                                                   # a new version
     assert funground_ml.teach("cat", picture) == 2
+
+
+def test_a_picture_redrawn_every_frame_teaches_one_at_a_time_as_a_camera_does(model):
+    """D-148: a focus box is a Picture the sketch redraws each frame; holding a key must not queue one picture a frame."""
+    model.gate.clear()                                                     # hold the thread, so the first stays pending
+    box = picture_of(DOWN)
+    assert funground_ml.teach("cat", box) == 1
+    for colour in (UP, SIDE, DOWN):
+        repaint(box, colour)
+        assert funground_ml.teach("cat", box) == 1                         # still pending: nothing added
+    assert funground_ml.teach("cat", [picture_of(UP), picture_of(SIDE)]) == 3   # other pictures are other sources
+    model.gate.set()
+    settle()
+    repaint(box, UP)
+    assert funground_ml.teach("cat", box) == 4
 
 
 def test_a_camera_with_no_frame_yet_adds_nothing_and_makes_no_name():

@@ -310,7 +310,7 @@ class TaughtSet:
         self.model: str | None = None
         self.worker: _Worker | _HostWorker | None = None
         self.version = 0                                    # grows with every example added
-        self._last_from: "weakref.WeakKeyDictionary[Any, _Example]" = weakref.WeakKeyDictionary()   # camera -> last taught
+        self._last_from: "weakref.WeakKeyDictionary[Any, _Example]" = weakref.WeakKeyDictionary()   # source -> last taught
         self._hinted: set[str] = set()
         self._stamp_frame: int | None = None
         self._stamp_results = 0
@@ -327,11 +327,9 @@ class TaughtSet:
 
     def teach(self, name: str, item: object, who: str) -> None:
         """Add a copy of *item*'s picture to *name*, unless a rule says it adds nothing (contract ML8)."""
-        is_picture = isinstance(item, Picture)
-        if not is_picture:
-            last = self._last_from.get(item)
-            if last is not None and last.pending:           # D-146: a camera teaches one picture at a time
-                return
+        last = self._last_from.get(item)
+        if last is not None and last.pending:               # D-146, D-148: each source teaches one picture at a time
+            return
         opened = _source.open_source(item, who)
         if opened is None:                                  # a camera with no frame yet
             return
@@ -341,8 +339,7 @@ class TaughtSet:
         example = _Example(frame.picture, frame.version)
         self.names.setdefault(name, []).append(example)
         self.version += 1
-        if not is_picture:
-            self._last_from[owner] = example
+        self._last_from[owner] = example
         self.worker.add(frame, example)
 
     def stamp(self) -> int:
@@ -495,12 +492,12 @@ def guess(source: object, k: object) -> Guess | None:
         return None
     worker = taught.worker
     worker.check()
-    is_picture = isinstance(source, Picture)
-    if is_picture:
+    waits = isinstance(source, Picture) and worker.can_wait     # on a computer a picture waits; in a page it is like a camera (D-148)
+    if waits:
         vector = _picture_vector(worker, source, who)
 
     def make(frame: _source.Frame, state: _source._State) -> _Similarities | None:
-        if not is_picture:
+        if not waits:
             sent = (id(frame.picture), frame.version)
             if state.requested != sent:                     # a new picture: its frame takes the place of one still waiting
                 worker.look(state.key, frame)
@@ -514,14 +511,11 @@ def guess(source: object, k: object) -> Guess | None:
     return None if similarities is None else similarities.guess(k)
 
 
-def _picture_vector(worker: _Worker | _HostWorker, picture: Picture, who: str) -> Any:
-    """A Picture's vector: a computer waits for it (after every example already queued); a page asks once for each picture and
-    version, and gives None until the vector has come (contract ML8)."""
-    if worker.can_wait:
-        worker.drain()
-        return _source.answer(picture, "guess vector", who, lambda frame, state: _wait_for(worker, frame))
-    slot = _source.answer(picture, "guess slot", who, lambda frame, state: _ask(worker, frame))
-    return slot.vector
+def _picture_vector(worker: _Worker, picture: Picture, who: str) -> Any:
+    """A Picture's vector on a computer: the call waits for it, after every example already queued (contract ML8). In a page a
+    Picture goes the camera's way instead: one in flight, the newest answer (D-148)."""
+    worker.drain()
+    return _source.answer(picture, "guess vector", who, lambda frame, state: _wait_for(worker, frame))
 
 
 def _ask(worker: _Worker | _HostWorker, frame: _source.Frame) -> _Slot:

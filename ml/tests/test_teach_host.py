@@ -190,10 +190,25 @@ def test_a_picture_guess_is_none_until_its_vector_comes_and_it_is_asked_once(pag
     assert len(page.requests()) == 4
     repaint(picture, UP)                                                   # a new version is asked for again
     frames.next()
-    assert guess_of(picture) is None and len(page.requests()) == 5
+    assert guess_of(picture).name == "side" and len(page.requests()) == 5   # the newest answer, one behind (D-148)
     page.answer_all()
     frames.next()
     assert guess_of(picture).name == "up"
+
+
+def test_a_picture_redrawn_every_frame_has_one_job_in_flight_and_does_not_flood_the_page(page, frames):
+    """D-148: in a page a Picture goes the camera's way, so a focus box redrawn each frame sends one picture at a time."""
+    teach_three(1)
+    page.answer_all()
+    box = picture_of(DOWN)
+    for colour in (UP, SIDE, DOWN, UP):
+        repaint(box, colour)
+        guess_of(box)
+        frames.next()
+    assert len(page.requests()) == 4                                       # three taught, and one guess in flight
+    page.answer_all()
+    frames.next()
+    assert guess_of(box) is not None and len(page.requests()) == 5         # the newest frame was waiting, and is sent now
 
 
 # ---- the page cannot run the model
