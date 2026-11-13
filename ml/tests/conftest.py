@@ -111,16 +111,17 @@ def sound_models():
 
 @pytest.fixture(scope="session")
 def picture_models():
-    """The picture model file in ml/tests/.models/ (downloaded on the first run). Skips the test when offline."""
+    """The two picture model files in ml/tests/.models/ (downloaded on the first run). Skips the test when offline."""
     from funground_ml import _fetch
 
     previous = os.environ.get(_fetch.ENVIRONMENT)
     os.environ[_fetch.ENVIRONMENT] = str(MODELS_FOLDER)
     try:
         try:
-            _fetch.ensure("picture", None, "the tests")
+            for task in ("picture_mobilenet", "picture_dinov2"):
+                _fetch.ensure(task, None, "the tests")
         except ConnectionError as error:
-            pytest.skip(f"the picture model file is not in ml/tests/.models/ and cannot be downloaded: {error}")
+            pytest.skip(f"a picture model file is not in ml/tests/.models/ and cannot be downloaded: {error}")
         yield MODELS_FOLDER
     finally:
         if previous is None:

@@ -98,7 +98,8 @@ def frames(monkeypatch):
 @pytest.fixture(autouse=True)
 def model(monkeypatch):
     fake = FakeModel()
-    monkeypatch.setitem(_teach.PICTURE_MODELS, "dinov2", _teach.PictureModel("picture", fake.load))
+    for key in _teach.MODEL_NAMES:                  # both models are the fake; each keeps its own task
+        monkeypatch.setitem(_teach.PICTURE_MODELS, key, _teach.PictureModel(_teach.PICTURE_MODELS[key].task, fake.load))
     fake.downloads = []
     monkeypatch.setattr(_fetch, "ensure", lambda task, base_dir, who: fake.downloads.append((task, who)) or {})
     return fake
@@ -261,18 +262,26 @@ def test_a_picture_is_added_even_while_a_camera_waits(model):
     settle()
 
 
+def test_the_default_picture_model_is_mobilenet(model):
+    assert _teach.DEFAULT_MODEL == "mobilenet"
+    funground_ml.teach("cat", picture_of(DOWN))
+    assert model.downloads == [("picture_mobilenet", "ml.teach()")]
+
+
 def test_the_first_teach_fixes_the_picture_model_and_names_it_in_the_error(model):
     funground_ml.teach("cat", picture_of(DOWN), model="dinov2")
+    assert model.downloads == [("picture_dinov2", "ml.teach()")]
     funground_ml.teach("cat", picture_of(UP))                              # None keeps the one in use
     with pytest.raises(ValueError, match=r'already teaches with the "dinov2" picture model, so it cannot also use "mobilenet"'):
         funground_ml.teach("cat", picture_of(SIDE), model="mobilenet")
     assert funground_ml.teach("cat", picture_of(SIDE), model="dinov2") == 3
 
 
-def test_mobilenet_is_a_valid_name_that_is_not_pinned_yet_and_does_not_fix_the_model(model):
-    with pytest.raises(NotImplementedError, match=r"MobileNetV4 is not pinned yet \(S-235\)"):
-        funground_ml.teach("cat", picture_of(DOWN), model="mobilenet")
-    assert funground_ml.teach("cat", picture_of(DOWN)) == 1                  # dinov2 is still free to be the first
+def test_naming_mobilenet_first_fixes_it_and_dinov2_then_raises(model):
+    funground_ml.teach("cat", picture_of(DOWN), model="mobilenet")
+    with pytest.raises(ValueError, match=r'already teaches with the "mobilenet" picture model, so it cannot also use "dinov2"'):
+        funground_ml.teach("cat", picture_of(SIDE), model="dinov2")
+    assert funground_ml.teach("cat", picture_of(SIDE)) == 2
 
 
 def test_the_model_is_fetched_once_in_the_sketchs_thread_and_a_failure_is_not_remembered(model, monkeypatch):
@@ -286,7 +295,7 @@ def test_the_model_is_fetched_once_in_the_sketchs_thread_and_a_failure_is_not_re
     funground_ml.teach("cat", picture_of(DOWN))
     funground_ml.teach("cat", picture_of(UP))
     settle()
-    assert model.downloads == [("picture", "ml.teach()")] and model.loaded == 1
+    assert model.downloads == [("picture_mobilenet", "ml.teach()")] and model.loaded == 1
 
 
 def test_the_picture_model_file_is_fetched_with_the_one_line_for_it(tmp_path, monkeypatch, capsys):
@@ -294,9 +303,19 @@ def test_the_picture_model_file_is_fetched_with_the_one_line_for_it(tmp_path, mo
     monkeypatch.undo()                                                       # the fake ensure goes; the env var must stay
     monkeypatch.setenv(_fetch.ENVIRONMENT, str(tmp_path))
     monkeypatch.setattr(_fetch, "_download", lambda *args: None)
-    paths = _fetch.ensure("picture", None, "ml.teach()")
-    assert capsys.readouterr().out.startswith("Downloading the picture model, 24 MB, once. After that funground uses the copy in ")
-    assert paths["model"].endswith("dinov2_small_q8.onnx")
+    paths = _fetch.ensure("picture_mobilenet", None, "ml.teach()")
+    assert capsys.readouterr().out.startswith("Downloading the picture model, 10 MB, once. After that funground uses the copy in ")
+    assert paths["model"].endswith("mobilenetv4_conv_small_vector.onnx")
+
+
+def test_both_picture_models_download_with_a_line_that_says_picture_model(tmp_path, monkeypatch, capsys):
+    monkeypatch.undo()
+    monkeypatch.setenv(_fetch.ENVIRONMENT, str(tmp_path))
+    monkeypatch.setattr(_fetch, "_download", lambda *args: None)
+    for task, size, file in (("picture_mobilenet", 10, "mobilenetv4_conv_small_vector.onnx"), ("picture_dinov2", 24, "dinov2_small_q8.onnx")):
+        paths = _fetch.ensure(task, None, "ml.teach()")
+        assert capsys.readouterr().out.startswith(f"Downloading the picture model, {size} MB, once.")
+        assert paths["model"].endswith(file)
 
 
 def test_a_new_sketch_starts_with_nothing_taught(sketch):

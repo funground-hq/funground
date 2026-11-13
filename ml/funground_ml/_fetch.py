@@ -14,7 +14,7 @@ from importlib import metadata
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from ._models import MODELS, ROLES, TASKS, Model
+from ._models import MODELS, ROLES, SAYS, TASKS, Model
 
 FOLDER_NAME = "models"
 ENVIRONMENT = "FUNGROUND_ML_MODELS"
@@ -102,7 +102,7 @@ def _download(model: Model, target: str, who: str, folder_word: str) -> None:
 
 
 def ensure(task: str, base_dir: str | None, who: str) -> dict[str, str]:
-    """The paths of the files for *task* ("pose", "hand", "person" or "words"), downloading the ones that are missing or wrong.
+    """The paths of the files for *task* (a key of ``TASKS``, such as "pose" or "words"), downloading the ones that are missing or wrong.
 
     Returns:
         {"detector": path, "landmarks": path} for pose and hand, {"model": path} for person, {"encoder": path,
@@ -124,7 +124,7 @@ def ensure(task: str, base_dir: str | None, who: str) -> dict[str, str]:
             missing.append(model)
     if missing:
         total = sum(m.size for m in missing)
-        print(f"Downloading the {task} model, {_megabytes(total)} MB, once. "
+        print(f"Downloading the {SAYS.get(task, task)} model, {_megabytes(total)} MB, once. "
               f"After that funground uses the copy in {folder_word}/.")
         os.makedirs(folder, exist_ok=True)
         for model in missing:

@@ -1,8 +1,10 @@
-"""The picture model on a computer: DINOv2-small (8-bit) with onnxruntime, numpy for the sums (S-235; desktop only).
+"""The picture models on a computer: MobileNetV4-small and DINOv2-small (8-bit) with onnxruntime, numpy for the sums (S-235; desktop only).
 
-The recipe is spike 23's: the colour only, the shorter side scaled to 256 (bicubic), the middle 224 x 224 cut out, ImageNet's mean
-and spread, and the model's first output at token 0 (the CLS token) made length 1. Two pictures that look alike then have vectors
-whose dot product is near 1. numpy and Pillow are imported inside the functions, so importing this module loads neither.
+Both models share one recipe, spike 23's (MobileNetV4's own preprocessor config says the same): the colour only, the shorter side
+scaled to 256 (bicubic), the middle 224 x 224 cut out, and ImageNet's mean and spread. What differs is which output is the vector:
+MobileNetV4's one output, ``vector``, made length 1; DINOv2's first output at token 0 (the CLS token), made length 1. Two pictures
+that look alike then have vectors whose dot product is near 1. numpy and Pillow are imported inside the functions, so importing this
+module loads neither.
 """
 from __future__ import annotations
 
@@ -30,8 +32,10 @@ def prepare(image):
     return np.ascontiguousarray(pixels.transpose(2, 0, 1)[None], dtype=np.float32)
 
 
-def load(paths: dict[str, str]) -> Callable:
+def load(paths: dict[str, str], pick: Callable) -> Callable:
     """The function from a Pillow RGB image to its vector (a float32 numpy array of length 1), for the model file in *paths*.
+
+    *pick* takes the model's raw outputs (the list ``session.run`` gives) and returns the 1-D vector, before it is made length 1.
 
     The session is made here, so the caller decides which thread loads the model.
     """
@@ -43,7 +47,17 @@ def load(paths: dict[str, str]) -> Callable:
     name = session.get_inputs()[0].name
 
     def vector(image):
-        token = session.run(None, {name: prepare(image)})[0][0, 0]          # output 0, the CLS token
-        return (token / np.linalg.norm(token)).astype(np.float32)
+        raw = np.asarray(pick(session.run(None, {name: prepare(image)})), dtype=np.float32)
+        return (raw / np.linalg.norm(raw)).astype(np.float32)
 
     return vector
+
+
+def mobilenet_vector(outputs):
+    """MobileNetV4's vector: its one output, ``vector``, shape (1, 1280), for the one picture."""
+    return outputs[0][0]
+
+
+def dinov2_vector(outputs):
+    """DINOv2's vector: output 0 at token 0 (the CLS token)."""
+    return outputs[0][0, 0]

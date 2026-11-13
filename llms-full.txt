@@ -5208,15 +5208,17 @@ There are three ways to call it. ``ml.teach("cat", cam)`` teaches one picture. `
 picture in the list, in order. ``ml.teach({"cat": [a, b], "dog": [c, d]})`` teaches each name in order. What you taught lasts
 while the sketch runs. Nothing is saved.
 
-There are two picture models. ``"dinov2"`` is the default. The first call picks the model, and the sketch keeps it: a later call
-cannot use the other one. The first call downloads the model (24 MB, once) and keeps it in a ``models/`` folder beside your
-sketch; it prints one line when it does. The pictures never leave your computer. DINOv2 is by Meta AI (Apache 2.0).
+There are two picture models. ``"mobilenet"`` (MobileNetV4-small) is the default. It is quick and small (10 MB). ``"dinov2"``
+(DINOv2-small) is slower and larger (24 MB). On some pictures it can tell look-alike things apart better. The first call picks
+the model, and the sketch keeps it: a later call cannot use the other one. The first call downloads the model (once) and keeps it
+in a ``models/`` folder beside your sketch; it prints one line when it does. The pictures never leave your computer.
+MobileNetV4 is by Google, and its weights are by timm (Apache 2.0). DINOv2 is by Meta AI (Apache 2.0).
 
 | Argument | Meaning |
 |---|---|
 | `name` | what to call the picture, as text, such as "thumbs up". It cannot be empty. Or a dict of names and lists of pictures. |
 | `source` | a camera from camera.open(), or a picture from f.load_image() or f.create_graphics(), or a list of them. Leave it out when name is a dict. |
-| `model` | "dinov2" or "mobilenet". None keeps the model already in use, and starts with "dinov2". |
+| `model` | "mobilenet" or "dinov2". None keeps the model already in use, and starts with "mobilenet". |
 
 **Returns.** how many examples that name has now, as an int, counting the ones still being turned into numbers. For a dict, a dict of each name and its count.
 

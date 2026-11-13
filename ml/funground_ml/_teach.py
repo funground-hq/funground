@@ -1,6 +1,6 @@
-"""Teaching and guessing: the taught set, the thread that makes vectors, and the guess (S-235, contract ML8; D-145, D-146).
+"""Teaching and guessing: the taught set, the thread that makes vectors, and the guess (S-235, contract ML8; D-145, D-146, D-147).
 
-``ml.teach(name, picture)`` keeps a copy of the picture as one example of ``name``. A **picture model** turns each example into a
+``ml.teach(name, picture)`` keeps a copy of the picture as one example of ``name``. A **picture model** (MobileNetV4-small, the default, or DINOv2-small) turns each example into a
 vector, beside the sketch (one daemon thread for each taught set), so ``ml.teach`` never waits. ``ml.guess(source)`` turns the source
 into a vector the same way and names the taught name whose nearest example it is closest to.
 
@@ -24,11 +24,11 @@ from funground import host_services
 from funground.api import canvas_sketch
 from funground.picture import FrameSource, Picture
 
-from . import _dinov2, _source, _tasks
+from . import _pictures, _source, _tasks
 from ._results import Guess
 
 MODEL_NAMES = ("dinov2", "mobilenet")
-DEFAULT_MODEL = "dinov2"
+DEFAULT_MODEL = "mobilenet"        # D-147
 FEW_EXAMPLES = 5                    # a name with fewer examples than this gets the hint
 MARGIN = 0.1                        # a lead of this much in similarity over the runner-up scores 0.95
 LOWEST, HIGHEST = 0.05, 0.95
@@ -43,10 +43,9 @@ class PictureModel:
     load: Callable[[dict[str, str]], Callable[[Any], Any]]
 
 
-PICTURE_MODELS: dict[str, PictureModel | None] = {
-    "dinov2": PictureModel("picture", _dinov2.load),
-    # S-235: MobileNetV4's file and recipe are added by the main session
-    "mobilenet": None,
+PICTURE_MODELS: dict[str, PictureModel] = {
+    "dinov2": PictureModel("picture_dinov2", lambda paths: _pictures.load(paths, _pictures.dinov2_vector)),
+    "mobilenet": PictureModel("picture_mobilenet", lambda paths: _pictures.load(paths, _pictures.mobilenet_vector)),
 }
 
 
@@ -356,8 +355,6 @@ def _use_model(taught: TaughtSet, chosen: str | None, base_dir: str | None, who:
         return
     name = chosen or DEFAULT_MODEL
     entry = PICTURE_MODELS[name]
-    if entry is None:
-        raise NotImplementedError("MobileNetV4 is not pinned yet (S-235)")
     if host_services.models is not None:
         raise NotImplementedError(f"{who}: teaching is not built for Play yet (S-235).")
     from . import _fetch

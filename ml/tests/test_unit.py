@@ -244,8 +244,8 @@ def test_a_picture_of_another_size_starts_again():
 
 
 # ---- the model table and the download
-def test_the_table_has_ten_pinned_files_from_the_hub():
-    assert len(_models.MODELS) == 10
+def test_the_table_has_eleven_pinned_files_from_the_hub():
+    assert len(_models.MODELS) == 11
     for model in _models.MODELS.values():
         assert re.fullmatch(r"https://huggingface\.co/(opencv|onnx-community|funground-hq)/[a-z0-9_.-]+/resolve/[0-9a-f]{40}/[\w./]+\.(onnx|json)", model.url), model.url
         assert "/main/" not in model.url
