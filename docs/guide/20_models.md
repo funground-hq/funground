@@ -392,6 +392,8 @@ The gallery has a whole sketch: [teach by example](../gallery/README.md#teach-by
 
 ### Make it look at the thing
 
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
 The model looks at the **whole** picture you give it. Sit a few feet from the camera, and most of the picture is you, your
 chair and the room. Your thumb is a small part of it. So the model learns "this room, with something here", and when you
 hold your thumb somewhere else, the picture changes more than the sign does. The guesses get worse.
