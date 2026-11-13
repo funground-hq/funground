@@ -149,8 +149,8 @@ def test_a_heard_made_from_guesses_has_the_rest_as_its_next():
     assert all(not g.is_new and g.next == () for g in heard.next)
 
 
-def test_the_public_names_are_pose_hand_person_words_and_sound():
-    assert funground_ml.__all__ == ["pose", "hand", "person", "words", "sound"]
+def test_the_public_names_start_with_pose_hand_person_words_and_sound():
+    assert funground_ml.__all__[:5] == ["pose", "hand", "person", "words", "sound"]
     assert funground_ml.Heard is _results.Heard
 
 

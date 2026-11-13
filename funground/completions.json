@@ -11022,6 +11022,22 @@
     "detail": "(source)",
     "summary": "Listen to a microphone or a sound, and give the name of what it hears.",
     "url": "reference/API.md#fn-ml-sound"
+   },
+   {
+    "name": "teach",
+    "kind": "function",
+    "signature": "teach(name, source=None, model=None)",
+    "detail": "(name, source=None, model=None)",
+    "summary": "Teach the computer what to call a picture.",
+    "url": "reference/API.md#fn-ml-teach"
+   },
+   {
+    "name": "guess",
+    "kind": "function",
+    "signature": "guess(source, k=1)",
+    "detail": "(source, k=1)",
+    "summary": "Guess what a camera or a picture shows, from the things you taught.",
+    "url": "reference/API.md#fn-ml-guess"
    }
   ]
  }

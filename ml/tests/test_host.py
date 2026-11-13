@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import struct
 import subprocess
 import sys
 
@@ -532,3 +533,72 @@ def test_a_session_passes_a_phrase_out_and_the_words_in():
     session.step(1.0)
     session.stop()
     assert asked[-1][0] == "close"
+
+
+# ---- vectors of pictures (S-235, ML8)
+def test_a_vector_job_is_sent_as_a_request_and_never_dropped_for_being_busy():
+    asked = []
+    models = HostModels(lambda command, fields: asked.append((command, fields)))
+    assert models.request_vector("picture_mobilenet", 1, bytes(16), 2, 2) is True
+    assert models.request_vector("picture_mobilenet", 2, bytes(16), 2, 2) is True       # many in flight
+    assert asked[0] == ("request", {"task": "picture_mobilenet", "key": 1, "width": 2, "height": 2, "pixels": bytes(16)})
+    assert [fields["key"] for _, fields in asked] == [1, 2]
+    with pytest.raises(ValueError):
+        models.request_vector("picture_mobilenet", 3, bytes(15), 2, 2)
+
+
+def test_a_vector_comes_back_as_float32_bytes_or_numbers_and_is_taken_once():
+    models = HostModels(lambda command, fields: None)
+    models.request_vector("picture_dinov2", 1, bytes(16), 2, 2)
+    models.request_vector("picture_dinov2", 2, bytes(16), 2, 2)
+    assert models.take_vector("picture_dinov2", 1) is None
+    generation = models.generation
+    models.push_vector("picture_dinov2", 1, struct.pack("<3f", 0.5, -0.25, 1.0))
+    models.push_vector("picture_dinov2", 2, [1, 2])
+    assert models.generation == generation + 2
+    assert models.take_vector("picture_dinov2", 1) == (0.5, -0.25, 1.0)
+    assert models.take_vector("picture_dinov2", 1) is None                              # forgotten as it is given
+    assert models.take_vector("picture_dinov2", 2) == (1.0, 2.0)
+    with pytest.raises(ValueError):
+        models.request_vector("picture_dinov2", 3, bytes(16), 2, 2)
+        models.push_vector("picture_dinov2", 3, bytes(7))
+
+
+def test_a_vector_for_a_job_not_in_flight_is_ignored():
+    models = HostModels(lambda command, fields: None)
+    models.push_vector("picture_mobilenet", 9, struct.pack("<1f", 1.0))
+    assert models.take_vector("picture_mobilenet", 9) is None and models.generation == 0
+
+
+def test_vector_requests_stop_when_nothing_listens_or_the_task_has_failed(capsys):
+    assert HostModels().request_vector("picture_mobilenet", 1, bytes(16), 2, 2) is False
+    models = HostModels(lambda command, fields: None)
+    assert models.failed("picture_mobilenet") is False
+    models.request_vector("picture_mobilenet", 1, bytes(16), 2, 2)
+    models.unavailable("picture_mobilenet", "no model today")
+    assert models.failed("picture_mobilenet") is True and models.failed("picture_dinov2") is False
+    assert models.request_vector("picture_mobilenet", 2, bytes(16), 2, 2) is False
+    models.push_vector("picture_mobilenet", 1, [1.0])                                   # its job was forgotten
+    assert models.take_vector("picture_mobilenet", 1) is None
+
+
+def test_close_forgets_the_vectors_in_flight_and_kept():
+    models = HostModels(lambda command, fields: None)
+    models.request_vector("picture_mobilenet", 1, bytes(16), 2, 2)
+    models.request_vector("picture_mobilenet", 2, bytes(16), 2, 2)
+    models.push_vector("picture_mobilenet", 1, [1.0])
+    models.close()
+    models.push_vector("picture_mobilenet", 2, [1.0])
+    assert models.take_vector("picture_mobilenet", 1) is None and models.take_vector("picture_mobilenet", 2) is None
+
+
+def test_a_session_passes_a_vector_to_the_models():
+    from funground.web import Session
+
+    session = Session(64, 48, on_models=lambda command, fields: None)
+    try:
+        host_services.models.request_vector("picture_mobilenet", 1, bytes(16), 2, 2)
+        session.push_models_vector("picture_mobilenet", 1, struct.pack("<2f", 0.5, 0.25))
+        assert host_services.models.take_vector("picture_mobilenet", 1) == (0.5, 0.25)
+    finally:
+        session.stop()

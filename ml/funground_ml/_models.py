@@ -13,6 +13,14 @@ token table ``vocab.json`` that turns the model's numbers back into text. Readin
 The sound file (S-250) is Google's YAMNet as ONNX, funground's own copy of the community repository ``audiomagic/yamnet-onnx``, so it cannot vanish with someone else's account (Apache-2.0 on the
 original; the converted repository's card names no licence). Its scores match Google's model to 6.7e-5 (spike 18). The 521 names
 it scores are in ``_sound_names.py``, not downloaded. The sound names come from the AudioSet ontology by Google LLC, CC BY 4.0.
+
+The picture file (S-235) is Meta AI's DINOv2-small (Apache-2.0), converted to ONNX and quantized to 8 bits by the ``onnx-community``
+organisation. ``ml.teach`` and ``ml.guess`` turn a picture into a vector of 384 numbers with it (``_dinov2.py``).
+
+The picture files (S-235) are two. MobileNetV4-small (Google; weights by timm; Apache-2.0) is the default (D-147): funground derived the
+file from timm's weights and cut off the classifier, so it gives a vector of 1,280 numbers; the derivation script is in its Hub
+repository, ``funground-hq/mobilenetv4-small-vector-onnx``. DINOv2-small is Meta AI's (Apache-2.0), converted to ONNX and quantized to
+8 bits by the ``onnx-community`` organisation; it gives a vector of 384 numbers. ``ml.teach`` and ``ml.guess`` use them (``_pictures.py``).
 """
 from __future__ import annotations
 
@@ -75,16 +83,25 @@ MODELS: dict[str, Model] = {m.name: m for m in (
     Model("sound_model", "funground-hq/yamnet-onnx", "9648eed1cf043f9163842e9cb6d5fd8291d0d1cf",
           "yamnet.onnx", 16093355,
           "d3835ffbbd4a1bb3e777f0ca217b5007907f5171dd5d17c4236b95b2af8f908e", "Apache-2.0"),
+    Model("picture_mobilenet", "funground-hq/mobilenetv4-small-vector-onnx", "b234e0655ee20702f98785f82228dd6ad42412ba",
+          "mobilenetv4_conv_small_vector.onnx", 9961955,
+          "addc91348c45900b641eacd073fbaf1355ae395c2176f0a989a78be73205ae60", "Apache-2.0"),
+    Model("picture_dinov2", "onnx-community/dinov2-small", "8b1f705a3a7f6f062f6bdd21986c1583d3ef105d",
+          "onnx/model_quantized.onnx", 24446700,
+          "c179f8f7f592449c4c1bca4cd124a7538021428c5ffb89afde9503935b197efb", "Apache-2.0",
+          kept_as="dinov2_small_q8.onnx"),
 )}
 
 # What each task needs: a finder, then the landmark model (pose and hand); one model for the person's mask; the two halves of
-# Whisper and its token table (words).
+# Whisper and its token table (words); one model each for the sound names (sound) and the picture's vector (teach and guess: one task for each picture model).
 TASKS: dict[str, tuple[str, ...]] = {
     "pose": ("pose_detector", "pose_landmarks"),
     "hand": ("palm_detector", "hand_landmarks"),
     "person": ("person_mask",),
     "words": ("words_encoder", "words_decoder", "words_vocabulary"),
     "sound": ("sound_model",),
+    "picture_mobilenet": ("picture_mobilenet",),
+    "picture_dinov2": ("picture_dinov2",),
 }
 
 # The name each file of a task goes by in the paths ``_fetch.ensure`` gives back, in the order of TASKS.
@@ -94,4 +111,9 @@ ROLES: dict[str, tuple[str, ...]] = {
     "person": ("model",),
     "words": ("encoder", "decoder", "vocabulary"),
     "sound": ("model",),
+    "picture_mobilenet": ("model",),
+    "picture_dinov2": ("model",),
 }
+
+# What the download line calls a task, when its key says too little ("Downloading the picture model, ...").
+SAYS: dict[str, str] = {"picture_mobilenet": "picture", "picture_dinov2": "picture"}

@@ -32,7 +32,7 @@ API_BADGE = '<p class="fg-since">Since {v}.</p>'
 LATER_WORDS = {"filter": {"kind": {"edges": "0.2"}}, "apply_filter": {"kind": {"edges": "0.2"}}}
 # Library calls that mark a guide section or a gallery example. The models library's names are not in completions.json (it is a
 # separate install), so a call is listed here by hand to get the marker. ml.words (S-234) and ml.sound (S-250).
-LATER_CALLS = {"ml.words": "0.2", "ml.sound": "0.2"}
+LATER_CALLS = {"ml.words": "0.2", "ml.sound": "0.2", "ml.teach": "0.2", "ml.guess": "0.2"}
 WORD_VERSIONS = {word: v for args in LATER_WORDS.values() for words in args.values() for word, v in words.items()}
 
 

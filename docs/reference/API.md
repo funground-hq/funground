@@ -33,7 +33,7 @@ In the examples, `import funground as f` is understood. A library's examples als
 - [The sound library](#the-sound-library): [`load`](#fn-sound-load), [`create`](#fn-sound-create), [`tone`](#fn-sound-tone), [`note`](#fn-sound-note), [`pluck`](#fn-sound-pluck), [`melody`](#fn-sound-melody), [`sequence`](#fn-sound-sequence), [`mix`](#fn-sound-mix), [`drone`](#fn-sound-drone), [`note_to_frequency`](#fn-sound-note_to_frequency), [`frequency_to_note`](#fn-sound-frequency_to_note), [`chord_notes`](#fn-sound-chord_notes), [`microphone`](#fn-sound-microphone), [`microphones`](#fn-sound-microphones), [`draw_wave`](#fn-sound-draw_wave), [`draw_spectrum`](#fn-sound-draw_spectrum), [`spectrogram`](#fn-sound-spectrogram), [`draw_pitch_line`](#fn-sound-draw_pitch_line)
 - [The sangeet library](#the-sangeet-library): [`ragas`](#fn-sangeet-ragas), [`raga`](#fn-sangeet-raga), [`talas`](#fn-sangeet-talas), [`tala_info`](#fn-sangeet-tala_info), [`tala`](#fn-sangeet-tala), [`match_ragas`](#fn-sangeet-match_ragas)
 - [The camera library](#the-camera-library): [`open`](#fn-camera-open), [`names`](#fn-camera-names), [`load_clip`](#fn-camera-load_clip)
-- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`person`](#fn-ml-person), [`words`](#fn-ml-words), [`sound`](#fn-ml-sound)
+- [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`person`](#fn-ml-person), [`words`](#fn-ml-words), [`sound`](#fn-ml-sound), [`teach`](#fn-ml-teach), [`guess`](#fn-ml-guess)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
 - [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
 - [Constants and reference tables](#constants-and-reference-tables)
@@ -5314,6 +5314,103 @@ if heard:
 ```
 
 See also: [`words`](#fn-ml-words), [`sound.microphone`](#fn-sound-microphone).
+
+<a id="fn-ml-teach"></a>
+### `ml.teach`
+
+```py
+ml.teach(name, source=None, model=None)
+```
+
+Teach the computer what to call a picture.
+
+Give a name and a camera or a picture. The computer keeps a copy of the picture as one example of that name. Then
+``ml.guess()`` can say which name a new picture is most like. Teach at least two names, and 5 or more pictures of each. The
+pictures should look different from each other: different light, different places, different angles.
+
+Teaching a camera keeps the picture it shows now. Hold a key down and it teaches as fast as the computer can, one picture at a
+time, so ``draw()`` never waits. A picture you draw again every frame, such as a box cut from the camera, is taught the same
+way. The picture is turned into numbers beside your sketch; a picture counts in a guess once that is done.
+Teaching the same picture again under the same name adds nothing, and neither does a camera with no picture yet.
+
+There are three ways to call it. ``ml.teach("cat", cam)`` teaches one picture. ``ml.teach("cat", [a, b, c])`` teaches each
+picture in the list, in order. ``ml.teach({"cat": [a, b], "dog": [c, d]})`` teaches each name in order. What you taught lasts
+while the sketch runs. Nothing is saved.
+
+There are two picture models. ``"mobilenet"`` (MobileNetV4-small) is the default. It is quick and small (10 MB). ``"dinov2"``
+(DINOv2-small) is slower and larger (24 MB). On some pictures it can tell look-alike things apart better. The first call picks
+the model, and the sketch keeps it: a later call cannot use the other one. The first call downloads the model (once) and keeps it
+in a ``models/`` folder beside your sketch; it prints one line when it does. The pictures never leave your computer.
+MobileNetV4 is by Google, and its weights are by timm (Apache 2.0). DINOv2 is by Meta AI (Apache 2.0).
+
+| Argument | Meaning |
+|---|---|
+| `name` | what to call the picture, as text, such as "thumbs up". It cannot be empty. Or a dict of names and lists of pictures. |
+| `source` | a camera from camera.open(), or a picture from f.load_image() or f.create_graphics(), or a list of them. Leave it out when name is a dict. |
+| `model` | "mobilenet" or "dinov2". None keeps the model already in use, and starts with "mobilenet". |
+
+**Returns.** how many examples that name has now, as an int, counting the ones still being turned into numbers. For a dict, a dict of each name and its count.
+
+**Raises.**
+
+- `TypeError`: if name is not text, or something to teach is not a camera or a picture (the message says which item).
+- `ValueError`: if name is empty, or model is not "dinov2" or "mobilenet", or the sketch already uses the other model.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+if f.key_down("u"):
+    ml.teach("thumbs up", cam)
+```
+
+See also: [`guess`](#fn-ml-guess).
+
+<a id="fn-ml-guess"></a>
+### `ml.guess`
+
+```py
+ml.guess(source, k=1)
+```
+
+Guess what a camera or a picture shows, from the things you taught.
+
+You get a Guess. ``guess.name`` is the name you taught that the picture is most like. ``guess.score`` (0 to 1) says how sure
+it is: 1 is fairly sure, and 0.5 means it is guessing between two. It is not how often the guess is right. With ``k`` of 2 or
+more, ``guess.next`` is the next names, the nearest first, each a Guess with its own name and score. A name appears once, and
+you get fewer than ``k`` if fewer names were taught. ``str(guess)`` is the name. Calling it twice in one frame on the same camera gives the same Guess.
+
+Each name is judged by the example of it that is nearest. With one name taught, the Guess is that name with a score of 0.5,
+and one line is printed to say to teach a second. With fewer than 5 examples of a name, one line is printed to say that more
+make better guesses. Each line is printed once.
+
+The computer always names the nearest thing you taught. It does not know what it was never shown. A picture of something else
+still gets a name. So teach a name for it, such as "nothing", with pictures of an empty room, the wall or whatever else the
+camera sees when nothing you care about is there.
+
+For a camera the answer is worked out beside your sketch, so ``draw()`` never waits. The Guess is the newest one, and can be a
+frame or more behind. You get None until the first one arrives, and if the camera has no picture yet. For a picture on a
+computer the call waits for the answer. In Play a picture is answered as a camera is: None until the first answer, then the
+newest one. You get None if nothing is taught yet, or no taught picture is ready.
+
+| Argument | Meaning |
+|---|---|
+| `source` | a camera from camera.open(), or a picture from f.load_image() or f.create_graphics(). |
+| `k` | how many names to give, as a whole number of 1 or more. The default is 1. |
+
+**Returns.** a Guess, or None if nothing can be guessed yet.
+
+**Raises.**
+
+- `TypeError`: if source is not a camera or a picture, or k is not a whole number.
+- `ValueError`: if k is less than 1.
+- `ConnectionError`: if the model has to be downloaded and there is no connection.
+
+```py
+answer = ml.guess(cam)
+if answer:
+    f.text(answer.name, 20, 100)
+```
+
+See also: [`teach`](#fn-ml-teach).
 
 <a id="live-values"></a>
 ## Live values

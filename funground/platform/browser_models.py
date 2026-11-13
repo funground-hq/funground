@@ -44,8 +44,27 @@ each 0.96 s of sound; take the mean of the rows, column by column (a microphone'
 several); push the 521 mean scores as float32 bytes with `push_sound_scores`. The quiet-window rule and the choosing of names
 are done in Python before and after, never on the page. A window of a microphone comes about twice a second.
 
+**Vectors** (the "picture_mobilenet" and "picture_dinov2" tasks, S-235, ML8):
+
+* `request_vector(task, job, rgba, width, height)` sends one picture to be turned into a vector, as the same "request" message
+  that pictures use (the page tells it apart by the task). `job` is a whole number that is unique within the run (funground_ml
+  numbers its jobs 1, 2, 3, ...). Nothing is dropped for being busy: many jobs can be in flight and the page works on them in
+  order. It returns False only when nothing listens (no `on_models`) or the task has failed.
+* `push_vector(task, job, vector)` is what the page calls with the answer: the vector as float32 bytes (4 bytes each, little-endian),
+  already made length 1 by the page, or a sequence of numbers. It is kept for that job, and ignored if that job is not in flight
+  (the run was forgotten).
+* `take_vector(task, job)` is what funground_ml reads: the vector as a tuple of floats, forgotten as it is given, or None if it
+  has not come. `failed(task)` is True after `unavailable(task, reason)`.
+
+What the page does with a picture of a vector task (funground_ml expects exactly this; the desktop does the same in
+`funground_ml/_pictures.py`): the RGBA picture (see-through pixels are already opaque black, which `Frame.rgba()` makes them);
+scale the shorter side to 256 with Pillow's bicubic resampling (the page reproduces Pillow's); cut the middle 224 x 224; divide by
+255; subtract the ImageNet mean (0.485, 0.456, 0.406) and divide by the spread (0.229, 0.224, 0.225) for red, green and blue; lay it
+out as NCHW; run the task's model. MobileNetV4: output 0, row 0 (1280 numbers). DINOv2: output 0 at [0, 0] (384 numbers). Make the
+vector length 1 and push it as float32 bytes.
+
 `key` says which source a request came from (funground_ml uses `id()` of the camera, picture, microphone or sound). `task` is
-"pose", "hand", "person", "words" or "sound". A result can be one frame behind, which is what `ml.pose(cam)` gives in a page
+"pose", "hand", "person", "words", "sound", "picture_mobilenet" or "picture_dinov2". A result can be one frame behind, which is what `ml.pose(cam)` gives in a page
 (contract ML3), and a phrase's answer arrives a second or two after the speaker pauses.
 
 `on_models(command, fields)` is told what the sketch wants:
@@ -53,9 +72,12 @@ are done in Python before and after, never on the page. A window of a microphone
     request   {"task", "key", "width", "height", "pixels"}   find the body or hand in these RGBA bytes
     request   {"task", "key", "rate", "samples"}             hear the words ("words") or name the sound ("sound") in these
                                                               samples (float32 bytes)
+    request   {"task", "key", "width", "height", "pixels"}   make the vector of these RGBA bytes ("picture_mobilenet",
+                                                              "picture_dinov2"); "key" is the job number
     close     {}                                              the run ended: forget every source
 
-A "request" with a "samples" field is a phrase or a window of sound and one with "pixels" is a picture; the "task" says the same.
+A "request" with a "samples" field is a phrase or a window of sound and one with "pixels" is a picture; the "task" says the same
+(a picture of a vector task is not dropped when busy, and its "key" is a job number, not a source).
 
 If the page cannot run a model (no connection for the first download, a file that fails its check) it calls
 `unavailable(task, reason)`, which prints the reason once and stops asking for that task. Without `on_models`
@@ -109,6 +131,8 @@ class HostModels:
         self._in_flight: set[tuple[str, int]] = set()
         self._latest: dict[tuple[str, int], ModelResult] = {}
         self._failed: set[str] = set()                    # tasks the page cannot run in this run
+        self._jobs: set[tuple[str, int]] = set()          # (task, job) of vectors asked for and not yet come
+        self._vectors: dict[tuple[str, int], tuple] = {}  # vectors that have come and not yet been taken
         self._asked = False                               # a "request" has been sent since the last "close"
         self.generation = 0                               # counts every result and failure: it says when an answer may differ
 
@@ -145,6 +169,28 @@ class HostModels:
         self._asked = True
         self._on_models("request", {"task": task, "key": key, "rate": int(rate), "samples": data})
         return True
+
+    def request_vector(self, task: str, job: int, rgba, width: int, height: int) -> bool:
+        """Send one picture to be made into a vector (RGBA bytes, as `request`). Never dropped for being busy: many jobs can be
+        in flight. Returns False only when nothing listens or the task has failed."""
+        if self._on_models is None or task in self._failed:
+            return False
+        data = bytes(rgba)
+        if width <= 0 or height <= 0 or len(data) != width * height * 4:
+            raise ValueError(f"a picture for the models must be width * height * 4 bytes of RGBA; got {len(data)} bytes "
+                             f"for {width} x {height}")
+        self._jobs.add((task, job))
+        self._asked = True
+        self._on_models("request", {"task": task, "key": job, "width": width, "height": height, "pixels": data})
+        return True
+
+    def take_vector(self, task: str, job: int) -> tuple | None:
+        """The vector for this job as a tuple of floats, forgotten as it is given; None if it has not come."""
+        return self._vectors.pop((task, job), None)
+
+    def failed(self, task: str) -> bool:
+        """True when the page has said it cannot run this task (`unavailable`)."""
+        return task in self._failed
 
     def latest(self, task: str, key: int) -> ModelResult | None:
         """The newest result for this task and source, or None before the first one."""
@@ -206,12 +252,29 @@ class HostModels:
         self._latest[(task, key)] = SoundResult(numbers)
         self.generation += 1
 
+    def push_vector(self, task: str, job: int, vector) -> None:
+        """A result that is a vector from the page: float32 bytes (4 bytes each, little-endian), or a sequence of numbers. It is
+        kept for `take_vector`. A result for a job that is not in flight (a forgotten run) is ignored."""
+        if (task, job) not in self._jobs:
+            return
+        self._jobs.discard((task, job))
+        if isinstance(vector, (bytes, bytearray, memoryview)):
+            data = bytes(vector)
+            if len(data) == 0 or len(data) % 4:
+                raise ValueError(f"a vector must be float32 bytes (4 for each number); got {len(data)} bytes")
+            numbers = struct.unpack(f"<{len(data) // 4}f", data)
+        else:
+            numbers = tuple(float(v) for v in vector)
+        self._vectors[(task, job)] = numbers
+        self.generation += 1
+
     def unavailable(self, task: str, reason: str) -> None:
         """The page could not run this task. Prints one line the first time, and the task is not asked for again."""
         if task in self._failed:
             return
         self._failed.add(task)
         self._in_flight = {item for item in self._in_flight if item[0] != task}
+        self._jobs = {item for item in self._jobs if item[0] != task}
         self.generation += 1
         print(str(reason).rstrip())
 
@@ -219,6 +282,8 @@ class HostModels:
         """The run ended: forget every source and tell the page to do the same."""
         self._in_flight.clear()
         self._latest.clear()
+        self._jobs.clear()
+        self._vectors.clear()
         self._failed.clear()
         if self._asked and self._on_models is not None:
             self._asked = False
