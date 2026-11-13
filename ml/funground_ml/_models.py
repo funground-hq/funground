@@ -28,8 +28,6 @@ from dataclasses import dataclass
 
 HUB = "https://huggingface.co"
 
-MOBILENET_COMMIT = "PENDING-UPLOAD"     # S-235: filled in when the maintainer has uploaded the file (D-147)
-
 
 @dataclass(frozen=True)
 class Model:
@@ -82,14 +80,10 @@ MODELS: dict[str, Model] = {m.name: m for m in (
           "vocab.json", 999186,
           "f6bd25a65e4e63ca31360e9fb11c7e4f9a391a78385d640acd814092dd6eee4f", "Apache-2.0",
           kept_as="whisper_tiny_en_vocab.json"),
-    Model("picture_model", "onnx-community/dinov2-small", "8b1f705a3a7f6f062f6bdd21986c1583d3ef105d",
-          "onnx/model_quantized.onnx", 24446700,
-          "c179f8f7f592449c4c1bca4cd124a7538021428c5ffb89afde9503935b197efb", "Apache-2.0",
-          kept_as="dinov2_small_q8.onnx"),
     Model("sound_model", "funground-hq/yamnet-onnx", "9648eed1cf043f9163842e9cb6d5fd8291d0d1cf",
           "yamnet.onnx", 16093355,
           "d3835ffbbd4a1bb3e777f0ca217b5007907f5171dd5d17c4236b95b2af8f908e", "Apache-2.0"),
-    Model("picture_mobilenet", "funground-hq/mobilenetv4-small-vector-onnx", MOBILENET_COMMIT,
+    Model("picture_mobilenet", "funground-hq/mobilenetv4-small-vector-onnx", "b234e0655ee20702f98785f82228dd6ad42412ba",
           "mobilenetv4_conv_small_vector.onnx", 9961955,
           "addc91348c45900b641eacd073fbaf1355ae395c2176f0a989a78be73205ae60", "Apache-2.0"),
     Model("picture_dinov2", "onnx-community/dinov2-small", "8b1f705a3a7f6f062f6bdd21986c1583d3ef105d",
