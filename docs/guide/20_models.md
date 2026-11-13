@@ -1,7 +1,8 @@
 # 20. Models: bodies, hands, words and sounds
 
-A model is a program that has learnt to find something in a picture, or in a sound. funground has five. One finds a **body**. One
-finds a **hand**. One cuts out the **person**. One writes down the **words** you say. One names the **sound** you hear. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
+A model is a program that has learnt to find something in a picture, or in a sound. funground has six. One finds a **body**. One
+finds a **hand**. One cuts out the **person**. One writes down the **words** you say. One names the **sound** you hear. And one
+learns from **you**: teach it a few pictures of each thing, and it names new ones. Point your camera at yourself, and your sketch knows where your nose, your wrists and your fingertips
 are. Speak to your microphone, and it knows what you said. Then you can draw with them.
 
 Everything runs on your own computer. What the camera sees never leaves it.
@@ -28,7 +29,7 @@ Why is it separate? A model is a big file, and a program to run it. Most sketche
 funground stays small, and you add the models when you want them.
 
 **The first call downloads the model.** It prints one line, such as `Downloading the pose model, 18 MB, once.` The body
-model is about 18 MB, the hand model about 8 MB, the words model 42 MB and the sound model 16 MB. The files are kept in a `models/` folder beside your sketch. The next
+model is about 18 MB, the hand model about 8 MB, the words model 42 MB, the sound model 16 MB and the picture model (for teaching) 10 MB. The files are kept in a `models/` folder beside your sketch. The next
 time you run it, nothing is downloaded, and it works without the internet.
 
 ## What a model is
@@ -311,12 +312,88 @@ f.run()
 
 The same dog can be `"Dog"` in one answer and `"Bark"` in the next. To catch both, look at `heard.next` as well.
 
-<!-- S-235: "Teach a model" goes here after D-145 -->
+## Teach a model
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+The other models learnt from someone else's examples. This one learns from **yours**. You show it a few pictures of each
+thing, and say what each thing is called. Then it can name a new picture.
+
+`ml.teach(name, source)` keeps a copy of a picture as one example of `name`. The source is a camera or a picture. It gives
+back how many examples that name has now. `ml.guess(source)` then names the taught thing that a picture is most like.
+
+```py
+import funground as f
+from funground import camera, ml
+
+cam = camera.open()
+
+def setup():
+    f.size(640, 480)
+    cam.start(320, 240)
+
+def draw():
+    f.background("navy")
+    f.image(cam, 0, 0)
+    if f.key_down("1"):
+        ml.teach("thumbs up", cam)
+    if f.key_down("2"):
+        ml.teach("thumbs down", cam)
+    if f.key_down("0"):
+        ml.teach("nothing", cam)
+    guess = ml.guess(cam)
+    if guess:
+        f.text_size(40)
+        f.text(guess.name, 340, 40)
+
+f.run()
+```
+
+Hold up a thumb and hold down 1 for a few seconds. Turn your thumb down and hold down 2. Take your hand away and hold down
+0. Now show a thumb, and the guess follows it.
+
+**Holding a key teaches as fast as the computer can.** Each picture is turned into numbers beside your sketch, so `draw()`
+never waits. While one picture is being worked on, a held key adds nothing, and the count stays true. How many pictures
+a second that makes depends on your computer. A taught picture counts in a guess once it is ready.
+
+A guess has three parts. `guess.name` is the name it chose. `guess.score` says how sure it is: 0.5 means it is guessing
+between two names, and 0.95 is as sure as it gets. `guess.next` is empty, unless you ask for more names:
+`ml.guess(cam, k=3)` gives the next two names in `guess.next`, the nearest first. `str(guess)` is the name.
+
+**Teach a name for "nothing".** The computer always picks the nearest thing you taught. It never says "I don't know". Show
+it your empty desk, and it will still say "thumbs up" or "thumbs down", whichever is nearer. So teach a third name, such as
+`"nothing"`, with pictures of what the camera sees when nothing you care about is there.
+
+**Teach 5 or more of each.** One or two examples are not enough. With look-alike things, such as two hand signs, five
+examples of each were right about 84 times in 100 in our tests, and ten examples about 92 times in 100. Things that look
+very different, such as a cup and a book, need only about three. Move a little while you teach: nearer, further, a bit to
+the side, in brighter and dimmer light. Different pictures teach it more than the same picture many times. If you teach
+fewer than 5 of a name, or only one name, the first guess prints one line to remind you.
+
+**Three ways to teach.** `ml.teach("cup", cam)` teaches one picture. `ml.teach("cup", [a, b, c])` teaches each picture in a
+list. `ml.teach({"cup": [a, b], "book": [c, d]})` teaches each name in turn, and gives back a dict of counts. The same
+picture taught twice under one name counts once.
+
+**How it decides.** Each picture becomes a list of numbers that describes how it looks. Pictures that look alike get
+lists that are close together. A guess finds, for each name, the example nearest to the new picture, and picks the
+nearest name. The score says how far ahead that name is of the next one: a clear lead gives a high score, and a near tie
+gives about 0.5.
+
+**On your computer, a picture waits.** `ml.guess(picture)` waits for the answer. In Play it gives `None` until the answer
+arrives. A camera never waits, anywhere: the guess is the newest one, and can be a frame or more behind.
+
+**Two picture models.** The first teach downloads the picture model, 10 MB, once. It is **MobileNetV4**, small and quick.
+`ml.teach(name, cam, model="dinov2")` on the first teach chooses **DINOv2** instead: 24 MB, and much slower (in Play, about
+2 guesses a second on a slow computer), but it sometimes tells look-alike things apart better. The first teach picks the
+model for the whole sketch. What you taught lasts while the sketch runs. Nothing is saved, and the pictures never leave
+your computer.
+
+The gallery has a whole sketch: [teach by example](../gallery/README.md#teach-by-example).
 
 ## One call a frame
 
 If you call `ml.pose(cam)` twice in one frame, you get the same body, and the work is done once. So you can ask for the
-body in two places in your code without slowing it down. `ml.hand(cam)`, `ml.person(cam)`, `ml.words(mic)` and `ml.sound(mic)` do the same.
+body in two places in your code without slowing it down. `ml.hand(cam)`, `ml.person(cam)`, `ml.words(mic)`, `ml.sound(mic)` and `ml.guess(cam)` do the same.
 
 Until the camera has sent its first picture, `ml.pose(cam)` gives `None`. You never need to wait on purpose.
 
@@ -354,16 +431,19 @@ Each model was made by someone else, from their own examples. funground uses the
 | Hand (`ml.hand`) | MediaPipe hand and palm, by Google. The files are the OpenCV Zoo's copies. | About 30,000 photos of real hands, and drawn computer hands placed over many backgrounds. |
 | Person (`ml.person`) | MediaPipe selfie segmentation, by Google. | Phone photos of people, taken with their consent, in real rooms and streets, in all kinds of light. Google tested it on people from 17 parts of the world: it did about as well for every skin tone (within about 1 in 100). |
 | Words (`ml.words`) | Whisper tiny.en, by OpenAI. It hears English only. | 680,000 hours of speech from the internet, with what was said. About two thirds of it was English. |
+| Pictures you teach (`ml.teach`, `ml.guess`) | MobileNetV4, by Google; the weights were trained with timm, a library by Ross Wightman, now kept by Hugging Face. funground cut off its last layer, which names 1,000 kinds of thing, and uses the numbers just before it. The other choice, `model="dinov2"`, is DINOv2 by Meta AI. | MobileNetV4: ImageNet, about 1.3 million photos of 1,000 kinds of thing (animals, objects, foods), each labelled by people. DINOv2: 142 million pictures with no labels at all; it learnt which pictures look alike by itself. Neither learnt your names: those come from your examples. |
 | Sound (`ml.sound`) | YAMNet, by Google. The 521 sound names are from the AudioSet ontology, also by Google. | AudioSet: about 2 million ten-second sound clips from YouTube videos, each one named by people who listened to it. Google left out 6 of AudioSet's 527 names, so that the model could not give an offensive name by mistake. |
 
-All five files are free to use (the Apache-2.0 licence). The sound names are free to use with a credit (CC BY 4.0).
+All the model files are free to use (the Apache-2.0 licence). The sound names are free to use with a credit (CC BY 4.0).
 
 Where these facts come from: Google's notes on the [body](https://research.google/blog/on-device-real-time-body-pose-tracking-with-mediapipe-blazepose/),
 [hand](https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker) and
 [person](https://storage.googleapis.com/mediapipe-assets/Model%20Card%20MediaPipe%20Selfie%20Segmentation.pdf) models,
 OpenAI's [notes on Whisper](https://huggingface.co/openai/whisper-tiny.en), and Google's pages on
 [YAMNet](https://github.com/tensorflow/models/blob/master/research/audioset/yamnet/README.md) and
-[AudioSet](https://research.google.com/audioset/).
+[AudioSet](https://research.google.com/audioset/), the [MobileNetV4 paper](https://arxiv.org/abs/2404.10518) and
+[timm's MobileNetV4 card](https://huggingface.co/timm/mobilenetv4_conv_small.e2400_r224_in1k), and Meta AI's
+[DINOv2 paper](https://arxiv.org/abs/2304.07193).
 
 ## Why a model is sometimes wrong
 
@@ -399,7 +479,7 @@ people who will use it, not only with yourself.
 
 ## What stays on your computer
 
-These stay on your computer: the camera's pictures, what the microphone hears, the points and words the model finds and the model files. The only thing
+These stay on your computer: the camera's pictures, what the microphone hears, the pictures you teach, the points and words the model finds and the model files. The only thing
 that goes over the internet is the download of the model files. The program that runs the models is also told not to send anything about itself.
 
 **In Play** (the website), you install nothing. The browser keeps the model files and runs the models for you. The
@@ -417,6 +497,8 @@ answer can be **one frame behind** the picture. Your sketch does not change.
   hands, you get one.
 - **The first run is slow.** It is downloading the model. The next run starts at once.
 - **"Could not download".** There was no internet on the first run. Connect once, run the sketch, and the files are kept.
+- **The guess is wrong, or stuck on one name.** Teach more examples of the names it mixes up, from different places and
+  angles, and teach a `"nothing"`. Check the counts: a name with many more examples than the others wins more often.
 - **A model is not exact.** The points move a little even when you stand still. To make them calmer, draw the average of
   the last few places instead of the newest one.
 
@@ -430,5 +512,7 @@ answer can be **one frame behind** the picture. Your sketch does not change.
 5. Clap, whistle and hum. Which names does `ml.sound(mic)` give? Which one is wrong? Is the right name in `heard.next`?
 6. Say the same sentence in two voices or accents, or in a quiet room and a noisy one. Does `ml.words` give the same
    words? Does the `score` change?
+7. Teach three things on your desk with 3 examples each, then with 10 each. Which guesses get better? Then teach it
+   only from one side of the desk, and guess from the other side.
 
 **Previous:** [19. Studios: the same picture, twice](19_studios.md)

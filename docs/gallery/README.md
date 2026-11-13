@@ -2921,6 +2921,36 @@ Make a noise near your microphone: clap, whistle, hum, tap a glass, play some mu
 
 Source: [`examples/gallery/models/05_name_that_sound.py`](../../examples/gallery/models/05_name_that_sound.py)
 
+### Teach by example
+
+![Teach by example](images/models-06_teach_by_example.png)
+
+Teach the computer three things with your camera, then let it guess. Hold up a thumb and hold down the 1 key: each moment you hold the key, the camera's picture is kept as one example of "thumbs up". Do the same with 2 for "thumbs down" and 0 for "nothing" (your empty desk or the wall behind you). Then put a hand up and watch the guess on the right. With no camera it shows two photos in turn, and the keys teach the photo on the screen. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- ml.teach(name, cam) keeps the camera's picture as one example of name, and gives back how many examples that name has now. Holding a key teaches as fast as the computer can, one picture at a time, so draw() never waits.
+- ml.guess(cam, k=3) names the taught thing the camera's picture is most like. guess.name is the best guess, guess.score says how sure it is (0.5 is a guess between two, 0.95 is fairly sure), and guess.next holds the next two names.
+- The computer always picks the nearest thing it was taught. That is why "nothing" is taught too: without it, an empty desk would still be called "thumbs up" or "thumbs down".
+- Teach at least 5 pictures of each name, and move a little while you teach: nearer, further, to the side. Different pictures teach it more than the same picture many times.
+- What you taught lasts while the sketch runs. The first teach downloads the picture model (10 MB, once) into a models folder beside the sketch, and the pictures never leave your computer.
+
+**Make it yours**
+
+- Change the names in KEYS, or add a fourth key and name.
+- Teach things on your desk instead of hands: a cup, a pen, a book.
+- Do something when the guess changes, such as playing a sound or changing the background colour.
+- Try ml.teach(name, cam, model="dinov2") on the first teach: a bigger, slower model that sometimes tells look-alike things apart better.
+
+</details>
+
+Source: [`examples/gallery/models/06_teach_by_example.py`](../../examples/gallery/models/06_teach_by_example.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it
