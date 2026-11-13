@@ -154,8 +154,8 @@ LIBRARIES: dict[str, dict] = {
     "ml": {
         "module": _ml,
         "title": "The models library",
-        "about": "A body, a hand and the outline of a person in a camera or a picture, and the words and sounds in a microphone, found on your own computer (a separate install, funground-ml).",
-        "names": ["pose", "hand", "person", "words", "sound"],
+        "about": "A body, a hand and the outline of a person in a camera or a picture, and the words and sounds in a microphone, and the things you teach it from pictures, found on your own computer (a separate install, funground-ml).",
+        "names": ["pose", "hand", "person", "words", "sound", "teach", "guess"],
         "renamed": None,           # new in 0.2
         "history": "New in 0.2.",
         "install": "The models library is a separate install: run `python -m pip install funground-ml`",

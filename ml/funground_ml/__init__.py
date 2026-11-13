@@ -25,15 +25,19 @@ so ``draw()`` never waits for it.
 
 ``ml.sound(mic)`` listens to a microphone and gives the name of the sound it hears now, such as "Dog" or "Whistling", with a few
 more guesses. It also works beside the sketch.
+
+``ml.teach(name, picture)`` shows the computer a picture and what to call it, and ``ml.guess(picture)`` then names the taught
+thing a new picture is most like. You teach it your own things, such as "thumbs up" and "thumbs down", with a few pictures of
+each, and nothing leaves your computer.
 """
 from __future__ import annotations
 
 from funground.api import _sketch_folder
 
-from . import _tasks
-from ._results import Body, Hand, Heard, Words
+from . import _tasks, _teach
+from ._results import Body, Guess, Hand, Heard, Words
 
-__all__ = ["pose", "hand", "person", "words", "sound"]
+__all__ = ["pose", "hand", "person", "words", "sound", "teach", "guess"]
 
 
 def pose(source):
@@ -227,3 +231,87 @@ def sound(source):
     See also: words, microphone
     """
     return _tasks.find_sound(source, _sketch_folder())
+
+
+def teach(name, source=None, model=None):
+    """Teach the computer what to call a picture.
+
+    Give a name and a camera or a picture. The computer keeps a copy of the picture as one example of that name. Then
+    ``ml.guess()`` can say which name a new picture is most like. Teach at least two names, and 5 or more pictures of each. The
+    pictures should look different from each other: different light, different places, different angles.
+
+    Teaching a camera keeps the picture it shows now. Hold a key down and it teaches as fast as the computer can, one picture at a
+    time, so ``draw()`` never waits. The picture is turned into numbers beside your sketch; a picture counts in a guess once that is done.
+    Teaching the same picture again under the same name adds nothing, and neither does a camera with no picture yet.
+
+    There are three ways to call it. ``ml.teach("cat", cam)`` teaches one picture. ``ml.teach("cat", [a, b, c])`` teaches each
+    picture in the list, in order. ``ml.teach({"cat": [a, b], "dog": [c, d]})`` teaches each name in order. What you taught lasts
+    while the sketch runs. Nothing is saved.
+
+    There are two picture models. ``"dinov2"`` is the default. The first call picks the model, and the sketch keeps it: a later call
+    cannot use the other one. The first call downloads the model (24 MB, once) and keeps it in a ``models/`` folder beside your
+    sketch; it prints one line when it does. The pictures never leave your computer. DINOv2 is by Meta AI (Apache 2.0).
+
+    Arguments:
+        name: what to call the picture, as text, such as "thumbs up". It cannot be empty. Or a dict of names and lists of pictures.
+        source: a camera from camera.open(), or a picture from f.load_image() or f.create_graphics(), or a list of them. Leave it out when name is a dict.
+        model: "dinov2" or "mobilenet". None keeps the model already in use, and starts with "dinov2".
+
+    Returns:
+        how many examples that name has now, as an int, counting the ones still being turned into numbers. For a dict, a dict of
+        each name and its count.
+
+    Raises:
+        TypeError: if name is not text, or something to teach is not a camera or a picture (the message says which item).
+        ValueError: if name is empty, or model is not "dinov2" or "mobilenet", or the sketch already uses the other model.
+        ConnectionError: if the model has to be downloaded and there is no connection.
+
+    Example:
+        if f.key_down("u"):
+            ml.teach("thumbs up", cam)
+
+    See also: guess
+    """
+    return _teach.teach(name, source, model, _sketch_folder())
+
+
+def guess(source, k=1):
+    """Guess what a camera or a picture shows, from the things you taught.
+
+    You get a Guess. ``guess.name`` is the name you taught that the picture is most like. ``guess.score`` (0 to 1) says how sure
+    it is: 1 is fairly sure, and 0.5 means it is guessing between two. It is not how often the guess is right. With ``k`` of 2 or
+    more, ``guess.next`` is the next names, the nearest first, each a Guess with its own name and score. A name appears once, and
+    you get fewer than ``k`` if fewer names were taught. ``str(guess)`` is the name. Calling it twice in one frame on the same camera gives the same Guess.
+
+    Each name is judged by the example of it that is nearest. With one name taught, the Guess is that name with a score of 0.5,
+    and one line is printed to say to teach a second. With fewer than 5 examples of a name, one line is printed to say that more
+    make better guesses. Each line is printed once.
+
+    The computer always names the nearest thing you taught. It does not know what it was never shown. A picture of something else
+    still gets a name. So teach a name for it, such as "nothing", with pictures of an empty room, the wall or whatever else the
+    camera sees when nothing you care about is there.
+
+    For a camera the answer is worked out beside your sketch, so ``draw()`` never waits. The Guess is the newest one, and can be a
+    frame or more behind. You get None until the first one arrives, and if the camera has no picture yet. For a picture on a
+    computer the call waits for the answer. You get None if nothing is taught yet, or no taught picture is ready.
+
+    Arguments:
+        source: a camera from camera.open(), or a picture from f.load_image() or f.create_graphics().
+        k: how many names to give, as a whole number of 1 or more. The default is 1.
+
+    Returns:
+        a Guess, or None if nothing can be guessed yet.
+
+    Raises:
+        TypeError: if source is not a camera or a picture, or k is not a whole number.
+        ValueError: if k is less than 1.
+        ConnectionError: if the model has to be downloaded and there is no connection.
+
+    Example:
+        answer = ml.guess(cam)
+        if answer:
+            f.text(answer.name, 20, 100)
+
+    See also: teach
+    """
+    return _teach.guess(source, k)

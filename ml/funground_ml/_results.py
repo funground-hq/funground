@@ -128,6 +128,27 @@ class Words:
         return f"<Words {shown!r} score {self.score:.2f}{', new' if self.is_new else ''}>"
 
 
+class Guess:
+    """The name given by ``ml.guess()``: the thing taught that a picture is nearest to.
+
+    ``guess.name`` is the name you taught. ``guess.score`` (0 to 1) says how sure it is: 1 is fairly sure, 0.5 is a guess between
+    two. It is not how often the guess is right. ``guess.next`` is the next guesses when you ask for more than one (``k``), the
+    nearest first; each is a Guess too, with its own name and score and no guesses of its own. ``str(guess)`` is the name.
+    """
+
+    def __init__(self, name: str, score: float, next: tuple["Guess", ...] = ()) -> None:
+        self.name = name
+        self.score = score
+        self.next = tuple(next)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def __repr__(self) -> str:
+        names = f", next {', '.join(repr(g.name) for g in self.next)}" if self.next else ""
+        return f"<Guess {self.name!r} score {self.score:.2f}{names}>"
+
+
 class Heard:
     """The name of a sound, given by ``ml.sound()``.
 
