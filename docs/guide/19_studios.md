@@ -843,4 +843,4 @@ Müller-Brockmann's *Grid Systems in Graphic Design* (1981)
 Gestalt principle of proximity ([Principles of grouping](https://en.wikipedia.org/wiki/Principles_of_grouping)).
 The code is written for funground (CC0). See [CREDITS.md](../../CREDITS.md#ideas-the-examples-build-on).
 
-**Previous:** [18. Projects](18_projects.md) · **Next:** [20. Models: your body and your hands](20_models.md)
+**Previous:** [18. Projects](18_projects.md) · **Next:** [20. Models: bodies, hands, words and sounds](20_models.md)
