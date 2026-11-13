@@ -96,6 +96,10 @@ class BrowserPlatform(HeadlessPlatform):
         """One result that is sound scores from the host's models (browser_models.py); the sketch reads the latest."""
         self.models.push_sound_scores(task, key, scores)
 
+    def push_models_vector(self, task: str, key: int, vector) -> None:
+        """One result that is a picture's vector from the host's models (browser_models.py); the sketch reads it once."""
+        self.models.push_vector(task, key, vector)
+
     def poll(self) -> bool:
         super().poll()
         for event in self._events:               # a page reports the space bar as " "; key_down("space") must see it

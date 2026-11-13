@@ -6,16 +6,22 @@ into a vector the same way and names the taught name whose nearest example it is
 
 * The **TaughtSet** is one for each sketch (a weak dictionary keyed on the sketch, so a new run starts empty). It keeps the names
   in the order they were first taught, each with its examples. An example has a vector, or is still waiting for one.
-* The **_Worker** is the thread. Its queue of teaching jobs is first in, first out: every taught picture becomes a vector. A camera
-  that is being guessed has one slot of its own that holds only the newest frame. Teaching jobs go before guessing jobs.
+* The **_Worker** is the thread (a computer). Its queue of teaching jobs is first in, first out: every taught picture becomes a vector.
+  A camera that is being guessed has one slot of its own that holds only the newest frame. Teaching jobs go before guessing jobs.
+* The **_HostWorker** is the same in a web page, where the page's worker makes the vectors (``host_services.models``, tasks
+  ``picture_mobilenet`` and ``picture_dinov2``). Every picture is sent as a job and nothing is dropped; a camera has one job in flight
+  and its newest frame waits. The vectors that have come are collected at the start of each ``ml.teach`` and ``ml.guess``.
 * The **_Similarities** are one answer's cosine similarities, name by name. The Guess for each ``k`` is cut from them.
 
-numpy is imported inside the functions that need it (desktop only); importing this module loads neither numpy nor onnxruntime.
+Vectors are made in the worker thread (a computer, with numpy) or by the page, and kept as ``array("f")``. The sums are plain Python,
+so the same code runs on both and a page needs no numpy. This module imports neither numpy nor onnxruntime.
 """
 from __future__ import annotations
 
+import operator
 import threading
 import weakref
+from array import array
 from collections import deque
 from dataclasses import dataclass
 from typing import Any, Callable
@@ -37,15 +43,17 @@ ONE_NAME_HINT = "Teach at least two things, so I can compare."
 
 @dataclass(frozen=True)
 class PictureModel:
-    """One way to turn a picture into a vector: the model files to fetch (a task of ``_models.TASKS``), and ``load(paths)``,
-    which makes the function from a Pillow RGB image to a unit-length float32 numpy vector. ``load`` runs in the worker thread."""
+    """One way to turn a picture into a vector: the model files to fetch (a task of ``_models.TASKS``), how many numbers the
+    vector has, and ``load(paths)``, which makes the function from a Pillow RGB image to a unit-length float32 vector. ``load``
+    runs in the worker thread (on the desktop; in a web page the page makes the vectors)."""
     task: str
+    size: int
     load: Callable[[dict[str, str]], Callable[[Any], Any]]
 
 
 PICTURE_MODELS: dict[str, PictureModel] = {
-    "dinov2": PictureModel("picture_dinov2", lambda paths: _pictures.load(paths, _pictures.dinov2_vector)),
-    "mobilenet": PictureModel("picture_mobilenet", lambda paths: _pictures.load(paths, _pictures.mobilenet_vector)),
+    "dinov2": PictureModel("picture_dinov2", 384, lambda paths: _pictures.load(paths, _pictures.dinov2_vector)),
+    "mobilenet": PictureModel("picture_mobilenet", 1280, lambda paths: _pictures.load(paths, _pictures.mobilenet_vector)),
 }
 
 
@@ -80,6 +88,8 @@ class _Worker:
     thread is kept and raised by the next ``check()``, in the sketch's thread; the job it was working on is lost (its slot is
     marked failed) and the thread goes on with the next one.
     """
+
+    can_wait = True
 
     def __init__(self, load: Callable[[], Callable[[Any], Any]]) -> None:
         self._load = load
@@ -159,7 +169,7 @@ class _Worker:
             try:
                 if compute is None:
                     compute = self._load()
-                vector = compute(frame.image())
+                vector = array("f", compute(frame.image()))        # numpy's vector, once, as plain floats
             except BaseException as error:           # kept for the sketch: a thread must not lose it
                 with self._condition:
                     self._error = error
@@ -176,6 +186,96 @@ class _Worker:
                 self.results += 1
                 self._working = False
                 self._condition.notify_all()
+
+
+class _HostWorker:
+    """The same as ``_Worker`` for a web page: the page's worker makes the vectors (``host_services.models``).
+
+    Every taught picture is sent as a job, numbered 1, 2, 3, ... for the run; none is dropped for being busy. A camera that is being
+    guessed has at most one job in flight; its newest frame waits in one place (a newer frame replaces an older one waiting) and is sent
+    when the job comes back. Nothing here waits: ``check()`` collects the vectors that have come, and is called at the start of every
+    ``ml.teach`` and ``ml.guess``. When the page cannot run the task (``unavailable``, which has already printed its sentence) every
+    example still waiting is marked failed.
+    """
+    can_wait = False
+
+    def __init__(self, models: Any, task: str, size: int) -> None:
+        self._models = models
+        self._task = task
+        self._size = size                                             # how many numbers a vector of this task has
+        self._number = 0                                              # the last job number used
+        self._slots: dict[int, _Slot] = {}                            # job -> where its vector goes (teaching, and a Picture)
+        self._flying: dict[int, int] = {}                             # job -> camera key, for a camera's job in flight
+        self._waiting: dict[int, _source.Frame] = {}                  # camera key -> its newest frame, not yet sent
+        self._vectors: dict[int, Any] = {}                            # camera key -> the newest vector that came back
+        self.results = 0                                              # how many vectors have come, ever
+
+    def _send(self, frame: _source.Frame) -> int | None:
+        """Send *frame* as the next job; its number, or None when the page will not take it."""
+        self._number += 1
+        if not self._models.request_vector(self._task, self._number, *frame.rgba()):
+            return None
+        return self._number
+
+    def add(self, frame: _source.Frame, slot: _Slot) -> None:
+        """Send a picture: its vector goes into *slot*."""
+        job = self._send(frame)
+        if job is None:
+            slot.failed = True
+        else:
+            self._slots[job] = slot
+
+    def look(self, key: int, frame: _source.Frame) -> None:
+        """Send a camera's frame for guessing, or keep it waiting if the camera has a job in flight (replacing an older one waiting)."""
+        if key in self._flying.values():
+            self._waiting[key] = frame
+        else:
+            self._fly(key, frame)
+
+    def _fly(self, key: int, frame: _source.Frame) -> None:
+        job = self._send(frame)
+        if job is not None:
+            self._flying[job] = key
+
+    def newest(self, key: int) -> Any:
+        """The newest vector that came back for the camera *key*, or None."""
+        return self._vectors.get(key)
+
+    def _take(self, job: int) -> array | None:
+        """The vector of *job* if it has come, or None. Raises RuntimeError if the page sent one of the wrong length: a fault
+        of the page, which would otherwise compare only part of each vector."""
+        vector = self._models.take_vector(self._task, job)
+        if vector is None:
+            return None
+        if len(vector) != self._size:
+            raise RuntimeError(f"the page sent a picture vector of {len(vector)} numbers for {self._task}; "
+                               f"funground expects {self._size}")
+        return array("f", vector)
+
+    def check(self) -> None:
+        """Collect every vector that has come, and send the frames that were waiting for them. Raises only for a vector of
+        the wrong length (``_take``)."""
+        if self._models.failed(self._task):
+            for slot in self._slots.values():
+                slot.failed = True
+            self._slots.clear()
+            self._flying.clear()
+            self._waiting.clear()
+            return
+        for job, slot in list(self._slots.items()):
+            vector = self._take(job)
+            if vector is not None:
+                slot.vector = vector
+                del self._slots[job]
+                self.results += 1
+        for job, key in list(self._flying.items()):
+            vector = self._take(job)
+            if vector is not None:
+                self._vectors[key] = vector
+                del self._flying[job]
+                self.results += 1
+                if key in self._waiting:
+                    self._fly(key, self._waiting.pop(key))
 
 
 # ---- the answer
@@ -208,19 +308,19 @@ class TaughtSet:
     def __init__(self) -> None:
         self.names: dict[str, list[_Example]] = {}
         self.model: str | None = None
-        self.worker: _Worker | None = None
+        self.worker: _Worker | _HostWorker | None = None
         self.version = 0                                    # grows with every example added
         self._last_from: "weakref.WeakKeyDictionary[Any, _Example]" = weakref.WeakKeyDictionary()   # camera -> last taught
         self._hinted: set[str] = set()
         self._stamp_frame: int | None = None
         self._stamp_results = 0
 
-    def use(self, name: str, paths: dict[str, str]) -> None:
-        """Fix the picture model to *name*, and make the worker (its thread starts with the first job)."""
-        entry = PICTURE_MODELS[name]
+    def use(self, name: str, worker: _Worker | _HostWorker) -> None:
+        """Fix the picture model to *name*, made by *worker* (a thread starts with its first job)."""
         self.model = name
-        self.worker = _Worker(lambda: entry.load(paths))
-        weakref.finalize(self, self.worker.close)
+        self.worker = worker
+        if isinstance(worker, _Worker):
+            weakref.finalize(self, worker.close)
 
     def count(self, name: str) -> int:
         return sum(1 for example in self.names.get(name, ()) if not example.failed)
@@ -257,15 +357,16 @@ class TaughtSet:
         return self.version + self._stamp_results
 
     def similarities(self, vector: Any) -> _Similarities | None:
-        """The similarity of *vector* to each name's nearest ready example, or None when no example is ready."""
-        import numpy as np
+        """The similarity of *vector* to each name's nearest ready example, or None when no example is ready.
 
-        vector = np.asarray(vector, dtype=np.float32)
+        Plain Python on both platforms (a page has no numpy): about 1280 multiplications for each example (384 for DINOv2), done again
+        only when the cached answer's stamp changes, that is, when something is taught or a vector comes in.
+        """
         ready = {name: [e.vector for e in examples if e.vector is not None] for name, examples in self.names.items()}
         ready = {name: vectors for name, vectors in ready.items() if vectors}
         if not ready:
             return None
-        found = [(name, float(np.max(np.stack(vectors) @ vector))) for name, vectors in ready.items()]
+        found = [(name, max(sum(map(operator.mul, v, vector)) for v in vectors)) for name, vectors in ready.items()]
         found.sort(key=lambda pair: -pair[1])               # a stable sort: equal similarities stay in the order taught
         self._hint(ready)
         return _Similarities(found)
@@ -347,7 +448,7 @@ def _check_model(model: object, who: str) -> str | None:
 
 
 def _use_model(taught: TaughtSet, chosen: str | None, base_dir: str | None, who: str) -> None:
-    """Fix the picture model at the first teach (downloading its file, here in the sketch's thread); check it later on."""
+    """Fix the picture model at the first teach (a computer downloads its file here, in the sketch's thread; a page downloads its own)."""
     if taught.model is not None:
         if chosen is not None and chosen != taught.model:
             raise ValueError(f"{who}: this sketch already teaches with the \"{taught.model}\" picture model, so it cannot "
@@ -356,10 +457,12 @@ def _use_model(taught: TaughtSet, chosen: str | None, base_dir: str | None, who:
     name = chosen or DEFAULT_MODEL
     entry = PICTURE_MODELS[name]
     if host_services.models is not None:
-        raise NotImplementedError(f"{who}: teaching is not built for Play yet (S-235).")
+        taught.use(name, _HostWorker(host_services.models, entry.task, entry.size))
+        return
     from . import _fetch
 
-    taught.use(name, _fetch.ensure(entry.task, base_dir, who))
+    paths = _fetch.ensure(entry.task, base_dir, who)
+    taught.use(name, _Worker(lambda: entry.load(paths)))
 
 
 def teach(name: object, source: object, model: object, base_dir: str | None):
@@ -394,8 +497,7 @@ def guess(source: object, k: object) -> Guess | None:
     worker.check()
     is_picture = isinstance(source, Picture)
     if is_picture:
-        worker.drain()                                      # on a computer a picture waits for every example already queued
-        vector = _source.answer(source, "guess vector", who, lambda frame, state: _wait_for(worker, frame))
+        vector = _picture_vector(worker, source, who)
 
     def make(frame: _source.Frame, state: _source._State) -> _Similarities | None:
         if not is_picture:
@@ -412,7 +514,21 @@ def guess(source: object, k: object) -> Guess | None:
     return None if similarities is None else similarities.guess(k)
 
 
-def _wait_for(worker: _Worker, frame: _source.Frame) -> Any:
+def _picture_vector(worker: _Worker | _HostWorker, picture: Picture, who: str) -> Any:
+    """A Picture's vector: a computer waits for it (after every example already queued); a page asks once for each picture and
+    version, and gives None until the vector has come (contract ML8)."""
+    if worker.can_wait:
+        worker.drain()
+        return _source.answer(picture, "guess vector", who, lambda frame, state: _wait_for(worker, frame))
+    slot = _source.answer(picture, "guess slot", who, lambda frame, state: _ask(worker, frame))
+    return slot.vector
+
+
+def _ask(worker: _Worker | _HostWorker, frame: _source.Frame) -> _Slot:
     slot = _Slot()
     worker.add(frame, slot)
-    return worker.wait_for(slot)
+    return slot
+
+
+def _wait_for(worker: _Worker, frame: _source.Frame) -> Any:
+    return worker.wait_for(_ask(worker, frame))

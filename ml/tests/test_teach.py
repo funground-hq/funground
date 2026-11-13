@@ -99,7 +99,7 @@ def frames(monkeypatch):
 def model(monkeypatch):
     fake = FakeModel()
     for key in _teach.MODEL_NAMES:                  # both models are the fake; each keeps its own task
-        monkeypatch.setitem(_teach.PICTURE_MODELS, key, _teach.PictureModel(_teach.PICTURE_MODELS[key].task, fake.load))
+        monkeypatch.setitem(_teach.PICTURE_MODELS, key, _teach.PictureModel(_teach.PICTURE_MODELS[key].task, _teach.PICTURE_MODELS[key].size, fake.load))
     fake.downloads = []
     monkeypatch.setattr(_fetch, "ensure", lambda task, base_dir, who: fake.downloads.append((task, who)) or {})
     return fake
