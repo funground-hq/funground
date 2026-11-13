@@ -68,8 +68,7 @@ computer. PDF and SVG output stays sharp at any size.
 
 funground draws with [Cairo](https://www.cairographics.org) and opens its window with
 [pygame-ce](https://pyga.me). The project is run as a small software process: sprints with
-reviews, a decision log and architecture decision records. See [docs/PROCESS.md](https://github.com/funground-hq/funground/blob/v0.1.0/docs/PROCESS.md),
-[docs/Roadmap.md](https://github.com/funground-hq/funground/blob/v0.1.0/docs/Roadmap.md) and [docs/design/](https://github.com/funground-hq/funground/blob/v0.1.0/docs/design/).
+reviews, a decision log and architecture decision records, kept by the maintainer.
 To contribute, start with the [developer documentation](https://github.com/funground-hq/funground/blob/v0.1.0/docs/developer/README.md).
 
 ## Licence

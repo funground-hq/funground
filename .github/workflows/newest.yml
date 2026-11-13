@@ -3,7 +3,7 @@
 # so this is the run that finds a library's breaking release before learners do. When it fails, look at which
 # version moved (the install step prints them all), then fix funground or lower the bound, and update the pins.
 #
-# One Windows job on the newest Python: about 8 minutes, about $0.35 a month at list price (CI_Guidance.md).
+# One Windows job on the newest Python: about 8 minutes, about $0.35 a month at list price.
 # GitHub runs a schedule from the default branch only, and emails the person who last changed this file when it fails.
 
 name: newest versions

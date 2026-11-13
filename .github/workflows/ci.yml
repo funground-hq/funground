@@ -1,4 +1,4 @@
-# CI, spent wisely (D-095, docs/developer/CI_Guidance.md). The full suite runs on the maintainer's
+# CI, spent wisely (D-095). The full suite runs on the maintainer's
 # machine before every push; GitHub adds only what that machine cannot.
 #
 #   a push or pull request that changes code   Windows, Python 3.11: one job

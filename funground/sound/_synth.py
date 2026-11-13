@@ -440,7 +440,7 @@ def melody_samples(text, tempo=120, wave="soft", sa=None, tuning="equal", rng=No
     # melody lasts its beats, plus the last note's release (at most 0.15 s) where that rings past
     # the end; a final rest at least that long holds it. LEGATO_LEAD would move part of each
     # release before the note's end: that helps swara_histogram() a little but leaves a dip
-    # between the notes (measurements in docs/design/Sound_Making_Note.md).
+    # between the notes.
     seconds_per_beat = 60.0 / tempo
     full_release = round(DEFAULT_RELEASE * RATE)
     sounding: list[tuple[int, list[float]]] = []

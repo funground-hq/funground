@@ -12,8 +12,7 @@ and how that claim was checked.
 - `examples/session1/01_first_sketch.py` to `14_paths.py` — written to follow the v0.5
   Quick Reference (`docs/reference/Quick_Reference.md`), which was
   itself written by a different AI assistant at the maintainer's direction (see
-  `AI-USAGE.md`). They are learner code and never change to make a test pass
-  (`docs/PROCESS.md`).
+  `AI-USAGE.md`). They are learner code and never change to make a test pass.
 - `examples/hello_visual.py` — comes from the v0.5 package, the same origin as the
   Session-1 sketches.
 - The Python code blocks in `docs/guide/*.md` — written alongside the guide chapters,
@@ -144,7 +143,7 @@ ideas (top-left anchors, translated origins, slow change).
   checked on their own against the same corpora. Nothing was flagged. The highest combined scores
   were 0.19 (`03_rhythm_before.py`, against a p5.js-website example) and 0.17
   (`06_poster_series_before.py`); the rest scored 0.12 to 0.16, with no shared calls and at most 0.04
-  shared numbers. They were written from the studio list in `docs/design/Studio_Vocabulary_Note.md`;
+  shared numbers. They were written from the project's own studio list;
   the ideas they build on (Design By Numbers, the typographic grid, Gestalt proximity) are credited
   in CREDITS.md.
 

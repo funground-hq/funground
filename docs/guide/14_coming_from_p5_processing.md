@@ -273,7 +273,7 @@ Every rename above is a one-for-one swap: `createCanvas` to `size`, `ellipse` to
 Some things a p5 or Processing sketch might use are not in funground. 3D and running in a
 browser are not part of the first release.
 
-Some features are left out on purpose. [This list](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
+Some features are left out on purpose. [This list](../reference/Compared_with_p5_and_DrawBot.md#what-funground-lacks) says what, and what to use instead.
 
 Funground can also do a few things p5 cannot: it saves PDF and SVG files with real text and layers (chapter 13), and it makes and listens to sound and music (chapters 16 and 17).
 

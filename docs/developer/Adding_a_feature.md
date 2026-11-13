@@ -1,33 +1,33 @@
 # Adding a feature
 
 The end-to-end recipe for one story that adds a public feature. Every step below is something a
-test or a tool checks, or a rule in [PROCESS](../PROCESS.md). Follow the order. The "Done"
-definition in PROCESS says a story that adds a public feature also adds its gallery example and
+test or a tool checks, or a project rule. Follow the order. The project's "Done"
+definition says a story that adds a public feature also adds its gallery example and
 its guide section in the same story.
 
-Before you start, read [Architecture.md](Architecture.md) so you know where the code belongs, and
+Before you start, read [Code_Layout.md](Code_Layout.md) so you know where the code belongs, and
 [Testing.md](Testing.md) so you know what each test checks.
 
 ## 0. Is it a decision?
 
 Ask first. Anything that changes a pinned contract row, adds or removes a runtime dependency,
 changes the base install, changes a public name or signature, picks between providers, or
-regenerates a golden is a decision (PROCESS, "When something is a decision"). It gets a row in
-[Decision_Log.md](../design/Decision_Log.md), and an ADR if it is long-lived. Under D-034 routine
+regenerates a golden is a decision. It gets a row in
+the maintainer's decision log, and an ADR if it is long-lived. Under D-034 routine
 design calls can be taken by the main session and logged as "decided by Claude". New dependencies,
 changes to the frozen v0.5 API, and scope changes still go to the maintainer. Sub-agents stop and
 report on these.
 
 ## 1. Pin a contract row first
 
-Add a row to [Semantic_Contract.md](../design/Semantic_Contract.md) before any code. The row says
+Add a row to [Semantic_Contract.md](../reference/Semantic_Contract.md) before any code. The row says
 what the feature does, in the exact words the tests will check: arguments, defaults, errors, what
 goes in the IR, and how it behaves in PDF and SVG. Mark it **Pinned** and name the story and the
 decision (for example "S-092, D-041"). Tests and code follow the row, never the other way round.
 
 ## 2. Write the code behind the facade
 
-- Put the behaviour in the right layer (see [Architecture.md](Architecture.md)). Drawing becomes
+- Put the behaviour in the right layer (see [Code_Layout.md](Code_Layout.md)). Drawing becomes
   ops in `funground/ir.py` and is replayed by `CairoRenderer`. State goes in `GraphicsState`.
   Helpers with no state get their own module.
 - A **new field** on an op or on `GraphicsState` needs a default and an entry in
@@ -197,10 +197,10 @@ it is allowed. Copying code or example text is not. Name the page or the source 
 
 ## 11. Design notes and these docs
 
-A story that adds a subsystem, a new dependency or a non-obvious mechanism gets a design note
-`docs/design/<Topic>_Note.md`: problem, design, rejected alternatives, invariants, limits, and where
-the tests are. Update [Architecture.md](Architecture.md) in the same change if a layer, a boundary
-or an invariant moved, and add the note to the index in [docs/design/README.md](../design/README.md).
+A story that adds a subsystem, a new dependency or a non-obvious mechanism gets a design note,
+kept with the maintainer's records: problem, design, rejected alternatives, invariants, limits, and
+where the tests are. Update [Code_Layout.md](Code_Layout.md) in the same change if a layer, a boundary
+or an invariant moved.
 
 ## 12. Parallel builders
 
@@ -241,8 +241,7 @@ over, and expect it afterwards.
 - [ ] p5 or DrawBot names are cited with where they were checked.
 - [ ] Learner-facing text is plain English with British spelling in prose and American spelling in
   names (`color=`).
-- [ ] Nothing is added to `src_v0.5/`, `spikes/`, old sprint folders, ADRs or the decision log
-  that rewrites history. Decision-log rows are added, not edited.
+- [ ] Nothing is added to `src_v0.5/`: it is history.
 - [ ] No new runtime dependency and no change to the frozen v0.5 API without the maintainer.
 - [ ] The full suite passes:
   `timeout 400 .venv/Scripts/python -m pytest -o addopts="" -q`

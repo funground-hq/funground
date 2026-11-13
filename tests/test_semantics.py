@@ -1,6 +1,6 @@
 """Pinned v0.5 drawing/runtime semantics, verified pixel by pixel.
 
-Each test documents one row of docs/Semantic_Contract.md. When v0.6 changes a
+Each test documents one row of docs/reference/Semantic_Contract.md. When v0.6 changes a
 rule deliberately (e.g. stroke alignment), update the contract *and* the test
 in the same commit.
 """

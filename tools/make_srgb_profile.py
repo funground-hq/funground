@@ -8,7 +8,7 @@ this: Pillow is optional for funground, and the browser's Pillow has no ImageCms
 The profile comes from littleCMS (the colour engine inside Pillow's ImageCms, MIT licence), which builds
 a standard sRGB matrix profile from the sRGB primaries and curve in IEC 61966-2-1. The bytes it
 returns carry no third-party copyright: littleCMS writes "No copyright, use freely" into the profile.
-See THIRD_PARTY_LICENSES.md and docs/design/Colour_For_Print_Note.md.
+See THIRD_PARTY_LICENSES.md.
 """
 from __future__ import annotations
 

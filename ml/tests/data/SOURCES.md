@@ -35,7 +35,7 @@ The photograph is only used to run the pose model in `test_models.py`. `standing
 - **What:** a computer voice saying "Draw a red circle in the middle of the screen, then make it bounce off the walls and change
   color every time it hits one." 7.2 s, 16 kHz, mono.
 - **Where from:** made on the maintainer's machine with Windows' own voice (System.Speech, Microsoft David) and resampled, in the
-  S-231 speech spike (spikes/16_models/speech_sounds/).
+  S-231 speech spike.
 - **Author and licence:** funground, CC0.
 
 The sound is only used to run the words model in `test_words_model.py`, and the sound model in `test_hearing_model.py`.
@@ -43,7 +43,7 @@ The sound is only used to run the words model in `test_words_model.py`, and the 
 ## whistle.wav
 
 - **What:** whistling, 4.9 s, 16 kHz, mono, 16-bit. It starts softly: the first second is quieter than the level rule of `ml.sound()` (0.02).
-- **Where from:** the spike's copy `spikes/16_models/speech_sounds/data/soft_whistle.ogg`, from Wikimedia Commons
+- **Where from:** from Wikimedia Commons
   <https://commons.wikimedia.org/wiki/File:Soft_whistle.ogg> (originally from pdsounds.org).
 - **Author:** stilgar. **Licence:** public domain.
 - **What was done to it:** decoded with ffmpeg, from 0.5 s on (up to 8 s, the clip ends first), made mono and resampled to 16 kHz, saved as 16-bit WAV.
@@ -51,10 +51,10 @@ The sound is only used to run the words model in `test_words_model.py`, and the 
 ## clapping.wav
 
 - **What:** people clapping, 8 s, 16 kHz, mono, 16-bit.
-- **Where from:** the spike's copy `spikes/16_models/speech_sounds/data/clapping_hurray_cropped.oga`, from Wikimedia Commons
+- **Where from:** from Wikimedia Commons
   <https://commons.wikimedia.org/wiki/File:Clapping_hurray_(cropped).oga>.
 - **Author:** Starlite. **Licence:** public domain.
 - **What was done to it:** the first 8 s decoded with ffmpeg, made mono and resampled to 16 kHz, saved as 16-bit WAV.
 
 These two sounds and `tts.wav` are used by `test_hearing_model.py` (the sound model) and by funground-web's `tools/test_models.py`. The names the
-model gives them are in the S-250 notes of `docs/design/ML_Package_Note.md`.
+model gives them are checked by those tests.

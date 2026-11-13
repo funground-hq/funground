@@ -14,8 +14,8 @@ catalogue's record when we wrote this page. If you find a mistake, please say so
 funground is made by its maintainer, **Samir Joshi**, who sets the goals, takes every decision and
 reviews the work. AI assistants (Anthropic's Claude, through Claude Code) wrote much of the code,
 the examples, the tests and the documentation, under the maintainer's direction. [AI-USAGE.md](AI-USAGE.md) says
-how, model by model, and every decision is in
-[docs/design/Decision_Log.md](docs/design/Decision_Log.md).
+how, model by model, and every decision is recorded in
+the project's decision log.
 
 The starting point, the *playground* v0.5 package, was itself written by another AI assistant at the
 maintainer's direction.
@@ -49,8 +49,7 @@ are the minimums in `pyproject.toml`. Licences are in [THIRD_PARTY_LICENSES.md](
   `funground/sound/` (`_synth.py` and the others), `analysis.py` and `funground/sangeet/_tables.py`.
 
 **The methods.** These are textbook or published methods. We list each one with a reference. The
-code is funground's own; where it differs from the paper, the design notes say so
-([Sound making](docs/design/Sound_Making_Note.md), [Music analysis](docs/design/Music_Analysis_Note.md)).
+code is funground's own; where it differs from the paper, the project's design notes say so.
 
 | What funground does | The method | Reference |
 |---|---|---|
@@ -70,8 +69,7 @@ code is funground's own; where it differs from the paper, the design notes say s
 | Meend (a glide between notes) | A smoothstep curve in log-frequency; a common choice, no source | none needed |
 
 Two limits to know. The Krumhansl-Kessler numbers in `funground/analysis.py` were checked against
-published copies on 4 October 2026 (see the code comment there); an earlier line in the
-[Music analysis note](docs/design/Music_Analysis_Note.md) still says they were written from memory.
+published copies on 4 October 2026 (see the code comment there).
 And these are simple versions of the methods, tuned to run in plain Python, so do not treat the
 results as research-grade.
 
@@ -81,7 +79,6 @@ The table in `funground/data/ragas.json` has **13 ragas** and **6 talas**: Teent
 Jhaptaal, Rupak, Dadra and Keherwa. It was built in October 2026. Each fact was checked against the
 pages below while building it, rather than written from memory, and each raga and tala lists the
 sources that back it (the `sources` list of its entry, with a note on which facts each one supports).
-[Ragas for learners](docs/design/Ragas_Note.md) is the full account.
 
 **The sources**
 
@@ -103,8 +100,7 @@ sources that back it (the `sources` list of its entry, with a note on which fact
 
 **The books those sources cite.** Several of the sources above, mostly Wikipedia and Parrikar,
 rest on these books. funground's maintainer and the AI did **not read them directly**; they are
-cited through the sources above, which are the only way we saw them
-([Ragas note](docs/design/Ragas_Note.md#1-the-table-and-its-sources) says so):
+cited through the sources above, which are the only way we saw them:
 
 - Joep Bor (editor) and others, *The Raga Guide: A Survey of 74 Hindustani Ragas* (Nimbus Records,
   1999). [Wikipedia's article on the book](https://en.wikipedia.org/wiki/The_Raga_Guide).
@@ -114,14 +110,11 @@ cited through the sources above, which are the only way we saw them
   works that set out the thaat system and the notation most sources follow.
 
 **When sources disagree.** Teachers and gharanas differ, so the table gives the most common form
-and the entry's `notes` field says what else you may be taught and which source says what. The list
-of disagreements (Kafi's samvadi, Bhairavi's vadi, the time of Marwa and others) is in section 1 of
-the [Ragas note](docs/design/Ragas_Note.md#1-the-table-and-its-sources). The note also says that a
-reviewer with the books should check the pakads first. **A teacher is still the best authority.**
+and the entry's `notes` field says what else you may be taught and which source says what. The
+disagreements include Kafi's samvadi, Bhairavi's vadi and the time of Marwa. A reviewer with the books
+should check the pakads first. **A teacher is still the best authority.**
 If your teacher says something different, follow your teacher.
 
-**Background reading** for the sound side, and for what exists in this area, is in the
-[Music research note](docs/design/Music_Research_Note.md), section 6.
 
 ## Drawing and maths
 

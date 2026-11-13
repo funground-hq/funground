@@ -1,5 +1,4 @@
 # The test suite on one system, for each Python version given. Called by ci.yml, one stage per system.
-# How CI is spent, and why: docs/developer/CI_Guidance.md.
 
 name: tests
 

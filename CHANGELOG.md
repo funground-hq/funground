@@ -1,8 +1,8 @@
 # Changelog
 
 What changed in funground, newest first. Release numbers follow the
-[roadmap](docs/Roadmap.md). Decisions are cited as D-nnn from the
-[decision log](docs/design/Decision_Log.md).
+roadmap. Decisions are cited as D-nnn from the
+maintainer's decision log.
 
 ## Unreleased — will become 0.2
 

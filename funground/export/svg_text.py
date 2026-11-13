@@ -5,7 +5,7 @@ SVG exporters write each line of text as a real ``<text>`` element instead, nami
 (``font-family``, with ``font-weight`` and ``font-style``). Illustrator, Inkscape and browsers then
 draw the text in the font installed on the computer, and it stays editable there. A browser also
 gets a subset of each font, embedded as a CSS ``@font-face``, so it shows the right font even when it
-is not installed. See ``docs/design/Text_In_Files_Note.md``.
+is not installed.
 
 1. **While drawing.** The Cairo renderer is given an `SvgTextCollector`. For each line of text (one
    ``ir.Text`` op, fallback runs of T18 included) it asks for a *marker*: the four-cornered shape of

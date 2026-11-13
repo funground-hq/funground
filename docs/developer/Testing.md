@@ -1,7 +1,6 @@
 # Testing
 
-A short, practical page. The thinking behind the layers is in
-[docs/qa/Test_Strategy.md](../qa/Test_Strategy.md). Read that for the why. Read this for the how.
+A short, practical page: how to test funground.
 
 Run everything:
 
@@ -52,8 +51,7 @@ Notes on some of them:
 
 Never edit, delete or regenerate an existing file in `tests/golden/` or `tests/snapshots/` to make a
 test pass. If a golden or snapshot changes, the behaviour changed. Find out why. A deliberate
-change to pinned behaviour is a decision (see [PROCESS](../PROCESS.md), "When something is a
-decision"), and the regeneration is a reviewed act in the main session.
+change to pinned behaviour is a decision for the maintainer, and the regeneration is a reviewed act in the main session.
 
 ### How to regenerate a golden legitimately
 
@@ -67,7 +65,7 @@ There are only three cases, and the reviews of Sprints 13 to 15 treated them the
 2. **A time-dependent picture.** It has no golden. Its gallery picture is kept by
    `tools/make_gallery.py`, and only `--force` re-renders it. Sprint 14 re-rendered the sargam example's
    picture this way after fixing the example. Name the file in your report.
-3. **A deliberate change to pinned behaviour.** This is a decision (see [PROCESS](../PROCESS.md)). The
+3. **A deliberate change to pinned behaviour.** This is a decision for the maintainer. The
    main session regenerates, reviews the diff by eye and logs it. The Session 1 goldens are the
    example (`FUNGROUND_UPDATE_GOLDENS=1`, below).
 
@@ -199,7 +197,7 @@ fragment you only want to show. The guide's contents page must list every chapte
 ## The CI matrix
 
 `.github/workflows/ci.yml` runs the suite in stages, so that GitHub's minutes go only where your own
-machine cannot reach ([CI_Guidance.md](CI_Guidance.md) has the reasons and the costs):
+machine cannot reach:
 
 | When | Jobs |
 |---|---|
@@ -221,9 +219,8 @@ pytest-timeout, pypdfium2, imageio-ffmpeg and build, so the PDF, GIF, MP4 and wh
 
 The release workflow, `.github/workflows/release.yml`, is separate. It builds the package, publishes it to
 TestPyPI and runs a **smoke test** on Windows, macOS and Linux from the installed package (draw, save
-PDF, SVG and PNG, read the PDF's text, make a sargam melody, list the gallery). See
-[Releasing.md](Releasing.md).
+PDF, SVG and PNG, read the PDF's text, make a sargam melody, list the gallery).
 
 A change is done when the whole suite is green locally and on the everyday CI job, and a release
-when it is green on the release run ([PROCESS](../PROCESS.md), "Definitions"). Locally you can only run your own cell, so keep the
+when it is green on the release run. Locally you can only run your own cell, so keep the
 code free of anything system-specific.

@@ -61,18 +61,13 @@ Each line says when to read the page.
 
 ## For contributors
 
-- [Developer documentation](developer/README.md): read this before you change the code. It covers the
-  architecture, how to add a feature, testing and releasing.
-- [Design documents](design/README.md): read these to learn why funground works the way it does.
-  They hold the semantic contract, design notes and decisions.
+- [Developer documentation](developer/README.md): read this before you change the code. It covers how the
+  code is laid out, how to add a feature, and testing.
+- [Semantic Contract](reference/Semantic_Contract.md): the pinned meaning of every public name.
 - [Credits and sources](../CREDITS.md): read this to see where the sound methods, the raga data, the fonts
   and the ideas behind the examples come from.
-- [How we work](PROCESS.md): read this to learn how sprints, stories and reviews run.
-- [Quality notes](qa/Test_Strategy.md): read this for the test strategy and where each example came
-  from ([example provenance](qa/Example_Provenance.md)).
+- [Example provenance](qa/Example_Provenance.md): where each example came from.
 
 ## Project history
 
-- [Roadmap](Roadmap.md): where the project is going.
-- [Sprints](../sprints/): what was planned and done, one folder for each.
 - [Changelog](../CHANGELOG.md): what changed in each release.

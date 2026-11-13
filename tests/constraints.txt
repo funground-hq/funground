@@ -2,7 +2,7 @@
 # new release of a library cannot turn CI red overnight; learners still get the newest versions.
 # These are the maintainer's machine's versions, where the full suite passes. Update them on purpose,
 # in one change, after the full suite passes locally with the new versions (and with new goldens if
-# the pictures change). See docs/developer/CI_Guidance.md.
+# the pictures change).
 #
 # Held back on purpose:
 #   pycairo 1.29.2 (its Windows wheel's Cairo moves anti-aliased edges by up to 12/255 in 7 goldens)

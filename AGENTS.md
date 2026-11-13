@@ -23,20 +23,20 @@ python -m venv .venv
 - Run the tests you touched first, then the whole suite before you call a change done. Report failures
   with their output; do not skip or weaken a test to make it pass.
 - CI on GitHub is not a test runner for you: it runs one Windows job per push and the three systems only
-  for a release ([CI_Guidance.md](docs/developer/CI_Guidance.md)). Reproduce problems locally.
+  for a release. Reproduce problems locally.
 
 ## Rules that must not break
 
 - **The provider boundary.** A backend library (pygame-ce, Cairo, pypdf, skia-pathops, svgelements,
   imageio-ffmpeg) is imported only by the module that provides that capability. `tests/test_boundaries.py`
-  holds the table ([Architecture.md](docs/developer/Architecture.md), section 3).
+  holds the table ([Code_Layout.md](docs/developer/Code_Layout.md), "The provider boundary").
 - **The naming trap.** A submodule must never have the name of a public function: importing it would
   replace `f.<name>` with the module. Check a new file's name against `_PUBLIC_NAMES`.
 - **Goldens and snapshots are the reference.** Never edit, delete or regenerate a file in `tests/golden/`,
   `tests/snapshots/` or `docs/gallery/images/` to make a test pass. A changed picture means changed
   behaviour: find out why ([Testing.md](docs/developer/Testing.md)).
 - **The semantic contract.** A change to what a public name means is a decision for the maintainer, and
-  updates [Semantic_Contract.md](docs/design/Semantic_Contract.md) in the same change.
+  updates [Semantic_Contract.md](docs/reference/Semantic_Contract.md) in the same change.
 - **Learner code never changes shape for a platform:** no `async`/`await` in sketches, the same file runs
   on a computer and in the browser.
 
@@ -54,6 +54,6 @@ python -m venv .venv
 
 ## How work is organised
 
-Stories (`S-nnn`), sprints and decisions (`D-nnn`) are recorded in the repository; see
-[PROCESS.md](docs/PROCESS.md) and the [developer documentation](docs/developer/README.md). Work on a
+Stories (`S-nnn`), sprints and decisions (`D-nnn`) are recorded by the maintainer, outside this repository; the
+IDs in code and commit messages refer to them. See the [developer documentation](docs/developer/README.md). Work on a
 branch. Do not push to `main`, tag, publish, or change goldens on purpose without the maintainer.

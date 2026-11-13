@@ -11,7 +11,7 @@ If you already use one of them and want to move, you want a different page: chap
 [15, Coming from DrawBot](../guide/15_coming_from_drawbot.md) translate name by name.
 
 **How this note was checked.** The funground column comes from the
-[Semantic Contract](../design/Semantic_Contract.md) and the code. The p5 and DrawBot columns were
+[Semantic Contract](Semantic_Contract.md) and the code. The p5 and DrawBot columns were
 checked against their own source and documentation (p5.js 2.3.2, the p5.js reference text, the
 Processing examples, the DrawBot README and docs). Where we could not confirm a claim, the note says
 "as far as we know". Tools change. Check their own sites before you decide.
@@ -187,11 +187,9 @@ unless a row says Processing.
 
 Be honest about these before you choose it.
 
-- **No 3D.** There is no WEBGL or P3D. 3D is out of scope for 1.0 (decision D-014, and
-  [ADR-003](../design/ADR-003-out-of-scope.md)).
+- **No 3D.** There is no WEBGL or P3D. 3D is out of scope for 1.0 (decision D-014, ADR-003).
 - **No browser.** A funground sketch does not run in a web page. You cannot share one by link.
-  Running in the browser was researched (see the
-  [Browser Mode Note](../design/Browser_Mode_Note.md)) but is not planned for 0.1. If you need
+  Running in the browser was researched but is not planned for 0.1. If you need
   the web, use p5.js.
 - **A first release and a small community.** Version 0.1. There are fewer books, forum answers
   and examples than for p5 or DrawBot. Expect rough edges.
@@ -212,8 +210,8 @@ Be honest about these before you choose it.
 ## Why funground chose differently
 
 Each paragraph names the decision. All the decisions are in the
-[Decision Log](../design/Decision_Log.md), and the pinned meanings are in the
-[Semantic Contract](../design/Semantic_Contract.md).
+maintainer's decision log, and the pinned meanings are in the
+[Semantic Contract](Semantic_Contract.md).
 
 **Python and snake_case.** funground is for people who are learning Python. So names follow
 Python style, and you call them through the module (`f.circle`). A helper called `map` would hide
@@ -325,4 +323,4 @@ funground learned from all three tools.
 funground is **not affiliated with, or endorsed by,** p5.js, the Processing Foundation or
 DrawBot. The names p5.js, Processing and DrawBot are used here only to say what they are. No
 logos or branding are used. Every example in funground is written from scratch, from the feature
-it shows. The example code is published as CC0 ([D-026](../design/Decision_Log.md)).
+it shows. The example code is published as CC0 (D-026).

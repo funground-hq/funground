@@ -312,7 +312,7 @@ f.show()                                        # look at it; close the window t
 
 ## What is not here
 
-Some DrawBot features are not in funground. `f.cmyk(c, m, y, k)` is the CMYK colour (inks from 0 to 100, no `cmykFill` calls: use it in `f.fill()` and `f.stroke()`), and a saved PDF holds exactly those inks. Colour profiles and spot colours are left out. [The list of what is left out](../design/ADR-003-out-of-scope.md) says why, and what to use instead.
+Some DrawBot features are not in funground. `f.cmyk(c, m, y, k)` is the CMYK colour (inks from 0 to 100, no `cmykFill` calls: use it in `f.fill()` and `f.stroke()`), and a saved PDF holds exactly those inks. Colour profiles and spot colours are left out. [The list of what is left out](../reference/Compared_with_p5_and_DrawBot.md#what-funground-lacks) says why, and what to use instead.
 
 ## See also
 

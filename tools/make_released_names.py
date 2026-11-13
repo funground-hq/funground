@@ -7,7 +7,7 @@ records every name in ``_PUBLIC_NAMES`` and, for each public class listed in fun
 methods and properties the class has at that ref (a class that did not exist then is left out). Releases already in the
 file are kept. tools/since.py reads the file to say which names arrive in a later release.
 
-Run it once after each release is tagged (docs/developer/Releasing.md), then regenerate the API reference.
+Run it once after each release is tagged, then regenerate the API reference.
 """
 from __future__ import annotations
 

@@ -25,6 +25,5 @@ Two things are **not** CC0:
 ## Where the examples come from
 
 Every example was written for funground. None is copied from p5.js, Processing, DrawBot or any
-other project, and that stays a rule for new examples; see "Examples are original" in
-[docs/PROCESS.md](../docs/PROCESS.md). The check made on the existing examples is recorded in
+other project, and that stays a rule for new examples (D-026). The check made on the existing examples is recorded in
 [docs/qa/Example_Provenance.md](../docs/qa/Example_Provenance.md).

@@ -10,14 +10,14 @@ This file was adopted by decision D-024; the README links it in one line (D-068)
 | | The maintainer | Claude |
 |---|---|---|
 | Direction | Sets goals, scope and priorities; changes the plan | Proposes plans, backlogs and sprint scopes |
-| Decisions | Takes every decision about behaviour, names, dependencies, releases and publishing | Presents each decision as context, options, trade-offs, a recommendation and the reasons ([process](docs/PROCESS.md#how-a-pending-decision-is-presented)) |
+| Decisions | Takes every decision about behaviour, names, dependencies, releases and publishing | Presents each decision as context, options, trade-offs, a recommendation and the reasons |
 | Code, tests and docs | Reviews; asks for changes | Writes almost all of it |
 | Checking | Reviews each sprint's review and reviewer's guide, and signs off before a sprint closes | Runs the full test suite before every commit; reports results as they are, failures included |
 | Public actions | Approves (repository, release) | Carries them out only after approval |
 
 Every decision, with the options offered and the outcome, is recorded in
-[docs/design/Decision_Log.md](docs/design/Decision_Log.md). Longer arguments live in the
-[architecture decision records](docs/design/).
+the project's decision log. Longer arguments live in the
+architecture decision records.
 
 ## Models
 
@@ -43,13 +43,13 @@ was copied from p5.js, Processing, DrawBot or any other project.
 
 - **Anthropic's Claude Code system instructions.** These are Anthropic's own and are not
   reproduced here.
-- **This project's instructions,** all in the repository:
-  - [docs/PROCESS.md](docs/PROCESS.md): the development process, the Definition of Done, how
+- **This project's instructions:**
+  - the development process: the Definition of Done, how
     decisions are presented, and "Who does what", which says which work goes to which model.
     Irreversible or public actions always stay with the main session.
-  - [.claude/agents/](.claude/agents/): the sub-agent definitions (story builder, mechanical
+  - the sub-agent definitions (story builder, mechanical
     editor, test runner), each with its model and rules. For example, sub-agents never commit.
-  - [docs/design/Semantic_Contract.md](docs/design/Semantic_Contract.md): the pinned behaviour
+  - [docs/reference/Semantic_Contract.md](docs/reference/Semantic_Contract.md): the pinned behaviour
     every change must keep.
 - **Standing preferences given in conversation,** kept by Claude Code between sessions:
   - commit often, one story per commit;
@@ -88,10 +88,9 @@ sprint review adds its entry here.
 
 ### Planning (24 Sept 2026)
 - The maintainer asked for a critique of the proposed architecture. The result was an
-  [architecture review](docs/design/Playground_Architecture_Review.md) and a revised plan.
+  architecture review and a revised plan.
 - The maintainer asked for spikes, each in its own virtual environment, run unattended during a
-  break. Spikes 01–05 tested pygame's limits, Skia versus Cairo and install cost
-  ([results](spikes/RESULTS.md)).
+  break. Spikes 01–05 tested pygame's limits, Skia versus Cairo and install cost.
 - The maintainer asked for a full SDLC: themes, epics, stories, tasks, sprints, backlog, design
   and QA. They also asked for decisions to be explained one at a time, and accepted D-001–D-008.
   ADRs, a decision log and a fixed format for presenting decisions became part of the process.

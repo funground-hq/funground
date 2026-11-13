@@ -3,7 +3,7 @@
 This module holds funground's small built-in table of Hindustani ragas and talas, and the plain
 Python behind ``sangeet.tala()`` and ``sangeet.match_ragas()``. The table lives in ``data/ragas.json``;
 every raga and tala there names the published sources its facts were checked against.
-``docs/design/Ragas_Note.md`` gives the methods and their limits.
+CREDITS.md lists the sources.
 
 The drone, the pitch track, the tonic and the swara histogram are in ``sound/_swaras.py``: the sound
 library needs them and must not import sangeet.

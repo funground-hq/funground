@@ -40,7 +40,7 @@ def test_downloadable_course_sketch_runs_and_exports(script, tmp_path, monkeypat
 
 def test_course_local_links_and_images_resolve():
     broken = []
-    for page in [*PAGES, ROOT / "docs/README.md", ROOT / "docs/creative-curriculum.md",
+    for page in [*PAGES, ROOT / "docs/README.md",
                  ROOT / "examples/course/README.md"]:
         for target in re.findall(r"\]\(([^)]+)\)", page.read_text(encoding="utf-8")):
             if "://" in target or target.startswith("#"):

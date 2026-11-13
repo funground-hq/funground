@@ -5,7 +5,7 @@ woman alone on a plain background, so the outline can be checked at points).
 The files are kept in ml/tests/.models/ (FUNGROUND_ML_MODELS); the first run downloads them, and a run with no connection
 skips these tests with a reason.
 
-The expected points are not stored: they come from the S-231 spike's own numpy glue (spikes/16_models/onnx/ort_glue.py),
+The expected points are not stored: they come from the S-231 spike's own numpy glue (ml/tests/reference/ort_glue.py),
 imported by path and run on the same picture with the same model files. funground-ml's code must give the same points
 within 5 px (the tolerance the spike measured between platforms), and the same mask (the spike's ``selfie``) within half a grey
 level on average.
@@ -27,7 +27,7 @@ from conftest import HAND_PHOTO, PERSON_PHOTO, POSE_PHOTO, ROOT, FakeCamera
 
 pytestmark = [pytest.mark.model, pytest.mark.usefixtures("real_models")]
 
-SPIKE = ROOT / "spikes" / "16_models" / "onnx" / "ort_glue.py"
+SPIKE = Path(__file__).resolve().parent / "reference" / "ort_glue.py"
 TOLERANCE = 5.0                  # pixels
 MASK_TOLERANCE = 0.5             # grey levels (0..255): the mean difference from the spike's mask
 
@@ -47,7 +47,7 @@ def hand_photo():
 def spike_points(real_models):
     """The spike's own glue: (pose rows on the pose photograph, hand rows on the hand photograph), each x, y, ..."""
     if not SPIKE.exists():
-        pytest.skip("the spike's glue (spikes/16_models/onnx/ort_glue.py) is not in this checkout")
+        pytest.skip("the spike's glue (ml/tests/reference/ort_glue.py) is not in this checkout")
     import onnxruntime as ort
 
     spec = importlib.util.spec_from_file_location("spike_ort_glue", SPIKE)
@@ -183,7 +183,7 @@ def test_the_person_keeps_the_photographs_own_pixels_where_it_is_solid(person_ph
 
 def test_the_person_agrees_with_the_spikes_mask_within_half_a_grey_level(person_photo, real_models):
     if not SPIKE.exists():
-        pytest.skip("the spike's glue (spikes/16_models/onnx/ort_glue.py) is not in this checkout")
+        pytest.skip("the spike's glue (ml/tests/reference/ort_glue.py) is not in this checkout")
     import onnxruntime as ort
 
     from funground_ml import _fetch
