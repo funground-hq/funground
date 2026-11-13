@@ -390,6 +390,104 @@ your computer.
 
 The gallery has a whole sketch: [teach by example](../gallery/README.md#teach-by-example).
 
+### Make it look at the thing
+
+The model looks at the **whole** picture you give it. Sit a few feet from the camera, and most of the picture is you, your
+chair and the room. Your thumb is a small part of it. So the model learns "this room, with something here", and when you
+hold your thumb somewhere else, the picture changes more than the sign does. The guesses get worse.
+
+The cure is to give the model a picture where the thing fills most of the space. The easiest way is a **focus box**: cut a
+square out of the middle of the camera, and teach and guess only that.
+
+```py
+import funground as f
+from funground import camera, ml
+
+BOX = 160
+cam = camera.open()
+focus = None
+
+def setup():
+    global focus
+    f.size(640, 480)
+    cam.start(320, 240)
+    focus = f.create_graphics(BOX, BOX)
+
+def draw():
+    left, top = (320 - BOX) // 2, (240 - BOX) // 2
+    focus.image(cam, -left, -top)        # the middle of the camera, copied into the box
+    f.background("navy")
+    f.image(cam, 0, 0)
+    f.no_fill()
+    f.stroke("gold")
+    f.rect(left, top, BOX, BOX)          # show where the box is
+    if f.key_down("1"):
+        ml.teach("thumbs up", focus)
+    if f.key_down("2"):
+        ml.teach("thumbs down", focus)
+    if f.key_down("0"):
+        ml.teach("nothing", focus)
+    guess = ml.guess(focus)
+    if guess:
+        f.no_stroke()
+        f.fill("white")
+        f.text_size(40)
+        f.text(guess.name, 340, 40)
+
+f.run()
+```
+
+`focus` is one picture that the sketch draws again every frame, so it works like a camera: holding a key teaches one
+picture at a time, and in Play the guess is the newest one. Hold the thing inside the gold box, both when you teach and
+when you test. "nothing" is now the box with nothing in it.
+
+Two more ways, when you are ready for them:
+
+- **Follow the hand.** `ml.hand(cam)` finds the hand anywhere in the picture. Cut the box around its points instead of
+  from the middle, and the hand can move about. Two models work together: one finds where to look, the other names
+  what it sees.
+- **Take away the background.** With the camera still, keep a copy of the empty box (`empty = focus.copy()` when a key is
+  pressed). Then, each frame, `focus.remove_background(empty)` makes every pixel that has not changed see-through, and the
+  model sees it as black. Only the thing you hold up is left. It needs steady light: a shadow counts as a change.
+
+### Test what you taught
+
+Do not trust a few lucky guesses. Count. Add a **test mode** to your sketch: press T, and now holding a key does not teach.
+It means "the camera shows this now", and every new guess is marked right or wrong.
+
+```py
+testing = False
+tested = 0
+right = 0
+last = None
+
+def key_pressed():
+    global testing
+    if f.key == "t":
+        testing = not testing
+
+def check(guess):                        # call it in draw() with the guess
+    global tested, right, last
+    if testing and guess is not None and guess is not last:
+        for key, name in KEYS.items():   # KEYS = {"1": "thumbs up", "2": "thumbs down", "0": "nothing"}
+            if f.key_down(key):
+                tested += 1
+                if guess.name == name:
+                    right += 1
+    last = guess
+```
+
+In test mode, skip the teaching: `if not testing:` before the `ml.teach` lines. Show `right` and `tested` on the screen.
+Then try it fairly:
+
+- **Test with new pictures.** Move the thing a little while you test, as you did while teaching. The same picture the model
+  was taught tells you nothing.
+- **Test every name,** "nothing" too, for about the same time each.
+- **Teach 5, test; teach up to 10, test again.** Does it get better?
+- **Change one thing at a time:** the place in the box, the light, the distance, another person's hand. Which one makes it
+  worse? Teach a few more examples of that, and test again.
+- **Compare the score with how often it is right.** If it says 0.9 and is right 9 times in 10, the score is honest.
+
 ## One call a frame
 
 If you call `ml.pose(cam)` twice in one frame, you get the same body, and the work is done once. So you can ask for the
