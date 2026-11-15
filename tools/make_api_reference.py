@@ -16,6 +16,8 @@ Docstring format (parsed by parse_doc below; tests/test_api_docs.py holds the ru
     Returns:     text
     Raises:      ValueError: text
     Example:     code
+    Blocks:      plain: / also: / kinds:   (words for editors and blocks, read into completions.json only, never shown in
+                 the reference or the llms files: a plain sentence, search words, and the kind of each parameter)
     See also: a, b
 """
 from __future__ import annotations
@@ -78,7 +80,7 @@ LLMS_LINKS = [
     ("Examples Gallery", "docs/gallery/README.md", "a small, tested sketch for every feature"),
 ]
 
-SECTIONS = ("Arguments", "Attributes", "Returns", "Raises", "Example")
+SECTIONS = ("Arguments", "Attributes", "Returns", "Raises", "Example", "Blocks")
 
 # Every name in funground._PUBLIC_NAMES must be in exactly one group (live values are documented in their own section).
 GROUPS: dict[str, list[str]] = {
@@ -240,13 +242,14 @@ WORD_MEANINGS: dict[str, list[tuple[str, dict[str, str]]]] = {
     "Mark.place": [("anchor", marks.ANCHOR_MEANINGS)],
 }
 
-HEADER = re.compile(r"^(Arguments|Attributes|Returns|Raises|Example):\s*$")
+HEADER = re.compile(r"^(Arguments|Attributes|Returns|Raises|Example|Blocks):\s*$")
 SEE_ALSO = re.compile(r"^See also:\s*(.*)$")
 
 
 def parse_doc(doc: str | None) -> dict:
     """Split a docstring into summary, prose, sections, see-also. Missing sections are empty."""
-    result = {"summary": "", "prose": "", "Arguments": "", "Attributes": "", "Returns": "", "Raises": "", "Example": "", "see": []}
+    result = {"summary": "", "prose": "", "Arguments": "", "Attributes": "", "Returns": "", "Raises": "", "Example": "", "Blocks": "",
+              "see": []}
     if not doc:
         return result
     lines = inspect.cleandoc(doc).splitlines()
@@ -292,6 +295,81 @@ def documented_params(doc: str | None) -> set[str]:
     for names, _ in parse_arguments(parse_doc(doc)["Arguments"]):
         out.update(names)
     return out
+
+
+# ---------------------------------------------------------------- the Blocks: section (S-300, BF-D-027)
+BLOCKS_KEYS = ("plain", "also", "kinds")
+_NUMBER = r"-?\d+(?:\.\d+)?"
+_KIND = re.compile(rf"(\w+)\s*=\s*(angle|pixels|file|range\(\s*({_NUMBER})\s*,\s*({_NUMBER})\s*,\s*({_NUMBER})\s*\))")
+
+
+def _number(text: str) -> int | float:
+    value = float(text)
+    return int(value) if value == int(value) else value
+
+
+def parse_blocks(body: str, owner: str, parameters: list[str] | None = None) -> dict:
+    """The ``Blocks:`` section of *owner*'s docstring as catalogue fields: ``plain`` (a sentence), ``also`` (a list of words)
+    and ``kinds`` ({parameter: {"kind": ...}}). An unknown key, an unknown kind or a parameter the signature does not have raises
+    ValueError naming it, so a typo cannot slip through. *parameters* is the signature's names (None: not checked)."""
+    entries: dict[str, str] = {}
+    key = ""
+    for line in body.splitlines():
+        if not line.strip():
+            continue
+        m = re.match(r"^(\w+):\s*(.*)$", line)
+        if m and line[0] != " ":
+            key = m.group(1)
+            if key not in BLOCKS_KEYS:
+                raise ValueError(f"{owner}: unknown key {key!r} in Blocks: (the keys are {', '.join(BLOCKS_KEYS)})")
+            if key in entries:
+                raise ValueError(f"{owner}: {key!r} is written twice in Blocks:")
+            entries[key] = m.group(2).strip()
+        elif key:
+            entries[key] += " " + line.strip()
+        else:
+            raise ValueError(f"{owner}: Blocks: lines must be 'key: text', not {line.strip()!r}")
+    out: dict = {}
+    if entries.get("plain"):
+        out["plain"] = entries["plain"]
+    if entries.get("also"):
+        words = [w.strip() for w in entries["also"].split(",") if w.strip()]
+        if any(w != w.lower() for w in words):
+            raise ValueError(f"{owner}: the 'also' words are lower case: {words}")
+        out["also"] = words
+    if entries.get("kinds"):
+        text = entries["kinds"]
+        found = list(_KIND.finditer(text))
+        if re.sub(r"[\s,]", "", _KIND.sub("", text)):
+            raise ValueError(f"{owner}: cannot read kinds: {text!r} (write name=angle, name=pixels, name=file or name=range(low, high, step))")
+        kinds = {}
+        for m in found:
+            name, kind = m.group(1), m.group(2)
+            if parameters is not None and name not in parameters:
+                raise ValueError(f"{owner}: kinds names {name!r}, which is not a parameter")
+            kinds[name] = ({"kind": "range", "low": _number(m.group(3)), "high": _number(m.group(4)), "step": _number(m.group(5))}
+                           if kind.startswith("range") else {"kind": kind})
+        out["kinds"] = kinds
+    return out
+
+
+def blocks_fields(doc: str | None, owner: str, parameters: list[str] | None = None, colour: list[str] = ()) -> dict:
+    """The catalogue fields for one entry: what its ``Blocks:`` section says, and ``{"kind": "colour"}`` for each parameter
+    that takes a colour. ``kinds`` follows the order of the signature."""
+    out = parse_blocks(parse_doc(doc)["Blocks"], owner, parameters)
+    kinds = {**out.get("kinds", {}), **{name: {"kind": "colour"} for name in colour}}
+    if kinds:
+        order = parameters if parameters is not None else list(kinds)
+        out["kinds"] = {name: kinds[name] for name in order if name in kinds}
+    return out
+
+
+def parameter_names(obj, drop_first: bool = False) -> list[str]:
+    try:
+        names = list(inspect.signature(obj).parameters)
+    except (TypeError, ValueError):
+        return []
+    return names[1:] if drop_first and names and names[0] in ("self", "cls") else names
 
 
 # ---------------------------------------------------------------- class helpers
@@ -910,21 +988,80 @@ def returned_class(annotation, doc: str | None, class_set: set[str]) -> str | No
     return found if found in class_set else None
 
 
-def class_members(cls: type, class_set: set[str]) -> list[dict]:
+def element_class(annotation, class_set: set[str]) -> str | None:
+    """The documented class in a list or tuple a function gives back (``tuple[Guess, ...]``, ``list[Body] | None``), or None.
+    An editor needs it for ``for guess in ...``: the loop's variable is one of these."""
+    if not isinstance(annotation, str):
+        return None
+    m = re.search(r"\b(?:tuple|list|Sequence)\[\s*['\"]?([A-Z]\w*)", annotation)
+    return m.group(1) if m and m.group(1) in class_set else None
+
+
+def section_of(name: str) -> str:
+    """The reference group a name of f is in (the GROUPS table); a live value is in "Live values"."""
+    return next((group for group, names in GROUPS.items() if name in names), "Live values")
+
+
+# The examples tell an editor which names are used most. A file counts once for a name, however often it uses it.
+EXAMPLES = ROOT / "examples"
+
+
+def example_uses() -> tuple[dict[str, int], dict[str, dict[str, int]], dict[str, int]]:
+    """How many example programs (``examples/**/*.py``) use each name: ``(f, libraries, members)``. A name of f is used by
+    ``f.name`` (every example says ``import funground as f``); a library's by ``sound.name`` and so on; a member of a class
+    by an attribute of that name on anything that is neither f nor a library (``picker.value()``). The member count is an
+    over-count for common names: ``save`` on a Picture counts every file that saves anything, and ``x`` counts every ``v.x``,
+    because the examples do not say what an object is."""
+    used_f: dict[str, int] = {}
+    used_lib: dict[str, dict[str, int]] = {lib: {} for lib in LIBRARIES}
+    used_member: dict[str, int] = {}
+    for path in sorted(EXAMPLES.rglob("*.py")):
+        f_names: set[str] = set()
+        lib_names: set[tuple[str, str]] = set()
+        members: set[str] = set()
+        for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+            if not isinstance(node, ast.Attribute):
+                continue
+            owner = node.value.id if isinstance(node.value, ast.Name) else None
+            if owner == "f":
+                f_names.add(node.attr)
+            elif owner in LIBRARIES:
+                lib_names.add((owner, node.attr))
+            else:
+                members.add(node.attr)
+        for name in f_names:
+            used_f[name] = used_f.get(name, 0) + 1
+        for lib, name in lib_names:
+            used_lib[lib][name] = used_lib[lib].get(name, 0) + 1
+        for name in members:
+            used_member[name] = used_member.get(name, 0) + 1
+    return used_f, used_lib, used_member
+
+
+def by_rank(entries: list[dict]) -> list[dict]:
+    """Most used first; names that are used equally often in the order of their names."""
+    return sorted(entries, key=lambda e: (-e["rank"], e["name"]))
+
+
+def class_members(cls: type, class_set: set[str], used_member: dict[str, int]) -> list[dict]:
     """The methods and properties of a class, as editors suggest them after ``object.`` (the order of the reference).
     The class's documented attributes come first, as properties; a models result then lists its named points."""
     members = []
     url = f"reference/API.md#cls-{cls.__name__}"
     for name, kept, text in class_attributes(cls):
         entry = {"name": name, "kind": "property", "signature": name, "detail": learner_types(kept),
-                 "summary": first_sentence(" ".join(text.split())), "url": url}
+                 "summary": first_sentence(" ".join(text.split())), "url": url, "section": cls.__name__,
+                 "rank": used_member.get(name, 0)}
         returns = returned_class(kept, None, class_set)
         if returns:
             entry["returns"] = returns
+        if element_class(kept, class_set):
+            entry["element"] = element_class(kept, class_set)
         members.append(entry)
     if cls in ML_RESULTS:                                   # the points are attributes made from _names, each an f.Vector
         members += [{"name": name, "kind": "property", "signature": name, "detail": "Vector", "returns": "Vector",
-                     "summary": f"A point of the {cls.__name__.lower()}: an f.Vector in the source's pixels.", "url": url}
+                     "summary": f"A point of the {cls.__name__.lower()}: an f.Vector in the source's pixels.", "url": url,
+                     "section": cls.__name__, "rank": used_member.get(name, 0)}
                     for name in getattr(cls, "_names", ())]
     for name, member in public_members(cls):
         is_property = isinstance(member, property)
@@ -938,10 +1075,14 @@ def class_members(cls: type, class_set: set[str]) -> list[dict]:
             signature, detail, _ = learner_signature(name, function, True)
             entry.update(signature=signature, detail=detail)
         entry.update(summary=first_sentence(parse_doc(function.__doc__)["summary"]),
-                     url=f"reference/API.md#cls-{cls.__name__}-{name}")
+                     url=f"reference/API.md#cls-{cls.__name__}-{name}", section=cls.__name__, rank=used_member.get(name, 0))
         returns = returned_class(annotation, function.__doc__, class_set)
         if returns:
             entry["returns"] = returns
+        if element_class(annotation, class_set):
+            entry["element"] = element_class(annotation, class_set)
+        entry.update(blocks_fields(function.__doc__, f"{cls.__name__}.{name}", parameter_names(function, True),
+                                   [] if is_property else learner_signature(name, function, True)[2]))
         if since.member_since(cls.__name__, name):
             entry["since"] = since.member_since(cls.__name__, name)
         members.append(entry)
@@ -961,9 +1102,11 @@ def completions_text() -> str:
         if key.startswith("f."):
             words[key[2:]] = {arg: [{"word": w, "meaning": m, **({"since": v} if (v := since.word_since(key[2:], arg, w)) else {})}
                                     for w, m in table.items()] for arg, table in tables}
+    used_f, used_lib, used_member = example_uses()
     names, color_params = [], []
     for name in f._PUBLIC_NAMES:
         entry: dict = {"name": name}
+        words_of, callable_obj, colour = None, None, []          # the docstring with the Blocks: section, and the function
         if name in NAMESPACE_NAMES:
             cls = getattr(f, name)
             detail = f"{len(cls)} colours" if name == "COLORS" else f"{len(cls)} groups of words"
@@ -973,6 +1116,7 @@ def completions_text() -> str:
         elif name in _api.LIVE_NAMES:
             entry.update(kind="value", signature=name, detail=value_types[name],
                          summary=first_sentence(parse_doc(live_docs.get(name))["summary"]), url=f"reference/API.md#live-{name}")
+            words_of = live_docs.get(name)
         else:
             obj = getattr(f, name)
             is_class = inspect.isclass(obj)
@@ -984,43 +1128,51 @@ def completions_text() -> str:
             returns = None if is_class else returned_class(inspect.signature(obj).return_annotation, obj.__doc__, class_set)
             if returns:
                 entry["returns"] = returns
+            if not is_class and element_class(inspect.signature(obj).return_annotation, class_set):
+                entry["element"] = element_class(inspect.signature(obj).return_annotation, class_set)
+            words_of, callable_obj = obj.__doc__, obj
         if since.name_since(name):
             entry["since"] = since.name_since(name)
         entry["star"] = name not in star_out
         if name in words:
             entry["options"] = words[name]
+        entry.update(section=section_of(name), rank=used_f.get(name, 0))
+        entry.update(blocks_fields(words_of, f"f.{name}", parameter_names(callable_obj) if callable_obj else None, colour))
         names.append(entry)
     colors = [{"name": n, "hex": hex_of(rgba)[:7]} for n, rgba in sorted(_colornames.NAMED_COLORS.items())]
     classes = {name: {"summary": first_sentence(parse_doc(cls.__doc__)["summary"]), "url": f"reference/API.md#cls-{name}",
                       **({"since": since.class_since(name)} if since.class_since(name) else {}),
-                      "members": class_members(cls, class_set)} for name, cls in all_classes()}
-    data = {"version": f.__version__, "names": names, "colors": colors, "color_params": color_params, "classes": classes,
-            "libraries": library_completions(class_set)}
+                      "members": class_members(cls, class_set, used_member)} for name, cls in all_classes()}
+    data = {"version": f.__version__, "names": by_rank(names), "colors": colors, "color_params": color_params, "classes": classes,
+            "libraries": library_completions(class_set, used_lib)}
     return json.dumps(data, indent=1, ensure_ascii=False) + "\n"
 
 
-def library_completions(class_set: set[str]) -> dict[str, list[dict]]:
+def library_completions(class_set: set[str], used_lib: dict[str, dict[str, int]]) -> dict[str, list[dict]]:
     """The names of each library for editors, under completions.json's "libraries" key (S-246): ``{"sound": [...],
     "sangeet": [...]}``. An entry has the same shape as one in "names" (name, kind, signature, detail, summary, url,
-    and "returns" or "options" when there are any), except that it has no "since" and no "star". The editor suggests
+    and "returns" or "options" when there are any), except that it has no "since" and no "star". The list is in order of "rank". The editor suggests
     them after ``sound.`` once the sketch says ``from funground import sound``."""
     libraries: dict[str, list[dict]] = {}
     for lib, info in LIBRARIES.items():
         entries = []
         for name in info["names"]:
             obj = getattr(info["module"], name)
-            signature, detail, _ = learner_signature(name, obj)
+            signature, detail, colour = learner_signature(name, obj)
             entry: dict = {"name": name, "kind": "function", "signature": signature, "detail": detail,
                            "summary": first_sentence(parse_doc(obj.__doc__)["summary"]),
-                           "url": f"reference/API.md#fn-{lib}-{name}"}
+                           "url": f"reference/API.md#fn-{lib}-{name}", "section": lib, "rank": used_lib[lib].get(name, 0)}
             returns = returned_class(inspect.signature(obj).return_annotation, obj.__doc__, class_set)
             if returns:
                 entry["returns"] = returns
+            if element_class(inspect.signature(obj).return_annotation, class_set):
+                entry["element"] = element_class(inspect.signature(obj).return_annotation, class_set)
+            entry.update(blocks_fields(obj.__doc__, f"{lib}.{name}", parameter_names(obj), colour))
             tables = WORD_MEANINGS.get(f"{lib}.{name}")
             if tables:
                 entry["options"] = {arg: [{"word": w, "meaning": m} for w, m in table.items()] for arg, table in tables}
             entries.append(entry)
-        libraries[lib] = entries
+        libraries[lib] = by_rank(entries)
     return libraries
 
 

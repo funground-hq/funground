@@ -37,6 +37,9 @@ def ragas() -> list[str]:
     Returns:
         A list of names.
 
+    Blocks:
+        also: list ragas, scales, names, all ragas
+
     See also: raga, match_ragas, talas
     """
     return _tables.raga_names()
@@ -57,6 +60,9 @@ def raga(name: str) -> Raga:
     Example:
         sound.melody(sangeet.raga("Yaman").aroha, sa="D4").play()
 
+    Blocks:
+        also: scale, mode, melody type, hindustani, notes
+
     See also: ragas, melody, match_ragas
     """
     return _tables.find_raga(name, "sangeet.raga()")
@@ -69,6 +75,9 @@ def talas() -> list[str]:
 
     Returns:
         A list of names.
+
+    Blocks:
+        also: list talas, rhythms, names, taals
 
     See also: tala_info, tala, ragas
     """
@@ -89,6 +98,9 @@ def tala_info(name: str) -> Tala:
 
     Example:
         print(sangeet.tala_info("Rupak").khali)
+
+    Blocks:
+        also: rhythm, beats, taal, clap pattern, cycle
 
     See also: talas, tala
     """
@@ -114,6 +126,10 @@ def tala(name: str, tempo: float = 80, cycles: int = 1) -> Sound:
     Example:
         sangeet.tala("Teentaal", tempo=100).loop()
 
+    Blocks:
+        plain: Make the sound of a tala being played on drums.
+        also: rhythm, beat, drums, tabla, theka, cycle
+
     See also: talas, tala_info, drone
     """
     return _engine.make(_tables.tala(name, tempo, cycles, None, "sangeet.tala()"), _sound_frame, "sangeet.tala()")
@@ -133,6 +149,10 @@ def match_ragas(histogram: Any) -> list[tuple[str, float]]:
     Example:
         h = song.swara_histogram("C#4")
         print(sangeet.match_ragas(h)[0])
+
+    Blocks:
+        plain: Find the ragas that fit the notes you played.
+        also: find raga, which raga, guess raga, compare, tune match
 
     See also: ragas, raga
     """

@@ -74,6 +74,10 @@ def pose(source) -> Body | None:
         if body:
             f.line(body.left_wrist.x, body.left_wrist.y, body.right_wrist.x, body.right_wrist.y)
 
+    Blocks:
+        plain: Find a body: head, arms, legs.
+        also: body, skeleton, arms, find person, track body
+
     See also: hand
     """
     return _tasks.find_body(source, _sketch_folder())
@@ -110,6 +114,10 @@ def hand(source) -> Hand | None:
         if palm:
             f.circle(palm.index_finger_tip.x, palm.index_finger_tip.y, 12)
 
+    Blocks:
+        plain: Find a hand and its fingers.
+        also: fingers, palm, wrist, gesture, find hand
+
     See also: pose
     """
     return _tasks.find_hand(source, _sketch_folder())
@@ -141,6 +149,10 @@ def person(source):
     Example:
         f.background("navy")
         f.image(ml.person(cam), 0, 0)
+
+    Blocks:
+        plain: Cut the person out of the picture.
+        also: cut out, silhouette, remove background, body shape, outline
 
     See also: pose, hand, image
     """
@@ -183,6 +195,10 @@ def words(source) -> Words | None:
         heard = ml.words(mic)
         if heard:
             f.text(heard.text, 20, 100)
+
+    Blocks:
+        plain: Turn speech from the microphone into words.
+        also: speech, voice, say, speech to text, transcribe
 
     See also: pose, microphone
     """
@@ -227,6 +243,10 @@ def sound(source) -> Heard | None:
         heard = ml.sound(mic)
         if heard:
             f.text(heard.name, 20, 100)
+
+    Blocks:
+        plain: Say what sound the microphone hears.
+        also: listen, hear, classify sound, microphone, noise
 
     See also: words, microphone
     """
@@ -273,6 +293,10 @@ def teach(name, source=None, model=None):
         if f.key_down("u"):
             ml.teach("thumbs up", cam)
 
+    Blocks:
+        plain: Show the computer a picture and give it a name.
+        also: train, learn, show examples, model, label
+
     See also: guess
     """
     return _teach.teach(name, source, model, _sketch_folder())
@@ -315,6 +339,10 @@ def guess(source, k=1) -> Guess | None:
         answer = ml.guess(cam)
         if answer:
             f.text(answer.name, 20, 100)
+
+    Blocks:
+        plain: Say what the camera or picture shows, using what you taught.
+        also: classify, what is this, recognise, identify, label
 
     See also: teach
     """
