@@ -2953,6 +2953,97 @@ Teach the computer three things with your camera, then let it guess. Hold up a t
 
 Source: [`examples/gallery/models/06_teach_by_example.py`](../../examples/gallery/models/06_teach_by_example.py)
 
+### Star catcher
+
+![Star catcher](images/models-07_star_catcher.png)
+
+Stars fall from the sky. Move your nose to move the basket, and catch as many as you can. Miss five and the game starts again. Until the camera is ready, and in the tests, it shows a photo, so the basket stays still. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- ml.pose(source) looks for a body in the picture. body.nose.x is how far across the picture the nose is.
+- The basket is a rectangle. Its middle is set to the nose every frame, so it follows you.
+- The star's y grows every frame, so it falls. It falls a little faster for every star you catch.
+- When the star is low enough and over the basket, you caught it. When it reaches the bottom, you missed it.
+- Either way, a new star starts at the top, in a place chosen by random.randint().
+- The camera is mirrored, so the basket moves the way you move.
+
+**Make it yours**
+
+- Use body.right_wrist.x instead of body.nose.x, and catch the stars with your hand.
+- Make the basket wider: change 60 in three places, or make it a variable.
+- Change "gold" to another colour, or draw the star bigger.
+- Change 5 to give yourself more chances.
+
+</details>
+
+Source: [`examples/gallery/models/07_star_catcher.py`](../../examples/gallery/models/07_star_catcher.py)
+
+### Reach up
+
+![Reach up](images/models-08_reach_up.png)
+
+Hold both hands above your head to fill the bar. When it is full, you score a point and the bar starts again. Put your hands down and the bar slowly empties. Until the camera is ready, and in the tests, it shows a photo, where nobody is reaching, so the bar stays empty. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- ml.pose(source) gives a body. body.left_wrist.y and body.right_wrist.y say how far down each wrist is.
+- In a picture, y gets bigger going down. So "above" means a smaller y.
+- When both wrists are higher than the nose, the bar level goes up by 2. Otherwise it goes down by 1, but never below 0.
+- A full bar is 300 tall. Then the points go up by 1 and the level goes back to 0.
+
+**Make it yours**
+
+- Change 2 to 4 for a quicker bar, or to 1 for a harder game.
+- Count only one hand: use just the left wrist.
+- Change 300 to make the bar shorter or taller. Remember to change both rectangles.
+- Draw the bar in a colour that changes as it fills.
+
+</details>
+
+Source: [`examples/gallery/models/08_reach_up.py`](../../examples/gallery/models/08_reach_up.py)
+
+### Teach a remote
+
+![Teach a remote](images/models-09_teach_a_remote.png)
+
+Teach the computer three things, then steer a boat with them. Hold up a hand pointing left and press 1, a hand pointing right and press 2, and a hand held still or no hand at all and press 3. Press each key a few times, moving a little each time. Then show it a direction and the boat goes that way. Sail through the gaps in the walls to score. Until the camera is ready, and in the tests, it shows a photo, so the keys teach the photo. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- ml.teach(name, source) keeps what is in the picture as one example of name.
+- ml.guess(source) names the taught thing the picture is most like, or gives None before you teach anything.
+- guess.name is the best guess. The boat turns that name into a move: "left" is 5 less, "right" is 5 more.
+- The wall falls down the screen. When it reaches the boat, the boat has to be inside the gap.
+- "still" is taught too. Without it, the boat would always be steered one way or the other.
+- What you taught lasts while the sketch runs. The first teach downloads the picture model (10 MB, once).
+
+**Make it yours**
+
+- Teach other things, such as a cup for "left" and a book for "right". Change the names in both places.
+- Make the gap wider: change 70 in three places.
+- Make the boat faster: change 5 to 8.
+- Show guess.score on the screen to see how sure the computer is.
+
+</details>
+
+Source: [`examples/gallery/models/09_teach_a_remote.py`](../../examples/gallery/models/09_teach_a_remote.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it

@@ -10,7 +10,7 @@
    "url": "reference/API.md#fn-size",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 205,
+   "rank": 208,
    "plain": "Set how big the drawing area is.",
    "also": [
     "canvas",
@@ -37,7 +37,7 @@
    "url": "reference/API.md#fn-fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 201,
+   "rank": 204,
    "also": [
     "color",
     "colour",
@@ -60,7 +60,7 @@
    "url": "reference/API.md#fn-background",
    "star": true,
    "section": "Colour",
-   "rank": 193,
+   "rank": 194,
    "also": [
     "paper",
     "wipe",
@@ -83,7 +83,7 @@
    "url": "reference/API.md#fn-no_stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 165,
+   "rank": 168,
    "plain": "Stop drawing outlines around shapes.",
    "also": [
     "no outline",
@@ -101,7 +101,7 @@
    "url": "reference/API.md#fn-run",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 139,
+   "rank": 142,
    "plain": "Start the sketch and keep drawing, frame after frame.",
    "also": [
     "start",
@@ -112,34 +112,6 @@
    ]
   },
   {
-   "name": "circle",
-   "kind": "function",
-   "signature": "circle(x, y, diameter)",
-   "detail": "(x: float, y: float, diameter: float) -> None",
-   "summary": "Draw a circle.",
-   "url": "reference/API.md#fn-circle",
-   "star": true,
-   "section": "Shapes",
-   "rank": 138,
-   "also": [
-    "round",
-    "ball",
-    "dot",
-    "oval"
-   ],
-   "kinds": {
-    "x": {
-     "kind": "pixels"
-    },
-    "y": {
-     "kind": "pixels"
-    },
-    "diameter": {
-     "kind": "pixels"
-    }
-   }
-  },
-  {
    "name": "text",
    "kind": "function",
    "signature": "text(message, x, y, color=None)",
@@ -148,7 +120,7 @@
    "url": "reference/API.md#fn-text",
    "star": true,
    "section": "Text and fonts",
-   "rank": 138,
+   "rank": 141,
    "also": [
     "say",
     "print",
@@ -170,6 +142,34 @@
    }
   },
   {
+   "name": "circle",
+   "kind": "function",
+   "signature": "circle(x, y, diameter)",
+   "detail": "(x: float, y: float, diameter: float) -> None",
+   "summary": "Draw a circle.",
+   "url": "reference/API.md#fn-circle",
+   "star": true,
+   "section": "Shapes",
+   "rank": 140,
+   "also": [
+    "round",
+    "ball",
+    "dot",
+    "oval"
+   ],
+   "kinds": {
+    "x": {
+     "kind": "pixels"
+    },
+    "y": {
+     "kind": "pixels"
+    },
+    "diameter": {
+     "kind": "pixels"
+    }
+   }
+  },
+  {
    "name": "text_size",
    "kind": "function",
    "signature": "text_size(size)",
@@ -178,7 +178,7 @@
    "url": "reference/API.md#fn-text_size",
    "star": true,
    "section": "Text and fonts",
-   "rank": 131,
+   "rank": 134,
    "also": [
     "font size",
     "bigger text",
@@ -201,7 +201,7 @@
    "url": "reference/API.md#fn-rect",
    "star": true,
    "section": "Shapes",
-   "rank": 108,
+   "rank": 111,
    "also": [
     "rectangle",
     "box",
@@ -233,7 +233,7 @@
    "url": "reference/API.md#fn-stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 101,
+   "rank": 103,
    "also": [
     "outline",
     "border",
@@ -256,7 +256,7 @@
    "url": "reference/API.md#fn-stroke_width",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 87,
+   "rank": 89,
    "also": [
     "thickness",
     "thick",
@@ -505,6 +505,40 @@
    }
   },
   {
+   "name": "width",
+   "kind": "value",
+   "signature": "width",
+   "detail": "int",
+   "summary": "The width of the canvas, in pixels.",
+   "url": "reference/API.md#live-width",
+   "star": true,
+   "section": "Live values",
+   "rank": 28,
+   "also": [
+    "canvas width",
+    "wide",
+    "across",
+    "screen width"
+   ]
+  },
+  {
+   "name": "key",
+   "kind": "value",
+   "signature": "key",
+   "detail": "str | None",
+   "summary": "The last key that was pressed or released.",
+   "url": "reference/API.md#live-key",
+   "star": true,
+   "section": "Live values",
+   "rank": 27,
+   "also": [
+    "keyboard",
+    "key pressed",
+    "letter",
+    "typed"
+   ]
+  },
+  {
    "name": "text_style",
    "kind": "function",
    "signature": "text_style(style)",
@@ -542,40 +576,6 @@
    ]
   },
   {
-   "name": "width",
-   "kind": "value",
-   "signature": "width",
-   "detail": "int",
-   "summary": "The width of the canvas, in pixels.",
-   "url": "reference/API.md#live-width",
-   "star": true,
-   "section": "Live values",
-   "rank": 27,
-   "also": [
-    "canvas width",
-    "wide",
-    "across",
-    "screen width"
-   ]
-  },
-  {
-   "name": "key",
-   "kind": "value",
-   "signature": "key",
-   "detail": "str | None",
-   "summary": "The last key that was pressed or released.",
-   "url": "reference/API.md#live-key",
-   "star": true,
-   "section": "Live values",
-   "rank": 26,
-   "also": [
-    "keyboard",
-    "key pressed",
-    "letter",
-    "typed"
-   ]
-  },
-  {
    "name": "height",
    "kind": "value",
    "signature": "height",
@@ -584,7 +584,7 @@
    "url": "reference/API.md#live-height",
    "star": true,
    "section": "Live values",
-   "rank": 24,
+   "rank": 25,
    "also": [
     "canvas height",
     "tall",
@@ -668,7 +668,7 @@
    "url": "reference/API.md#fn-image",
    "star": true,
    "section": "Images and SVG",
-   "rank": 20,
+   "rank": 22,
    "also": [
     "picture",
     "photo",
@@ -691,6 +691,31 @@
    }
   },
   {
+   "name": "load_image",
+   "kind": "function",
+   "signature": "load_image(path)",
+   "detail": "(path: str) -> Picture",
+   "summary": "Read an image file and return it as a picture.",
+   "url": "reference/API.md#fn-load_image",
+   "returns": "Picture",
+   "star": true,
+   "section": "Images and SVG",
+   "rank": 22,
+   "plain": "Open a picture file so you can draw it.",
+   "also": [
+    "open picture",
+    "photo",
+    "read picture",
+    "import",
+    "png"
+   ],
+   "kinds": {
+    "path": {
+     "kind": "file"
+    }
+   }
+  },
+  {
    "name": "random",
    "kind": "function",
    "signature": "random(low=1.0, high=None)",
@@ -706,31 +731,6 @@
     "roll",
     "any number"
    ]
-  },
-  {
-   "name": "load_image",
-   "kind": "function",
-   "signature": "load_image(path)",
-   "detail": "(path: str) -> Picture",
-   "summary": "Read an image file and return it as a picture.",
-   "url": "reference/API.md#fn-load_image",
-   "returns": "Picture",
-   "star": true,
-   "section": "Images and SVG",
-   "rank": 19,
-   "plain": "Open a picture file so you can draw it.",
-   "also": [
-    "open picture",
-    "photo",
-    "read picture",
-    "import",
-    "png"
-   ],
-   "kinds": {
-    "path": {
-     "kind": "file"
-    }
-   }
   },
   {
    "name": "random_seed",
@@ -10117,7 +10117,7 @@
      "summary": "Start listening.",
      "url": "reference/API.md#cls-Microphone-start",
      "section": "Microphone",
-     "rank": 19
+     "rank": 22
     },
     {
      "name": "stop",
@@ -10185,7 +10185,7 @@
      "summary": "Whether a frame has arrived.",
      "url": "reference/API.md#cls-Camera-is_ready",
      "section": "Camera",
-     "rank": 11,
+     "rank": 14,
      "since": "0.2"
     },
     {
@@ -10231,7 +10231,7 @@
      "summary": "Open the camera.",
      "url": "reference/API.md#cls-Camera-start",
      "section": "Camera",
-     "rank": 19,
+     "rank": 22,
      "since": "0.2"
     },
     {
@@ -12223,7 +12223,7 @@
      "summary": "the raga's name.",
      "url": "reference/API.md#cls-Raga",
      "section": "Raga",
-     "rank": 5
+     "rank": 6
     },
     {
      "name": "thaat",
@@ -12339,7 +12339,7 @@
      "summary": "the tala's name.",
      "url": "reference/API.md#cls-Tala",
      "section": "Tala",
-     "rank": 5
+     "rank": 6
     },
     {
      "name": "beats",
@@ -12457,7 +12457,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 1
+     "rank": 3
     },
     {
      "name": "left_eye_inner",
@@ -12622,7 +12622,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 1
     },
     {
      "name": "right_wrist",
@@ -12633,7 +12633,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 1
     },
     {
      "name": "left_pinky",
@@ -13121,7 +13121,7 @@
      "summary": "the name you taught.",
      "url": "reference/API.md#cls-Guess",
      "section": "Guess",
-     "rank": 5
+     "rank": 6
     },
     {
      "name": "score",
@@ -13159,7 +13159,7 @@
      "summary": "the sound's name in English, for example \"Dog\" or \"Speech\".",
      "url": "reference/API.md#cls-Heard",
      "section": "Heard",
-     "rank": 5
+     "rank": 6
     },
     {
      "name": "score",
@@ -13823,7 +13823,7 @@
     "summary": "Make a camera object for the computer's default camera.",
     "url": "reference/API.md#fn-camera-open",
     "section": "camera",
-    "rank": 11,
+    "rank": 14,
     "returns": "Camera",
     "plain": "Turn on the camera.",
     "also": [
@@ -13878,6 +13878,25 @@
   ],
   "ml": [
    {
+    "name": "pose",
+    "kind": "function",
+    "signature": "pose(source)",
+    "detail": "(source) -> Body | None",
+    "summary": "Find the body in a camera or a picture.",
+    "url": "reference/API.md#fn-ml-pose",
+    "section": "ml",
+    "rank": 3,
+    "returns": "Body",
+    "plain": "Find a body: head, arms, legs.",
+    "also": [
+     "body",
+     "skeleton",
+     "arms",
+     "find person",
+     "track body"
+    ]
+   },
+   {
     "name": "guess",
     "kind": "function",
     "signature": "guess(source, k=1)",
@@ -13885,7 +13904,7 @@
     "summary": "Guess what a camera or a picture shows, from the things you taught.",
     "url": "reference/API.md#fn-ml-guess",
     "section": "ml",
-    "rank": 1,
+    "rank": 2,
     "returns": "Guess",
     "plain": "Say what the camera or picture shows, using what you taught.",
     "also": [
@@ -13893,6 +13912,24 @@
      "what is this",
      "recognise",
      "identify",
+     "label"
+    ]
+   },
+   {
+    "name": "teach",
+    "kind": "function",
+    "signature": "teach(name, source=None, model=None)",
+    "detail": "(name, source=None, model=None)",
+    "summary": "Teach the computer what to call a picture.",
+    "url": "reference/API.md#fn-ml-teach",
+    "section": "ml",
+    "rank": 2,
+    "plain": "Show the computer a picture and give it a name.",
+    "also": [
+     "train",
+     "learn",
+     "show examples",
+     "model",
      "label"
     ]
    },
@@ -13935,25 +13972,6 @@
     ]
    },
    {
-    "name": "pose",
-    "kind": "function",
-    "signature": "pose(source)",
-    "detail": "(source) -> Body | None",
-    "summary": "Find the body in a camera or a picture.",
-    "url": "reference/API.md#fn-ml-pose",
-    "section": "ml",
-    "rank": 1,
-    "returns": "Body",
-    "plain": "Find a body: head, arms, legs.",
-    "also": [
-     "body",
-     "skeleton",
-     "arms",
-     "find person",
-     "track body"
-    ]
-   },
-   {
     "name": "sound",
     "kind": "function",
     "signature": "sound(source)",
@@ -13970,24 +13988,6 @@
      "classify sound",
      "microphone",
      "noise"
-    ]
-   },
-   {
-    "name": "teach",
-    "kind": "function",
-    "signature": "teach(name, source=None, model=None)",
-    "detail": "(name, source=None, model=None)",
-    "summary": "Teach the computer what to call a picture.",
-    "url": "reference/API.md#fn-ml-teach",
-    "section": "ml",
-    "rank": 1,
-    "plain": "Show the computer a picture and give it a name.",
-    "also": [
-     "train",
-     "learn",
-     "show examples",
-     "model",
-     "label"
     ]
    },
    {

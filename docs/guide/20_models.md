@@ -490,6 +490,27 @@ Then try it fairly:
   worse? Teach a few more examples of that, and test again.
 - **Compare the score with how often it is right.** If it says 0.9 and is right 9 times in 10, the score is honest.
 
+## Make a game in blocks
+
+Three small games in the gallery use your body or something you teach. They are written so that every line also reads as
+a block, if you like to build with blocks.
+
+- **Star catcher** (`07_star_catcher.py`): move your nose to move a basket and catch the falling stars.
+- **Reach up** (`08_reach_up.py`): hold both hands above your head to fill a bar. A full bar is a point.
+- **Teach a remote** (`09_teach_a_remote.py`): teach "left", "right" and "still", then steer a boat through the gaps in
+  the walls with what the computer guesses.
+
+To try one in Play:
+
+1. Tick **Blocks**, beside Auto-run. A **Python | Blocks** switch appears above the code.
+2. Open one of the three games from the examples.
+3. Press **Blocks**. The sketch shows as blocks, and each block makes the same Python.
+4. Change one number, such as the `60` that sets how wide the basket is, or the `2` that sets how fast the bar fills.
+5. Press **Run** and see what changed. Then press **Python**: the number you changed is there too.
+
+The games need a camera. Until it is ready, and in the tests, they show a photo instead. On a desktop computer with no
+camera, the sketch stops and says so. In Teach a remote, press 1, 2 and 3 to teach what the camera sees, a few times each.
+
 ## One call a frame
 
 If you call `ml.pose(cam)` twice in one frame, you get the same body, and the work is done once. So you can ask for the
