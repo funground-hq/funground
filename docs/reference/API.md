@@ -35,7 +35,7 @@ In the examples, `import funground as f` is understood. A library's examples als
 - [The camera library](#the-camera-library): [`open`](#fn-camera-open), [`names`](#fn-camera-names), [`load_clip`](#fn-camera-load_clip)
 - [The models library](#the-models-library): [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`person`](#fn-ml-person), [`words`](#fn-ml-words), [`sound`](#fn-ml-sound), [`teach`](#fn-ml-teach), [`guess`](#fn-ml-guess)
 - [Live values](#live-values): [`delta_time`](#live-delta_time), [`frame_count`](#live-frame_count), [`ground`](#live-ground), [`height`](#live-height), [`is_key_pressed`](#live-is_key_pressed), [`is_mouse_pressed`](#live-is_mouse_pressed), [`key`](#live-key), [`key_code`](#live-key_code), [`mouse_button`](#live-mouse_button), [`mouse_x`](#live-mouse_x), [`mouse_y`](#live-mouse_y), [`pixels`](#live-pixels), [`pmouse_x`](#live-pmouse_x), [`pmouse_y`](#live-pmouse_y), [`width`](#live-width)
-- [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala)
+- [Classes in detail](#classes-in-detail): [`Sound`](#cls-Sound), [`Microphone`](#cls-Microphone), [`Camera`](#cls-Camera), [`Clip`](#cls-Clip), [`Picture`](#cls-Picture), [`Vector`](#cls-Vector), [`FormattedString`](#cls-FormattedString), [`Run`](#cls-Run), [`PathBuilder`](#cls-PathBuilder), [`Mark`](#cls-Mark), [`Area`](#cls-Area), [`Ground`](#cls-Ground), [`Cell`](#cls-Cell), [`Grid`](#cls-Grid), [`Path`](#cls-Path), [`Font`](#cls-Font), [`Control`](#cls-Control), [`Slider`](#cls-Slider), [`Checkbox`](#cls-Checkbox), [`Button`](#cls-Button), [`Color`](#cls-Color), [`Gradient`](#cls-Gradient), [`Raga`](#cls-Raga), [`Tala`](#cls-Tala), [`Body`](#cls-Body), [`Hand`](#cls-Hand), [`Words`](#cls-Words), [`Guess`](#cls-Guess), [`Heard`](#cls-Heard)
 - [Constants and reference tables](#constants-and-reference-tables)
 
 <a id="sketch-and-loop"></a>
@@ -5101,7 +5101,7 @@ The models library is a separate install: run `python -m pip install funground-m
 ### `ml.pose`
 
 ```py
-ml.pose(source)
+ml.pose(source) -> 'Body | None'
 ```
 
 Find the body in a camera or a picture.
@@ -5145,7 +5145,7 @@ See also: [`hand`](#fn-ml-hand).
 ### `ml.hand`
 
 ```py
-ml.hand(source)
+ml.hand(source) -> 'Hand | None'
 ```
 
 Find a hand in a camera or a picture.
@@ -5223,7 +5223,7 @@ See also: [`pose`](#fn-ml-pose), [`hand`](#fn-ml-hand), [`image`](#fn-image).
 ### `ml.words`
 
 ```py
-ml.words(source)
+ml.words(source) -> 'Words | None'
 ```
 
 Listen to a microphone or a sound, and give the words in it.
@@ -5270,7 +5270,7 @@ See also: [`pose`](#fn-ml-pose), [`sound.microphone`](#fn-sound-microphone).
 ### `ml.sound`
 
 ```py
-ml.sound(source)
+ml.sound(source) -> 'Heard | None'
 ```
 
 Listen to a microphone or a sound, and give the name of what it hears.
@@ -5368,7 +5368,7 @@ See also: [`guess`](#fn-ml-guess).
 ### `ml.guess`
 
 ```py
-ml.guess(source, k=1)
+ml.guess(source, k=1) -> 'Guess | None'
 ```
 
 Guess what a camera or a picture shows, from the things you taught.
@@ -10689,9 +10689,13 @@ from a centre). Give it to fill(), stroke() or background(). It is read in the d
 moment you draw the shape, so it follows translate(), rotate() and scale() like the shape does. In a
 PDF or SVG file it stays a true gradient.
 
-A gradient cannot be changed. Its parts are kind ("linear" or "radial"), points (x1, y1, x2, y2 for a
-linear gradient, and x, y, radius for a radial one) and stops (a tuple of (position, colour) pairs,
-with positions from 0 to 1).
+A gradient cannot be changed.
+
+| Attribute | Meaning |
+|---|---|
+| `kind` | "linear" or "radial". |
+| `points` | x1, y1, x2, y2 for a linear gradient, and x, y, radius for a radial one. |
+| `stops` | a tuple of (position, colour) pairs, with positions from 0 to 1. |
 
 ```py
 sky = f.linear_gradient(0, 0, 0, 400, ["navy", "skyblue"])
@@ -10707,21 +10711,22 @@ Raga(name: 'str', thaat: 'str', swaras: 'tuple[str, ...]', aroha: 'str', avaroha
 
 One raga from funground's small table. It is read-only.
 
-You get one from sangeet.raga(name). Its parts are:
-name: the raga's name.
-thaat: the parent scale it belongs to.
-swaras: the notes it uses, as a tuple of letters such as ("S", "R", "G"). Small r, g, d and n are komal (flat). M is tivra (sharp) Ma.
-aroha: the way up, as a sargam string that sound.melody(text, sa=...) can play.
-avaroha: the way down, as a sargam string.
-pakad: a phrase that marks the raga, as a sargam string.
-vadi: the most important swara.
-samvadi: the second most important swara.
-time: the traditional time of day to perform it.
-notes: where the sources differ, and other things to know. It may be empty.
-sources: a tuple of texts that say where each fact was checked.
+You get one from sangeet.raga(name). str(raga) gives a short summary. A raga is much more than its notes,
+and the table gives a start, not the raga.
 
-str(raga) gives a short summary. A raga is much more than its notes, and the table gives a start, not
-the raga.
+| Attribute | Meaning |
+|---|---|
+| `name` | the raga's name. |
+| `thaat` | the parent scale it belongs to. |
+| `swaras` | the notes it uses, as a tuple of letters such as ("S", "R", "G"). Small r, g, d and n are komal (flat). M is tivra (sharp) Ma. |
+| `aroha` | the way up, as a sargam string that sound.melody(text, sa=...) can play. |
+| `avaroha` | the way down, as a sargam string. |
+| `pakad` | a phrase that marks the raga, as a sargam string. |
+| `vadi` | the most important swara. |
+| `samvadi` | the second most important swara. |
+| `time` | the traditional time of day to perform it. |
+| `notes` | where the sources differ, and other things to know. It may be empty. |
+| `sources` | a tuple of texts that say where each fact was checked. |
 
 ```py
 yaman = sangeet.raga("Yaman")
@@ -10738,23 +10743,133 @@ Tala(name: 'str', beats: 'int', vibhag: 'tuple[int, ...]', tali: 'tuple[int, ...
 
 One tala from funground's small table. It is read-only.
 
-You get one from sangeet.tala_info(name). Beats are counted from 1, so the sam is beat 1. Its parts are:
-name: the tala's name.
-beats: how many beats in one cycle.
-vibhag: the divisions, as a tuple of beat counts such as (4, 4, 4, 4).
-tali: the beat numbers that are claps.
-khali: the beat numbers that are waves (the empty beats).
-sam: the first beat, always 1.
-bols: the theka, the drum syllables, one for each beat.
-notes: where the sources differ, and other things to know. It may be empty.
-sources: a tuple of texts that say where each fact was checked.
-
+You get one from sangeet.tala_info(name). Beats are counted from 1, so the sam is beat 1.
 str(tala) gives a short summary. Use sangeet.tala(name) to hear the theka.
+
+| Attribute | Meaning |
+|---|---|
+| `name` | the tala's name. |
+| `beats` | how many beats in one cycle. |
+| `vibhag` | the divisions, as a tuple of beat counts such as (4, 4, 4, 4). |
+| `tali` | the beat numbers that are claps. |
+| `khali` | the beat numbers that are waves (the empty beats). |
+| `sam` | the first beat, always 1. |
+| `bols` | the theka, the drum syllables, one for each beat. |
+| `notes` | where the sources differ, and other things to know. It may be empty. |
+| `sources` | a tuple of texts that say where each fact was checked. |
 
 ```py
 teentaal = sangeet.tala_info("Teentaal")
 print(teentaal.beats, teentaal.bols)
 ```
+
+<a id="cls-Body"></a>
+### `Body`
+
+<p class="fg-since">Since 0.2.</p>
+
+```py
+Body
+```
+
+One body found by ``ml.pose()``.
+
+It has 33 named points, each an ``f.Vector`` in the source's pixels: ``body.nose``, ``body.left_shoulder``,
+``body.right_ankle`` and so on (the list is in ``ml.pose``). ``body.points`` is a dict of every name and point, in
+the model's order. ``body.score`` is how sure the model is, from 0 to 1.
+
+Left and right are the person's own sides. With a mirrored camera the left wrist is the learner's own left wrist,
+wherever it shows on the screen.
+
+| Attribute | Meaning |
+|---|---|
+| `points` | a dict of every point name and its f.Vector, in the model's order. |
+| `score` | how sure the model is, from 0 to 1. |
+
+<a id="cls-Hand"></a>
+### `Hand`
+
+<p class="fg-since">Since 0.2.</p>
+
+```py
+Hand
+```
+
+One hand found by ``ml.hand()``.
+
+It has 21 named points, each an ``f.Vector`` in the source's pixels: ``hand.wrist``, ``hand.thumb_tip``,
+``hand.index_finger_tip`` and so on (the list is in ``ml.hand``). ``hand.points`` is a dict of every name and point, in
+the model's order. ``hand.score`` is how sure the model is, from 0 to 1. A hand has no side in this version.
+
+| Attribute | Meaning |
+|---|---|
+| `points` | a dict of every point name and its f.Vector, in the model's order. |
+| `score` | how sure the model is, from 0 to 1. |
+
+<a id="cls-Words"></a>
+### `Words`
+
+<p class="fg-since">Since 0.2.</p>
+
+```py
+Words
+```
+
+The words heard by ``ml.words()``.
+
+``words.text`` is what was said, with the model's own capitals and punctuation, and is never empty. ``words.score`` (0 to 1)
+is how sure the model is. ``words.is_new`` is True in the frame the answer first shows up, and False in the frames after, so
+``if words and words.is_new:`` does something once for each thing said. ``str(words)`` is the text.
+
+| Attribute | Meaning |
+|---|---|
+| `text` | what was said, with the model's own capitals and punctuation. It is never empty. |
+| `score` | how sure the model is, from 0 to 1. |
+| `is_new` | True in the frame the answer first shows up, and False in the frames after. |
+
+<a id="cls-Guess"></a>
+### `Guess`
+
+<p class="fg-since">Since 0.2.</p>
+
+```py
+Guess
+```
+
+The name given by ``ml.guess()``: the thing taught that a picture is nearest to.
+
+``guess.name`` is the name you taught. ``guess.score`` (0 to 1) says how sure it is: 1 is fairly sure, 0.5 is a guess between
+two. It is not how often the guess is right. ``guess.next`` is the next guesses when you ask for more than one (``k``), the
+nearest first; each is a Guess too, with its own name and score and no guesses of its own. ``str(guess)`` is the name.
+
+| Attribute | Meaning |
+|---|---|
+| `name` | the name you taught. |
+| `score` | how sure it is, from 0 to 1. It is not how often the guess is right. |
+| `next` | the next guesses when you ask for more than one, the nearest first. Each is a Guess with no guesses of its own. |
+
+<a id="cls-Heard"></a>
+### `Heard`
+
+<p class="fg-since">Since 0.2.</p>
+
+```py
+Heard
+```
+
+The name of a sound, given by ``ml.sound()``.
+
+``heard.name`` is the sound's name in English, for example ``"Dog"`` or ``"Speech"``. ``heard.score`` (0 to 1) is how sure the
+model is of that name. ``heard.next`` is up to four more guesses, the likeliest first; each is a Heard too, with its own name
+and score, no guesses of its own, and ``is_new`` False. ``heard.is_new`` is True in the frame an answer first shows up, and False
+in the frames after. ``str(heard)`` is the name. The name is often a broad one, and it can be wrong.
+
+| Attribute | Meaning |
+|---|---|
+| `name` | the sound's name in English, for example "Dog" or "Speech". |
+| `score` | how sure the model is of that name, from 0 to 1. |
+| `next` | up to four more guesses, the likeliest first. Each is a Heard with no guesses of its own. |
+| `is_new` | True in the frame an answer first shows up, and False in the frames after. |
 
 <a id="constants-and-reference-tables"></a>
 ## Constants and reference tables

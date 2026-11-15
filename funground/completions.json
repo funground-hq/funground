@@ -10645,17 +10645,837 @@
   "Gradient": {
    "summary": "A blend of colours that you can use in place of a colour.",
    "url": "reference/API.md#cls-Gradient",
-   "members": []
+   "members": [
+    {
+     "name": "kind",
+     "kind": "property",
+     "signature": "kind",
+     "detail": "str",
+     "summary": "\"linear\" or \"radial\".",
+     "url": "reference/API.md#cls-Gradient"
+    },
+    {
+     "name": "points",
+     "kind": "property",
+     "signature": "points",
+     "detail": "tuple[float, ...]",
+     "summary": "x1, y1, x2, y2 for a linear gradient, and x, y, radius for a radial one.",
+     "url": "reference/API.md#cls-Gradient"
+    },
+    {
+     "name": "stops",
+     "kind": "property",
+     "signature": "stops",
+     "detail": "tuple[tuple[float, Color], ...]",
+     "summary": "a tuple of (position, colour) pairs, with positions from 0 to 1.",
+     "url": "reference/API.md#cls-Gradient"
+    }
+   ]
   },
   "Raga": {
    "summary": "One raga from funground's small table.",
    "url": "reference/API.md#cls-Raga",
-   "members": []
+   "members": [
+    {
+     "name": "name",
+     "kind": "property",
+     "signature": "name",
+     "detail": "str",
+     "summary": "the raga's name.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "thaat",
+     "kind": "property",
+     "signature": "thaat",
+     "detail": "str",
+     "summary": "the parent scale it belongs to.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "swaras",
+     "kind": "property",
+     "signature": "swaras",
+     "detail": "tuple[str, ...]",
+     "summary": "the notes it uses, as a tuple of letters such as (\"S\", \"R\", \"G\").",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "aroha",
+     "kind": "property",
+     "signature": "aroha",
+     "detail": "str",
+     "summary": "the way up, as a sargam string that sound.melody(text, sa=...) can play.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "avaroha",
+     "kind": "property",
+     "signature": "avaroha",
+     "detail": "str",
+     "summary": "the way down, as a sargam string.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "pakad",
+     "kind": "property",
+     "signature": "pakad",
+     "detail": "str",
+     "summary": "a phrase that marks the raga, as a sargam string.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "vadi",
+     "kind": "property",
+     "signature": "vadi",
+     "detail": "str",
+     "summary": "the most important swara.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "samvadi",
+     "kind": "property",
+     "signature": "samvadi",
+     "detail": "str",
+     "summary": "the second most important swara.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "time",
+     "kind": "property",
+     "signature": "time",
+     "detail": "str",
+     "summary": "the traditional time of day to perform it.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "notes",
+     "kind": "property",
+     "signature": "notes",
+     "detail": "str",
+     "summary": "where the sources differ, and other things to know.",
+     "url": "reference/API.md#cls-Raga"
+    },
+    {
+     "name": "sources",
+     "kind": "property",
+     "signature": "sources",
+     "detail": "tuple[str, ...]",
+     "summary": "a tuple of texts that say where each fact was checked.",
+     "url": "reference/API.md#cls-Raga"
+    }
+   ]
   },
   "Tala": {
    "summary": "One tala from funground's small table.",
    "url": "reference/API.md#cls-Tala",
-   "members": []
+   "members": [
+    {
+     "name": "name",
+     "kind": "property",
+     "signature": "name",
+     "detail": "str",
+     "summary": "the tala's name.",
+     "url": "reference/API.md#cls-Tala"
+    },
+    {
+     "name": "beats",
+     "kind": "property",
+     "signature": "beats",
+     "detail": "int",
+     "summary": "how many beats in one cycle.",
+     "url": "reference/API.md#cls-Tala"
+    },
+    {
+     "name": "vibhag",
+     "kind": "property",
+     "signature": "vibhag",
+     "detail": "tuple[int, ...]",
+     "summary": "the divisions, as a tuple of beat counts such as (4, 4, 4, 4).",
+     "url": "reference/API.md#cls-Tala"
+    },
+    {
+     "name": "tali",
+     "kind": "property",
+     "signature": "tali",
+     "detail": "tuple[int, ...]",
+     "summary": "the beat numbers that are claps.",
+     "url": "reference/API.md#cls-Tala"
+    },
+    {
+     "name": "khali",
+     "kind": "property",
+     "signature": "khali",
+     "detail": "tuple[int, ...]",
+     "summary": "the beat numbers that are waves (the empty beats).",
+     "url": "reference/API.md#cls-Tala"
+    },
+    {
+     "name": "sam",
+     "kind": "property",
+     "signature": "sam",
+     "detail": "int",
+     "summary": "the first beat, always 1.",
+     "url": "reference/API.md#cls-Tala"
+    },
+    {
+     "name": "bols",
+     "kind": "property",
+     "signature": "bols",
+     "detail": "tuple[str, ...]",
+     "summary": "the theka, the drum syllables, one for each beat.",
+     "url": "reference/API.md#cls-Tala"
+    },
+    {
+     "name": "notes",
+     "kind": "property",
+     "signature": "notes",
+     "detail": "str",
+     "summary": "where the sources differ, and other things to know.",
+     "url": "reference/API.md#cls-Tala"
+    },
+    {
+     "name": "sources",
+     "kind": "property",
+     "signature": "sources",
+     "detail": "tuple[str, ...]",
+     "summary": "a tuple of texts that say where each fact was checked.",
+     "url": "reference/API.md#cls-Tala"
+    }
+   ]
+  },
+  "Body": {
+   "summary": "One body found by ``ml.pose()``.",
+   "url": "reference/API.md#cls-Body",
+   "since": "0.2",
+   "members": [
+    {
+     "name": "points",
+     "kind": "property",
+     "signature": "points",
+     "detail": "dict[str, Vector]",
+     "summary": "a dict of every point name and its f.Vector, in the model's order.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "score",
+     "kind": "property",
+     "signature": "score",
+     "detail": "float",
+     "summary": "how sure the model is, from 0 to 1.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "nose",
+     "kind": "property",
+     "signature": "nose",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_eye_inner",
+     "kind": "property",
+     "signature": "left_eye_inner",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_eye",
+     "kind": "property",
+     "signature": "left_eye",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_eye_outer",
+     "kind": "property",
+     "signature": "left_eye_outer",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_eye_inner",
+     "kind": "property",
+     "signature": "right_eye_inner",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_eye",
+     "kind": "property",
+     "signature": "right_eye",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_eye_outer",
+     "kind": "property",
+     "signature": "right_eye_outer",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_ear",
+     "kind": "property",
+     "signature": "left_ear",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_ear",
+     "kind": "property",
+     "signature": "right_ear",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "mouth_left",
+     "kind": "property",
+     "signature": "mouth_left",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "mouth_right",
+     "kind": "property",
+     "signature": "mouth_right",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_shoulder",
+     "kind": "property",
+     "signature": "left_shoulder",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_shoulder",
+     "kind": "property",
+     "signature": "right_shoulder",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_elbow",
+     "kind": "property",
+     "signature": "left_elbow",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_elbow",
+     "kind": "property",
+     "signature": "right_elbow",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_wrist",
+     "kind": "property",
+     "signature": "left_wrist",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_wrist",
+     "kind": "property",
+     "signature": "right_wrist",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_pinky",
+     "kind": "property",
+     "signature": "left_pinky",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_pinky",
+     "kind": "property",
+     "signature": "right_pinky",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_index",
+     "kind": "property",
+     "signature": "left_index",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_index",
+     "kind": "property",
+     "signature": "right_index",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_thumb",
+     "kind": "property",
+     "signature": "left_thumb",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_thumb",
+     "kind": "property",
+     "signature": "right_thumb",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_hip",
+     "kind": "property",
+     "signature": "left_hip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_hip",
+     "kind": "property",
+     "signature": "right_hip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_knee",
+     "kind": "property",
+     "signature": "left_knee",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_knee",
+     "kind": "property",
+     "signature": "right_knee",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_ankle",
+     "kind": "property",
+     "signature": "left_ankle",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_ankle",
+     "kind": "property",
+     "signature": "right_ankle",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_heel",
+     "kind": "property",
+     "signature": "left_heel",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_heel",
+     "kind": "property",
+     "signature": "right_heel",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "left_foot_index",
+     "kind": "property",
+     "signature": "left_foot_index",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    },
+    {
+     "name": "right_foot_index",
+     "kind": "property",
+     "signature": "right_foot_index",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the body: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Body"
+    }
+   ]
+  },
+  "Hand": {
+   "summary": "One hand found by ``ml.hand()``.",
+   "url": "reference/API.md#cls-Hand",
+   "since": "0.2",
+   "members": [
+    {
+     "name": "points",
+     "kind": "property",
+     "signature": "points",
+     "detail": "dict[str, Vector]",
+     "summary": "a dict of every point name and its f.Vector, in the model's order.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "score",
+     "kind": "property",
+     "signature": "score",
+     "detail": "float",
+     "summary": "how sure the model is, from 0 to 1.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "wrist",
+     "kind": "property",
+     "signature": "wrist",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "thumb_cmc",
+     "kind": "property",
+     "signature": "thumb_cmc",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "thumb_mcp",
+     "kind": "property",
+     "signature": "thumb_mcp",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "thumb_ip",
+     "kind": "property",
+     "signature": "thumb_ip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "thumb_tip",
+     "kind": "property",
+     "signature": "thumb_tip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "index_finger_mcp",
+     "kind": "property",
+     "signature": "index_finger_mcp",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "index_finger_pip",
+     "kind": "property",
+     "signature": "index_finger_pip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "index_finger_dip",
+     "kind": "property",
+     "signature": "index_finger_dip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "index_finger_tip",
+     "kind": "property",
+     "signature": "index_finger_tip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "middle_finger_mcp",
+     "kind": "property",
+     "signature": "middle_finger_mcp",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "middle_finger_pip",
+     "kind": "property",
+     "signature": "middle_finger_pip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "middle_finger_dip",
+     "kind": "property",
+     "signature": "middle_finger_dip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "middle_finger_tip",
+     "kind": "property",
+     "signature": "middle_finger_tip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "ring_finger_mcp",
+     "kind": "property",
+     "signature": "ring_finger_mcp",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "ring_finger_pip",
+     "kind": "property",
+     "signature": "ring_finger_pip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "ring_finger_dip",
+     "kind": "property",
+     "signature": "ring_finger_dip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "ring_finger_tip",
+     "kind": "property",
+     "signature": "ring_finger_tip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "pinky_mcp",
+     "kind": "property",
+     "signature": "pinky_mcp",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "pinky_pip",
+     "kind": "property",
+     "signature": "pinky_pip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "pinky_dip",
+     "kind": "property",
+     "signature": "pinky_dip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    },
+    {
+     "name": "pinky_tip",
+     "kind": "property",
+     "signature": "pinky_tip",
+     "detail": "Vector",
+     "returns": "Vector",
+     "summary": "A point of the hand: an f.Vector in the source's pixels.",
+     "url": "reference/API.md#cls-Hand"
+    }
+   ]
+  },
+  "Words": {
+   "summary": "The words heard by ``ml.words()``.",
+   "url": "reference/API.md#cls-Words",
+   "since": "0.2",
+   "members": [
+    {
+     "name": "text",
+     "kind": "property",
+     "signature": "text",
+     "detail": "str",
+     "summary": "what was said, with the model's own capitals and punctuation.",
+     "url": "reference/API.md#cls-Words"
+    },
+    {
+     "name": "score",
+     "kind": "property",
+     "signature": "score",
+     "detail": "float",
+     "summary": "how sure the model is, from 0 to 1.",
+     "url": "reference/API.md#cls-Words"
+    },
+    {
+     "name": "is_new",
+     "kind": "property",
+     "signature": "is_new",
+     "detail": "bool",
+     "summary": "True in the frame the answer first shows up, and False in the frames after.",
+     "url": "reference/API.md#cls-Words"
+    }
+   ]
+  },
+  "Guess": {
+   "summary": "The name given by ``ml.guess()``: the thing taught that a picture is nearest to.",
+   "url": "reference/API.md#cls-Guess",
+   "since": "0.2",
+   "members": [
+    {
+     "name": "name",
+     "kind": "property",
+     "signature": "name",
+     "detail": "str",
+     "summary": "the name you taught.",
+     "url": "reference/API.md#cls-Guess"
+    },
+    {
+     "name": "score",
+     "kind": "property",
+     "signature": "score",
+     "detail": "float",
+     "summary": "how sure it is, from 0 to 1.",
+     "url": "reference/API.md#cls-Guess"
+    },
+    {
+     "name": "next",
+     "kind": "property",
+     "signature": "next",
+     "detail": "tuple[Guess, ...]",
+     "summary": "the next guesses when you ask for more than one, the nearest first.",
+     "url": "reference/API.md#cls-Guess"
+    }
+   ]
+  },
+  "Heard": {
+   "summary": "The name of a sound, given by ``ml.sound()``.",
+   "url": "reference/API.md#cls-Heard",
+   "since": "0.2",
+   "members": [
+    {
+     "name": "name",
+     "kind": "property",
+     "signature": "name",
+     "detail": "str",
+     "summary": "the sound's name in English, for example \"Dog\" or \"Speech\".",
+     "url": "reference/API.md#cls-Heard"
+    },
+    {
+     "name": "score",
+     "kind": "property",
+     "signature": "score",
+     "detail": "float",
+     "summary": "how sure the model is of that name, from 0 to 1.",
+     "url": "reference/API.md#cls-Heard"
+    },
+    {
+     "name": "next",
+     "kind": "property",
+     "signature": "next",
+     "detail": "tuple[Heard, ...]",
+     "summary": "up to four more guesses, the likeliest first.",
+     "url": "reference/API.md#cls-Heard"
+    },
+    {
+     "name": "is_new",
+     "kind": "property",
+     "signature": "is_new",
+     "detail": "bool",
+     "summary": "True in the frame an answer first shows up, and False in the frames after.",
+     "url": "reference/API.md#cls-Heard"
+    }
+   ]
   }
  },
  "libraries": {
@@ -10986,17 +11806,19 @@
     "name": "pose",
     "kind": "function",
     "signature": "pose(source)",
-    "detail": "(source)",
+    "detail": "(source) -> Body | None",
     "summary": "Find the body in a camera or a picture.",
-    "url": "reference/API.md#fn-ml-pose"
+    "url": "reference/API.md#fn-ml-pose",
+    "returns": "Body"
    },
    {
     "name": "hand",
     "kind": "function",
     "signature": "hand(source)",
-    "detail": "(source)",
+    "detail": "(source) -> Hand | None",
     "summary": "Find a hand in a camera or a picture.",
-    "url": "reference/API.md#fn-ml-hand"
+    "url": "reference/API.md#fn-ml-hand",
+    "returns": "Hand"
    },
    {
     "name": "person",
@@ -11011,17 +11833,19 @@
     "name": "words",
     "kind": "function",
     "signature": "words(source)",
-    "detail": "(source)",
+    "detail": "(source) -> Words | None",
     "summary": "Listen to a microphone or a sound, and give the words in it.",
-    "url": "reference/API.md#fn-ml-words"
+    "url": "reference/API.md#fn-ml-words",
+    "returns": "Words"
    },
    {
     "name": "sound",
     "kind": "function",
     "signature": "sound(source)",
-    "detail": "(source)",
+    "detail": "(source) -> Heard | None",
     "summary": "Listen to a microphone or a sound, and give the name of what it hears.",
-    "url": "reference/API.md#fn-ml-sound"
+    "url": "reference/API.md#fn-ml-sound",
+    "returns": "Heard"
    },
    {
     "name": "teach",
@@ -11035,9 +11859,10 @@
     "name": "guess",
     "kind": "function",
     "signature": "guess(source, k=1)",
-    "detail": "(source, k=1)",
+    "detail": "(source, k=1) -> Guess | None",
     "summary": "Guess what a camera or a picture shows, from the things you taught.",
-    "url": "reference/API.md#fn-ml-guess"
+    "url": "reference/API.md#fn-ml-guess",
+    "returns": "Guess"
    }
   ]
  }

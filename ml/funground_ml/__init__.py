@@ -40,7 +40,7 @@ from ._results import Body, Guess, Hand, Heard, Words
 __all__ = ["pose", "hand", "person", "words", "sound", "teach", "guess"]
 
 
-def pose(source):
+def pose(source) -> Body | None:
     """Find the body in a camera or a picture.
 
     The model finds one person. If there is no one it gives None, so ``if body:`` is enough. Calling it twice in one frame
@@ -79,7 +79,7 @@ def pose(source):
     return _tasks.find_body(source, _sketch_folder())
 
 
-def hand(source):
+def hand(source) -> Hand | None:
     """Find a hand in a camera or a picture.
 
     The model finds one hand. If there is none it gives None, so ``if hand:`` is enough. Calling it twice in one frame on
@@ -147,7 +147,7 @@ def person(source):
     return _tasks.find_person(source, _sketch_folder())
 
 
-def words(source):
+def words(source) -> Words | None:
     """Listen to a microphone or a sound, and give the words in it.
 
     It understands English. For a microphone (``sound.microphone()``, started) funground cuts what it hears into phrases: a phrase
@@ -189,7 +189,7 @@ def words(source):
     return _tasks.find_words(source, _sketch_folder())
 
 
-def sound(source):
+def sound(source) -> Heard | None:
     """Listen to a microphone or a sound, and give the name of what it hears.
 
     It names everyday sounds, such as a dog, a whistle, clapping, a car or speech. For a microphone (``sound.microphone()``,
@@ -278,7 +278,7 @@ def teach(name, source=None, model=None):
     return _teach.teach(name, source, model, _sketch_folder())
 
 
-def guess(source, k=1):
+def guess(source, k=1) -> Guess | None:
     """Guess what a camera or a picture shows, from the things you taught.
 
     You get a Guess. ``guess.name`` is the name you taught that the picture is most like. ``guess.score`` (0 to 1) says how sure

@@ -39,6 +39,8 @@ class _Points:
     """The part a Body and a Hand share: named points as attributes, ``points``, ``score`` and a helpful error."""
 
     _names: tuple = ()
+    points: dict[str, Vector]
+    score: float
 
     def __init__(self, points: dict[str, Vector], score: float) -> None:
         self.points = points
@@ -70,6 +72,10 @@ class Body(_Points):
 
     Left and right are the person's own sides. With a mirrored camera the left wrist is the learner's own left wrist,
     wherever it shows on the screen.
+
+    Attributes:
+        points: a dict of every point name and its f.Vector, in the model's order.
+        score: how sure the model is, from 0 to 1.
     """
 
     _names = BODY_NAMES
@@ -97,6 +103,10 @@ class Hand(_Points):
     It has 21 named points, each an ``f.Vector`` in the source's pixels: ``hand.wrist``, ``hand.thumb_tip``,
     ``hand.index_finger_tip`` and so on (the list is in ``ml.hand``). ``hand.points`` is a dict of every name and point, in
     the model's order. ``hand.score`` is how sure the model is, from 0 to 1. A hand has no side in this version.
+
+    Attributes:
+        points: a dict of every point name and its f.Vector, in the model's order.
+        score: how sure the model is, from 0 to 1.
     """
 
     _names = HAND_NAMES
@@ -113,7 +123,16 @@ class Words:
     ``words.text`` is what was said, with the model's own capitals and punctuation, and is never empty. ``words.score`` (0 to 1)
     is how sure the model is. ``words.is_new`` is True in the frame the answer first shows up, and False in the frames after, so
     ``if words and words.is_new:`` does something once for each thing said. ``str(words)`` is the text.
+
+    Attributes:
+        text: what was said, with the model's own capitals and punctuation. It is never empty.
+        score: how sure the model is, from 0 to 1.
+        is_new: True in the frame the answer first shows up, and False in the frames after.
     """
+
+    text: str
+    score: float
+    is_new: bool
 
     def __init__(self, text: str, score: float, is_new: bool = False) -> None:
         self.text = text
@@ -134,7 +153,16 @@ class Guess:
     ``guess.name`` is the name you taught. ``guess.score`` (0 to 1) says how sure it is: 1 is fairly sure, 0.5 is a guess between
     two. It is not how often the guess is right. ``guess.next`` is the next guesses when you ask for more than one (``k``), the
     nearest first; each is a Guess too, with its own name and score and no guesses of its own. ``str(guess)`` is the name.
+
+    Attributes:
+        name: the name you taught.
+        score: how sure it is, from 0 to 1. It is not how often the guess is right.
+        next: the next guesses when you ask for more than one, the nearest first. Each is a Guess with no guesses of its own.
     """
+
+    name: str
+    score: float
+    next: tuple[Guess, ...]
 
     def __init__(self, name: str, score: float, next: tuple["Guess", ...] = ()) -> None:
         self.name = name
@@ -156,7 +184,18 @@ class Heard:
     model is of that name. ``heard.next`` is up to four more guesses, the likeliest first; each is a Heard too, with its own name
     and score, no guesses of its own, and ``is_new`` False. ``heard.is_new`` is True in the frame an answer first shows up, and False
     in the frames after. ``str(heard)`` is the name. The name is often a broad one, and it can be wrong.
+
+    Attributes:
+        name: the sound's name in English, for example "Dog" or "Speech".
+        score: how sure the model is of that name, from 0 to 1.
+        next: up to four more guesses, the likeliest first. Each is a Heard with no guesses of its own.
+        is_new: True in the frame an answer first shows up, and False in the frames after.
     """
+
+    name: str
+    score: float
+    next: tuple[Heard, ...]
+    is_new: bool
 
     def __init__(self, name: str, score: float, next: tuple["Heard", ...] = (), is_new: bool = False) -> None:
         self.name = name

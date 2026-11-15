@@ -12,6 +12,7 @@ The output is fully deterministic: fixed order, no dates.
 Docstring format (parsed by parse_doc below; tests/test_api_docs.py holds the rules):
     Summary sentence.            blank line, prose
     Arguments:   x, y: text      (indented entries, continuation lines indented more)
+    Attributes:  x: text         (a class's data, in the same form as Arguments: the parts of a Gradient, a Raga, a Body)
     Returns:     text
     Raises:      ValueError: text
     Example:     code
@@ -77,7 +78,7 @@ LLMS_LINKS = [
     ("Examples Gallery", "docs/gallery/README.md", "a small, tested sketch for every feature"),
 ]
 
-SECTIONS = ("Arguments", "Returns", "Raises", "Example")
+SECTIONS = ("Arguments", "Attributes", "Returns", "Raises", "Example")
 
 # Every name in funground._PUBLIC_NAMES must be in exactly one group (live values are documented in their own section).
 GROUPS: dict[str, list[str]] = {
@@ -239,13 +240,13 @@ WORD_MEANINGS: dict[str, list[tuple[str, dict[str, str]]]] = {
     "Mark.place": [("anchor", marks.ANCHOR_MEANINGS)],
 }
 
-HEADER = re.compile(r"^(Arguments|Returns|Raises|Example):\s*$")
+HEADER = re.compile(r"^(Arguments|Attributes|Returns|Raises|Example):\s*$")
 SEE_ALSO = re.compile(r"^See also:\s*(.*)$")
 
 
 def parse_doc(doc: str | None) -> dict:
     """Split a docstring into summary, prose, sections, see-also. Missing sections are empty."""
-    result = {"summary": "", "prose": "", "Arguments": "", "Returns": "", "Raises": "", "Example": "", "see": []}
+    result = {"summary": "", "prose": "", "Arguments": "", "Attributes": "", "Returns": "", "Raises": "", "Example": "", "see": []}
     if not doc:
         return result
     lines = inspect.cleandoc(doc).splitlines()
@@ -326,12 +327,35 @@ def all_classes() -> list[tuple[str, type]]:
         if inspect.isclass(obj) and obj not in seen and name not in NAMESPACE_NAMES:
             seen.add(obj)
             found.append((obj.__name__, obj))
+    found += [(cls.__name__, cls) for cls in ML_RESULTS]
     return found
 
 
+# What the models library's functions give back. They are not exported (nobody builds one), so they are not in api_classes.txt;
+# they are listed here so that an editor knows what `body = ml.pose(cam)` holds. A result is data, not methods: its points
+# and scores are listed (from its Attributes: section and its _names), and its constructors are left out.
+ML_RESULTS = [getattr(_ml, name) for name in ("Body", "Hand", "Words", "Guess", "Heard")]
+
+
+def class_attributes(cls: type) -> list[tuple[str, str, str]]:
+    """(name, type, text) for each entry of the class's ``Attributes:`` section, in the order written. The type is the
+    class's annotation of the name ("" if it has none)."""
+    annotations: dict[str, object] = {}
+    for klass in reversed(cls.__mro__):
+        annotations.update(vars(klass).get("__annotations__", {}))
+    out = []
+    for names, text in parse_arguments(parse_doc(cls.__doc__)["Attributes"]):
+        for name in names:
+            kept = annotations.get(name, "")
+            out.append((name, kept.replace("'", "").replace('"', "") if isinstance(kept, str) else "", text))
+    return out
+
+
 def public_members(cls: type) -> list[tuple[str, object]]:
-    """Public methods and properties, own and inherited (not from object), sorted by name."""
+    """Public methods and properties, own and inherited (not from object), sorted by name. A models result has none."""
     out: dict[str, object] = {}
+    if cls in ML_RESULTS:
+        return []
     for klass in reversed(cls.__mro__):
         if klass is object:
             continue
@@ -720,7 +744,7 @@ def build() -> str:
         p.add("*(The class list, docs/reference/api_classes.txt, is not written yet.)*", "")
     for name, cls in classes:
         try:
-            sig = signature_text("", name, cls)
+            sig = name if cls in ML_RESULTS else signature_text("", name, cls)   # a result is not built by hand
         except Exception:
             sig = f"{name}(...)"
         d = parse_doc(cls.__doc__)
@@ -732,6 +756,11 @@ def build() -> str:
         if d["Arguments"]:
             p.add("| Argument | Meaning |", "|---|---|")
             for names, text in parse_arguments(d["Arguments"]):
+                p.add(f"| {', '.join('`' + n + '`' for n in names)} | {esc(text)} |")
+            p.add("")
+        if d["Attributes"]:
+            p.add("| Attribute | Meaning |", "|---|---|")
+            for names, text in parse_arguments(d["Attributes"]):
                 p.add(f"| {', '.join('`' + n + '`' for n in names)} | {esc(text)} |")
             p.add("")
         if d["Example"]:
@@ -882,8 +911,21 @@ def returned_class(annotation, doc: str | None, class_set: set[str]) -> str | No
 
 
 def class_members(cls: type, class_set: set[str]) -> list[dict]:
-    """The methods and properties of a class, as editors suggest them after ``object.`` (the order of the reference)."""
+    """The methods and properties of a class, as editors suggest them after ``object.`` (the order of the reference).
+    The class's documented attributes come first, as properties; a models result then lists its named points."""
     members = []
+    url = f"reference/API.md#cls-{cls.__name__}"
+    for name, kept, text in class_attributes(cls):
+        entry = {"name": name, "kind": "property", "signature": name, "detail": learner_types(kept),
+                 "summary": first_sentence(" ".join(text.split())), "url": url}
+        returns = returned_class(kept, None, class_set)
+        if returns:
+            entry["returns"] = returns
+        members.append(entry)
+    if cls in ML_RESULTS:                                   # the points are attributes made from _names, each an f.Vector
+        members += [{"name": name, "kind": "property", "signature": name, "detail": "Vector", "returns": "Vector",
+                     "summary": f"A point of the {cls.__name__.lower()}: an f.Vector in the source's pixels.", "url": url}
+                    for name in getattr(cls, "_names", ())]
     for name, member in public_members(cls):
         is_property = isinstance(member, property)
         function = member.fget if is_property else member

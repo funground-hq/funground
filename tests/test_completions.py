@@ -143,3 +143,31 @@ def test_members_are_signed_without_self_and_chain_by_what_they_return():
     assert camera["width"]["kind"] == "property" and camera["record"]["returns"] == "Clip"
     assert camera["picture"]["returns"] == "Picture"          # from the Returns text: the method has no annotation
     assert "self" not in camera["start"]["detail"]
+
+
+def test_the_models_functions_name_the_result_they_give_back():
+    ml = {e["name"]: e for e in data()["libraries"]["ml"]}
+    assert {n: ml[n]["returns"] for n in ("pose", "hand", "words", "sound", "guess")} == \
+        {"pose": "Body", "hand": "Hand", "words": "Words", "sound": "Heard", "guess": "Guess"}
+    assert set(data()["classes"]) >= {"Body", "Hand", "Words", "Guess", "Heard"}
+    assert not {"Body", "Hand", "Words", "Guess", "Heard"} & set(entries())      # results are not public names
+
+
+def test_the_models_results_list_their_points_and_scores():
+    classes = data()["classes"]
+    body = {m["name"]: m for m in classes["Body"]["members"]}
+    assert body["left_wrist"]["returns"] == "Vector" and body["score"]["detail"] == "float" and "points" in body
+    assert len(body) == 35 and len(classes["Hand"]["members"]) == 23
+    assert {m["name"] for m in classes["Words"]["members"]} == {"text", "score", "is_new"}
+    assert {m["name"] for m in classes["Guess"]["members"]} == {"name", "score", "next"}
+    assert {m["name"] for m in classes["Heard"]["members"]} == {"name", "score", "next", "is_new"}
+
+
+def test_gradient_raga_and_tala_list_their_documented_attributes():
+    classes = data()["classes"]
+    assert [m["name"] for m in classes["Gradient"]["members"]] == ["kind", "points", "stops"]
+    raga = {m["name"]: m for m in classes["Raga"]["members"]}
+    assert {"name", "thaat", "swaras", "aroha", "vadi", "samvadi", "time"} <= set(raga)
+    assert raga["swaras"]["detail"] == "tuple[str, ...]" and raga["thaat"]["kind"] == "property"
+    tala = {m["name"] for m in classes["Tala"]["members"]}
+    assert {"name", "beats", "vibhag", "tali", "khali", "sam", "bols"} <= tala
