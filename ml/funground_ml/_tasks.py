@@ -31,7 +31,7 @@ def find_body(source: object, base_dir: str | None) -> Body | None:
 
     def make(frame: _source.Frame, state: _source._State) -> Body | None:
         paths = _fetch.ensure("pose", base_dir, who)
-        detector, landmark_model = _runtime.session(paths["detector"]), _runtime.session(paths["landmarks"])
+        detector, landmark_model = _runtime.session(paths["detector"], "pose"), _runtime.session(paths["landmarks"], "pose")
         image = frame.image()
 
         def detect_region():
@@ -56,7 +56,7 @@ def find_hand(source: object, base_dir: str | None) -> Hand | None:
 
     def make(frame: _source.Frame, state: _source._State) -> Hand | None:
         paths = _fetch.ensure("hand", base_dir, who)
-        detector, landmark_model = _runtime.session(paths["detector"]), _runtime.session(paths["landmarks"])
+        detector, landmark_model = _runtime.session(paths["detector"], "hand"), _runtime.session(paths["landmarks"], "hand")
         image = frame.image()
 
         def detect_region():
@@ -84,7 +84,7 @@ def find_person(source: object, base_dir: str | None) -> Picture | None:
     from . import _fetch, _glue, _runtime
 
     def make(frame: _source.Frame, state: _source._State) -> Picture:
-        session = _runtime.session(_fetch.ensure("person", base_dir, who)["model"])
+        session = _runtime.session(_fetch.ensure("person", base_dir, who)["model"], "person")
         return frame.picture._masked_copy(_glue.person_mask(session, frame.image()), _glue.MASK_SIZE, _glue.MASK_SIZE)
 
     return _source.answer(source, "person", who, make)

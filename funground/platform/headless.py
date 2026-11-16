@@ -108,5 +108,8 @@ class HeadlessPlatform:
             raise ValueError(f"unsupported pixel format {p.format}")
         return ((p.width, p.height), rgb)
 
+    def show_wait(self, text: str | None) -> None:
+        """No window: nothing to show."""
+
     def close(self) -> None:
         self._last = None

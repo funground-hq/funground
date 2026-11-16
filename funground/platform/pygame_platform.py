@@ -378,6 +378,17 @@ class PygamePlatform:
         canvas = self._screen if size == self._screen.get_size() else self._screen.subsurface((0, 0, *size))
         return (size, pygame.image.tobytes(canvas, "RGB"))
 
+    def show_wait(self, text: str | None) -> None:
+        """Put a library's wait after the sketch's title (None: the title alone) and keep the window answering."""
+        if self._screen is None:
+            return                                  # no window yet: nothing to show or to keep alive
+        title = self._title if text is None else f"{self._title} - {text}"
+        if self._window is not None:
+            self._window.title = title
+        else:
+            pygame.display.set_caption(title)
+        pygame.event.pump()                         # without it Windows marks a busy window "Not Responding"
+
     def close(self) -> None:
         # The display surface dies with pygame.quit(); forget it so a later
         # run creates a fresh window (v0.5 defect, fixed in Sprint 0).

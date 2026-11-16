@@ -9,17 +9,20 @@ from __future__ import annotations
 import hashlib
 import os
 import socket
+import time
 from http.client import HTTPException
 from importlib import metadata
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+from . import _wait
 from ._models import MODELS, ROLES, SAYS, TASKS, Model
 
 FOLDER_NAME = "models"
 ENVIRONMENT = "FUNGROUND_ML_MODELS"
 TIMEOUT = 30.0              # seconds to wait for the site, each time it is asked for more
 CHUNK = 1 << 20
+TITLE_EVERY = 0.25          # seconds between two updates of the window's title while a file arrives
 
 _open = urlopen             # tests put a local opener here: no unit test uses the network
 _checked: set[tuple[str, str]] = set()      # (folder, file) pairs whose checksum was verified in this process
@@ -72,8 +75,30 @@ def _offline(who: str, model: Model, reason: str, folder_word: str) -> str:
             f"Run the sketch once while online; after that funground uses the copy in {folder_word}/.")
 
 
-def _download(model: Model, target: str, who: str, folder_word: str) -> None:
-    """Fetch *model* into *target*, checked, or raise. Nothing is left under a temporary name."""
+class _Progress:
+    """Tells the sketch how far a task's download has come, at most ``TITLE_EVERY`` seconds apart (the window's title, D-149)."""
+
+    def __init__(self, word: str, total: int) -> None:
+        self._word, self._total = word, total
+        self._done = 0              # bytes of the files that are finished
+        self._last = float("-inf")
+
+    def __call__(self, received: int) -> None:
+        """*received* bytes of the current file have arrived."""
+        now = time.monotonic()
+        if now - self._last >= TITLE_EVERY:
+            self._last = now
+            done = _megabytes(self._done + received)
+            _wait.progress(f"Downloading the {self._word} model: {done} of {_megabytes(self._total)} MB")
+
+    def file_done(self, size: int) -> None:
+        self._done += size
+
+
+def _download(model: Model, target: str, who: str, folder_word: str, report=None) -> None:
+    """Fetch *model* into *target*, checked, or raise. Nothing is left under a temporary name.
+
+    *report*, when given, is called with the bytes received so far after each chunk."""
     temporary = target + ".part"
     digest, received = hashlib.sha256(), 0
     request = Request(model.url, headers={"User-Agent": f"funground-ml/{_version()}"})
@@ -85,6 +110,8 @@ def _download(model: Model, target: str, who: str, folder_word: str) -> None:
                     break
                 digest.update(chunk)
                 out.write(chunk)
+                if report is not None:
+                    report(received)
         if received != model.size or digest.hexdigest() != model.sha256:
             raise ValueError(f"{who}: the file downloaded for the {_words(model)} is not the one funground expects "
                              "(its checksum is different), so it was not kept. Try again. If it keeps happening, "
@@ -127,7 +154,10 @@ def ensure(task: str, base_dir: str | None, who: str) -> dict[str, str]:
         print(f"Downloading the {SAYS.get(task, task)} model, {_megabytes(total)} MB, once. "
               f"After that funground uses the copy in {folder_word}/.")
         os.makedirs(folder, exist_ok=True)
-        for model in missing:
-            _download(model, os.path.join(folder, model.local_name), who, folder_word)
-            _checked.add((folder, model.local_name))
+        progress = _Progress(SAYS.get(task, task), total)
+        with _wait.waiting(f"Downloading the {SAYS.get(task, task)} model"):
+            for model in missing:
+                _download(model, os.path.join(folder, model.local_name), who, folder_word, progress)
+                progress.file_done(model.size)
+                _checked.add((folder, model.local_name))
     return paths

@@ -388,7 +388,7 @@ def test_the_download_line_names_the_words_model_and_its_true_size(monkeypatch, 
     kept = tmp_path / "kept"
     monkeypatch.setenv(_fetch.ENVIRONMENT, str(kept))
     monkeypatch.setattr(_fetch, "_checked", set())
-    monkeypatch.setattr(_fetch, "_download", lambda model, target, who, folder_word: None)
+    monkeypatch.setattr(_fetch, "_download", lambda *args: None)
     paths = _fetch.ensure("words", None, "ml.words()")
     assert set(paths) == {"encoder", "decoder", "vocabulary"}
     assert capsys.readouterr().out == f"Downloading the words model, 42 MB, once. After that funground uses the copy in {kept}/.\n"
