@@ -67,6 +67,10 @@ def open(name: str | None = None) -> Camera:
         cam.start()
         f.image(cam, 0, 0)
 
+    Blocks:
+        plain: Turn on the camera.
+        also: webcam, video, photo, record, selfie, live
+
     See also: names, load_clip, image, load_image
     """
     return _device.make(name, canvas_sketch)
@@ -82,6 +86,9 @@ def names() -> list[str]:
 
     Example:
         print(camera.names())
+
+    Blocks:
+        also: list cameras, webcams, devices, which camera
 
     See also: open
     """
@@ -110,6 +117,11 @@ def load_clip(path: str) -> Clip:
     Example:
         take = camera.load_clip("take.gif")
         f.image(take.frame(f.frame_count % len(take)), 0, 0)
+
+    Blocks:
+        plain: Open an animated picture file so you can play it.
+        also: gif, animation, video file, movie, open clip
+        kinds: path=file
 
     See also: open, load_image
     """

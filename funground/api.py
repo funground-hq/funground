@@ -45,6 +45,9 @@ LIVE_DOCS: dict[str, str] = {
 
     Example:
         f.circle(f.width / 2, f.height / 2, 80)
+
+    Blocks:
+        also: canvas width, wide, across, screen width
     """,
     "height": """The height of the canvas, in pixels.
 
@@ -52,6 +55,9 @@ LIVE_DOCS: dict[str, str] = {
 
     Example:
         f.line(0, f.height, f.width, 0)
+
+    Blocks:
+        also: canvas height, tall, up and down, screen height
     """,
     "mouse_x": """The mouse's x position over the canvas, in pixels from the left edge.
 
@@ -59,6 +65,9 @@ LIVE_DOCS: dict[str, str] = {
 
     Example:
         f.circle(f.mouse_x, f.mouse_y, 30)
+
+    Blocks:
+        also: mouse, cursor, pointer, across
     """,
     "mouse_y": """The mouse's y position over the canvas, in pixels from the top edge.
 
@@ -66,6 +75,9 @@ LIVE_DOCS: dict[str, str] = {
 
     Example:
         f.circle(f.mouse_x, f.mouse_y, 30)
+
+    Blocks:
+        also: mouse, cursor, pointer, up and down
     """,
     "pmouse_x": """Where the mouse's x was in the previous frame, in pixels.
 
@@ -104,6 +116,9 @@ LIVE_DOCS: dict[str, str] = {
     Example:
         if f.key == "r":
             f.background("white")
+
+    Blocks:
+        also: keyboard, key pressed, letter, typed
     """,
     "key_code": """The code of the last key that was pressed or released.
 
@@ -126,6 +141,9 @@ LIVE_DOCS: dict[str, str] = {
 
     Example:
         f.rotate(f.frame_count * 3)
+
+    Blocks:
+        also: frames, counter, time, ticks
     """,
     "delta_time": """The seconds that the previous frame took.
 
@@ -349,6 +367,11 @@ def size(width: int | PageName | str, height: int | None = None, *, title: str =
     Example:
         f.size("A4", margin=f.mm(15))
 
+    Blocks:
+        plain: Set how big the drawing area is.
+        also: canvas, window, resolution, screen, dimensions
+        kinds: width=pixels, height=pixels
+
     See also: ground, grid, run, resize_canvas, full_screen, page_size
     """
     refuse_in_mark("f.size()")
@@ -371,6 +394,10 @@ def run(*, fps: int | None = None, max_frames: int | None = None) -> None:
     Example:
         f.run(max_frames=300)
 
+    Blocks:
+        plain: Start the sketch and keep drawing, frame after frame.
+        also: start, play, go, begin, loop
+
     See also: size, stop, no_loop
     """
     caller = inspect.currentframe()
@@ -388,6 +415,10 @@ def show() -> None:
         f.size(400, 300)
         f.circle(200, 150, 100)
         f.show()
+
+    Blocks:
+        plain: Open a window to see what you drew.
+        also: open, window, display, view, preview
 
     See also: size, new_page, save
     """
@@ -512,6 +543,10 @@ def grid(cols: int, rows: int, *, gutter: float | tuple = 0, area: object = None
             f.circle(cell.cx, cell.cy, cell.width * 0.8)
         g.show()
 
+    Blocks:
+        plain: Cut an area into rows and columns of equal boxes.
+        also: table, rows, columns, cells, layout
+
     See also: area, ground, size, mm
     """
     from .surface import make_grid
@@ -534,6 +569,9 @@ def mm(n: float) -> float:
 
     Example:
         f.size("A4", margin=f.mm(15))
+
+    Blocks:
+        also: millimetres, millimeters, print size, paper size
 
     See also: inch, size, grid
     """
@@ -747,6 +785,10 @@ def save(path: str, *, text: SaveText = "live", bleed: float = 0, marks: bool = 
         f.save("poster.pdf", bleed=f.mm(3), marks=True)
         f.save("poster.png", dpi=300)
 
+    Blocks:
+        also: export, download, png, pdf, picture
+        kinds: path=file
+
     See also: save_frames, save_gif, save_movie, new_page, mm
     """
     refuse_in_mark("f.save()")
@@ -900,6 +942,9 @@ def background(color: Color, *more: float) -> None:
         f.background("white")
         f.background(30, 30, 60)
 
+    Blocks:
+        also: paper, wipe, backdrop, sky, colour
+
     See also: clear, fill, color_mode
     """
     if _exploring.in_cell():                      # S-132 Play: in a variations cell it paints the cell's ground
@@ -921,6 +966,10 @@ def circle(x: float, y: float, diameter: float) -> None:
     Example:
         f.circle(200, 150, 80)
 
+    Blocks:
+        also: round, ball, dot, oval
+        kinds: x=pixels, y=pixels, diameter=pixels
+
     See also: ellipse, ellipse_mode, fill, stroke
     """
     active_sketch().circle(x, y, diameter)
@@ -938,6 +987,10 @@ def ellipse(x: float, y: float, width: float, height: float) -> None:
 
     Example:
         f.ellipse(220, 80, 100, 50)
+
+    Blocks:
+        also: oval, egg, round, squashed circle
+        kinds: x=pixels, y=pixels, width=pixels, height=pixels
 
     See also: circle, ellipse_mode, arc
     """
@@ -958,6 +1011,10 @@ def rect(x: float, y: float, width: float, height: float, *radii: float) -> None
     Example:
         f.rect(40, 160, 120, 60)
         f.rect(40, 240, 120, 60, 12)
+
+    Blocks:
+        also: rectangle, box, square, block, bar
+        kinds: x=pixels, y=pixels, width=pixels, height=pixels
 
     See also: square, rect_mode, fill, stroke
     """
@@ -1035,6 +1092,10 @@ def line(x1: float, y1: float, x2: float, y2: float) -> None:
     Example:
         f.line(220, 160, 340, 220)
 
+    Blocks:
+        also: segment, connect, join, stick
+        kinds: x1=pixels, y1=pixels, x2=pixels, y2=pixels
+
     See also: stroke, stroke_width, point
     """
     active_sketch().line(x1, y1, x2, y2)
@@ -1051,6 +1112,10 @@ def point(x: float, y: float) -> None:
     Example:
         f.stroke_width(6)
         f.point(400, 100)
+
+    Blocks:
+        also: dot, pixel, spot, speck
+        kinds: x=pixels, y=pixels
 
     See also: line, stroke, stroke_width
     """
@@ -1087,6 +1152,10 @@ def triangle(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float) -
 
     Example:
         f.triangle(10, 90, 90, 90, 50, 10)
+
+    Blocks:
+        also: three corners, three sides, pointy, arrow
+        kinds: x1=pixels, y1=pixels, x2=pixels, y2=pixels, x3=pixels, y3=pixels
 
     See also: quad, polygon
     """
@@ -1148,6 +1217,11 @@ def arc(x: float, y: float, width: float, height: float, start: float, stop: flo
     Example:
         f.arc(100, 100, 80, 80, 0, 270, "pie")
 
+    Blocks:
+        plain: Draw a curved piece of an oval, from one angle to another.
+        also: curve, pie, slice, part of circle, bow
+        kinds: x=pixels, y=pixels, width=pixels, height=pixels, start=angle, stop=angle
+
     See also: ellipse, ellipse_mode
     """
     active_sketch().arc(x, y, width, height, start, stop, mode)
@@ -1178,6 +1252,10 @@ def text(message: object, x: float, y: float, color: Color | None = None) -> Non
         f.fill("black")
         f.text("Hello", 30, 40)
         f.text(f.frame_count, 30, 80, color="navy")
+
+    Blocks:
+        also: say, print, write, words, label, type
+        kinds: x=pixels, y=pixels
 
     See also: text_size, text_align, text_width, text_box, text_font, FormattedString
     """
@@ -1295,6 +1373,10 @@ def text_align(horizontal: TextAlignX, vertical: TextAlignY | None = None) -> No
         f.text_align("center", "center")
         f.text("Middle", f.width / 2, f.height / 2)
 
+    Blocks:
+        plain: Choose which side of the point the text sits on.
+        also: centre, center, left, right, middle
+
     See also: text, text_box, text_width
     """
     active_sketch().text_align(horizontal, vertical)
@@ -1363,6 +1445,10 @@ def text_box(message: object, x: float, y: float, width: float, height: float | 
     Example:
         rest = f.text_box("A long story that wraps inside a box.", 20, 60, 280, 100)
 
+    Blocks:
+        also: paragraph, wrap, text area, wrap text
+        kinds: x=pixels, y=pixels, width=pixels, height=pixels
+
     See also: text, text_align, text_width, text_leading, FormattedString
     """
     return active_sketch().text_box(message, x, y, width, height, color)
@@ -1382,6 +1468,9 @@ def text_width(message: object) -> float:
     Example:
         msg = "Hello"
         f.text(msg, (f.width - f.text_width(msg)) / 2, 100)
+
+    Blocks:
+        also: measure text, how wide, text length
 
     See also: text, text_size, text_align
     """
@@ -1540,6 +1629,11 @@ def linear_gradient(x1: float, y1: float, x2: float, y2: float, colors: Any, sto
         f.fill(f.linear_gradient(0, 0, 200, 0, ["red", "blue"]))
         f.rect(0, 0, 200, 100)
 
+    Blocks:
+        plain: Make a colour that fades from one to another along a line.
+        also: fade, blend, rainbow, ramp, colour mix
+        kinds: x1=pixels, y1=pixels, x2=pixels, y2=pixels
+
     See also: radial_gradient, fill, lerp_color
     """
     from .paint import linear_gradient as make
@@ -1629,6 +1723,11 @@ def opacity(amount: float) -> None:
     Example:
         f.opacity(128)
 
+    Blocks:
+        plain: Make what you draw next see-through.
+        also: transparent, see-through, fade, alpha, ghost
+        kinds: amount=range(0, 255, 1)
+
     See also: blend_mode, fill, tint
     """
     active_sketch().opacity(amount)
@@ -1679,6 +1778,11 @@ def lerp_color(c1: Color, c2: Color, amount: float) -> Color:
     Example:
         f.fill(f.lerp_color("red", "blue", 0.5))
 
+    Blocks:
+        plain: Mix two colours and give back the colour in between.
+        also: mix, blend, between colours, gradient, fade
+        kinds: amount=range(0, 1, 0.01)
+
     See also: color, lerp, linear_gradient
     """
     from .color import Color as _Color
@@ -1702,6 +1806,9 @@ def fill(color: Color, *more: float) -> None:
         f.fill("gold")
         f.fill(255, 99, 71, 128)
 
+    Blocks:
+        also: color, colour, paint, inside, shade
+
     See also: no_fill, stroke, color_mode, linear_gradient
     """
     active_sketch().fill(color, *more)
@@ -1715,6 +1822,10 @@ def no_fill() -> None:
     Example:
         f.no_fill()
         f.circle(100, 100, 50)
+
+    Blocks:
+        plain: Draw shapes with nothing inside, only their outlines.
+        also: empty, hollow, see-through, outline only
 
     See also: fill, no_stroke
     """
@@ -1736,6 +1847,9 @@ def stroke(color: Color, *more: float) -> None:
     Example:
         f.stroke("navy")
 
+    Blocks:
+        also: outline, border, edge, pen, line colour
+
     See also: no_stroke, stroke_width, fill
     """
     active_sketch().stroke(color, *more)
@@ -1749,6 +1863,10 @@ def no_stroke() -> None:
     Example:
         f.no_stroke()
         f.circle(100, 100, 50)
+
+    Blocks:
+        plain: Stop drawing outlines around shapes.
+        also: no outline, no border, hide outline, no line
 
     See also: stroke, no_fill
     """
@@ -1768,6 +1886,10 @@ def stroke_width(pixels: int) -> None:
 
     Example:
         f.stroke_width(3)
+
+    Blocks:
+        also: thickness, thick, line width, border size, pen size
+        kinds: pixels=pixels
 
     See also: stroke, stroke_cap, stroke_join, stroke_dash
     """
@@ -1894,6 +2016,10 @@ def text_size(size: float) -> None:
     Example:
         f.text_size(28)
 
+    Blocks:
+        also: font size, bigger text, letters, big, small
+        kinds: size=pixels
+
     See also: text, text_width, text_font, text_leading
     """
     active_sketch().text_size(size)
@@ -1982,6 +2108,9 @@ def text_style(style: TextStyle) -> None:
 
     Example:
         f.text_style("bold")
+
+    Blocks:
+        also: bold, italic, font style, slanted
 
     See also: text_font, text_size
     """
@@ -2094,6 +2223,10 @@ def translate(dx: float, dy: float) -> None:
     Example:
         f.translate(f.width / 2, f.height / 2)
 
+    Blocks:
+        also: move, shift, slide, offset, origin
+        kinds: dx=pixels, dy=pixels
+
     See also: rotate, scale, push, pop
     """
     active_sketch().translate(dx, dy)
@@ -2111,6 +2244,11 @@ def rotate(degrees: float) -> None:
         f.translate(200, 150)
         f.rotate(45)
         f.rect(-40, -25, 80, 50)
+
+    Blocks:
+        plain: Turn everything you draw next, by a number of degrees.
+        also: turn, spin, twist, tilt, angle, rotation
+        kinds: degrees=angle
 
     See also: translate, scale, radians, push
     """
@@ -2133,6 +2271,10 @@ def scale(sx: float, sy: float | None = None) -> None:
         f.scale(2)
         f.scale(2, 1)
 
+    Blocks:
+        plain: Make everything you draw next bigger or smaller.
+        also: grow, shrink, zoom, bigger, smaller, resize
+
     See also: translate, rotate, push
     """
     active_sketch().scale(sx, sy)
@@ -2149,6 +2291,11 @@ def shear_x(degrees: float) -> None:
     Example:
         f.shear_x(20)
 
+    Blocks:
+        plain: Slant everything you draw next sideways.
+        also: slant, lean, skew, tilt
+        kinds: degrees=angle
+
     See also: shear_y, apply_matrix
     """
     active_sketch().shear_x(degrees)
@@ -2161,6 +2308,11 @@ def shear_y(degrees: float) -> None:
 
     Arguments:
         degrees: the slant, in degrees.
+
+    Blocks:
+        plain: Slant everything you draw next up or down.
+        also: slant, lean, skew, tilt
+        kinds: degrees=angle
 
     See also: shear_x, apply_matrix
     """
@@ -2205,6 +2357,10 @@ def push() -> None:
         f.rect(0, 0, 80, 40)
         f.pop()
 
+    Blocks:
+        plain: Remember the style and position, so you can come back to them.
+        also: remember, store, keep style, checkpoint
+
     See also: pop, saved_state
     """
     active_sketch().push()
@@ -2214,6 +2370,10 @@ def pop() -> None:
     """Restore the transform and style saved by the last push().
 
     A pop() with nothing to restore prints a warning and is ignored.
+
+    Blocks:
+        plain: Go back to the style and position you saved with push().
+        also: restore, undo, go back, end
 
     See also: push, saved_state
     """
@@ -2232,6 +2392,10 @@ def saved_state() -> AbstractContextManager[None]:
         with f.saved_state():
             f.rotate(30)
             f.rect(0, 0, 80, 40)
+
+    Blocks:
+        plain: Do some drawing, then put the style back as it was.
+        also: remember, restore, keep style, push pop
 
     See also: push, pop
     """
@@ -2254,6 +2418,10 @@ def begin_shape() -> None:
         f.vertex(60, 90)
         f.end_shape(close=True)
 
+    Blocks:
+        plain: Start a shape that you build one corner at a time.
+        also: start shape, polygon, custom shape, corners
+
     See also: vertex, end_shape, begin_contour
     """
     active_sketch().begin_shape()
@@ -2267,6 +2435,10 @@ def vertex(x: float, y: float) -> None:
 
     Raises:
         RuntimeError: there is no begin_shape() before it.
+
+    Blocks:
+        also: corner, point, add point, polygon point
+        kinds: x=pixels, y=pixels
 
     See also: begin_shape, end_shape, bezier_vertex
     """
@@ -2502,6 +2674,9 @@ def end_shape(close: bool = False) -> None:
     Example:
         f.end_shape(close=True)
 
+    Blocks:
+        also: finish shape, close shape, done, draw polygon
+
     See also: begin_shape, vertex
     """
     active_sketch().end_shape(close)
@@ -2519,6 +2694,10 @@ def path() -> PathBuilder:
         tri = f.path().move_to(0, 0).line_to(40, 0).line_to(20, -30).close()
         f.draw_path(tri)
 
+    Blocks:
+        plain: Make an empty path, a shape you can build and draw again.
+        also: shape, outline, curve, route, trace
+
     See also: draw_path, clip, text_path, svg_paths
     """
     return active_sketch().path()
@@ -2534,6 +2713,9 @@ def draw_path(path: PathBuilder) -> None:
 
     Example:
         f.draw_path(f.path().circle(50, 50, 40))
+
+    Blocks:
+        also: show path, paint path, draw shape, trace
 
     See also: path, clip, text_path
     """
@@ -2563,6 +2745,10 @@ def clip(path: PathBuilder) -> None:
             f.clip(f.path().circle(100, 100, 80))
             f.background("gold")
 
+    Blocks:
+        plain: Only show your drawing inside a shape you choose.
+        also: cut, mask, crop, hole, window
+
     See also: no_clip, path, saved_state
     """
     active_sketch().clip(path)
@@ -2585,6 +2771,11 @@ def create_graphics(width: int, height: int) -> Picture:
         g.fill("tomato")
         g.circle(100, 50, 80)
         f.image(g, 20, 20)
+
+    Blocks:
+        plain: Make a second picture to draw on, away from the screen.
+        also: new canvas, layer, off screen, buffer
+        kinds: width=pixels, height=pixels
 
     See also: image, layer, load_image
     """
@@ -2610,6 +2801,9 @@ def layer(name: str) -> Picture:
     Example:
         with f.layer("sky"):
             f.background("skyblue")
+
+    Blocks:
+        also: sheet, level, tracing paper, group
 
     See also: hide_layer, show_layer, create_graphics
     """
@@ -2670,6 +2864,9 @@ def create_slider(low: float, high: float, value: float | None = None, step: flo
         size = f.create_slider(10, 100, 40, step=5, label="size")
         f.circle(200, 150, size.value())
 
+    Blocks:
+        also: control, dial, bar, knob, sliding
+
     See also: create_checkbox, create_button
     """
     refuse_in_mark("f.create_slider()")
@@ -2693,6 +2890,9 @@ def create_checkbox(label: str, checked: bool = False) -> Checkbox:
         if grid.checked():
             f.line(0, 0, f.width, f.height)
 
+    Blocks:
+        also: tick, tick box, switch, toggle, yes or no
+
     See also: create_slider, create_button
     """
     refuse_in_mark("f.create_checkbox()")
@@ -2714,6 +2914,9 @@ def create_button(label: str) -> Button:
         reset = f.create_button("reset")
         if reset.clicked():
             f.background("white")
+
+    Blocks:
+        also: click, press, control, switch
 
     See also: create_slider, create_checkbox
     """
@@ -2739,6 +2942,11 @@ def load_image(path: str) -> Picture:
     Example:
         photo = f.load_image("photo.jpg")
         f.image(photo, 0, 0)
+
+    Blocks:
+        plain: Open a picture file so you can draw it.
+        also: open picture, photo, read picture, import, png
+        kinds: path=file
 
     See also: image, load_svg, create_graphics
     """
@@ -2838,6 +3046,10 @@ def image(picture: Picture | FrameSource, x: float, y: float, width: float | Non
     Example:
         f.image(photo, 0, 0)
         f.image(photo, 0, 0, 200, 150, 40, 30, 100, 75)
+
+    Blocks:
+        also: picture, photo, show picture, paste
+        kinds: x=pixels, y=pixels, width=pixels, height=pixels
 
     See also: load_image, create_graphics, image_mode, tint
     """
@@ -3053,6 +3265,10 @@ def key_down(key: KeyName | str | int) -> bool:
         if f.key_down("left"):
             x -= 3
 
+    Blocks:
+        plain: Ask if a key is being held down right now.
+        also: is key held, keyboard, pressed, hold
+
     See also: is_key_pressed, key, key_code
     """
     return canvas_sketch().key_down(key)
@@ -3074,6 +3290,9 @@ def random(low: float = 1.0, high: float | None = None) -> float:
     Example:
         x = f.random(f.width)
         d = f.random(10, 40)
+
+    Blocks:
+        also: dice, chance, roll, any number
 
     See also: random_seed, random_choice, random_gaussian, noise
     """
@@ -3112,6 +3331,10 @@ def random_seed(seed: int | None = None) -> None:
 
     Example:
         f.random_seed(7)
+
+    Blocks:
+        plain: Make random() give the same numbers every time.
+        also: same random, repeat, fixed, remember random
 
     See also: random, noise_seed
     """
@@ -3214,6 +3437,9 @@ def random_choice(items: Any) -> Any:
         f.fill(f.random_choice(["red", "gold", "skyblue"]))
         f.fill(f.random_choice(f.COLORS))
 
+    Blocks:
+        also: pick, choose, choose one, draw lots
+
     See also: random, random_seed
     """
     return canvas_sketch().random_choice(items)
@@ -3236,6 +3462,10 @@ def map_range(value: float, start1: float, stop1: float, start2: float, stop2: f
 
     Example:
         grey = f.map_range(f.mouse_x, 0, f.width, 0, 255)
+
+    Blocks:
+        plain: Change a number from one range to another.
+        also: map, rescale, convert, remap
 
     See also: lerp, norm, constrain
     """
@@ -3316,6 +3546,10 @@ def constrain(value: float, low: float, high: float) -> float:
     Example:
         x = f.constrain(x, 20, f.width - 20)
 
+    Blocks:
+        plain: Keep a number from going below a low value or above a high one.
+        also: limit, clamp, keep between, stay inside
+
     See also: map_range, lerp
     """
     return Sketch.constrain(value, low, high)
@@ -3335,6 +3569,10 @@ def radians(degrees: float) -> float:
     Example:
         import math
         y = math.sin(f.radians(45))
+
+    Blocks:
+        also: convert angle, degrees to radians, pi, angle
+        kinds: degrees=angle
 
     See also: degrees, rotate
     """
@@ -3413,6 +3651,11 @@ def mark(path: PathBuilder | str | None = None, *, fill: Color | None = NOT_GIVE
             f.fill("gold")
             f.circle(0, 0, 24)
         flower.place(100, 100)
+
+    Blocks:
+        plain: Make a drawing you can keep and place again and again.
+        also: stamp, symbol, sticker, reuse, copy
+        kinds: stroke_width=pixels
 
     See also: path, load_svg, saved_state, layer
     """

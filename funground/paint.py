@@ -25,9 +25,12 @@ class Gradient:
     moment you draw the shape, so it follows translate(), rotate() and scale() like the shape does. In a
     PDF or SVG file it stays a true gradient.
 
-    A gradient cannot be changed. Its parts are kind ("linear" or "radial"), points (x1, y1, x2, y2 for a
-    linear gradient, and x, y, radius for a radial one) and stops (a tuple of (position, colour) pairs,
-    with positions from 0 to 1).
+    A gradient cannot be changed.
+
+    Attributes:
+        kind: "linear" or "radial".
+        points: x1, y1, x2, y2 for a linear gradient, and x, y, radius for a radial one.
+        stops: a tuple of (position, colour) pairs, with positions from 0 to 1.
 
     Example:
         sky = f.linear_gradient(0, 0, 0, 400, ["navy", "skyblue"])

@@ -63,6 +63,11 @@ def load(path: str) -> Sound:
         beep = sound.load("beep.wav")
         beep.play()
 
+    Blocks:
+        plain: Open a sound file so you can play it.
+        also: open sound, mp3, wav, read audio, music file
+        kinds: path=file
+
     See also: create, tone, note, draw_wave
     """
     return _engine.load(path, _sketch_folder(), lambda: canvas_sketch().frame_count)
@@ -87,6 +92,10 @@ def create(samples: Any, rate: int = 44100) -> Sound:
         import math
         s = sound.create([math.sin(i / 9) for i in range(44100)])
         s.play()
+
+    Blocks:
+        plain: Make a sound out of a list of numbers.
+        also: make sound, samples, waveform, from numbers, synth
 
     See also: tone, load, mix
     """
@@ -114,6 +123,11 @@ def tone(frequency: float, seconds: float, wave: Wave = "sine", volume: float = 
 
     Example:
         sound.tone(440, 1, "square").play()
+
+    Blocks:
+        plain: Make a steady beep at a pitch you choose.
+        also: beep, hum, buzz, sine, hertz
+        kinds: volume=range(0, 1, 0.05)
 
     See also: note, pluck, melody, create
     """
@@ -147,6 +161,11 @@ def note(name: str, seconds: float, wave: Wave = "sine", volume: float = 0.5,
     Example:
         sound.note("C4", 2, attack=0.5, sustain=1).play()
 
+    Blocks:
+        plain: Make a sound that is one note, such as C4.
+        also: key, piano, pitch, play note, music note
+        kinds: volume=range(0, 1, 0.05)
+
     See also: tone, melody, note_to_frequency
     """
     rng = canvas_sketch()._rng
@@ -170,6 +189,11 @@ def pluck(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -
 
     Example:
         sound.pluck("E3", 2).play()
+
+    Blocks:
+        plain: Make a sound like a plucked string.
+        also: guitar, string, twang, sitar, strum
+        kinds: volume=range(0, 1, 0.05)
 
     See also: tone, note, drone
     """
@@ -200,6 +224,11 @@ def melody(text: str, tempo: float = 120, wave: Wave = "soft", sa: str | None = 
     Example:
         sound.melody("C4 E4 G4:2 -", tempo=100).play()
 
+    Blocks:
+        plain: Make music from a line of note names.
+        also: tune, song, music, notes, play, sargam
+        kinds: volume=range(0, 1, 0.05)
+
     See also: note, sequence, mix, raga
     """
     values = synth.melody_samples(text, tempo, wave, sa, tuning, canvas_sketch()._rng, "sound.melody()", volume)
@@ -217,6 +246,10 @@ def sequence(*sounds: Sound) -> Sound:
 
     Example:
         sound.sequence(sound.note("C4", 1), sound.note("E4", 1)).play()
+
+    Blocks:
+        plain: Play sounds one after another.
+        also: one after another, join, chain, playlist, series
 
     See also: mix, melody
     """
@@ -236,6 +269,10 @@ def mix(*sounds: Sound) -> Sound:
 
     Example:
         sound.mix(sound.note("C4", 2), sound.note("E4", 2), sound.note("G4", 2)).play()
+
+    Blocks:
+        plain: Play several sounds at the same time.
+        also: together, chord, layer, combine, overlay
 
     See also: sequence, chord_notes
     """
@@ -258,6 +295,9 @@ def note_to_frequency(name: str, sa: str | None = None) -> float:
     Example:
         print(sound.note_to_frequency("A4"))
 
+    Blocks:
+        also: pitch, hertz, hz, note number, frequency
+
     See also: frequency_to_note, note, tone
     """
     return synth.note_to_frequency(name, sa)
@@ -278,6 +318,9 @@ def frequency_to_note(hz: float, sa: str | None = None) -> str:
     Example:
         print(sound.frequency_to_note(440))
 
+    Blocks:
+        also: pitch name, note name, hertz to note, which note, hz
+
     See also: note_to_frequency
     """
     return synth.frequency_to_note(hz, sa)
@@ -297,6 +340,9 @@ def chord_notes(name: str) -> list[str]:
 
     Example:
         print(sound.chord_notes("Am"))
+
+    Blocks:
+        also: chord, notes in chord, harmony, triad
 
     See also: mix, note
     """
@@ -319,6 +365,11 @@ def drone(sa: float | str, seconds: float, pattern: str = "P S' S' S", volume: f
 
     Example:
         sound.drone("D3", 8).loop()
+
+    Blocks:
+        plain: Make a steady humming background note.
+        also: tanpura, hum, background, sa, pa
+        kinds: volume=range(0, 1, 0.05)
 
     See also: pluck, tala, raga
     """
@@ -344,6 +395,10 @@ def microphone(name: str | None = None) -> Microphone:
         mic = sound.microphone()
         mic.start()
 
+    Blocks:
+        plain: Listen to the microphone.
+        also: mic, listen, record, hear, input
+
     See also: microphones, draw_wave, draw_spectrum, draw_pitch_line
     """
     return _microphone.make(name, _sound_frame)
@@ -357,6 +412,9 @@ def microphones() -> list[str]:
 
     Example:
         print(sound.microphones())
+
+    Blocks:
+        also: mics, inputs, devices, audio inputs
 
     See also: microphone
     """
@@ -376,6 +434,11 @@ def draw_wave(source: Any, x: float, y: float, w: float, h: float) -> None:
     Example:
         sound.draw_wave(song, 20, 20, 400, 80)
 
+    Blocks:
+        plain: Draw the wiggly line of a sound.
+        also: waveform, sound wave, squiggle, oscilloscope, visualiser
+        kinds: x=pixels, y=pixels, w=pixels, h=pixels
+
     See also: draw_spectrum, spectrogram, draw_pitch_line
     """
     _views.draw_wave(active_sketch(), source, x, y, w, h)
@@ -394,6 +457,11 @@ def draw_spectrum(source: Any, x: float, y: float, w: float, h: float, bands: in
 
     Example:
         sound.draw_spectrum(mic, 20, 120, 400, 80)
+
+    Blocks:
+        plain: Draw bars that show how loud each pitch is.
+        also: bars, equaliser, equalizer, frequencies, visualiser
+        kinds: x=pixels, y=pixels, w=pixels, h=pixels
 
     See also: draw_wave, spectrogram
     """
@@ -415,6 +483,11 @@ def spectrogram(sound: Sound, width: int, height: int) -> Picture:
     Example:
         pic = sound.spectrogram(song, 400, 200)
         f.image(pic, 20, 20)
+
+    Blocks:
+        plain: Make a picture of a whole sound.
+        also: sound picture, heat map, voiceprint, picture of sound
+        kinds: width=pixels, height=pixels
 
     See also: draw_wave, draw_spectrum, image
     """
@@ -438,6 +511,11 @@ def draw_pitch_line(source: Any, x: float, y: float, w: float, h: float, seconds
 
     Example:
         sound.draw_pitch_line(mic, 20, 20, 400, 150)
+
+    Blocks:
+        plain: Draw a line that follows how high a sound is.
+        also: pitch, graph, singing, tune line, voice
+        kinds: x=pixels, y=pixels, w=pixels, h=pixels
 
     See also: draw_wave, microphone, frequency_to_note
     """

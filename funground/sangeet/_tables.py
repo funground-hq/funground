@@ -32,21 +32,21 @@ _DATA = Path(__file__).resolve().parent.parent / "data" / "ragas.json"
 class Raga:
     """One raga from funground's small table. It is read-only.
 
-    You get one from sangeet.raga(name). Its parts are:
-    name: the raga's name.
-    thaat: the parent scale it belongs to.
-    swaras: the notes it uses, as a tuple of letters such as ("S", "R", "G"). Small r, g, d and n are komal (flat). M is tivra (sharp) Ma.
-    aroha: the way up, as a sargam string that sound.melody(text, sa=...) can play.
-    avaroha: the way down, as a sargam string.
-    pakad: a phrase that marks the raga, as a sargam string.
-    vadi: the most important swara.
-    samvadi: the second most important swara.
-    time: the traditional time of day to perform it.
-    notes: where the sources differ, and other things to know. It may be empty.
-    sources: a tuple of texts that say where each fact was checked.
+    You get one from sangeet.raga(name). str(raga) gives a short summary. A raga is much more than its notes,
+    and the table gives a start, not the raga.
 
-    str(raga) gives a short summary. A raga is much more than its notes, and the table gives a start, not
-    the raga.
+    Attributes:
+        name: the raga's name.
+        thaat: the parent scale it belongs to.
+        swaras: the notes it uses, as a tuple of letters such as ("S", "R", "G"). Small r, g, d and n are komal (flat). M is tivra (sharp) Ma.
+        aroha: the way up, as a sargam string that sound.melody(text, sa=...) can play.
+        avaroha: the way down, as a sargam string.
+        pakad: a phrase that marks the raga, as a sargam string.
+        vadi: the most important swara.
+        samvadi: the second most important swara.
+        time: the traditional time of day to perform it.
+        notes: where the sources differ, and other things to know. It may be empty.
+        sources: a tuple of texts that say where each fact was checked.
 
     Example:
         yaman = sangeet.raga("Yaman")
@@ -77,18 +77,19 @@ class Raga:
 class Tala:
     """One tala from funground's small table. It is read-only.
 
-    You get one from sangeet.tala_info(name). Beats are counted from 1, so the sam is beat 1. Its parts are:
-    name: the tala's name.
-    beats: how many beats in one cycle.
-    vibhag: the divisions, as a tuple of beat counts such as (4, 4, 4, 4).
-    tali: the beat numbers that are claps.
-    khali: the beat numbers that are waves (the empty beats).
-    sam: the first beat, always 1.
-    bols: the theka, the drum syllables, one for each beat.
-    notes: where the sources differ, and other things to know. It may be empty.
-    sources: a tuple of texts that say where each fact was checked.
-
+    You get one from sangeet.tala_info(name). Beats are counted from 1, so the sam is beat 1.
     str(tala) gives a short summary. Use sangeet.tala(name) to hear the theka.
+
+    Attributes:
+        name: the tala's name.
+        beats: how many beats in one cycle.
+        vibhag: the divisions, as a tuple of beat counts such as (4, 4, 4, 4).
+        tali: the beat numbers that are claps.
+        khali: the beat numbers that are waves (the empty beats).
+        sam: the first beat, always 1.
+        bols: the theka, the drum syllables, one for each beat.
+        notes: where the sources differ, and other things to know. It may be empty.
+        sources: a tuple of texts that say where each fact was checked.
 
     Example:
         teentaal = sangeet.tala_info("Teentaal")

@@ -40,7 +40,7 @@ from ._results import Body, Guess, Hand, Heard, Words
 __all__ = ["pose", "hand", "person", "words", "sound", "teach", "guess"]
 
 
-def pose(source):
+def pose(source) -> Body | None:
     """Find the body in a camera or a picture.
 
     The model finds one person. If there is no one it gives None, so ``if body:`` is enough. Calling it twice in one frame
@@ -74,12 +74,16 @@ def pose(source):
         if body:
             f.line(body.left_wrist.x, body.left_wrist.y, body.right_wrist.x, body.right_wrist.y)
 
+    Blocks:
+        plain: Find a body: head, arms, legs.
+        also: body, skeleton, arms, find person, track body
+
     See also: hand
     """
     return _tasks.find_body(source, _sketch_folder())
 
 
-def hand(source):
+def hand(source) -> Hand | None:
     """Find a hand in a camera or a picture.
 
     The model finds one hand. If there is none it gives None, so ``if hand:`` is enough. Calling it twice in one frame on
@@ -109,6 +113,10 @@ def hand(source):
         palm = ml.hand(cam)
         if palm:
             f.circle(palm.index_finger_tip.x, palm.index_finger_tip.y, 12)
+
+    Blocks:
+        plain: Find a hand and its fingers.
+        also: fingers, palm, wrist, gesture, find hand
 
     See also: pose
     """
@@ -142,12 +150,16 @@ def person(source):
         f.background("navy")
         f.image(ml.person(cam), 0, 0)
 
+    Blocks:
+        plain: Cut the person out of the picture.
+        also: cut out, silhouette, remove background, body shape, outline
+
     See also: pose, hand, image
     """
     return _tasks.find_person(source, _sketch_folder())
 
 
-def words(source):
+def words(source) -> Words | None:
     """Listen to a microphone or a sound, and give the words in it.
 
     It understands English. For a microphone (``sound.microphone()``, started) funground cuts what it hears into phrases: a phrase
@@ -184,12 +196,16 @@ def words(source):
         if heard:
             f.text(heard.text, 20, 100)
 
+    Blocks:
+        plain: Turn speech from the microphone into words.
+        also: speech, voice, say, speech to text, transcribe
+
     See also: pose, microphone
     """
     return _tasks.find_words(source, _sketch_folder())
 
 
-def sound(source):
+def sound(source) -> Heard | None:
     """Listen to a microphone or a sound, and give the name of what it hears.
 
     It names everyday sounds, such as a dog, a whistle, clapping, a car or speech. For a microphone (``sound.microphone()``,
@@ -227,6 +243,10 @@ def sound(source):
         heard = ml.sound(mic)
         if heard:
             f.text(heard.name, 20, 100)
+
+    Blocks:
+        plain: Say what sound the microphone hears.
+        also: listen, hear, classify sound, microphone, noise
 
     See also: words, microphone
     """
@@ -273,12 +293,16 @@ def teach(name, source=None, model=None):
         if f.key_down("u"):
             ml.teach("thumbs up", cam)
 
+    Blocks:
+        plain: Show the computer a picture and give it a name.
+        also: train, learn, show examples, model, label
+
     See also: guess
     """
     return _teach.teach(name, source, model, _sketch_folder())
 
 
-def guess(source, k=1):
+def guess(source, k=1) -> Guess | None:
     """Guess what a camera or a picture shows, from the things you taught.
 
     You get a Guess. ``guess.name`` is the name you taught that the picture is most like. ``guess.score`` (0 to 1) says how sure
@@ -315,6 +339,10 @@ def guess(source, k=1):
         answer = ml.guess(cam)
         if answer:
             f.text(answer.name, 20, 100)
+
+    Blocks:
+        plain: Say what the camera or picture shows, using what you taught.
+        also: classify, what is this, recognise, identify, label
 
     See also: teach
     """

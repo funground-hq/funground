@@ -5,9 +5,11 @@ Docstring format (parsed by tools/make_api_reference.py):
     Summary sentence ending with a full stop.
     Prose.
     Arguments:   x, y: text
+    Attributes:  x: text         (a class's data, in the same form as Arguments:)
     Returns:     text
     Raises:      ValueError: text
     Example:     code
+    Blocks:      plain: / also: / kinds:   (words for editors and blocks; read into completions.json, never shown in the reference)
     See also: a, b
 """
 import ast
@@ -184,3 +186,53 @@ def test_every_option_alias_is_shown_as_its_constants_group():
     assert aliases == set(tool.ALIAS_GROUP)
     for alias, group in tool.ALIAS_GROUP.items():
         assert set(getattr(_options, alias).__args__) <= set(getattr(f.CONSTANTS, group)) | {"Square"}, alias
+
+
+def _documented_things():
+    """(label, docstring, parameters) for every function of f and of the libraries, every live value and every class member."""
+    for name in f._PUBLIC_NAMES:
+        obj = getattr(f, name)
+        if name in LIVE:
+            yield f"f.{name}", api.LIVE_DOCS[name], None
+        elif callable(obj):
+            yield f"f.{name}", obj.__doc__, tool.parameter_names(obj)
+    for lib, info in tool.LIBRARIES.items():
+        for name in info["names"]:
+            obj = getattr(info["module"], name)
+            yield f"{lib}.{name}", obj.__doc__, tool.parameter_names(obj)
+    for _, cls in tool.all_classes():
+        for name, member in tool.public_members(cls):
+            function = member.fget if isinstance(member, property) else member
+            yield f"{cls.__name__}.{name}", function.__doc__, tool.parameter_names(function, True)
+
+
+def test_every_blocks_section_is_read_and_comes_before_see_also():
+    """The Blocks: section is words for editors (S-300). A typo in a key, a kind or a parameter name raises; and the section
+    sits before See also:, because the reader stops at that line."""
+    found = 0
+    for label, doc, parameters in _documented_things():
+        tool.parse_blocks(tool.parse_doc(doc)["Blocks"], label, parameters)
+        lines = [ln.strip() for ln in inspect.cleandoc(doc or "").splitlines()]
+        if "Blocks:" in lines:
+            found += 1
+            see = next((i for i, ln in enumerate(lines) if ln.startswith("See also:")), len(lines))
+            assert lines.index("Blocks:") < see, f"{label}: put Blocks: before See also:"
+    assert found > 90
+
+
+def test_the_blocks_section_is_not_in_the_reference_or_the_llms_files():
+    for path in (ROOT / "docs" / "reference" / "API.md", ROOT / "llms.txt", ROOT / "llms-full.txt"):
+        text = path.read_text(encoding="utf-8")
+        assert "Blocks:" not in text and "kinds: " not in text, path.name
+        assert "transparent, see-through, fade" not in text, path.name
+
+
+def test_a_blocks_section_with_a_typo_is_an_error():
+    with pytest.raises(ValueError, match="x=colour"):
+        tool.parse_blocks("also: a\nkinds: x=colour", "f.demo", ["x"])
+    with pytest.raises(ValueError, match="'alos'"):
+        tool.parse_blocks("alos: a", "f.demo")
+    with pytest.raises(ValueError, match="'y'"):
+        tool.parse_blocks("kinds: y=angle", "f.demo", ["x"])
+    with pytest.raises(ValueError, match="lower case"):
+        tool.parse_blocks("also: Turn", "f.demo")
