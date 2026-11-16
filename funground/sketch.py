@@ -20,7 +20,7 @@ import warnings
 from collections.abc import Callable, Iterator, Sequence
 from typing import Any
 
-from . import frame_inputs, ir
+from . import frame_inputs, host_services, ir
 from ._numbers import unusable
 from .capabilities import Capability, FungroundWarning, missing_capability
 from .controls import Button, Checkbox, ControlPanel, Slider, panel_ops
@@ -2542,6 +2542,8 @@ class Sketch:
         self._graphics_before_run = 0
 
         self._platform.start()
+        if not self._host_driven:              # a page shows a library's wait itself; a window shows it in its title
+            host_services.waiting = self._platform.show_wait
         self.running = True
         self.frame_count = 0
         self.delta_time = 0.0
@@ -2626,6 +2628,7 @@ class Sketch:
         self._frame_sequence = None
         self._drop_motion()                      # a recording the sketch did not live to finish is dropped
         frame_inputs.stop_all()                  # a camera's light goes off, a microphone is let go
+        host_services.waiting = None
         self._renderer.attach(0, 0)
         self._platform.close()
         self._end_panel()

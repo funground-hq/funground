@@ -517,7 +517,7 @@ def selfie(monkeypatch):
 
     model = _Selfie()
     monkeypatch.setattr(_fetch, "ensure", lambda task, base, who: {"model": "unused"})
-    monkeypatch.setattr(_runtime, "session", lambda path: model)
+    monkeypatch.setattr(_runtime, "session", lambda path, task=None: model)
     return model
 
 

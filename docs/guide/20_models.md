@@ -28,7 +28,7 @@ Without the install, that line stops with one sentence: "The models library is a
 Why is it separate? A model is a big file, and a program to run it. Most sketches need neither. So the core of
 funground stays small, and you add the models when you want them.
 
-**The first call downloads the model.** It prints one line, such as `Downloading the pose model, 18 MB, once.` The body
+**The first call downloads the model.** It prints one line, such as `Downloading the pose model, 18 MB, once.` The window's title also shows how far the download has come, and it says `Starting` while the model wakes up. The window keeps answering. The body
 model is about 18 MB, the hand model about 8 MB, the words model 42 MB, the sound model 16 MB and the picture model (for teaching) 10 MB. The files are kept in a `models/` folder beside your sketch. The next
 time you run it, nothing is downloaded, and it works without the internet.
 

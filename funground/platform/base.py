@@ -125,5 +125,11 @@ class Platform(Protocol):
     def capture(self) -> tuple[tuple[int, int], bytes]:
         """Return ((width, height), RGB bytes) of the last presented frame."""
 
+    def show_wait(self, text: str | None) -> None:
+        """Show a library's wait (a model downloading or starting) outside the picture, or end it for None.
+
+        A platform with a window puts the text in the window's title and keeps the window answering; one
+        with no window does nothing."""
+
     def close(self) -> None:
         """Destroy the window and release platform resources."""

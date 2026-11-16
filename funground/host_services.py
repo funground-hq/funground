@@ -13,3 +13,4 @@ mixer = None        # the page's mixer (platform/browser_audio.HostMixer), else 
 microphone = None   # the page's microphone (platform/browser_audio.HostMicrophone), else None: SDL's input is used
 camera = None       # the page's camera (platform/browser_camera.HostCamera), else None: pygame.camera is used
 models = None       # the page's models (platform/browser_models.HostModels), else None: funground_ml runs onnxruntime itself
+waiting = None      # set by the running sketch: waiting(text) shows a library's wait (a model downloading or starting) outside the picture; waiting(None) ends it
