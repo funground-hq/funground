@@ -50,6 +50,23 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
   import line, and a `TypeError` after it (the library can be called, only to say this).
 
 ### Added
+- **Teach a model** (S-235, D-145 to D-148, contract ML8). `ml.teach("thumbs up", cam)` keeps the camera's picture as one
+  example of that name; `ml.guess(cam)` gives the name you taught that a new picture is most like, as a Guess with `.name`,
+  `.score` (0 to 1, how sure) and, with `k=2` or more, `.next`. Teach at least two names and 5 or more pictures of each, and a
+  name such as "nothing" for what the camera sees when nothing you care about is there. A list or a dict teaches many at once.
+  The picture model is MobileNetV4-small (10 MB, the default) or DINOv2-small (`model="dinov2"`, 24 MB). For a camera the
+  answer comes beside your sketch, so `draw()` never waits. What you taught lasts while the sketch runs; nothing is saved
+  and no picture leaves your computer. Gallery example `models-06`; guide chapter 20, "Teach a model".
+- **You can see a model loading** (S-307, D-149). While a model downloads or starts, the window's title says so
+  ("Downloading the hand model: 3 of 8 MB", "Starting the hand model") and the window keeps answering; the old title comes
+  back when the model is ready. In Play the status line says the same.
+- **The guide chapter on models** (S-236): what a model is, what it learnt from, why it can be wrong, and what stays on
+  your computer, with a section for each model.
+- **Editors know what the models give back** (S-299, S-300). `completions.json` says that `ml.pose` gives a Body, `ml.hand`
+  a Hand, `ml.words` Words, `ml.sound` a Heard and `ml.guess` a Guess, and lists their members, and those of Gradient,
+  Raga and Tala, so `b = ml.pose(cam)` then `b.` lists the points. Every entry also has its section of the reference, a
+  rank (how many examples use it, most used first), plain words and kinds of argument (an angle, a colour, a range), for
+  editors and the blocks view.
 - **Tidy the cut-out and edit its outline** (S-245, D-115, contract P12 and P13). `me.remove_background(empty, tidy=True)` and `me.remove_color(color, tidy=True)` keep one connected part, the largest, and fill its holes with the picture's own colours. `at=(x, y)` keeps the part that has that point in it. `me.outline(points=80)` gives the border of the visible part as a list of `(x, y)` points spread evenly along it, for `f.path().polygon()`, the mouse and `f.clip()`. Nothing changes unless you ask. Gallery example `images-11`.
 - **A font that is loaded and never chosen is reported** (S-244). When a sketch loads a font, draws text and never passes the font to `f.text_font()` (or uses it in any other way), funground prints one line when the run ends, such as "Lora was loaded but never chosen: add f.text_font(...) to use it". It is the same on the desktop and in Play. No new names.
 - **The name of a sound** (S-250, D-126, D-129). `ml.sound(mic)` listens to your microphone and gives the name of the sound it hears, such as `"Dog"`, `"Whistling"` or `"Speech"`: a Heard with `.name`, `.score`, `.next` (up to four more guesses, each a Heard) and `.is_new`, or `None` when it is quiet or the model is not sure. It hears the last second and gives a new answer about twice a second, beside your sketch, so `draw()` never waits. Give it a sound instead (`mic.capture(3)` or `sound.load(...)`, up to 30 seconds) and it names the whole sound. It often gives a broad name and can be wrong; the next guesses help. The first call downloads the sound model (16 MB, YAMNet by Google), once, and keeps it in `models/` beside your sketch. The sound names are from the AudioSet ontology by Google (CC BY 4.0). Nothing you record leaves the computer. There is a guide section, a gallery example and a Quick Reference row. The same sketch runs in Play once the page runs the model. No new dependency.
