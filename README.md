@@ -44,6 +44,13 @@ python -m pip install funground
 - **Linux:** install the Cairo library first, for example on Debian or Ubuntu:
   `sudo apt install libcairo2-dev pkg-config python3-dev`.
 
+The models (a body, a hand and the person in your camera, the words you say, the sounds you make, and a model you
+teach) are a second install, as they need a larger library:
+
+```
+python -m pip install funground-ml
+```
+
 ## Learn
 
 - [User Guide](https://github.com/funground-hq/funground/blob/v0.1.0/docs/guide/README.md): chapters from your first sketch to animation, interaction,
@@ -60,9 +67,11 @@ Shapes, rounded corners, curves and paths, with path booleans (union, difference
 gradients, blend modes and shadows; transforms; text with alignment, text boxes, ligatures, mixed
 styles and fonts; animation and loop control; mouse and keyboard events; sliders, checkboxes and
 buttons; noise and randomness; vectors; pictures, SVG drawings, pixels and filters; off-screen
-graphics; sound (play a tune, read its volume, listen through the microphone, and learn with it: draw a wave and hear it, compose and save, ear training, a piano roll); and saving as PNG, PDF (with real text and several
+graphics; the camera (draw what it sees, record a clip); sound (play a tune, read its volume, listen through the microphone, and learn with it: draw a wave and hear it, compose and save, ear training, a piano roll); and saving as PNG, PDF (with real text and several
 pages), SVG, numbered frames, or an animated GIF or MP4. Text is drawn the same way on every
 computer. PDF and SVG output stays sharp at any size.
+With funground-ml, models that run on your own computer find a body, a hand or the person in the camera, hear words
+and sounds, and learn the things you show them; nothing they see or hear leaves the computer.
 
 ## How it is built
 

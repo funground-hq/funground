@@ -35,13 +35,15 @@ f.run()
 
 - `ml.sound(source)` gives the name of the sound heard, as `heard.name` with `heard.score`, `heard.next` (up to four more guesses) and `heard.is_new`, or `None` when it is quiet or the model is not sure. The source is a microphone from `sound.microphone()` (the last second, a new answer about twice a second, beside your sketch) or a Sound, such as `mic.capture(3)`. The name is often broad and can be wrong.
 
-For pose, hand and person the source is a camera from `camera.open()` or a picture from `f.load_image()`.
+- `ml.teach(name, source)` keeps a picture as one example of a name you choose, and `ml.guess(source)` gives the name you taught that a new picture is most like, as `guess.name` with `guess.score` (and `guess.next` with `k=2` or more), or `None` before the first answer for a camera. Teach at least two names, 5 or more pictures of each, and a name such as "nothing" for an empty scene. What you taught lasts while the sketch runs; nothing is saved.
+
+For pose, hand, person, teach and guess the source is a camera from `camera.open()` or a picture from `f.load_image()`.
 
 ## The model files
 
-The first call downloads the model it needs from the Hugging Face Hub (about 18 MB for the body, 8 MB for the hand, under 1 MB for the person, 42 MB for the words, 16 MB for the sound) and
+The first call downloads the model it needs from the Hugging Face Hub (about 18 MB for the body, 8 MB for the hand, under 1 MB for the person, 42 MB for the words, 16 MB for the sound, 10 MB for the picture model that teach and guess use, or 24 MB with `model="dinov2"`) and
 prints one line. The files are kept in a `models/` folder beside your sketch, so the next run works offline. They are
-the OpenCV Zoo's conversions of MediaPipe's models, MediaPipe's selfie segmentation, OpenAI's Whisper tiny.en and Google's YAMNet (as ONNX, from the community repository `audiomagic/yamnet-onnx`), all under the Apache-2.0 licence.
+the OpenCV Zoo's conversions of MediaPipe's models, MediaPipe's selfie segmentation, OpenAI's Whisper tiny.en and Google's YAMNet (as ONNX, from the community repository `audiomagic/yamnet-onnx`), Google's MobileNetV4-small (weights by timm, cut before its classifier by funground: `funground-hq/mobilenetv4-small-vector-onnx`) and Meta AI's DINOv2-small (from `onnx-community`), all under the Apache-2.0 licence.
 
 The 521 sound names that YAMNet scores are in the package (`funground_ml/_sound_names.py`), not downloaded. They are from the AudioSet ontology by Google LLC, licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). YAMNet is by Google LLC (Apache-2.0). Each file is checked against a
 fixed SHA-256 before it is kept.

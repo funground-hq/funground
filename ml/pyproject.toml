@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "funground-ml"
 version = "0.1.0.dev0"
-description = "The models library for funground: a body, a hand and the person in a camera or a picture, and the words you say, found on your own computer."
+description = "The models library for funground: a body, a hand and the person in a camera or a picture, the words you say and the sounds you make, and a model you teach, all on your own computer."
 readme = "README.md"
 license = "LGPL-2.1-only"
 requires-python = ">=3.11"
@@ -22,7 +22,9 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 
-# The same bounds as the core's (D-100): from the version funground-ml needs up to the next major version.
+# Other libraries: the core's bounds (D-100), from the version needed up to the next major version. funground itself:
+# one minor version (D-152), because funground-ml uses funground's internals, which can change in any minor release.
+# The release commit sets "funground>=0.2,<0.3"; until then it stays open, as 0.2.0.dev0 does not satisfy >=0.2.
 dependencies = ["funground", "onnxruntime>=1.31,<2", "numpy>=2,<3", "pillow>=11,<13"]
 
 [project.urls]
