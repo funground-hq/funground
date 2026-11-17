@@ -50,6 +50,10 @@ A smooth start (E-35): editors suggest what to type, and the first chapter shows
   import line, and a `TypeError` after it (the library can be called, only to say this).
 
 ### Added
+- **funground-ml 0.1.0, the models library, is released with 0.2** (D-127). `python -m pip install funground-ml` gives
+  `ml.pose`, `ml.hand`, `ml.person`, `ml.words`, `ml.sound`, `ml.teach` and `ml.guess`, described below. Each funground-ml
+  release works with one funground minor version (D-152): 0.1.0 needs funground 0.2. When funground 0.3 comes, so does
+  a funground-ml for it.
 - **Teach a model** (S-235, D-145 to D-148, contract ML8). `ml.teach("thumbs up", cam)` keeps the camera's picture as one
   example of that name; `ml.guess(cam)` gives the name you taught that a new picture is most like, as a Guess with `.name`,
   `.score` (0 to 1, how sure) and, with `k=2` or more, `.next`. Teach at least two names and 5 or more pictures of each, and a
