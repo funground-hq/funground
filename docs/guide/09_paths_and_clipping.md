@@ -794,8 +794,9 @@ f.run()
 
 Use the camera like a picture. `f.image(cam, x, y)` draws its latest frame and takes everything `f.image()` takes:
 a size, `f.tint()`, `f.image_mode()`. The frame is taken once before each `draw()`, so everything you do in one
-frame sees the same picture. Every frame is scaled to the size you gave `cam.start(width, height)`, and it is
-flipped left to right like a mirror. Use `cam.start(mirror=False)` to see what the camera sees.
+frame sees the same picture. Every frame has the size you gave `cam.start(width, height)`. A picture of another
+shape (a phone held upright gives a tall one) is cut evenly from its long sides, then scaled, so faces keep their
+shape. It is flipped left to right like a mirror. Use `cam.start(mirror=False)` to see what the camera sees.
 
 The camera needs a moment to wake up. Until the first frame arrives, `cam.is_ready()` is `False`, `f.image(cam)`
 draws nothing, and `cam.picture()` is black. So a sketch never crashes while it waits. If the camera is refused

@@ -9,8 +9,8 @@ A *device* is whatever delivers frames. The desktop's device wraps ``pygame.came
 page (``platform/browser_camera.HostCamera``, which the web runner puts in ``host_services.camera``); tests use a fake. All three answer:
 
     start(width, height)              open it; RuntimeError if it cannot be opened
-    read(width, height, mirror)       a new frame as ``width * height * 4`` bytes of BGRA (Cairo's layout), scaled to
-                                      the asked size and mirrored if asked, or None when no new frame has arrived
+    read(width, height, mirror)       a new frame as ``width * height * 4`` bytes of BGRA (Cairo's layout), cut to
+                                      the asked shape, scaled to the asked size and mirrored if asked, or None when no new frame has arrived
     stop()                            let it go
 
 A Camera never waits for a device. Before each ``draw()`` the sketch calls ``take_frames()`` (through the core's
@@ -74,8 +74,17 @@ def _device_names() -> list[str]:
         raise RuntimeError(_no_device_message(f"the computer's camera system did not answer ({exc})")) from exc
 
 
+def _cover_box(from_width: int, from_height: int, width: int, height: int) -> tuple[int, int, int, int]:
+    """The part of a picture that has the shape of width x height: cut evenly from the sides that are too long (D-154)."""
+    if from_width * height > width * from_height:            # too wide: cut left and right
+        keep = max(1, round(from_height * width / height))
+        return ((from_width - keep) // 2, 0, keep, from_height)
+    keep = max(1, round(from_width * height / width))        # too tall (or the same shape): cut top and bottom
+    return (0, (from_height - keep) // 2, from_width, keep)
+
+
 class _DesktopDevice:
-    """A camera of the computer, through pygame.camera. Frames are scaled and mirrored with pygame's own transforms."""
+    """A camera of the computer, through pygame.camera. Frames are cut, scaled and mirrored with pygame's own transforms."""
 
     def __init__(self, name: str) -> None:
         self._name = name
@@ -98,6 +107,9 @@ class _DesktopDevice:
 
         surface = camera.get_image()
         if surface.get_size() != (width, height):
+            box = _cover_box(*surface.get_size(), width, height)
+            if box != (0, 0, *surface.get_size()):
+                surface = surface.subsurface(box)
             surface = pygame.transform.smoothscale(surface, (width, height))
         if mirror:
             surface = pygame.transform.flip(surface, True, False)
@@ -180,7 +192,9 @@ class Camera:
 
     The frame is taken once before each draw(), so everything you do in one frame sees the same picture. Before the
     first frame arrives, f.image(cam) draws nothing and cam.picture() is black, so use is_ready() to know when to
-    start. Every frame is scaled to the size you asked for and, by default, flipped left to right like a mirror.
+    start. Every frame keeps its shape: if the camera's picture has another shape than the size you asked for, it is
+    cut evenly from the sides that are too long, then scaled to that size. By default it is flipped left to right
+    like a mirror.
     Frames stay on your computer: funground never sends them anywhere. With FUNGROUND_HEADLESS=1 a camera opens
     nothing and is never ready.
 
@@ -238,9 +252,10 @@ class Camera:
     def start(self, width: int = 640, height: int = 480, mirror: bool = True) -> None:
         """Open the camera.
 
-        The computer or the browser may ask your permission first. Frames are scaled to width and height, so your
-        layout never depends on the camera. Call it again with other numbers to change the size. The camera closes
-        when you call stop() and when the sketch ends.
+        The computer or the browser may ask your permission first. Frames keep their shape: a picture of another
+        shape is cut evenly from its long sides, then scaled to width and height. So your layout never depends on the
+        camera. Call it again with other numbers to change the size. The camera closes when you call stop() and when
+        the sketch ends.
 
         Arguments:
             width, height: the size of every frame in pixels, whole numbers above 0.

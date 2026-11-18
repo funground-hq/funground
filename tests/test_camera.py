@@ -264,6 +264,57 @@ def test_a_frame_is_scaled_to_the_asked_size_from_any_native_size(desk):
     assert at(picture, 0, 0) == (10, 0, 0) and at(picture, 7, 3) == (0, 0, 200)
 
 
+def _striped(size, by_column):
+    """A picture whose columns (or rows) are numbered 3, 6, 9 ... in the red channel."""
+    surface = pygame.Surface(size, 0, 24)
+    for i in range(size[0] if by_column else size[1]):
+        rect = (i, 0, 1, size[1]) if by_column else (0, i, size[0], 1)
+        surface.fill((3 * (i + 1), 0, 0), rect)
+    return surface
+
+
+def _first_frame(desk, native_surface, width, height):
+    desk.native = native_surface.get_size()
+    cam = camera.open()
+    cam.start(width, height, mirror=False)
+    sketch = run(lambda: None, setup=lambda: f.size(width, height), frames=1)
+    cam.start(width, height, mirror=False)
+    cam._device._camera.get_image = lambda: native_surface
+    ci.take_frames(sketch)
+    return cam.picture()
+
+
+def test_a_tall_frame_is_cut_top_and_bottom_into_the_asked_shape(desk):
+    # A phone held upright (48 x 64) into 64 x 48: the middle 48 x 36 is kept, rows 14 to 49 of 64.
+    picture = _first_frame(desk, _striped((48, 64), by_column=False), 64, 48)
+    assert (picture.width, picture.height) == (64, 48)
+    top, bottom = at(picture, 10, 0)[0], at(picture, 10, 47)[0]
+    assert 3 * 15 <= top <= 3 * 20              # row 14 is number 45; the top is near it, not near 3
+    assert 3 * 44 <= bottom <= 3 * 51           # and the bottom is near row 49 (number 150), not near 192
+    assert at(picture, 0, 24) == at(picture, 63, 24)          # the shape is kept across the width
+
+
+def test_a_wide_frame_is_cut_left_and_right_into_the_asked_shape(desk):
+    # 80 x 40 into 40 x 40: the middle 40 columns (20 to 59) are kept.
+    picture = _first_frame(desk, _striped((80, 40), by_column=True), 40, 40)
+    assert (picture.width, picture.height) == (40, 40)
+    left, right = at(picture, 0, 5)[0], at(picture, 39, 5)[0]
+    assert 3 * 20 <= left <= 3 * 24
+    assert 3 * 56 <= right <= 3 * 60
+
+
+def test_a_frame_of_the_asked_shape_is_not_cut(desk):
+    picture = _first_frame(desk, _striped((80, 60), by_column=True), 40, 30)
+    assert at(picture, 0, 5)[0] < 10 and at(picture, 39, 5)[0] > 230          # all 80 columns are there
+
+
+def test_cover_box_keeps_the_centre():
+    assert ci._cover_box(480, 640, 640, 480) == (0, 140, 480, 360)
+    assert ci._cover_box(1280, 480, 640, 480) == (320, 0, 640, 480)
+    assert ci._cover_box(640, 480, 640, 480) == (0, 0, 640, 480)
+    assert ci._cover_box(320, 240, 640, 480) == (0, 0, 320, 240)
+
+
 def test_picture_is_black_before_the_first_frame(desk):
     cam = camera.open()
     cam.start(8, 4)
