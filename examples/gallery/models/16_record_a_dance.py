@@ -7,8 +7,8 @@ library, which is a separate install: funground-ml.
 
 How it works:
 - This is the mirror puppet with a recorder. Press Record, dance, press Stop, then Save.
-- While recording is True, each frame adds one dictionary to the list frames: ten numbers, rounded to whole degrees.
-  Twenty-four frames make one second of dance.
+- While recording is True, each frame adds one dictionary to the list frames: the ten angles, rounded to whole degrees,
+  and the four arm lengths. Twenty-four frames make one second of dance.
 - json is the Python library for writing lists and dictionaries as text. json.dump() writes the frames and the frame rate
   into dance.json. Open the file and look: it is only numbers, so it is small, and any drawing can dance it.
 - Recording keeps the eased angles, mirrored as the puppet showed them, so the replay looks like what you saw.
@@ -23,7 +23,7 @@ import json
 
 import funground as f
 from funground import camera, ml
-from puppet import Puppet, bone_angles, ease, mirrored
+from puppet import Puppet, bone_angles, arm_lengths, ease, mirrored
 
 JOINTS = {"nose": (240, 132), "right_shoulder": (172, 262), "left_shoulder": (308, 262),
           "right_elbow": (112, 318), "left_elbow": (368, 318), "right_wrist": (64, 382), "left_wrist": (416, 382),
@@ -35,6 +35,7 @@ drawing = f.load_image("data/hero.png")
 drawing.remove_color(drawing.get(4, 4), 60, tidy=True)
 hero = Puppet(drawing, JOINTS, arm=26, leg=28, head=92, grow=1.3)
 angles = dict(hero.rest)
+lengths = dict(hero.lengths)
 still = f.load_image("data/standing_woman_640.jpg")      # used when there is no camera
 still.resize(320, 480)
 cam = None
@@ -77,14 +78,17 @@ def draw():
     f.image(source, 0, 0)
     body = ml.pose(source)
     if body is not None:
-        seen = bone_angles(body.points)
+        seen, sizes = bone_angles(body.points), arm_lengths(body.points)
         if source is cam:                        # a camera is a mirror: copy the picture, as your reflection would
-            seen = mirrored(seen)
+            seen, sizes = mirrored(seen), mirrored(sizes)
         for bone, angle in seen.items():
             angles[bone] = ease(angles[bone], angle, 0.5)
+        for bone, size in sizes.items():
+            lengths[bone] += (size - lengths[bone]) * 0.5
     if recording:
-        frames.append({bone: round(angle) for bone, angle in angles.items()})
-    hero.draw(angles, 620, 300, zoom=0.62)
+        frames.append({"angles": {bone: round(angle) for bone, angle in angles.items()},
+                       "lengths": {bone: round(size, 2) for bone, size in lengths.items()}})
+    hero.draw(angles, 620, 300, zoom=0.62, lengths=lengths)
     f.no_stroke()
     f.fill("black")
     f.text_size(18)

@@ -50,7 +50,8 @@ for n, card in enumerate(cards):
     f.stroke("silver")
     f.stroke_width(1)
     f.rect(card.left, card.top, card.width, card.height)
-    hero.draw(frames[n * len(frames) // CARDS], card.cx + f.mm(6), card.top + f.mm(42), zoom=0.28)
+    frame = frames[n * len(frames) // CARDS]
+    hero.draw(frame["angles"], card.cx + f.mm(6), card.top + f.mm(42), zoom=0.28, lengths=frame.get("lengths"))
     f.no_stroke()
     f.fill("gray")
     f.text_size(11)

@@ -9,8 +9,8 @@ How it works:
   dance.json yet, open() fails with FileNotFoundError, and made_up_dance() from puppet.py makes one instead.
 - f.frame_count counts the frames drawn so far. f.frame_count % len(frames) counts 0, 1, 2 ... up to the last frame,
   then starts at 0 again, so the dance loops.
-- Each puppet has its own JOINTS, measured on its own drawing, and its own piece sizes. The angles are the same for
-  both, so they move together.
+- Each puppet has its own JOINTS, measured on its own drawing, and its own piece sizes. The angles and lengths are
+  the same for both, so they move together. frame.get("lengths") is None for the made-up dance: each keeps its own.
 - The friend is thin, so its arm and leg pieces are narrow (arm=12, leg=11). Its body piece grows more (grow=1.75)
   because its tunic is wider than the line between its shoulders and hips.
 
@@ -60,9 +60,9 @@ def setup():
 
 def draw():
     f.background("oldlace")
-    angles = frames[f.frame_count % len(frames)]
-    hero.draw(angles, 280, 300, zoom=0.62)
-    friend.draw(angles, 640, 300, zoom=0.62)
+    frame = frames[f.frame_count % len(frames)]
+    hero.draw(frame["angles"], 280, 300, zoom=0.62, lengths=frame.get("lengths"))
+    friend.draw(frame["angles"], 640, 300, zoom=0.62, lengths=frame.get("lengths"))
     f.fill("black")
     f.text_size(16)
     f.text_align("left", "top")

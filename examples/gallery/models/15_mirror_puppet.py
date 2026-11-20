@@ -6,15 +6,15 @@ cardboard puppet held together with paper fasteners. With no camera, it uses a p
 models library, which is a separate install: funground-ml.
 
 How it works:
-- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, ease, mirrored reads it. In Play it
+- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, arm_lengths, ease, mirrored reads it. In Play it
   opens as a second tab; on a computer, keep the two files in the same folder.
 - JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are.
 - picture.remove_color(picture.get(4, 4), 60, tidy=True) takes away the paper: every colour close to the corner's colour
   becomes see-through, and tidy keeps only the character.
-- bone_angles(body.points) gives the directions of your ten bones. Only directions are copied, never lengths, so the
-  puppet keeps its own shape. A camera shows you as a mirror does: your left arm is on the picture's left, where the
+- bone_angles(body.points) gives the directions of your ten bones, and arm_lengths(body.points) how long your arms
+  are for your size, so the puppet reaches as high as you do. A camera shows you as a mirror does: your left arm is on the picture's left, where the
   drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does.
-- ease() moves each angle half of the way towards the new one in each frame. A pose model's points jump a little from
+- ease() moves each angle half of the way towards the new one in each frame, and each length moves half of the way too. A pose model's points jump a little from
   frame to frame, and easing smooths the jumps away.
 - hero.draw(angles, 620, 300, zoom=0.62) draws the puppet with its hips at 620, 300, at 62 % of the drawing's size.
 
@@ -28,7 +28,7 @@ Make it yours:
 """
 import funground as f
 from funground import camera, ml
-from puppet import Puppet, bone_angles, ease, mirrored
+from puppet import Puppet, bone_angles, arm_lengths, ease, mirrored
 
 JOINTS = {"nose": (240, 132), "right_shoulder": (172, 262), "left_shoulder": (308, 262),
           "right_elbow": (112, 318), "left_elbow": (368, 318), "right_wrist": (64, 382), "left_wrist": (416, 382),
@@ -39,6 +39,7 @@ drawing = f.load_image("data/hero.png")
 drawing.remove_color(drawing.get(4, 4), 60, tidy=True)
 hero = Puppet(drawing, JOINTS, arm=26, leg=28, head=92, grow=1.3)
 angles = dict(hero.rest)                         # start as drawn
+lengths = dict(hero.lengths)
 still = f.load_image("data/standing_woman_640.jpg")      # used when there is no camera
 still.resize(320, 480)
 cam = None
@@ -64,12 +65,14 @@ def draw():
         f.fill("gold")
         for point in body.points.values():
             f.circle(point.x, point.y, 8)
-        seen = bone_angles(body.points)
+        seen, sizes = bone_angles(body.points), arm_lengths(body.points)
         if source is cam:                        # a camera is a mirror: copy the picture, as your reflection would
-            seen = mirrored(seen)
+            seen, sizes = mirrored(seen), mirrored(sizes)
         for bone, angle in seen.items():
             angles[bone] = ease(angles[bone], angle, 0.5)
-    hero.draw(angles, 620, 300, zoom=0.62)
+        for bone, size in sizes.items():
+            lengths[bone] += (size - lengths[bone]) * 0.5
+    hero.draw(angles, 620, 300, zoom=0.62, lengths=lengths)
 
 
 f.run(fps=24)

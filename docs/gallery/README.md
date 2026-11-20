@@ -3212,11 +3212,11 @@ You move, and a character drawn on paper copies you. The camera finds your body,
 
 **How it works**
 
-- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, ease, mirrored reads it. In Play it opens as a second tab; on a computer, keep the two files in the same folder.
+- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, arm_lengths, ease, mirrored reads it. In Play it opens as a second tab; on a computer, keep the two files in the same folder.
 - JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are.
 - picture.remove_color(picture.get(4, 4), 60, tidy=True) takes away the paper: every colour close to the corner's colour becomes see-through, and tidy keeps only the character.
-- bone_angles(body.points) gives the directions of your ten bones. Only directions are copied, never lengths, so the puppet keeps its own shape. A camera shows you as a mirror does: your left arm is on the picture's left, where the drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does.
-- ease() moves each angle half of the way towards the new one in each frame. A pose model's points jump a little from frame to frame, and easing smooths the jumps away.
+- bone_angles(body.points) gives the directions of your ten bones, and arm_lengths(body.points) how long your arms are for your size, so the puppet reaches as high as you do. A camera shows you as a mirror does: your left arm is on the picture's left, where the drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does.
+- ease() moves each angle half of the way towards the new one in each frame, and each length moves half of the way too. A pose model's points jump a little from frame to frame, and easing smooths the jumps away.
 - hero.draw(angles, 620, 300, zoom=0.62) draws the puppet with its hips at 620, 300, at 62 % of the drawing's size.
 
 **Make it yours**
@@ -3244,7 +3244,7 @@ Dance in front of the camera while the puppet copies you, and the sketch writes 
 **How it works**
 
 - This is the mirror puppet with a recorder. Press Record, dance, press Stop, then Save.
-- While recording is True, each frame adds one dictionary to the list frames: ten numbers, rounded to whole degrees. Twenty-four frames make one second of dance.
+- While recording is True, each frame adds one dictionary to the list frames: the ten angles, rounded to whole degrees, and the four arm lengths. Twenty-four frames make one second of dance.
 - json is the Python library for writing lists and dictionaries as text. json.dump() writes the frames and the frame rate into dance.json. Open the file and look: it is only numbers, so it is small, and any drawing can dance it.
 - Recording keeps the eased angles, mirrored as the puppet showed them, so the replay looks like what you saw.
 - In Play, dance.json appears in My files. On a computer, it is written in the folder the sketch runs in.
@@ -3274,7 +3274,7 @@ The dance you recorded is only numbers: ten directions for each frame. So any dr
 
 - json.load() reads dance.json back into a dictionary: the frame rate and the list of frames. If there is no dance.json yet, open() fails with FileNotFoundError, and made_up_dance() from puppet.py makes one instead.
 - f.frame_count counts the frames drawn so far. f.frame_count % len(frames) counts 0, 1, 2 ... up to the last frame, then starts at 0 again, so the dance loops.
-- Each puppet has its own JOINTS, measured on its own drawing, and its own piece sizes. The angles are the same for both, so they move together.
+- Each puppet has its own JOINTS, measured on its own drawing, and its own piece sizes. The angles and lengths are the same for both, so they move together. frame.get("lengths") is None for the made-up dance: each keeps its own.
 - The friend is thin, so its arm and leg pieces are narrow (arm=12, leg=11). Its body piece grows more (grow=1.75) because its tunic is wider than the line between its shoulders and hips.
 
 **Make it yours**
