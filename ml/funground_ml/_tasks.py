@@ -225,7 +225,7 @@ def _from_host(models, task: str, source: object, who: str, build):
         sent = (id(frame.picture), frame.version)
         if state.requested != sent and not models.busy(task, state.key):
             pixels, width, height = frame.rgba()
-            models.request(task, state.key, pixels, width, height)
+            models.request(task, state.key, pixels, width, height, frame.moving)
             state.requested = sent
         result = models.latest(task, state.key)
         return None if result is None else build(frame, result)

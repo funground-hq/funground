@@ -143,9 +143,10 @@ class HostModels:
         the task, or nothing is listening."""
         return self._on_models is None or task in self._failed or (task, key) in self._in_flight
 
-    def request(self, task: str, key: int, rgba, width: int, height: int) -> bool:
-        """Send one picture (RGBA bytes, row by row from the top left). Returns False when it was dropped, because
-        `busy` is true."""
+    def request(self, task: str, key: int, rgba, width: int, height: int, moving: bool = False) -> bool:
+        """Send one picture (RGBA bytes, row by row from the top left). *moving* is True for a camera's frame: the page
+        follows and steadies a body from one frame to the next, as funground-ml does on the desktop (S-328), and never
+        for a still picture. Returns False when it was dropped, because `busy` is true."""
         if self.busy(task, key):
             return False
         data = bytes(rgba)
@@ -154,7 +155,8 @@ class HostModels:
                              f"for {width} x {height}")
         self._in_flight.add((task, key))
         self._asked = True
-        self._on_models("request", {"task": task, "key": key, "width": width, "height": height, "pixels": data})
+        self._on_models("request", {"task": task, "key": key, "width": width, "height": height, "pixels": data,
+                                    "moving": bool(moving)})
         return True
 
     def request_sound(self, task: str, key: int, samples, rate: int) -> bool:

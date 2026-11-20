@@ -175,6 +175,12 @@ def test_the_picture_is_sent_as_opaque_rgba(page):
     assert page.requests()[0]["pixels"] == bytes([120, 90, 10, 255]) * 2
 
 
+def test_a_cameras_frame_is_sent_as_moving_and_a_picture_is_not(page):
+    funground_ml.pose(FakeCamera(solid_picture()))
+    funground_ml.pose(solid_picture())
+    assert [request["moving"] for request in page.requests()] == [True, False]
+
+
 def test_a_result_gives_a_body_and_the_same_one_twice_in_a_frame(page):
     camera = FakeCamera(solid_picture(), mirror=False)
     funground_ml.pose(camera)
