@@ -8,7 +8,7 @@ needs the models library, which is a separate install: funground-ml.
 How it works:
 - The sketch opens my_photo.jpg. When there is no file of that name, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
-- The figure is drawn once, in setup(), on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
+- draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
 - BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
 - draw() shows the photo with the figure over it on the left, and the figure alone on the right. f.image(picture, x, y, w, h) scales both to the canvas.
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
@@ -36,6 +36,7 @@ except FileNotFoundError:
     photo = f.load_image("data/gandhi_london_rain.jpg")
 
 figure = None
+found = False                      # True once the figure is drawn
 save_button = None
 half = 0                           # the width of each half of the canvas
 
@@ -45,12 +46,10 @@ def setup():
     half = round(photo.width * HEIGHT / photo.height)
     f.size(2 * half, HEIGHT)
     save_button = f.create_button("Save the stick figure")
-
     figure = f.create_graphics(photo.width, photo.height)
-    body = ml.pose(photo)
-    if body is None:
-        print("The computer found no one on this photo. Try a photo of one whole person.")
-        return
+
+
+def draw_figure(body):
     figure.stroke("lime")
     figure.stroke_width(photo.height / 100)          # the same look on a small photo and a big one
     figure.stroke_cap("round")
@@ -62,6 +61,13 @@ def setup():
 
 
 def draw():
+    global found
+    if not found:
+        body = ml.pose(photo)
+        if body:
+            draw_figure(body)
+            found = True
+
     f.image(photo, 0, 0, half, HEIGHT)
     f.image(figure, 0, 0, half, HEIGHT)
 
@@ -69,6 +75,9 @@ def draw():
     f.fill(30)                     # a dark paper, so the green figure stands out
     f.rect(half, 0, half, HEIGHT)
     f.image(figure, half, 0, half, HEIGHT)
+    if not found:
+        f.fill("white")
+        f.text("Looking for a body...", half + 20, HEIGHT / 2)
 
     if save_button.clicked():
         figure.save("stick_figure.png")

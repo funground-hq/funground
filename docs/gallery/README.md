@@ -2786,7 +2786,7 @@ A photograph with a green stick figure on it, and the same stick figure alone be
 
 - The sketch opens my_photo.jpg. When there is no file of that name, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
-- The figure is drawn once, in setup(), on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
+- draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
 - BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
 - draw() shows the photo with the figure over it on the left, and the figure alone on the right. f.image(picture, x, y, w, h) scales both to the canvas.
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
