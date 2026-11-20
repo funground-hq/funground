@@ -6,13 +6,14 @@ cardboard puppet held together with paper fasteners. With no camera, it uses a p
 models library, which is a separate install: funground-ml.
 
 How it works:
-- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, ease reads it. In Play it
+- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, ease, mirrored reads it. In Play it
   opens as a second tab; on a computer, keep the two files in the same folder.
 - JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are.
 - picture.remove_color(picture.get(4, 4), 60, tidy=True) takes away the paper: every colour close to the corner's colour
   becomes see-through, and tidy keeps only the character.
 - bone_angles(body.points) gives the directions of your ten bones. Only directions are copied, never lengths, so the
-  puppet keeps its own shape.
+  puppet keeps its own shape. A camera shows you as a mirror does: your left arm is on the picture's left, where the
+  drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does.
 - ease() moves each angle half of the way towards the new one in each frame. A pose model's points jump a little from
   frame to frame, and easing smooths the jumps away.
 - hero.draw(angles, 620, 300, zoom=0.62) draws the puppet with its hips at 620, 300, at 62 % of the drawing's size.
@@ -27,7 +28,7 @@ Make it yours:
 """
 import funground as f
 from funground import camera, ml
-from puppet import Puppet, bone_angles, ease
+from puppet import Puppet, bone_angles, ease, mirrored
 
 JOINTS = {"nose": (240, 132), "right_shoulder": (172, 262), "left_shoulder": (308, 262),
           "right_elbow": (112, 318), "left_elbow": (368, 318), "right_wrist": (64, 382), "left_wrist": (416, 382),
@@ -63,7 +64,10 @@ def draw():
         f.fill("gold")
         for point in body.points.values():
             f.circle(point.x, point.y, 8)
-        for bone, angle in bone_angles(body.points).items():
+        seen = bone_angles(body.points)
+        if source is cam:                        # a camera is a mirror: copy the picture, as your reflection would
+            seen = mirrored(seen)
+        for bone, angle in seen.items():
             angles[bone] = ease(angles[bone], angle, 0.5)
     hero.draw(angles, 620, 300, zoom=0.62)
 

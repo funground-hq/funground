@@ -1,11 +1,14 @@
 """A cut-out puppet: one drawing, thirteen marked joints, ten bones that turn.
 
 This is not an example of its own. It is a second file that the puppet examples import with
-from puppet import Puppet, bone_angles, ease. Keep it in the same folder as your sketch. In Play it opens as a second tab.
+from puppet import Puppet, bone_angles, ease, mirrored. Keep it in the same folder as your sketch. In Play it opens as a second tab.
 
 How it works:
 - bone_angles(points) takes a dictionary of named points and gives ten directions in degrees: the body, the head and
   the eight arm and leg bones. It works on the joints you marked on your drawing and on the points of a real body alike.
+- mirrored(angles) swaps left and right. A camera shows you as a mirror does: your left arm is on the picture's left,
+  where a drawing that faces you has its right arm. Swapped, the puppet copies the picture, as your reflection would.
+  Without the swap, your left arm's direction turns the arm on the other side, and the arms cross the body.
 - A Puppet remembers the directions as you drew them (rest). To pose it, each piece is turned by the difference
   between the direction it should point in and the direction it was drawn in.
 - box(a, b, half) gives the four corners of a box around the line from a to b. The drawing is clipped to that box,
@@ -39,6 +42,20 @@ def bone_angles(points):
     for bone, (start, end) in BONES.items():
         angles[bone] = (points[end] - points[start]).heading()
     return angles
+
+
+def other_side(name):
+    """left_wrist for right_wrist, right_wrist for left_wrist; body and head stay as they are."""
+    if name.startswith("left_"):
+        return "right_" + name[len("left_"):]
+    if name.startswith("right_"):
+        return "left_" + name[len("right_"):]
+    return name
+
+
+def mirrored(angles):
+    """The same directions with left and right swapped, for a camera that shows you as a mirror does."""
+    return {other_side(bone): angle for bone, angle in angles.items()}
 
 
 def ease(old, new, amount=0.5):

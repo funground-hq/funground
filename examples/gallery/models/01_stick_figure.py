@@ -18,7 +18,6 @@ Make it yours:
 - Tick All 33 points and look at the hands and feet. Then give them a colour of their own: draw MORE_BONES with another figure.stroke().
 - Change "lime" and the line's thickness to give the figure a new look.
 - Change SURE to 0.9 and more bones go faint; change it to 0 and every bone is bright.
-- Draw a small circle at every point in body.points.values() instead of lines.
 - Give the right half a colour of its own: change f.fill(30) before the rect.
 """
 import funground as f

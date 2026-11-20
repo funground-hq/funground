@@ -2787,16 +2787,16 @@ A photograph with a green stick figure on it, and the same stick figure alone be
 - The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
 - draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
-- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
+- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points. A bone is bright when the model is sure of both ends (body.scores says how sure it is of each point, from 0 to 1) and faint when one end is a guess: in the Gandhi photograph his left arm and leg are hidden behind him, and the model guesses where they are. Tick All 33 points and draw_figure() draws again with MORE_BONES too (the face, the hands and the feet) and a dot on every point the model gives.
 - draw() shows the photo with the figure over it on the left, and the figure alone on the right. f.image(picture, x, y, w, h) scales both to the canvas.
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
 
 **Make it yours**
 
 - Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
-- Add the ears and the mouth: body.left_ear, body.right_ear, body.mouth_left and body.mouth_right.
-- Change figure.stroke("lime") and the line's thickness to give the figure a new look.
-- Draw a small circle at every point in body.points.values() instead of lines.
+- Tick All 33 points and look at the hands and feet. Then give them a colour of their own: draw MORE_BONES with another figure.stroke().
+- Change "lime" and the line's thickness to give the figure a new look.
+- Change SURE to 0.9 and more bones go faint; change it to 0 and every bone is bright.
 - Give the right half a colour of its own: change f.fill(30) before the rect.
 
 </details>
@@ -2837,24 +2837,25 @@ Source: [`examples/gallery/models/02_follow_your_finger.py`](../../examples/gall
 
 ![In front of the sea](images/models-03_in_front_of_the_sea.png)
 
-A woman on a catwalk is cut out of her photograph and put in front of a sunset sea that the sketch draws itself. The computer finds the person, and everything else in the photograph becomes see-through. It needs the models library, which is a separate install: funground-ml.
+A person is cut out of a photograph and put in front of a sunset sea that the sketch draws itself. The computer finds the person, and everything else in the photograph becomes see-through. It uses your own photo when you give it one, and a woman on a catwalk until then. It needs the models library, which is a separate install: funground-ml.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
 
 **How it works**
 
-- ml.person(photo) gives a new picture the size of the photo. Only the person is left in it. The rest is see-through.
-- The edge is soft. A pixel on the edge is a little see-through, so the cut-out blends into what is behind it.
-- The sky is a stack of thin bands. Each band is a step of f.lerp_color() between two colours. The sea is built the same way.
-- Wavy lines are drawn on the sea with f.begin_shape(), f.vertex() and a sine wave.
-- The background is drawn first. f.image() draws the person last, so she stands in front.
+- The sketch tries my_photo.jpg, my_photo.png, my_photo.jpeg and my_photo.svg in turn. When there is none, it opens the catwalk photograph instead. An SVG is read with f.load_svg(), so only its shapes count: a photo saved inside an SVG is left out.
+- The canvas is always HEIGHT tall. A photo of another size is drawn scaled, f.image(cutout, 0, 0, WIDTH, HEIGHT), so a big phone photo fits too.
+- ml.person(photo) gives a new picture the size of the photo. Only the person is left in it. The rest is see-through. The edge is soft: a pixel on the edge is a little see-through, so the cut-out blends into what is behind it.
+- The sky is a stack of thin bands. Each band is a step of f.lerp_color() between two colours. The sea is built the same way, with wavy lines drawn on it by f.begin_shape(), f.vertex() and a sine wave.
+- draw() asks for the cut-out until it has one, then keeps it (in Play the answer comes a few frames later, while the model starts). The background is drawn first, and the person last, so they stand in front.
 - With a camera, ml.person(cam) works the same way. Use f.image(ml.person(cam), 0, 0) to put yourself in front of the sea.
 
 **Make it yours**
 
+- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
 - Change the four colours at the top for a morning, or a night.
-- Move HORIZON to put the sea higher or lower behind her.
+- Move HORIZON to put the sea higher or lower behind the person.
 - Add stars to the sky with f.circle() and f.random_seed().
 - Draw the person twice: first with f.opacity(80) and a shift in x, then normally, for a shadow.
 
@@ -2971,16 +2972,17 @@ A green stick figure that follows you. The computer looks at the camera, finds y
 - Every pose sketch has the same three steps: get a picture, ask for the body in it, and draw with the 33 points you get back. Only the third step changes from one project to the next.
 - The first line of draw() chooses the picture for this frame: the camera if it has a frame ready, the photo if not. cam.is_ready() is false for the first moments, before the first frame arrives.
 - ml.pose(source) gives a body, or None when it sees no one. Always check for None before you use the body. Here the sketch writes a hint and leaves draw() early with return.
-- BONES is a list of pairs of point names. The loop looks up both points of each pair and draws a line between them. Twelve pairs make the figure.
+- BONES is a list of pairs of point names. The loop looks up both points of each pair and draws a line between them. Twelve pairs make the figure. A bone is faint when the model is not sure of one of its ends: body.scores says how sure it is of each point, from 0 to 1. Tick All 33 points and MORE_BONES joins in (the face, the hands and the feet), with a dot on every point.
 - The gold and blue dots mark your left and right wrists. The camera is mirrored, but left is your own left: raise your left hand and the gold dot rises.
 - f.run(fps=24) asks for 24 frames a second. Finding a body is real work for the computer, and 24 is smooth enough.
 
 **Make it yours**
 
 - Hide the camera picture by deleting the f.image(source, 0, 0) line. Only the figure remains.
-- Draw a small circle at every point: for p in body.points.values(): f.circle(p.x, p.y, 6).
+- Tick All 33 points and wave. The fingers and toes wobble more than the elbows: they are small, and the model is less sure of them.
 - Show how sure the model is: f.text(round(body.score, 2), 20, 440).
-- Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them.
+- Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them, and their bones go faint.
+- Leave the guesses out: change the faint stroke to f.no_stroke().
 
 </details>
 
@@ -3210,10 +3212,10 @@ You move, and a character drawn on paper copies you. The camera finds your body,
 
 **How it works**
 
-- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, ease reads it. In Play it opens as a second tab; on a computer, keep the two files in the same folder.
+- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, ease, mirrored reads it. In Play it opens as a second tab; on a computer, keep the two files in the same folder.
 - JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are.
 - picture.remove_color(picture.get(4, 4), 60, tidy=True) takes away the paper: every colour close to the corner's colour becomes see-through, and tidy keeps only the character.
-- bone_angles(body.points) gives the directions of your ten bones. Only directions are copied, never lengths, so the puppet keeps its own shape.
+- bone_angles(body.points) gives the directions of your ten bones. Only directions are copied, never lengths, so the puppet keeps its own shape. A camera shows you as a mirror does: your left arm is on the picture's left, where the drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does.
 - ease() moves each angle half of the way towards the new one in each frame. A pose model's points jump a little from frame to frame, and easing smooths the jumps away.
 - hero.draw(angles, 620, 300, zoom=0.62) draws the puppet with its hips at 620, 300, at 62 % of the drawing's size.
 
@@ -3244,7 +3246,7 @@ Dance in front of the camera while the puppet copies you, and the sketch writes 
 - This is the mirror puppet with a recorder. Press Record, dance, press Stop, then Save.
 - While recording is True, each frame adds one dictionary to the list frames: ten numbers, rounded to whole degrees. Twenty-four frames make one second of dance.
 - json is the Python library for writing lists and dictionaries as text. json.dump() writes the frames and the frame rate into dance.json. Open the file and look: it is only numbers, so it is small, and any drawing can dance it.
-- Recording keeps the eased angles, so the replay is as smooth as what you saw.
+- Recording keeps the eased angles, mirrored as the puppet showed them, so the replay looks like what you saw.
 - In Play, dance.json appears in My files. On a computer, it is written in the folder the sketch runs in.
 
 **Make it yours**
