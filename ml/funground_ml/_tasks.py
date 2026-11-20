@@ -38,10 +38,15 @@ def find_body(source: object, base_dir: str | None) -> Body | None:
             detection = _glue.detect(detector, image, _glue.POSE_DETECTOR)
             return None if detection is None else _glue.body_region(detection)
 
-        found = state.tracker.find(image, detect_region, lambda region: _glue.body_landmarks(landmark_model, image, region))
+        steady = state.steadier if frame.moving else None          # a camera: follow the body and steady it
+        found = state.tracker.find(image, detect_region, lambda region: _glue.body_landmarks(landmark_model, image, region),
+                                   follow=steady.region if steady else None)
         if found is None:
+            if steady:
+                steady.reset()
             return None
-        return Body.from_points(_to_logical(frame, found.points), found.score, frame.mirrored)
+        points = steady.points(found.points) if steady else found.points
+        return Body.from_points(_to_logical(frame, points), found.score, frame.mirrored)
 
     return _source.answer(source, "pose", who, make)
 
