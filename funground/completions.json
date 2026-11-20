@@ -37,7 +37,7 @@
    "url": "reference/API.md#fn-fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 201,
+   "rank": 202,
    "also": [
     "color",
     "colour",
@@ -83,7 +83,7 @@
    "url": "reference/API.md#fn-no_stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 165,
+   "rank": 166,
    "plain": "Stop drawing outlines around shapes.",
    "also": [
     "no outline",
@@ -112,34 +112,6 @@
    ]
   },
   {
-   "name": "circle",
-   "kind": "function",
-   "signature": "circle(x, y, diameter)",
-   "detail": "(x: float, y: float, diameter: float) -> None",
-   "summary": "Draw a circle.",
-   "url": "reference/API.md#fn-circle",
-   "star": true,
-   "section": "Shapes",
-   "rank": 138,
-   "also": [
-    "round",
-    "ball",
-    "dot",
-    "oval"
-   ],
-   "kinds": {
-    "x": {
-     "kind": "pixels"
-    },
-    "y": {
-     "kind": "pixels"
-    },
-    "diameter": {
-     "kind": "pixels"
-    }
-   }
-  },
-  {
    "name": "text",
    "kind": "function",
    "signature": "text(message, x, y, color=None)",
@@ -166,6 +138,34 @@
     },
     "color": {
      "kind": "colour"
+    }
+   }
+  },
+  {
+   "name": "circle",
+   "kind": "function",
+   "signature": "circle(x, y, diameter)",
+   "detail": "(x: float, y: float, diameter: float) -> None",
+   "summary": "Draw a circle.",
+   "url": "reference/API.md#fn-circle",
+   "star": true,
+   "section": "Shapes",
+   "rank": 137,
+   "also": [
+    "round",
+    "ball",
+    "dot",
+    "oval"
+   ],
+   "kinds": {
+    "x": {
+     "kind": "pixels"
+    },
+    "y": {
+     "kind": "pixels"
+    },
+    "diameter": {
+     "kind": "pixels"
     }
    }
   },
@@ -201,7 +201,7 @@
    "url": "reference/API.md#fn-rect",
    "star": true,
    "section": "Shapes",
-   "rank": 108,
+   "rank": 109,
    "also": [
     "rectangle",
     "box",
@@ -233,7 +233,7 @@
    "url": "reference/API.md#fn-stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 101,
+   "rank": 100,
    "also": [
     "outline",
     "border",
@@ -256,7 +256,7 @@
    "url": "reference/API.md#fn-stroke_width",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 87,
+   "rank": 86,
    "also": [
     "thickness",
     "thick",
@@ -378,7 +378,7 @@
    "url": "reference/API.md#fn-line",
    "star": true,
    "section": "Shapes",
-   "rank": 52,
+   "rank": 51,
    "also": [
     "segment",
     "connect",
@@ -409,7 +409,7 @@
    "url": "reference/API.md#fn-no_fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 49,
+   "rank": 48,
    "plain": "Draw shapes with nothing inside, only their outlines.",
    "also": [
     "empty",
@@ -963,6 +963,24 @@
    }
   },
   {
+   "name": "create_button",
+   "kind": "function",
+   "signature": "create_button(label)",
+   "detail": "(label: str) -> Button",
+   "summary": "Make a button in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_button",
+   "returns": "Button",
+   "star": true,
+   "section": "Interaction and controls",
+   "rank": 11,
+   "also": [
+    "click",
+    "press",
+    "control",
+    "switch"
+   ]
+  },
+  {
    "name": "create_slider",
    "kind": "function",
    "signature": "create_slider(low, high, value=None, step=None, label=None)",
@@ -982,22 +1000,31 @@
    ]
   },
   {
-   "name": "create_button",
+   "name": "create_graphics",
    "kind": "function",
-   "signature": "create_button(label)",
-   "detail": "(label: str) -> Button",
-   "summary": "Make a button in the panel below the canvas.",
-   "url": "reference/API.md#fn-create_button",
-   "returns": "Button",
+   "signature": "create_graphics(width, height)",
+   "detail": "(width: int, height: int) -> Picture",
+   "summary": "Make a picture: an off-screen canvas.",
+   "url": "reference/API.md#fn-create_graphics",
+   "returns": "Picture",
    "star": true,
-   "section": "Interaction and controls",
+   "section": "Pictures and layers",
    "rank": 10,
+   "plain": "Make a second picture to draw on, away from the screen.",
    "also": [
-    "click",
-    "press",
-    "control",
-    "switch"
-   ]
+    "new canvas",
+    "layer",
+    "off screen",
+    "buffer"
+   ],
+   "kinds": {
+    "width": {
+     "kind": "pixels"
+    },
+    "height": {
+     "kind": "pixels"
+    }
+   }
   },
   {
    "name": "scale",
@@ -1052,33 +1079,6 @@
     "custom shape",
     "corners"
    ]
-  },
-  {
-   "name": "create_graphics",
-   "kind": "function",
-   "signature": "create_graphics(width, height)",
-   "detail": "(width: int, height: int) -> Picture",
-   "summary": "Make a picture: an off-screen canvas.",
-   "url": "reference/API.md#fn-create_graphics",
-   "returns": "Picture",
-   "star": true,
-   "section": "Pictures and layers",
-   "rank": 9,
-   "plain": "Make a second picture to draw on, away from the screen.",
-   "also": [
-    "new canvas",
-    "layer",
-    "off screen",
-    "buffer"
-   ],
-   "kinds": {
-    "width": {
-     "kind": "pixels"
-    },
-    "height": {
-     "kind": "pixels"
-    }
-   }
   },
   {
    "name": "end_shape",
@@ -1566,33 +1566,6 @@
    "rank": 4
   },
   {
-   "name": "stroke_cap",
-   "kind": "function",
-   "signature": "stroke_cap(cap)",
-   "detail": "(cap: CONSTANTS.CAP) -> None",
-   "summary": "Choose how the ends of lines look.",
-   "url": "reference/API.md#fn-stroke_cap",
-   "star": true,
-   "options": {
-    "cap": [
-     {
-      "word": "round",
-      "meaning": "Each end of a line is a half circle, so the line reaches half its width past its end points. The default."
-     },
-     {
-      "word": "square",
-      "meaning": "Each end is squared off half the line's width past its end point."
-     },
-     {
-      "word": "butt",
-      "meaning": "Each end is cut off flat exactly at its end point."
-     }
-    ]
-   },
-   "section": "Fill and stroke",
-   "rank": 4
-  },
-  {
    "name": "text_path",
    "kind": "function",
    "signature": "text_path(message, x, y)",
@@ -1846,6 +1819,33 @@
    "url": "reference/API.md#fn-stop",
    "star": true,
    "section": "Sketch and loop",
+   "rank": 3
+  },
+  {
+   "name": "stroke_cap",
+   "kind": "function",
+   "signature": "stroke_cap(cap)",
+   "detail": "(cap: CONSTANTS.CAP) -> None",
+   "summary": "Choose how the ends of lines look.",
+   "url": "reference/API.md#fn-stroke_cap",
+   "star": true,
+   "options": {
+    "cap": [
+     {
+      "word": "round",
+      "meaning": "Each end of a line is a half circle, so the line reaches half its width past its end points. The default."
+     },
+     {
+      "word": "square",
+      "meaning": "Each end is squared off half the line's width past its end point."
+     },
+     {
+      "word": "butt",
+      "meaning": "Each end is cut off flat exactly at its end point."
+     }
+    ]
+   },
+   "section": "Fill and stroke",
    "rank": 3
   },
   {
@@ -9920,7 +9920,7 @@
      "summary": "Write the sound to a 16-bit WAV file.",
      "url": "reference/API.md#cls-Sound-save",
      "section": "Sound",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "set_volume",
@@ -10220,7 +10220,7 @@
      "summary": "Save the latest frame as a photo.",
      "url": "reference/API.md#cls-Camera-save",
      "section": "Camera",
-     "rank": 4,
+     "rank": 5,
      "since": "0.2"
     },
     {
@@ -10338,7 +10338,7 @@
      "summary": "Write the frames kept so far to a file.",
      "url": "reference/API.md#cls-Clip-save",
      "section": "Clip",
-     "rank": 4,
+     "rank": 5,
      "since": "0.2"
     },
     {
@@ -10461,7 +10461,7 @@
      "summary": "Write the picture to a file straight away.",
      "url": "reference/API.md#cls-Picture-save",
      "section": "Picture",
-     "rank": 4
+     "rank": 5
     }
    ]
   },
@@ -10792,7 +10792,7 @@
      "summary": "Add a circle as a closed part of the path.",
      "url": "reference/API.md#cls-PathBuilder-circle",
      "section": "PathBuilder",
-     "rank": 19,
+     "rank": 20,
      "returns": "PathBuilder"
     },
     {
@@ -11985,7 +11985,7 @@
      "summary": "Whether the button was clicked since you last asked.",
      "url": "reference/API.md#cls-Button-clicked",
      "section": "Button",
-     "rank": 10
+     "rank": 11
     },
     {
      "name": "label",
