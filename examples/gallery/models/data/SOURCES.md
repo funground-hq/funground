@@ -29,3 +29,14 @@ The photograph is used by `02_follow_your_finger.py` when there is no camera. A 
   original size, 330 x 454, not scaled.
 
 The photograph is used by `01_stick_figure.py`. A copy of it is also in `ml/tests/data/`, where the tests use it.
+
+## hero.png and friend.png
+
+- **What:** two characters drawn as a learner would draw them on paper for a cut-out puppet: a round hero in a striped
+  jumper (480 x 640) and a thin friend in a tunic (400 x 600), each standing with its arms away from its body, on
+  off-white paper with a soft corner shadow and grain, like a phone photograph.
+- **Where from:** made for funground (S-321) by `tools/make_puppet_drawings.py`, with funground itself. They are original
+  (D-026); no picture was traced or copied. Run the tool again to remake them; it prints each drawing's JOINTS line.
+- **Licence:** CC0, like the examples (`examples/LICENSE`).
+
+The drawings are used by the puppet examples `14_mark_the_joints.py` to `18_print_a_flipbook.py`.
