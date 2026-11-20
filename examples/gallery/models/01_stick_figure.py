@@ -9,13 +9,13 @@ How it works:
 - The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
 - draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
-- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
+- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points. Tick All 33 points and draw_figure() draws again with MORE_BONES too (the face, the hands and the feet) and a dot on every point the model gives.
 - draw() shows the photo with the figure over it on the left, and the figure alone on the right. f.image(picture, x, y, w, h) scales both to the canvas.
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
 
 Make it yours:
 - Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
-- Add the ears and the mouth: body.left_ear, body.right_ear, body.mouth_left and body.mouth_right.
+- Tick All 33 points and look at the hands and feet. Then give them a colour of their own: draw MORE_BONES with another figure.stroke().
 - Change figure.stroke("lime") and the line's thickness to give the figure a new look.
 - Draw a small circle at every point in body.points.values() instead of lines.
 - Give the right half a colour of its own: change f.fill(30) before the rect.
@@ -28,6 +28,14 @@ BONES = [("left_shoulder", "right_shoulder"), ("left_shoulder", "left_elbow"), (
          ("right_shoulder", "right_elbow"), ("right_elbow", "right_wrist"), ("left_shoulder", "left_hip"),
          ("right_shoulder", "right_hip"), ("left_hip", "right_hip"), ("left_hip", "left_knee"),
          ("left_knee", "left_ankle"), ("right_hip", "right_knee"), ("right_knee", "right_ankle")]
+MORE_BONES = [("nose", "left_eye_inner"), ("left_eye_inner", "left_eye"), ("left_eye", "left_eye_outer"),
+              ("left_eye_outer", "left_ear"), ("nose", "right_eye_inner"), ("right_eye_inner", "right_eye"),
+              ("right_eye", "right_eye_outer"), ("right_eye_outer", "right_ear"), ("mouth_left", "mouth_right"),
+              ("left_wrist", "left_thumb"), ("left_wrist", "left_index"), ("left_wrist", "left_pinky"),
+              ("left_index", "left_pinky"), ("right_wrist", "right_thumb"), ("right_wrist", "right_index"),
+              ("right_wrist", "right_pinky"), ("right_index", "right_pinky"), ("left_ankle", "left_heel"),
+              ("left_heel", "left_foot_index"), ("left_ankle", "left_foot_index"), ("right_ankle", "right_heel"),
+              ("right_heel", "right_foot_index"), ("right_ankle", "right_foot_index")]   # the face, the hands and the feet
 
 photo = None
 for name in ["my_photo.jpg", "my_photo.png", "my_photo.jpeg"]:
@@ -43,35 +51,47 @@ if photo is None:
 figure = None
 found = False                      # True once the figure is drawn
 save_button = None
+all_points = None                  # the box that adds the face, the hands and the feet
+body = None
+drawn_all = None                   # what the figure was last drawn with, so it is drawn again only when the box changes
 half = 0                           # the width of each half of the canvas
 
 
 def setup():
-    global figure, save_button, half
+    global figure, save_button, all_points, half
     half = round(photo.width * HEIGHT / photo.height)
     f.size(2 * half, HEIGHT)
     save_button = f.create_button("Save the stick figure")
+    all_points = f.create_checkbox("All 33 points")
     figure = f.create_graphics(photo.width, photo.height)
 
 
-def draw_figure(body):
+def draw_figure(body, every):
+    figure.clear()
     figure.stroke("lime")
     figure.stroke_width(photo.height / 100)          # the same look on a small photo and a big one
     figure.stroke_cap("round")
     figure.no_fill()
-    for first, second in BONES:
+    for first, second in BONES + MORE_BONES if every else BONES:
         a, b = body.points[first], body.points[second]
         figure.line(a.x, a.y, b.x, b.y)
-    figure.circle(body.nose.x, body.nose.y, photo.height / 20)
+    if every:
+        figure.no_stroke()
+        figure.fill("white")
+        for p in body.points.values():
+            figure.circle(p.x, p.y, photo.height / 120)
+    else:
+        figure.circle(body.nose.x, body.nose.y, photo.height / 20)
 
 
 def draw():
-    global found
+    global found, body, drawn_all
     if not found:
         body = ml.pose(photo)
-        if body:
-            draw_figure(body)
-            found = True
+        found = body is not None
+    if found and all_points.checked() != drawn_all:
+        drawn_all = all_points.checked()
+        draw_figure(body, drawn_all)
 
     f.image(photo, 0, 0, half, HEIGHT)
     f.image(figure, 0, 0, half, HEIGHT)
