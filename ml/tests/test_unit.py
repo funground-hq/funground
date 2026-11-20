@@ -250,7 +250,7 @@ def test_the_table_has_eleven_pinned_files_from_the_hub():
         assert re.fullmatch(r"https://huggingface\.co/(opencv|onnx-community|funground-hq)/[a-z0-9_.-]+/resolve/[0-9a-f]{40}/[\w./]+\.(onnx|json)", model.url), model.url
         assert "/main/" not in model.url
         assert re.fullmatch(r"[0-9a-f]{64}", model.sha256) and model.size > 100_000
-        assert model.licence == "Apache-2.0"
+        assert model.licence == ("MIT OR Apache-2.0" if model.repo.endswith("whisper-tiny.en") else "Apache-2.0")
         assert "/" not in model.local_name                                  # a copy is kept straight in models/
     assert set(name for names in _models.TASKS.values() for name in names) == set(_models.MODELS)
 
