@@ -5334,11 +5334,11 @@
   "width": 2.0
  },
  {
-  "height": 960,
+  "height": 960.0,
   "op": "Image",
   "source": "graphics-2",
   "version": 1,
-  "width": 640,
+  "width": 640.0,
   "x": 0.0,
   "y": 0.0
  }
