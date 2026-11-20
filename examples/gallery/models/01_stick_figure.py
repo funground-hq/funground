@@ -9,14 +9,15 @@ How it works:
 - The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
 - draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
-- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points. Tick All 33 points and draw_figure() draws again with MORE_BONES too (the face, the hands and the feet) and a dot on every point the model gives.
+- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points. A bone is bright when the model is sure of both ends (body.scores says how sure it is of each point, from 0 to 1) and faint when one end is a guess: in the Gandhi photograph his left arm and leg are hidden behind him, and the model guesses where they are. Tick All 33 points and draw_figure() draws again with MORE_BONES too (the face, the hands and the feet) and a dot on every point the model gives.
 - draw() shows the photo with the figure over it on the left, and the figure alone on the right. f.image(picture, x, y, w, h) scales both to the canvas.
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
 
 Make it yours:
 - Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
 - Tick All 33 points and look at the hands and feet. Then give them a colour of their own: draw MORE_BONES with another figure.stroke().
-- Change figure.stroke("lime") and the line's thickness to give the figure a new look.
+- Change "lime" and the line's thickness to give the figure a new look.
+- Change SURE to 0.9 and more bones go faint; change it to 0 and every bone is bright.
 - Draw a small circle at every point in body.points.values() instead of lines.
 - Give the right half a colour of its own: change f.fill(30) before the rect.
 """
@@ -24,6 +25,7 @@ import funground as f
 from funground import ml
 
 HEIGHT = 480                       # the canvas is this tall; the photo is scaled to fit it
+SURE = 0.5                         # a point the model is less sure of than this is a guess
 BONES = [("left_shoulder", "right_shoulder"), ("left_shoulder", "left_elbow"), ("left_elbow", "left_wrist"),
          ("right_shoulder", "right_elbow"), ("right_elbow", "right_wrist"), ("left_shoulder", "left_hip"),
          ("right_shoulder", "right_hip"), ("left_hip", "right_hip"), ("left_hip", "left_knee"),
@@ -68,13 +70,17 @@ def setup():
 
 def draw_figure(body, every):
     figure.clear()
-    figure.stroke("lime")
     figure.stroke_width(photo.height / 100)          # the same look on a small photo and a big one
     figure.stroke_cap("round")
     figure.no_fill()
     for first, second in BONES + MORE_BONES if every else BONES:
+        if body.scores[first] < SURE or body.scores[second] < SURE:
+            figure.stroke(0, 255, 0, 90)             # a faint lime: one end is a guess
+        else:
+            figure.stroke("lime")
         a, b = body.points[first], body.points[second]
         figure.line(a.x, a.y, b.x, b.y)
+    figure.stroke("lime")
     if every:
         figure.no_stroke()
         figure.fill("white")

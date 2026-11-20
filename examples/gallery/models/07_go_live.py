@@ -6,7 +6,7 @@ How it works:
 - Every pose sketch has the same three steps: get a picture, ask for the body in it, and draw with the 33 points you get back. Only the third step changes from one project to the next.
 - The first line of draw() chooses the picture for this frame: the camera if it has a frame ready, the photo if not. cam.is_ready() is false for the first moments, before the first frame arrives.
 - ml.pose(source) gives a body, or None when it sees no one. Always check for None before you use the body. Here the sketch writes a hint and leaves draw() early with return.
-- BONES is a list of pairs of point names. The loop looks up both points of each pair and draws a line between them. Twelve pairs make the figure. Tick All 33 points and MORE_BONES joins in (the face, the hands and the feet), with a dot on every point.
+- BONES is a list of pairs of point names. The loop looks up both points of each pair and draws a line between them. Twelve pairs make the figure. A bone is faint when the model is not sure of one of its ends: body.scores says how sure it is of each point, from 0 to 1. Tick All 33 points and MORE_BONES joins in (the face, the hands and the feet), with a dot on every point.
 - The gold and blue dots mark your left and right wrists. The camera is mirrored, but left is your own left: raise your left hand and the gold dot rises.
 - f.run(fps=24) asks for 24 frames a second. Finding a body is real work for the computer, and 24 is smooth enough.
 
@@ -14,7 +14,8 @@ Make it yours:
 - Hide the camera picture by deleting the f.image(source, 0, 0) line. Only the figure remains.
 - Tick All 33 points and wave. The fingers and toes wobble more than the elbows: they are small, and the model is less sure of them.
 - Show how sure the model is: f.text(round(body.score, 2), 20, 440).
-- Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them.
+- Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them, and their bones go faint.
+- Leave the guesses out: change the faint stroke to f.no_stroke().
 """
 import funground as f
 from funground import camera, ml
@@ -59,13 +60,17 @@ def draw():
         f.text("Step back until the camera can see all of you", 20, 20)
         return
     f.no_fill()
-    f.stroke("lime")
     f.stroke_width(4)
     f.stroke_cap("round")
     every = all_points.checked()
     for first, second in BONES + MORE_BONES if every else BONES:
+        if body.scores[first] < 0.5 or body.scores[second] < 0.5:
+            f.stroke(0, 255, 0, 90)                     # a faint lime: the model guessed one end
+        else:
+            f.stroke("lime")
         a, b = body.points[first], body.points[second]
         f.line(a.x, a.y, b.x, b.y)
+    f.stroke("lime")
     if not every:
         f.circle(body.nose.x, body.nose.y, 24)          # with all 33 points the face is drawn instead
     f.no_stroke()
