@@ -24,6 +24,7 @@ if str(ROOT) not in sys.path:
 import funground  # noqa: E402
 from funground import api  # noqa: E402
 from funground.export import save_pixels  # noqa: E402
+from funground.gallery import importing_beside  # noqa: E402
 from funground.platform.headless import HeadlessPlatform  # noqa: E402
 from funground.sketch import Sketch  # noqa: E402
 
@@ -60,10 +61,11 @@ def render(sketch: Path, out: Path, frames: int = FRAMES) -> Path:
 
     original = funground.run
     funground.run = harness_run
-    try:
-        exec(compile(source, str(sketch), "exec"), namespace)
-    finally:
-        funground.run = original
+    with importing_beside(sketch):          # an example may import a file beside it, such as puppet.py (S-321)
+        try:
+            exec(compile(source, str(sketch), "exec"), namespace)
+        finally:
+            funground.run = original
     script = api.active_sketch()
     if not out.exists() and script._script:
         # A script (S-076) never calls f.run(): its picture is the finished canvas.

@@ -22,6 +22,7 @@ import pytest  # noqa: E402
 
 import funground  # noqa: E402
 from funground import api  # noqa: E402
+from funground.gallery import importing_beside  # noqa: E402
 from funground.sketch import Sketch  # noqa: E402
 
 EXAMPLES = ROOT / "examples" / "session1"
@@ -137,10 +138,11 @@ def run_sketch(path: Path, frames: int = 30, fps: int = 1000):
 
     original_run, original_show = funground.run, funground.show
     funground.run, funground.show = harness_run, harness_show
-    try:
-        exec(compile(source, str(path), "exec"), namespace)
-    finally:
-        funground.run, funground.show = original_run, original_show
+    with importing_beside(path):
+        try:
+            exec(compile(source, str(path), "exec"), namespace)
+        finally:
+            funground.run, funground.show = original_run, original_show
 
     active = api.active_sketch()
     if active.last_frame is None and active._script:
