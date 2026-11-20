@@ -59,6 +59,10 @@ class Vector:
         v.add(1, 1).mult(2)       # now (8, 10)
         w = v + f.Vector(1, 0)    # a new vector, v is not changed
 
+    Blocks:
+        plain: Two numbers, x and y, for a position, a speed or a push.
+        also: point, arrow, direction, velocity, position
+
     See also: from_angle, random_2d, mag, add
     """
 

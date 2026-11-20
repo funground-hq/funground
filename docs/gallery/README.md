@@ -3170,6 +3170,152 @@ Teach the computer two gestures, "hands up" and "namaste", with the real ml.teac
 
 Source: [`examples/gallery/models/13_teach_with_a_pose_card.py`](../../examples/gallery/models/13_teach_with_a_pose_card.py)
 
+### Mark the joints
+
+![Mark the joints](images/models-14_mark_the_joints.png)
+
+Before a drawing can dance, the computer must know where its joints are. Tap the drawing once for each joint, in the order the sketch asks: the nose, then the shoulders, elbows, wrists, hips, knees and ankles. When all thirteen are marked, the sketch prints a JOINTS line. Copy it into the mirror puppet, and your drawing is ready to move.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- NAMES is the list of the thirteen joints, in the order they are asked for. "left" is the character's own left, so a character who faces you has its left shoulder on your right. A pose model names a person's joints the same way, which is what lets the puppet copy you arm for arm.
+- joints is a dictionary that starts empty. mouse_pressed() adds the next name with the place you tapped, so the next name to ask for is NAMES[len(joints)].
+- The Undo button takes back the last dot: joints.popitem() removes the newest entry of a dictionary.
+- Each dot is drawn with its number, so you can check the order. Lines join the dots that make one bone.
+- When the last joint is marked, print() writes the dictionary as one line of code you can copy.
+
+**Make it yours**
+
+- Photograph your own drawing on a plain sheet of paper, put the photo in the data folder, and change "data/hero.png" to its name. Draw your character standing with its arms a little away from its body: every piece must be clear of the others.
+- Mark data/friend.png too, and check your numbers against the FRIEND line in 17_replay_on_any_drawing.py.
+- Make the dots bigger if you mark them with a finger on a phone.
+
+</details>
+
+Source: [`examples/gallery/models/14_mark_the_joints.py`](../../examples/gallery/models/14_mark_the_joints.py)
+
+### Mirror puppet
+
+![Mirror puppet](images/models-15_mirror_puppet.png)
+
+You move, and a character drawn on paper copies you. The camera finds your body, the sketch measures the direction of ten of your bones, and the drawing's own bones are turned to point the same way. The drawing is cut into pieces like a cardboard puppet held together with paper fasteners. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, ease reads it. In Play it opens as a second tab; on a computer, keep the two files in the same folder.
+- JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are.
+- picture.remove_color(picture.get(4, 4), 60, tidy=True) takes away the paper: every colour close to the corner's colour becomes see-through, and tidy keeps only the character.
+- bone_angles(body.points) gives the directions of your ten bones. Only directions are copied, never lengths, so the puppet keeps its own shape.
+- ease() moves each angle half of the way towards the new one in each frame. A pose model's points jump a little from frame to frame, and easing smooths the jumps away.
+- hero.draw(angles, 620, 300, zoom=0.62) draws the puppet with its hips at 620, 300, at 62 % of the drawing's size.
+
+**Make it yours**
+
+- Draw your own character, mark its joints with 14_mark_the_joints.py and paste your JOINTS line here.
+- Change 0.5 in ease() to 0.2 for a slow, floaty puppet, or to 1 for no smoothing at all.
+- Make the arm and leg pieces wider or narrower: they are the arm=26 and leg=28 of Puppet(...). Too narrow cuts off the outline; too wide takes a bit of the body with each arm.
+- Look at the shoulders when you lift your arms. The pieces are cut with straight edges, so a joint shows a small gap or a stub. puppet.py is yours to change: try drawing a circle over each joint.
+
+</details>
+
+Source: [`examples/gallery/models/15_mirror_puppet.py`](../../examples/gallery/models/15_mirror_puppet.py)
+
+### Record a dance
+
+![Record a dance](images/models-16_record_a_dance.png)
+
+Dance in front of the camera while the puppet copies you, and the sketch writes your dance down: the ten bone directions of every frame, as numbers. Save, and the numbers go into a file, dance.json, that the next sketch replays on any drawing. With no camera, it uses a photo, so it still works, but the dance is a very still one. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- This is the mirror puppet with a recorder. Press Record, dance, press Stop, then Save.
+- While recording is True, each frame adds one dictionary to the list frames: ten numbers, rounded to whole degrees. Twenty-four frames make one second of dance.
+- json is the Python library for writing lists and dictionaries as text. json.dump() writes the frames and the frame rate into dance.json. Open the file and look: it is only numbers, so it is small, and any drawing can dance it.
+- Recording keeps the eased angles, so the replay is as smooth as what you saw.
+- In Play, dance.json appears in My files. On a computer, it is written in the folder the sketch runs in.
+
+**Make it yours**
+
+- Record a short dance: two or three seconds of one clear move, done twice, replays best.
+- Add a count-in: wait three seconds after Record before the first frame is kept.
+- Record at 12 frames a second (fps=12 in f.run, and in the file) and see whether the replay still looks smooth.
+
+</details>
+
+Source: [`examples/gallery/models/16_record_a_dance.py`](../../examples/gallery/models/16_record_a_dance.py)
+
+### Replay on any drawing
+
+![Replay on any drawing](images/models-17_replay_on_any_drawing.png)
+
+The dance you recorded is only numbers: ten directions for each frame. So any drawing with marked joints can dance it. Here two characters who look nothing alike dance the same dance side by side. It does not need a camera or the models library. Until you have recorded a dance of your own, they dance one made up from sine waves.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- json.load() reads dance.json back into a dictionary: the frame rate and the list of frames. If there is no dance.json yet, open() fails with FileNotFoundError, and made_up_dance() from puppet.py makes one instead.
+- f.frame_count counts the frames drawn so far. f.frame_count % len(frames) counts 0, 1, 2 ... up to the last frame, then starts at 0 again, so the dance loops.
+- Each puppet has its own JOINTS, measured on its own drawing, and its own piece sizes. The angles are the same for both, so they move together.
+- The friend is thin, so its arm and leg pieces are narrow (arm=12, leg=11). Its body piece grows more (grow=1.75) because its tunic is wider than the line between its shoulders and hips.
+
+**Make it yours**
+
+- Record a dance with 16_record_a_dance.py, then run this again.
+- Draw a third character, mark it with 14_mark_the_joints.py, and add it to the line-up.
+- Play the friend's dance a quarter of a second behind the hero's: use frames[(f.frame_count - 6) % len(frames)].
+- Mirror the friend: give it 180 - angle for every bone, and swap left and right.
+
+</details>
+
+Source: [`examples/gallery/models/17_replay_on_any_drawing.py`](../../examples/gallery/models/17_replay_on_any_drawing.py)
+
+### Print a flip book
+
+![Print a flip book](images/models-18_print_a_flipbook.png)
+
+Your dance on paper: eight frames of it on one A4 page, saved as flipbook.pdf. Print it, cut out the eight cards along the lines, stack them in order with card 1 on top, staple the left edge, and flick through them with your thumb. It does not need a camera or the models library. Until you have recorded a dance of your own, it prints one made up from sine waves.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- This is a script, not an animation: it draws one page from top to bottom, saves it and shows it.
+- f.size("A4", margin=f.mm(12)) makes the page an A4 sheet with a 12 mm margin. f.grid(2, 4, gutter=f.mm(6)) cuts the inside of the margins into eight cards with 6 mm between them. The grid goes row by row, left to right.
+- The eight frames are spread evenly through the dance: card n shows frame n * len(frames) // 8.
+- hero.draw(..., zoom=0.28) draws the puppet small enough for a card. The hips are put the same distance from the top of every card, so the puppet does not jump about when you flick.
+- f.save("flipbook.pdf") writes the page. A PDF keeps the shapes sharp at any printer's size. The drawing is stored in the file once, however many pieces of it the page shows, so the file stays small.
+
+**Make it yours**
+
+- Use the friend instead: copy its FRIEND line and its Puppet(...) from 17_replay_on_any_drawing.py.
+- Make a thicker flip book: f.grid(3, 6, ...) gives 18 smaller cards, and a smoother flick.
+- Write the card's number on the right edge instead, if you staple on the right.
+- Print a second page with the next eight frames: draw it after f.new_page().
+
+</details>
+
+Source: [`examples/gallery/models/18_print_a_flipbook.py`](../../examples/gallery/models/18_print_a_flipbook.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it
