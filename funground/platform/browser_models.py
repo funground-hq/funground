@@ -7,8 +7,8 @@ so inference never blocks the sketch's step. The two halves meet here, in the wa
 
 * `request(task, key, rgba, width, height)` sends one picture to the page. At most one is in flight for each task and
   source; a picture that comes while one is being worked on is dropped, never queued.
-* `push(task, key, points, score, width, height)` is what the page calls with a result of points (the "pose" and "hand"
-  tasks), and `push_mask(task, key, mask, mask_width, mask_height, width, height)` with a result that is a mask (the "person"
+* `push(task, key, points, score, width, height, scores=None)` is what the page calls with a result of points (the "pose"
+  and "hand" tasks; `scores`, one for each point, is how sure the pose model is of it, S-328), and `push_mask(task, key, mask, mask_width, mask_height, width, height)` with a result that is a mask (the "person"
   task). The host delivers either between two steps, so the sketch never sees a result appear half way through a frame.
 * `latest(task, key)` is what funground_ml reads: the newest result for that task and source, a `PointsResult` or a
   `MaskResult`, or None before the first.
@@ -98,6 +98,7 @@ class PointsResult(NamedTuple):
     score: float
     width: int                  # the size of the picture that was sent
     height: int
+    scores: tuple | None = None     # how sure the model is of each point, 0 to 1, when the page sends it (pose)
 
 
 class MaskResult(NamedTuple):
@@ -197,9 +198,10 @@ class HostModels:
         return self._latest.get((task, key))
 
     # ---- what the host calls
-    def push(self, task: str, key: int, points, score: float, width: int, height: int) -> None:
+    def push(self, task: str, key: int, points, score: float, width: int, height: int, scores=None) -> None:
         """A result from the page. `points` is a flat sequence x0, y0, x1, y1, ... in pixels of the picture that was
-        sent, or None when nobody was found. A result for a source the run has forgotten is ignored."""
+        sent, or None when nobody was found; `scores`, when the page sends it, is how sure the model is of each point
+        (one number for each pair). A result for a source the run has forgotten is ignored."""
         if (task, key) not in self._in_flight:
             return
         self._in_flight.discard((task, key))
@@ -210,7 +212,12 @@ class HostModels:
             if len(flat) % 2:
                 raise ValueError("the points of a model result must be x, y pairs: an even number of values")
             found = tuple(zip(flat[0::2], flat[1::2]))
-        self._latest[(task, key)] = PointsResult(found, float(score), int(width), int(height))
+        sure = None
+        if found is not None and scores is not None:
+            sure = tuple(float(v) for v in scores)
+            if len(sure) != len(found):
+                raise ValueError("a model result must have one score for each point")
+        self._latest[(task, key)] = PointsResult(found, float(score), int(width), int(height), sure)
         self.generation += 1
 
     def push_mask(self, task: str, key: int, mask, mask_width: int, mask_height: int, width: int, height: int) -> None:

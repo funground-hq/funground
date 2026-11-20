@@ -80,9 +80,9 @@ class BrowserPlatform(HeadlessPlatform):
         """One RGBA frame from the host's camera (`width * height * 4` bytes); the sketch uses the latest."""
         self.camera.push(pixels, width, height)
 
-    def push_models(self, task: str, key: int, points, score: float, width: int, height: int) -> None:
+    def push_models(self, task: str, key: int, points, score: float, width: int, height: int, scores=None) -> None:
         """One result from the host's models (browser_models.py); the sketch reads the latest."""
-        self.models.push(task, key, points, score, width, height)
+        self.models.push(task, key, points, score, width, height, scores)
 
     def push_models_mask(self, task: str, key: int, mask, mask_width: int, mask_height: int, width: int, height: int) -> None:
         """One result that is a mask from the host's models (browser_models.py); the sketch reads the latest."""

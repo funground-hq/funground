@@ -60,6 +60,20 @@ def test_a_mirrored_picture_swaps_every_left_and_right_name():
     assert mirrored.mouth_left.x == plain.mouth_left.x             # "mouth_left" does not start with a side
 
 
+def test_each_point_has_a_score_and_a_mirrored_picture_swaps_them_with_the_points():
+    sure = [i / 100 for i in range(33)]
+    plain = _results.Body.from_points(_rows(33), 0.9, False, sure)
+    mirrored = _results.Body.from_points(_rows(33), 0.9, True, sure)
+    assert list(plain.scores) == list(plain.points)
+    assert plain.scores["left_wrist"] == 0.15 and mirrored.scores["left_wrist"] == plain.scores["right_wrist"] == 0.16
+    assert mirrored.scores["nose"] == plain.scores["nose"] == 0.0
+
+
+def test_without_scores_for_the_points_each_has_the_bodys_score():
+    body = _results.Body.from_points(_rows(33), 0.9, mirrored=False)
+    assert set(body.scores.values()) == {0.9}
+
+
 def test_a_hand_has_21_named_points():
     hand = _results.Hand.from_points(_rows(21), 0.95)
     assert list(hand.points) == list(_results.HAND_NAMES)

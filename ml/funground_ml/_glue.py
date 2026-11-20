@@ -167,6 +167,7 @@ class Landmarks(NamedTuple):
     points: np.ndarray       # (n, 2) in picture pixels
     score: float             # 0 to 1
     region: tuple | None = None     # where to look in the next picture, from the model's own helper points (pose only)
+    scores: np.ndarray | None = None    # (n,) how sure the model is of each point, 0 to 1 (pose only: its "visibility")
 
 
 def _run_landmarks(session, crop: Crop):
@@ -184,7 +185,9 @@ def body_landmarks(session, image: Image.Image, region: tuple, count: int = 33) 
 
     The model gives 39 rows of (x, y, depth, visible, present); the first 33 are the body, the last 6 are helpers. Rows
     33 and 34 are the middle of the hips and a point on the circle round the body, like the detector's key points: they
-    are the region to look in for the next picture, so the square follows the body as MediaPipe's does.
+    are the region to look in for the next picture, so the square follows the body as MediaPipe's does. The "visible"
+    column, after a sigmoid, is how sure the model is of each point (MediaPipe's "visibility"): low for a hidden limb
+    whose place it guessed (S-328).
     """
     (x0, y0), (x1, y1) = region
     radius = float(np.hypot(x1 - x0, y1 - y0))
@@ -193,8 +196,9 @@ def body_landmarks(session, image: Image.Image, region: tuple, count: int = 33) 
     score = float(outputs[1][0, 0])
     if score < POSE_MIN_SCORE:
         return None
-    points = crop.to_picture(outputs[0][0].reshape(-1, 5)[:, :2])
-    return Landmarks(points[:count], min(score, 1.0), (tuple(points[33]), tuple(points[34])))
+    rows = outputs[0][0].reshape(-1, 5)
+    points = crop.to_picture(rows[:, :2])
+    return Landmarks(points[:count], min(score, 1.0), (tuple(points[33]), tuple(points[34])), sigmoid(rows[:count, 3]))
 
 
 def hand_region(detection: Detection) -> tuple:

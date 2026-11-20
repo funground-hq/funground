@@ -100,6 +100,16 @@ for name, point in body.points.items():
     f.circle(point.x, point.y, 6)           # a dot on every point of the body
 ```
 
+**The model guesses what it cannot see.** A leg behind the other leg, or a hand out of the picture, still gets a point:
+the model puts it where it thinks it is. `body.scores` says how sure it is of each point, from 0 to 1, with the same
+names as `body.points`. A part it saw clearly is near 1; a guess is low. Draw the guesses faintly, or leave them out:
+
+```py
+for name, point in body.points.items():
+    if body.scores[name] > 0.5:
+        f.circle(point.x, point.y, 6)       # only the points the model saw
+```
+
 A wrong name is helped. `body.left_sholder` says "A body has no point called 'left_sholder'. Did you mean
 'left_shoulder'?"
 

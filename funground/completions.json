@@ -1177,6 +1177,25 @@
    }
   },
   {
+   "name": "create_checkbox",
+   "kind": "function",
+   "signature": "create_checkbox(label, checked=False)",
+   "detail": "(label: str, checked: bool = False) -> Checkbox",
+   "summary": "Make a tick box in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_checkbox",
+   "returns": "Checkbox",
+   "star": true,
+   "section": "Interaction and controls",
+   "rank": 8,
+   "also": [
+    "tick",
+    "tick box",
+    "switch",
+    "toggle",
+    "yes or no"
+   ]
+  },
+  {
    "name": "lerp_color",
    "kind": "function",
    "signature": "lerp_color(c1, c2, amount)",
@@ -1401,25 +1420,6 @@
     "direction",
     "velocity",
     "position"
-   ]
-  },
-  {
-   "name": "create_checkbox",
-   "kind": "function",
-   "signature": "create_checkbox(label, checked=False)",
-   "detail": "(label: str, checked: bool = False) -> Checkbox",
-   "summary": "Make a tick box in the panel below the canvas.",
-   "url": "reference/API.md#fn-create_checkbox",
-   "returns": "Checkbox",
-   "star": true,
-   "section": "Interaction and controls",
-   "rank": 6,
-   "also": [
-    "tick",
-    "tick box",
-    "switch",
-    "toggle",
-    "yes or no"
    ]
   },
   {
@@ -1988,6 +1988,18 @@
    "returns": "Font",
    "star": true,
    "section": "Text and fonts",
+   "rank": 2
+  },
+  {
+   "name": "load_svg",
+   "kind": "function",
+   "signature": "load_svg(path)",
+   "detail": "(path: str) -> Picture",
+   "summary": "Read an SVG file and return a picture of its shapes.",
+   "url": "reference/API.md#fn-load_svg",
+   "returns": "Picture",
+   "star": true,
+   "section": "Images and SVG",
    "rank": 2
   },
   {
@@ -3164,18 +3176,6 @@
    "url": "reference/API.md#fn-load_pixels",
    "star": true,
    "section": "Pixels and filters",
-   "rank": 1
-  },
-  {
-   "name": "load_svg",
-   "kind": "function",
-   "signature": "load_svg(path)",
-   "detail": "(path: str) -> Picture",
-   "summary": "Read an SVG file and return a picture of its shapes.",
-   "url": "reference/API.md#fn-load_svg",
-   "returns": "Picture",
-   "star": true,
-   "section": "Images and SVG",
    "rank": 1
   },
   {
@@ -11957,7 +11957,7 @@
      "summary": "Read whether the box is ticked, or tick or untick it.",
      "url": "reference/API.md#cls-Checkbox-checked",
      "section": "Checkbox",
-     "rank": 6
+     "rank": 8
     },
     {
      "name": "label",
@@ -12451,10 +12451,20 @@
      "kind": "property",
      "signature": "score",
      "detail": "float",
-     "summary": "how sure the model is, from 0 to 1.",
+     "summary": "how sure the model is that there is a body, from 0 to 1.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
      "rank": 3
+    },
+    {
+     "name": "scores",
+     "kind": "property",
+     "signature": "scores",
+     "detail": "dict[str, float]",
+     "summary": "a dict of every point name and how sure the model is of that point, from 0 to 1.",
+     "url": "reference/API.md#cls-Body",
+     "section": "Body",
+     "rank": 0
     },
     {
      "name": "nose",

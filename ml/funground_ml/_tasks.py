@@ -46,7 +46,7 @@ def find_body(source: object, base_dir: str | None) -> Body | None:
                 steady.reset()
             return None
         points = steady.points(found.points) if steady else found.points
-        return Body.from_points(_to_logical(frame, points), found.score, frame.mirrored)
+        return Body.from_points(_to_logical(frame, points), found.score, frame.mirrored, found.scores)
 
     return _source.answer(source, "pose", who, make)
 
@@ -56,7 +56,7 @@ def find_hand(source: object, base_dir: str | None) -> Hand | None:
     who = "ml.hand()"
     if host_services.models is not None:
         return _from_host(host_services.models, "hand", source, who,
-                          _points_of(lambda points, score, mirrored: Hand.from_points(points, score)))
+                          _points_of(lambda points, score, mirrored, scores: Hand.from_points(points, score)))
     from . import _fetch, _glue, _runtime
 
     def make(frame: _source.Frame, state: _source._State) -> Hand | None:
@@ -201,7 +201,8 @@ def _points_of(build):
         if result.points is None:
             return None
         size = (result.width, result.height)
-        return build([frame.to_logical(x, y, size) for x, y in result.points], result.score, frame.mirrored)
+        return build([frame.to_logical(x, y, size) for x, y in result.points], result.score, frame.mirrored,
+                     result.scores)
 
     return points_answer
 

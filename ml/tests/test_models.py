@@ -80,6 +80,13 @@ def test_a_body_is_found_in_the_photograph(photo):
     assert 0 < body.nose.x < width and 0 < body.nose.y < height
 
 
+def test_the_model_is_less_sure_of_the_hidden_side(photo):
+    body = funground_ml.pose(photo)                           # side-on: his left knee and wrist are behind him
+    assert all(0.0 <= sure <= 1.0 for sure in body.scores.values())
+    assert body.scores["left_knee"] < 0.7 < body.scores["right_knee"]
+    assert body.scores["left_wrist"] < 0.7 < body.scores["right_wrist"]
+
+
 def test_the_body_agrees_with_the_spikes_glue_within_5_pixels(photo, spike_points):
     body = funground_ml.pose(photo)
     expected = spike_points[0][:, :2]

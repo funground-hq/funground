@@ -68,21 +68,30 @@ class Body(_Points):
 
     It has 33 named points, each an ``f.Vector`` in the source's pixels: ``body.nose``, ``body.left_shoulder``,
     ``body.right_ankle`` and so on (the list is in ``ml.pose``). ``body.points`` is a dict of every name and point, in
-    the model's order. ``body.score`` is how sure the model is, from 0 to 1.
+    the model's order. ``body.score`` is how sure the model is that there is a body, from 0 to 1, and ``body.scores``
+    is how sure it is of each point: a dict of every name and a number from 0 to 1, low for a part it could not see (a
+    leg behind the other, a hand out of the picture) whose place it guessed.
 
     Left and right are the person's own sides. With a mirrored camera the left wrist is the learner's own left wrist,
     wherever it shows on the screen.
 
     Attributes:
         points: a dict of every point name and its f.Vector, in the model's order.
-        score: how sure the model is, from 0 to 1.
+        score: how sure the model is that there is a body, from 0 to 1.
+        scores: a dict of every point name and how sure the model is of that point, from 0 to 1.
     """
 
     _names = BODY_NAMES
+    scores: dict[str, float]
+
+    def __init__(self, points: dict[str, Vector], score: float, scores: dict[str, float]) -> None:
+        super().__init__(points, score)
+        self.scores = scores
 
     @classmethod
-    def from_points(cls, xy, score: float, mirrored: bool) -> "Body":
-        """*xy* is the model's 33 (x, y) rows in BODY_NAMES order. For a mirrored picture the sides are swapped.
+    def from_points(cls, xy, score: float, mirrored: bool, scores=None) -> "Body":
+        """*xy* is the model's 33 (x, y) rows in BODY_NAMES order, and *scores* its 33 numbers for how sure it is of
+        each (None: each point gets the body's *score*). For a mirrored picture the sides are swapped.
 
         Why the swap is right: the model decides left and right by where a limb is in the picture, as a person facing a
         normal camera has their left side on the picture's right. A mirrored picture shows the learner as in a mirror:
@@ -90,11 +99,12 @@ class Body(_Points):
         is therefore the model's "right_wrist", and the same for every other pair. The points stay where they are drawn.
         """
         index = {name: i for i, name in enumerate(BODY_NAMES)}
-        points = {}
+        points, sure = {}, {}
         for name in BODY_NAMES:
-            row = xy[index[other_side(name) if mirrored else name]]
-            points[name] = Vector(float(row[0]), float(row[1]))
-        return cls(points, score)
+            i = index[other_side(name) if mirrored else name]
+            points[name] = Vector(float(xy[i][0]), float(xy[i][1]))
+            sure[name] = float(scores[i]) if scores is not None else float(score)
+        return cls(points, score, sure)
 
 
 class Hand(_Points):
