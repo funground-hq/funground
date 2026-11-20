@@ -131,8 +131,15 @@ class Session:
 
     @property
     def canvas_size(self) -> tuple[int, int]:
-        """The sketch's canvas in logical pixels, as the file set it with f.size()."""
-        return (self._sketch.width, self._sketch.height)
+        """The picture the page shows, in logical pixels: the canvas, as the file set it with f.size(), and, below
+        it, the controls panel when the sketch has one (S-329). The page sizes its canvas element and maps the
+        pointer from this value, and each frame has this height.
+
+        Known limit: controls first made after setup() make the frames taller than the size the page was
+        given. The desktop reopens its window; the page reads this size once after setup and does not."""
+        panel = self._sketch._panel
+        extra = panel.height if self._sketch._panel_shown and panel else 0
+        return (self._sketch.width, self._sketch.height + extra)
 
     @property
     def running(self) -> bool:

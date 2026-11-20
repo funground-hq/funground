@@ -16,6 +16,11 @@ The event vocabulary is the one of `InputEvent` (platform.base): kinds in `EVENT
 `MOUSE_BUTTONS`, coordinates in logical pixels, keys as a character ("a", " ") or a name from `KEY_NAMES`
 ("left", "enter", "space", "escape"). Escape does not stop the sketch: the page has a Stop button.
 
+The sketch's controls panel (S-329, contract U1) is shown as on the desktop: each frame handed to `on_frame` is the
+canvas with the panel below it, one frame taller by the panel (physical pixels, the same format). Mouse events
+at or below the canvas's bottom edge go to the panel, by the rule the desktop uses (controls.PanelMouse); the
+sketch does not see them. `capture()` stays the canvas alone.
+
 Everything that is the same as the headless platform (the event queue, the polled mouse and key state,
 `capture`) is inherited from it.
 """
@@ -23,6 +28,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+from ..controls import PanelMouse
 from .base import EVENT_KINDS, MOUSE_BUTTONS, InputEvent, Pixels
 from .browser_audio import HostMicrophone, HostMixer, MicrophoneCallback, SoundCallback
 from .browser_camera import CameraCallback, HostCamera
@@ -59,10 +65,30 @@ class BrowserPlatform(HeadlessPlatform):
         self.microphone = HostMicrophone(on_microphone)
         self.camera = HostCamera(on_camera)
         self.models = HostModels(on_models)
+        self._panel = None                       # the sketch's ControlPanel, or None (S-329)
+        self._panel_pixels: Pixels | None = None   # the last drawn panel, a copy (the sketch reuses its surface)
+        self._panel_mouse = PanelMouse()
+        self._canvas = (0, 0)                    # the canvas's logical size, as open_window was given it
 
     @property
     def backing_scale(self) -> float:
         return self._scale
+
+    # ---- controls panel (S-329)
+    def open_window(self, width: int, height: int, title: str) -> tuple[int, int]:
+        self._canvas = (width, height)
+        return super().open_window(width, height, title)
+
+    def set_controls(self, panel) -> bool:
+        self._panel = panel if panel else None
+        self._panel_pixels = None
+        self._panel_mouse.reset()
+        return True
+
+    def present_panel(self, pixels: Pixels) -> None:
+        self._panel_pixels = Pixels(bytes(pixels.data), pixels.width, pixels.height, pixels.format)
+        if self._last is not None:               # a control changed: show it now, even if the sketch draws nothing
+            self._send(self._last)
 
     # ---- input, pushed by the host
     def push_event(self, event: InputEvent) -> None:
@@ -70,6 +96,8 @@ class BrowserPlatform(HeadlessPlatform):
             raise ValueError(f"unknown event kind {event.kind!r}; the kinds are {', '.join(EVENT_KINDS)}")
         if event.button is not None and event.button not in MOUSE_BUTTONS:
             raise ValueError(f"unknown mouse button {event.button!r}; the buttons are {', '.join(MOUSE_BUTTONS)}")
+        if self._panel_mouse.route(self._panel, event, *self._canvas):
+            return
         self.post(event)
 
     def push_microphone(self, samples) -> None:
@@ -139,7 +167,17 @@ class BrowserPlatform(HeadlessPlatform):
 
     # ---- output, to the host
     def present(self, pixels: Pixels) -> None:
-        super().present(pixels)                  # keeps the frame for capture()
-        if self._on_frame is not None:
-            data = memoryview(pixels.data)
-            self._on_frame(data, pixels.width, pixels.height, len(data) // pixels.height)
+        super().present(pixels)                  # keeps the canvas for capture(): the panel is not part of the picture
+        self._send(pixels)
+
+    def _send(self, pixels: Pixels) -> None:
+        """Give the host the canvas, with the panel below it when one is shown."""
+        if self._on_frame is None:
+            return
+        data = memoryview(pixels.data)
+        height = pixels.height
+        panel = self._panel_pixels
+        if self._panel is not None and panel is not None and panel.width == pixels.width and panel.format == pixels.format:
+            data = memoryview(bytes(data) + panel.data)      # rows have no padding, so the panel's rows follow the canvas's
+            height += panel.height
+        self._on_frame(data, pixels.width, height, len(data) // height)
