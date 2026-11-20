@@ -18,7 +18,9 @@
 """
 from __future__ import annotations
 
+import contextlib
 import io
+import logging
 import math
 import os
 import struct
@@ -100,6 +102,29 @@ def format_of(path: str) -> str:
 NO_PRINT_SETUP = PrintSetup()           # no bleed and no marks: the page is the canvas (contract D2)
 
 
+
+class _SameImageNames(logging.Filter):
+    """Drops pypdf's note about a name listed twice in one dictionary.
+
+    A picture drawn several times is stored once (S-321); Cairo 1.18 then lists it in the page's resources once per use,
+    always under the same name and pointing at the same object. pypdf notes the repeat when funground reads the file
+    back to finish it. The file is sound, so the note would only puzzle a learner."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        return not record.getMessage().startswith("Multiple definitions in dictionary")
+
+
+@contextlib.contextmanager
+def _same_image_names_allowed():
+    logger = logging.getLogger("pypdf.generic._data_structures")    # where pypdf reads a dictionary; a test pins it
+    quiet = _SameImageNames()
+    logger.addFilter(quiet)
+    try:
+        yield
+    finally:
+        logger.removeFilter(quiet)
+
+
 def _write_pdf(path: str, draw, text_mode: str = "live", setup: PrintSetup = NO_PRINT_SETUP) -> None:
     """Write a PDF with real text (S-094, contract T15) and real layers (S-096, contract F16).
 
@@ -131,19 +156,22 @@ def _write_pdf(path: str, draw, text_mode: str = "live", setup: PrintSetup = NO_
             break
         try:
             if text:
-                renderer.pdf_text.finish(path)
+                with _same_image_names_allowed():
+                    renderer.pdf_text.finish(path)
         except Exception:
             text = False
             continue
         try:
             if layers:
-                renderer.file_layers.finish_pdf(path)
+                with _same_image_names_allowed():
+                    renderer.file_layers.finish_pdf(path)
         except Exception:
             layers = False
             continue
         break
-    finish_colour(path, renderer.cmyk_standins)
-    write_print_boxes(path, setup)
+    with _same_image_names_allowed():
+        finish_colour(path, renderer.cmyk_standins)
+        write_print_boxes(path, setup)
 
 
 def _write_svg(path: str, draw, text_mode: str = "live") -> None:
