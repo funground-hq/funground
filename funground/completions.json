@@ -10,7 +10,7 @@
    "url": "reference/API.md#fn-size",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 205,
+   "rank": 212,
    "plain": "Set how big the drawing area is.",
    "also": [
     "canvas",
@@ -37,7 +37,7 @@
    "url": "reference/API.md#fn-fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 202,
+   "rank": 208,
    "also": [
     "color",
     "colour",
@@ -60,7 +60,7 @@
    "url": "reference/API.md#fn-background",
    "star": true,
    "section": "Colour",
-   "rank": 193,
+   "rank": 200,
    "also": [
     "paper",
     "wipe",
@@ -83,7 +83,7 @@
    "url": "reference/API.md#fn-no_stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 166,
+   "rank": 172,
    "plain": "Stop drawing outlines around shapes.",
    "also": [
     "no outline",
@@ -101,7 +101,7 @@
    "url": "reference/API.md#fn-run",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 139,
+   "rank": 146,
    "plain": "Start the sketch and keep drawing, frame after frame.",
    "also": [
     "start",
@@ -120,7 +120,7 @@
    "url": "reference/API.md#fn-text",
    "star": true,
    "section": "Text and fonts",
-   "rank": 139,
+   "rank": 144,
    "also": [
     "say",
     "print",
@@ -150,7 +150,7 @@
    "url": "reference/API.md#fn-circle",
    "star": true,
    "section": "Shapes",
-   "rank": 137,
+   "rank": 141,
    "also": [
     "round",
     "ball",
@@ -178,7 +178,7 @@
    "url": "reference/API.md#fn-text_size",
    "star": true,
    "section": "Text and fonts",
-   "rank": 131,
+   "rank": 135,
    "also": [
     "font size",
     "bigger text",
@@ -201,7 +201,7 @@
    "url": "reference/API.md#fn-rect",
    "star": true,
    "section": "Shapes",
-   "rank": 109,
+   "rank": 114,
    "also": [
     "rectangle",
     "box",
@@ -233,7 +233,7 @@
    "url": "reference/API.md#fn-stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 100,
+   "rank": 104,
    "also": [
     "outline",
     "border",
@@ -256,7 +256,7 @@
    "url": "reference/API.md#fn-stroke_width",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 86,
+   "rank": 90,
    "also": [
     "thickness",
     "thick",
@@ -355,7 +355,7 @@
    "url": "reference/API.md#fn-save",
    "star": true,
    "section": "Saving",
-   "rank": 55,
+   "rank": 56,
    "also": [
     "export",
     "download",
@@ -378,7 +378,7 @@
    "url": "reference/API.md#fn-line",
    "star": true,
    "section": "Shapes",
-   "rank": 51,
+   "rank": 55,
    "also": [
     "segment",
     "connect",
@@ -409,7 +409,7 @@
    "url": "reference/API.md#fn-no_fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 48,
+   "rank": 52,
    "plain": "Draw shapes with nothing inside, only their outlines.",
    "also": [
     "empty",
@@ -427,7 +427,7 @@
    "url": "reference/API.md#fn-translate",
    "star": true,
    "section": "Transforms and the state stack",
-   "rank": 40,
+   "rank": 41,
    "also": [
     "move",
     "shift",
@@ -453,7 +453,7 @@
    "url": "reference/API.md#live-frame_count",
    "star": true,
    "section": "Live values",
-   "rank": 36,
+   "rank": 37,
    "also": [
     "frames",
     "counter",
@@ -470,7 +470,7 @@
    "url": "reference/API.md#fn-saved_state",
    "star": true,
    "section": "Transforms and the state stack",
-   "rank": 30,
+   "rank": 31,
    "plain": "Do some drawing, then put the style back as it was.",
    "also": [
     "remember",
@@ -488,7 +488,7 @@
    "url": "reference/API.md#fn-rotate",
    "star": true,
    "section": "Transforms and the state stack",
-   "rank": 29,
+   "rank": 30,
    "plain": "Turn everything you draw next, by a number of degrees.",
    "also": [
     "turn",
@@ -576,6 +576,62 @@
    ]
   },
   {
+   "name": "load_image",
+   "kind": "function",
+   "signature": "load_image(path)",
+   "detail": "(path: str) -> Picture",
+   "summary": "Read an image file and return it as a picture.",
+   "url": "reference/API.md#fn-load_image",
+   "returns": "Picture",
+   "star": true,
+   "section": "Images and SVG",
+   "rank": 26,
+   "plain": "Open a picture file so you can draw it.",
+   "also": [
+    "open picture",
+    "photo",
+    "read picture",
+    "import",
+    "png"
+   ],
+   "kinds": {
+    "path": {
+     "kind": "file"
+    }
+   }
+  },
+  {
+   "name": "image",
+   "kind": "function",
+   "signature": "image(picture, x, y, width=None, height=None, sx=None, sy=None, sw=None, sh=None)",
+   "detail": "(picture: Picture | FrameSource, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
+   "summary": "Draw a picture.",
+   "url": "reference/API.md#fn-image",
+   "star": true,
+   "section": "Images and SVG",
+   "rank": 25,
+   "also": [
+    "picture",
+    "photo",
+    "show picture",
+    "paste"
+   ],
+   "kinds": {
+    "x": {
+     "kind": "pixels"
+    },
+    "y": {
+     "kind": "pixels"
+    },
+    "width": {
+     "kind": "pixels"
+    },
+    "height": {
+     "kind": "pixels"
+    }
+   }
+  },
+  {
    "name": "height",
    "kind": "value",
    "signature": "height",
@@ -660,37 +716,6 @@
    ]
   },
   {
-   "name": "image",
-   "kind": "function",
-   "signature": "image(picture, x, y, width=None, height=None, sx=None, sy=None, sw=None, sh=None)",
-   "detail": "(picture: Picture | FrameSource, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
-   "summary": "Draw a picture.",
-   "url": "reference/API.md#fn-image",
-   "star": true,
-   "section": "Images and SVG",
-   "rank": 20,
-   "also": [
-    "picture",
-    "photo",
-    "show picture",
-    "paste"
-   ],
-   "kinds": {
-    "x": {
-     "kind": "pixels"
-    },
-    "y": {
-     "kind": "pixels"
-    },
-    "width": {
-     "kind": "pixels"
-    },
-    "height": {
-     "kind": "pixels"
-    }
-   }
-  },
-  {
    "name": "random",
    "kind": "function",
    "signature": "random(low=1.0, high=None)",
@@ -706,31 +731,6 @@
     "roll",
     "any number"
    ]
-  },
-  {
-   "name": "load_image",
-   "kind": "function",
-   "signature": "load_image(path)",
-   "detail": "(path: str) -> Picture",
-   "summary": "Read an image file and return it as a picture.",
-   "url": "reference/API.md#fn-load_image",
-   "returns": "Picture",
-   "star": true,
-   "section": "Images and SVG",
-   "rank": 19,
-   "plain": "Open a picture file so you can draw it.",
-   "also": [
-    "open picture",
-    "photo",
-    "read picture",
-    "import",
-    "png"
-   ],
-   "kinds": {
-    "path": {
-     "kind": "file"
-    }
-   }
   },
   {
    "name": "random_seed",
@@ -830,7 +830,7 @@
    "url": "reference/API.md#fn-constrain",
    "star": true,
    "section": "Maths",
-   "rank": 14,
+   "rank": 15,
    "plain": "Keep a number from going below a low value or above a high one.",
    "also": [
     "limit",
@@ -840,29 +840,22 @@
    ]
   },
   {
-   "name": "point",
+   "name": "create_button",
    "kind": "function",
-   "signature": "point(x, y)",
-   "detail": "(x: float, y: float) -> None",
-   "summary": "Draw a dot.",
-   "url": "reference/API.md#fn-point",
+   "signature": "create_button(label)",
+   "detail": "(label: str) -> Button",
+   "summary": "Make a button in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_button",
+   "returns": "Button",
    "star": true,
-   "section": "Shapes",
-   "rank": 13,
+   "section": "Interaction and controls",
+   "rank": 15,
    "also": [
-    "dot",
-    "pixel",
-    "spot",
-    "speck"
-   ],
-   "kinds": {
-    "x": {
-     "kind": "pixels"
-    },
-    "y": {
-     "kind": "pixels"
-    }
-   }
+    "click",
+    "press",
+    "control",
+    "switch"
+   ]
   },
   {
    "name": "triangle",
@@ -873,7 +866,7 @@
    "url": "reference/API.md#fn-triangle",
    "star": true,
    "section": "Shapes",
-   "rank": 13,
+   "rank": 14,
    "also": [
     "three corners",
     "three sides",
@@ -897,6 +890,31 @@
      "kind": "pixels"
     },
     "y3": {
+     "kind": "pixels"
+    }
+   }
+  },
+  {
+   "name": "point",
+   "kind": "function",
+   "signature": "point(x, y)",
+   "detail": "(x: float, y: float) -> None",
+   "summary": "Draw a dot.",
+   "url": "reference/API.md#fn-point",
+   "star": true,
+   "section": "Shapes",
+   "rank": 13,
+   "also": [
+    "dot",
+    "pixel",
+    "spot",
+    "speck"
+   ],
+   "kinds": {
+    "x": {
+     "kind": "pixels"
+    },
+    "y": {
      "kind": "pixels"
     }
    }
@@ -963,22 +981,31 @@
    }
   },
   {
-   "name": "create_button",
+   "name": "create_graphics",
    "kind": "function",
-   "signature": "create_button(label)",
-   "detail": "(label: str) -> Button",
-   "summary": "Make a button in the panel below the canvas.",
-   "url": "reference/API.md#fn-create_button",
-   "returns": "Button",
+   "signature": "create_graphics(width, height)",
+   "detail": "(width: int, height: int) -> Picture",
+   "summary": "Make a picture: an off-screen canvas.",
+   "url": "reference/API.md#fn-create_graphics",
+   "returns": "Picture",
    "star": true,
-   "section": "Interaction and controls",
+   "section": "Pictures and layers",
    "rank": 11,
+   "plain": "Make a second picture to draw on, away from the screen.",
    "also": [
-    "click",
-    "press",
-    "control",
-    "switch"
-   ]
+    "new canvas",
+    "layer",
+    "off screen",
+    "buffer"
+   ],
+   "kinds": {
+    "width": {
+     "kind": "pixels"
+    },
+    "height": {
+     "kind": "pixels"
+    }
+   }
   },
   {
    "name": "create_slider",
@@ -1000,31 +1027,39 @@
    ]
   },
   {
-   "name": "create_graphics",
+   "name": "begin_shape",
    "kind": "function",
-   "signature": "create_graphics(width, height)",
-   "detail": "(width: int, height: int) -> Picture",
-   "summary": "Make a picture: an off-screen canvas.",
-   "url": "reference/API.md#fn-create_graphics",
-   "returns": "Picture",
+   "signature": "begin_shape()",
+   "detail": "() -> None",
+   "summary": "Start a shape that you build from its corners.",
+   "url": "reference/API.md#fn-begin_shape",
    "star": true,
-   "section": "Pictures and layers",
+   "section": "Curves and custom shapes",
    "rank": 10,
-   "plain": "Make a second picture to draw on, away from the screen.",
+   "plain": "Start a shape that you build one corner at a time.",
    "also": [
-    "new canvas",
-    "layer",
-    "off screen",
-    "buffer"
-   ],
-   "kinds": {
-    "width": {
-     "kind": "pixels"
-    },
-    "height": {
-     "kind": "pixels"
-    }
-   }
+    "start shape",
+    "polygon",
+    "custom shape",
+    "corners"
+   ]
+  },
+  {
+   "name": "end_shape",
+   "kind": "function",
+   "signature": "end_shape(close=False)",
+   "detail": "(close: bool = False) -> None",
+   "summary": "Draw the shape that you built from corners.",
+   "url": "reference/API.md#fn-end_shape",
+   "star": true,
+   "section": "Curves and custom shapes",
+   "rank": 10,
+   "also": [
+    "finish shape",
+    "close shape",
+    "done",
+    "draw polygon"
+   ]
   },
   {
    "name": "scale",
@@ -1063,38 +1098,21 @@
    ]
   },
   {
-   "name": "begin_shape",
+   "name": "map_range",
    "kind": "function",
-   "signature": "begin_shape()",
-   "detail": "() -> None",
-   "summary": "Start a shape that you build from its corners.",
-   "url": "reference/API.md#fn-begin_shape",
+   "signature": "map_range(value, start1, stop1, start2, stop2, clamp=False)",
+   "detail": "(value: float, start1: float, stop1: float, start2: float, stop2: float, clamp: bool = False) -> float",
+   "summary": "Re-scale a number from one range to another.",
+   "url": "reference/API.md#fn-map_range",
    "star": true,
-   "section": "Curves and custom shapes",
+   "section": "Maths",
    "rank": 9,
-   "plain": "Start a shape that you build one corner at a time.",
+   "plain": "Change a number from one range to another.",
    "also": [
-    "start shape",
-    "polygon",
-    "custom shape",
-    "corners"
-   ]
-  },
-  {
-   "name": "end_shape",
-   "kind": "function",
-   "signature": "end_shape(close=False)",
-   "detail": "(close: bool = False) -> None",
-   "summary": "Draw the shape that you built from corners.",
-   "url": "reference/API.md#fn-end_shape",
-   "star": true,
-   "section": "Curves and custom shapes",
-   "rank": 9,
-   "also": [
-    "finish shape",
-    "close shape",
-    "done",
-    "draw polygon"
+    "map",
+    "rescale",
+    "convert",
+    "remap"
    ]
   },
   {
@@ -1277,24 +1295,6 @@
    ]
   },
   {
-   "name": "map_range",
-   "kind": "function",
-   "signature": "map_range(value, start1, stop1, start2, stop2, clamp=False)",
-   "detail": "(value: float, start1: float, stop1: float, start2: float, stop2: float, clamp: bool = False) -> float",
-   "summary": "Re-scale a number from one range to another.",
-   "url": "reference/API.md#fn-map_range",
-   "star": true,
-   "section": "Maths",
-   "rank": 7,
-   "plain": "Change a number from one range to another.",
-   "also": [
-    "map",
-    "rescale",
-    "convert",
-    "remap"
-   ]
-  },
-  {
    "name": "mark",
    "kind": "function",
    "signature": "mark(path=None, fill=<not given>, stroke=<not given>, stroke_width=None)",
@@ -1420,6 +1420,33 @@
     "print size",
     "paper size"
    ]
+  },
+  {
+   "name": "stroke_cap",
+   "kind": "function",
+   "signature": "stroke_cap(cap)",
+   "detail": "(cap: CONSTANTS.CAP) -> None",
+   "summary": "Choose how the ends of lines look.",
+   "url": "reference/API.md#fn-stroke_cap",
+   "star": true,
+   "options": {
+    "cap": [
+     {
+      "word": "round",
+      "meaning": "Each end of a line is a half circle, so the line reaches half its width past its end points. The default."
+     },
+     {
+      "word": "square",
+      "meaning": "Each end is squared off half the line's width past its end point."
+     },
+     {
+      "word": "butt",
+      "meaning": "Each end is cut off flat exactly at its end point."
+     }
+    ]
+   },
+   "section": "Fill and stroke",
+   "rank": 6
   },
   {
    "name": "Vector",
@@ -1563,6 +1590,17 @@
    "url": "reference/API.md#fn-save_gif",
    "star": true,
    "section": "Saving",
+   "rank": 4
+  },
+  {
+   "name": "square",
+   "kind": "function",
+   "signature": "square(x, y, size, *radii)",
+   "detail": "(x: float, y: float, size: float, *radii: float) -> None",
+   "summary": "Draw a square.",
+   "url": "reference/API.md#fn-square",
+   "star": true,
+   "section": "Shapes",
    "rank": 4
   },
   {
@@ -1789,6 +1827,17 @@
    "rank": 3
   },
   {
+   "name": "quad",
+   "kind": "function",
+   "signature": "quad(x1, y1, x2, y2, x3, y3, x4, y4)",
+   "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float, x4: float, y4: float) -> None",
+   "summary": "Draw a four-sided shape through four corners.",
+   "url": "reference/API.md#fn-quad",
+   "star": true,
+   "section": "Shapes",
+   "rank": 3
+  },
+  {
    "name": "show_layer",
    "kind": "function",
    "signature": "show_layer(name)",
@@ -1800,17 +1849,6 @@
    "rank": 3
   },
   {
-   "name": "square",
-   "kind": "function",
-   "signature": "square(x, y, size, *radii)",
-   "detail": "(x: float, y: float, size: float, *radii: float) -> None",
-   "summary": "Draw a square.",
-   "url": "reference/API.md#fn-square",
-   "star": true,
-   "section": "Shapes",
-   "rank": 3
-  },
-  {
    "name": "stop",
    "kind": "function",
    "signature": "stop()",
@@ -1819,33 +1857,6 @@
    "url": "reference/API.md#fn-stop",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 3
-  },
-  {
-   "name": "stroke_cap",
-   "kind": "function",
-   "signature": "stroke_cap(cap)",
-   "detail": "(cap: CONSTANTS.CAP) -> None",
-   "summary": "Choose how the ends of lines look.",
-   "url": "reference/API.md#fn-stroke_cap",
-   "star": true,
-   "options": {
-    "cap": [
-     {
-      "word": "round",
-      "meaning": "Each end of a line is a half circle, so the line reaches half its width past its end points. The default."
-     },
-     {
-      "word": "square",
-      "meaning": "Each end is squared off half the line's width past its end point."
-     },
-     {
-      "word": "butt",
-      "meaning": "Each end is cut off flat exactly at its end point."
-     }
-    ]
-   },
-   "section": "Fill and stroke",
    "rank": 3
   },
   {
@@ -1879,6 +1890,17 @@
    "url": "reference/API.md#fn-color_mode",
    "star": true,
    "section": "Colour",
+   "rank": 2
+  },
+  {
+   "name": "curve_vertex",
+   "kind": "function",
+   "signature": "curve_vertex(x, y)",
+   "detail": "(x: float, y: float) -> None",
+   "summary": "Add a point for a smooth curve that passes through the points.",
+   "url": "reference/API.md#fn-curve_vertex",
+   "star": true,
+   "section": "Curves and custom shapes",
    "rank": 2
   },
   {
@@ -2002,17 +2024,6 @@
    "url": "reference/API.md#fn-page_size",
    "star": true,
    "section": "Motion and pages",
-   "rank": 2
-  },
-  {
-   "name": "quad",
-   "kind": "function",
-   "signature": "quad(x1, y1, x2, y2, x3, y3, x4, y4)",
-   "detail": "(x1: float, y1: float, x2: float, y2: float, x3: float, y3: float, x4: float, y4: float) -> None",
-   "summary": "Draw a four-sided shape through four corners.",
-   "url": "reference/API.md#fn-quad",
-   "star": true,
-   "section": "Shapes",
    "rank": 2
   },
   {
@@ -2936,17 +2947,6 @@
    "detail": "(tightness: float) -> None",
    "summary": "Set how tight curve_vertex() and curve() curves are.",
    "url": "reference/API.md#fn-curve_tightness",
-   "star": true,
-   "section": "Curves and custom shapes",
-   "rank": 1
-  },
-  {
-   "name": "curve_vertex",
-   "kind": "function",
-   "signature": "curve_vertex(x, y)",
-   "detail": "(x: float, y: float) -> None",
-   "summary": "Add a point for a smooth curve that passes through the points.",
-   "url": "reference/API.md#fn-curve_vertex",
    "star": true,
    "section": "Curves and custom shapes",
    "rank": 1
@@ -9839,7 +9839,7 @@
      "summary": "Play the sound over and over, until you call stop() or pause().",
      "url": "reference/API.md#cls-Sound-loop",
      "section": "Sound",
-     "rank": 12
+     "rank": 13
     },
     {
      "name": "onsets",
@@ -9889,7 +9889,7 @@
      "summary": "Play the sound from the start, or from where pause() left it.",
      "url": "reference/API.md#cls-Sound-play",
      "section": "Sound",
-     "rank": 5
+     "rank": 6
     },
     {
      "name": "reverb",
@@ -10117,7 +10117,7 @@
      "summary": "Start listening.",
      "url": "reference/API.md#cls-Microphone-start",
      "section": "Microphone",
-     "rank": 19
+     "rank": 26
     },
     {
      "name": "stop",
@@ -10174,7 +10174,7 @@
      "summary": "The height of every frame, in pixels: the size asked in start(), or 480 before that.",
      "url": "reference/API.md#cls-Camera-height",
      "section": "Camera",
-     "rank": 8,
+     "rank": 9,
      "since": "0.2"
     },
     {
@@ -10185,7 +10185,7 @@
      "summary": "Whether a frame has arrived.",
      "url": "reference/API.md#cls-Camera-is_ready",
      "section": "Camera",
-     "rank": 11,
+     "rank": 18,
      "since": "0.2"
     },
     {
@@ -10231,7 +10231,7 @@
      "summary": "Open the camera.",
      "url": "reference/API.md#cls-Camera-start",
      "section": "Camera",
-     "rank": 19,
+     "rank": 26,
      "since": "0.2"
     },
     {
@@ -10253,7 +10253,7 @@
      "summary": "The width of every frame, in pixels: the size asked in start(), or 640 before that.",
      "url": "reference/API.md#cls-Camera-width",
      "section": "Camera",
-     "rank": 8,
+     "rank": 9,
      "since": "0.2"
     }
    ]
@@ -10451,7 +10451,7 @@
      "summary": "Change the size of the picture, in place, scaling its pixels smoothly.",
      "url": "reference/API.md#cls-Picture-resize",
      "section": "Picture",
-     "rank": 4
+     "rank": 11
     },
     {
      "name": "save",
@@ -10488,7 +10488,7 @@
      "summary": "The angle that turns this vector's direction onto another's.",
      "url": "reference/API.md#cls-Vector-angle_between",
      "section": "Vector",
-     "rank": 0
+     "rank": 2
     },
     {
      "name": "copy",
@@ -10519,7 +10519,7 @@
      "summary": "The distance from this point to another.",
      "url": "reference/API.md#cls-Vector-dist",
      "section": "Vector",
-     "rank": 1
+     "rank": 5
     },
     {
      "name": "div",
@@ -10561,7 +10561,7 @@
      "summary": "The direction the vector points in.",
      "url": "reference/API.md#cls-Vector-heading",
      "section": "Vector",
-     "rank": 1
+     "rank": 2
     },
     {
      "name": "lerp",
@@ -10707,7 +10707,7 @@
      "summary": "Add a run of text to the end.",
      "url": "reference/API.md#cls-FormattedString-append",
      "section": "FormattedString",
-     "rank": 24,
+     "rank": 27,
      "returns": "FormattedString"
     },
     {
@@ -10792,7 +10792,7 @@
      "summary": "Add a circle as a closed part of the path.",
      "url": "reference/API.md#cls-PathBuilder-circle",
      "section": "PathBuilder",
-     "rank": 20,
+     "rank": 21,
      "returns": "PathBuilder"
     },
     {
@@ -11094,7 +11094,7 @@
      "summary": "The height of the area the mark covers, from bounds(); 0 for an empty mark.",
      "url": "reference/API.md#cls-Mark-height",
      "section": "Mark",
-     "rank": 8
+     "rank": 9
     },
     {
      "name": "is_empty",
@@ -11124,7 +11124,7 @@
      "summary": "The width of the area the mark covers, from bounds(); 0 for an empty mark.",
      "url": "reference/API.md#cls-Mark-width",
      "section": "Mark",
-     "rank": 8
+     "rank": 9
     }
    ]
   },
@@ -11181,7 +11181,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Area-height",
      "section": "Area",
-     "rank": 8
+     "rank": 9
     },
     {
      "name": "inset",
@@ -11232,7 +11232,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Area-width",
      "section": "Area",
-     "rank": 8
+     "rank": 9
     }
    ]
   },
@@ -11300,7 +11300,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Ground-height",
      "section": "Ground",
-     "rank": 8
+     "rank": 9
     },
     {
      "name": "inset",
@@ -11361,7 +11361,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Ground-width",
      "section": "Ground",
-     "rank": 8
+     "rank": 9
     }
    ]
   },
@@ -11428,7 +11428,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Cell-height",
      "section": "Cell",
-     "rank": 8
+     "rank": 9
     },
     {
      "name": "index",
@@ -11499,7 +11499,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Cell-width",
      "section": "Cell",
-     "rank": 8
+     "rank": 9
     }
    ]
   },
@@ -11720,7 +11720,7 @@
      "summary": "Every point in the path, including curve control points, in order.",
      "url": "reference/API.md#cls-Path-points",
      "section": "Path",
-     "rank": 1
+     "rank": 6
     },
     {
      "name": "quad_to",
@@ -11985,7 +11985,7 @@
      "summary": "Whether the button was clicked since you last asked.",
      "url": "reference/API.md#cls-Button-clicked",
      "section": "Button",
-     "rank": 11
+     "rank": 15
     },
     {
      "name": "label",
@@ -12197,7 +12197,7 @@
      "summary": "x1, y1, x2, y2 for a linear gradient, and x, y, radius for a radial one.",
      "url": "reference/API.md#cls-Gradient",
      "section": "Gradient",
-     "rank": 1
+     "rank": 6
     },
     {
      "name": "stops",
@@ -12223,7 +12223,7 @@
      "summary": "the raga's name.",
      "url": "reference/API.md#cls-Raga",
      "section": "Raga",
-     "rank": 5
+     "rank": 7
     },
     {
      "name": "thaat",
@@ -12253,7 +12253,7 @@
      "summary": "the way up, as a sargam string that sound.melody(text, sa=...) can play.",
      "url": "reference/API.md#cls-Raga",
      "section": "Raga",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "avaroha",
@@ -12339,7 +12339,7 @@
      "summary": "the tala's name.",
      "url": "reference/API.md#cls-Tala",
      "section": "Tala",
-     "rank": 5
+     "rank": 7
     },
     {
      "name": "beats",
@@ -12436,7 +12436,7 @@
      "summary": "a dict of every point name and its f.Vector, in the model's order.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 1
+     "rank": 6
     },
     {
      "name": "score",
@@ -12446,7 +12446,7 @@
      "summary": "how sure the model is, from 0 to 1.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "nose",
@@ -12457,7 +12457,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 1
+     "rank": 5
     },
     {
      "name": "left_eye_inner",
@@ -12479,7 +12479,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 1
     },
     {
      "name": "left_eye_outer",
@@ -12512,7 +12512,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 1
     },
     {
      "name": "right_eye_outer",
@@ -12578,7 +12578,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 4
     },
     {
      "name": "right_shoulder",
@@ -12589,7 +12589,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 3
     },
     {
      "name": "left_elbow",
@@ -12600,7 +12600,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 2
     },
     {
      "name": "right_elbow",
@@ -12611,7 +12611,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 2
     },
     {
      "name": "left_wrist",
@@ -12622,7 +12622,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 3
     },
     {
      "name": "right_wrist",
@@ -12633,7 +12633,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 4
     },
     {
      "name": "left_pinky",
@@ -12710,7 +12710,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 5
     },
     {
      "name": "right_hip",
@@ -12721,7 +12721,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 5
     },
     {
      "name": "left_knee",
@@ -12732,7 +12732,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 2
     },
     {
      "name": "right_knee",
@@ -12743,7 +12743,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 2
     },
     {
      "name": "left_ankle",
@@ -12754,7 +12754,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 3
     },
     {
      "name": "right_ankle",
@@ -12765,7 +12765,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 3
     },
     {
      "name": "left_heel",
@@ -12826,7 +12826,7 @@
      "summary": "a dict of every point name and its f.Vector, in the model's order.",
      "url": "reference/API.md#cls-Hand",
      "section": "Hand",
-     "rank": 1
+     "rank": 6
     },
     {
      "name": "score",
@@ -12836,7 +12836,7 @@
      "summary": "how sure the model is, from 0 to 1.",
      "url": "reference/API.md#cls-Hand",
      "section": "Hand",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "wrist",
@@ -13094,7 +13094,7 @@
      "summary": "how sure the model is, from 0 to 1.",
      "url": "reference/API.md#cls-Words",
      "section": "Words",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "is_new",
@@ -13121,7 +13121,7 @@
      "summary": "the name you taught.",
      "url": "reference/API.md#cls-Guess",
      "section": "Guess",
-     "rank": 5
+     "rank": 7
     },
     {
      "name": "score",
@@ -13131,7 +13131,7 @@
      "summary": "how sure it is, from 0 to 1.",
      "url": "reference/API.md#cls-Guess",
      "section": "Guess",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "next",
@@ -13159,7 +13159,7 @@
      "summary": "the sound's name in English, for example \"Dog\" or \"Speech\".",
      "url": "reference/API.md#cls-Heard",
      "section": "Heard",
-     "rank": 5
+     "rank": 7
     },
     {
      "name": "score",
@@ -13169,7 +13169,7 @@
      "summary": "how sure the model is of that name, from 0 to 1.",
      "url": "reference/API.md#cls-Heard",
      "section": "Heard",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "next",
@@ -13280,7 +13280,7 @@
     "summary": "Return the frequency of a note, in hertz.",
     "url": "reference/API.md#fn-sound-note_to_frequency",
     "section": "sound",
-    "rank": 9,
+    "rank": 10,
     "also": [
      "pitch",
      "hertz",
@@ -13307,6 +13307,33 @@
      "from numbers",
      "synth"
     ]
+   },
+   {
+    "name": "drone",
+    "kind": "function",
+    "signature": "drone(sa, seconds, pattern=\"P S' S' S\", volume=0.5)",
+    "detail": "(sa: float | str, seconds: float, pattern: str = P S S S, volume: float = 0.5) -> Sound",
+    "summary": "Make a tanpura-like drone.",
+    "url": "reference/API.md#fn-sound-drone",
+    "section": "sound",
+    "rank": 4,
+    "returns": "Sound",
+    "plain": "Make a steady humming background note.",
+    "also": [
+     "tanpura",
+     "hum",
+     "background",
+     "sa",
+     "pa"
+    ],
+    "kinds": {
+     "volume": {
+      "kind": "range",
+      "low": 0,
+      "high": 1,
+      "step": 0.05
+     }
+    }
    },
    {
     "name": "frequency_to_note",
@@ -13345,6 +13372,33 @@
     ]
    },
    {
+    "name": "pluck",
+    "kind": "function",
+    "signature": "pluck(name_or_frequency, seconds, volume=0.5)",
+    "detail": "(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -> Sound",
+    "summary": "Make a sound like a plucked string.",
+    "url": "reference/API.md#fn-sound-pluck",
+    "section": "sound",
+    "rank": 4,
+    "returns": "Sound",
+    "plain": "Make a sound like a plucked string.",
+    "also": [
+     "guitar",
+     "string",
+     "twang",
+     "sitar",
+     "strum"
+    ],
+    "kinds": {
+     "volume": {
+      "kind": "range",
+      "low": 0,
+      "high": 1,
+      "step": 0.05
+     }
+    }
+   },
+   {
     "name": "sequence",
     "kind": "function",
     "signature": "sequence(*sounds)",
@@ -13364,49 +13418,22 @@
     ]
    },
    {
-    "name": "drone",
+    "name": "tone",
     "kind": "function",
-    "signature": "drone(sa, seconds, pattern=\"P S' S' S\", volume=0.5)",
-    "detail": "(sa: float | str, seconds: float, pattern: str = P S S S, volume: float = 0.5) -> Sound",
-    "summary": "Make a tanpura-like drone.",
-    "url": "reference/API.md#fn-sound-drone",
+    "signature": "tone(frequency, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
+    "detail": "(frequency: float, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
+    "summary": "Make a sound that is one steady tone.",
+    "url": "reference/API.md#fn-sound-tone",
     "section": "sound",
-    "rank": 3,
+    "rank": 4,
     "returns": "Sound",
-    "plain": "Make a steady humming background note.",
+    "plain": "Make a steady beep at a pitch you choose.",
     "also": [
-     "tanpura",
+     "beep",
      "hum",
-     "background",
-     "sa",
-     "pa"
-    ],
-    "kinds": {
-     "volume": {
-      "kind": "range",
-      "low": 0,
-      "high": 1,
-      "step": 0.05
-     }
-    }
-   },
-   {
-    "name": "note",
-    "kind": "function",
-    "signature": "note(name, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
-    "detail": "(name: str, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
-    "summary": "Make a sound that is one named note.",
-    "url": "reference/API.md#fn-sound-note",
-    "section": "sound",
-    "rank": 3,
-    "returns": "Sound",
-    "plain": "Make a sound that is one note, such as C4.",
-    "also": [
-     "key",
-     "piano",
-     "pitch",
-     "play note",
-     "music note"
+     "buzz",
+     "sine",
+     "hertz"
     ],
     "kinds": {
      "volume": {
@@ -13446,49 +13473,22 @@
     }
    },
    {
-    "name": "pluck",
+    "name": "note",
     "kind": "function",
-    "signature": "pluck(name_or_frequency, seconds, volume=0.5)",
-    "detail": "(name_or_frequency: float | str, seconds: float, volume: float = 0.5) -> Sound",
-    "summary": "Make a sound like a plucked string.",
-    "url": "reference/API.md#fn-sound-pluck",
+    "signature": "note(name, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
+    "detail": "(name: str, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
+    "summary": "Make a sound that is one named note.",
+    "url": "reference/API.md#fn-sound-note",
     "section": "sound",
     "rank": 3,
     "returns": "Sound",
-    "plain": "Make a sound like a plucked string.",
+    "plain": "Make a sound that is one note, such as C4.",
     "also": [
-     "guitar",
-     "string",
-     "twang",
-     "sitar",
-     "strum"
-    ],
-    "kinds": {
-     "volume": {
-      "kind": "range",
-      "low": 0,
-      "high": 1,
-      "step": 0.05
-     }
-    }
-   },
-   {
-    "name": "tone",
-    "kind": "function",
-    "signature": "tone(frequency, seconds, wave='sine', volume=0.5, attack=0.01, release=0.15, decay=0.15, sustain=0.7)",
-    "detail": "(frequency: float, seconds: float, wave: CONSTANTS.WAVE = sine, volume: float = 0.5, attack: float = 0.01, release: float = 0.15, decay: float = 0.15, sustain: float = 0.7) -> Sound",
-    "summary": "Make a sound that is one steady tone.",
-    "url": "reference/API.md#fn-sound-tone",
-    "section": "sound",
-    "rank": 3,
-    "returns": "Sound",
-    "plain": "Make a steady beep at a pitch you choose.",
-    "also": [
-     "beep",
-     "hum",
-     "buzz",
-     "sine",
-     "hertz"
+     "key",
+     "piano",
+     "pitch",
+     "play note",
+     "music note"
     ],
     "kinds": {
      "volume": {
@@ -13708,6 +13708,24 @@
   ],
   "sangeet": [
    {
+    "name": "raga",
+    "kind": "function",
+    "signature": "raga(name)",
+    "detail": "(name: str) -> Raga",
+    "summary": "Return one raga from the built-in table.",
+    "url": "reference/API.md#fn-sangeet-raga",
+    "section": "sangeet",
+    "rank": 3,
+    "returns": "Raga",
+    "also": [
+     "scale",
+     "mode",
+     "melody type",
+     "hindustani",
+     "notes"
+    ]
+   },
+   {
     "name": "match_ragas",
     "kind": "function",
     "signature": "match_ragas(histogram)",
@@ -13723,24 +13741,6 @@
      "guess raga",
      "compare",
      "tune match"
-    ]
-   },
-   {
-    "name": "raga",
-    "kind": "function",
-    "signature": "raga(name)",
-    "detail": "(name: str) -> Raga",
-    "summary": "Return one raga from the built-in table.",
-    "url": "reference/API.md#fn-sangeet-raga",
-    "section": "sangeet",
-    "rank": 2,
-    "returns": "Raga",
-    "also": [
-     "scale",
-     "mode",
-     "melody type",
-     "hindustani",
-     "notes"
     ]
    },
    {
@@ -13823,7 +13823,7 @@
     "summary": "Make a camera object for the computer's default camera.",
     "url": "reference/API.md#fn-camera-open",
     "section": "camera",
-    "rank": 11,
+    "rank": 18,
     "returns": "Camera",
     "plain": "Turn on the camera.",
     "also": [
@@ -13878,6 +13878,25 @@
   ],
   "ml": [
    {
+    "name": "pose",
+    "kind": "function",
+    "signature": "pose(source)",
+    "detail": "(source) -> Body | None",
+    "summary": "Find the body in a camera or a picture.",
+    "url": "reference/API.md#fn-ml-pose",
+    "section": "ml",
+    "rank": 8,
+    "returns": "Body",
+    "plain": "Find a body: head, arms, legs.",
+    "also": [
+     "body",
+     "skeleton",
+     "arms",
+     "find person",
+     "track body"
+    ]
+   },
+   {
     "name": "guess",
     "kind": "function",
     "signature": "guess(source, k=1)",
@@ -13885,7 +13904,7 @@
     "summary": "Guess what a camera or a picture shows, from the things you taught.",
     "url": "reference/API.md#fn-ml-guess",
     "section": "ml",
-    "rank": 1,
+    "rank": 2,
     "returns": "Guess",
     "plain": "Say what the camera or picture shows, using what you taught.",
     "also": [
@@ -13893,6 +13912,24 @@
      "what is this",
      "recognise",
      "identify",
+     "label"
+    ]
+   },
+   {
+    "name": "teach",
+    "kind": "function",
+    "signature": "teach(name, source=None, model=None)",
+    "detail": "(name, source=None, model=None)",
+    "summary": "Teach the computer what to call a picture.",
+    "url": "reference/API.md#fn-ml-teach",
+    "section": "ml",
+    "rank": 2,
+    "plain": "Show the computer a picture and give it a name.",
+    "also": [
+     "train",
+     "learn",
+     "show examples",
+     "model",
      "label"
     ]
    },
@@ -13935,25 +13972,6 @@
     ]
    },
    {
-    "name": "pose",
-    "kind": "function",
-    "signature": "pose(source)",
-    "detail": "(source) -> Body | None",
-    "summary": "Find the body in a camera or a picture.",
-    "url": "reference/API.md#fn-ml-pose",
-    "section": "ml",
-    "rank": 1,
-    "returns": "Body",
-    "plain": "Find a body: head, arms, legs.",
-    "also": [
-     "body",
-     "skeleton",
-     "arms",
-     "find person",
-     "track body"
-    ]
-   },
-   {
     "name": "sound",
     "kind": "function",
     "signature": "sound(source)",
@@ -13970,24 +13988,6 @@
      "classify sound",
      "microphone",
      "noise"
-    ]
-   },
-   {
-    "name": "teach",
-    "kind": "function",
-    "signature": "teach(name, source=None, model=None)",
-    "detail": "(name, source=None, model=None)",
-    "summary": "Teach the computer what to call a picture.",
-    "url": "reference/API.md#fn-ml-teach",
-    "section": "ml",
-    "rank": 1,
-    "plain": "Show the computer a picture and give it a name.",
-    "also": [
-     "train",
-     "learn",
-     "show examples",
-     "model",
-     "label"
     ]
    },
    {
