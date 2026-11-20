@@ -630,4 +630,7 @@ answer can be **one frame behind** the picture. Your sketch does not change.
 7. Teach three things on your desk with 3 examples each, then with 10 each. Which guesses get better? Then teach it
    only from one side of the desk, and guess from the other side.
 
+To go beyond the screen, see [A cardboard puppet that copies you](projects/12_servo_puppet.md). It sends two shoulder angles
+to an ESP32 board that turns servos. It is desktop only and not yet run on real hardware.
+
 **Previous:** [19. Studios: the same picture, twice](19_studios.md)
