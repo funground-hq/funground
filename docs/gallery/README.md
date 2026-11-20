@@ -2955,6 +2955,221 @@ Teach the computer three things with your camera, then let it guess. Hold up a t
 
 Source: [`examples/gallery/models/06_teach_by_example.py`](../../examples/gallery/models/06_teach_by_example.py)
 
+### Go live
+
+![Go live](images/models-07_go_live.png)
+
+A green stick figure that follows you. The computer looks at the camera, finds your body, and the sketch joins the points it found. Raise your left hand and the gold dot rises. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- Every pose sketch has the same three steps: get a picture, ask for the body in it, and draw with the 33 points you get back. Only the third step changes from one project to the next.
+- The first line of draw() chooses the picture for this frame: the camera if it has a frame ready, the photo if not. cam.is_ready() is false for the first moments, before the first frame arrives.
+- ml.pose(source) gives a body, or None when it sees no one. Always check for None before you use the body. Here the sketch writes a hint and leaves draw() early with return.
+- BONES is a list of pairs of point names. The loop looks up both points of each pair and draws a line between them. Twelve pairs make the figure.
+- The gold and blue dots mark your left and right wrists. The camera is mirrored, but left is your own left: raise your left hand and the gold dot rises.
+- f.run(fps=24) asks for 24 frames a second. Finding a body is real work for the computer, and 24 is smooth enough.
+
+**Make it yours**
+
+- Hide the camera picture by deleting the f.image(source, 0, 0) line. Only the figure remains.
+- Draw a small circle at every point: for p in body.points.values(): f.circle(p.x, p.y, 6).
+- Show how sure the model is: f.text(round(body.score, 2), 20, 440).
+- Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them.
+
+</details>
+
+Source: [`examples/gallery/models/07_go_live.py`](../../examples/gallery/models/07_go_live.py)
+
+### Show the numbers
+
+![Show the numbers](images/models-08_show_the_numbers.png)
+
+The angle at each elbow and knee, written beside the joint. It also counts squats and draws the knee angle as a graph over time. The picture becomes a measuring tool. This is a teaching tool, not accurate enough for medical or sports decisions. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- MEASURED lists four joints. Each entry names three points: the joint in the middle and its two neighbours. For the left elbow these are the shoulder, the elbow and the wrist.
+- angle_at(a, b, c) makes the arrow from b to a and the arrow from b to c, then asks for the turn between them. A straight arm gives 180 degrees, a fully bent arm a small number. abs removes the sign.
+- knee is the average of the two knee angles. Standing straight gives about 175 and a deep squat gives less than 100. A squat is counted when knee first drops below 100 and then rises above 160. The variable is_down remembers the drop. With one threshold, a small wobble around it would be counted many times.
+- history keeps the last 200 knee angles, and del history[:-200] throws away everything older. f.map_range turns an angle between 40 and 180 into a height between 470 and 400, and each frame moves 3 pixels to the right.
+- The camera sees a flat picture, so these are angles as they look on the screen. For a true knee angle, stand side-on to the camera, so the leg bends in the plane of the picture. Compare a slow squat with a fast one: the slow one makes a wide dip.
+
+**Make it yours**
+
+- Change 100 to 120 to count shallower squats.
+- Measure the shoulder: add ("left_hip", "left_shoulder", "left_elbow") to MEASURED.
+- Save the graph as numbers. Add print(round(knee)) and copy the output into a spreadsheet.
+- Ask two friends to squat at different speeds and compare their graphs.
+
+</details>
+
+Source: [`examples/gallery/models/08_show_the_numbers.py`](../../examples/gallery/models/08_show_the_numbers.py)
+
+### Change the costume
+
+![Change the costume](images/models-09_change_the_costume.png)
+
+The same body points, drawn three ways: as a Warli figure, as a robot, and as brush strokes. Press a button to change the costume. The points say where the body is. They say nothing about what it looks like. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- Warli is a painting tradition of the Warli people of Maharashtra, made in white on an earth-coloured wall. Its people are two triangles joined at the waist, a circle for the head and thin lines for limbs. It is worth showing learners real Warli paintings next to this sketch.
+- middle(a, b) gives the point halfway between two points: add them and halve the result. The waist is halfway between the middle of the shoulders and the middle of the hips, and both triangles meet there. wide_left and wide_right push the hips out to 1.8 times their distance from the centre, because a Warli skirt is wide.
+- block(a, b, thickness) draws a bar from one point to another. It moves the drawing origin to a, turns the page to face b, and draws a plain rectangle along the x axis. The with f.saved_state(): line undoes the move and the turn afterwards. Move, turn, draw is a very useful pattern.
+- stroke_through(points, width) draws one smooth brush stroke with f.curve_vertex. The first and last points are given twice, because the curve needs a neighbour on each side of every point it passes through. The red square is a seal, as on an ink painting.
+- Each button is made once in setup(). In draw(), button.clicked() is True once for each click, and the sketch remembers which costume you chose.
+
+**Make it yours**
+
+- Draw the camera picture nowhere at all, as here, and ask a friend to guess the pose from the costume alone.
+- Give the Warli figure a hair bun: a small circle beside the head.
+- Invent a fourth costume: write a function, make a fourth button in setup(), and add one more elif in draw().
+- Draw two costumes side by side with f.translate to compare them.
+
+</details>
+
+Source: [`examples/gallery/models/09_change_the_costume.py`](../../examples/gallery/models/09_change_the_costume.py)
+
+### Leave trails
+
+![Leave trails](images/models-10_leave_trails.png)
+
+The last 20 poses stay on screen, the older ones fainter, like one photographic plate with many moments on it. In the 1880s Eadweard Muybridge and Étienne-Jules Marey photographed people and animals many times a second to see how they move. Marey put all the moments on one plate, so a walking man became a row of overlapping figures. This sketch does the same with stick figures. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- trail is a list of poses. Each entry is body.points, the dictionary of all 33 points at one moment.
+- f.frame_count % EVERY == 0 is true on every third frame. Keeping every frame would pack the figures too close together to read. At 24 frames a second, 20 kept poses cover two and a half seconds. del trail[:-KEEP] removes everything except the last 20.
+- The fourth number in f.stroke(255, 255, 255, ...) is how solid the line is, from 0 to 255. Older poses have a smaller i, so they are fainter. The newest pose is drawn in gold and thicker.
+- The camera picture is not drawn at all. The black background is what makes the white figures look like an old photographic plate.
+- The Save button writes the picture with f.save("trails.pdf"). A PDF holds lines, not pixels, so the poster stays sharp at any print size. For a good poster, choose one clear movement, such as a jump or one step of a dance, and cross the camera's view from one side to the other. Press Clear, perform, and press Save at the end.
+
+**Make it yours**
+
+- Change EVERY to 6 for figures that are further apart, or KEEP to 40 for a longer memory.
+- Colour the figures by age with f.hsb: f.stroke(f.hsb(i * 12, 80, 100)).
+- Draw only one point's path, such as the right wrist, as a single curved line. This is how sports coaches study a throw.
+- Use a white background and black figures for a poster that uses less ink.
+
+</details>
+
+Source: [`examples/gallery/models/10_leave_trails.py`](../../examples/gallery/models/10_leave_trails.py)
+
+### Body as instrument
+
+![Body as instrument](images/models-11_body_as_instrument.png)
+
+Your right hand plays the notes of a raga: low at the hip, high above the head. Lift your right foot and put it down, and a drum sounds. A quiet drone hums underneath. With no camera, it uses a photo, so it still works, but you will need the camera to hear it change. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- sangeet.raga("Bhupali") gives a record of the raga. Its aroha, the rising line, is the text "S R G P D S'", and split() cuts it into six swaras. sound.note_to_frequency(swara, sa=SA) turns each swara into a pitch, counted from D4 as Sa. sound.pluck makes a plucked-string sound. All six are made once, before the sketch starts, so playing them later costs no time.
+- low is the height of your hip and high is a little above your head. Both are measured from your body on every frame, so the instrument still works if you step nearer or further away.
+- f.map_range turns the height of your right wrist into a number from 0 to just under 6. int cuts that to a whole step from 0 to 5, and clamp=True keeps it inside that range when your hand goes below the hip or above the top.
+- A note is played only when step differs from last_step. Without that check, the same note would restart 24 times a second.
+- A stamp is a foot that was up and is now down. foot_is_up is true when the right ankle is higher than the left by more than a fifth of your torso length. The drum plays in the one frame where foot_was_up is true and foot_is_up is false. Using the torso as the unit, not a fixed number of pixels, keeps this working at any distance.
+- sound.drone("D3", 8, volume=0.2).loop() starts a quiet drone that repeats for as long as the sketch runs.
+
+**Make it yours**
+
+- Change the raga. sangeet.ragas() lists them all, among them Yaman, Durga and Bhairav. Listen to how the mood changes with the same movement.
+- Come down by a different path: use raga.avaroha when the hand is falling.
+- Give the left hand its own job, such as the volume: notes[step].set_volume(...).
+- Replace the drum with a whole theka: sangeet.tala("Keherwa", tempo=100).loop().
+- Two players: each one's hand plays a different octave. Change SA to "D3" for the second set of notes.
+
+</details>
+
+Source: [`examples/gallery/models/11_body_as_instrument.py`](../../examples/gallery/models/11_body_as_instrument.py)
+
+### Teach with numbers
+
+![Teach with numbers](images/models-12_teach_with_numbers.png)
+
+Teach the computer two gestures, "hands up" and "namaste", and then let it name the one you make. A pose becomes seven numbers, and the sketch compares them with the poses it was taught. You write the teaching and the guessing yourself, so you see how it works inside. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- describe(body) turns a pose into seven numbers: four joint angles (both elbows and both shoulders), how far each wrist is above its shoulder, and the distance between the wrists.
+- Every number is a ratio. Angles are divided by 180, heights by the torso length, and the wrist distance by the shoulder width. So the numbers stay the same when you step closer, further or sideways. Pixel positions would not.
+- teach(name, numbers) only remembers. It adds the seven numbers to the list for that name. There is no training step.
+- guess(numbers) finds the nearest memory. math.dist measures how far apart two lists of numbers are, and the name with the closest example wins. The score compares the best with the runner-up: 0.5 is a coin toss and 1 is an exact match. This is called nearest neighbour.
+- You cannot press a button and pose at the same time. So a button starts a countdown of 3 seconds, counted in frames, and then the sketch teaches that name on every 4th frame for one second: 6 examples. Teach "hands up", then "namaste", then "nothing".
+- "Nothing" must be taught too. The sketch always names the nearest thing it knows, so an untaught pose gets a name with a low score. A low score means "I am guessing". Act on a gesture only when the score is high.
+
+**Make it yours**
+
+- Act on a gesture only when you are sure: if name == "namaste" and score > 0.7:.
+- Teach each name from two different distances, and watch the score stay high. Ratios make this work.
+- Add a fourth name, such as "arms wide", with its own button.
+- Add an eighth number to describe(), such as the angle at one knee, and see if the guesses improve.
+
+</details>
+
+Source: [`examples/gallery/models/12_teach_with_numbers.py`](../../examples/gallery/models/12_teach_with_numbers.py)
+
+### Teach with a pose card
+
+![Teach with a pose card](images/models-13_teach_with_a_pose_card.png)
+
+Teach the computer two gestures, "hands up" and "namaste", with the real ml.teach, and then let it name the one you make. ml.teach learns from pictures. If you give it the camera picture, it also learns your shirt and your room. So the sketch gives it a pose card instead: the stick figure alone, white on black, always the same size and in the same place. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- f.create_graphics(160, 160) makes a small second picture called card. It has the same drawing commands as f.
+- draw_card subtracts the hip position from every point, so the figure is always centred. It multiplies by zoom, so the torso is always the same length on the card. This does for a picture what the ratios did in Teach with numbers.
+- ml.teach(name, card) keeps the card as one example of that name and returns how many examples the name has now. The first ml.teach downloads a picture model of about 10 MB, once.
+- ml.guess(card, k=2) gives a guess with a name, a score, and the runner-up in guess.next. It gives None until something has been taught.
+- You cannot press a button and pose at the same time. So a button starts a countdown of 3 seconds, counted in frames, and then the sketch teaches that name on every 4th frame for one second. Teach "hands up", then "namaste", then "nothing". The same picture twice adds nothing, so move a little.
+- "Nothing" must be taught too: the computer always names the nearest thing it knows. Compare this with Teach with numbers, and see which tells your poses apart better.
+
+**Make it yours**
+
+- Make CARD bigger, such as 224, and draw the lines thicker. A bigger card shows more detail.
+- Show the runner-up under the name, using guess.next[0].name and guess.next[0].score.
+- Teach each name from two different distances, and see if the guess holds.
+- Add a fourth name, such as "arms wide", with its own button.
+
+</details>
+
+Source: [`examples/gallery/models/13_teach_with_a_pose_card.py`](../../examples/gallery/models/13_teach_with_a_pose_card.py)
+
 ## Sound
 
 ### Sound: play a tune and watch it

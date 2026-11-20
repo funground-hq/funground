@@ -1,0 +1,549 @@
+[
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 480,
+  "op": "Image",
+  "source": "graphics-1",
+  "version": 1,
+  "width": 320,
+  "x": 0.0,
+  "y": 0.0
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "hands up: 0 taught",
+  "x": 20,
+  "y": 400
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "namaste: 0 taught",
+  "x": 20,
+  "y": 424
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "nothing: 0 taught",
+  "x": 20,
+  "y": 448
+ },
+ {
+  "height": 190,
+  "op": "Rect",
+  "radii": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    150
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 300,
+  "x": 330,
+  "y": 100
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "left elbow",
+  "x": 340,
+  "y": 110
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    72,
+    61,
+    139,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 120,
+  "x": 500,
+  "y": 112
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 59.21566682980436,
+  "x": 500,
+  "y": 112
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "right elbow",
+  "x": 340,
+  "y": 135
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    72,
+    61,
+    139,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 120,
+  "x": 500,
+  "y": 137
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 40.5226547448248,
+  "x": 500,
+  "y": 137
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "left shoulder",
+  "x": 340,
+  "y": 160
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    72,
+    61,
+    139,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 120,
+  "x": 500,
+  "y": 162
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 4.571349773284765,
+  "x": 500,
+  "y": 162
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "right shoulder",
+  "x": 340,
+  "y": 185
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    72,
+    61,
+    139,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 120,
+  "x": 500,
+  "y": 187
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 14.511061335994384,
+  "x": 500,
+  "y": 187
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "left hand height",
+  "x": 340,
+  "y": 210
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    72,
+    61,
+    139,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 120,
+  "x": 500,
+  "y": 212
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 70.27664626889457,
+  "x": 500,
+  "y": 212
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "right hand height",
+  "x": 340,
+  "y": 235
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    72,
+    61,
+    139,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 120,
+  "x": 500,
+  "y": 237
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 50.458226812477555,
+  "x": 500,
+  "y": 237
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "text": "hands apart",
+  "x": 340,
+  "y": 260
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    72,
+    61,
+    139,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 120,
+  "x": 500,
+  "y": 262
+ },
+ {
+  "height": 10,
+  "op": "Rect",
+  "style": {
+   "fill": [
+    255,
+    215,
+    0,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 16
+  },
+  "width": 91.66051760451947,
+  "x": 500,
+  "y": 262
+ },
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    255,
+    255,
+    255,
+    255
+   ],
+   "stroke": null,
+   "stroke_width": 1,
+   "text_size": 24
+  },
+  "text": "Teach me first",
+  "x": 340,
+  "y": 16
+ }
+]

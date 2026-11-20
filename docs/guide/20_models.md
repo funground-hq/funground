@@ -115,6 +115,17 @@ alone with `figure.save("stick_figure.png")`. To use your photo in Play, add it 
 `my_photo` (the `.jpg` or `.png` ending stays). On your computer, put `my_photo.jpg` or `my_photo.png` beside the
 sketch.
 
+Seven more pose projects in the gallery start from the camera and go on to measuring, drawing, music and teaching:
+[go live](../gallery/README.md#go-live),
+[show the numbers](../gallery/README.md#show-the-numbers),
+[change the costume](../gallery/README.md#change-the-costume),
+[leave trails](../gallery/README.md#leave-trails),
+[body as instrument](../gallery/README.md#body-as-instrument),
+[teach with numbers](../gallery/README.md#teach-with-numbers) and
+[teach with a pose card](../gallery/README.md#teach-with-a-pose-card). They all use the same three steps: get a
+picture, ask for the body, and draw with its 33 points. Only the third step changes. With no camera, each one uses a
+photo, so you can try them all in Play.
+
 ## Find a hand
 
 `ml.hand(source)` does the same for a hand. It gives a **hand**, or `None`.
