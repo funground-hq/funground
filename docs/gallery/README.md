@@ -2784,7 +2784,7 @@ A photograph with a green stick figure on it, and the same stick figure alone be
 
 **How it works**
 
-- The sketch opens my_photo.jpg. When there is no file of that name, it opens the Gandhi photograph instead.
+- The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
 - draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
 - BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
@@ -2793,7 +2793,7 @@ A photograph with a green stick figure on it, and the same stick figure alone be
 
 **Make it yours**
 
-- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo.jpg. On your computer: put the photo beside this sketch and call it my_photo.jpg. Run the sketch again.
+- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
 - Add the ears and the mouth: body.left_ear, body.right_ear, body.mouth_left and body.mouth_right.
 - Change figure.stroke("lime") and the line's thickness to give the figure a new look.
 - Draw a small circle at every point in body.points.values() instead of lines.

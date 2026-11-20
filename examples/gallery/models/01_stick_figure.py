@@ -6,7 +6,7 @@ your own photo when you give it one, and a photograph of Mahatma Gandhi arriving
 needs the models library, which is a separate install: funground-ml.
 
 How it works:
-- The sketch opens my_photo.jpg. When there is no file of that name, it opens the Gandhi photograph instead.
+- The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
 - draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
 - BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
@@ -14,7 +14,7 @@ How it works:
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
 
 Make it yours:
-- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo.jpg. On your computer: put the photo beside this sketch and call it my_photo.jpg. Run the sketch again.
+- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
 - Add the ears and the mouth: body.left_ear, body.right_ear, body.mouth_left and body.mouth_right.
 - Change figure.stroke("lime") and the line's thickness to give the figure a new look.
 - Draw a small circle at every point in body.points.values() instead of lines.
@@ -29,10 +29,15 @@ BONES = [("left_shoulder", "right_shoulder"), ("left_shoulder", "left_elbow"), (
          ("right_shoulder", "right_hip"), ("left_hip", "right_hip"), ("left_hip", "left_knee"),
          ("left_knee", "left_ankle"), ("right_hip", "right_knee"), ("right_knee", "right_ankle")]
 
-try:
-    photo = f.load_image("my_photo.jpg")
-except FileNotFoundError:
-    print("No my_photo.jpg yet, so this is the Gandhi photograph. Add your own photo and call it my_photo.jpg.")
+photo = None
+for name in ["my_photo.jpg", "my_photo.png", "my_photo.jpeg"]:
+    try:
+        photo = f.load_image(name)
+        break                      # found one: stop looking
+    except FileNotFoundError:
+        pass                       # not this one: try the next name
+if photo is None:
+    print("No my_photo yet, so this is the Gandhi photograph. Add your own photo and call it my_photo.jpg or my_photo.png.")
     photo = f.load_image("data/gandhi_london_rain.jpg")
 
 figure = None
