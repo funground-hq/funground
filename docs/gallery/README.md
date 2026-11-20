@@ -2973,14 +2973,14 @@ A green stick figure that follows you. The computer looks at the camera, finds y
 - The first line of draw() chooses the picture for this frame: the camera if it has a frame ready, the photo if not. cam.is_ready() is false for the first moments, before the first frame arrives.
 - ml.pose(source) gives a body, or None when it sees no one. Always check for None before you use the body. Here the sketch writes a hint and leaves draw() early with return.
 - BONES is a list of pairs of point names. The loop looks up both points of each pair and draws a line between them. Twelve pairs make the figure. A bone is faint when the model is not sure of one of its ends: body.scores says how sure it is of each point, from 0 to 1. Tick All 33 points and MORE_BONES joins in (the face, the hands and the feet), with a dot on every point.
-- The gold and blue dots mark your left and right wrists. The camera is mirrored, but left is your own left: raise your left hand and the gold dot rises.
+- The gold and blue dots mark your left and right wrists. The camera is mirrored, but left is your own left: raise your left hand and the gold dot rises. Tick Fingers and a second model, ml.hand(), finds one hand and its 21 points. The sketch draws its fingers and gives its wrist, which is more exact, to the side whose wrist is nearer. Two models do twice the work, so the figure moves less smoothly.
 - f.run(fps=24) asks for 24 frames a second. Finding a body is real work for the computer, and 24 is smooth enough.
 
 **Make it yours**
 
 - Hide the camera picture by deleting the f.image(source, 0, 0) line. Only the figure remains.
 - Tick All 33 points and wave. The fingers and toes wobble more than the elbows: they are small, and the model is less sure of them.
-- Show how sure the model is: f.text(round(body.score, 2), 20, 440).
+- Tick Fingers and count on your hand: hand.index_finger_tip and hand.thumb_tip are two of its points. Show how sure the model is: f.text(round(body.score, 2), 20, 440).
 - Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them, and their bones go faint.
 - Leave the guesses out: change the faint stroke to f.no_stroke().
 
@@ -3215,7 +3215,7 @@ You move, and a character drawn on paper copies you. The camera finds your body,
 - This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, arm_lengths, ease, mirrored reads it. In Play it opens as a second tab; on a computer, keep the two files in the same folder.
 - JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are.
 - picture.remove_color(picture.get(4, 4), 60, tidy=True) takes away the paper: every colour close to the corner's colour becomes see-through, and tidy keeps only the character.
-- bone_angles(body.points) gives the directions of your ten bones, and arm_lengths(body.points) how long your arms are for your size, so the puppet reaches as high as you do. A camera shows you as a mirror does: your left arm is on the picture's left, where the drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does.
+- bone_angles(body.points) gives the directions of your ten bones, and arm_lengths(body.points) how long your arms are for your size, so the puppet reaches as high as you do. A camera shows you as a mirror does: your left arm is on the picture's left, where the drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does. Tick Fingers and a second model, ml.hand(), finds one hand: its wrist is more exact, so it takes the place of the nearer wrist.
 - ease() moves each angle half of the way towards the new one in each frame, and each length moves half of the way too. A pose model's points jump a little from frame to frame, and easing smooths the jumps away.
 - hero.draw(angles, 620, 300, zoom=0.62) draws the puppet with its hips at 620, 300, at 62 % of the drawing's size.
 

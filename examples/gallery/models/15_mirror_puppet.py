@@ -13,7 +13,8 @@ How it works:
   becomes see-through, and tidy keeps only the character.
 - bone_angles(body.points) gives the directions of your ten bones, and arm_lengths(body.points) how long your arms
   are for your size, so the puppet reaches as high as you do. A camera shows you as a mirror does: your left arm is on the picture's left, where the
-  drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does.
+  drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does. Tick Fingers
+  and a second model, ml.hand(), finds one hand: its wrist is more exact, so it takes the place of the nearer wrist.
 - ease() moves each angle half of the way towards the new one in each frame, and each length moves half of the way too. A pose model's points jump a little from
   frame to frame, and easing smooths the jumps away.
 - hero.draw(angles, 620, 300, zoom=0.62) draws the puppet with its hips at 620, 300, at 62 % of the drawing's size.
@@ -43,11 +44,13 @@ lengths = dict(hero.lengths)
 still = f.load_image("data/standing_woman_640.jpg")      # used when there is no camera
 still.resize(320, 480)
 cam = None
+fingers = None
 
 
 def setup():
-    global cam
+    global cam, fingers
     f.size(900, 480)
+    fingers = f.create_checkbox("Fingers")
     try:
         cam = camera.open()
         cam.start(320, 240)
@@ -65,7 +68,12 @@ def draw():
         f.fill("gold")
         for point in body.points.values():
             f.circle(point.x, point.y, 8)
-        seen, sizes = bone_angles(body.points), arm_lengths(body.points)
+        points = dict(body.points)
+        hand = ml.hand(source) if fingers.checked() else None
+        if hand:                                 # give the hand model's wrist to the nearer side
+            side = "left" if hand.wrist.dist(points["left_wrist"]) < hand.wrist.dist(points["right_wrist"]) else "right"
+            points[side + "_wrist"] = hand.wrist
+        seen, sizes = bone_angles(points), arm_lengths(points)
         if source is cam:                        # a camera is a mirror: copy the picture, as your reflection would
             seen, sizes = mirrored(seen), mirrored(sizes)
         for bone, angle in seen.items():
