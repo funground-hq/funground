@@ -220,10 +220,11 @@ class Session:
         start; the camera stays not ready."""
         self._platform.camera.unavailable(reason)
 
-    def push_models(self, task: str, key: int, points, score: float, width: int, height: int) -> None:
+    def push_models(self, task: str, key: int, points, score: float, width: int, height: int, scores=None) -> None:
         """One result from the host's models: `points` is a flat sequence x0, y0, x1, y1, ... in pixels of the picture
-        that "request" sent (or None for nobody), `key` is the source's key from that request."""
-        self._platform.push_models(task, key, points, score, width, height)
+        that "request" sent (or None for nobody), `key` is the source's key from that request. `scores` is how sure the
+        model is of each point, 0 to 1 (`body.scores`); a page that sends none gives every point `score`."""
+        self._platform.push_models(task, key, points, score, width, height, scores)
 
     def push_models_mask(self, task: str, key: int, mask, mask_width: int, mask_height: int, width: int, height: int) -> None:
         """One result from the host's models that is a mask (the "person" task): `mask` is `mask_width * mask_height`
