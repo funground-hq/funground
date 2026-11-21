@@ -123,7 +123,7 @@ the points land in the right place. The gallery has a
 picture of its own (`f.create_graphics`), shows it over the photo and alone beside it, and a button saves the figure
 alone with `figure.save("stick_figure.png")`. To use your photo in Play, add it in My files and rename it
 `my_photo` (the `.jpg` or `.png` ending stays). On your computer, put `my_photo.jpg` or `my_photo.png` beside the
-sketch.
+sketch. A drawing saved as `my_photo.svg` works too: the sketch opens it with `f.load_svg()`.
 
 Seven more pose projects in the gallery start from the camera and go on to measuring, drawing, music and teaching:
 [go live](../gallery/README.md#go-live),
