@@ -1117,6 +1117,25 @@
    ]
   },
   {
+   "name": "create_checkbox",
+   "kind": "function",
+   "signature": "create_checkbox(label, checked=False)",
+   "detail": "(label: str, checked: bool = False) -> Checkbox",
+   "summary": "Make a tick box in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_checkbox",
+   "returns": "Checkbox",
+   "star": true,
+   "section": "Interaction and controls",
+   "rank": 9,
+   "also": [
+    "tick",
+    "tick box",
+    "switch",
+    "toggle",
+    "yes or no"
+   ]
+  },
+  {
    "name": "map_range",
    "kind": "function",
    "signature": "map_range(value, start1, stop1, start2, stop2, clamp=False)",
@@ -1175,25 +1194,6 @@
      "kind": "pixels"
     }
    }
-  },
-  {
-   "name": "create_checkbox",
-   "kind": "function",
-   "signature": "create_checkbox(label, checked=False)",
-   "detail": "(label: str, checked: bool = False) -> Checkbox",
-   "summary": "Make a tick box in the panel below the canvas.",
-   "url": "reference/API.md#fn-create_checkbox",
-   "returns": "Checkbox",
-   "star": true,
-   "section": "Interaction and controls",
-   "rank": 8,
-   "also": [
-    "tick",
-    "tick box",
-    "switch",
-    "toggle",
-    "yes or no"
-   ]
   },
   {
    "name": "lerp_color",
@@ -1262,6 +1262,25 @@
      "kind": "colour"
     }
    }
+  },
+  {
+   "name": "Vector",
+   "kind": "class",
+   "signature": "Vector(x=0.0, y=0.0)",
+   "detail": "(x: float = 0.0, y: float = 0.0)",
+   "summary": "A 2D vector: two numbers, x and y, that you can add, scale, turn and measure.",
+   "url": "reference/API.md#cls-Vector",
+   "star": true,
+   "section": "Classes",
+   "rank": 7,
+   "plain": "Two numbers, x and y, for a position, a speed or a push.",
+   "also": [
+    "point",
+    "arrow",
+    "direction",
+    "velocity",
+    "position"
+   ]
   },
   {
    "name": "grid",
@@ -1402,25 +1421,6 @@
      "kind": "angle"
     }
    }
-  },
-  {
-   "name": "Vector",
-   "kind": "class",
-   "signature": "Vector(x=0.0, y=0.0)",
-   "detail": "(x: float = 0.0, y: float = 0.0)",
-   "summary": "A 2D vector: two numbers, x and y, that you can add, scale, turn and measure.",
-   "url": "reference/API.md#cls-Vector",
-   "star": true,
-   "section": "Classes",
-   "rank": 6,
-   "plain": "Two numbers, x and y, for a position, a speed or a push.",
-   "also": [
-    "point",
-    "arrow",
-    "direction",
-    "velocity",
-    "position"
-   ]
   },
   {
    "name": "layer",
@@ -1813,6 +1813,18 @@
    "rank": 3
   },
   {
+   "name": "load_svg",
+   "kind": "function",
+   "signature": "load_svg(path)",
+   "detail": "(path: str) -> Picture",
+   "summary": "Read an SVG file and return a picture of its shapes.",
+   "url": "reference/API.md#fn-load_svg",
+   "returns": "Picture",
+   "star": true,
+   "section": "Images and SVG",
+   "rank": 3
+  },
+  {
    "name": "no_loop",
    "kind": "function",
    "signature": "no_loop()",
@@ -1988,18 +2000,6 @@
    "returns": "Font",
    "star": true,
    "section": "Text and fonts",
-   "rank": 2
-  },
-  {
-   "name": "load_svg",
-   "kind": "function",
-   "signature": "load_svg(path)",
-   "detail": "(path: str) -> Picture",
-   "summary": "Read an SVG file and return a picture of its shapes.",
-   "url": "reference/API.md#fn-load_svg",
-   "returns": "Picture",
-   "star": true,
-   "section": "Images and SVG",
    "rank": 2
   },
   {
@@ -10182,7 +10182,7 @@
      "summary": "The height of every frame, in pixels: the size asked in start(), or 480 before that.",
      "url": "reference/API.md#cls-Camera-height",
      "section": "Camera",
-     "rank": 11,
+     "rank": 12,
      "since": "0.2"
     },
     {
@@ -10261,7 +10261,7 @@
      "summary": "The width of every frame, in pixels: the size asked in start(), or 640 before that.",
      "url": "reference/API.md#cls-Camera-width",
      "section": "Camera",
-     "rank": 11,
+     "rank": 12,
      "since": "0.2"
     }
    ]
@@ -10459,7 +10459,7 @@
      "summary": "Change the size of the picture, in place, scaling its pixels smoothly.",
      "url": "reference/API.md#cls-Picture-resize",
      "section": "Picture",
-     "rank": 13
+     "rank": 14
     },
     {
      "name": "save",
@@ -10527,7 +10527,7 @@
      "summary": "The distance from this point to another.",
      "url": "reference/API.md#cls-Vector-dist",
      "section": "Vector",
-     "rank": 5
+     "rank": 8
     },
     {
      "name": "div",
@@ -10601,7 +10601,7 @@
      "summary": "The length of the vector.",
      "url": "reference/API.md#cls-Vector-mag",
      "section": "Vector",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "mag_sq",
@@ -11102,7 +11102,7 @@
      "summary": "The height of the area the mark covers, from bounds(); 0 for an empty mark.",
      "url": "reference/API.md#cls-Mark-height",
      "section": "Mark",
-     "rank": 11
+     "rank": 12
     },
     {
      "name": "is_empty",
@@ -11132,7 +11132,7 @@
      "summary": "The width of the area the mark covers, from bounds(); 0 for an empty mark.",
      "url": "reference/API.md#cls-Mark-width",
      "section": "Mark",
-     "rank": 11
+     "rank": 12
     }
    ]
   },
@@ -11189,7 +11189,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Area-height",
      "section": "Area",
-     "rank": 11
+     "rank": 12
     },
     {
      "name": "inset",
@@ -11240,7 +11240,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Area-width",
      "section": "Area",
-     "rank": 11
+     "rank": 12
     }
    ]
   },
@@ -11308,7 +11308,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Ground-height",
      "section": "Ground",
-     "rank": 11
+     "rank": 12
     },
     {
      "name": "inset",
@@ -11369,7 +11369,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Ground-width",
      "section": "Ground",
-     "rank": 11
+     "rank": 12
     }
    ]
   },
@@ -11436,7 +11436,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Cell-height",
      "section": "Cell",
-     "rank": 11
+     "rank": 12
     },
     {
      "name": "index",
@@ -11507,7 +11507,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Cell-width",
      "section": "Cell",
-     "rank": 11
+     "rank": 12
     }
    ]
   },
@@ -11957,7 +11957,7 @@
      "summary": "Read whether the box is ticked, or tick or untick it.",
      "url": "reference/API.md#cls-Checkbox-checked",
      "section": "Checkbox",
-     "rank": 8
+     "rank": 9
     },
     {
      "name": "label",
@@ -12464,7 +12464,7 @@
      "summary": "a dict of every point name and how sure the model is of that point, from 0 to 1.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 0
+     "rank": 2
     },
     {
      "name": "nose",
@@ -12640,7 +12640,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 3
+     "rank": 2
     },
     {
      "name": "right_wrist",
@@ -12651,7 +12651,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 4
+     "rank": 3
     },
     {
      "name": "left_pinky",
@@ -12865,7 +12865,7 @@
      "summary": "A point of the hand: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Hand",
      "section": "Hand",
-     "rank": 0
+     "rank": 2
     },
     {
      "name": "thumb_cmc",
@@ -13915,6 +13915,25 @@
     ]
    },
    {
+    "name": "hand",
+    "kind": "function",
+    "signature": "hand(source)",
+    "detail": "(source) -> Hand | None",
+    "summary": "Find a hand in a camera or a picture.",
+    "url": "reference/API.md#fn-ml-hand",
+    "section": "ml",
+    "rank": 3,
+    "returns": "Hand",
+    "plain": "Find a hand and its fingers.",
+    "also": [
+     "fingers",
+     "palm",
+     "wrist",
+     "gesture",
+     "find hand"
+    ]
+   },
+   {
     "name": "guess",
     "kind": "function",
     "signature": "guess(source, k=1)",
@@ -13949,25 +13968,6 @@
      "show examples",
      "model",
      "label"
-    ]
-   },
-   {
-    "name": "hand",
-    "kind": "function",
-    "signature": "hand(source)",
-    "detail": "(source) -> Hand | None",
-    "summary": "Find a hand in a camera or a picture.",
-    "url": "reference/API.md#fn-ml-hand",
-    "section": "ml",
-    "rank": 1,
-    "returns": "Hand",
-    "plain": "Find a hand and its fingers.",
-    "also": [
-     "fingers",
-     "palm",
-     "wrist",
-     "gesture",
-     "find hand"
     ]
    },
    {
