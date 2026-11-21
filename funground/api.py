@@ -1232,6 +1232,9 @@ def clear() -> None:
 
     A PNG saved afterwards keeps the transparency. The window shows it as black.
 
+    Blocks:
+        also: transparent, empty, wipe, nothing
+
     See also: background, erase, save
     """
     refuse_in_mark("f.clear()")

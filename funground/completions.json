@@ -10,7 +10,7 @@
    "url": "reference/API.md#fn-size",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 205,
+   "rank": 206,
    "plain": "Set how big the drawing area is.",
    "also": [
     "canvas",
@@ -37,7 +37,7 @@
    "url": "reference/API.md#fn-fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 201,
+   "rank": 202,
    "also": [
     "color",
     "colour",
@@ -60,7 +60,7 @@
    "url": "reference/API.md#fn-background",
    "star": true,
    "section": "Colour",
-   "rank": 193,
+   "rank": 194,
    "also": [
     "paper",
     "wipe",
@@ -83,7 +83,7 @@
    "url": "reference/API.md#fn-no_stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 165,
+   "rank": 166,
    "plain": "Stop drawing outlines around shapes.",
    "also": [
     "no outline",
@@ -101,7 +101,7 @@
    "url": "reference/API.md#fn-run",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 139,
+   "rank": 140,
    "plain": "Start the sketch and keep drawing, frame after frame.",
    "also": [
     "start",
@@ -110,6 +110,36 @@
     "begin",
     "loop"
    ]
+  },
+  {
+   "name": "text",
+   "kind": "function",
+   "signature": "text(message, x, y, color=None)",
+   "detail": "(message: object, x: float, y: float, color: Color | None = None) -> None",
+   "summary": "Draw text.",
+   "url": "reference/API.md#fn-text",
+   "star": true,
+   "section": "Text and fonts",
+   "rank": 139,
+   "also": [
+    "say",
+    "print",
+    "write",
+    "words",
+    "label",
+    "type"
+   ],
+   "kinds": {
+    "x": {
+     "kind": "pixels"
+    },
+    "y": {
+     "kind": "pixels"
+    },
+    "color": {
+     "kind": "colour"
+    }
+   }
   },
   {
    "name": "circle",
@@ -140,36 +170,6 @@
    }
   },
   {
-   "name": "text",
-   "kind": "function",
-   "signature": "text(message, x, y, color=None)",
-   "detail": "(message: object, x: float, y: float, color: Color | None = None) -> None",
-   "summary": "Draw text.",
-   "url": "reference/API.md#fn-text",
-   "star": true,
-   "section": "Text and fonts",
-   "rank": 138,
-   "also": [
-    "say",
-    "print",
-    "write",
-    "words",
-    "label",
-    "type"
-   ],
-   "kinds": {
-    "x": {
-     "kind": "pixels"
-    },
-    "y": {
-     "kind": "pixels"
-    },
-    "color": {
-     "kind": "colour"
-    }
-   }
-  },
-  {
    "name": "text_size",
    "kind": "function",
    "signature": "text_size(size)",
@@ -178,7 +178,7 @@
    "url": "reference/API.md#fn-text_size",
    "star": true,
    "section": "Text and fonts",
-   "rank": 131,
+   "rank": 132,
    "also": [
     "font size",
     "bigger text",
@@ -233,7 +233,7 @@
    "url": "reference/API.md#fn-stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 101,
+   "rank": 102,
    "also": [
     "outline",
     "border",
@@ -256,7 +256,7 @@
    "url": "reference/API.md#fn-stroke_width",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 87,
+   "rank": 88,
    "also": [
     "thickness",
     "thick",
@@ -317,7 +317,7 @@
     ]
    },
    "section": "Text and fonts",
-   "rank": 86,
+   "rank": 87,
    "plain": "Choose which side of the point the text sits on.",
    "also": [
     "centre",
@@ -355,7 +355,7 @@
    "url": "reference/API.md#fn-save",
    "star": true,
    "section": "Saving",
-   "rank": 55,
+   "rank": 56,
    "also": [
     "export",
     "download",
@@ -409,7 +409,7 @@
    "url": "reference/API.md#fn-no_fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 49,
+   "rank": 50,
    "plain": "Draw shapes with nothing inside, only their outlines.",
    "also": [
     "empty",
@@ -733,6 +733,26 @@
    }
   },
   {
+   "name": "path",
+   "kind": "function",
+   "signature": "path()",
+   "detail": "() -> PathBuilder",
+   "summary": "Make a new, empty path that you can reuse.",
+   "url": "reference/API.md#fn-path",
+   "returns": "PathBuilder",
+   "star": true,
+   "section": "Paths and clipping",
+   "rank": 19,
+   "plain": "Make an empty path, a shape you can build and draw again.",
+   "also": [
+    "shape",
+    "outline",
+    "curve",
+    "route",
+    "trace"
+   ]
+  },
+  {
    "name": "random_seed",
    "kind": "function",
    "signature": "random_seed(seed=None)",
@@ -768,22 +788,19 @@
    ]
   },
   {
-   "name": "path",
+   "name": "draw_path",
    "kind": "function",
-   "signature": "path()",
-   "detail": "() -> PathBuilder",
-   "summary": "Make a new, empty path that you can reuse.",
-   "url": "reference/API.md#fn-path",
-   "returns": "PathBuilder",
+   "signature": "draw_path(path)",
+   "detail": "(path: PathBuilder) -> None",
+   "summary": "Draw a path made with path().",
+   "url": "reference/API.md#fn-draw_path",
    "star": true,
    "section": "Paths and clipping",
-   "rank": 18,
-   "plain": "Make an empty path, a shape you can build and draw again.",
+   "rank": 17,
    "also": [
-    "shape",
-    "outline",
-    "curve",
-    "route",
+    "show path",
+    "paint path",
+    "draw shape",
     "trace"
    ]
   },
@@ -802,23 +819,6 @@
     "cursor",
     "pointer",
     "up and down"
-   ]
-  },
-  {
-   "name": "draw_path",
-   "kind": "function",
-   "signature": "draw_path(path)",
-   "detail": "(path: PathBuilder) -> None",
-   "summary": "Draw a path made with path().",
-   "url": "reference/API.md#fn-draw_path",
-   "star": true,
-   "section": "Paths and clipping",
-   "rank": 16,
-   "also": [
-    "show path",
-    "paint path",
-    "draw shape",
-    "trace"
    ]
   },
   {
@@ -902,6 +902,25 @@
    }
   },
   {
+   "name": "create_slider",
+   "kind": "function",
+   "signature": "create_slider(low, high, value=None, step=None, label=None)",
+   "detail": "(low: float, high: float, value: float | None = None, step: float | None = None, label: str | None = None) -> Slider",
+   "summary": "Make a slider in a panel below the canvas.",
+   "url": "reference/API.md#fn-create_slider",
+   "returns": "Slider",
+   "star": true,
+   "section": "Interaction and controls",
+   "rank": 12,
+   "also": [
+    "control",
+    "dial",
+    "bar",
+    "knob",
+    "sliding"
+   ]
+  },
+  {
    "name": "linear_gradient",
    "kind": "function",
    "signature": "linear_gradient(x1, y1, x2, y2, colors, stops=None)",
@@ -963,25 +982,6 @@
    }
   },
   {
-   "name": "create_slider",
-   "kind": "function",
-   "signature": "create_slider(low, high, value=None, step=None, label=None)",
-   "detail": "(low: float, high: float, value: float | None = None, step: float | None = None, label: str | None = None) -> Slider",
-   "summary": "Make a slider in a panel below the canvas.",
-   "url": "reference/API.md#fn-create_slider",
-   "returns": "Slider",
-   "star": true,
-   "section": "Interaction and controls",
-   "rank": 11,
-   "also": [
-    "control",
-    "dial",
-    "bar",
-    "knob",
-    "sliding"
-   ]
-  },
-  {
    "name": "create_button",
    "kind": "function",
    "signature": "create_button(label)",
@@ -991,7 +991,7 @@
    "returns": "Button",
    "star": true,
    "section": "Interaction and controls",
-   "rank": 10,
+   "rank": 11,
    "also": [
     "click",
     "press",
@@ -1227,6 +1227,25 @@
    }
   },
   {
+   "name": "create_checkbox",
+   "kind": "function",
+   "signature": "create_checkbox(label, checked=False)",
+   "detail": "(label: str, checked: bool = False) -> Checkbox",
+   "summary": "Make a tick box in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_checkbox",
+   "returns": "Checkbox",
+   "star": true,
+   "section": "Interaction and controls",
+   "rank": 7,
+   "also": [
+    "tick",
+    "tick box",
+    "switch",
+    "toggle",
+    "yes or no"
+   ]
+  },
+  {
    "name": "key_down",
    "kind": "function",
    "signature": "key_down(key)",
@@ -1326,6 +1345,23 @@
    }
   },
   {
+   "name": "mm",
+   "kind": "function",
+   "signature": "mm(n)",
+   "detail": "(n: float) -> float",
+   "summary": "Convert millimetres to funground units.",
+   "url": "reference/API.md#fn-mm",
+   "star": true,
+   "section": "Ground",
+   "rank": 7,
+   "also": [
+    "millimetres",
+    "millimeters",
+    "print size",
+    "paper size"
+   ]
+  },
+  {
    "name": "radians",
    "kind": "function",
    "signature": "radians(degrees)",
@@ -1348,22 +1384,20 @@
    }
   },
   {
-   "name": "create_checkbox",
+   "name": "clear",
    "kind": "function",
-   "signature": "create_checkbox(label, checked=False)",
-   "detail": "(label: str, checked: bool = False) -> Checkbox",
-   "summary": "Make a tick box in the panel below the canvas.",
-   "url": "reference/API.md#fn-create_checkbox",
-   "returns": "Checkbox",
+   "signature": "clear()",
+   "detail": "() -> None",
+   "summary": "Make the whole canvas transparent.",
+   "url": "reference/API.md#fn-clear",
    "star": true,
-   "section": "Interaction and controls",
+   "section": "Colour",
    "rank": 6,
    "also": [
-    "tick",
-    "tick box",
-    "switch",
-    "toggle",
-    "yes or no"
+    "transparent",
+    "empty",
+    "wipe",
+    "nothing"
    ]
   },
   {
@@ -1405,23 +1439,6 @@
    ]
   },
   {
-   "name": "mm",
-   "kind": "function",
-   "signature": "mm(n)",
-   "detail": "(n: float) -> float",
-   "summary": "Convert millimetres to funground units.",
-   "url": "reference/API.md#fn-mm",
-   "star": true,
-   "section": "Ground",
-   "rank": 6,
-   "also": [
-    "millimetres",
-    "millimeters",
-    "print size",
-    "paper size"
-   ]
-  },
-  {
    "name": "Vector",
    "kind": "class",
    "signature": "Vector(x=0.0, y=0.0)",
@@ -1433,17 +1450,6 @@
    "rank": 5
   },
   {
-   "name": "clear",
-   "kind": "function",
-   "signature": "clear()",
-   "detail": "() -> None",
-   "summary": "Make the whole canvas transparent.",
-   "url": "reference/API.md#fn-clear",
-   "star": true,
-   "section": "Colour",
-   "rank": 5
-  },
-  {
    "name": "is_mouse_pressed",
    "kind": "value",
    "signature": "is_mouse_pressed",
@@ -1452,6 +1458,18 @@
    "url": "reference/API.md#live-is_mouse_pressed",
    "star": true,
    "section": "Live values",
+   "rank": 5
+  },
+  {
+   "name": "text_path",
+   "kind": "function",
+   "signature": "text_path(message, x, y)",
+   "detail": "(message: object, x: float, y: float) -> PathBuilder",
+   "summary": "Return the outlines of some text as a path.",
+   "url": "reference/API.md#fn-text_path",
+   "returns": "PathBuilder",
+   "star": true,
+   "section": "Text and fonts",
    "rank": 5
   },
   {
@@ -1590,18 +1608,6 @@
     ]
    },
    "section": "Fill and stroke",
-   "rank": 4
-  },
-  {
-   "name": "text_path",
-   "kind": "function",
-   "signature": "text_path(message, x, y)",
-   "detail": "(message: object, x: float, y: float) -> PathBuilder",
-   "summary": "Return the outlines of some text as a path.",
-   "url": "reference/API.md#fn-text_path",
-   "returns": "PathBuilder",
-   "star": true,
-   "section": "Text and fonts",
    "rank": 4
   },
   {
@@ -10707,7 +10713,7 @@
      "summary": "Add a run of text to the end.",
      "url": "reference/API.md#cls-FormattedString-append",
      "section": "FormattedString",
-     "rank": 24,
+     "rank": 25,
      "returns": "FormattedString"
     },
     {
@@ -10782,7 +10788,7 @@
      "summary": "The box that exactly holds the path.",
      "url": "reference/API.md#cls-PathBuilder-bounds",
      "section": "PathBuilder",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "circle",
@@ -10868,7 +10874,7 @@
      "summary": "Make a new path that is the outline a stroke would paint, so you can fill, cut or clip with it.",
      "url": "reference/API.md#cls-PathBuilder-expand_stroke",
      "section": "PathBuilder",
-     "rank": 2,
+     "rank": 3,
      "returns": "PathBuilder"
     },
     {
@@ -10977,7 +10983,7 @@
      "summary": "Add a rectangle as a closed part of the path.",
      "url": "reference/API.md#cls-PathBuilder-rect",
      "section": "PathBuilder",
-     "rank": 13,
+     "rank": 14,
      "returns": "PathBuilder"
     },
     {
@@ -11010,7 +11016,7 @@
      "summary": "Make a new path that is this path scaled about the point (0, 0).",
      "url": "reference/API.md#cls-PathBuilder-scale",
      "section": "PathBuilder",
-     "rank": 4,
+     "rank": 5,
      "returns": "PathBuilder"
     },
     {
@@ -11033,7 +11039,7 @@
      "summary": "Make a new path that is this path moved.",
      "url": "reference/API.md#cls-PathBuilder-translate",
      "section": "PathBuilder",
-     "rank": 4,
+     "rank": 5,
      "returns": "PathBuilder"
     },
     {
@@ -11084,7 +11090,7 @@
      "summary": "Return the area the mark covers, in its own coordinates.",
      "url": "reference/API.md#cls-Mark-bounds",
      "section": "Mark",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "height",
@@ -11625,7 +11631,7 @@
      "summary": "The box that holds every point of the path, including curve control points.",
      "url": "reference/API.md#cls-Path-bounds",
      "section": "Path",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "close",
@@ -11741,7 +11747,7 @@
      "summary": "Make a new path that is one closed rectangle.",
      "url": "reference/API.md#cls-Path-rect",
      "section": "Path",
-     "rank": 13,
+     "rank": 14,
      "returns": "Path"
     },
     {
@@ -11923,7 +11929,7 @@
      "summary": "Read the slider's number, or set it.",
      "url": "reference/API.md#cls-Slider-value",
      "section": "Slider",
-     "rank": 11
+     "rank": 12
     },
     {
      "name": "visible",
@@ -11949,7 +11955,7 @@
      "summary": "Read whether the box is ticked, or tick or untick it.",
      "url": "reference/API.md#cls-Checkbox-checked",
      "section": "Checkbox",
-     "rank": 6
+     "rank": 7
     },
     {
      "name": "label",
@@ -11985,7 +11991,7 @@
      "summary": "Whether the button was clicked since you last asked.",
      "url": "reference/API.md#cls-Button-clicked",
      "section": "Button",
-     "rank": 10
+     "rank": 11
     },
     {
      "name": "label",
