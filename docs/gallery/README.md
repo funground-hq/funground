@@ -3684,12 +3684,12 @@ Six flat panels that fit together into a box, drawn at their real size for a las
 
 **How it works**
 
-- Everything is worked out in millimetres. f.mm(1) is how many funground units one millimetre is, so .scale(f.mm(1)) turns a panel drawn in millimetres into one at its real size. A PDF keeps that size when it is printed or cut.
+- Everything is worked out in millimetres, and draw_sheet() turns millimetres into units with per_mm. On the screen per_mm is SCREEN, so an A3 sheet fits in the window. For the file it is f.mm(1), how many funground units one millimetre is, so the panels come out at their real size. A PDF keeps that size when it is printed or cut.
 - A panel is its middle, a rectangle one thickness in from each edge, joined with | (union) to the pieces of the border it owns. Along each edge the border is cut into an odd number of pieces about FINGER wide. The panel that ranks higher (RANK) owns pieces 0, 2, 4 and so on; the panel it meets owns the others, so the two edges fit exactly.
 - An odd number means both end pieces go to the same panel, so the pattern reads the same from either end.
 - Where three panels meet in a corner, the corner square goes to the one that ranks highest. Without a lid, the walls' top edges have nothing to meet and stay straight.
 - A laser burns away a thin line, about KERF wide, so a piece comes out a little smaller than its line. cut() makes each outline bigger by half of that: expand_stroke(KERF) is the shape a line KERF wide would paint around the outline, and | adds it on. join="miter" keeps the corners sharp. Holes get smaller by the same amount.
-- The saved frame starts with f.clear() instead of the plywood background: a cutter would treat that rectangle as one more shape to engrave. The brown names are left out of it too.
+- "save" draws the sheet again on f.create_graphics(), an off-screen picture the size of A3, and saves that picture. It starts transparent and gets no plywood background, because a cutter would treat a filled rectangle as one more shape to engrave. The brown names are left out of it too.
 
 **Make it yours**
 

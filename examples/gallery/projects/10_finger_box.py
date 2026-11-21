@@ -6,8 +6,9 @@ sliders to set the box's width, depth and height and the thickness of your sheet
 box.pdf and box.svg: open the PDF in the laser cutter's program. Red lines are cut; blue is engraved.
 
 How it works:
-- Everything is worked out in millimetres. f.mm(1) is how many funground units one millimetre is, so .scale(f.mm(1))
-  turns a panel drawn in millimetres into one at its real size. A PDF keeps that size when it is printed or cut.
+- Everything is worked out in millimetres, and draw_sheet() turns millimetres into units with per_mm. On the screen
+  per_mm is SCREEN, so an A3 sheet fits in the window. For the file it is f.mm(1), how many funground units one
+  millimetre is, so the panels come out at their real size. A PDF keeps that size when it is printed or cut.
 - A panel is its middle, a rectangle one thickness in from each edge, joined with | (union) to the pieces of the border
   it owns. Along each edge the border is cut into an odd number of pieces about FINGER wide. The panel that ranks
   higher (RANK) owns pieces 0, 2, 4 and so on; the panel it meets owns the others, so the two edges fit exactly.
@@ -17,8 +18,9 @@ How it works:
 - A laser burns away a thin line, about KERF wide, so a piece comes out a little smaller than its line. cut() makes each
   outline bigger by half of that: expand_stroke(KERF) is the shape a line KERF wide would paint around the outline, and
   | adds it on. join="miter" keeps the corners sharp. Holes get smaller by the same amount.
-- The saved frame starts with f.clear() instead of the plywood background: a cutter would treat that rectangle as one
-  more shape to engrave. The brown names are left out of it too.
+- "save" draws the sheet again on f.create_graphics(), an off-screen picture the size of A3, and saves that picture.
+  It starts transparent and gets no plywood background, because a cutter would treat a filled rectangle as one more
+  shape to engrave. The brown names are left out of it too.
 
 Make it yours:
 - Put your own name in NAME, or make it bigger with f.text_size().
@@ -39,13 +41,15 @@ EDGE = 10               # the space round the edge of the sheet, in mm
 RANK = {"bottom": 3, "top": 3, "front": 2, "back": 2, "left": 1, "right": 1}
 CUT, ENGRAVE = "red", "blue"
 SHEET = "#ecd9b4"         # plywood, on the screen only
+SCREEN = 1.8             # pixels for each mm on the screen
+A3 = (420, 297)          # the sheet, in mm
 
 width = depth = height = thickness = lid = save_button = None
 
 
 def setup():
     global width, depth, height, thickness, lid, save_button
-    f.size("A3", landscape=True)          # 420 by 297 mm, the size of the sheet
+    f.size(round(A3[0] * SCREEN), round(A3[1] * SCREEN))
     width = f.create_slider(40, 130, 100, step=1, label="width mm")
     depth = f.create_slider(40, 120, 80, step=1, label="depth mm")
     height = f.create_slider(30, 120, 60, step=1, label="height mm")
@@ -109,34 +113,36 @@ def cut(shape):
     return shape | shape.expand_stroke(KERF, join="miter")
 
 
-def draw():
-    saving = save_button.clicked()
-    if saving:
-        f.clear()                         # no background in the file
-    else:
-        f.background(SHEET)
+def draw_sheet(canvas, per_mm, labels):
+    """Draw every panel on canvas (f, or a picture), per_mm units for each millimetre, with names if labels is True."""
     w, d, h = width.value(), depth.value(), height.value()
     for name, shape, (x, y) in make_panels(w, d, h, thickness.value(), lid.checked()):
-        f.no_fill()
-        f.stroke(CUT)
-        f.stroke_width(1)
-        f.draw_path(cut(shape).translate(x, y).scale(f.mm(1)))
-        middle_x, middle_y = f.mm(x + shape.bounds()[2] / 2), f.mm(y + shape.bounds()[3] / 2)
+        canvas.no_fill()
+        canvas.stroke(CUT)
+        canvas.stroke_width(1)
+        canvas.draw_path(cut(shape).translate(x, y).scale(per_mm))
+        _, _, across, down = shape.bounds()
+        middle_x, middle_y = (x + across / 2) * per_mm, (y + down / 2) * per_mm
+        canvas.no_stroke()
+        canvas.text_align("center", "center")
         if name == "front":
-            f.no_stroke()
-            f.fill(ENGRAVE)
-            f.text_size(f.mm(10))
-            f.text_align("center", "center")
-            f.draw_path(f.text_path(NAME, middle_x, middle_y))
-        elif not saving:
-            f.no_stroke()
-            f.fill("saddlebrown")
-            f.text_size(14)
-            f.text_align("center", "center")
-            f.text(name, middle_x, middle_y)
-    if saving:
-        f.save("box.pdf")
-        f.save("box.svg")
+            canvas.fill(ENGRAVE)
+            canvas.text_size(10 * per_mm)        # letters 10 mm tall
+            canvas.draw_path(canvas.text_path(NAME, middle_x, middle_y))
+        elif labels:
+            canvas.fill("saddlebrown")
+            canvas.text_size(14)
+            canvas.text(name, middle_x, middle_y)
+
+
+def draw():
+    f.background(SHEET)
+    draw_sheet(f, SCREEN, labels=True)
+    if save_button.clicked():
+        sheet = f.create_graphics(round(f.mm(A3[0])), round(f.mm(A3[1])))
+        draw_sheet(sheet, f.mm(1), labels=False)
+        sheet.save("box.pdf")
+        sheet.save("box.svg")
 
 
 f.run()

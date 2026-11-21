@@ -37,7 +37,7 @@
    "url": "reference/API.md#fn-fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 202,
+   "rank": 201,
    "also": [
     "color",
     "colour",
@@ -83,7 +83,7 @@
    "url": "reference/API.md#fn-no_stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 166,
+   "rank": 165,
    "plain": "Stop drawing outlines around shapes.",
    "also": [
     "no outline",
@@ -110,36 +110,6 @@
     "begin",
     "loop"
    ]
-  },
-  {
-   "name": "text",
-   "kind": "function",
-   "signature": "text(message, x, y, color=None)",
-   "detail": "(message: object, x: float, y: float, color: Color | None = None) -> None",
-   "summary": "Draw text.",
-   "url": "reference/API.md#fn-text",
-   "star": true,
-   "section": "Text and fonts",
-   "rank": 139,
-   "also": [
-    "say",
-    "print",
-    "write",
-    "words",
-    "label",
-    "type"
-   ],
-   "kinds": {
-    "x": {
-     "kind": "pixels"
-    },
-    "y": {
-     "kind": "pixels"
-    },
-    "color": {
-     "kind": "colour"
-    }
-   }
   },
   {
    "name": "circle",
@@ -170,6 +140,36 @@
    }
   },
   {
+   "name": "text",
+   "kind": "function",
+   "signature": "text(message, x, y, color=None)",
+   "detail": "(message: object, x: float, y: float, color: Color | None = None) -> None",
+   "summary": "Draw text.",
+   "url": "reference/API.md#fn-text",
+   "star": true,
+   "section": "Text and fonts",
+   "rank": 138,
+   "also": [
+    "say",
+    "print",
+    "write",
+    "words",
+    "label",
+    "type"
+   ],
+   "kinds": {
+    "x": {
+     "kind": "pixels"
+    },
+    "y": {
+     "kind": "pixels"
+    },
+    "color": {
+     "kind": "colour"
+    }
+   }
+  },
+  {
    "name": "text_size",
    "kind": "function",
    "signature": "text_size(size)",
@@ -178,7 +178,7 @@
    "url": "reference/API.md#fn-text_size",
    "star": true,
    "section": "Text and fonts",
-   "rank": 132,
+   "rank": 131,
    "also": [
     "font size",
     "bigger text",
@@ -233,7 +233,7 @@
    "url": "reference/API.md#fn-stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 102,
+   "rank": 101,
    "also": [
     "outline",
     "border",
@@ -256,7 +256,7 @@
    "url": "reference/API.md#fn-stroke_width",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 88,
+   "rank": 87,
    "also": [
     "thickness",
     "thick",
@@ -317,7 +317,7 @@
     ]
    },
    "section": "Text and fonts",
-   "rank": 87,
+   "rank": 86,
    "plain": "Choose which side of the point the text sits on.",
    "also": [
     "centre",
@@ -355,7 +355,7 @@
    "url": "reference/API.md#fn-save",
    "star": true,
    "section": "Saving",
-   "rank": 56,
+   "rank": 55,
    "also": [
     "export",
     "download",
@@ -409,7 +409,7 @@
    "url": "reference/API.md#fn-no_fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 50,
+   "rank": 49,
    "plain": "Draw shapes with nothing inside, only their outlines.",
    "also": [
     "empty",
@@ -788,23 +788,6 @@
    ]
   },
   {
-   "name": "draw_path",
-   "kind": "function",
-   "signature": "draw_path(path)",
-   "detail": "(path: PathBuilder) -> None",
-   "summary": "Draw a path made with path().",
-   "url": "reference/API.md#fn-draw_path",
-   "star": true,
-   "section": "Paths and clipping",
-   "rank": 17,
-   "also": [
-    "show path",
-    "paint path",
-    "draw shape",
-    "trace"
-   ]
-  },
-  {
    "name": "mouse_y",
    "kind": "value",
    "signature": "mouse_y",
@@ -819,6 +802,23 @@
     "cursor",
     "pointer",
     "up and down"
+   ]
+  },
+  {
+   "name": "draw_path",
+   "kind": "function",
+   "signature": "draw_path(path)",
+   "detail": "(path: PathBuilder) -> None",
+   "summary": "Draw a path made with path().",
+   "url": "reference/API.md#fn-draw_path",
+   "star": true,
+   "section": "Paths and clipping",
+   "rank": 16,
+   "also": [
+    "show path",
+    "paint path",
+    "draw shape",
+    "trace"
    ]
   },
   {
@@ -1000,6 +1000,33 @@
    ]
   },
   {
+   "name": "create_graphics",
+   "kind": "function",
+   "signature": "create_graphics(width, height)",
+   "detail": "(width: int, height: int) -> Picture",
+   "summary": "Make a picture: an off-screen canvas.",
+   "url": "reference/API.md#fn-create_graphics",
+   "returns": "Picture",
+   "star": true,
+   "section": "Pictures and layers",
+   "rank": 10,
+   "plain": "Make a second picture to draw on, away from the screen.",
+   "also": [
+    "new canvas",
+    "layer",
+    "off screen",
+    "buffer"
+   ],
+   "kinds": {
+    "width": {
+     "kind": "pixels"
+    },
+    "height": {
+     "kind": "pixels"
+    }
+   }
+  },
+  {
    "name": "scale",
    "kind": "function",
    "signature": "scale(sx, sy=None)",
@@ -1052,33 +1079,6 @@
     "custom shape",
     "corners"
    ]
-  },
-  {
-   "name": "create_graphics",
-   "kind": "function",
-   "signature": "create_graphics(width, height)",
-   "detail": "(width: int, height: int) -> Picture",
-   "summary": "Make a picture: an off-screen canvas.",
-   "url": "reference/API.md#fn-create_graphics",
-   "returns": "Picture",
-   "star": true,
-   "section": "Pictures and layers",
-   "rank": 9,
-   "plain": "Make a second picture to draw on, away from the screen.",
-   "also": [
-    "new canvas",
-    "layer",
-    "off screen",
-    "buffer"
-   ],
-   "kinds": {
-    "width": {
-     "kind": "pixels"
-    },
-    "height": {
-     "kind": "pixels"
-    }
-   }
   },
   {
    "name": "end_shape",
@@ -1384,23 +1384,6 @@
    }
   },
   {
-   "name": "clear",
-   "kind": "function",
-   "signature": "clear()",
-   "detail": "() -> None",
-   "summary": "Make the whole canvas transparent.",
-   "url": "reference/API.md#fn-clear",
-   "star": true,
-   "section": "Colour",
-   "rank": 6,
-   "also": [
-    "transparent",
-    "empty",
-    "wipe",
-    "nothing"
-   ]
-  },
-  {
    "name": "grid",
    "kind": "function",
    "signature": "grid(cols, rows, gutter=0, area=None)",
@@ -1450,6 +1433,23 @@
    "rank": 5
   },
   {
+   "name": "clear",
+   "kind": "function",
+   "signature": "clear()",
+   "detail": "() -> None",
+   "summary": "Make the whole canvas transparent.",
+   "url": "reference/API.md#fn-clear",
+   "star": true,
+   "section": "Colour",
+   "rank": 5,
+   "also": [
+    "transparent",
+    "empty",
+    "wipe",
+    "nothing"
+   ]
+  },
+  {
    "name": "is_mouse_pressed",
    "kind": "value",
    "signature": "is_mouse_pressed",
@@ -1458,18 +1458,6 @@
    "url": "reference/API.md#live-is_mouse_pressed",
    "star": true,
    "section": "Live values",
-   "rank": 5
-  },
-  {
-   "name": "text_path",
-   "kind": "function",
-   "signature": "text_path(message, x, y)",
-   "detail": "(message: object, x: float, y: float) -> PathBuilder",
-   "summary": "Return the outlines of some text as a path.",
-   "url": "reference/API.md#fn-text_path",
-   "returns": "PathBuilder",
-   "star": true,
-   "section": "Text and fonts",
    "rank": 5
   },
   {
@@ -1608,6 +1596,18 @@
     ]
    },
    "section": "Fill and stroke",
+   "rank": 4
+  },
+  {
+   "name": "text_path",
+   "kind": "function",
+   "signature": "text_path(message, x, y)",
+   "detail": "(message: object, x: float, y: float) -> PathBuilder",
+   "summary": "Return the outlines of some text as a path.",
+   "url": "reference/API.md#fn-text_path",
+   "returns": "PathBuilder",
+   "star": true,
+   "section": "Text and fonts",
    "rank": 4
   },
   {
@@ -9926,7 +9926,7 @@
      "summary": "Write the sound to a 16-bit WAV file.",
      "url": "reference/API.md#cls-Sound-save",
      "section": "Sound",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "set_volume",
@@ -10226,7 +10226,7 @@
      "summary": "Save the latest frame as a photo.",
      "url": "reference/API.md#cls-Camera-save",
      "section": "Camera",
-     "rank": 4,
+     "rank": 5,
      "since": "0.2"
     },
     {
@@ -10344,7 +10344,7 @@
      "summary": "Write the frames kept so far to a file.",
      "url": "reference/API.md#cls-Clip-save",
      "section": "Clip",
-     "rank": 4,
+     "rank": 5,
      "since": "0.2"
     },
     {
@@ -10467,7 +10467,7 @@
      "summary": "Write the picture to a file straight away.",
      "url": "reference/API.md#cls-Picture-save",
      "section": "Picture",
-     "rank": 4
+     "rank": 5
     }
    ]
   },
@@ -11919,7 +11919,7 @@
      "summary": "The value as the panel shows it.",
      "url": "reference/API.md#cls-Slider-text",
      "section": "Slider",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "value",
@@ -13090,7 +13090,7 @@
      "summary": "what was said, with the model's own capitals and punctuation.",
      "url": "reference/API.md#cls-Words",
      "section": "Words",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "score",

@@ -44,8 +44,20 @@ def cut(shape):
 `|` adds it on, so the outline grows by half the kerf all round. `join="miter"` keeps the corners square.
 
 **Cut and engrave.** Laser programs sort lines by colour. Here red lines are cut and the blue name is engraved, that
-is, burnt into the surface. In the laser program you set what each colour does. The saved frame has no background,
-because a cutter would treat a filled rectangle as one more thing to engrave.
+is, burnt into the surface. In the laser program you set what each colour does.
+
+**Small on the screen, real size in the file.** An A3 sheet at its real size is 1191 by 842 units, taller than most
+laptop screens, so the sliders would fall off the bottom. The sketch draws everything with one function,
+`draw_sheet(canvas, per_mm, labels)`. On the screen `per_mm` is 1.8, so the sheet is 756 by 535. When you press save,
+it draws the same panels again on `f.create_graphics()`, an off-screen picture the size of A3, with `per_mm` set to
+`f.mm(1)`, and saves that picture. The picture has no background, because a cutter would treat a filled rectangle as
+one more thing to engrave.
+
+```py
+sheet = f.create_graphics(round(f.mm(420)), round(f.mm(297)))     # A3, at its real size
+draw_sheet(sheet, f.mm(1), labels=False)
+sheet.save("box.pdf")
+```
 
 ## Stage 1: make it work
 
