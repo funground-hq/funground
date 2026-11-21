@@ -12,7 +12,8 @@ How it works:
 - json is the Python library for writing lists and dictionaries as text. json.dump() writes the frames and the frame rate
   into dance.json. Open the file and look: it is only numbers, so it is small, and any drawing can dance it.
 - Recording keeps the eased angles, mirrored as the puppet showed them, so the replay looks like what you saw.
-- In Play, dance.json appears in My files. On a computer, it is written in the folder the sketch runs in.
+- In Play, "Saved dance.json" shows up under the canvas: press Keep to put it in My files, where 17 and 18 find it.
+  On a computer, it is written in the folder the sketch runs in.
 
 Make it yours:
 - Record a short dance: two or three seconds of one clear move, done twice, replays best.

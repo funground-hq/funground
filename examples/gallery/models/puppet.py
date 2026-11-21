@@ -20,7 +20,11 @@ How it works:
   the camera looks short, as it does in the picture. Each piece stays between SHORTEST and LONGEST times its drawn
   length. The legs keep their drawn length: a camera often sees no legs at all.
 - made_up_dance() makes a short dance from sine waves, for when you have not recorded one of your own yet.
+- load_drawing() opens your own drawing, my_drawing.png, when there is one, scaled to the height of data/hero.png. Its
+  name says which drawing it opened, so load_joints() can read the joints 14_mark_the_joints.py saved for it, in
+  hero_joints.json or my_drawing_joints.json. When there is no such file, the joints written in the sketch are used.
 """
+import json
 import math
 
 import funground as f
@@ -33,6 +37,7 @@ BONES = {   # bone: (the joint it starts at, the joint it ends at)
 }
 ARMS = ("left_upper_arm", "left_forearm", "right_upper_arm", "right_forearm")
 SHORTEST, LONGEST = 0.6, 1.5     # how much a piece may shrink or grow from its drawn length
+TALL = 640                       # your own drawing is scaled to this height, the height of data/hero.png
 
 
 def middle(a, b):
@@ -158,3 +163,28 @@ def made_up_dance(count=48):
             "left_thigh": round(80 + 12 * beat), "left_shin": round(85 - 10 * beat),
         }})
     return frames
+
+
+def load_drawing(default):
+    """Your own drawing, my_drawing.png (or .jpg), scaled to TALL pixels high, or the picture default when you have
+    none. Gives the picture and its name without the ending or the folder: "my_drawing", or "hero" for data/hero.png."""
+    for name in ("my_drawing.png", "my_drawing.jpg", "my_drawing.jpeg"):
+        try:
+            picture = f.load_image(name)
+        except FileNotFoundError:
+            continue                             # not this one: try the next name
+        picture.resize(round(picture.width * TALL / picture.height), TALL)
+        return picture, "my_drawing"
+    return f.load_image(default), default.split("/")[-1].split(".")[0]
+
+
+def load_joints(name, joints):
+    """The joints 14_mark_the_joints.py saved for the drawing called name (in name_joints.json), or joints when it
+    has saved none."""
+    try:
+        with open(name + "_joints.json") as file:
+            return {joint: tuple(place) for joint, place in json.load(file).items()}
+    except FileNotFoundError:
+        if name == "my_drawing":
+            print("my_drawing has no joints yet: mark them with 14_mark_the_joints.py and save them.")
+        return joints

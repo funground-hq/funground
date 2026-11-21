@@ -2784,7 +2784,7 @@ A photograph with a green stick figure on it, and the same stick figure alone be
 
 **How it works**
 
-- The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
+- The sketch tries my_photo.jpg, my_photo.png, my_photo.jpeg and my_photo.svg in turn. A photo opens with f.load_image(); a drawing made in a vector app (.svg) opens with f.load_svg(), and the model looks at it as it is drawn. When there is no file of those names, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
 - draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
 - BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points. A bone is bright when the model is sure of both ends (body.scores says how sure it is of each point, from 0 to 1) and faint when one end is a guess: in the Gandhi photograph his left arm and leg are hidden behind him, and the model guesses where they are. Tick All 33 points and draw_figure() draws again with MORE_BONES too (the face, the hands and the feet) and a dot on every point the model gives.
@@ -2794,6 +2794,7 @@ A photograph with a green stick figure on it, and the same stick figure alone be
 **Make it yours**
 
 - Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
+- Try a drawing instead of a photo: draw a whole person in a vector app, save it as my_photo.svg and use it as above. The model looks for a real body, so a figure drawn with arms, legs and a head works best.
 - Tick All 33 points and look at the hands and feet. Then give them a colour of their own: draw MORE_BONES with another figure.stroke().
 - Change "lime" and the line's thickness to give the figure a new look.
 - Change SURE to 0.9 and more bones go faint; change it to 0 and every bone is bright.
@@ -2980,7 +2981,7 @@ A green stick figure that follows you. The computer looks at the camera, finds y
 
 - Hide the camera picture by deleting the f.image(source, 0, 0) line. Only the figure remains.
 - Tick All 33 points and wave. The fingers and toes wobble more than the elbows: they are small, and the model is less sure of them.
-- Tick Fingers and count on your hand: hand.index_finger_tip and hand.thumb_tip are two of its points. Show how sure the model is: f.text(round(body.score, 2), 20, 440).
+- Tick Fingers and count on your hand: hand.index_finger_tip and hand.thumb_tip are two of its points. Show how sure the model is: f.text(round(body.score, 2), 20, 340).
 - Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them, and their bones go faint.
 - Leave the guesses out: change the faint stroke to f.no_stroke().
 
@@ -3176,24 +3177,25 @@ Source: [`examples/gallery/models/13_teach_with_a_pose_card.py`](../../examples/
 
 ![Mark the joints](images/models-14_mark_the_joints.png)
 
-Before a drawing can dance, the computer must know where its joints are. Tap the drawing once for each joint, in the order the sketch asks: the nose, then the shoulders, elbows, wrists, hips, knees and ankles. When all thirteen are marked, the sketch prints a JOINTS line. Copy it into the mirror puppet, and your drawing is ready to move.
+Before a drawing can dance, the computer must know where its joints are. Tap the drawing once for each joint, in the order the sketch asks: the nose, then the shoulders, elbows, wrists, hips, knees and ankles. Tap a dot to pick it up and tap again to put it down somewhere better. When all thirteen are marked, press Save: the puppet sketches read the joints from the file it writes, and your drawing is ready to move. It works with a finger on a phone too.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
 
 **How it works**
 
+- This sketch has a second file, puppet.py, beside it. load_drawing() opens your own drawing, my_drawing.png, when there is one, and data/hero.png until then. Its name, "hero" or "my_drawing", names the file the joints are saved in.
 - NAMES is the list of the thirteen joints, in the order they are asked for. "left" is the character's own left, so a character who faces you has its left shoulder on your right. A pose model names a person's joints the same way, which is what lets the puppet copy you arm for arm.
 - joints is a dictionary that starts empty. mouse_pressed() adds the next name with the place you tapped, so the next name to ask for is NAMES[len(joints)].
+- A finger hides the spot it taps, so a dot is easy to put a little wrong. A tap close to a dot (nearer than REACH) picks it up instead: held remembers its name, and the next tap moves it there. Tapping is all it needs, so it works on a phone, where dragging a finger would move the page instead.
 - The Undo button takes back the last dot: joints.popitem() removes the newest entry of a dictionary.
-- Each dot is drawn with its number, so you can check the order. Lines join the dots that make one bone.
-- When the last joint is marked, print() writes the dictionary as one line of code you can copy.
+- Save writes the dictionary into hero_joints.json (or my_drawing_joints.json) with json.dump(). In Play the file shows up under the canvas: press Keep to put it in My files, where the puppet sketches find it. On your computer it goes in the folder you ran the sketch from. Save also prints the JOINTS line, which you can paste into a sketch instead.
 
 **Make it yours**
 
-- Photograph your own drawing on a plain sheet of paper, put the photo in the data folder, and change "data/hero.png" to its name. Draw your character standing with its arms a little away from its body: every piece must be clear of the others.
-- Mark data/friend.png too, and check your numbers against the FRIEND line in 17_replay_on_any_drawing.py.
-- Make the dots bigger if you mark them with a finger on a phone.
+- Mark your own character. Draw it standing with its arms a little away from its body (every piece must be clear of the others) on a plain sheet of paper and take a photo. In Play: open My files, press Add file, choose the photo, then Rename it to my_drawing. On your computer: put it beside this sketch as my_drawing.png. Mark it, Save (and Keep), then run 15_mirror_puppet.py: it opens my_drawing too.
+- Mark data/friend.png: change "data/hero.png" to "data/friend.png" and check your numbers against the FRIEND line in 17_replay_on_any_drawing.py.
+- Make REACH bigger if picking up a dot is hard with your finger, or smaller if the joints are close together.
 
 </details>
 
@@ -3213,7 +3215,7 @@ You move, and a character drawn on paper copies you. The camera finds your body,
 **How it works**
 
 - This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, arm_lengths, ease, mirrored reads it. In Play it opens as a second tab; on a computer, keep the two files in the same folder.
-- JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are.
+- JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are. load_drawing() opens your own my_drawing.png instead when there is one, and load_joints() reads the joints you saved for it with Save in 14_mark_the_joints.py (my_drawing_joints.json). Without a saved file, JOINTS is used.
 - picture.remove_color(picture.get(4, 4), 60, tidy=True) takes away the paper: every colour close to the corner's colour becomes see-through, and tidy keeps only the character.
 - bone_angles(body.points) gives the directions of your ten bones, and arm_lengths(body.points) how long your arms are for your size, so the puppet reaches as high as you do. A camera shows you as a mirror does: your left arm is on the picture's left, where the drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does. Tick Fingers and a second model, ml.hand(), finds one hand: its wrist is more exact, so it takes the place of the nearer wrist.
 - ease() moves each angle half of the way towards the new one in each frame, and each length moves half of the way too. A pose model's points jump a little from frame to frame, and easing smooths the jumps away.
@@ -3221,7 +3223,7 @@ You move, and a character drawn on paper copies you. The camera finds your body,
 
 **Make it yours**
 
-- Draw your own character, mark its joints with 14_mark_the_joints.py and paste your JOINTS line here.
+- Draw your own character, save it as my_drawing.png (in Play: Add file in My files, then Rename), mark its joints with 14_mark_the_joints.py and press Save (in Play, then Keep). This sketch then moves your character.
 - Change 0.5 in ease() to 0.2 for a slow, floaty puppet, or to 1 for no smoothing at all.
 - Make the arm and leg pieces wider or narrower: they are the arm=26 and leg=28 of Puppet(...). Too narrow cuts off the outline; too wide takes a bit of the body with each arm.
 - Look at the shoulders when you lift your arms. The pieces are cut with straight edges, so a joint shows a small gap or a stub. puppet.py is yours to change: try drawing a circle over each joint.
@@ -3247,7 +3249,7 @@ Dance in front of the camera while the puppet copies you, and the sketch writes 
 - While recording is True, each frame adds one dictionary to the list frames: the ten angles, rounded to whole degrees, and the four arm lengths. Twenty-four frames make one second of dance.
 - json is the Python library for writing lists and dictionaries as text. json.dump() writes the frames and the frame rate into dance.json. Open the file and look: it is only numbers, so it is small, and any drawing can dance it.
 - Recording keeps the eased angles, mirrored as the puppet showed them, so the replay looks like what you saw.
-- In Play, dance.json appears in My files. On a computer, it is written in the folder the sketch runs in.
+- In Play, "Saved dance.json" shows up under the canvas: press Keep to put it in My files, where 17 and 18 find it. On a computer, it is written in the folder the sketch runs in.
 
 **Make it yours**
 
