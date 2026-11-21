@@ -265,3 +265,12 @@ the "move the paper, not the shape" framing are written for funground. `tools/ch
 corpus files in `C:\Projects\funground-corpora`: nothing flagged.
 
 `examples/gallery/text/14_font_from_the_web.py` (story S-230) is original CC0 work: a short poster written from the feature it shows, `f.load_font()` given a web address. `tools/check_originality.py` against the corpus files in `C:\Projects\funground-corpora`: nothing flagged (closest file `src\friendly_errors\fes_core.js`, combined 0.16). Beside it, `fonts/Lora[wght].ttf` is Lora, downloaded by the sketch from google/fonts under the SIL Open Font License; `fonts/OFL.txt` is that licence and `fonts/sources.json` records the address.
+
+## A box from a laser cutter — 21 November 2026
+
+`examples/gallery/projects/10_finger_box.py` and the guide project `docs/guide/projects/13_finger_box.md` (story S-263,
+D-169) are original CC0 work, written for funground from the idea of a finger-jointed box. Finger joints are an old
+woodworking joint, and box makers for laser cutters exist; none was read or used. The panels are built in a way of our
+own: each is its middle joined with `|` to the border pieces it owns, an edge's pieces go to the higher-ranked panel
+by parity, and a corner square to the highest of the three panels that meet there. `tools/check_originality.py`
+against the corpus files in `C:\Projects\funground-corpora`: nothing flagged (closest combined score 0.17).

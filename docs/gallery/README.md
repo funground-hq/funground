@@ -3673,6 +3673,36 @@ A cloud of words hangs in front of a mouth like fog, and breath blows it away. M
 
 Source: [`examples/gallery/projects/09_blow_the_words_away.py`](../../examples/gallery/projects/09_blow_the_words_away.py)
 
+### Finger-jointed box
+
+![Finger-jointed box](images/projects-10_finger_box.png)
+
+Six flat panels that fit together into a box, drawn at their real size for a laser cutter. Each edge has teeth (fingers) that slot into the gaps of the panel it meets, so the box holds together with a dab of glue or none. Use the sliders to set the box's width, depth and height and the thickness of your sheet, in millimetres. "save" writes box.pdf and box.svg: open the PDF in the laser cutter's program. Red lines are cut; blue is engraved.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- Everything is worked out in millimetres. f.mm(1) is how many funground units one millimetre is, so .scale(f.mm(1)) turns a panel drawn in millimetres into one at its real size. A PDF keeps that size when it is printed or cut.
+- A panel is its middle, a rectangle one thickness in from each edge, joined with | (union) to the pieces of the border it owns. Along each edge the border is cut into an odd number of pieces about FINGER wide. The panel that ranks higher (RANK) owns pieces 0, 2, 4 and so on; the panel it meets owns the others, so the two edges fit exactly.
+- An odd number means both end pieces go to the same panel, so the pattern reads the same from either end.
+- Where three panels meet in a corner, the corner square goes to the one that ranks highest. Without a lid, the walls' top edges have nothing to meet and stay straight.
+- A laser burns away a thin line, about KERF wide, so a piece comes out a little smaller than its line. cut() makes each outline bigger by half of that: expand_stroke(KERF) is the shape a line KERF wide would paint around the outline, and | adds it on. join="miter" keeps the corners sharp. Holes get smaller by the same amount.
+- The saved frame starts with f.clear() instead of the plywood background: a cutter would treat that rectangle as one more shape to engrave. The brown names are left out of it too.
+
+**Make it yours**
+
+- Put your own name in NAME, or make it bigger with f.text_size().
+- Measure your sheet with a ruler or callipers and set the thickness slider to it: the fingers must be as long as the sheet is thick, or they stick out or fall short.
+- Ask what kerf your laser cutter burns, and change KERF. If the joints are loose, make it bigger; if they will not go together, make it smaller. Cut one corner first to test it.
+- Cut a hole in the lid: take f.path().circle() away from it with - (difference) in make_panels().
+- Untick "lid" for an open tray.
+
+</details>
+
+Source: [`examples/gallery/projects/10_finger_box.py`](../../examples/gallery/projects/10_finger_box.py)
+
 ## Studios
 
 ### Placement: one mark in nine places (studio 1)
