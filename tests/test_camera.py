@@ -51,6 +51,8 @@ class FakeCamera:
         self.running = False
 
     def query_image(self):
+        if self.module.fail_to_read:
+            raise SystemError(self.module.fail_to_read)
         return self.running and not self.module.silent
 
     def get_image(self):
@@ -65,6 +67,7 @@ class FakeCameraModule:
         self.opened: list[FakeCamera] = []
         self.silent = False
         self.fail_to_open = ""
+        self.fail_to_read = ""
 
     def init(self):
         pass
@@ -165,6 +168,18 @@ def test_a_camera_that_cannot_be_opened_is_a_runtime_error_at_start(desk):
     with pytest.raises(RuntimeError, match="could not be opened.*busy"):
         cam.start()
     assert not cam.is_ready()
+
+
+def test_a_camera_busy_only_when_read_is_let_go_with_one_line(desk, capsys):
+    """pygame on Windows starts a camera that another program holds, and says so at the first query_image()."""
+    desk.fail_to_read = "Camera already in use (Capture Thread Quit)"
+    cam = camera.open()
+    cam.start()
+    cam._take(None)
+    cam._take(None)
+    assert not cam.is_ready() and not desk.opened[0].running
+    assert capsys.readouterr().out.splitlines() == [
+        "The camera is not available: Camera already in use (Capture Thread Quit). Check that no other program is using it."]
 
 
 def test_start_checks_its_arguments(desk):

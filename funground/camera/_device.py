@@ -91,12 +91,24 @@ class _DesktopDevice:
         self._camera = camera
 
     def read(self, width: int, height: int, mirror: bool) -> bytes | None:
+        """The newest frame scaled to width x height, or None when none has come since the last read.
+
+        On Windows a camera that another program holds still starts; pygame says so only when a frame is asked for.
+        Then the camera is let go with one line of output and never becomes ready, as a refused camera in the browser.
+        """
         camera = self._camera
-        if camera is None or not camera.query_image():          # query_image() never waits
+        if camera is None:
+            return None
+        try:
+            if not camera.query_image():                        # query_image() never waits
+                return None
+            surface = camera.get_image()
+        except Exception as exc:
+            self.stop()
+            print(f"The camera is not available: {str(exc).rstrip('. ')}. Check that no other program is using it.")
             return None
         import pygame
 
-        surface = camera.get_image()
         if surface.get_size() != (width, height):
             surface = pygame.transform.smoothscale(surface, (width, height))
         if mirror:
