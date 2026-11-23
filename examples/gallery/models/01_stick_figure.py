@@ -14,7 +14,7 @@ How it works:
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
 
 Make it yours:
-- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again. A drawing works too: draw a whole person in a vector app and save it as my_photo.svg (in Play, add it the same way).
+- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again. A drawing works too: draw a whole person in a vector app and save it as my_photo.svg (in Play, add it the same way). The model does best when the person faces the camera and both legs can be seen; from the side, or with crossed legs, it can mix the legs up, as it does with Gandhi's.
 - Tick All 33 points and look at the hands and feet. Then give them a colour of their own: draw MORE_BONES with another figure.stroke().
 - Change "lime" and the line's thickness to give the figure a new look.
 - Change SURE to 0.9 and more bones go faint; change it to 0 and every bone is bright.
