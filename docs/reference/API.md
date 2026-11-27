@@ -6588,7 +6588,9 @@ a clip you can save as a GIF.
 
 The frame is taken once before each draw(), so everything you do in one frame sees the same picture. Before the
 first frame arrives, f.image(cam) draws nothing and cam.picture() is black, so use is_ready() to know when to
-start. Every frame is scaled to the size you asked for and, by default, flipped left to right like a mirror.
+start. Every frame keeps its shape: if the camera's picture has another shape than the size you asked for, it is
+cut evenly from the sides that are too long, then scaled to that size. By default it is flipped left to right
+like a mirror.
 Frames stay on your computer: funground never sends them anywhere. With FUNGROUND_HEADLESS=1 a camera opens
 nothing and is never ready.
 
@@ -6732,9 +6734,10 @@ Camera.start(width: 'int' = 640, height: 'int' = 480, mirror: 'bool' = True) -> 
 
 Open the camera.
 
-The computer or the browser may ask your permission first. Frames are scaled to width and height, so your
-layout never depends on the camera. Call it again with other numbers to change the size. The camera closes
-when you call stop() and when the sketch ends.
+The computer or the browser may ask your permission first. Frames keep their shape: a picture of another
+shape is cut evenly from its long sides, then scaled to width and height. So your layout never depends on the
+camera. Call it again with other numbers to change the size. The camera closes when you call stop() and when
+the sketch ends.
 
 | Argument | Meaning |
 |---|---|
