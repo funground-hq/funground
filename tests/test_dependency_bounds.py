@@ -62,3 +62,5 @@ def test_the_golden_tolerance_takes_invisible_edges_and_refuses_a_visible_change
     assert not conftest.golden_matches(base, bytes(many))
     monkeypatch.setattr(conftest, "GOLDEN_TOLERANCE", False)
     assert not conftest.golden_matches(base, bytes(edge))      # and without the tolerance, exact
+    assert conftest.golden_matches(base, bytes(edge), tolerant=True)            # unless the caller asks for it
+    assert not conftest.golden_matches(base, bytes(visible), tolerant=True)

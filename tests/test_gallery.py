@@ -112,7 +112,11 @@ def test_example_matches_golden(path: Path, monkeypatch):
         pytest.skip(f"golden written: {golden.name}")
     if platform.system() != GOLDEN_PLATFORM:
         pytest.skip(f"goldens were produced on {GOLDEN_PLATFORM}")
-    same = golden_matches(pygame.image.tobytes(pygame.image.load(str(golden)), "RGB"), frame[1])
+    # A models example draws where the model found the body, and onnxruntime's last digits differ between processors
+    # (see the snapshot test below): an edge can move by 1 or 2 of 255 (measured on CI: 231 pixels of 432,000, in
+    # 15 and 16). Its picture matches within the golden tolerance; every other example matches byte for byte.
+    same = golden_matches(pygame.image.tobytes(pygame.image.load(str(golden)), "RGB"), frame[1],
+                          tolerant=path.parent.name == MODELS_AREA)
     if not same:
         actual = GOLDEN / "_actual"
         actual.mkdir(exist_ok=True)

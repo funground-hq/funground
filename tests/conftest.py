@@ -177,11 +177,12 @@ TOLERANCE_STEP = 32            # largest difference in one channel, of 255 (meas
 TOLERANCE_SHARE = 0.01         # share of the pixels that may differ at all
 
 
-def golden_matches(expected: bytes, actual: bytes) -> bool:
-    """True when two RGB frames are the same picture: byte for byte, or within the tolerance above when it is on."""
+def golden_matches(expected: bytes, actual: bytes, tolerant: bool = False) -> bool:
+    """True when two RGB frames are the same picture: byte for byte, or within the tolerance above when it is on
+    (the weekly run) or the caller asks for it (``tolerant``: a models example, whose points vary by processor)."""
     if expected == actual:
         return True
-    if not GOLDEN_TOLERANCE or len(expected) != len(actual):
+    if not (tolerant or GOLDEN_TOLERANCE) or len(expected) != len(actual):
         return False
     changed = 0
     for i in range(0, len(expected), 3):
