@@ -259,6 +259,9 @@ def _largest_difference(path: str) -> int:
 def test_a_file_at_another_rate_gives_the_desktops_samples(tmp_path, rate, channels, count):
     """The desktop is the reference (W1). If an update of pygame-ce changes SDL's filter, this says so, and
     analysis.resample_file follows it."""
+    if count * RATE < rate:
+        pytest.skip("SDL 2.32 (pygame-ce 2.5.8) frees memory twice when a file shorter than one frame at the mixer's "
+                    "rate is resampled; on Linux this aborts Python")
     assert _largest_difference(_wav(tmp_path / "file.wav", rate, channels, _sweep(count, channels))) <= 1
 
 
