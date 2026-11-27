@@ -192,7 +192,7 @@ def test_a_picture_drawn_many_times_is_stored_once_in_a_pdf(tmp_path, caplog):
         if p.frame_count == 1:
             p.save(str(once))
             return
-        for n in range(20):
+        for n in range(80):                                         # a flipbook page: 8 puppets of 10 pieces
             with p.saved_state():
                 p.clip(p.path().rect(n * 20, 0, 20, 300))
                 p.image(pictures["drawing"], n * 18, n * 12)
@@ -208,3 +208,26 @@ def test_a_picture_drawn_many_times_is_stored_once_in_a_pdf(tmp_path, caplog):
     assert many.stat().st_size < 2 * once.stat().st_size
     assert _images_in(two) > _images_in(many)                       # a different picture is kept as well
     assert not [r for r in caplog.records if "Multiple definitions" in r.getMessage()]
+
+
+def test_pictures_on_a_pdf_share_one_surface_with_no_mime_data(monkeypatch):
+    """S-339 (D-173): the same pixels are painted from one surface, which carries no mime data (pycairo's mime-data
+    clean-up wrote to freed memory once a PDF's copy outlived the surface: Python crashed in the browser). The cache
+    keeps the newest pictures within its bound, and always the one just drawn."""
+    from funground.renderers import cairo2d
+    renderer = cairo2d.CairoRenderer()
+    blank, red = bytes(20 * 20 * 4), bytes([0, 0, 255, 255]) * (20 * 20)
+    surface = cairo.PDFSurface(None, 200, 200)
+    ctx = cairo.Context(surface)
+    for _ in range(40):
+        renderer._paint_picture(ctx, blank, 20, 20, 0, 0, 20, 20, 1.0, False)
+    assert len(renderer._picture_surfaces) == 1
+    (img,) = renderer._picture_surfaces.values()
+    assert img.get_mime_data(cairo.MIME_TYPE_UNIQUE_ID) is None
+    monkeypatch.setattr(cairo2d, "PICTURE_SURFACE_CACHE_BYTES", 20 * 20 * 4)     # room for one picture
+    renderer._paint_picture(ctx, red, 20, 20, 0, 0, 20, 20, 1.0, False)
+    assert len(renderer._picture_surfaces) == 1 and renderer._picture_bytes == 20 * 20 * 4
+    surface.finish()
+    image = cairo.ImageSurface(cairo.FORMAT_ARGB32, 20, 20)                     # a raster target keeps nothing
+    renderer._paint_picture(cairo.Context(image), blank, 20, 20, 0, 0, 20, 20, 1.0, False)
+    assert len(renderer._picture_surfaces) == 1

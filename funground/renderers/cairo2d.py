@@ -34,6 +34,11 @@ if TYPE_CHECKING:
 # `f.text(f.frame_count, ...)` from growing the cache without bound.
 TEXT_RUN_CACHE_SIZE = 256
 
+# S-321, S-339: on a PDF or SVG each distinct picture is painted from one surface, so the file stores it once however
+# many times it is drawn. The cache keeps the newest pictures up to this many bytes of pixels; one pushed out is only
+# stored again if it is drawn again.
+PICTURE_SURFACE_CACHE_BYTES = 64 * 2**20
+
 
 def _u32(values) -> memoryview:
     """32-bit values as a memoryview (native order, which is what Cairo's surface uses)."""
@@ -55,6 +60,8 @@ class CairoRenderer:
         self._ctx: cairo.Context | None = None
         self._scale = 1.0
         self._text_runs: OrderedDict[tuple, TextRun] = OrderedDict()
+        self._picture_surfaces: OrderedDict[bytes, cairo.ImageSurface] = OrderedDict()   # S-339, by pixels_id
+        self._picture_bytes = 0
         # S-094 (T15): set only by the PDF exporters (funground.export.pdf_text). When set, text
         # is drawn as marker groups that the exporter swaps for real PDF text after the file is
         # written. Never set for the window, PNG or SVG.
@@ -579,17 +586,48 @@ class CairoRenderer:
         # contract P3: under no_smooth (anti-aliasing off) pictures scale without blurring
         nearest = ctx.get_antialias() == cairo.ANTIALIAS_NONE
         if op.sw is None:
-            paint_picture_pixels(ctx, pixels, snap.phys_width, snap.phys_height,
-                                  op.x, op.y, op.width, op.height, alpha, nearest)
+            self._paint_picture(ctx, pixels, snap.phys_width, snap.phys_height,
+                                op.x, op.y, op.width, op.height, alpha, nearest)
             return
         # S-078 (P6): the source rectangle (picture pixels) fills the destination box, clipped to it
         ctx.save()
         ctx.new_path(); ctx.rectangle(op.x, op.y, op.width, op.height); ctx.clip()
         ctx.translate(op.x, op.y)
         ctx.scale(op.width / op.sw, op.height / op.sh)
-        paint_picture_pixels(ctx, pixels, snap.phys_width, snap.phys_height,
-                              -op.sx, -op.sy, snap.logical_width, snap.logical_height, alpha, nearest)
+        self._paint_picture(ctx, pixels, snap.phys_width, snap.phys_height,
+                            -op.sx, -op.sy, snap.logical_width, snap.logical_height, alpha, nearest)
         ctx.restore()
+
+    def _paint_picture(self, ctx: cairo.Context, pixels, phys_w: int, phys_h: int, x: float, y: float,
+                       logical_w: float, logical_h: float, alpha: float, nearest: bool) -> None:
+        """Paint a picture's pixels; on a PDF or SVG from the one surface kept for those pixels (S-339)."""
+        if phys_w <= 0 or phys_h <= 0:
+            return
+        if isinstance(ctx.get_target(), cairo.ImageSurface):
+            img = picture_surface(pixels, phys_w, phys_h)
+        else:
+            img = self._vector_picture_surface(pixels, phys_w, phys_h)
+        paint_picture_surface(ctx, img, phys_w, phys_h, x, y, logical_w, logical_h, alpha, nearest)
+
+    def _vector_picture_surface(self, pixels, phys_w: int, phys_h: int) -> cairo.ImageSurface:
+        """The surface for these pixels on a PDF or SVG: the same one each time they are drawn, so Cairo stores them once.
+
+        A PDF or SVG keeps every surface painted on it; a cut-out puppet draws one drawing 80 times, each piece clipped
+        (S-321). Painted again, one surface is stored once. (S-321 gave each new surface its pixels' digest as Cairo's
+        unique id instead. pycairo's mime-data clean-up then wrote to the surface after it was freed, once the PDF's
+        copy outlived it: Python crashed in the browser, D-173, spike 31. Reusing the surface needs no mime data.)"""
+        key = pixels_id(pixels, phys_w, phys_h)
+        img = self._picture_surfaces.get(key)
+        if img is not None:
+            self._picture_surfaces.move_to_end(key)            # mark as most recently used
+            return img
+        img = picture_surface(pixels, phys_w, phys_h)
+        self._picture_surfaces[key] = img
+        self._picture_bytes += img.get_stride() * phys_h
+        while self._picture_bytes > PICTURE_SURFACE_CACHE_BYTES and len(self._picture_surfaces) > 1:
+            _, old = self._picture_surfaces.popitem(last=False)   # evict least recently used, never the newest
+            self._picture_bytes -= old.get_stride() * old.get_height()
+        return img
 
     def _replay_image_history(self, ctx: cairo.Context, op: "ir.Image", snap, alpha: float) -> None:
         """PDF/SVG targets: replay the picture's history as vectors (contract P3)."""
@@ -824,6 +862,27 @@ def pixels_id(pixel_bytes, phys_w: int, phys_h: int) -> bytes:
     return digest.hexdigest().encode()
 
 
+def picture_surface(pixel_bytes, phys_w: int, phys_h: int) -> cairo.ImageSurface:
+    """A Cairo surface over a Picture's raw pixels (BGRA premultiplied, Cairo's own ARGB32 layout: no conversion)."""
+    stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_ARGB32, phys_w)
+    data = bytearray(pixel_bytes) if isinstance(pixel_bytes, bytes) else pixel_bytes    # Cairo needs a writable buffer
+    return cairo.ImageSurface.create_for_data(data, cairo.FORMAT_ARGB32, phys_w, phys_h, stride)
+
+
+def paint_picture_surface(ctx: cairo.Context, img: cairo.ImageSurface, phys_w: int, phys_h: int,
+                          x: float, y: float, logical_w: float, logical_h: float, alpha: float = 1.0,
+                          nearest: bool = False) -> None:
+    """Paint *img* so its *phys_w* x *phys_h* physical pixels fill *logical_w* x *logical_h* logical units at (x, y)."""
+    ctx.save()
+    ctx.translate(x, y)
+    ctx.scale(logical_w / phys_w, logical_h / phys_h)
+    ctx.set_source_surface(img, 0, 0)
+    if nearest:                                  # crisp enlarged pixels (contract P3, no_smooth)
+        ctx.get_source().set_filter(cairo.FILTER_NEAREST)
+    ctx.paint_with_alpha(alpha)
+    ctx.restore()
+
+
 def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: int,
                           x: float, y: float, logical_w: float, logical_h: float, alpha: float = 1.0,
                           nearest: bool = False) -> None:
@@ -833,27 +892,13 @@ def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: i
     own ARGB32 layout, so it can be wrapped in an ``ImageSurface`` with no conversion. The
     surface is scaled so its *phys_w* x *phys_h* physical pixels fill *logical_w* x
     *logical_h* logical units at (x, y) on *ctx* - crisp when that matches the picture's own
-    HiDPI scale. Used both to draw an ``Image`` op on a raster target and, without a history,
-    as ``Picture.save()``'s PDF/SVG fallback (funground.picture).
+    HiDPI scale. Used as ``Picture.save()``'s PDF/SVG fallback, which paints one picture once
+    (funground.picture); a renderer drawing ``Image`` ops uses its own cache (S-339).
     """
     if phys_w <= 0 or phys_h <= 0:
         return
-    stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_ARGB32, phys_w)
-    data = bytearray(pixel_bytes) if isinstance(pixel_bytes, bytes) else pixel_bytes    # Cairo needs a writable buffer
-    img = cairo.ImageSurface.create_for_data(data, cairo.FORMAT_ARGB32, phys_w, phys_h, stride)
-    if not isinstance(ctx.get_target(), cairo.ImageSurface):
-        # A PDF or SVG keeps every picture it is given. The same picture drawn again (a flipbook's cut-out puppet draws
-        # one drawing 80 times, each piece clipped) would be stored again each time; Cairo stores a picture once when its
-        # surfaces carry the same unique id, so the id is the pixels' own digest (S-321).
-        img.set_mime_data(cairo.MIME_TYPE_UNIQUE_ID, pixels_id(data, phys_w, phys_h))
-    ctx.save()
-    ctx.translate(x, y)
-    ctx.scale(logical_w / phys_w, logical_h / phys_h)
-    ctx.set_source_surface(img, 0, 0)
-    if nearest:                                  # crisp enlarged pixels (contract P3, no_smooth)
-        ctx.get_source().set_filter(cairo.FILTER_NEAREST)
-    ctx.paint_with_alpha(alpha)
-    ctx.restore()
+    paint_picture_surface(ctx, picture_surface(pixel_bytes, phys_w, phys_h), phys_w, phys_h,
+                          x, y, logical_w, logical_h, alpha, nearest)
 
 
 def mask_pixels(pixel_bytes, phys_w: int, phys_h: int, mask: bytes, mask_w: int, mask_h: int) -> bytes:
