@@ -2773,29 +2773,31 @@ Source: [`examples/gallery/pixels/06_palette_and_gif.py`](../../examples/gallery
 
 ## Models: your body and your hands
 
-### A stick figure on a photograph
+### A stick figure from your own photo
 
-![A stick figure on a photograph](images/models-01_stick_figure.png)
+![A stick figure from your own photo](images/models-01_stick_figure.png)
 
-A photograph of Mahatma Gandhi arriving in England in 1931, and a green stick figure drawn over him. The computer finds his body, and the sketch joins the points it found. It needs the models library, which is a separate install: funground-ml.
+A photograph with a green stick figure on it, and the same stick figure alone beside it. The computer finds the body, and the sketch joins the points it found. Press the button to keep the stick figure by itself as a picture. It uses your own photo when you give it one, and a photograph of Mahatma Gandhi arriving in England in 1931 until then. It needs the models library, which is a separate install: funground-ml.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
 
 **How it works**
 
-- ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there.
-- Each point is a Vector in the photo's own pixels, so body.left_shoulder.x and .y can go straight into f.line().
+- The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
+- ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
+- draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
 - BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
-- The nose gets a circle. The first run downloads the pose model (once) into a models folder beside the sketch.
-- The photograph is drawn first with f.image(), so the figure lands on top of it.
+- draw() shows the photo with the figure over it on the left, and the figure alone on the right. f.image(picture, x, y, w, h) scales both to the canvas.
+- The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
 
 **Make it yours**
 
+- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
 - Add the ears and the mouth: body.left_ear, body.right_ear, body.mouth_left and body.mouth_right.
-- Change f.stroke("lime") and f.stroke_width(4) to give the figure a new look.
+- Change figure.stroke("lime") and the line's thickness to give the figure a new look.
 - Draw a small circle at every point in body.points.values() instead of lines.
-- Try your own photo: put it in the data folder and change the name in f.load_image().
+- Give the right half a colour of its own: change f.fill(30) before the rect.
 
 </details>
 

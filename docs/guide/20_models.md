@@ -109,7 +109,11 @@ goes up. On a mirrored screen, that hand is on the left of the picture, as it wo
 
 A picture works as well as a camera. The points are in the picture's own pixels, so draw the picture at `(0, 0)` and
 the points land in the right place. The gallery has a
-[stick figure on a photograph](../gallery/README.md#a-stick-figure-on-a-photograph).
+[stick figure from your own photo](../gallery/README.md#a-stick-figure-from-your-own-photo): it draws the figure on a
+picture of its own (`f.create_graphics`), shows it over the photo and alone beside it, and a button saves the figure
+alone with `figure.save("stick_figure.png")`. To use your photo in Play, add it in My files and rename it
+`my_photo` (the `.jpg` or `.png` ending stays). On your computer, put `my_photo.jpg` or `my_photo.png` beside the
+sketch.
 
 ## Find a hand
 
