@@ -1,7 +1,7 @@
 # funground Quick Reference
 
-**Version 0.2.0.dev0** (in development, after 0.1.0) — a small visual-programming library. `import funground as f; print(f.__version__)`
-prints `0.2.0.dev0`.
+**Version 0.2.0rc1** (the release candidate for 0.2) — a small visual-programming library. `import funground as f; print(f.__version__)`
+prints `0.2.0rc1`.
 
 This reference lists every public name in funground. For exact arguments, results and an example of each name, see the [API reference](API.md). Every function has a
 one-line description; every section ends with one complete sketch, and the picture above that sketch
@@ -1163,7 +1163,7 @@ The public student-facing API. Everything is reached as `f.<name>`.
 
 | METADATA | |
 |---|---|
-| `f.__version__` | `"0.2.0.dev0"`. |
+| `f.__version__` | `"0.2.0rc1"`. |
 
 **Remember:** use `f.` before funground functions and live values: `f.circle(...)`, `f.width`,
 `f.mouse_x`, `f.run()`. Python variables such as `x` remain ordinary Python variables.

@@ -4,9 +4,54 @@ What changed in funground, newest first. Release numbers follow the
 roadmap. Decisions are cited as D-nnn from the
 maintainer's decision log.
 
-## Unreleased — will become 0.2
+## 0.2.0rc1 — 27 November 2026 (release candidate)
 
-A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are.
+The release candidate for 0.2 (D-176). Its [release notes](docs/releases/0.2.0rc1.md) say what has not yet been tried
+by hand. funground-ml is published with 0.2.0, not with this candidate.
+
+A smooth start (E-35): editors suggest what to type, and the first chapter shows where things are. The camera and
+the models, with projects that use them (E-52).
+
+### Added in the last weeks before the candidate
+- **The stick figure from your own photo** (S-319, D-162). Gallery `models-01` uses `my_photo.jpg` (or `.png`,
+  `.jpeg`, or a drawing as `.svg`) beside the sketch, draws the figure over it and alone beside it, and saves the figure
+  as a see-through PNG. An **All 33 points** box adds the face, hands and feet.
+- **Six pose projects** (S-320): gallery `models-07` to `models-13` (go live, show the numbers, change the costume,
+  leave trails, the body as an instrument, teach with numbers, teach with a pose card). They use buttons, not keys, so
+  they work on a phone, and a photo stands in when there is no camera.
+- **The cut-out puppet** (S-321, S-324, D-171): gallery `models-14` to `models-18`. Mark the joints of a drawing (tap a
+  dot to pick it up), a puppet that moves as your reflection, record a dance, replay it on any drawing, and print it as
+  a flip book on A4. `puppet.py` beside them cuts ten bones from a drawing; Save writes the joints and the dance as
+  JSON files. The puppet's arms stretch to the length of yours.
+- **How sure the pose model is of each point** (S-328, D-165): `body.scores`. Examples 01 and 07 draw a bone faint
+  when the model guessed one of its ends.
+- **Fingers** (S-330): a box in `models-07` and `models-15` that finds one hand with `ml.hand()` and uses its wrist,
+  more exact than the pose model's.
+- **A box for a laser cutter** (S-263, E-40, D-169): gallery `projects-10` draws six panels with fingers that lock
+  together, at true size in mm, with the kerf allowed for and your name engraved; guide project 13 explains it. Not yet
+  cut on a real machine.
+- **A cardboard puppet that copies you** (S-322): guide project 12 turns two servos on an ESP32 from your shoulder
+  angles. Desktop only, not yet run on real hardware.
+- **Controls in Play** (S-329): the panel of sliders and buttons shows below the canvas and answers taps, as on the
+  desktop.
+- **The models' licences** (S-327): `THIRD_PARTY_LICENSES.md` lists the models funground-ml downloads, who made them,
+  and the limits their makers set.
+
+### Changed in the last weeks before the candidate
+- **A camera picture keeps its shape** (S-312, D-154). A frame of another shape than `width` x `height` is cut evenly
+  from its long sides, then scaled, so a face is not squeezed.
+- **A body in a camera is followed and steadied** (S-328), as MediaPipe does: the points shake less from frame to frame.
+  A photo gives the same answers as before.
+- **A picture drawn many times is stored once in a PDF or SVG** (S-321, S-339, D-173). A flip-book page went from
+  2.5 MB to 48 KB.
+- **An example may import a helper beside it** (S-321): a file without a number, such as `puppet.py`, is copied with
+  the examples that use it.
+
+### Fixed in the last weeks before the candidate
+- **Saving a PDF of pictures no longer crashes Python in Play** (S-339, D-173). Example 18's flip book could stop
+  Python in the browser; 25 saves in a row now work.
+- **A camera another program holds no longer stops the sketch on Windows.** It prints one line and is never ready, as
+  when the browser is refused the camera; example 07 then uses its photo.
 
 ### Fixed
 - **A sound file reads the same in Play as on your computer** (S-259, D-135). A WAV file that was not at 44 100 Hz sounded
