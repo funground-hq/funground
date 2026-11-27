@@ -11,6 +11,7 @@ import sys
 
 import pygame
 
+from ..controls import PanelMouse
 from .base import KEY_NAMES, InputEvent, InputState, Pixels
 
 _NAMED_KEYS = {
@@ -140,8 +141,7 @@ class PygamePlatform:
         self._title = "funground"
         self._window_panel = 0                # the panel height (logical) the open window was made for
         self._full = False
-        self._capturing = False               # a left press that began in the panel is still held
-        self._canvas_down = False             # a press that began on the canvas is still held
+        self._mouse = PanelMouse()            # which mouse events are the panel's (shared with the browser)
 
     @property
     def backing_scale(self) -> float:
@@ -162,7 +162,7 @@ class PygamePlatform:
         changed = (self._window_panel != (panel.height if panel else 0))
         self._panel = panel
         self._panel_image = None
-        self._capturing = False
+        self._mouse.reset()
         if changed and self._screen is not None and not self._full:
             self.open_window(*self._canvas, self._title)    # same canvas, a window taller or shorter by the panel
         return True
@@ -187,28 +187,7 @@ class PygamePlatform:
 
     def _route_to_panel(self, ev: InputEvent) -> bool:
         """True when the mouse event belongs to the panel, so the sketch must not see it."""
-        panel = self._panel
-        if panel is None or not ev.kind.startswith("mouse"):
-            return False
-        width, top = self._canvas[0], self._canvas[1]
-        py = ev.y - top
-        if self._capturing:
-            if ev.kind in ("mouse_dragged", "mouse_moved"):
-                panel.drag(ev.x, py, width)
-            elif ev.kind == "mouse_released" and ev.button == "left":
-                panel.release(ev.x, py, width)
-                self._capturing = False
-            return True
-        if ev.y >= top and not self._canvas_down:
-            if ev.kind == "mouse_pressed" and ev.button == "left":
-                panel.press(ev.x, py, width)
-                self._capturing = True
-            return True
-        if ev.kind == "mouse_pressed":
-            self._canvas_down = True
-        elif ev.kind == "mouse_released":
-            self._canvas_down = False
-        return False
+        return self._mouse.route(self._panel, ev, self._canvas[0], self._canvas[1])
 
     # ---- window
     def open_window(self, width: int, height: int, title: str) -> tuple[int, int]:
@@ -352,7 +331,7 @@ class PygamePlatform:
     def input_state(self) -> InputState:
         x, y = pygame.mouse.get_pos()
         s = self._input_scale
-        pressed = any(pygame.mouse.get_pressed(3)) and not self._capturing    # a panel click is not the sketch's
+        pressed = any(pygame.mouse.get_pressed(3)) and not self._mouse.capturing    # a panel click is not the sketch's
         return InputState(round(x / s), round(y / s), pressed, bool(self._held_keys))
 
     def key_down(self, key: str | int) -> bool:
@@ -402,4 +381,4 @@ class PygamePlatform:
         self._screen = None
         self._clock = None
         self._panel_image = None
-        self._capturing = self._canvas_down = False
+        self._mouse.reset()

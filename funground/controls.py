@@ -482,6 +482,47 @@ class ControlPanel:
 
 # ---------------------------------------------------------------- drawing
 
+
+class PanelMouse:
+    """Which mouse events belong to the panel and which to the sketch (the rule of every platform with a panel).
+
+    A press that starts below the canvas's bottom edge is the panel's: it, the drags after it and the release
+    are the panel's alone. A press that starts on the canvas stays the sketch's until it is released, even if
+    it is dragged down over the panel. `capturing` is True while a press that began in the panel is held.
+    """
+
+    def __init__(self) -> None:
+        self.capturing = False                 # a left press that began in the panel is still held
+        self._canvas_down = False              # a press that began on the canvas is still held
+
+    def reset(self) -> None:
+        self.capturing = self._canvas_down = False
+
+    def route(self, panel: ControlPanel | None, ev, width: int, top: int) -> bool:
+        """True when the mouse event *ev* (logical pixels) belongs to *panel*, so the sketch must not see it.
+        *width* and *top* are the canvas's width and height: the panel starts at y = *top*."""
+        if panel is None or not ev.kind.startswith("mouse"):
+            return False
+        py = ev.y - top
+        if self.capturing:
+            if ev.kind in ("mouse_dragged", "mouse_moved"):
+                panel.drag(ev.x, py, width)
+            elif ev.kind == "mouse_released" and ev.button == "left":
+                panel.release(ev.x, py, width)
+                self.capturing = False
+            return True
+        if ev.y >= top and not self._canvas_down:
+            if ev.kind == "mouse_pressed" and ev.button == "left":
+                panel.press(ev.x, py, width)
+                self.capturing = True
+            return True
+        if ev.kind == "mouse_pressed":
+            self._canvas_down = True
+        elif ev.kind == "mouse_released":
+            self._canvas_down = False
+        return False
+
+
 def panel_ops(panel: ControlPanel, width: int) -> list[ir.Op]:
     """The draw ops for the panel, for a surface *width* x `panel.height` logical pixels."""
     style = GraphicsState(fill=INK, stroke=None, stroke_width=0, text_size=TEXT_SIZE)
