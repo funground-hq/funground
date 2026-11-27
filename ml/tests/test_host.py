@@ -176,8 +176,11 @@ def test_the_picture_is_sent_as_opaque_rgba(page):
 
 
 def test_a_cameras_frame_is_sent_as_moving_and_a_picture_is_not(page):
-    funground_ml.pose(FakeCamera(solid_picture()))
-    funground_ml.pose(solid_picture())
+    # Both sources stay alive: the page tells sources apart by id(), and a freed camera's id can be reused by the
+    # picture made next (seen on Python 3.11), which then looks like the same source with its request still unanswered.
+    camera, picture = FakeCamera(solid_picture()), solid_picture()
+    funground_ml.pose(camera)
+    funground_ml.pose(picture)
     assert [request["moving"] for request in page.requests()] == [True, False]
 
 
