@@ -10,7 +10,7 @@
    "url": "reference/API.md#fn-size",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 205,
+   "rank": 206,
    "plain": "Set how big the drawing area is.",
    "also": [
     "canvas",
@@ -60,7 +60,7 @@
    "url": "reference/API.md#fn-background",
    "star": true,
    "section": "Colour",
-   "rank": 193,
+   "rank": 194,
    "also": [
     "paper",
     "wipe",
@@ -101,7 +101,7 @@
    "url": "reference/API.md#fn-run",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 139,
+   "rank": 140,
    "plain": "Start the sketch and keep drawing, frame after frame.",
    "also": [
     "start",
@@ -733,6 +733,26 @@
    }
   },
   {
+   "name": "path",
+   "kind": "function",
+   "signature": "path()",
+   "detail": "() -> PathBuilder",
+   "summary": "Make a new, empty path that you can reuse.",
+   "url": "reference/API.md#fn-path",
+   "returns": "PathBuilder",
+   "star": true,
+   "section": "Paths and clipping",
+   "rank": 19,
+   "plain": "Make an empty path, a shape you can build and draw again.",
+   "also": [
+    "shape",
+    "outline",
+    "curve",
+    "route",
+    "trace"
+   ]
+  },
+  {
    "name": "random_seed",
    "kind": "function",
    "signature": "random_seed(seed=None)",
@@ -765,26 +785,6 @@
     "cursor",
     "pointer",
     "across"
-   ]
-  },
-  {
-   "name": "path",
-   "kind": "function",
-   "signature": "path()",
-   "detail": "() -> PathBuilder",
-   "summary": "Make a new, empty path that you can reuse.",
-   "url": "reference/API.md#fn-path",
-   "returns": "PathBuilder",
-   "star": true,
-   "section": "Paths and clipping",
-   "rank": 18,
-   "plain": "Make an empty path, a shape you can build and draw again.",
-   "also": [
-    "shape",
-    "outline",
-    "curve",
-    "route",
-    "trace"
    ]
   },
   {
@@ -902,6 +902,25 @@
    }
   },
   {
+   "name": "create_slider",
+   "kind": "function",
+   "signature": "create_slider(low, high, value=None, step=None, label=None)",
+   "detail": "(low: float, high: float, value: float | None = None, step: float | None = None, label: str | None = None) -> Slider",
+   "summary": "Make a slider in a panel below the canvas.",
+   "url": "reference/API.md#fn-create_slider",
+   "returns": "Slider",
+   "star": true,
+   "section": "Interaction and controls",
+   "rank": 12,
+   "also": [
+    "control",
+    "dial",
+    "bar",
+    "knob",
+    "sliding"
+   ]
+  },
+  {
    "name": "linear_gradient",
    "kind": "function",
    "signature": "linear_gradient(x1, y1, x2, y2, colors, stops=None)",
@@ -963,25 +982,6 @@
    }
   },
   {
-   "name": "create_slider",
-   "kind": "function",
-   "signature": "create_slider(low, high, value=None, step=None, label=None)",
-   "detail": "(low: float, high: float, value: float | None = None, step: float | None = None, label: str | None = None) -> Slider",
-   "summary": "Make a slider in a panel below the canvas.",
-   "url": "reference/API.md#fn-create_slider",
-   "returns": "Slider",
-   "star": true,
-   "section": "Interaction and controls",
-   "rank": 11,
-   "also": [
-    "control",
-    "dial",
-    "bar",
-    "knob",
-    "sliding"
-   ]
-  },
-  {
    "name": "create_button",
    "kind": "function",
    "signature": "create_button(label)",
@@ -991,13 +991,40 @@
    "returns": "Button",
    "star": true,
    "section": "Interaction and controls",
-   "rank": 10,
+   "rank": 11,
    "also": [
     "click",
     "press",
     "control",
     "switch"
    ]
+  },
+  {
+   "name": "create_graphics",
+   "kind": "function",
+   "signature": "create_graphics(width, height)",
+   "detail": "(width: int, height: int) -> Picture",
+   "summary": "Make a picture: an off-screen canvas.",
+   "url": "reference/API.md#fn-create_graphics",
+   "returns": "Picture",
+   "star": true,
+   "section": "Pictures and layers",
+   "rank": 10,
+   "plain": "Make a second picture to draw on, away from the screen.",
+   "also": [
+    "new canvas",
+    "layer",
+    "off screen",
+    "buffer"
+   ],
+   "kinds": {
+    "width": {
+     "kind": "pixels"
+    },
+    "height": {
+     "kind": "pixels"
+    }
+   }
   },
   {
    "name": "scale",
@@ -1052,33 +1079,6 @@
     "custom shape",
     "corners"
    ]
-  },
-  {
-   "name": "create_graphics",
-   "kind": "function",
-   "signature": "create_graphics(width, height)",
-   "detail": "(width: int, height: int) -> Picture",
-   "summary": "Make a picture: an off-screen canvas.",
-   "url": "reference/API.md#fn-create_graphics",
-   "returns": "Picture",
-   "star": true,
-   "section": "Pictures and layers",
-   "rank": 9,
-   "plain": "Make a second picture to draw on, away from the screen.",
-   "also": [
-    "new canvas",
-    "layer",
-    "off screen",
-    "buffer"
-   ],
-   "kinds": {
-    "width": {
-     "kind": "pixels"
-    },
-    "height": {
-     "kind": "pixels"
-    }
-   }
   },
   {
    "name": "end_shape",
@@ -1227,6 +1227,25 @@
    }
   },
   {
+   "name": "create_checkbox",
+   "kind": "function",
+   "signature": "create_checkbox(label, checked=False)",
+   "detail": "(label: str, checked: bool = False) -> Checkbox",
+   "summary": "Make a tick box in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_checkbox",
+   "returns": "Checkbox",
+   "star": true,
+   "section": "Interaction and controls",
+   "rank": 7,
+   "also": [
+    "tick",
+    "tick box",
+    "switch",
+    "toggle",
+    "yes or no"
+   ]
+  },
+  {
    "name": "key_down",
    "kind": "function",
    "signature": "key_down(key)",
@@ -1326,6 +1345,23 @@
    }
   },
   {
+   "name": "mm",
+   "kind": "function",
+   "signature": "mm(n)",
+   "detail": "(n: float) -> float",
+   "summary": "Convert millimetres to funground units.",
+   "url": "reference/API.md#fn-mm",
+   "star": true,
+   "section": "Ground",
+   "rank": 7,
+   "also": [
+    "millimetres",
+    "millimeters",
+    "print size",
+    "paper size"
+   ]
+  },
+  {
    "name": "radians",
    "kind": "function",
    "signature": "radians(degrees)",
@@ -1346,25 +1382,6 @@
      "kind": "angle"
     }
    }
-  },
-  {
-   "name": "create_checkbox",
-   "kind": "function",
-   "signature": "create_checkbox(label, checked=False)",
-   "detail": "(label: str, checked: bool = False) -> Checkbox",
-   "summary": "Make a tick box in the panel below the canvas.",
-   "url": "reference/API.md#fn-create_checkbox",
-   "returns": "Checkbox",
-   "star": true,
-   "section": "Interaction and controls",
-   "rank": 6,
-   "also": [
-    "tick",
-    "tick box",
-    "switch",
-    "toggle",
-    "yes or no"
-   ]
   },
   {
    "name": "grid",
@@ -1405,23 +1422,6 @@
    ]
   },
   {
-   "name": "mm",
-   "kind": "function",
-   "signature": "mm(n)",
-   "detail": "(n: float) -> float",
-   "summary": "Convert millimetres to funground units.",
-   "url": "reference/API.md#fn-mm",
-   "star": true,
-   "section": "Ground",
-   "rank": 6,
-   "also": [
-    "millimetres",
-    "millimeters",
-    "print size",
-    "paper size"
-   ]
-  },
-  {
    "name": "Vector",
    "kind": "class",
    "signature": "Vector(x=0.0, y=0.0)",
@@ -1441,7 +1441,13 @@
    "url": "reference/API.md#fn-clear",
    "star": true,
    "section": "Colour",
-   "rank": 5
+   "rank": 5,
+   "also": [
+    "transparent",
+    "empty",
+    "wipe",
+    "nothing"
+   ]
   },
   {
    "name": "is_mouse_pressed",
@@ -9920,7 +9926,7 @@
      "summary": "Write the sound to a 16-bit WAV file.",
      "url": "reference/API.md#cls-Sound-save",
      "section": "Sound",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "set_volume",
@@ -10220,7 +10226,7 @@
      "summary": "Save the latest frame as a photo.",
      "url": "reference/API.md#cls-Camera-save",
      "section": "Camera",
-     "rank": 4,
+     "rank": 5,
      "since": "0.2"
     },
     {
@@ -10338,7 +10344,7 @@
      "summary": "Write the frames kept so far to a file.",
      "url": "reference/API.md#cls-Clip-save",
      "section": "Clip",
-     "rank": 4,
+     "rank": 5,
      "since": "0.2"
     },
     {
@@ -10461,7 +10467,7 @@
      "summary": "Write the picture to a file straight away.",
      "url": "reference/API.md#cls-Picture-save",
      "section": "Picture",
-     "rank": 4
+     "rank": 5
     }
    ]
   },
@@ -10707,7 +10713,7 @@
      "summary": "Add a run of text to the end.",
      "url": "reference/API.md#cls-FormattedString-append",
      "section": "FormattedString",
-     "rank": 24,
+     "rank": 25,
      "returns": "FormattedString"
     },
     {
@@ -10782,7 +10788,7 @@
      "summary": "The box that exactly holds the path.",
      "url": "reference/API.md#cls-PathBuilder-bounds",
      "section": "PathBuilder",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "circle",
@@ -10868,7 +10874,7 @@
      "summary": "Make a new path that is the outline a stroke would paint, so you can fill, cut or clip with it.",
      "url": "reference/API.md#cls-PathBuilder-expand_stroke",
      "section": "PathBuilder",
-     "rank": 2,
+     "rank": 3,
      "returns": "PathBuilder"
     },
     {
@@ -10977,7 +10983,7 @@
      "summary": "Add a rectangle as a closed part of the path.",
      "url": "reference/API.md#cls-PathBuilder-rect",
      "section": "PathBuilder",
-     "rank": 13,
+     "rank": 14,
      "returns": "PathBuilder"
     },
     {
@@ -11010,7 +11016,7 @@
      "summary": "Make a new path that is this path scaled about the point (0, 0).",
      "url": "reference/API.md#cls-PathBuilder-scale",
      "section": "PathBuilder",
-     "rank": 4,
+     "rank": 5,
      "returns": "PathBuilder"
     },
     {
@@ -11033,7 +11039,7 @@
      "summary": "Make a new path that is this path moved.",
      "url": "reference/API.md#cls-PathBuilder-translate",
      "section": "PathBuilder",
-     "rank": 4,
+     "rank": 5,
      "returns": "PathBuilder"
     },
     {
@@ -11084,7 +11090,7 @@
      "summary": "Return the area the mark covers, in its own coordinates.",
      "url": "reference/API.md#cls-Mark-bounds",
      "section": "Mark",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "height",
@@ -11625,7 +11631,7 @@
      "summary": "The box that holds every point of the path, including curve control points.",
      "url": "reference/API.md#cls-Path-bounds",
      "section": "Path",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "close",
@@ -11741,7 +11747,7 @@
      "summary": "Make a new path that is one closed rectangle.",
      "url": "reference/API.md#cls-Path-rect",
      "section": "Path",
-     "rank": 13,
+     "rank": 14,
      "returns": "Path"
     },
     {
@@ -11913,7 +11919,7 @@
      "summary": "The value as the panel shows it.",
      "url": "reference/API.md#cls-Slider-text",
      "section": "Slider",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "value",
@@ -11923,7 +11929,7 @@
      "summary": "Read the slider's number, or set it.",
      "url": "reference/API.md#cls-Slider-value",
      "section": "Slider",
-     "rank": 11
+     "rank": 12
     },
     {
      "name": "visible",
@@ -11949,7 +11955,7 @@
      "summary": "Read whether the box is ticked, or tick or untick it.",
      "url": "reference/API.md#cls-Checkbox-checked",
      "section": "Checkbox",
-     "rank": 6
+     "rank": 7
     },
     {
      "name": "label",
@@ -11985,7 +11991,7 @@
      "summary": "Whether the button was clicked since you last asked.",
      "url": "reference/API.md#cls-Button-clicked",
      "section": "Button",
-     "rank": 10
+     "rank": 11
     },
     {
      "name": "label",
@@ -13084,7 +13090,7 @@
      "summary": "what was said, with the model's own capitals and punctuation.",
      "url": "reference/API.md#cls-Words",
      "section": "Words",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "score",
