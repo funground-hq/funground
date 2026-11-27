@@ -60,6 +60,20 @@ def test_a_mirrored_picture_swaps_every_left_and_right_name():
     assert mirrored.mouth_left.x == plain.mouth_left.x             # "mouth_left" does not start with a side
 
 
+def test_each_point_has_a_score_and_a_mirrored_picture_swaps_them_with_the_points():
+    sure = [i / 100 for i in range(33)]
+    plain = _results.Body.from_points(_rows(33), 0.9, False, sure)
+    mirrored = _results.Body.from_points(_rows(33), 0.9, True, sure)
+    assert list(plain.scores) == list(plain.points)
+    assert plain.scores["left_wrist"] == 0.15 and mirrored.scores["left_wrist"] == plain.scores["right_wrist"] == 0.16
+    assert mirrored.scores["nose"] == plain.scores["nose"] == 0.0
+
+
+def test_without_scores_for_the_points_each_has_the_bodys_score():
+    body = _results.Body.from_points(_rows(33), 0.9, mirrored=False)
+    assert set(body.scores.values()) == {0.9}
+
+
 def test_a_hand_has_21_named_points():
     hand = _results.Hand.from_points(_rows(21), 0.95)
     assert list(hand.points) == list(_results.HAND_NAMES)
@@ -607,3 +621,87 @@ def test_a_mirrored_camera_is_not_swapped_for_the_person(selfie):
 def test_person_says_what_it_needs_when_given_something_else():
     with pytest.raises(TypeError, match=r"ml\.person\(\) needs a camera from camera\.open\(\) or a picture from f\.load_image\(\), not str"):
         funground_ml.person("a.png")
+
+
+
+# ---- a body in a camera's pictures: the region follows it (S-328)
+def test_with_follow_the_region_from_the_landmarks_is_kept_and_never_goes_stale():
+    tracker, detects, looked_in = _glue.Tracker(), [], []
+
+    def landmarks(region):
+        looked_in.append(region)
+        return _glue.Landmarks(None, 0.99, f"next after {len(looked_in)}")
+
+    for _ in range(_glue.REUSE_LIMIT + 5):
+        tracker.find(_Image, lambda: detects.append(1) or "detected", landmarks, follow=lambda region: "steady " + region)
+    assert len(detects) == 1                                         # no look again at REUSE_LIMIT: the region follows
+    assert looked_in[:3] == ["detected", "steady next after 1", "steady next after 2"]
+
+
+def test_without_follow_a_photo_keeps_the_detectors_box():
+    tracker, looked_in = _glue.Tracker(), []
+
+    def landmarks(region):
+        looked_in.append(region)
+        return _glue.Landmarks(None, 0.99, "next")
+
+    for _ in range(3):
+        tracker.find(_Image, lambda: "detected", landmarks)
+    assert looked_in == ["detected"] * 3
+
+
+# ---- steadying the points (S-328)
+class _Clock:
+    def __init__(self):
+        self.now = 0.0
+
+    def __call__(self):
+        return self.now
+
+
+def _smoother():
+    clock = _Clock()
+    return _glue.Smoother(*_glue.POINTS_SMOOTHING, clock), clock
+
+
+def _body(x=0.0):
+    import numpy as np
+    return np.array([[100.0 + x, 100.0], [300.0 + x, 500.0]])       # a body 200 by 400: its size is 300
+
+
+def test_the_first_points_are_given_as_they_are():
+    import numpy as np
+    smoother, clock = _smoother()
+    assert np.array_equal(smoother.smooth(_body()), _body())
+
+
+def test_a_still_body_that_shakes_is_held_steady():
+    smoother, clock = _smoother()
+    smoother.smooth(_body())
+    shakes = []
+    for i in range(1, 49):                                           # two seconds at 24 a second, shaking by 3 pixels
+        clock.now = i / 24
+        shakes.append(smoother.smooth(_body(3.0 if i % 2 else -3.0))[0, 0] - 100.0)
+    assert max(abs(s) for s in shakes[-24:]) < 1.0
+
+
+def test_a_body_that_moves_fast_is_not_left_behind():
+    smoother, clock = _smoother()
+    smoother.smooth(_body())
+    for i in range(1, 13):                                           # half a second, moving 600 pixels a second
+        clock.now = i / 24
+        x = smoother.smooth(_body(25.0 * i))[0, 0]
+    assert abs(x - (100.0 + 25.0 * 12)) < 25.0                       # less than one picture's move behind
+
+
+def test_after_a_gap_the_smoothing_starts_afresh():
+    import numpy as np
+    smoother, clock = _smoother()
+    smoother.smooth(_body())
+    clock.now = smoother.gap + 0.1
+    assert np.array_equal(smoother.smooth(_body(50.0)), _body(50.0))
+
+
+def test_the_steadier_gives_a_region_in_the_trackers_shape():
+    steadier = _glue.Steadier(_Clock())
+    assert steadier.region(((1.0, 2.0), (3.0, 4.0))) == ((1.0, 2.0), (3.0, 4.0))

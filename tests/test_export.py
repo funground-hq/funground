@@ -159,3 +159,52 @@ def test_a_saved_pdf_keeps_the_real_size(tmp_path):
     page = PdfReader(str(path)).pages[0].mediabox
     assert float(page.width) * 25.4 / 72 == pytest.approx(100, abs=0.5)
     assert float(page.height) * 25.4 / 72 == pytest.approx(100, abs=0.5)
+
+
+def _images_in(pdf_path) -> int:
+    """How many pictures the PDF stores (a picture with see-through parts is stored with its mask: two objects)."""
+    return pdf_path.read_bytes().count(b"/Subtype /Image")
+
+
+def test_a_picture_drawn_many_times_is_stored_once_in_a_pdf(tmp_path, caplog):
+    """S-321: a cut-out puppet draws one drawing again and again, each time clipped to one piece. The PDF stores the
+    drawing once, not once per piece (a flipbook page was 2.5 MB, 48 KB after), and saving says nothing about it."""
+    surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 60, 40)          # the drawing: a red dot on white
+    ctx = cairo.Context(surface)
+    ctx.set_source_rgb(1, 1, 1)
+    ctx.paint()
+    ctx.set_source_rgb(1, 0.4, 0.3)
+    ctx.arc(30, 20, 15, 0, 6.3)
+    ctx.fill()
+    surface.write_to_png(str(tmp_path / "drawing.png"))
+    once, many, two = (tmp_path / f"{name}.pdf" for name in ("once", "many", "two"))
+
+    pictures = {}
+
+    def draw():                                                     # each file is the frame it is saved in
+        if not pictures:
+            pictures["drawing"] = p.load_image(str(tmp_path / "drawing.png"))
+            pictures["other"] = p.load_image(str(tmp_path / "drawing.png"))
+            pictures["other"].remove_color("white")                  # different pixels: a picture of its own
+            p.size(400, 300)
+        p.background("white")
+        p.image(pictures["drawing"], 0, 0)
+        if p.frame_count == 1:
+            p.save(str(once))
+            return
+        for n in range(20):
+            with p.saved_state():
+                p.clip(p.path().rect(n * 20, 0, 20, 300))
+                p.image(pictures["drawing"], n * 18, n * 12)
+        if p.frame_count == 2:
+            p.save(str(many))
+            return
+        p.image(pictures["other"], 300, 200)
+        p.save(str(two))
+
+    with caplog.at_level("WARNING"):
+        api.active_sketch().run_namespace({"draw": draw}, max_frames=3)
+    assert _images_in(many) == _images_in(once) >= 1
+    assert many.stat().st_size < 2 * once.stat().st_size
+    assert _images_in(two) > _images_in(many)                       # a different picture is kept as well
+    assert not [r for r in caplog.records if "Multiple definitions" in r.getMessage()]

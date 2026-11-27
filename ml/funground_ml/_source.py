@@ -19,12 +19,13 @@ from funground.picture import FrameSource, Picture
 class Frame:
     """The picture to read now, as Pillow sees it."""
 
-    def __init__(self, picture: Picture, mirrored: bool) -> None:
+    def __init__(self, picture: Picture, mirrored: bool, moving: bool = False) -> None:
         # Reading the pixels draws anything the picture has waiting, then gives a frozen copy and its version.
         self._snapshot = picture._snapshot()
         self.picture = picture
         self.version: int = self._snapshot.version
         self.mirrored = mirrored
+        self.moving = moving                    # a camera's frame: one scene moving, not separate photos
 
     def image(self):
         """The pixels as a Pillow RGB image. See-through pixels count as black (the pixels are premultiplied)."""
@@ -63,6 +64,7 @@ class _State:
         self.result: Any = None
         self.requested: tuple | None = None      # (picture, version) last sent to the page's models
         self._tracker: Any = None
+        self._steadier: Any = None
 
     @property
     def tracker(self):
@@ -72,6 +74,15 @@ class _State:
 
             self._tracker = Tracker()
         return self._tracker
+
+    @property
+    def steadier(self):
+        """What steadies a body from picture to picture of a camera (desktop only; made on first use)."""
+        if self._steadier is None:
+            from ._glue import Steadier
+
+            self._steadier = Steadier()
+        return self._steadier
 
     def get(self, frame: Frame, stamp: int) -> tuple[bool, Any]:
         """(True, the result) when this is the picture and version (and stamp) the result was made for."""
@@ -100,7 +111,7 @@ def open_source(source: object, who: str) -> tuple[Frame, object] | None:
         if picture is None:
             return None
         # A camera started with mirror=True (the default) gives mirrored pictures.
-        return Frame(picture, getattr(source, "_mirror", False) is True), source
+        return Frame(picture, getattr(source, "_mirror", False) is True, moving=True), source
     raise TypeError(f"{who} needs a camera from camera.open() or a picture from f.load_image(), "
                     f"not {type(source).__name__}.")
 

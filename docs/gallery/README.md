@@ -2787,16 +2787,16 @@ A photograph with a green stick figure on it, and the same stick figure alone be
 - The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
 - draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
-- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points.
+- BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points. A bone is bright when the model is sure of both ends (body.scores says how sure it is of each point, from 0 to 1) and faint when one end is a guess: in the Gandhi photograph his left arm and leg are hidden behind him, and the model guesses where they are. Tick All 33 points and draw_figure() draws again with MORE_BONES too (the face, the hands and the feet) and a dot on every point the model gives.
 - draw() shows the photo with the figure over it on the left, and the figure alone on the right. f.image(picture, x, y, w, h) scales both to the canvas.
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
 
 **Make it yours**
 
 - Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
-- Add the ears and the mouth: body.left_ear, body.right_ear, body.mouth_left and body.mouth_right.
-- Change figure.stroke("lime") and the line's thickness to give the figure a new look.
-- Draw a small circle at every point in body.points.values() instead of lines.
+- Tick All 33 points and look at the hands and feet. Then give them a colour of their own: draw MORE_BONES with another figure.stroke().
+- Change "lime" and the line's thickness to give the figure a new look.
+- Change SURE to 0.9 and more bones go faint; change it to 0 and every bone is bright.
 - Give the right half a colour of its own: change f.fill(30) before the rect.
 
 </details>
@@ -2837,24 +2837,25 @@ Source: [`examples/gallery/models/02_follow_your_finger.py`](../../examples/gall
 
 ![In front of the sea](images/models-03_in_front_of_the_sea.png)
 
-A woman on a catwalk is cut out of her photograph and put in front of a sunset sea that the sketch draws itself. The computer finds the person, and everything else in the photograph becomes see-through. It needs the models library, which is a separate install: funground-ml.
+A person is cut out of a photograph and put in front of a sunset sea that the sketch draws itself. The computer finds the person, and everything else in the photograph becomes see-through. It uses your own photo when you give it one, and a woman on a catwalk until then. It needs the models library, which is a separate install: funground-ml.
 
 <details>
 <summary>How it works, and how to make it yours</summary>
 
 **How it works**
 
-- ml.person(photo) gives a new picture the size of the photo. Only the person is left in it. The rest is see-through.
-- The edge is soft. A pixel on the edge is a little see-through, so the cut-out blends into what is behind it.
-- The sky is a stack of thin bands. Each band is a step of f.lerp_color() between two colours. The sea is built the same way.
-- Wavy lines are drawn on the sea with f.begin_shape(), f.vertex() and a sine wave.
-- The background is drawn first. f.image() draws the person last, so she stands in front.
+- The sketch tries my_photo.jpg, my_photo.png, my_photo.jpeg and my_photo.svg in turn. When there is none, it opens the catwalk photograph instead. An SVG is read with f.load_svg(), so only its shapes count: a photo saved inside an SVG is left out.
+- The canvas is always HEIGHT tall. A photo of another size is drawn scaled, f.image(cutout, 0, 0, WIDTH, HEIGHT), so a big phone photo fits too.
+- ml.person(photo) gives a new picture the size of the photo. Only the person is left in it. The rest is see-through. The edge is soft: a pixel on the edge is a little see-through, so the cut-out blends into what is behind it.
+- The sky is a stack of thin bands. Each band is a step of f.lerp_color() between two colours. The sea is built the same way, with wavy lines drawn on it by f.begin_shape(), f.vertex() and a sine wave.
+- draw() asks for the cut-out until it has one, then keeps it (in Play the answer comes a few frames later, while the model starts). The background is drawn first, and the person last, so they stand in front.
 - With a camera, ml.person(cam) works the same way. Use f.image(ml.person(cam), 0, 0) to put yourself in front of the sea.
 
 **Make it yours**
 
+- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
 - Change the four colours at the top for a morning, or a night.
-- Move HORIZON to put the sea higher or lower behind her.
+- Move HORIZON to put the sea higher or lower behind the person.
 - Add stars to the sky with f.circle() and f.random_seed().
 - Draw the person twice: first with f.opacity(80) and a shift in x, then normally, for a shadow.
 
@@ -2971,16 +2972,17 @@ A green stick figure that follows you. The computer looks at the camera, finds y
 - Every pose sketch has the same three steps: get a picture, ask for the body in it, and draw with the 33 points you get back. Only the third step changes from one project to the next.
 - The first line of draw() chooses the picture for this frame: the camera if it has a frame ready, the photo if not. cam.is_ready() is false for the first moments, before the first frame arrives.
 - ml.pose(source) gives a body, or None when it sees no one. Always check for None before you use the body. Here the sketch writes a hint and leaves draw() early with return.
-- BONES is a list of pairs of point names. The loop looks up both points of each pair and draws a line between them. Twelve pairs make the figure.
-- The gold and blue dots mark your left and right wrists. The camera is mirrored, but left is your own left: raise your left hand and the gold dot rises.
+- BONES is a list of pairs of point names. The loop looks up both points of each pair and draws a line between them. Twelve pairs make the figure. A bone is faint when the model is not sure of one of its ends: body.scores says how sure it is of each point, from 0 to 1. Tick All 33 points and MORE_BONES joins in (the face, the hands and the feet), with a dot on every point.
+- The gold and blue dots mark your left and right wrists. The camera is mirrored, but left is your own left: raise your left hand and the gold dot rises. Tick Fingers and a second model, ml.hand(), finds one hand and its 21 points. The sketch draws its fingers and gives its wrist, which is more exact, to the side whose wrist is nearer. Two models do twice the work, so the figure moves less smoothly.
 - f.run(fps=24) asks for 24 frames a second. Finding a body is real work for the computer, and 24 is smooth enough.
 
 **Make it yours**
 
 - Hide the camera picture by deleting the f.image(source, 0, 0) line. Only the figure remains.
-- Draw a small circle at every point: for p in body.points.values(): f.circle(p.x, p.y, 6).
-- Show how sure the model is: f.text(round(body.score, 2), 20, 440).
-- Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them.
+- Tick All 33 points and wave. The fingers and toes wobble more than the elbows: they are small, and the model is less sure of them.
+- Tick Fingers and count on your hand: hand.index_finger_tip and hand.thumb_tip are two of its points. Show how sure the model is: f.text(round(body.score, 2), 20, 440).
+- Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them, and their bones go faint.
+- Leave the guesses out: change the faint stroke to f.no_stroke().
 
 </details>
 
@@ -3169,6 +3171,152 @@ Teach the computer two gestures, "hands up" and "namaste", with the real ml.teac
 </details>
 
 Source: [`examples/gallery/models/13_teach_with_a_pose_card.py`](../../examples/gallery/models/13_teach_with_a_pose_card.py)
+
+### Mark the joints
+
+![Mark the joints](images/models-14_mark_the_joints.png)
+
+Before a drawing can dance, the computer must know where its joints are. Tap the drawing once for each joint, in the order the sketch asks: the nose, then the shoulders, elbows, wrists, hips, knees and ankles. When all thirteen are marked, the sketch prints a JOINTS line. Copy it into the mirror puppet, and your drawing is ready to move.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- NAMES is the list of the thirteen joints, in the order they are asked for. "left" is the character's own left, so a character who faces you has its left shoulder on your right. A pose model names a person's joints the same way, which is what lets the puppet copy you arm for arm.
+- joints is a dictionary that starts empty. mouse_pressed() adds the next name with the place you tapped, so the next name to ask for is NAMES[len(joints)].
+- The Undo button takes back the last dot: joints.popitem() removes the newest entry of a dictionary.
+- Each dot is drawn with its number, so you can check the order. Lines join the dots that make one bone.
+- When the last joint is marked, print() writes the dictionary as one line of code you can copy.
+
+**Make it yours**
+
+- Photograph your own drawing on a plain sheet of paper, put the photo in the data folder, and change "data/hero.png" to its name. Draw your character standing with its arms a little away from its body: every piece must be clear of the others.
+- Mark data/friend.png too, and check your numbers against the FRIEND line in 17_replay_on_any_drawing.py.
+- Make the dots bigger if you mark them with a finger on a phone.
+
+</details>
+
+Source: [`examples/gallery/models/14_mark_the_joints.py`](../../examples/gallery/models/14_mark_the_joints.py)
+
+### Mirror puppet
+
+![Mirror puppet](images/models-15_mirror_puppet.png)
+
+You move, and a character drawn on paper copies you. The camera finds your body, the sketch measures the direction of ten of your bones, and the drawing's own bones are turned to point the same way. The drawing is cut into pieces like a cardboard puppet held together with paper fasteners. With no camera, it uses a photo, so it still works. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- This sketch has a second file, puppet.py, beside it. from puppet import Puppet, bone_angles, arm_lengths, ease, mirrored reads it. In Play it opens as a second tab; on a computer, keep the two files in the same folder.
+- JOINTS is the line 14_mark_the_joints.py printed for the drawing: where its thirteen joints are.
+- picture.remove_color(picture.get(4, 4), 60, tidy=True) takes away the paper: every colour close to the corner's colour becomes see-through, and tidy keeps only the character.
+- bone_angles(body.points) gives the directions of your ten bones, and arm_lengths(body.points) how long your arms are for your size, so the puppet reaches as high as you do. A camera shows you as a mirror does: your left arm is on the picture's left, where the drawing has its right arm. mirrored() swaps left and right, so the puppet moves as your reflection does. Tick Fingers and a second model, ml.hand(), finds one hand: its wrist is more exact, so it takes the place of the nearer wrist.
+- ease() moves each angle half of the way towards the new one in each frame, and each length moves half of the way too. A pose model's points jump a little from frame to frame, and easing smooths the jumps away.
+- hero.draw(angles, 620, 300, zoom=0.62) draws the puppet with its hips at 620, 300, at 62 % of the drawing's size.
+
+**Make it yours**
+
+- Draw your own character, mark its joints with 14_mark_the_joints.py and paste your JOINTS line here.
+- Change 0.5 in ease() to 0.2 for a slow, floaty puppet, or to 1 for no smoothing at all.
+- Make the arm and leg pieces wider or narrower: they are the arm=26 and leg=28 of Puppet(...). Too narrow cuts off the outline; too wide takes a bit of the body with each arm.
+- Look at the shoulders when you lift your arms. The pieces are cut with straight edges, so a joint shows a small gap or a stub. puppet.py is yours to change: try drawing a circle over each joint.
+
+</details>
+
+Source: [`examples/gallery/models/15_mirror_puppet.py`](../../examples/gallery/models/15_mirror_puppet.py)
+
+### Record a dance
+
+![Record a dance](images/models-16_record_a_dance.png)
+
+Dance in front of the camera while the puppet copies you, and the sketch writes your dance down: the ten bone directions of every frame, as numbers. Save, and the numbers go into a file, dance.json, that the next sketch replays on any drawing. With no camera, it uses a photo, so it still works, but the dance is a very still one. It needs the models library, which is a separate install: funground-ml.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- This is the mirror puppet with a recorder. Press Record, dance, press Stop, then Save.
+- While recording is True, each frame adds one dictionary to the list frames: the ten angles, rounded to whole degrees, and the four arm lengths. Twenty-four frames make one second of dance.
+- json is the Python library for writing lists and dictionaries as text. json.dump() writes the frames and the frame rate into dance.json. Open the file and look: it is only numbers, so it is small, and any drawing can dance it.
+- Recording keeps the eased angles, mirrored as the puppet showed them, so the replay looks like what you saw.
+- In Play, dance.json appears in My files. On a computer, it is written in the folder the sketch runs in.
+
+**Make it yours**
+
+- Record a short dance: two or three seconds of one clear move, done twice, replays best.
+- Add a count-in: wait three seconds after Record before the first frame is kept.
+- Record at 12 frames a second (fps=12 in f.run, and in the file) and see whether the replay still looks smooth.
+
+</details>
+
+Source: [`examples/gallery/models/16_record_a_dance.py`](../../examples/gallery/models/16_record_a_dance.py)
+
+### Replay on any drawing
+
+![Replay on any drawing](images/models-17_replay_on_any_drawing.png)
+
+The dance you recorded is only numbers: ten directions for each frame. So any drawing with marked joints can dance it. Here two characters who look nothing alike dance the same dance side by side. It does not need a camera or the models library. Until you have recorded a dance of your own, they dance one made up from sine waves.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- json.load() reads dance.json back into a dictionary: the frame rate and the list of frames. If there is no dance.json yet, open() fails with FileNotFoundError, and made_up_dance() from puppet.py makes one instead.
+- f.frame_count counts the frames drawn so far. f.frame_count % len(frames) counts 0, 1, 2 ... up to the last frame, then starts at 0 again, so the dance loops.
+- Each puppet has its own JOINTS, measured on its own drawing, and its own piece sizes. The angles and lengths are the same for both, so they move together. frame.get("lengths") is None for the made-up dance: each keeps its own.
+- The friend is thin, so its arm and leg pieces are narrow (arm=12, leg=11). Its body piece grows more (grow=1.75) because its tunic is wider than the line between its shoulders and hips.
+
+**Make it yours**
+
+- Record a dance with 16_record_a_dance.py, then run this again.
+- Draw a third character, mark it with 14_mark_the_joints.py, and add it to the line-up.
+- Play the friend's dance a quarter of a second behind the hero's: use frames[(f.frame_count - 6) % len(frames)].
+- Mirror the friend: give it 180 - angle for every bone, and swap left and right.
+
+</details>
+
+Source: [`examples/gallery/models/17_replay_on_any_drawing.py`](../../examples/gallery/models/17_replay_on_any_drawing.py)
+
+### Print a flip book
+
+![Print a flip book](images/models-18_print_a_flipbook.png)
+
+Your dance on paper: eight frames of it on one A4 page, saved as flipbook.pdf. Print it, cut out the eight cards along the lines, stack them in order with card 1 on top, staple the left edge, and flick through them with your thumb. It does not need a camera or the models library. Until you have recorded a dance of your own, it prints one made up from sine waves.
+
+> **Since 0.2.** In Play now; on your computer with funground 0.2.
+
+<details>
+<summary>How it works, and how to make it yours</summary>
+
+**How it works**
+
+- This is a script, not an animation: it draws one page from top to bottom, saves it and shows it.
+- f.size("A4", margin=f.mm(12)) makes the page an A4 sheet with a 12 mm margin. f.grid(2, 4, gutter=f.mm(6)) cuts the inside of the margins into eight cards with 6 mm between them. The grid goes row by row, left to right.
+- The eight frames are spread evenly through the dance: card n shows frame n * len(frames) // 8.
+- hero.draw(..., zoom=0.28) draws the puppet small enough for a card. The hips are put the same distance from the top of every card, so the puppet does not jump about when you flick.
+- f.save("flipbook.pdf") writes the page. A PDF keeps the shapes sharp at any printer's size. The drawing is stored in the file once, however many pieces of it the page shows, so the file stays small.
+
+**Make it yours**
+
+- Use the friend instead: copy its FRIEND line and its Puppet(...) from 17_replay_on_any_drawing.py.
+- Make a thicker flip book: f.grid(3, 6, ...) gives 18 smaller cards, and a smoother flick.
+- Write the card's number on the right edge instead, if you staple on the right.
+- Print a second page with the next eight frames: draw it after f.new_page().
+
+</details>
+
+Source: [`examples/gallery/models/18_print_a_flipbook.py`](../../examples/gallery/models/18_print_a_flipbook.py)
 
 ## Sound
 

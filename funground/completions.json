@@ -10,7 +10,7 @@
    "url": "reference/API.md#fn-size",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 213,
+   "rank": 218,
    "plain": "Set how big the drawing area is.",
    "also": [
     "canvas",
@@ -37,7 +37,7 @@
    "url": "reference/API.md#fn-fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 208,
+   "rank": 213,
    "also": [
     "color",
     "colour",
@@ -60,7 +60,7 @@
    "url": "reference/API.md#fn-background",
    "star": true,
    "section": "Colour",
-   "rank": 201,
+   "rank": 206,
    "also": [
     "paper",
     "wipe",
@@ -83,7 +83,7 @@
    "url": "reference/API.md#fn-no_stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 172,
+   "rank": 176,
    "plain": "Stop drawing outlines around shapes.",
    "also": [
     "no outline",
@@ -101,7 +101,7 @@
    "url": "reference/API.md#fn-run",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 147,
+   "rank": 151,
    "plain": "Start the sketch and keep drawing, frame after frame.",
    "also": [
     "start",
@@ -120,7 +120,7 @@
    "url": "reference/API.md#fn-text",
    "star": true,
    "section": "Text and fonts",
-   "rank": 144,
+   "rank": 148,
    "also": [
     "say",
     "print",
@@ -150,7 +150,7 @@
    "url": "reference/API.md#fn-circle",
    "star": true,
    "section": "Shapes",
-   "rank": 141,
+   "rank": 144,
    "also": [
     "round",
     "ball",
@@ -178,7 +178,7 @@
    "url": "reference/API.md#fn-text_size",
    "star": true,
    "section": "Text and fonts",
-   "rank": 135,
+   "rank": 139,
    "also": [
     "font size",
     "bigger text",
@@ -201,7 +201,7 @@
    "url": "reference/API.md#fn-rect",
    "star": true,
    "section": "Shapes",
-   "rank": 114,
+   "rank": 115,
    "also": [
     "rectangle",
     "box",
@@ -233,7 +233,7 @@
    "url": "reference/API.md#fn-stroke",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 104,
+   "rank": 106,
    "also": [
     "outline",
     "border",
@@ -256,7 +256,7 @@
    "url": "reference/API.md#fn-stroke_width",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 90,
+   "rank": 92,
    "also": [
     "thickness",
     "thick",
@@ -317,7 +317,7 @@
     ]
    },
    "section": "Text and fonts",
-   "rank": 86,
+   "rank": 90,
    "plain": "Choose which side of the point the text sits on.",
    "also": [
     "centre",
@@ -336,7 +336,7 @@
    "url": "reference/API.md#fn-show",
    "star": true,
    "section": "Sketch and loop",
-   "rank": 66,
+   "rank": 67,
    "plain": "Open a window to see what you drew.",
    "also": [
     "open",
@@ -355,7 +355,7 @@
    "url": "reference/API.md#fn-save",
    "star": true,
    "section": "Saving",
-   "rank": 56,
+   "rank": 57,
    "also": [
     "export",
     "download",
@@ -378,7 +378,7 @@
    "url": "reference/API.md#fn-line",
    "star": true,
    "section": "Shapes",
-   "rank": 55,
+   "rank": 56,
    "also": [
     "segment",
     "connect",
@@ -409,7 +409,7 @@
    "url": "reference/API.md#fn-no_fill",
    "star": true,
    "section": "Fill and stroke",
-   "rank": 52,
+   "rank": 53,
    "plain": "Draw shapes with nothing inside, only their outlines.",
    "also": [
     "empty",
@@ -427,7 +427,7 @@
    "url": "reference/API.md#fn-translate",
    "star": true,
    "section": "Transforms and the state stack",
-   "rank": 41,
+   "rank": 42,
    "also": [
     "move",
     "shift",
@@ -453,7 +453,7 @@
    "url": "reference/API.md#live-frame_count",
    "star": true,
    "section": "Live values",
-   "rank": 37,
+   "rank": 38,
    "also": [
     "frames",
     "counter",
@@ -470,7 +470,7 @@
    "url": "reference/API.md#fn-saved_state",
    "star": true,
    "section": "Transforms and the state stack",
-   "rank": 31,
+   "rank": 32,
    "plain": "Do some drawing, then put the style back as it was.",
    "also": [
     "remember",
@@ -478,6 +478,31 @@
     "keep style",
     "push pop"
    ]
+  },
+  {
+   "name": "load_image",
+   "kind": "function",
+   "signature": "load_image(path)",
+   "detail": "(path: str) -> Picture",
+   "summary": "Read an image file and return it as a picture.",
+   "url": "reference/API.md#fn-load_image",
+   "returns": "Picture",
+   "star": true,
+   "section": "Images and SVG",
+   "rank": 31,
+   "plain": "Open a picture file so you can draw it.",
+   "also": [
+    "open picture",
+    "photo",
+    "read picture",
+    "import",
+    "png"
+   ],
+   "kinds": {
+    "path": {
+     "kind": "file"
+    }
+   }
   },
   {
    "name": "rotate",
@@ -488,7 +513,7 @@
    "url": "reference/API.md#fn-rotate",
    "star": true,
    "section": "Transforms and the state stack",
-   "rank": 30,
+   "rank": 31,
    "plain": "Turn everything you draw next, by a number of degrees.",
    "also": [
     "turn",
@@ -503,6 +528,54 @@
      "kind": "angle"
     }
    }
+  },
+  {
+   "name": "image",
+   "kind": "function",
+   "signature": "image(picture, x, y, width=None, height=None, sx=None, sy=None, sw=None, sh=None)",
+   "detail": "(picture: Picture | FrameSource, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
+   "summary": "Draw a picture.",
+   "url": "reference/API.md#fn-image",
+   "star": true,
+   "section": "Images and SVG",
+   "rank": 29,
+   "also": [
+    "picture",
+    "photo",
+    "show picture",
+    "paste"
+   ],
+   "kinds": {
+    "x": {
+     "kind": "pixels"
+    },
+    "y": {
+     "kind": "pixels"
+    },
+    "width": {
+     "kind": "pixels"
+    },
+    "height": {
+     "kind": "pixels"
+    }
+   }
+  },
+  {
+   "name": "width",
+   "kind": "value",
+   "signature": "width",
+   "detail": "int",
+   "summary": "The width of the canvas, in pixels.",
+   "url": "reference/API.md#live-width",
+   "star": true,
+   "section": "Live values",
+   "rank": 28,
+   "also": [
+    "canvas width",
+    "wide",
+    "across",
+    "screen width"
+   ]
   },
   {
    "name": "text_style",
@@ -542,23 +615,6 @@
    ]
   },
   {
-   "name": "width",
-   "kind": "value",
-   "signature": "width",
-   "detail": "int",
-   "summary": "The width of the canvas, in pixels.",
-   "url": "reference/API.md#live-width",
-   "star": true,
-   "section": "Live values",
-   "rank": 27,
-   "also": [
-    "canvas width",
-    "wide",
-    "across",
-    "screen width"
-   ]
-  },
-  {
    "name": "key",
    "kind": "value",
    "signature": "key",
@@ -576,62 +632,6 @@
    ]
   },
   {
-   "name": "load_image",
-   "kind": "function",
-   "signature": "load_image(path)",
-   "detail": "(path: str) -> Picture",
-   "summary": "Read an image file and return it as a picture.",
-   "url": "reference/API.md#fn-load_image",
-   "returns": "Picture",
-   "star": true,
-   "section": "Images and SVG",
-   "rank": 26,
-   "plain": "Open a picture file so you can draw it.",
-   "also": [
-    "open picture",
-    "photo",
-    "read picture",
-    "import",
-    "png"
-   ],
-   "kinds": {
-    "path": {
-     "kind": "file"
-    }
-   }
-  },
-  {
-   "name": "image",
-   "kind": "function",
-   "signature": "image(picture, x, y, width=None, height=None, sx=None, sy=None, sw=None, sh=None)",
-   "detail": "(picture: Picture | FrameSource, x: float, y: float, width: float | None = None, height: float | None = None, sx: float | None = None, sy: float | None = None, sw: float | None = None, sh: float | None = None) -> None",
-   "summary": "Draw a picture.",
-   "url": "reference/API.md#fn-image",
-   "star": true,
-   "section": "Images and SVG",
-   "rank": 25,
-   "also": [
-    "picture",
-    "photo",
-    "show picture",
-    "paste"
-   ],
-   "kinds": {
-    "x": {
-     "kind": "pixels"
-    },
-    "y": {
-     "kind": "pixels"
-    },
-    "width": {
-     "kind": "pixels"
-    },
-    "height": {
-     "kind": "pixels"
-    }
-   }
-  },
-  {
    "name": "height",
    "kind": "value",
    "signature": "height",
@@ -640,7 +640,7 @@
    "url": "reference/API.md#live-height",
    "star": true,
    "section": "Live values",
-   "rank": 24,
+   "rank": 25,
    "also": [
     "canvas height",
     "tall",
@@ -716,6 +716,26 @@
    ]
   },
   {
+   "name": "path",
+   "kind": "function",
+   "signature": "path()",
+   "detail": "() -> PathBuilder",
+   "summary": "Make a new, empty path that you can reuse.",
+   "url": "reference/API.md#fn-path",
+   "returns": "PathBuilder",
+   "star": true,
+   "section": "Paths and clipping",
+   "rank": 20,
+   "plain": "Make an empty path, a shape you can build and draw again.",
+   "also": [
+    "shape",
+    "outline",
+    "curve",
+    "route",
+    "trace"
+   ]
+  },
+  {
    "name": "random",
    "kind": "function",
    "signature": "random(low=1.0, high=None)",
@@ -733,23 +753,20 @@
    ]
   },
   {
-   "name": "path",
-   "kind": "function",
-   "signature": "path()",
-   "detail": "() -> PathBuilder",
-   "summary": "Make a new, empty path that you can reuse.",
-   "url": "reference/API.md#fn-path",
-   "returns": "PathBuilder",
+   "name": "mouse_x",
+   "kind": "value",
+   "signature": "mouse_x",
+   "detail": "float",
+   "summary": "The mouse's x position over the canvas, in pixels from the left edge.",
+   "url": "reference/API.md#live-mouse_x",
    "star": true,
-   "section": "Paths and clipping",
+   "section": "Live values",
    "rank": 19,
-   "plain": "Make an empty path, a shape you can build and draw again.",
    "also": [
-    "shape",
-    "outline",
-    "curve",
-    "route",
-    "trace"
+    "mouse",
+    "cursor",
+    "pointer",
+    "across"
    ]
   },
   {
@@ -771,20 +788,21 @@
    ]
   },
   {
-   "name": "mouse_x",
-   "kind": "value",
-   "signature": "mouse_x",
-   "detail": "float",
-   "summary": "The mouse's x position over the canvas, in pixels from the left edge.",
-   "url": "reference/API.md#live-mouse_x",
+   "name": "create_button",
+   "kind": "function",
+   "signature": "create_button(label)",
+   "detail": "(label: str) -> Button",
+   "summary": "Make a button in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_button",
+   "returns": "Button",
    "star": true,
-   "section": "Live values",
+   "section": "Interaction and controls",
    "rank": 18,
    "also": [
-    "mouse",
-    "cursor",
-    "pointer",
-    "across"
+    "click",
+    "press",
+    "control",
+    "switch"
    ]
   },
   {
@@ -796,30 +814,12 @@
    "url": "reference/API.md#live-mouse_y",
    "star": true,
    "section": "Live values",
-   "rank": 17,
+   "rank": 18,
    "also": [
     "mouse",
     "cursor",
     "pointer",
     "up and down"
-   ]
-  },
-  {
-   "name": "create_button",
-   "kind": "function",
-   "signature": "create_button(label)",
-   "detail": "(label: str) -> Button",
-   "summary": "Make a button in the panel below the canvas.",
-   "url": "reference/API.md#fn-create_button",
-   "returns": "Button",
-   "star": true,
-   "section": "Interaction and controls",
-   "rank": 16,
-   "also": [
-    "click",
-    "press",
-    "control",
-    "switch"
    ]
   },
   {
@@ -1027,6 +1027,26 @@
    }
   },
   {
+   "name": "scale",
+   "kind": "function",
+   "signature": "scale(sx, sy=None)",
+   "detail": "(sx: float, sy: float | None = None) -> None",
+   "summary": "Grow or shrink later drawing about the origin.",
+   "url": "reference/API.md#fn-scale",
+   "star": true,
+   "section": "Transforms and the state stack",
+   "rank": 11,
+   "plain": "Make everything you draw next bigger or smaller.",
+   "also": [
+    "grow",
+    "shrink",
+    "zoom",
+    "bigger",
+    "smaller",
+    "resize"
+   ]
+  },
+  {
    "name": "begin_shape",
    "kind": "function",
    "signature": "begin_shape()",
@@ -1042,6 +1062,25 @@
     "polygon",
     "custom shape",
     "corners"
+   ]
+  },
+  {
+   "name": "create_checkbox",
+   "kind": "function",
+   "signature": "create_checkbox(label, checked=False)",
+   "detail": "(label: str, checked: bool = False) -> Checkbox",
+   "summary": "Make a tick box in the panel below the canvas.",
+   "url": "reference/API.md#fn-create_checkbox",
+   "returns": "Checkbox",
+   "star": true,
+   "section": "Interaction and controls",
+   "rank": 10,
+   "also": [
+    "tick",
+    "tick box",
+    "switch",
+    "toggle",
+    "yes or no"
    ]
   },
   {
@@ -1062,26 +1101,6 @@
    ]
   },
   {
-   "name": "scale",
-   "kind": "function",
-   "signature": "scale(sx, sy=None)",
-   "detail": "(sx: float, sy: float | None = None) -> None",
-   "summary": "Grow or shrink later drawing about the origin.",
-   "url": "reference/API.md#fn-scale",
-   "star": true,
-   "section": "Transforms and the state stack",
-   "rank": 10,
-   "plain": "Make everything you draw next bigger or smaller.",
-   "also": [
-    "grow",
-    "shrink",
-    "zoom",
-    "bigger",
-    "smaller",
-    "resize"
-   ]
-  },
-  {
    "name": "text_width",
    "kind": "function",
    "signature": "text_width(message)",
@@ -1095,6 +1114,25 @@
     "measure text",
     "how wide",
     "text length"
+   ]
+  },
+  {
+   "name": "clip",
+   "kind": "function",
+   "signature": "clip(path)",
+   "detail": "(path: PathBuilder) -> None",
+   "summary": "Limit later drawing to the inside of a path.",
+   "url": "reference/API.md#fn-clip",
+   "star": true,
+   "section": "Paths and clipping",
+   "rank": 9,
+   "plain": "Only show your drawing inside a shape you choose.",
+   "also": [
+    "cut",
+    "mask",
+    "crop",
+    "hole",
+    "window"
    ]
   },
   {
@@ -1158,25 +1196,6 @@
    }
   },
   {
-   "name": "clip",
-   "kind": "function",
-   "signature": "clip(path)",
-   "detail": "(path: PathBuilder) -> None",
-   "summary": "Limit later drawing to the inside of a path.",
-   "url": "reference/API.md#fn-clip",
-   "star": true,
-   "section": "Paths and clipping",
-   "rank": 8,
-   "plain": "Only show your drawing inside a shape you choose.",
-   "also": [
-    "cut",
-    "mask",
-    "crop",
-    "hole",
-    "window"
-   ]
-  },
-  {
    "name": "lerp_color",
    "kind": "function",
    "signature": "lerp_color(c1, c2, amount)",
@@ -1209,6 +1228,23 @@
      "step": 0.01
     }
    }
+  },
+  {
+   "name": "mm",
+   "kind": "function",
+   "signature": "mm(n)",
+   "detail": "(n: float) -> float",
+   "summary": "Convert millimetres to funground units.",
+   "url": "reference/API.md#fn-mm",
+   "star": true,
+   "section": "Ground",
+   "rank": 8,
+   "also": [
+    "millimetres",
+    "millimeters",
+    "print size",
+    "paper size"
+   ]
   },
   {
    "name": "text_box",
@@ -1245,22 +1281,23 @@
    }
   },
   {
-   "name": "create_checkbox",
+   "name": "grid",
    "kind": "function",
-   "signature": "create_checkbox(label, checked=False)",
-   "detail": "(label: str, checked: bool = False) -> Checkbox",
-   "summary": "Make a tick box in the panel below the canvas.",
-   "url": "reference/API.md#fn-create_checkbox",
-   "returns": "Checkbox",
+   "signature": "grid(cols, rows, gutter=0, area=None)",
+   "detail": "(cols: int, rows: int, *, gutter: float | tuple = 0, area: object = None) -> Grid",
+   "summary": "Divide an area into a grid of equal cells.",
+   "url": "reference/API.md#fn-grid",
+   "returns": "Grid",
    "star": true,
-   "section": "Interaction and controls",
+   "section": "Ground",
    "rank": 7,
+   "plain": "Cut an area into rows and columns of equal boxes.",
    "also": [
-    "tick",
-    "tick box",
-    "switch",
-    "toggle",
-    "yes or no"
+    "table",
+    "rows",
+    "columns",
+    "cells",
+    "layout"
    ]
   },
   {
@@ -1345,23 +1382,6 @@
    }
   },
   {
-   "name": "mm",
-   "kind": "function",
-   "signature": "mm(n)",
-   "detail": "(n: float) -> float",
-   "summary": "Convert millimetres to funground units.",
-   "url": "reference/API.md#fn-mm",
-   "star": true,
-   "section": "Ground",
-   "rank": 7,
-   "also": [
-    "millimetres",
-    "millimeters",
-    "print size",
-    "paper size"
-   ]
-  },
-  {
    "name": "radians",
    "kind": "function",
    "signature": "radians(degrees)",
@@ -1384,23 +1404,22 @@
    }
   },
   {
-   "name": "grid",
-   "kind": "function",
-   "signature": "grid(cols, rows, gutter=0, area=None)",
-   "detail": "(cols: int, rows: int, *, gutter: float | tuple = 0, area: object = None) -> Grid",
-   "summary": "Divide an area into a grid of equal cells.",
-   "url": "reference/API.md#fn-grid",
-   "returns": "Grid",
+   "name": "Vector",
+   "kind": "class",
+   "signature": "Vector(x=0.0, y=0.0)",
+   "detail": "(x: float = 0.0, y: float = 0.0)",
+   "summary": "A 2D vector: two numbers, x and y, that you can add, scale, turn and measure.",
+   "url": "reference/API.md#cls-Vector",
    "star": true,
-   "section": "Ground",
+   "section": "Classes",
    "rank": 6,
-   "plain": "Cut an area into rows and columns of equal boxes.",
+   "plain": "Two numbers, x and y, for a position, a speed or a push.",
    "also": [
-    "table",
-    "rows",
-    "columns",
-    "cells",
-    "layout"
+    "point",
+    "arrow",
+    "direction",
+    "velocity",
+    "position"
    ]
   },
   {
@@ -1447,17 +1466,6 @@
    },
    "section": "Fill and stroke",
    "rank": 6
-  },
-  {
-   "name": "Vector",
-   "kind": "class",
-   "signature": "Vector(x=0.0, y=0.0)",
-   "detail": "(x: float = 0.0, y: float = 0.0)",
-   "summary": "A 2D vector: two numbers, x and y, that you can add, scale, turn and measure.",
-   "url": "reference/API.md#cls-Vector",
-   "star": true,
-   "section": "Classes",
-   "rank": 5
   },
   {
    "name": "clear",
@@ -1986,6 +1994,18 @@
    "returns": "Font",
    "star": true,
    "section": "Text and fonts",
+   "rank": 2
+  },
+  {
+   "name": "load_svg",
+   "kind": "function",
+   "signature": "load_svg(path)",
+   "detail": "(path: str) -> Picture",
+   "summary": "Read an SVG file and return a picture of its shapes.",
+   "url": "reference/API.md#fn-load_svg",
+   "returns": "Picture",
+   "star": true,
+   "section": "Images and SVG",
    "rank": 2
   },
   {
@@ -3162,18 +3182,6 @@
    "url": "reference/API.md#fn-load_pixels",
    "star": true,
    "section": "Pixels and filters",
-   "rank": 1
-  },
-  {
-   "name": "load_svg",
-   "kind": "function",
-   "signature": "load_svg(path)",
-   "detail": "(path: str) -> Picture",
-   "summary": "Read an SVG file and return a picture of its shapes.",
-   "url": "reference/API.md#fn-load_svg",
-   "returns": "Picture",
-   "star": true,
-   "section": "Images and SVG",
    "rank": 1
   },
   {
@@ -10123,7 +10131,7 @@
      "summary": "Start listening.",
      "url": "reference/API.md#cls-Microphone-start",
      "section": "Microphone",
-     "rank": 26
+     "rank": 28
     },
     {
      "name": "stop",
@@ -10180,7 +10188,7 @@
      "summary": "The height of every frame, in pixels: the size asked in start(), or 480 before that.",
      "url": "reference/API.md#cls-Camera-height",
      "section": "Camera",
-     "rank": 9,
+     "rank": 11,
      "since": "0.2"
     },
     {
@@ -10191,7 +10199,7 @@
      "summary": "Whether a frame has arrived.",
      "url": "reference/API.md#cls-Camera-is_ready",
      "section": "Camera",
-     "rank": 18,
+     "rank": 20,
      "since": "0.2"
     },
     {
@@ -10237,7 +10245,7 @@
      "summary": "Open the camera.",
      "url": "reference/API.md#cls-Camera-start",
      "section": "Camera",
-     "rank": 26,
+     "rank": 28,
      "since": "0.2"
     },
     {
@@ -10259,7 +10267,7 @@
      "summary": "The width of every frame, in pixels: the size asked in start(), or 640 before that.",
      "url": "reference/API.md#cls-Camera-width",
      "section": "Camera",
-     "rank": 9,
+     "rank": 11,
      "since": "0.2"
     }
    ]
@@ -10446,7 +10454,7 @@
      "summary": "Make every pixel that is close to a colour see-through, in place.",
      "url": "reference/API.md#cls-Picture-remove_color",
      "section": "Picture",
-     "rank": 0,
+     "rank": 4,
      "since": "0.2"
     },
     {
@@ -10457,7 +10465,7 @@
      "summary": "Change the size of the picture, in place, scaling its pixels smoothly.",
      "url": "reference/API.md#cls-Picture-resize",
      "section": "Picture",
-     "rank": 11
+     "rank": 13
     },
     {
      "name": "save",
@@ -10525,7 +10533,7 @@
      "summary": "The distance from this point to another.",
      "url": "reference/API.md#cls-Vector-dist",
      "section": "Vector",
-     "rank": 5
+     "rank": 7
     },
     {
      "name": "div",
@@ -10567,7 +10575,7 @@
      "summary": "The direction the vector points in.",
      "url": "reference/API.md#cls-Vector-heading",
      "section": "Vector",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "lerp",
@@ -10599,7 +10607,7 @@
      "summary": "The length of the vector.",
      "url": "reference/API.md#cls-Vector-mag",
      "section": "Vector",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "mag_sq",
@@ -10630,7 +10638,7 @@
      "summary": "Make the length 1, keeping the direction, in place.",
      "url": "reference/API.md#cls-Vector-normalize",
      "section": "Vector",
-     "rank": 0,
+     "rank": 1,
      "returns": "Vector"
     },
     {
@@ -10652,7 +10660,7 @@
      "summary": "Turn the vector by an angle, in place.",
      "url": "reference/API.md#cls-Vector-rotate",
      "section": "Vector",
-     "rank": 2,
+     "rank": 3,
      "returns": "Vector"
     },
     {
@@ -10713,7 +10721,7 @@
      "summary": "Add a run of text to the end.",
      "url": "reference/API.md#cls-FormattedString-append",
      "section": "FormattedString",
-     "rank": 28,
+     "rank": 30,
      "returns": "FormattedString"
     },
     {
@@ -10798,7 +10806,7 @@
      "summary": "Add a circle as a closed part of the path.",
      "url": "reference/API.md#cls-PathBuilder-circle",
      "section": "PathBuilder",
-     "rank": 21,
+     "rank": 22,
      "returns": "PathBuilder"
     },
     {
@@ -10949,7 +10957,7 @@
      "summary": "Add a closed shape through a list of corners.",
      "url": "reference/API.md#cls-PathBuilder-polygon",
      "section": "PathBuilder",
-     "rank": 3,
+     "rank": 4,
      "returns": "PathBuilder"
     },
     {
@@ -11005,7 +11013,7 @@
      "summary": "Make a new path that is this path turned about a point.",
      "url": "reference/API.md#cls-PathBuilder-rotate",
      "section": "PathBuilder",
-     "rank": 2,
+     "rank": 3,
      "returns": "PathBuilder"
     },
     {
@@ -11100,7 +11108,7 @@
      "summary": "The height of the area the mark covers, from bounds(); 0 for an empty mark.",
      "url": "reference/API.md#cls-Mark-height",
      "section": "Mark",
-     "rank": 9
+     "rank": 11
     },
     {
      "name": "is_empty",
@@ -11130,7 +11138,7 @@
      "summary": "The width of the area the mark covers, from bounds(); 0 for an empty mark.",
      "url": "reference/API.md#cls-Mark-width",
      "section": "Mark",
-     "rank": 9
+     "rank": 11
     }
    ]
   },
@@ -11156,7 +11164,7 @@
      "summary": "The x of the area's centre.",
      "url": "reference/API.md#cls-Area-cx",
      "section": "Area",
-     "rank": 5
+     "rank": 6
     },
     {
      "name": "cy",
@@ -11187,7 +11195,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Area-height",
      "section": "Area",
-     "rank": 9
+     "rank": 11
     },
     {
      "name": "inset",
@@ -11208,7 +11216,7 @@
      "summary": "The x of the area's left edge.",
      "url": "reference/API.md#cls-Area-left",
      "section": "Area",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "right",
@@ -11228,7 +11236,7 @@
      "summary": "The y of the area's top edge.",
      "url": "reference/API.md#cls-Area-top",
      "section": "Area",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "width",
@@ -11238,7 +11246,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Area-width",
      "section": "Area",
-     "rank": 9
+     "rank": 11
     }
    ]
   },
@@ -11275,7 +11283,7 @@
      "summary": "The x of the area's centre.",
      "url": "reference/API.md#cls-Ground-cx",
      "section": "Ground",
-     "rank": 5
+     "rank": 6
     },
     {
      "name": "cy",
@@ -11306,7 +11314,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Ground-height",
      "section": "Ground",
-     "rank": 9
+     "rank": 11
     },
     {
      "name": "inset",
@@ -11327,7 +11335,7 @@
      "summary": "The x of the area's left edge.",
      "url": "reference/API.md#cls-Ground-left",
      "section": "Ground",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "margin",
@@ -11357,7 +11365,7 @@
      "summary": "The y of the area's top edge.",
      "url": "reference/API.md#cls-Ground-top",
      "section": "Ground",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "width",
@@ -11367,7 +11375,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Ground-width",
      "section": "Ground",
-     "rank": 9
+     "rank": 11
     }
    ]
   },
@@ -11403,7 +11411,7 @@
      "summary": "The x of the area's centre.",
      "url": "reference/API.md#cls-Cell-cx",
      "section": "Cell",
-     "rank": 5
+     "rank": 6
     },
     {
      "name": "cy",
@@ -11434,7 +11442,7 @@
      "summary": "How high the area is: 0 or more.",
      "url": "reference/API.md#cls-Cell-height",
      "section": "Cell",
-     "rank": 9
+     "rank": 11
     },
     {
      "name": "index",
@@ -11465,7 +11473,7 @@
      "summary": "The x of the area's left edge.",
      "url": "reference/API.md#cls-Cell-left",
      "section": "Cell",
-     "rank": 4
+     "rank": 5
     },
     {
      "name": "right",
@@ -11495,7 +11503,7 @@
      "summary": "The y of the area's top edge.",
      "url": "reference/API.md#cls-Cell-top",
      "section": "Cell",
-     "rank": 2
+     "rank": 3
     },
     {
      "name": "width",
@@ -11505,7 +11513,7 @@
      "summary": "How wide the area is: 0 or more.",
      "url": "reference/API.md#cls-Cell-width",
      "section": "Cell",
-     "rank": 9
+     "rank": 11
     }
    ]
   },
@@ -11726,7 +11734,7 @@
      "summary": "Every point in the path, including curve control points, in order.",
      "url": "reference/API.md#cls-Path-points",
      "section": "Path",
-     "rank": 6
+     "rank": 8
     },
     {
      "name": "quad_to",
@@ -11955,7 +11963,7 @@
      "summary": "Read whether the box is ticked, or tick or untick it.",
      "url": "reference/API.md#cls-Checkbox-checked",
      "section": "Checkbox",
-     "rank": 7
+     "rank": 10
     },
     {
      "name": "label",
@@ -11991,7 +11999,7 @@
      "summary": "Whether the button was clicked since you last asked.",
      "url": "reference/API.md#cls-Button-clicked",
      "section": "Button",
-     "rank": 16
+     "rank": 18
     },
     {
      "name": "label",
@@ -12203,7 +12211,7 @@
      "summary": "x1, y1, x2, y2 for a linear gradient, and x, y, radius for a radial one.",
      "url": "reference/API.md#cls-Gradient",
      "section": "Gradient",
-     "rank": 6
+     "rank": 8
     },
     {
      "name": "stops",
@@ -12442,17 +12450,27 @@
      "summary": "a dict of every point name and its f.Vector, in the model's order.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 6
+     "rank": 8
     },
     {
      "name": "score",
      "kind": "property",
      "signature": "score",
      "detail": "float",
-     "summary": "how sure the model is, from 0 to 1.",
+     "summary": "how sure the model is that there is a body, from 0 to 1.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
      "rank": 3
+    },
+    {
+     "name": "scores",
+     "kind": "property",
+     "signature": "scores",
+     "detail": "dict[str, float]",
+     "summary": "a dict of every point name and how sure the model is of that point, from 0 to 1.",
+     "url": "reference/API.md#cls-Body",
+     "section": "Body",
+     "rank": 2
     },
     {
      "name": "nose",
@@ -12628,7 +12646,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 3
+     "rank": 2
     },
     {
      "name": "right_wrist",
@@ -12639,7 +12657,7 @@
      "summary": "A point of the body: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Body",
      "section": "Body",
-     "rank": 4
+     "rank": 3
     },
     {
      "name": "left_pinky",
@@ -12832,7 +12850,7 @@
      "summary": "a dict of every point name and its f.Vector, in the model's order.",
      "url": "reference/API.md#cls-Hand",
      "section": "Hand",
-     "rank": 6
+     "rank": 8
     },
     {
      "name": "score",
@@ -12853,7 +12871,7 @@
      "summary": "A point of the hand: an f.Vector in the source's pixels.",
      "url": "reference/API.md#cls-Hand",
      "section": "Hand",
-     "rank": 0
+     "rank": 2
     },
     {
      "name": "thumb_cmc",
@@ -13829,7 +13847,7 @@
     "summary": "Make a camera object for the computer's default camera.",
     "url": "reference/API.md#fn-camera-open",
     "section": "camera",
-    "rank": 18,
+    "rank": 20,
     "returns": "Camera",
     "plain": "Turn on the camera.",
     "also": [
@@ -13891,7 +13909,7 @@
     "summary": "Find the body in a camera or a picture.",
     "url": "reference/API.md#fn-ml-pose",
     "section": "ml",
-    "rank": 8,
+    "rank": 10,
     "returns": "Body",
     "plain": "Find a body: head, arms, legs.",
     "also": [
@@ -13900,6 +13918,25 @@
      "arms",
      "find person",
      "track body"
+    ]
+   },
+   {
+    "name": "hand",
+    "kind": "function",
+    "signature": "hand(source)",
+    "detail": "(source) -> Hand | None",
+    "summary": "Find a hand in a camera or a picture.",
+    "url": "reference/API.md#fn-ml-hand",
+    "section": "ml",
+    "rank": 3,
+    "returns": "Hand",
+    "plain": "Find a hand and its fingers.",
+    "also": [
+     "fingers",
+     "palm",
+     "wrist",
+     "gesture",
+     "find hand"
     ]
    },
    {
@@ -13937,25 +13974,6 @@
      "show examples",
      "model",
      "label"
-    ]
-   },
-   {
-    "name": "hand",
-    "kind": "function",
-    "signature": "hand(source)",
-    "detail": "(source) -> Hand | None",
-    "summary": "Find a hand in a camera or a picture.",
-    "url": "reference/API.md#fn-ml-hand",
-    "section": "ml",
-    "rank": 1,
-    "returns": "Hand",
-    "plain": "Find a hand and its fingers.",
-    "also": [
-     "fingers",
-     "palm",
-     "wrist",
-     "gesture",
-     "find hand"
     ]
    },
    {

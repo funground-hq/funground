@@ -1,0 +1,50 @@
+[
+ {
+  "color": [
+   255,
+   255,
+   255,
+   255
+  ],
+  "op": "Clear"
+ },
+ {
+  "height": 640,
+  "op": "Image",
+  "source": "graphics-1",
+  "version": 0,
+  "width": 480,
+  "x": 0.0,
+  "y": 0.0
+ },
+ {
+  "color": [
+   0,
+   0,
+   0,
+   255
+  ],
+  "op": "Text",
+  "style": {
+   "fill": [
+    0,
+    0,
+    0,
+    255
+   ],
+   "stroke": [
+    0,
+    191,
+    255,
+    255
+   ],
+   "stroke_width": 3,
+   "text_align": "center",
+   "text_size": 20,
+   "text_valign": "center"
+  },
+  "text": "1 of 13: tap the nose",
+  "x": 135.3857421875,
+  "y": 658.359375
+ }
+]

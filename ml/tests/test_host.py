@@ -175,6 +175,12 @@ def test_the_picture_is_sent_as_opaque_rgba(page):
     assert page.requests()[0]["pixels"] == bytes([120, 90, 10, 255]) * 2
 
 
+def test_a_cameras_frame_is_sent_as_moving_and_a_picture_is_not(page):
+    funground_ml.pose(FakeCamera(solid_picture()))
+    funground_ml.pose(solid_picture())
+    assert [request["moving"] for request in page.requests()] == [True, False]
+
+
 def test_a_result_gives_a_body_and_the_same_one_twice_in_a_frame(page):
     camera = FakeCamera(solid_picture(), mirror=False)
     funground_ml.pose(camera)
@@ -214,6 +220,30 @@ def test_nobody_found_gives_none(page):
     funground_ml.hand(picture)
     page.models.push("hand", page.requests()[0]["key"], None, 0.0, 64, 48)
     assert funground_ml.hand(picture) is None
+
+
+def test_the_scores_of_the_points_come_from_the_page_and_are_swapped_in_python(page):
+    plain, mirrored = FakeCamera(solid_picture(), mirror=False), FakeCamera(solid_picture(), mirror=True)
+    funground_ml.pose(plain)
+    funground_ml.pose(mirrored)
+    for request in page.requests():
+        page.models.push("pose", request["key"], _pairs(33), 0.9, 64, 48, [i / 100 for i in range(33)])
+    a, b = funground_ml.pose(plain), funground_ml.pose(mirrored)
+    assert a.scores["left_wrist"] == 0.15 and b.scores["left_wrist"] == 0.16
+
+
+def test_a_page_that_sends_no_scores_gives_each_point_the_bodys_score(page):
+    picture = solid_picture()
+    funground_ml.pose(picture)
+    page.models.push("pose", page.requests()[0]["key"], _pairs(33), 0.8, 64, 48)
+    assert set(funground_ml.pose(picture).scores.values()) == {0.8}
+
+
+def test_scores_that_do_not_match_the_points_are_refused():
+    models = HostModels(lambda command, fields: None)
+    models.request("pose", 7, bytes(16), 2, 2)
+    with pytest.raises(ValueError, match="one score for each point"):
+        models.push("pose", 7, _pairs(33), 0.9, 2, 2, [0.5] * 32)
 
 
 def test_a_mirrored_camera_swaps_the_sides_in_python(page):

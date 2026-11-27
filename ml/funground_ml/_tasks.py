@@ -38,10 +38,15 @@ def find_body(source: object, base_dir: str | None) -> Body | None:
             detection = _glue.detect(detector, image, _glue.POSE_DETECTOR)
             return None if detection is None else _glue.body_region(detection)
 
-        found = state.tracker.find(image, detect_region, lambda region: _glue.body_landmarks(landmark_model, image, region))
+        steady = state.steadier if frame.moving else None          # a camera: follow the body and steady it
+        found = state.tracker.find(image, detect_region, lambda region: _glue.body_landmarks(landmark_model, image, region),
+                                   follow=steady.region if steady else None)
         if found is None:
+            if steady:
+                steady.reset()
             return None
-        return Body.from_points(_to_logical(frame, found.points), found.score, frame.mirrored)
+        points = steady.points(found.points) if steady else found.points
+        return Body.from_points(_to_logical(frame, points), found.score, frame.mirrored, found.scores)
 
     return _source.answer(source, "pose", who, make)
 
@@ -51,7 +56,7 @@ def find_hand(source: object, base_dir: str | None) -> Hand | None:
     who = "ml.hand()"
     if host_services.models is not None:
         return _from_host(host_services.models, "hand", source, who,
-                          _points_of(lambda points, score, mirrored: Hand.from_points(points, score)))
+                          _points_of(lambda points, score, mirrored, scores: Hand.from_points(points, score)))
     from . import _fetch, _glue, _runtime
 
     def make(frame: _source.Frame, state: _source._State) -> Hand | None:
@@ -196,7 +201,8 @@ def _points_of(build):
         if result.points is None:
             return None
         size = (result.width, result.height)
-        return build([frame.to_logical(x, y, size) for x, y in result.points], result.score, frame.mirrored)
+        return build([frame.to_logical(x, y, size) for x, y in result.points], result.score, frame.mirrored,
+                     result.scores)
 
     return points_answer
 
@@ -219,7 +225,7 @@ def _from_host(models, task: str, source: object, who: str, build):
         sent = (id(frame.picture), frame.version)
         if state.requested != sent and not models.busy(task, state.key):
             pixels, width, height = frame.rgba()
-            models.request(task, state.key, pixels, width, height)
+            models.request(task, state.key, pixels, width, height, frame.moving)
             state.requested = sent
         result = models.latest(task, state.key)
         return None if result is None else build(frame, result)

@@ -35,6 +35,7 @@ example list); ``import funground`` never imports it.
 """
 from __future__ import annotations
 
+import contextlib
 import math
 import os
 import re
@@ -109,7 +110,9 @@ def area_rank(area: str) -> int:
 
 
 def list_examples(examples_dir: Path) -> list[Path]:
-    return sorted(examples_dir.glob("*/*.py"), key=lambda p: (area_rank(p.parent.name), p.parent.name, p.name))
+    """The examples: the numbered files of each area (``models/15_mirror_puppet.py``). An unnumbered file beside them
+    (``models/puppet.py``) is a helper some of them import, not an example of its own (S-321)."""
+    return sorted(examples_dir.glob("*/[0-9][0-9]_*.py"), key=lambda p: (area_rank(p.parent.name), p.parent.name, p.name))
 
 
 def example_id(path: Path) -> str:
@@ -167,9 +170,37 @@ def title_and_description(path: Path) -> tuple[str, str]:
     return parts.title, parts.description
 
 
-def data_files(path: Path) -> list[Path]:
-    """Files beside an example that its code names (``"data/photo.jpg"``, ``"fonts/x.ttf"``)."""
+def helper_files(path: Path) -> list[Path]:
+    """The files beside an example that it imports (``from puppet import Puppet`` finds ``puppet.py``), S-321."""
     found = []
+    for name in re.findall(r"^\s*(?:from|import)\s+(\w+)", path.read_text(encoding="utf-8"), re.MULTILINE):
+        candidate = path.parent / f"{name}.py"
+        if candidate.is_file() and candidate != path and candidate not in found:
+            found.append(candidate)
+    return found
+
+
+@contextlib.contextmanager
+def importing_beside(path: Path):
+    """Run an example as `python example.py` does: its folder comes first on sys.path, so `from puppet import Puppet`
+    finds the file beside it (S-321). Afterwards the folder leaves sys.path and the modules found there are forgotten,
+    so the next example imports its own. Used by the tests and the picture tools, which run examples in this process."""
+    folder = str(path.resolve().parent)
+    before = set(sys.modules)
+    sys.path.insert(0, folder)
+    try:
+        yield
+    finally:
+        sys.path.remove(folder)
+        for name in set(sys.modules) - before:
+            origin = getattr(sys.modules[name], "__file__", None) or ""
+            if origin and str(Path(origin).resolve().parent) == folder:
+                del sys.modules[name]
+
+
+def data_files(path: Path) -> list[Path]:
+    """Files beside an example that its code names (``"data/photo.jpg"``, ``"fonts/x.ttf"``), and the files it imports."""
+    found = helper_files(path)
     for name in re.findall(r"""["']([^"'\n]+)["']""", path.read_text(encoding="utf-8")):
         candidate = path.parent / name
         try:
@@ -213,11 +244,12 @@ def saved_message(names: list[str], folder: Path, shown: int = 3) -> str:
 
 
 def copy_example(path: Path, folder: Path) -> tuple[Path, list[Path], list[Path]]:
-    """Copy an example and the data files it names into ``folder``.
+    """Copy an example, the data files it names and the files it imports into ``folder``.
 
     The example never overwrites: a taken name becomes ``name_2.py``. Data files keep their
     place (``data/photo.jpg``) because the code names them that way; one that already exists is
-    left alone. Returns (the new example, data files written, data files already there).
+    left alone, and so is an imported file such as ``puppet.py`` the learner may have changed.
+    Returns (the new example, data files written, data files already there).
     """
     folder.mkdir(parents=True, exist_ok=True)
     target = free_name(folder, path.name)

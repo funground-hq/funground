@@ -80,6 +80,13 @@ def test_a_body_is_found_in_the_photograph(photo):
     assert 0 < body.nose.x < width and 0 < body.nose.y < height
 
 
+def test_the_model_is_less_sure_of_the_hidden_side(photo):
+    body = funground_ml.pose(photo)                           # side-on: his left knee and wrist are behind him
+    assert all(0.0 <= sure <= 1.0 for sure in body.scores.values())
+    assert body.scores["left_knee"] < 0.7 < body.scores["right_knee"]
+    assert body.scores["left_wrist"] < 0.7 < body.scores["right_wrist"]
+
+
 def test_the_body_agrees_with_the_spikes_glue_within_5_pixels(photo, spike_points):
     body = funground_ml.pose(photo)
     expected = spike_points[0][:, :2]
@@ -132,12 +139,16 @@ def test_the_next_frame_reuses_the_box_instead_of_running_the_detector(photo, mo
     looks = []
     real = _glue.detect
     monkeypatch.setattr(_glue, "detect", lambda *args: looks.append(1) or real(*args))
+    now = [100.0]                                             # two frames of a camera at 24 a second
+    monkeypatch.setattr(_glue.time, "monotonic", lambda: now[0])
     first = funground_ml.pose(camera)
+    now[0] += 1 / 24
     picture.image(photo, 0, 0)                                # the next frame: a new version of the same picture
     second = funground_ml.pose(camera)
     assert first is not None and second is not None and first is not second
-    assert len(looks) == 1                                    # one look for two frames
-    assert np.abs(_xy(first.points) - _xy(second.points)).max() < 1.0
+    assert len(looks) == 1                                    # one look for two frames: the region follows the body
+    torso = ["left_shoulder", "right_shoulder", "left_hip", "right_hip"]     # the same body, found in the followed region
+    assert max(np.hypot(first.points[n].x - second.points[n].x, first.points[n].y - second.points[n].y) for n in torso) < photo.height / 10
 
 
 def test_the_models_are_run_by_the_cpu_provider_and_kept_once(photo, hand_photo):

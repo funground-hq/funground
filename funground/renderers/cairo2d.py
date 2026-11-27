@@ -9,6 +9,7 @@ materialised through the outline route (funground.typography).
 """
 from __future__ import annotations
 
+import hashlib
 import math
 import zlib
 from array import array
@@ -816,6 +817,13 @@ class CairoRenderer:
         return run.at_size(style.text_size)
 
 
+def pixels_id(pixel_bytes, phys_w: int, phys_h: int) -> bytes:
+    """A name for a picture's pixels that is the same exactly when the pixels and the size are: their BLAKE2 digest."""
+    digest = hashlib.blake2b(pixel_bytes, digest_size=16)
+    digest.update(f"{phys_w}x{phys_h}".encode())
+    return digest.hexdigest().encode()
+
+
 def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: int,
                           x: float, y: float, logical_w: float, logical_h: float, alpha: float = 1.0,
                           nearest: bool = False) -> None:
@@ -833,6 +841,11 @@ def paint_picture_pixels(ctx: cairo.Context, pixel_bytes, phys_w: int, phys_h: i
     stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_ARGB32, phys_w)
     data = bytearray(pixel_bytes) if isinstance(pixel_bytes, bytes) else pixel_bytes    # Cairo needs a writable buffer
     img = cairo.ImageSurface.create_for_data(data, cairo.FORMAT_ARGB32, phys_w, phys_h, stride)
+    if not isinstance(ctx.get_target(), cairo.ImageSurface):
+        # A PDF or SVG keeps every picture it is given. The same picture drawn again (a flipbook's cut-out puppet draws
+        # one drawing 80 times, each piece clipped) would be stored again each time; Cairo stores a picture once when its
+        # surfaces carry the same unique id, so the id is the pixels' own digest (S-321).
+        img.set_mime_data(cairo.MIME_TYPE_UNIQUE_ID, pixels_id(data, phys_w, phys_h))
     ctx.save()
     ctx.translate(x, y)
     ctx.scale(logical_w / phys_w, logical_h / phys_h)

@@ -103,6 +103,24 @@ def test_copy_writes_the_example_and_its_data_and_never_overwrites(tmp_path):
     assert third.name == "01_load_image_3.py"
 
 
+def test_a_file_an_example_imports_is_copied_with_it_and_is_not_an_example(tmp_path):
+    """S-321: the puppet examples import puppet.py from beside them. It is copied with each, never listed as an example
+    of its own, and a copy the learner already has (perhaps changed) is kept."""
+    area = tmp_path / "gallery" / "toys"
+    area.mkdir(parents=True)
+    (area / "helper.py").write_text("SIZE = 40\n", encoding="utf-8")
+    example = area / "01_uses_helper.py"
+    example.write_text('"""Uses a helper."""\nimport funground as f\nfrom helper import SIZE\n', encoding="utf-8")
+    assert list_examples(tmp_path / "gallery") == [example]
+    mine = tmp_path / "mine"
+    _, written, kept = copy_example(example, mine)
+    assert written == [mine / "helper.py"] and not kept
+    (mine / "helper.py").write_text("SIZE = 90\n", encoding="utf-8")
+    _, written, kept = copy_example(example, mine)
+    assert not written and kept == [mine / "helper.py"]
+    assert (mine / "helper.py").read_text(encoding="utf-8") == "SIZE = 90\n"
+
+
 def test_free_name_skips_taken_names(tmp_path):
     (tmp_path / "a.py").write_text("x")
     (tmp_path / "a_2.py").write_text("x")
@@ -157,8 +175,9 @@ def test_the_wheel_carries_the_examples_pictures_and_licence(tmp_path):
         rel = path.relative_to(SOURCE_EXAMPLES).as_posix()
         assert f"funground/examples/{rel}" in names, rel
         assert f"funground/gallery_images/{gallery.example_id(path)}.png" in names, rel
-    # every data or font file beside an example is shipped too (a new data folder must be added to pyproject.toml)
-    extra = [p for p in SOURCE_EXAMPLES.rglob("*") if p.is_file() and p.suffix != ".py" and "__pycache__" not in p.parts]
+    # every data or font file beside an example, and every helper it imports (S-321), is shipped too (a new data
+    # folder must be added to pyproject.toml)
+    extra = [p for p in SOURCE_EXAMPLES.rglob("*") if p.is_file() and "__pycache__" not in p.parts]
     assert extra
     for p in extra:
         assert f"funground/examples/{p.relative_to(SOURCE_EXAMPLES).as_posix()}" in names, p

@@ -15,6 +15,7 @@ Every function takes the model's session (anything with ``run`` and ``get_inputs
 """
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from typing import Callable, NamedTuple
 
@@ -26,7 +27,14 @@ DETECTOR_MIN_SCORE = 0.5     # the detector's best score, after the sigmoid, mus
 POSE_MIN_SCORE = 0.5         # the pose landmark model's "there is a body" score
 HAND_MIN_SCORE = 0.8         # the hand landmark model's "there is a hand" score
 REUSE_MIN_SCORE = 0.9        # a box is reused for the next picture only if the landmarks found in it scored this well
-REUSE_LIMIT = 10             # ... and for at most this many pictures in a row, then the detector looks again
+REUSE_LIMIT = 10             # ... and for at most this many pictures in a row, then the detector looks again (a region
+                             # that follows a body in a camera's pictures has no limit: it does not go stale)
+
+# ---- steadying a body in a camera's pictures: MediaPipe's one-euro filters, with its pose settings (S-328)
+POINTS_SMOOTHING = (0.05, 80.0)     # the 33 points: (how steadily a still point is held, in hertz; how quickly the
+                                    # smoothing lets go as it moves, per body size a second)
+REGION_SMOOTHING = (0.01, 10.0)     # the region the next picture is looked at in: steadier, so it does not wander
+SPEED_CUTOFF = 1.0                  # how much the speed itself is smoothed (hertz)
 
 
 # ---- cutting a square out of the picture
@@ -158,6 +166,8 @@ def detect(session, image: Image.Image, spec: Detector) -> Detection | None:
 class Landmarks(NamedTuple):
     points: np.ndarray       # (n, 2) in picture pixels
     score: float             # 0 to 1
+    region: tuple | None = None     # where to look in the next picture, from the model's own helper points (pose only)
+    scores: np.ndarray | None = None    # (n,) how sure the model is of each point, 0 to 1 (pose only: its "visibility")
 
 
 def _run_landmarks(session, crop: Crop):
@@ -173,8 +183,11 @@ def body_region(detection: Detection) -> tuple:
 def body_landmarks(session, image: Image.Image, region: tuple, count: int = 33) -> Landmarks | None:
     """The body's 33 points in the square around *region*, or None when the score is under POSE_MIN_SCORE.
 
-    The model gives 39 rows of (x, y, depth, visible, present); the first 33 are the body, the last 6 are helpers for
-    tracking that are not used here.
+    The model gives 39 rows of (x, y, depth, visible, present); the first 33 are the body, the last 6 are helpers. Rows
+    33 and 34 are the middle of the hips and a point on the circle round the body, like the detector's key points: they
+    are the region to look in for the next picture, so the square follows the body as MediaPipe's does. The "visible"
+    column, after a sigmoid, is how sure the model is of each point (MediaPipe's "visibility"): low for a hidden limb
+    whose place it guessed (S-328).
     """
     (x0, y0), (x1, y1) = region
     radius = float(np.hypot(x1 - x0, y1 - y0))
@@ -183,8 +196,9 @@ def body_landmarks(session, image: Image.Image, region: tuple, count: int = 33) 
     score = float(outputs[1][0, 0])
     if score < POSE_MIN_SCORE:
         return None
-    rows = outputs[0][0].reshape(-1, 5)[:count]
-    return Landmarks(crop.to_picture(rows[:, :2]), min(score, 1.0))
+    rows = outputs[0][0].reshape(-1, 5)
+    points = crop.to_picture(rows[:, :2])
+    return Landmarks(points[:count], min(score, 1.0), (tuple(points[33]), tuple(points[34])), sigmoid(rows[:count, 3]))
 
 
 def hand_region(detection: Detection) -> tuple:
@@ -205,31 +219,38 @@ def hand_landmarks(session, image: Image.Image, region: tuple, count: int = 21) 
     return Landmarks(crop.to_picture(rows[:, :2]), min(score, 1.0))
 
 
-# ---- tracking: the box of the last picture, reused
+# ---- tracking: the region of the last picture, reused or followed
 class Tracker:
     """The region found for the last picture of one source, so the detector need not run for every picture.
 
-    The region is reused for the next picture only while the landmarks found in it scored at least REUSE_MIN_SCORE,
-    and for at most REUSE_LIMIT pictures in a row; then, or when a reused region does not do, the detector looks again.
-    (This is the "box reused" mode of the S-231 spike: it is faster, and a body or hand that moves a long way between
-    two pictures is found again by the detector.)
+    The region is reused for the next picture only while the landmarks found in it scored at least REUSE_MIN_SCORE;
+    when a reused region does not do, the detector looks again.
+
+    Which region is kept depends on *follow*. Without it the detector's box is kept, for at most REUSE_LIMIT pictures in
+    a row, so a body or hand that moved a long way is found again: the "box reused" mode of the S-231 spike, and what a
+    photo gets. With it (a body in a camera's pictures) the region the landmarks give for the next picture is kept,
+    steadied by *follow*: the square follows the body from picture to picture, as MediaPipe's does (S-328), and never
+    goes stale.
     """
 
     def __init__(self) -> None:
         self.region = None
+        self.follows = False                # the region came from the last landmarks, not from the detector
         self.reused = 0
         self.size: tuple | None = None      # the size of the pictures it has seen: a new size starts again
 
     def forget(self) -> None:
-        self.region, self.reused = None, 0
+        self.region, self.follows, self.reused = None, False, 0
 
     def can_reuse(self) -> bool:
-        return self.region is not None and self.reused < REUSE_LIMIT
+        return self.region is not None and (self.follows or self.reused < REUSE_LIMIT)
 
     def find(self, image: Image.Image, detect_region: Callable[[], tuple | None],
-             landmarks: Callable[[tuple], Landmarks | None]) -> Landmarks | None:
+             landmarks: Callable[[tuple], Landmarks | None],
+             follow: Callable[[tuple], tuple] | None = None) -> Landmarks | None:
         """The landmarks in *image*. *detect_region()* gives a new region (or None for nobody); *landmarks(region)* gives
-        the points in a region (or None when the score is too low)."""
+        the points in a region (or None when the score is too low); *follow(next region)*, when given, gives the region
+        to keep from the one the landmarks give."""
         if self.size != image.size:
             self.forget()
             self.size = image.size
@@ -237,6 +258,7 @@ class Tracker:
             found = landmarks(self.region)
             if found is not None and found.score >= REUSE_MIN_SCORE:
                 self.reused += 1
+                self._keep(self.region, found, follow)
                 return found
         region = detect_region()
         if region is None:
@@ -244,10 +266,77 @@ class Tracker:
             return None
         found = landmarks(region)
         if found is not None and found.score >= REUSE_MIN_SCORE:
-            self.region, self.reused = region, 0
+            self.reused = 0
+            self._keep(region, found, follow)
         else:
             self.forget()
         return found
+
+    def _keep(self, region, found: Landmarks, follow) -> None:
+        self.follows = follow is not None and found.region is not None
+        self.region = follow(found.region) if self.follows else region
+
+
+# ---- steadying: a body in a camera's pictures, held still where it keeps still
+def _alpha(cutoff, seconds: float):
+    """How far a low-pass filter with this cutoff (hertz) moves towards a new value after *seconds*."""
+    return 1.0 / (1.0 + 1.0 / (2 * np.pi * cutoff * seconds))
+
+
+class Smoother:
+    """A one-euro filter on every coordinate of some points, as MediaPipe uses for a body in a camera's pictures.
+
+    It smooths a lot while a point keeps still (the model's small shake from picture to picture goes) and hardly at all
+    while it moves fast (a waved hand is not left behind). Speeds are measured in sizes a second (the mean side of the
+    points' box), so a body far from the camera is smoothed as one near it is. After a gap of more than *gap* seconds,
+    or for points of another shape, it starts afresh.
+    """
+
+    def __init__(self, min_cutoff: float, beta: float, clock: Callable[[], float] | None = None,
+                 gap: float = 0.5) -> None:
+        self.min_cutoff, self.beta, self.gap = min_cutoff, beta, gap
+        self.clock = clock or time.monotonic
+        self.reset()
+
+    def reset(self) -> None:
+        """Start afresh: the next points are given as they are."""
+        self.points: np.ndarray | None = None
+        self.speed: np.ndarray | None = None
+        self.time = 0.0
+
+    def smooth(self, points: np.ndarray) -> np.ndarray:
+        """The smoothed *points*, an (n, 2) array, seen now."""
+        now = self.clock()
+        seconds = now - self.time
+        if self.points is None or self.points.shape != points.shape or not 0 < seconds <= self.gap:
+            self.points, self.speed, self.time = points.copy(), np.zeros_like(points), now
+            return points.copy()
+        size = max(float(np.mean(np.ptp(points, axis=0))), 1e-6)
+        speed = (points - self.points) / seconds / size
+        self.speed = self.speed + _alpha(SPEED_CUTOFF, seconds) * (speed - self.speed)
+        cutoff = self.min_cutoff + self.beta * np.abs(self.speed)
+        self.points = self.points + _alpha(cutoff, seconds) * (points - self.points)
+        self.time = now
+        return self.points.copy()
+
+
+class Steadier:
+    """What steadies one body in a camera's pictures: its 33 points, and the region the next picture is looked at in."""
+
+    def __init__(self, clock: Callable[[], float] | None = None) -> None:
+        self._points = Smoother(*POINTS_SMOOTHING, clock)
+        self._region = Smoother(*REGION_SMOOTHING, clock)
+
+    def reset(self) -> None:
+        self._points.reset()
+        self._region.reset()
+
+    def points(self, points: np.ndarray) -> np.ndarray:
+        return self._points.smooth(points)
+
+    def region(self, region: tuple) -> tuple:
+        steady = self._region.smooth(np.array(region, dtype=float))
+        return (tuple(steady[0]), tuple(steady[1]))
 
 
 # ---- the person's mask: one model, no boxes

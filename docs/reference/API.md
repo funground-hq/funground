@@ -10779,7 +10779,9 @@ One body found by ``ml.pose()``.
 
 It has 33 named points, each an ``f.Vector`` in the source's pixels: ``body.nose``, ``body.left_shoulder``,
 ``body.right_ankle`` and so on (the list is in ``ml.pose``). ``body.points`` is a dict of every name and point, in
-the model's order. ``body.score`` is how sure the model is, from 0 to 1.
+the model's order. ``body.score`` is how sure the model is that there is a body, from 0 to 1, and ``body.scores``
+is how sure it is of each point: a dict of every name and a number from 0 to 1, low for a part it could not see (a
+leg behind the other, a hand out of the picture) whose place it guessed.
 
 Left and right are the person's own sides. With a mirrored camera the left wrist is the learner's own left wrist,
 wherever it shows on the screen.
@@ -10787,7 +10789,8 @@ wherever it shows on the screen.
 | Attribute | Meaning |
 |---|---|
 | `points` | a dict of every point name and its f.Vector, in the model's order. |
-| `score` | how sure the model is, from 0 to 1. |
+| `score` | how sure the model is that there is a body, from 0 to 1. |
+| `scores` | a dict of every point name and how sure the model is of that point, from 0 to 1. |
 
 <a id="cls-Hand"></a>
 ### `Hand`
