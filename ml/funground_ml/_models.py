@@ -6,7 +6,7 @@ Apache-2.0) as ONNX, from the ``onnx-community`` organisation. Each address name
 change under a learner. ``_fetch`` checks the size and the SHA-256 before it keeps a download.
 
 The words files (S-234) are OpenAI's Whisper tiny.en, converted to ONNX and quantized to 8 bits by the ``onnx-community``
-organisation (Apache-2.0 on the original; the converted repository's card names no licence): the encoder, the decoder, and the
+organisation (MIT in OpenAI's repository, Apache-2.0 on its Hugging Face cards: both are recorded; the converted repository's card names no licence): the encoder, the decoder, and the
 token table ``vocab.json`` that turns the model's numbers back into text. Reading the table is a few lines of our own
 (``_speech.py``), so there is no ``tokenizers`` library to install.
 
@@ -70,15 +70,15 @@ MODELS: dict[str, Model] = {m.name: m for m in (
           kept_as="mediapipe_selfie_segmentation.onnx"),
     Model("words_encoder", "onnx-community/whisper-tiny.en", "2575352d61be1bf7225cf8f8b268a4678025fc58",
           "onnx/encoder_model_quantized.onnx", 10124993,
-          "e93ec822f16a8fd264e7de972ad17d615ea7334b75a52d54c50c2e18dd503a25", "Apache-2.0",
+          "e93ec822f16a8fd264e7de972ad17d615ea7334b75a52d54c50c2e18dd503a25", "MIT OR Apache-2.0",
           kept_as="whisper_tiny_en_encoder_q8.onnx"),
     Model("words_decoder", "onnx-community/whisper-tiny.en", "2575352d61be1bf7225cf8f8b268a4678025fc58",
           "onnx/decoder_model_merged_quantized.onnx", 30718858,
-          "c0592d0749413c960569e1c7fb806b060d5d18f3ebad4a95cbf9a77dc6e9be52", "Apache-2.0",
+          "c0592d0749413c960569e1c7fb806b060d5d18f3ebad4a95cbf9a77dc6e9be52", "MIT OR Apache-2.0",
           kept_as="whisper_tiny_en_decoder_q8.onnx"),
     Model("words_vocabulary", "onnx-community/whisper-tiny.en", "2575352d61be1bf7225cf8f8b268a4678025fc58",
           "vocab.json", 999186,
-          "f6bd25a65e4e63ca31360e9fb11c7e4f9a391a78385d640acd814092dd6eee4f", "Apache-2.0",
+          "f6bd25a65e4e63ca31360e9fb11c7e4f9a391a78385d640acd814092dd6eee4f", "MIT OR Apache-2.0",
           kept_as="whisper_tiny_en_vocab.json"),
     Model("sound_model", "funground-hq/yamnet-onnx", "9648eed1cf043f9163842e9cb6d5fd8291d0d1cf",
           "yamnet.onnx", 16093355,

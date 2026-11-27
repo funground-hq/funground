@@ -49,6 +49,73 @@ The licence versions shown are those declared by the releases funground is teste
 (pygame-ce 2.5.8, pycairo 1.29.1, fontTools 4.66, uharfbuzz 0.56). Always check the package you
 actually install.
 
+## Models downloaded by funground-ml
+
+funground-ml, the separate models package, downloads these files the first time a sketch needs one. They come from the
+Hugging Face Hub, each pinned to a commit and checked against its SHA-256 before it is kept (the table is in
+`ml/funground_ml/_models.py`). No funground package includes them. Two of them are funground's own copies, so for those
+funground is the one who passes them on.
+
+| Model | Used by | Where it comes from | Licence | Credit and changes |
+|---|---|---|---|---|
+| MediaPipe BlazePose: the person finder and the 33 body points | `ml.pose` | `opencv/person_detection_mediapipe`, `opencv/pose_estimation_mediapipe` | Apache-2.0 | Google LLC's models, converted to ONNX by the OpenCV Zoo. |
+| MediaPipe hands: the palm finder and the 21 hand points | `ml.hand` | `opencv/palm_detection_mediapipe`, `opencv/handpose_estimation_mediapipe` | Apache-2.0 | Google LLC's models, converted to ONNX by the OpenCV Zoo. |
+| MediaPipe selfie segmentation (general, 256 x 256) | `ml.person` | `onnx-community/mediapipe_selfie_segmentation` | Apache-2.0 | Google LLC's model, converted to ONNX by the `onnx-community` organisation. |
+| Whisper tiny.en, quantized to 8 bits: encoder, decoder and `vocab.json` | `ml.words` | `onnx-community/whisper-tiny.en` | MIT, and Apache-2.0 | OpenAI's model. OpenAI's repository releases the code and weights under MIT (text below); its Hugging Face cards say Apache-2.0. Both allow this use, so both are kept. Converted and quantized by `onnx-community`. |
+| YAMNet, the sound classifier | `ml.sound` | `funground-hq/yamnet-onnx`, funground's unchanged copy of `audiomagic/yamnet-onnx` | Apache-2.0 | Google LLC's model, converted to ONNX by audiomagic. |
+| MobileNetV4-small, giving a vector of 1,280 numbers (the default picture model) | `ml.teach`, `ml.guess` | `funground-hq/mobilenetv4-small-vector-onnx` | Apache-2.0 | Google's architecture (Qin et al., 2024) with Ross Wightman's timm weights, trained on ImageNet-1k. **Changed by funground:** the classifier is cut off; the script that does it is in that repository. |
+| DINOv2-small, quantized to 8 bits | `ml.teach`, `ml.guess` (`model="dinov2"`) | `onnx-community/dinov2-small` | Apache-2.0 | Meta AI's model, converted and quantized by `onnx-community`. |
+
+The Apache-2.0 text is at <https://www.apache.org/licenses/LICENSE-2.0>.
+
+**What the makers say the models are for.** The MediaPipe model cards put "any form of surveillance or identity
+recognition" out of scope, and say the models work best for one person, near the camera. OpenAI's card asks people not
+to transcribe recordings of others taken without their consent, and warns that Whisper can write words that were never
+said. funground's model features are for making things with your own body, hands, voice and pictures, not for watching
+or identifying people.
+
+Whisper's MIT licence, from <https://github.com/openai/whisper>:
+
+```text
+MIT License
+
+Copyright (c) 2022 OpenAI
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## Installed alongside funground-ml
+
+| Package | Licence | Includes |
+|---|---|---|
+| [onnxruntime](https://onnxruntime.ai) | MIT (© Microsoft Corporation) | other libraries in its wheels, each under its own licence, listed in its ThirdPartyNotices file |
+| [NumPy](https://numpy.org) | BSD-3-Clause | parts under 0BSD, MIT, Zlib and CC0-1.0, as its package declares |
+| [Pillow](https://pillow.readthedocs.io) | MIT-CMU | — |
+
+Checked with onnxruntime 1.32.0, NumPy 2.5.4 and Pillow 12.3.0.
+
+## Play, in the browser
+
+Play, the editor on funground's website, runs funground in the browser with Pyodide and runs the models with ONNX
+Runtime Web. Those, and the editor's own libraries and fonts, are listed on the website's
+[third-party notices](https://funground-hq.github.io/notices/) page.
+
 ## Inspirations, no code taken
 
 funground borrows ideas and function names from these projects but none of their code, apart from
