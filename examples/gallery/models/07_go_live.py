@@ -13,7 +13,7 @@ How it works:
 Make it yours:
 - Hide the camera picture by deleting the f.image(source, 0, 0) line. Only the figure remains.
 - Tick All 33 points and wave. The fingers and toes wobble more than the elbows: they are small, and the model is less sure of them.
-- Tick Fingers and count on your hand: hand.index_finger_tip and hand.thumb_tip are two of its points. Show how sure the model is: f.text(round(body.score, 2), 20, 440).
+- Tick Fingers and count on your hand: hand.index_finger_tip and hand.thumb_tip are two of its points. Show how sure the model is: f.text(round(body.score, 2), 20, 340).
 - Walk half out of the picture and watch what the model does with the points it cannot see. It guesses them, and their bones go faint.
 - Leave the guesses out: change the faint stroke to f.no_stroke().
 """
@@ -39,7 +39,7 @@ FINGERS = [["wrist", "thumb_cmc", "thumb_mcp", "thumb_ip", "thumb_tip"],     # e
            ["wrist", "pinky_mcp", "pinky_pip", "pinky_dip", "pinky_tip"]]
 
 still = f.load_image("data/standing_woman_640.jpg")      # used when there is no camera
-still.resize(320, 480)
+still.resize(240, 360)
 cam = None
 all_points = None
 fingers = None
@@ -47,12 +47,12 @@ fingers = None
 
 def setup():
     global cam, all_points, fingers
-    f.size(640, 480)
+    f.size(640, 360)                # wide, as most laptop cameras are
     all_points = f.create_checkbox("All 33 points")
     fingers = f.create_checkbox("Fingers")
     try:
         cam = camera.open()
-        cam.start(640, 480)
+        cam.start(640, 360)
     except RuntimeError:
         cam = None
 

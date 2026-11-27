@@ -4,12 +4,14 @@ A fake host drives a Session with its own clock, as a browser page would. Nothin
 """
 from __future__ import annotations
 
+import inspect
 import json
 
 import pytest
 
 from conftest import EXAMPLES
 from funground import api
+from funground.platform.browser import BrowserPlatform
 from funground.platform.headless import HeadlessPlatform
 from funground.sketch import Sketch
 from funground.web import Session
@@ -370,3 +372,14 @@ def test_keep_in_a_folder_of_the_sketch_not_the_current_one(tmp_path):
     session.keep("elsewhere")
     assert kept_files(tmp_path / "work") == ["001.json", "001.png", "001.py"]
     session.stop()
+
+
+def test_the_session_passes_each_models_result_on_with_all_of_its_parts():
+    """Session.push_models* forward to the platform: a part the platform takes (such as the pose's scores, S-328) must be
+    taken by the session too, or the page's call fails."""
+    names = [name for name in vars(Session) if name.startswith("push_models")]
+    assert "push_models" in names
+    for name in names:
+        session = list(inspect.signature(getattr(Session, name)).parameters)
+        platform = list(inspect.signature(getattr(BrowserPlatform, name)).parameters)
+        assert session == platform, name

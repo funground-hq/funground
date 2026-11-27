@@ -6,7 +6,7 @@ your own photo when you give it one, and a photograph of Mahatma Gandhi arriving
 needs the models library, which is a separate install: funground-ml.
 
 How it works:
-- The sketch tries my_photo.jpg, my_photo.png and my_photo.jpeg in turn. When there is no file of those names, it opens the Gandhi photograph instead.
+- The sketch tries my_photo.jpg, my_photo.png, my_photo.jpeg and my_photo.svg in turn. A photo opens with f.load_image(); a drawing made in a vector app (.svg) opens with f.load_svg(), and the model looks at it as it is drawn. When there is no file of those names, it opens the Gandhi photograph instead.
 - ml.pose(photo) looks for a body in a picture. It gives a body with 33 named points, or None if no one is there. The first run downloads the pose model (once) into a models folder beside the sketch.
 - draw() asks for the body until it has one (in Play the answer comes a few frames later, while the model starts). Then draw_figure() draws the figure once, on a see-through picture the size of the photo (f.create_graphics). Each point is in the photo's own pixels, so the figure lines up with the body.
 - BONES is a list of pairs of names. The loop looks each name up in body.points and draws a line between the two points. A bone is bright when the model is sure of both ends (body.scores says how sure it is of each point, from 0 to 1) and faint when one end is a guess: in the Gandhi photograph his left arm and leg are hidden behind him, and the model guesses where they are. Tick All 33 points and draw_figure() draws again with MORE_BONES too (the face, the hands and the feet) and a dot on every point the model gives.
@@ -14,7 +14,7 @@ How it works:
 - The button saves only the figure's picture, so stick_figure.png has the figure on a see-through background and no photo. In Play it shows up under the canvas: press Keep to put it in My files. On your computer it goes in the folder you ran the sketch from.
 
 Make it yours:
-- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again.
+- Use your own photo. In Play: open My files, press Add file and choose a photo of one whole person, then press Rename beside it and call it my_photo (the .jpg or .png ending stays). On your computer: put the photo beside this sketch and call it my_photo.jpg or my_photo.png. Run the sketch again. A drawing works too: draw a whole person in a vector app and save it as my_photo.svg (in Play, add it the same way). The model does best when the person faces the camera and both legs can be seen; from the side, or with crossed legs, it can mix the legs up, as it does with Gandhi's.
 - Tick All 33 points and look at the hands and feet. Then give them a colour of their own: draw MORE_BONES with another figure.stroke().
 - Change "lime" and the line's thickness to give the figure a new look.
 - Change SURE to 0.9 and more bones go faint; change it to 0 and every bone is bright.
@@ -39,9 +39,12 @@ MORE_BONES = [("nose", "left_eye_inner"), ("left_eye_inner", "left_eye"), ("left
               ("right_heel", "right_foot_index"), ("right_ankle", "right_foot_index")]   # the face, the hands and the feet
 
 photo = None
-for name in ["my_photo.jpg", "my_photo.png", "my_photo.jpeg"]:
+for name in ["my_photo.jpg", "my_photo.png", "my_photo.jpeg", "my_photo.svg"]:
     try:
-        photo = f.load_image(name)
+        if name.endswith(".svg"):
+            photo = f.load_svg(name)       # a drawing of shapes
+        else:
+            photo = f.load_image(name)     # a photo
         break                      # found one: stop looking
     except FileNotFoundError:
         pass                       # not this one: try the next name

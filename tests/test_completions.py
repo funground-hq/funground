@@ -163,7 +163,8 @@ def test_the_models_results_list_their_points_and_scores():
     classes = data()["classes"]
     body = {m["name"]: m for m in classes["Body"]["members"]}
     assert body["left_wrist"]["returns"] == "Vector" and body["score"]["detail"] == "float" and "points" in body
-    assert len(body) == 35 and len(classes["Hand"]["members"]) == 23
+    assert body["scores"]["detail"] == "dict[str, float]"         # how sure the model is of each point (S-328, D-165)
+    assert len(body) == 36 and len(classes["Hand"]["members"]) == 23
     assert {m["name"] for m in classes["Words"]["members"]} == {"text", "score", "is_new"}
     assert {m["name"] for m in classes["Guess"]["members"]} == {"name", "score", "next"}
     assert {m["name"] for m in classes["Heard"]["members"]} == {"name", "score", "next", "is_new"}
