@@ -69,11 +69,13 @@ jobs:
           FUNGROUND_ML_MODELS: ${{ github.workspace }}/ml/tests/.models
           FUNGROUND_GOLDEN_TOLERANCE: ${{ inputs.newest && '1' || '' }}
         run: python -m pytest tests/test_gallery.py -k models --timeout=300
-      - name: Keep the pictures that differ from their goldens
+      - name: Keep the pictures and op lists that differ from their goldens and snapshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: golden-actual-${{ inputs.os }}-${{ matrix.python }}
-          path: tests/golden/_actual/
+          path: |
+            tests/golden/_actual/
+            tests/snapshots/_actual/
           if-no-files-found: ignore
           retention-days: 7

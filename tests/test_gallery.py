@@ -53,6 +53,10 @@ def _installed(distribution: str) -> bool:
 # listed (the index, the images and the coverage counts stay right) but they are only run when funground-ml is installed.
 # Their model files come from ml/tests/.models (git-ignored), so a test never writes a models/ folder into the repository.
 MODELS_AREA = "models"
+# How far a models example's points may move between processors, in px. onnxruntime's last digits differ: CI's
+# Windows runner moved a point by 0.00004 px from this machine, macOS on Apple silicon by 0.012 px (15, which scales
+# its bones to your arms). A real change moves the figure by whole pixels.
+MODEL_POINT_TOLERANCE = 0.1
 MODELS_FOLDER = ROOT / "ml" / "tests" / ".models"
 # Installed, not merely importable: tools/make_api_reference.py puts ml/ on sys.path to read the docstrings, and a test
 # that imports it in the same process would make funground_ml importable without its numpy, Pillow and onnxruntime.
@@ -112,8 +116,8 @@ def test_example_matches_golden(path: Path, monkeypatch):
         pytest.skip(f"golden written: {golden.name}")
     if platform.system() != GOLDEN_PLATFORM:
         pytest.skip(f"goldens were produced on {GOLDEN_PLATFORM}")
-    # A models example draws where the model found the body, and onnxruntime's last digits differ between processors
-    # (see the snapshot test below): an edge can move by 1 or 2 of 255 (measured on CI: 231 pixels of 432,000, in
+    # A models example draws where the model found the body, and its points move a little between processors
+    # (MODEL_POINT_TOLERANCE): an edge can move by 1 or 2 of 255 (measured on CI: 231 pixels of 432,000, in
     # 15 and 16). Its picture matches within the golden tolerance; every other example matches byte for byte.
     same = golden_matches(pygame.image.tobytes(pygame.image.load(str(golden)), "RGB"), frame[1],
                           tolerant=path.parent.name == MODELS_AREA)
@@ -139,9 +143,8 @@ def test_example_ops_match_snapshot(path: Path, monkeypatch):
         out = ROOT / "tests" / "snapshots" / "_actual"
         out.mkdir(parents=True, exist_ok=True)
         (out / snap.name).write_text(actual, encoding="utf-8")
-    # A models example draws where the model found the body. onnxruntime's arithmetic differs in the last digits between
-    # processors (CI's runner gave 194.27486 where this machine gave 194.27482), so those points match to 0.01 px.
-    tolerance = {"abs_tol": 0.01} if path.parent.name == MODELS_AREA else {}
+    # A models example draws where the model found the body, so its points match to MODEL_POINT_TOLERANCE.
+    tolerance = {"abs_tol": MODEL_POINT_TOLERANCE} if path.parent.name == MODELS_AREA else {}
     try:
         assert_json_documents_close(json.loads(actual), json.loads(expected), **tolerance)
     except AssertionError as exc:
